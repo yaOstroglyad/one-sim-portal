@@ -21,14 +21,9 @@ const routes: Routes = [
     },
     children: [
       {
-        path: 'pages',
-        loadChildren: () =>
-            import('./views/pages/pages.module').then((m) => m.PagesModule)
-      },
-      {
         path: 'forms',
         loadChildren: () =>
-            import('./views/forms/forms.module').then((m) => m.CoreUIFormsModule)
+            import('./views/forms/forms.module').then((m) => m.FormsModule)
       },
     ]
   },
@@ -69,7 +64,6 @@ const routes: Routes = [
       scrollPositionRestoration: 'top',
       anchorScrolling: 'enabled',
       initialNavigation: 'enabledBlocking'
-      // relativeLinkResolution: 'legacy'
     })
   ],
   exports: [RouterModule]
