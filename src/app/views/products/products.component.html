@@ -1,0 +1,30 @@
+<c-card>
+<table cTable>
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">name</th>
+        <th scope="col">provider</th>
+        <th scope="col" class="text-center">usage</th>
+        <th scope="col">effectiveDate</th>
+        <th scope="col">price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let product of productsData">
+        <th scope="row">{{product.id}}</th>
+        <td>{{product.name}}</td>
+        <td>{{product.providerName}}</td>
+        <td>
+            <div class="badge-display">
+                <c-badge *ngFor="let usage of product.usages"
+                         [class]="usage?.unitType + '-badge'"
+                         shape="rounded-pill">{{usage?.total}} {{usage?.unitType}}</c-badge>
+            </div>
+        </td>
+        <td>{{product.effectiveDate}}</td>
+        <td>{{product.price}}</td>
+    </tr>
+    </tbody>
+</table>
+</c-card>

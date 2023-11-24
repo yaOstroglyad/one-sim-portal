@@ -1,0 +1,15 @@
+@import "../../../scss/custom";
+
+.GB-badge {
+  background: #306fe1;
+}
+.SMS-badge {
+  background: #e18030;
+}
+.VOICE-badge, .Min-badge  {
+  background: #867d21;
+}
+.badge-display {
+  display: flex;
+  justify-content: space-between;
+}

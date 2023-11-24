@@ -16,10 +16,11 @@ import {
   cifIn,
   cifPl,
   cifUs,
+  cil3d,
   cilAlignCenter,
   cilAlignLeft,
   cilAlignRight,
-  cilApplicationsSettings,
+  cilApplicationsSettings, cilAppsSettings,
   cilArrowBottom,
   cilArrowRight,
   cilArrowTop,
@@ -87,10 +88,12 @@ import {
   cilUser,
   cilUserFemale,
   cilUserFollow,
-  cilUserUnfollow,
+  cilUserUnfollow
 } from '@coreui/icons';
 
 export const iconSubset = {
+  cil3d,
+  cilAppsSettings,
   cibCcAmex,
   cibCcApplePay,
   cibCcMastercard,

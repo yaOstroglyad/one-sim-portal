@@ -1,0 +1,14 @@
+<table cTable>
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let provider of providersData">
+        <th scope="row">{{provider.id}}</th>
+        <td>{{provider.name}}</td>
+    </tr>
+    </tbody>
+</table>
