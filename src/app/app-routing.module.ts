@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DefaultLayoutComponent } from './containers';
 import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
 import { LoginComponent } from './views/pages/login/login.component';
@@ -10,17 +9,7 @@ import { RegisterComponent } from './views/pages/register/register.component';
 const routes: Routes = [
   {
     path: '',
-    component: DefaultLayoutComponent,
-    data: {
-      title: 'Home'
-    },
-    children: [
-      {
-        path: 'forms',
-        loadChildren: () =>
-            import('./views/forms/forms.module').then((m) => m.FormsModule)
-      },
-    ]
+    loadChildren: () => import('./containers/default-layout/default-layout.module').then((m) => m.DefaultLayoutModule)
   },
   {
     path: '404',

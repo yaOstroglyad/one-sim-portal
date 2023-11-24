@@ -11,5 +11,5 @@ import { FormsRoutingModule } from './forms-routing.module';
       FormsRoutingModule
   ]
 })
-export class FormsModule {
+export class CFormsModule {
 }
