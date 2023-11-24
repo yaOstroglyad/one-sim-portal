@@ -11,7 +11,13 @@ import { AppComponent } from './app.component';
 
 import { IconSetService } from '@coreui/icons-angular';
 import { PagesModule } from './views/pages/pages.module';
-
+import { NgxWebstorageModule } from 'ngx-webstorage';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -19,6 +25,17 @@ import { PagesModule } from './views/pages/pages.module';
     BrowserAnimationsModule,
     PagesModule,
     AppRoutingModule,
+    NgxWebstorageModule.forRoot(),
+    AppRoutingModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      defaultLanguage: 'en',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     {

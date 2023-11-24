@@ -3,13 +3,16 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
-import { LoginComponent } from './views/pages/login/login.component';
 import { RegisterComponent } from './views/pages/register/register.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'home',
     loadChildren: () => import('./containers/default-layout/default-layout.module').then((m) => m.DefaultLayoutModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./views/pages/login/login.module').then((m) => m.LoginPageModule)
   },
   {
     path: '404',
@@ -23,13 +26,6 @@ const routes: Routes = [
     component: Page500Component,
     data: {
       title: 'Page 500'
-    }
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-    data: {
-      title: 'Login Page'
     }
   },
   {
