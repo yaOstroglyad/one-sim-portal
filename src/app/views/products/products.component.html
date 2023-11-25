@@ -32,3 +32,6 @@
         </tbody>
     </table>
 </c-card>
+<app-edit-product [visible]="visible"
+                  [data]="selectedData"
+                  (onClose)="setModalVisibility($event)"></app-edit-product>

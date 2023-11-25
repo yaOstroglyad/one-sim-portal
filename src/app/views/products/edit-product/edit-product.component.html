@@ -1,0 +1,71 @@
+<c-modal size="lg"
+         backdrop="static"
+         alignment="center"
+         [visible]="visible">
+    <c-modal-header>
+        <h5 cModalTitle>Create / Edit product</h5>
+        <button (click)="close()" cButtonClose></button>
+    </c-modal-header>
+    <c-modal-body>
+        <form [formGroup]="form"
+              cForm>
+            <c-row>
+                <c-col [xs]="6" class="mb-3">
+                    <input aria-label="Product name"
+                           formControlName="name"
+                           cFormControl
+                           placeholder="Product name" />
+                </c-col>
+                <c-col [xs]="6" class="mb-3">
+                    <select aria-label="Provider name"
+                            formControlName="providerName"
+                            cSelect>
+                        <option disabled>Select provider</option>
+                        <option value="Ventra">Ventra</option>
+                    </select>
+                </c-col>
+                <c-col [xs]="6" class="mb-3">
+                    <select aria-label="Usages"
+                            formControlName="usages"
+                            multiple
+                            cSelect>
+                        <option disabled>Select packages</option>
+                        <option *ngFor="let usage of usages" [value]="usage">{{usage.total}} {{usage.unitType}}</option>
+                    </select>
+                </c-col>
+                <c-col [xs]="6" class="mb-3">
+                    <mat-form-field appearance="outline" size="lg">
+                        <mat-label>Set a effective date</mat-label>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </c-col>
+                <c-col [xs]="6" class="mb-3">
+                    <c-input-group>
+                        <input aria-label="Price"
+                               formControlName="price"
+                               cFormControl
+                               placeholder="Product price" />
+                        <select aria-label="currency"
+                                formControlName="currency"
+                                cSelect>
+                            <option disabled>Select currency</option>
+                            <option value="$">$</option>
+                        </select>
+                    </c-input-group>
+                </c-col>
+            </c-row>
+        </form>
+    </c-modal-body>
+    <c-modal-footer>
+        <button cButton
+                color="secondary"
+                (click)="close()">
+            Close
+        </button>
+        <button cButton
+                class="bg-primary"
+                (click)="submit()">Save changes</button>
+    </c-modal-footer>
+</c-modal>

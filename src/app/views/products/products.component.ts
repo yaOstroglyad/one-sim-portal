@@ -14,7 +14,9 @@ import { cilPencil } from '@coreui/icons';
 export class ProductsComponent implements OnInit {
   protected readonly cilPencil = cilPencil;
 
-  productsData: Package[] = [];
+  public visible: boolean;
+  public productsData: Package[] = [];
+  public selectedData: any;
   ngOnInit(): void {
     this.productsData = [{
       id: '1',
@@ -46,5 +48,12 @@ export class ProductsComponent implements OnInit {
 
 	edit(product: Package) {
       console.log('product', product);
+      this.selectedData = product;
+      this.setModalVisibility(true);
 	}
+
+  setModalVisibility(event: boolean) {
+    this.visible = event;
+    console.log('this.visible setModalVisibility', this.visible);
+  }
 }
