@@ -4,6 +4,7 @@ import { UsageInfo } from '../../shared/model/usageInfo';
 import UnitTypeDataEnum = UsageInfo.UnitTypeDataEnum;
 import UsageTypeEnum = UsageInfo.UsageTypeEnum;
 import UnitTypeAmountEnum = UsageInfo.UnitTypeAmountEnum;
+import { cilPencil } from '@coreui/icons';
 
 @Component({
   selector: 'app-products',
@@ -11,6 +12,8 @@ import UnitTypeAmountEnum = UsageInfo.UnitTypeAmountEnum;
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit {
+  protected readonly cilPencil = cilPencil;
+
   productsData: Package[] = [];
   ngOnInit(): void {
     this.productsData = [{
@@ -41,4 +44,7 @@ export class ProductsComponent implements OnInit {
     }]
   }
 
+	edit(product: Package) {
+      console.log('product', product);
+	}
 }

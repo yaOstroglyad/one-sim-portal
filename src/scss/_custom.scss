@@ -5,6 +5,9 @@
   text-align: center;
 }
 
+.edit-btn {
+  cursor: pointer;
+}
 
 .screen {
   background: linear-gradient(90deg, $primary-color, $primary-with-opacity-05);

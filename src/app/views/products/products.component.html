@@ -1,5 +1,5 @@
 <c-card>
-    <table cTable>
+    <table cTable [responsive]="true">
         <thead>
         <tr>
             <th scope="col">ID</th>
@@ -8,6 +8,7 @@
             <th scope="col" class="text-center">usage</th>
             <th scope="col">effectiveDate</th>
             <th scope="col">price</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -24,6 +25,9 @@
             </td>
             <td>{{product.effectiveDate}}</td>
             <td>{{product.price}}</td>
+            <td class="edit-btn" (click)="edit(product)">
+                <svg [cIcon]="cilPencil" size="m" title="List Icon"></svg>
+            </td>
         </tr>
         </tbody>
     </table>

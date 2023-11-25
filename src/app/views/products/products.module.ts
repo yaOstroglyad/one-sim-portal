@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProductsComponent } from './products.component';
 import { ProductsRoutingModule } from './products-routing.module';
 import { BadgeComponent, CardComponent, TableDirective } from '@coreui/angular';
+import { IconDirective } from '@coreui/icons-angular';
 
 
 
@@ -15,7 +16,8 @@ import { BadgeComponent, CardComponent, TableDirective } from '@coreui/angular';
 		ProductsRoutingModule,
 		TableDirective,
 		BadgeComponent,
-		CardComponent
+		CardComponent,
+		IconDirective
 	]
 })
 export class ProductsModule { }
