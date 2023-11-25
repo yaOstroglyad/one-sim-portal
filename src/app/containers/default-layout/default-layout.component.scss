@@ -1,7 +1,16 @@
+@import "src/scss/variables";
+
 :host {
   ng-scrollbar {
-    --scrollbar-thumb-color: var(--cui-border-color, #999);
-    --scrollbar-track-color: var(--cui-body-color, #fff);
+    --scrollbar-thumb-color: var(--cui-border-color, --ion-color-light);
+    --scrollbar-track-color: var(--cui-body-color, --ion-color-medium-contrast);
     --scrollbar-hover-size: calc(var(--scrollbar-size) * 1.5);
+  }
+  .p-bg {
+    background: $primary-color-border;
+    box-shadow: 0 0 12px var(--ion-color-medium-shade);
+  }
+  .sidebar-toggler {
+    background-color: $primary-color-border;
   }
 }

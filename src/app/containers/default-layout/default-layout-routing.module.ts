@@ -14,11 +14,6 @@ const routes: Routes = [
     component: DefaultLayoutComponent,
     children: [
       {
-        path: 'forms',
-        loadChildren: () =>
-            import('../../views/forms/forms.module').then((m) => m.CFormsModule)
-      },
-      {
         path: 'providers',
         loadChildren: () =>
             import('../../views/providers/providers.module').then((m) => m.ProvidersModule)
