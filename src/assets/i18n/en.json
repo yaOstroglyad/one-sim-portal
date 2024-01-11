@@ -1,0 +1,15 @@
+{
+  "provider": {
+    "id": "ID",
+    "name": "Name"
+  },
+  "package": {
+    "id": "ID",
+    "name": "Name",
+    "providerName": "Provider name",
+    "usages": "Usages",
+    "effectiveDate": "Effective Date",
+    "price": "Price",
+    "unitType": "Unit Type"
+  }
+}

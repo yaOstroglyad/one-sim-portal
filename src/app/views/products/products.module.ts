@@ -28,6 +28,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { GenericTableModule, TableFilterModule } from '../../shared';
 
 
 
@@ -61,7 +62,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 		MatDatepickerModule,
 		MatNativeDateModule,
 		MatInputModule,
-		InputGroupComponent
+		InputGroupComponent,
+		GenericTableModule,
+		TableFilterModule
 	],
 	providers: [
 		MatDatepickerModule

@@ -1,0 +1,28 @@
+<ng-container *ngIf="config$ | async; let config">
+    <c-dropdown>
+        <button class="me-1 column-picker"
+                cDropdownToggle
+                cButton
+                color="secondary">
+            <svg cIcon
+                 name="cilColumns"></svg>
+        </button>
+        <ul cDropdownMenu>
+            <li *ngFor="let col of config.columns"
+                class="p-1 c-pointer"
+                (click)="$event.stopPropagation();">
+                <c-form-check cDropdownItem>
+                    <input cFormCheckInput
+                           [checked]="col.visible || selectedColumns.has(col.header)"
+                           [id]="col.header"
+                           type="checkbox"
+                           #checkbox
+                           (change)="onColumnSelect(col.header, checkbox.checked);" />
+                    <label cFormCheckLabel
+                           class="c-pointer"
+                           [for]="col.header">{{ config?.translatePrefix + col.header | translate }}</label>
+                </c-form-check>
+            </li>
+        </ul>
+    </c-dropdown>
+</ng-container>

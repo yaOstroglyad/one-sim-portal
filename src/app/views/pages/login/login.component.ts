@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../shared/auth/auth.service';
@@ -7,7 +7,8 @@ import { LoginService } from './login.service';
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
-	styleUrls: ['./login.component.scss']
+	styleUrls: ['./login.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
 	@HostListener('window:keyup', ['$event'])

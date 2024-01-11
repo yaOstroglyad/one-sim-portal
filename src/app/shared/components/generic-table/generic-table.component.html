@@ -1,0 +1,61 @@
+<ng-container *ngIf="config$ | async as config">
+    <c-card *ngIf="(data$ | async)?.length; else noData">
+        <table cTable [responsive]="true">
+            <thead>
+            <tr>
+                <th *ngIf="config.showCheckboxes"
+                    class="min-w-3r text-center">
+                    <input type="checkbox"
+                           class="c-pointer"
+                           [checked]="this.selectedItems.size"
+                           (change)="toggleAll($event)">
+                </th>
+                <ng-container *ngFor="let col of config.columns">
+                    <th *ngIf="col.visible"
+                        scope="col">
+                        {{ config?.translatePrefix + col.header | translate }}
+                    </th>
+                </ng-container>
+                <th *ngIf="config.showEditButton"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of data$ | async">
+                <td *ngIf="config.showCheckboxes"
+                    class="min-w-3r text-center">
+                    <input type="checkbox"
+                           class="c-pointer"
+                           [checked]="isSelected(item)"
+                           [value]="item"
+                           (change)="toggleItemSelection(item, $event)">
+                </td>
+                <ng-container *ngFor="let col of config.columns">
+                    <td *ngIf="col.visible">
+                        <ng-container [ngSwitch]="col.templateType">
+                            <ng-container *ngSwitchCase="'text'">{{ item[col.key] }}</ng-container>
+                            <ng-container *ngSwitchCase="'date'">{{ item[col.key] | date: col.dateFormat }}
+                            </ng-container>
+                            <ng-container *ngSwitchCase="'time'">{{ item[col.key] | formatTime }}</ng-container>
+                            <ng-container *ngSwitchCase="'custom'">
+                                <ng-container
+                                        *ngTemplateOutlet="col.customTemplate(); context: {context: item}"></ng-container>
+                            </ng-container>
+                            <ng-container *ngSwitchDefault>{{ item[col.key] }}</ng-container>
+                        </ng-container>
+                    </td>
+                </ng-container>
+                <td *ngIf="config.showEditButton"
+                    (click)="onEdit(item)"
+                    class="min-w-3r text-center c-pointer">
+                    <svg cIcon
+                         name="cilPencil"></svg>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </c-card>
+</ng-container>
+
+<ng-template #noData>
+    <no-data></no-data>
+</ng-template>
