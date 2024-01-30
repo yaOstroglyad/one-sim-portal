@@ -8,3 +8,4 @@ export * from './components/column-control/column-control.module'
 export * from './components/table-initialization-error/table-initialization-error.module'
 export * from './components/no-data/no-data.module'
 export * from './pipes/format-time/format-time.module';
+export * from './services/data.service';
