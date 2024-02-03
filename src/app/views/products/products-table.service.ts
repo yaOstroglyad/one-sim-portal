@@ -9,7 +9,7 @@ import { Package } from '../../shared/model/package';
 })
 export class ProductsTableService extends TableConfigAbstractService {
 	private originalDataSubject = new BehaviorSubject<Package[]>([]);
-	public data$: Observable<Package[]> = this.originalDataSubject.asObservable();
+	public dataList$: Observable<Package[]> = this.originalDataSubject.asObservable();
 	public tableConfigSubject = new BehaviorSubject<TableConfig>({
 		translatePrefix: 'package.',
 		showCheckboxes: false,
@@ -23,11 +23,12 @@ export class ProductsTableService extends TableConfigAbstractService {
 		]
 	});
 
+
 	constructor() {
 		super();
 	}
 
-	public updateData(data: Package[]): void {
+	public updateTableData(data: Package[]): void {
 		this.originalDataSubject.next(data);
 	}
 
@@ -48,11 +49,11 @@ export class ProductsTableService extends TableConfigAbstractService {
 		this.tableConfigSubject.next(newConfig);
 	}
 
-	public applyFilter(filterValues: any): void {
+	applyFilter(filterValues: any): void {
 		if (!filterValues) {
-			this.data$ = this.originalDataSubject.asObservable();
+			this.dataList$ = this.originalDataSubject.asObservable();
 		} else {
-			this.data$ = this.originalDataSubject.pipe(
+			this.dataList$ = this.originalDataSubject.pipe(
 				map(data => data.filter(item =>
 					(filterValues.name ? item.name.toUpperCase().includes(filterValues.name.toUpperCase()) : true)
 				))

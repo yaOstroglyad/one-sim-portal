@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostListener, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../shared/auth/auth.service';
+import { AuthService } from '../../../shared';
 import { LoginService } from './login.service';
 
 @Component({
@@ -20,27 +20,28 @@ export class LoginComponent implements OnInit {
 
 	form: FormGroup = new FormGroup({
 		loginName: new FormControl(null),
-		password: new FormControl(null)
+		password: new FormControl(null),
+		rememberMe: new FormControl(true)
 	});
 
 	constructor(private loginService: LoginService,
-				private authService: AuthService,
-				private router: Router) { }
+							private authService: AuthService,
+							private router: Router) { }
 
 	ngOnInit(): void {
 		this.authService.deleteAuthenticationToken();
 	}
 
 	login(): void {
-		// this.loginService.login(this.form.value);
+		this.loginService.login(this.form.value);
 		this.router.navigate(['/home']);
 	}
 
 	quickLoginByAdmin(): void {
-		// this.form.controls['loginName'].setValue('customer1@mail.com');
-		// this.form.controls['password'].setValue('customer');
-		// this.loginService.login(this.form.value);
+		this.form.controls['loginName'].setValue('admin');
+		this.form.controls['password'].setValue('admin');
+		this.form.controls['rememberMe'].setValue(true);
+		this.loginService.login(this.form.value);
 		this.router.navigate(['/home']);
 	}
-
 }

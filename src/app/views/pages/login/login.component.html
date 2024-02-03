@@ -1,23 +1,15 @@
 <div class="login-container">
     <div class="screen">
         <div class="screen__content">
-            <form class="login">
-                <img src="assets/img/brand/1e-sim.png"
-                     width="79"
-                     height="77"
-                     alt="esim"
-                     class="sidebar-brand-full">
+            <form class="login" [formGroup]="form">
                 <div class="login__field">
-                    <i class="login__icon fas fa-user"></i>
-                    <input type="text" class="login__input" placeholder="User name / Email">
+                    <input formControlName="loginName" type="text" class="login__input" placeholder="User name / Email">
                 </div>
                 <div class="login__field">
-                    <i class="login__icon fas fa-lock"></i>
-                    <input type="password" class="login__input" placeholder="Password">
+                    <input formControlName="password" type="password" class="login__input" placeholder="Password">
                 </div>
                 <button class="button login__submit" (click)="login()">
                     <span class="button__text">Log In</span>
-                    <i class="button__icon fas fa-chevron-right"></i>
                 </button>
             </form>
         </div>

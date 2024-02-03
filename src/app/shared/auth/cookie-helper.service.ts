@@ -12,7 +12,7 @@ export class CookieHelperService {
     const currentTimestamp = new Date();
     const futureTimestamp = currentTimestamp.getTime() + tenSecond;
     const futureTimestamp2 = new Date(futureTimestamp);
-    this.cookieService.set( 'token', JSON.stringify(token), futureTimestamp2 );
+    this.cookieService.set('token', token, futureTimestamp2);
   }
   deleteTokenFromCookie(): void {
     this.cookieService.deleteAll();

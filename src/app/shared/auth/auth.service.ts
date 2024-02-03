@@ -38,8 +38,6 @@ export class AuthService {
   public authorize(credentials: LoginRequest): Observable<any> {
     this.rememberMe = credentials.rememberMe;
 
-    delete credentials.rememberMe;
-
     const bodyString = JSON.stringify(credentials);
 
     const headers = new HttpHeaders({

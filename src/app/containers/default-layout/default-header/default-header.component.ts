@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { ClassToggleService, HeaderComponent } from '@coreui/angular';
+
+import { HeaderComponent } from '@coreui/angular';
+import { LanguageService } from '../../../shared';
 
 @Component({
   selector: 'app-default-header',
@@ -9,11 +11,11 @@ export class DefaultHeaderComponent extends HeaderComponent {
 
   @Input() sidebarId: string = "sidebar";
 
-  public newMessages = new Array(4)
-  public newTasks = new Array(5)
-  public newNotifications = new Array(5)
-
-  constructor(private classToggler: ClassToggleService) {
+  constructor(private languageService: LanguageService) {
     super();
+  }
+
+  changeLang(lang: string) {
+    this.languageService.setLanguage(lang);
   }
 }

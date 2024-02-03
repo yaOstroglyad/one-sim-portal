@@ -6,6 +6,10 @@ import { FilterConfig, TableConfig, TableFilterFieldType } from '../../shared';
 import { ProductsTableService } from './products-table.service';
 import { ProductsDataService } from './products-data.service';
 import { packagesMock } from './products-mock';
+import { Provider } from '../../shared/model/provider';
+import { ProvidersTableService } from '../providers/providers-table.service';
+import { ProvidersDataService } from '../providers/providers-data.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-products',
@@ -18,44 +22,50 @@ export class ProductsComponent implements OnInit {
 	public visible: boolean;
 	public selectedData: Package;
 	public tableConfig$: BehaviorSubject<TableConfig>;
-	public data$: Observable<Package[]>;
-	public filterConfig: FilterConfig = {
-		name: {type: TableFilterFieldType.Text, placeholder: 'Filter by name'}
-	};
+	public dataList$: Observable<Package[]>;
+	public filterConfig: FilterConfig = {};
 
 	constructor(private cdr: ChangeDetectorRef,
 							private tableService: ProductsTableService,
-							private productsDataService: ProductsDataService
+							private productsDataService: ProductsDataService,
+							public translateService: TranslateService
 	) {
+		this.initFilterConfig();
 	}
 
 	ngOnInit(): void {
-		this.productsDataService.getData().subscribe(data => {
-			this.tableService.updateData(data);
-      this.tableService.addCustomColumns(this);
+		this.productsDataService.list().subscribe(data => {
+			this.tableService.updateTableData(data);
+			this.tableService.addCustomColumns(this);
 			this.tableConfig$ = this.tableService.getTableConfig();
-			this.data$ = this.tableService.data$;
+			this.dataList$ = this.tableService.dataList$;
 			this.cdr.detectChanges();
 		});
 	}
 
+	private initFilterConfig(): void {
+		this.filterConfig = {
+			name: {type: TableFilterFieldType.Text, placeholder: 'Filter by name'}
+		};
+	}
+
 	applyFilter(filterValues: any): void {
 		this.tableService.applyFilter(filterValues);
-		this.data$ = this.tableService.data$;
+		this.dataList$ = this.tableService.dataList$;
 	}
 
 	onColumnSelectionChanged(selectedColumns: Set<string>): void {
 		this.tableService.updateColumnVisibility(selectedColumns);
 	}
 
+	setModalVisibility(event: boolean): void {
+		this.visible = event;
+		console.log('this.visible setModalVisibility', this.visible);
+	}
+
 	edit(product: Package): void {
 		console.log('product', product);
 		this.selectedData = product;
 		this.setModalVisibility(true);
-	}
-
-	setModalVisibility(event: boolean): void {
-		this.visible = event;
-		console.log('this.visible setModalVisibility', this.visible);
 	}
 }

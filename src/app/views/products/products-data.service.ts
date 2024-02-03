@@ -1,20 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { packagesMock } from './products-mock';
 import { Package } from '../../shared/model/package';
+import { DataService } from '../../shared';
 
 @Injectable({
 	providedIn: 'root'
 })
-export class ProductsDataService {
-	private apiUrl = 'url_to_your_api_endpoint';
+export class ProductsDataService extends DataService<Package>{
+	private apiUrl = '/api/api/v1/products/query/all';
 
-	constructor(private http: HttpClient) {}
+	constructor(public http: HttpClient) {
+		super(http, '/api/api/v1/products')
+	}
 
-	getData(): Observable<Package[]> {
-		// return throwError(() => new Error('Internal Server Error'));
-		return of(packagesMock);
-		// return this.http.get<Provider[]>(this.apiUrl);
+	list(): Observable<Package[]> {
+		return this.http.get<Package[]>(this.apiUrl).pipe(
+			catchError(() => {
+				console.warn('error happened, presenting mocked data');
+				return of(packagesMock)
+			})
+		);
 	}
 }

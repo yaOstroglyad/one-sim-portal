@@ -11,8 +11,8 @@ import { TableConfig } from './table-column-config.interface';
 export class GenericTableComponent {
 	@Input() config$: Observable<TableConfig>;
 	@Input() data$: Observable<any[]>;
-  @Output() selectedItemsChange = new EventEmitter<any>;
-  @Output() toggleAction = new EventEmitter<any>;
+	@Output() selectedItemsChange = new EventEmitter<any>;
+	@Output() toggleAction = new EventEmitter<any>;
 
 	public selectedItems = new Set<any>();
 	public toggleAll(event: any): void {

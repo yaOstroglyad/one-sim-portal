@@ -6,7 +6,7 @@ export enum TableFilterFieldType {
 export interface FilterConfig {
 	[key: string]: {
 		type: TableFilterFieldType;
+		placeholder?: string;
 		options?: Array<{ label: string; value: any }>;
-		placeholder: string;
 	};
 }

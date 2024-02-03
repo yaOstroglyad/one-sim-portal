@@ -4,11 +4,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
 import { RegisterComponent } from './views/pages/register/register.component';
+import { AuthGuardService } from './shared';
 
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./containers/default-layout/default-layout.module').then((m) => m.DefaultLayoutModule)
+    loadChildren: () => import('./containers/default-layout/default-layout.module').then((m) => m.DefaultLayoutModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'login',

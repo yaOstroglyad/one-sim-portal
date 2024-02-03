@@ -1,3 +1,15 @@
 .min-w-3r {
   min-width: 3rem;
 }
+table {
+  width: 100%;
+  table-layout: auto;
+}
+
+th, td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 100px;
+  max-width: 300px;
+}

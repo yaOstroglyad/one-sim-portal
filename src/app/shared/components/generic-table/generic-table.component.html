@@ -4,7 +4,8 @@
             <thead>
             <tr>
                 <th *ngIf="config.showCheckboxes"
-                    class="min-w-3r text-center">
+                    class="min-w-3r text-center"
+                    scope="col">
                     <input type="checkbox"
                            class="c-pointer"
                            [checked]="this.selectedItems.size"
@@ -16,7 +17,8 @@
                         {{ config?.translatePrefix + col.header | translate }}
                     </th>
                 </ng-container>
-                <th *ngIf="config.showEditButton"></th>
+                <th scope="col"
+                    *ngIf="config.showEditButton"></th>
             </tr>
             </thead>
             <tbody>

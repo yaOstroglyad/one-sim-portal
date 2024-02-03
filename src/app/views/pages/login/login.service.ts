@@ -3,9 +3,7 @@ import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
 import { take } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { AuthService } from '../../../shared/auth/auth.service';
-import { CookieHelperService } from '../../../shared/auth/cookie-helper.service';
-import { LoginRequest } from '../../../shared/model/loginRequest';
+import { LoginRequest, AuthService, CookieHelperService } from '../../../shared';
 
 
 @Injectable({providedIn: 'root'})

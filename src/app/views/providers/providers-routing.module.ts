@@ -5,11 +5,6 @@ import { ProvidersComponent } from './providers.component';
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'providers'
-  },
-  {
-    path: 'providers',
     data: {
       title: 'Providers'
     },

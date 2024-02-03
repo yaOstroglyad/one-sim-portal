@@ -51,12 +51,14 @@ export class TableFilterComponent implements OnInit {
 
   private resetColumnSelection(): void {
     const resetColumns = new Set<string>();
-    this.initialTableConfig.columns.forEach(col => {
-      if (col.visible) {
-        resetColumns.add(col.header);
-      }
-    });
-    this.currentSelectedColumns = resetColumns;
+    if (this.initialTableConfig) {
+      this.initialTableConfig.columns.forEach(col => {
+        if (col.visible) {
+          resetColumns.add(col.header);
+        }
+      });
+      this.currentSelectedColumns = resetColumns;
+    }
     this.columnSelectionChange.emit(resetColumns);
   }
 

@@ -5,7 +5,7 @@
 </table-filter>
 <generic-table [config$]="tableConfig$"
                (toggleAction)="edit($event)"
-               [data$]="data$"></generic-table>
+               [data$]="dataList$"></generic-table>
 
 <app-edit-product [visible]="visible"
                   [data]="selectedData"

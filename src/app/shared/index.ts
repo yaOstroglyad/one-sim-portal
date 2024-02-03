@@ -9,3 +9,5 @@ export * from './components/table-initialization-error/table-initialization-erro
 export * from './components/no-data/no-data.module'
 export * from './pipes/format-time/format-time.module';
 export * from './services/data.service';
+export * from './services/language.service';
+export * from './auth/index';

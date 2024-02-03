@@ -9,7 +9,7 @@ import { Provider } from '../../shared/model/provider';
 })
 export class ProvidersTableService extends TableConfigAbstractService {
 	private originalDataSubject = new BehaviorSubject<Provider[]>([]);
-	public data$: Observable<Provider[]> = this.originalDataSubject.asObservable();
+	public dataList$: Observable<Provider[]> = this.originalDataSubject.asObservable();
 	public tableConfigSubject = new BehaviorSubject<TableConfig>({
 		translatePrefix: 'provider.',
 		showCheckboxes: false,
@@ -20,19 +20,20 @@ export class ProvidersTableService extends TableConfigAbstractService {
 		]
 	});
 
+
 	constructor() {
 		super();
 	}
 
-	public updateData(data: Provider[]): void {
+	public updateTableData(data: Provider[]): void {
 		this.originalDataSubject.next(data);
 	}
 
-	public applyFilter(filterValues: any): void {
+	applyFilter(filterValues: any): void {
 		if (!filterValues) {
-			this.data$ = this.originalDataSubject.asObservable();
+			this.dataList$ = this.originalDataSubject.asObservable();
 		} else {
-			this.data$ = this.originalDataSubject.pipe(
+			this.dataList$ = this.originalDataSubject.pipe(
 				map(data => data.filter(item =>
 					(filterValues.name ? item.name.toUpperCase().includes(filterValues.name.toUpperCase()) : true)
 				))
