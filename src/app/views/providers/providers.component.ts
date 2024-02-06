@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { FilterConfig, TableConfig, TableFilterFieldType } from '../../shared';
+import { HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
 import { Provider } from '../../shared/model/provider';
 import { ProvidersTableService } from './providers-table.service';
 import { ProvidersDataService } from './providers-data.service';
@@ -15,14 +15,14 @@ import { TranslateService } from '@ngx-translate/core';
 export class ProvidersComponent implements OnInit {
   public tableConfig$: BehaviorSubject<TableConfig>;
   public dataList$: Observable<Provider[]>;
-  public filterConfig: FilterConfig = {};
+  public headerConfig: HeaderConfig = {};
 
   constructor(private cdr: ChangeDetectorRef,
               private tableService: ProvidersTableService,
               private providersDataService: ProvidersDataService,
               public translateService: TranslateService
   ) {
-    this.initFilterConfig();
+    this.initheaderConfig();
   }
 
   ngOnInit(): void {
@@ -34,8 +34,8 @@ export class ProvidersComponent implements OnInit {
     });
   }
 
-  private initFilterConfig(): void {
-    this.filterConfig = {
+  private initheaderConfig(): void {
+    this.headerConfig = {
       name: {type: TableFilterFieldType.Text, placeholder: 'Filter by name'},
     };
   }

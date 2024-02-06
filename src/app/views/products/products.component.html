@@ -1,8 +1,8 @@
-<table-filter [config]="filterConfig"
-              [tableConfig$]="tableConfig$"
-              (columnSelectionChange)="onColumnSelectionChanged($event)"
-              (filteredData)="applyFilter($event)">
-</table-filter>
+<app-header [config]="headerConfig"
+            [tableConfig$]="tableConfig$"
+            (columnSelectionChange)="onColumnSelectionChanged($event)"
+            (filteredData)="applyFilter($event)">
+</app-header>
 <generic-table [config$]="tableConfig$"
                (toggleAction)="edit($event)"
                [data$]="dataList$"></generic-table>

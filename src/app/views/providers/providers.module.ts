@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProvidersComponent } from './providers.component';
 import { ProvidersRoutingModule } from './providers-routing.module';
 import { CardComponent, TableDirective } from '@coreui/angular';
-import { GenericTableModule, TableFilterModule } from '../../shared';
+import { GenericTableModule, HeaderModule, TableFilterModule } from '../../shared';
 
 
 
@@ -17,7 +17,8 @@ import { GenericTableModule, TableFilterModule } from '../../shared';
 		TableDirective,
 		CardComponent,
 		TableFilterModule,
-		GenericTableModule
+		GenericTableModule,
+		HeaderModule
 	]
 })
 export class ProvidersModule { }

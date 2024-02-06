@@ -3,10 +3,11 @@ export enum TableFilterFieldType {
 	Select = 'select',
 	Number = 'number'
 }
-export interface FilterConfig {
+export interface HeaderConfig {
 	[key: string]: {
 		type: TableFilterFieldType;
 		placeholder?: string;
+		defaultValue?: any;
 		options?: Array<{ label: string; value: any }>;
 	};
 }

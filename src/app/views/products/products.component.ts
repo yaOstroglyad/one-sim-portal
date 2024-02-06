@@ -1,14 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Package } from '../../shared/model/package';
-import { cilPencil } from '@coreui/icons';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { FilterConfig, TableConfig, TableFilterFieldType } from '../../shared';
+import { HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
 import { ProductsTableService } from './products-table.service';
 import { ProductsDataService } from './products-data.service';
-import { packagesMock } from './products-mock';
-import { Provider } from '../../shared/model/provider';
-import { ProvidersTableService } from '../providers/providers-table.service';
-import { ProvidersDataService } from '../providers/providers-data.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -23,14 +18,14 @@ export class ProductsComponent implements OnInit {
 	public selectedData: Package;
 	public tableConfig$: BehaviorSubject<TableConfig>;
 	public dataList$: Observable<Package[]>;
-	public filterConfig: FilterConfig = {};
+	public headerConfig: HeaderConfig = {};
 
 	constructor(private cdr: ChangeDetectorRef,
 							private tableService: ProductsTableService,
 							private productsDataService: ProductsDataService,
 							public translateService: TranslateService
 	) {
-		this.initFilterConfig();
+		this.initheaderConfig();
 	}
 
 	ngOnInit(): void {
@@ -43,8 +38,8 @@ export class ProductsComponent implements OnInit {
 		});
 	}
 
-	private initFilterConfig(): void {
-		this.filterConfig = {
+	private initheaderConfig(): void {
+		this.headerConfig = {
 			name: {type: TableFilterFieldType.Text, placeholder: 'Filter by name'}
 		};
 	}

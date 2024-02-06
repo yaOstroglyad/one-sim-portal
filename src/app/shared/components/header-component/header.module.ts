@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableFilterComponent } from './table-filter.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ButtonDirective, FormControlDirective, FormSelectDirective } from '@coreui/angular';
+import { ButtonDirective, DropdownToggleDirective, FormControlDirective, FormSelectDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { ColumnControlModule } from '../column-control/column-control.module';
+import { MatIconModule } from '@angular/material/icon';
+import { HeaderComponent } from './header.component';
 
 
 
 @NgModule({
   declarations: [
-    TableFilterComponent
+    HeaderComponent
   ],
 	imports: [
 		CommonModule,
@@ -19,10 +20,12 @@ import { ColumnControlModule } from '../column-control/column-control.module';
 		IconDirective,
 		FormControlDirective,
 		FormSelectDirective,
-		ColumnControlModule
+		ColumnControlModule,
+		MatIconModule,
+		DropdownToggleDirective
 	],
   exports: [
-    TableFilterComponent
+		HeaderComponent
   ]
 })
-export class TableFilterModule { }
+export class HeaderModule { }

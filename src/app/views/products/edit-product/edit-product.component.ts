@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { UsageInfo } from '../../../shared/model/usageInfo';
+import { UsageInfo } from '../../../shared';
 import UnitTypeDataEnum = UsageInfo.UnitTypeDataEnum;
 import UsageTypeEnum = UsageInfo.UsageTypeEnum;
 import UnitTypeAmountEnum = UsageInfo.UnitTypeAmountEnum;
