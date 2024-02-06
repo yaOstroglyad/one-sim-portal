@@ -56,11 +56,6 @@ export class ProductsComponent implements OnInit {
 		this.tableService.updateColumnVisibility(selectedColumns);
 	}
 
-	setModalVisibility(event: boolean): void {
-		this.visible = event;
-		console.log('this.visible setModalVisibility', this.visible);
-	}
-
 	edit(product: Package): void {
 		const dialogRef = this.dialog.open(EditProductComponent, {
 			width: '650px',
