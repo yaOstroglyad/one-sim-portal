@@ -29,6 +29,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { GenericTableModule, HeaderModule } from '../../shared';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 
 
@@ -64,7 +66,9 @@ import { GenericTableModule, HeaderModule } from '../../shared';
 		MatInputModule,
 		InputGroupComponent,
 		GenericTableModule,
-		HeaderModule
+		HeaderModule,
+		MatDialogModule,
+		MatButtonModule
 	],
 	providers: [
 		MatDatepickerModule

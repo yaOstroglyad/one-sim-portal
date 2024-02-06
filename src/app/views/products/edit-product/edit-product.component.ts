@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UsageInfo } from '../../../shared';
 import UnitTypeDataEnum = UsageInfo.UnitTypeDataEnum;
 import UsageTypeEnum = UsageInfo.UsageTypeEnum;
 import UnitTypeAmountEnum = UsageInfo.UnitTypeAmountEnum;
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit-product',
@@ -11,11 +12,6 @@ import UnitTypeAmountEnum = UsageInfo.UnitTypeAmountEnum;
   styleUrls: ['./edit-product.component.scss']
 })
 export class EditProductComponent {
-  @Input() data: any;
-  @Input() visible: boolean;
-  @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onFormChange: EventEmitter<any> = new EventEmitter<any>();
-
   form: FormGroup = new FormGroup({
     id: new FormControl(null),
     name: new FormControl(null),
@@ -25,6 +21,9 @@ export class EditProductComponent {
     price: new FormControl(null),
     currency: new FormControl(null)
   });
+
+  currencies = [];
+  providers = [];
 
   usages = [{
     unitType: UnitTypeDataEnum.Gb,
@@ -46,16 +45,34 @@ export class EditProductComponent {
     remaining: 100
   }]
 
-  constructor() {}
-  close () {
-    this.onClose.emit(false);
-  }
-  submit() {
-    console.log('form', this.form.value);
-    this.close();
+  constructor(
+    public dialogRef: MatDialogRef<EditProductComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    if (this.data) {
+      this.initializeFormData(this.data);
+    }
   }
 
-  setDate(event) {
-    console.log('event', event);
+  private initializeFormData(data: any): void {
+    this.form.patchValue({
+      id: data.id || null,
+      name: data.name || '',
+      providerName: data.providerName || '',
+      usages: data.usages || [],
+      effectiveDate: data.effectiveDate || '',
+      price: data.price || '',
+      currency: data.currency || ''
+    });
+  }
+
+  close(): void {
+    this.dialogRef.close();
+  }
+
+  submit(): void {
+    // Обработка отправки формы
+    console.log('form', this.form.value);
+    this.dialogRef.close(this.form.value); // Можно передать данные формы обратно
   }
 }

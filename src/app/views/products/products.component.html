@@ -7,10 +7,6 @@
                (toggleAction)="edit($event)"
                [data$]="dataList$"></generic-table>
 
-<app-edit-product [visible]="visible"
-                  [data]="selectedData"
-                  (onClose)="setModalVisibility($event)"></app-edit-product>
-
 <ng-template #usageTemplate let-data='context'>
     <td>
         <div class="badge-display">

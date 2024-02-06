@@ -1,71 +1,50 @@
-<c-modal size="lg"
-         backdrop="static"
-         alignment="center"
-         [visible]="visible">
-    <c-modal-header>
-        <h5 cModalTitle>Create / Edit product</h5>
-        <button (click)="close()" cButtonClose></button>
-    </c-modal-header>
-    <c-modal-body>
-        <form [formGroup]="form"
-              cForm>
-            <c-row>
-                <c-col [xs]="6" class="mb-3">
-                    <input aria-label="Product name"
-                           formControlName="name"
-                           cFormControl
-                           placeholder="Product name" />
-                </c-col>
-                <c-col [xs]="6" class="mb-3">
-                    <select aria-label="Provider name"
-                            formControlName="providerName"
-                            cSelect>
-                        <option disabled>Select provider</option>
-                        <option value="Venta">Venta</option>
-                    </select>
-                </c-col>
-                <c-col [xs]="6" class="mb-3">
-                    <select aria-label="Usages"
-                            formControlName="usages"
-                            multiple
-                            cSelect>
-                        <option disabled>Select packages</option>
-                        <option *ngFor="let usage of usages" [value]="usage">{{usage.total}} {{usage.unitType}}</option>
-                    </select>
-                </c-col>
-                <c-col [xs]="6" class="mb-3">
-                    <mat-form-field appearance="outline" size="lg">
-                        <mat-label>Set a effective date</mat-label>
-                        <input matInput [matDatepicker]="picker">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
-                </c-col>
-                <c-col [xs]="6" class="mb-3">
-                    <c-input-group>
-                        <input aria-label="Price"
-                               formControlName="price"
-                               cFormControl
-                               placeholder="Product price" />
-                        <select aria-label="currency"
-                                formControlName="currency"
-                                cSelect>
-                            <option disabled>Select currency</option>
-                            <option value="$">$</option>
-                        </select>
-                    </c-input-group>
-                </c-col>
-            </c-row>
-        </form>
-    </c-modal-body>
-    <c-modal-footer>
-        <button cButton
-                color="secondary"
-                (click)="close()">
-            Close
-        </button>
-        <button cButton
-                class="bg-primary"
-                (click)="submit()">Save changes</button>
-    </c-modal-footer>
-</c-modal>
+<h2 mat-dialog-title class="dialog-header">{{ data ? 'Edit' : 'Create' }} product</h2>
+<mat-dialog-content class="mat-typography dialog-content">
+    <form [formGroup]="form" class="product-form">
+        <div class="grid-container">
+            <mat-form-field class="grid-item" appearance="fill">
+                <mat-label>Product name</mat-label>
+                <input matInput formControlName="name">
+            </mat-form-field>
+
+        <mat-form-field class="grid-item" appearance="fill">
+            <mat-label>Provider name</mat-label>
+            <select matNativeControl formControlName="providerName">
+                <option value="" disabled>Select provider</option>
+                <option *ngFor="let provider of providers" [value]="provider">{{provider}}</option>
+            </select>
+        </mat-form-field>
+
+        <mat-form-field class="grid-item" appearance="fill">
+            <mat-label>Usages</mat-label>
+            <select matNativeControl formControlName="usages" multiple>
+                <option *ngFor="let usage of usages" [value]="usage">{{usage.total}} {{usage.unitType}}</option>
+            </select>
+        </mat-form-field>
+
+        <mat-form-field class="grid-item" appearance="fill">
+            <mat-label>Effective date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="effectiveDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="grid-item" appearance="fill">
+            <mat-label>Price</mat-label>
+            <input matInput formControlName="price" placeholder="Product price">
+        </mat-form-field>
+
+        <mat-form-field class="grid-item" appearance="fill">
+            <mat-label>Currency</mat-label>
+            <select matNativeControl formControlName="currency">
+                <option value="" disabled>Select currency</option>
+                <option *ngFor="let currency of currencies" [value]="currency">{{currency}}</option>
+            </select>
+        </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-footer" align="end">
+    <button mat-button (click)="close()">Cancel</button>
+    <button mat-button color="primary" (click)="submit()">Save changes</button>
+</mat-dialog-actions>

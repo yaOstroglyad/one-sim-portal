@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./containers/default-layout/default-layout.module').then((m) => m.DefaultLayoutModule),
-    canActivate: [AuthGuardService]
+    // canActivate: [AuthGuardService]
   },
   {
     path: 'login',
