@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   @Input() config: HeaderConfig;
   @Input() tableConfig$: Observable<TableConfig>;
   @Output() filteredData = new EventEmitter<any>();
+  @Output() onAddAction = new EventEmitter<any>();
   @Output() columnSelectionChange = new EventEmitter<Set<string>>();
 
   headerForm: FormGroup;
@@ -65,5 +66,9 @@ export class HeaderComponent implements OnInit {
   onColumnSelectionChanged($event: Set<string>): void {
     this.currentSelectedColumns = $event;
     this.columnSelectionChange.emit($event);
+  }
+
+  addNewEntity(): void {
+    this.onAddAction.emit();
   }
 }

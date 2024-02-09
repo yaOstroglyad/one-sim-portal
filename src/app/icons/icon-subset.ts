@@ -67,7 +67,7 @@ import {
   cilPaperPlane,
   cilPen,
   cilPencil,
-  cilPeople,
+  cilPeople, cilPlus,
   cilPrint,
   cilPuzzle, cilReload,
   cilReportSlash,
@@ -189,6 +189,7 @@ export const iconSubset = {
   cilGroup,
   cilFilter,
   cilReload,
+  cilPlus,
   cilColumns
 };
 
@@ -286,4 +287,5 @@ export enum IconSubset {
   cilGroup = 'cilGroup',
   cilIndustry = 'cilIndustry',
   cilShieldAlt = 'cilShieldAlt',
+  cilPlus = 'cilPlus',
 }

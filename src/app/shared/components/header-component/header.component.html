@@ -13,8 +13,18 @@
         </select>
     </ng-container>
     <!-- Column picker -->
-    <column-control *ngIf="tableConfig$ | async" [config$]="tableConfig$" [currentSelectedColumns]="currentSelectedColumns"
-                    (columnSelectionChange)="onColumnSelectionChanged($event)"></column-control>
+    <ng-container *ngIf="tableConfig$ | async as tableConfig">
+        <column-control [config$]="tableConfig$"
+                        [currentSelectedColumns]="currentSelectedColumns"
+                        (columnSelectionChange)="onColumnSelectionChanged($event)"></column-control>
+        <!-- Reset button -->
+        <button *ngIf="tableConfig.showEditButton"
+                class="me-1"
+                cButton color="primary"
+                (click)="addNewEntity()">
+            <svg cIcon name="cilPlus"></svg>
+        </button>
+    </ng-container>
     <!-- Slot for additional actions -->
     <ng-content select="[header-actions]"></ng-content>
     <!-- Reset button -->
