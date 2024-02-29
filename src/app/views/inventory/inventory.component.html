@@ -1,0 +1,7 @@
+<app-header [config]="headerConfig"
+            [tableConfig$]="tableConfig$"
+            (columnSelectionChange)="onColumnSelectionChanged($event)"
+            (filteredData)="applyFilter($event)">
+</app-header>
+<generic-table [config$]="tableConfig$"
+               [data$]="dataList$"></generic-table>

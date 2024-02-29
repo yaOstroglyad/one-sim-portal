@@ -36,6 +36,11 @@ export const navItems: INavData[] = [
     url: 'products',
     iconComponent: { name: 'cil3d' },
   },
+  {
+    name: 'Inventory',
+    url: 'inventory',
+    iconComponent: { name: 'cil-sim' },
+  },
   // {
   //   name: 'Settings',
   //   url: 'settings',
