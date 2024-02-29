@@ -1,18 +1,10 @@
 {
-  "/api-pr": {
-    "target": "http://172.16.87.9:8888",
-    "secure": false,
-    "pathRewrite": {
-      "^/api": ""
-    }
-  },
   "/api": {
     "target": "https://esim-server.dev.global-sim.app",
     "secure": false,
+    "changeOrigin": true,
     "pathRewrite": {
       "^/api": ""
     }
   }
 }
-
-
