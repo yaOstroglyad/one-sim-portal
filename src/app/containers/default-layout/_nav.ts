@@ -17,11 +17,6 @@ export const navItems: INavData[] = [
   //   iconComponent: { name: 'cil-sim' },
   // },
   // {
-  //   name: 'Customers',
-  //   url: 'customers',
-  //   iconComponent: { name: 'cil-industry' },
-  // },
-  // {
   //   name: 'Subscribers',
   //   url: 'subscribers',
   //   iconComponent: { name: 'cil-group' },
@@ -30,6 +25,11 @@ export const navItems: INavData[] = [
     name: 'Providers',
     url: 'providers',
     iconComponent: { name: 'cil-apps-settings' },
+  },
+  {
+    name: 'Customers',
+    url: 'customers',
+    iconComponent: { name: 'cil-industry' },
   },
   {
     name: 'Products',

@@ -3,6 +3,10 @@
     "id": "ID",
     "name": "Name"
   },
+  "customer": {
+    "id": "ID",
+    "name": "Name"
+  },
   "package": {
     "id": "ID",
     "name": "Name",
