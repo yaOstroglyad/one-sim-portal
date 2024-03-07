@@ -1,0 +1,44 @@
+<ng-container *ngIf="config">
+    <form [formGroup]="form">
+<!--                <ng-container *ngFor="let field of config.fields">-->
+<!--                    <ng-container [ngSwitch]="field.type">-->
+<!--                        <ng-container *ngSwitchCase="'text'" [ngTemplateOutlet]="textTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>-->
+<!--                        <ng-container *ngSwitchCase="'password'" [ngTemplateOutlet]="passwordTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>-->
+<!--                        &lt;!&ndash; Добавьте другие ngSwitchCase для разных типов полей &ndash;&gt;-->
+<!--                    </ng-container>-->
+<!--                </ng-container>-->
+
+        <div *ngFor="let field of config.fields">
+            <ng-container [ngSwitch]="field.type">
+                <mat-form-field *ngSwitchCase="'text'" appearance="outline">
+                    <mat-label>{{field.label}}</mat-label>
+                    <input matInput [formControlName]="field.name" [type]="field.type">
+                </mat-form-field>
+
+                <mat-form-field *ngSwitchCase="'password'" appearance="outline">
+                    <mat-label>{{field.label}}</mat-label>
+                    <input matInput [formControlName]="field.name" [type]="field.type">
+                </mat-form-field>
+            </ng-container>
+        </div>
+
+        <button mat-button type="submit" [disabled]="!form.valid">Submit</button>
+    </form>
+</ng-container>
+
+
+<!--TODO использовать элементы позже -->
+
+<ng-template #textTemplate let-field>
+    <mat-form-field appearance="fill">
+        <mat-label>{{field.label}}</mat-label>
+        <input matInput [formControlName]="field.name" [type]="field.type">
+    </mat-form-field>
+</ng-template>
+
+<ng-template #passwordTemplate let-field>
+    <mat-form-field appearance="fill">
+        <mat-label>{{field.label}}</mat-label>
+        <input matInput [formControlName]="field.name" [type]="field.type">
+    </mat-form-field>
+</ng-template>

@@ -20,7 +20,13 @@
 .screen__content {
   z-index: 1;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
 }
 
 .screen__background {

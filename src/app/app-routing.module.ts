@@ -17,6 +17,10 @@ const routes: Routes = [
     loadChildren: () => import('./views/pages/login/login.module').then((m) => m.LoginPageModule)
   },
   {
+    path: 'register',
+    loadChildren: () => import('./views/pages/register/register.module').then((m) => m.RegisterModule),
+  },
+  {
     path: '404',
     component: Page404Component,
     data: {

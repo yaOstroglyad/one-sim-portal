@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RegistrationConfig } from './registration.config';
 
 @Component({
 	selector: 'app-register',
@@ -6,7 +7,8 @@ import { Component } from '@angular/core';
 	styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+	RegistrationConfig = RegistrationConfig;
 
-	constructor() { }
+	constructor() {}
 
 }
