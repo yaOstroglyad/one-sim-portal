@@ -1,6 +1,5 @@
 import { FieldType, FormConfig } from '../../../shared/components/form-generator/field-config';
 import { FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { of } from 'rxjs';
 
 export const passwordMatchValidator: ValidatorFn = (formGroup: FormGroup): ValidationErrors | null => {
 	const password = formGroup.get('password')?.value;
