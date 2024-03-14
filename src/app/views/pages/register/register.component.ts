@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RegistrationConfig } from './registration.config';
+import { FormGroup } from '@angular/forms';
 
 @Component({
 	selector: 'app-register',
@@ -8,7 +9,11 @@ import { RegistrationConfig } from './registration.config';
 })
 export class RegisterComponent {
 	RegistrationConfig = RegistrationConfig;
+	isFormValid: any;
 
 	constructor() {}
 
+	handleFormChanges(form: FormGroup): void {
+		this.isFormValid = form.valid;
+	}
 }

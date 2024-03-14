@@ -1,10 +1,15 @@
 // field-config.model.ts
 import { ValidatorFn } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 export enum FieldType {
 	text = 'text',
 	email = 'email',
 	password = 'password',
+	datepicker = 'datepicker',
+	textarea = 'textarea',
+	select = 'select',
+	checkbox = 'checkbox',
 }
 
 export interface FieldConfig {
@@ -12,6 +17,7 @@ export interface FieldConfig {
 	name: string;
 	label: string;
 	value?: any;
+	options?: Observable<Array<{value: any; displayValue: string}>>;
 	validators?: ValidatorFn | ValidatorFn[];
 	disabled?: boolean;
 	displayOptions?: {

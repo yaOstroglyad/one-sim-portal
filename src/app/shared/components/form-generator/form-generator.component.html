@@ -1,44 +1,89 @@
 <ng-container *ngIf="config">
     <form [formGroup]="form">
-<!--                <ng-container *ngFor="let field of config.fields">-->
-<!--                    <ng-container [ngSwitch]="field.type">-->
-<!--                        <ng-container *ngSwitchCase="'text'" [ngTemplateOutlet]="textTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>-->
-<!--                        <ng-container *ngSwitchCase="'password'" [ngTemplateOutlet]="passwordTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>-->
-<!--                        &lt;!&ndash; Добавьте другие ngSwitchCase для разных типов полей &ndash;&gt;-->
-<!--                    </ng-container>-->
-<!--                </ng-container>-->
+                <ng-container *ngFor="let field of config.fields">
+                    <ng-container [ngSwitch]="field.type">
+                        <ng-container *ngSwitchCase="'text'" [ngTemplateOutlet]="textTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="'textarea'" [ngTemplateOutlet]="textareaTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="'password'" [ngTemplateOutlet]="passwordTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="'email'" [ngTemplateOutlet]="email" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="'datepicker'" [ngTemplateOutlet]="datePickerTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="'select'" [ngTemplateOutlet]="selectTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="'checkbox'" [ngTemplateOutlet]="checkboxTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <!-- Добавьте другие ngSwitchCase для разных типов полей -->
+                    </ng-container>
+                </ng-container>
 
-        <div *ngFor="let field of config.fields">
-            <ng-container [ngSwitch]="field.type">
-                <mat-form-field *ngSwitchCase="'text'" appearance="outline">
-                    <mat-label>{{field.label}}</mat-label>
-                    <input matInput [formControlName]="field.name" [type]="field.type">
-                </mat-form-field>
+        <ng-template #textTemplate let-field>
+            <mat-form-field appearance="outline">
+                <mat-label>{{field.label}}</mat-label>
+                <input matInput [formControlName]="field.name" [type]="field.type">
+            </mat-form-field>
+        </ng-template>
 
-                <mat-form-field *ngSwitchCase="'password'" appearance="outline">
-                    <mat-label>{{field.label}}</mat-label>
-                    <input matInput [formControlName]="field.name" [type]="field.type">
-                </mat-form-field>
-            </ng-container>
-        </div>
+        <ng-template #textareaTemplate let-field>
+            <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>{{field.label}}</mat-label>
+                <textarea matInput [placeholder]="field.placeholder" [formControlName]="field.name"></textarea>
+            </mat-form-field>
+        </ng-template>
 
-        <button mat-button type="submit" [disabled]="!form.valid">Submit</button>
+        <ng-template #passwordTemplate let-field>
+            <mat-form-field appearance="outline">
+                <mat-label>{{field.label}}</mat-label>
+                <input matInput [formControlName]="field.name" [type]="field.type">
+            </mat-form-field>
+        </ng-template>
+
+        <ng-template #email let-field>
+            <mat-form-field appearance="outline">
+                <mat-label>{{field.label}}</mat-label>
+                <input matInput
+                       [formControlName]="field.name"
+                       [type]="field.type"
+                       placeholder="Введите ваш email"
+                       type="email">
+                <mat-error *ngIf="form.controls[field.name].hasError('required')" class="error">
+                    Email обязателен к заполнению
+                </mat-error>
+                <mat-error *ngIf="form.controls[field.name].hasError('email')" class="error">
+                    Пожалуйста, введите действительный email
+                </mat-error>
+            </mat-form-field>
+        </ng-template>
+
+        <ng-template #datePickerTemplate let-field>
+            <mat-form-field appearance="outline">
+                <mat-label>{{field.label}}</mat-label>
+                <input matInput [matDatepicker]="picker" [formControlName]="field.name">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="form.controls[field.name].hasError('required')" class="error">
+                    Дата обязательна к заполнению
+                </mat-error>
+            </mat-form-field>
+        </ng-template>
+
+        <ng-template #selectTemplate let-field>
+            <mat-form-field appearance="outline">
+                <mat-label>{{field.label}}</mat-label>
+                <mat-select [formControlName]="field.name">
+                    <mat-option *ngFor="let option of field.options | async" [value]="option.value">
+                        {{option.displayValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </ng-template>
+
+
+        <ng-template #checkboxTemplate let-field>
+            <mat-checkbox [formControlName]="field.name"
+                          [color]="'primary'"
+                          [disabled]="field.disabled">
+                {{field.label}}
+            </mat-checkbox>
+        </ng-template>
+
+
+
     </form>
 </ng-container>
-
-
-<!--TODO использовать элементы позже -->
-
-<ng-template #textTemplate let-field>
-    <mat-form-field appearance="fill">
-        <mat-label>{{field.label}}</mat-label>
-        <input matInput [formControlName]="field.name" [type]="field.type">
-    </mat-form-field>
-</ng-template>
-
-<ng-template #passwordTemplate let-field>
-    <mat-form-field appearance="fill">
-        <mat-label>{{field.label}}</mat-label>
-        <input matInput [formControlName]="field.name" [type]="field.type">
-    </mat-form-field>
-</ng-template>

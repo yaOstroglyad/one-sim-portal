@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormConfig } from './field-config';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { createControl } from './form-generator.utils';
@@ -11,12 +11,16 @@ import { createControl } from './form-generator.utils';
 })
 export class FormGeneratorComponent implements OnInit {
   @Input() config: FormConfig;
+  @Output() formChanges = new EventEmitter<FormGroup>();
   form: FormGroup = new FormGroup({});
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.form = this.createGroup(this.config);
+    this.form.valueChanges.subscribe(() => {
+      this.formChanges.emit(this.form);
+    });
   }
 
   createGroup(config: FormConfig): FormGroup {
@@ -25,7 +29,6 @@ export class FormGeneratorComponent implements OnInit {
       return controls;
     }, {});
 
-    return new FormGroup(groupControls, {validators: config.formValidators});
+    return this.fb.group(groupControls, {validators: config.formValidators});
   }
-
 }

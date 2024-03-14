@@ -1,5 +1,6 @@
 import { FieldType, FormConfig } from '../../../shared/components/form-generator/field-config';
 import { FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { of } from 'rxjs';
 
 export const passwordMatchValidator: ValidatorFn = (formGroup: FormGroup): ValidationErrors | null => {
 	const password = formGroup.get('password')?.value;
@@ -10,11 +11,14 @@ export const passwordMatchValidator: ValidatorFn = (formGroup: FormGroup): Valid
 export const RegistrationConfig: FormConfig = {
 	fields: [
 		{
-			type: FieldType.text,
-			name: 'username',
-			label: 'Username',
+			type: FieldType.email,
+			name: 'email',
+			label: 'Email',
 			value: '',
-			validators: [Validators.required, Validators.minLength(4)], // Пример валидаторов
+			validators: [
+				Validators.required,
+				Validators.email
+			],
 			disabled: false,
 			displayOptions: {
 				newLine: true
