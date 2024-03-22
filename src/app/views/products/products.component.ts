@@ -56,7 +56,7 @@ export class ProductsComponent implements OnInit {
 		this.tableService.updateColumnVisibility(selectedColumns);
 	}
 
-	edit(product: Package): void {
+	edit(product?: Package): void {
 		const dialogRef = this.dialog.open(EditProductComponent, {
 			width: '650px',
 			data: product

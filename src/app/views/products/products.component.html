@@ -1,5 +1,6 @@
 <app-header [config]="headerConfig"
             [tableConfig$]="tableConfig$"
+            (onAddAction)="edit()"
             (columnSelectionChange)="onColumnSelectionChanged($event)"
             (filteredData)="applyFilter($event)">
 </app-header>

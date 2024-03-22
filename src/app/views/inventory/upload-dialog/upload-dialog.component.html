@@ -1,0 +1,21 @@
+<h2 mat-dialog-title class="dialog-header">Upload reasons</h2>
+<mat-dialog-content class="mat-typography dialog-content"
+                    (dragover)="onDragOver($event)"
+                    (dragleave)="onDragLeave($event)"
+                    (drop)="onFileDropped($event)">
+    <div class="drop-zone">
+        Drag and drop!
+    </div>
+    <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)">
+    <button mat-button (click)="fileInput.click()">Choose File</button>
+    <div *ngIf="uploadSuccess" class="upload-success">
+        {{file?.name}} Upload Success!
+    </div>
+    <div *ngIf="uploadError" class="upload-error">
+        Something went wrong :(
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-footer" align="end">
+    <button mat-button (click)="close()">Cancel</button>
+    <button mat-button color="primary" (click)="submit()">Save changes</button>
+</mat-dialog-actions>

@@ -3,18 +3,36 @@ import { CommonModule } from '@angular/common';
 import { InventoryComponent } from './inventory.component';
 import { InventoryRoutingModule } from './inventory-routing.module';
 import { GenericTableModule, HeaderModule } from '../../shared';
+import { ButtonDirective } from '@coreui/angular';
+import { IconDirective } from '@coreui/icons-angular';
+import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
 @NgModule({
   declarations: [
-    InventoryComponent
+    InventoryComponent,
+		UploadDialogComponent
   ],
-  imports: [
-    CommonModule,
-    InventoryRoutingModule,
-    HeaderModule,
-    GenericTableModule
-  ]
+	imports: [
+		CommonModule,
+		InventoryRoutingModule,
+		HeaderModule,
+		GenericTableModule,
+		MatDialogModule,
+		ButtonDirective,
+		IconDirective,
+		MatButtonModule,
+		MatDatepickerModule,
+		MatFormFieldModule,
+		MatInputModule,
+		ReactiveFormsModule
+	]
 })
 export class InventoryModule { }

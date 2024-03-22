@@ -9,6 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 
@@ -28,7 +29,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 		MatDatepickerModule,
 		MatNativeDateModule,
 		MatSelectModule,
-		MatCheckboxModule
+		MatCheckboxModule,
+		FlexLayoutModule
 	]
 })
 export class FormGeneratorModule { }

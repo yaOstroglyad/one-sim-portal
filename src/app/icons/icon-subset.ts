@@ -20,7 +20,8 @@ import {
   cilAlignCenter,
   cilAlignLeft,
   cilAlignRight,
-  cilApplicationsSettings, cilAppsSettings,
+  cilApplicationsSettings,
+  cilAppsSettings,
   cilArrowBottom,
   cilArrowRight,
   cilArrowTop,
@@ -39,7 +40,7 @@ import {
   cilCode, cilColumns,
   cilCommentSquare,
   cilCreditCard,
-  cilCursor,
+  cilCursor, cilDataTransferDown, cilDataTransferUp,
   cilDollar,
   cilDrop,
   cilEnvelopeClosed,
@@ -190,6 +191,8 @@ export const iconSubset = {
   cilFilter,
   cilReload,
   cilPlus,
+  cilDataTransferDown,
+  cilDataTransferUp,
   cilColumns
 };
 
@@ -288,4 +291,6 @@ export enum IconSubset {
   cilIndustry = 'cilIndustry',
   cilShieldAlt = 'cilShieldAlt',
   cilPlus = 'cilPlus',
+  cilDataTransferDown = 'cilDataTransferDown',
+  cilDataTransferUp = 'cilDataTransferUp',
 }

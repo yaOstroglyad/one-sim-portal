@@ -2,6 +2,12 @@
             [tableConfig$]="tableConfig$"
             (columnSelectionChange)="onColumnSelectionChanged($event)"
             (filteredData)="applyFilter($event)">
+    <button cButton
+            color="dark"
+            class="me-1"
+            (click)="openUpload()" header-actions>
+        <svg cIcon name="cilDataTransferUp"></svg>
+    </button>
 </app-header>
 <generic-table [config$]="tableConfig$"
                [data$]="dataList$"></generic-table>

@@ -1,17 +1,21 @@
 <ng-container *ngIf="config">
     <form [formGroup]="form">
-                <ng-container *ngFor="let field of config.fields">
-                    <ng-container [ngSwitch]="field.type">
-                        <ng-container *ngSwitchCase="'text'" [ngTemplateOutlet]="textTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                        <ng-container *ngSwitchCase="'textarea'" [ngTemplateOutlet]="textareaTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                        <ng-container *ngSwitchCase="'password'" [ngTemplateOutlet]="passwordTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                        <ng-container *ngSwitchCase="'email'" [ngTemplateOutlet]="email" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                        <ng-container *ngSwitchCase="'datepicker'" [ngTemplateOutlet]="datePickerTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                        <ng-container *ngSwitchCase="'select'" [ngTemplateOutlet]="selectTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                        <ng-container *ngSwitchCase="'checkbox'" [ngTemplateOutlet]="checkboxTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                        <!-- Добавьте другие ngSwitchCase для разных типов полей -->
-                    </ng-container>
+        <ng-container *ngFor="let field of config.fields">
+            <div fxLayoutWrap
+                 fxLayoutGap="3.5%"
+                 fxLayoutAlign="left">
+                <ng-container [ngSwitch]="field.type">
+                    <ng-container *ngSwitchCase="'text'" [ngTemplateOutlet]="textTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="'textarea'" [ngTemplateOutlet]="textareaTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="'password'" [ngTemplateOutlet]="passwordTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="'email'" [ngTemplateOutlet]="email" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="'datepicker'" [ngTemplateOutlet]="datePickerTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="'select'" [ngTemplateOutlet]="selectTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="'checkbox'" [ngTemplateOutlet]="checkboxTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <!-- Добавьте другие ngSwitchCase для разных типов полей -->
                 </ng-container>
+            </div>
+        </ng-container>
 
         <ng-template #textTemplate let-field>
             <mat-form-field appearance="outline">
@@ -21,7 +25,7 @@
         </ng-template>
 
         <ng-template #textareaTemplate let-field>
-            <mat-form-field class="example-full-width" appearance="outline">
+            <mat-form-field appearance="outline">
                 <mat-label>{{field.label}}</mat-label>
                 <textarea matInput [placeholder]="field.placeholder" [formControlName]="field.name"></textarea>
             </mat-form-field>
