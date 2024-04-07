@@ -13,7 +13,8 @@ export class UploadDialogComponent {
 	file: File;
 
 	constructor(public dialogRef: MatDialogRef<UploadDialogComponent>,
-							@Inject(MAT_DIALOG_DATA) public data: { uploadResourceService: UploadResourceService }) {
+							@Inject(MAT_DIALOG_DATA) public data: { uploadResourceService: UploadResourceService, selectionResult: any }) {
+		console.log('data', this.data);
 	}
   onDragOver(event: DragEvent): void {
     event.preventDefault();

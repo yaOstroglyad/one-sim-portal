@@ -12,13 +12,16 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SetupResourceComponent } from './setup-resource/setup-resource.component';
+import { FormGeneratorModule } from '../../shared/components/form-generator/form-generator.module';
 
 
 
 @NgModule({
   declarations: [
     InventoryComponent,
-		UploadDialogComponent
+		UploadDialogComponent,
+  SetupResourceComponent
   ],
 	imports: [
 		CommonModule,
@@ -32,7 +35,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 		MatDatepickerModule,
 		MatFormFieldModule,
 		MatInputModule,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		FormGeneratorModule
 	]
 })
 export class InventoryModule { }

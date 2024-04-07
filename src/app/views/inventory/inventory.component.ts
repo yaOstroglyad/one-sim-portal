@@ -8,6 +8,7 @@ import { InventoryTableService } from './inventory-table.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';
 import { UploadResourceService } from './upload-resource.service';
+import { SetupResourceComponent } from './setup-resource/setup-resource.component';
 
 @Component({
   selector: 'app-inventory',
@@ -22,9 +23,9 @@ export class InventoryComponent {
   constructor(private cdr: ChangeDetectorRef,
               private tableService: InventoryTableService,
               private inventoryDataService: InventoryDataService,
-              public translateService: TranslateService,
+              private dialog: MatDialog,
               public uploadResourceService: UploadResourceService,
-              private dialog: MatDialog
+              public translateService: TranslateService,
   ) {
     this.initHeaderConfig();
   }
@@ -52,15 +53,32 @@ export class InventoryComponent {
   onColumnSelectionChanged(selectedColumns: Set<string>): void {
     this.tableService.updateColumnVisibility(selectedColumns);
   }
+  openSelectionDialog() {
+    const selectionDialogRef = this.dialog.open(SetupResourceComponent, {
+      width: '600px',
+      // Здесь могут быть данные и конфигурация для первого диалогового окна
+    });
 
-  openUpload() {
-    const dialogRef = this.dialog.open(UploadDialogComponent, {
+    selectionDialogRef.afterClosed().subscribe(selectionResult => {
+      console.log('selectionResult',selectionResult);
+      if (selectionResult) {
+        // Если пользователь выбрал значение и нажал "далее", открываем следующее диалоговое окно
+        this.openUpload(selectionResult);
+      }
+    });
+  }
+  openUpload(selectionResult: any) {
+    const uploadDialogRef = this.dialog.open(UploadDialogComponent, {
       width: '600px',
       data: {
-        uploadResourceService: this.uploadResourceService
+        uploadResourceService: this.uploadResourceService,
+        selectionResult: selectionResult
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {});
+    uploadDialogRef.afterClosed().subscribe(result => {
+      // Обработка результата второго диалогового окна
+    });
   }
+
 }
