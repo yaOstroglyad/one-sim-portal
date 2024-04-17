@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UploadResourceService } from '../upload-resource.service';
 
@@ -7,35 +7,41 @@ import { UploadResourceService } from '../upload-resource.service';
 	templateUrl: './upload-dialog.component.html',
 	styleUrls: ['./upload-dialog.component.scss']
 })
-export class UploadDialogComponent {
+export class UploadDialogComponent implements OnInit {
+	serviceProviderId: string;
 	uploadSuccess: boolean = false;
 	uploadError: boolean = false;
 	file: File;
 
-	constructor(public dialogRef: MatDialogRef<UploadDialogComponent>,
-							@Inject(MAT_DIALOG_DATA) public data: { uploadResourceService: UploadResourceService, selectionResult: any }) {
-		console.log('data', this.data);
-	}
-  onDragOver(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    const target = event.target as HTMLElement;
-    target.classList.add('drag-over');
-  }
+	constructor(
+		public dialogRef: MatDialogRef<UploadDialogComponent>,
+		@Inject(MAT_DIALOG_DATA) public data: any,
+		private uploadResourceService: UploadResourceService
+	) {}
 
-  onDragLeave(event: DragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    const target = event.target as HTMLElement;
-    target.classList.remove('drag-over');
-  }
+	ngOnInit(): void {
+		this.serviceProviderId = this.data.serviceProviderId;
+		console.log('this.data', this.data);
+		console.log('this.serviceProviderId', this.serviceProviderId);
+	}
+
+	onDragOver(event: DragEvent): void {
+		event.preventDefault();
+		event.stopPropagation();
+		const target = event.target as HTMLElement;
+		target.classList.add('drag-over');
+	}
+
+	onDragLeave(event: DragEvent): void {
+		event.preventDefault();
+		event.stopPropagation();
+		const target = event.target as HTMLElement;
+		target.classList.remove('drag-over');
+	}
 
 	onFileDropped(event: DragEvent): void {
 		event.preventDefault();
 		event.stopPropagation();
-
-    const target = event.target as HTMLElement;
-    target.classList.remove('drag-over');
 
 		const files = event.dataTransfer.files;
 		if (files.length > 0) {
@@ -44,15 +50,7 @@ export class UploadDialogComponent {
 		}
 	}
 
-	close(): void {
-		this.dialogRef.close();
-	}
-
-	submit(): void {
-		this.dialogRef.close();
-	}
-
-	onFileSelected(event: Event): void {
+	onFileSelected(event: any): void {
 		const input = event.target as HTMLInputElement;
 		if (input.files && input.files.length) {
 			this.file = input.files[0];
@@ -63,13 +61,21 @@ export class UploadDialogComponent {
 	private uploadFile(): void {
 		if (!this.file) return;
 
-		this.data.uploadResourceService.uploadFile(this.file).subscribe(
-			(success) => {
+		this.uploadResourceService.uploadFile(this.file, this.serviceProviderId).subscribe({
+			next: (res) => {
 				this.uploadSuccess = true;
 			},
-			error => {
+			error: (err) => {
 				this.uploadError = true;
 			}
-		);
+		});
+	}
+
+	close(): void {
+		this.dialogRef.close();
+	}
+
+	submit(): void {
+		this.dialogRef.close(this.uploadSuccess);
 	}
 }

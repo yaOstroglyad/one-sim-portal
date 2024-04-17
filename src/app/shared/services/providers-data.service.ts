@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
-import { providersMock } from './providers-mock';
-import { Provider } from '../../shared/model/provider';
-import { DataService } from '../../shared';
+import { providersMock } from '../../views/providers/providers-mock';
+import { Provider } from '../model/provider';
+import { DataService } from '../index';
 
 @Injectable({
 	providedIn: 'root'

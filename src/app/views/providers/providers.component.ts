@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
 import { Provider } from '../../shared/model/provider';
 import { ProvidersTableService } from './providers-table.service';
-import { ProvidersDataService } from './providers-data.service';
+import { ProvidersDataService } from '../../shared/services/providers-data.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({

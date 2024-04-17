@@ -4,15 +4,15 @@
                     (dragleave)="onDragLeave($event)"
                     (drop)="onFileDropped($event)">
     <div class="drop-zone">
-        Drag and drop!
+        Drag and drop your file here or click the button below to select the file.
     </div>
     <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)">
     <button mat-button (click)="fileInput.click()">Choose File</button>
     <div *ngIf="uploadSuccess" class="upload-success">
-        {{file?.name}} Upload Success!
+        {{file?.name}} uploaded successfully!
     </div>
     <div *ngIf="uploadError" class="upload-error">
-        Something went wrong :(
+        Something went wrong. Please try again.
     </div>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-footer" align="end">

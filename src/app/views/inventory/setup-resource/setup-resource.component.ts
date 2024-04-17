@@ -1,7 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SetupResourceFormConfig } from './setup-resource.utils';
+import { getSetupResourceFormConfig } from './setup-resource.utils';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ProvidersDataService } from '../../../shared/services/providers-data.service';
+import { FormConfig } from '../../../shared/components/form-generator/field-config';
 
 @Component({
   selector: 'app-setup-resource',
@@ -9,14 +11,17 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./setup-resource.component.scss']
 })
 export class SetupResourceComponent {
-  setupResourceFormConfig = SetupResourceFormConfig;
-  form: any;
-  isFormValid: any;
+  setupResourceFormConfig: FormConfig;
+  form: FormGroup;
+  isFormValid: boolean;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<SetupResourceComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+    private providersDataService: ProvidersDataService,
+  ) {
+    this.setupResourceFormConfig = getSetupResourceFormConfig(this.providersDataService);
+  }
 
   handleFormChanges(form: FormGroup): void {
     this.form = form;

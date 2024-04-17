@@ -7,7 +7,6 @@ import { InventoryDataService } from './inventory-data.service';
 import { InventoryTableService } from './inventory-table.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';
-import { UploadResourceService } from './upload-resource.service';
 import { SetupResourceComponent } from './setup-resource/setup-resource.component';
 
 @Component({
@@ -24,7 +23,6 @@ export class InventoryComponent {
               private tableService: InventoryTableService,
               private inventoryDataService: InventoryDataService,
               private dialog: MatDialog,
-              public uploadResourceService: UploadResourceService,
               public translateService: TranslateService,
   ) {
     this.initHeaderConfig();
@@ -56,13 +54,10 @@ export class InventoryComponent {
   openSelectionDialog() {
     const selectionDialogRef = this.dialog.open(SetupResourceComponent, {
       width: '600px',
-      // Здесь могут быть данные и конфигурация для первого диалогового окна
     });
 
     selectionDialogRef.afterClosed().subscribe(selectionResult => {
-      console.log('selectionResult',selectionResult);
       if (selectionResult) {
-        // Если пользователь выбрал значение и нажал "далее", открываем следующее диалоговое окно
         this.openUpload(selectionResult);
       }
     });
@@ -71,8 +66,7 @@ export class InventoryComponent {
     const uploadDialogRef = this.dialog.open(UploadDialogComponent, {
       width: '600px',
       data: {
-        uploadResourceService: this.uploadResourceService,
-        selectionResult: selectionResult
+        ...selectionResult
       }
     });
 

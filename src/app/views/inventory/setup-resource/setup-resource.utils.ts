@@ -1,33 +1,24 @@
 import { FieldType, FormConfig } from '../../../shared/components/form-generator/field-config';
 import { Validators } from '@angular/forms';
+import { ProvidersDataService } from '../../../shared/services/providers-data.service';
+import { map } from 'rxjs/operators';
 
-export const SetupResourceFormConfig: FormConfig = {
-	fields: [
-		{
-			type: FieldType.text,
-			name: 'name',
-			label: 'Resource name',
-			value: '',
-			validators: [
-				Validators.required
-			],
-			disabled: false,
-			displayOptions: {
-				newLine: true
+export function getSetupResourceFormConfig(dataService: ProvidersDataService): FormConfig {
+	return {
+		fields: [
+			{
+				type: FieldType.select,
+				name: 'serviceProviderId',
+				label: 'Service Provider',
+				validators: [Validators.required],
+				options: dataService.list().pipe(
+					map(providers => providers.map(
+						provider => ({
+							value: provider.id, displayValue: provider.name
+						})
+					))
+				)
 			}
-		},
-		{
-			type: FieldType.text,
-			name: 'resourceType',
-			label: 'Resource type',
-			value: '',
-			validators: [
-				Validators.required
-			],
-			disabled: false,
-			displayOptions: {
-				newLine: true
-			}
-		}
-	]
-};
+		]
+	};
+}
