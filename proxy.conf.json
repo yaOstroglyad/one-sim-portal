@@ -2,9 +2,11 @@
   "/api": {
     "target": "https://esim-server.dev.global-sim.app",
     "secure": false,
-    "changeOrigin": true,
-    "pathRewrite": {
-      "^/api": ""
-    }
+    "changeOrigin": true
+  },
+  "/auth": {
+    "target": "https://esim-server.dev.global-sim.app",
+    "secure": false,
+    "changeOrigin": true
   }
 }

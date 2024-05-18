@@ -9,10 +9,10 @@ import { Customer } from '../../shared/model/customer';
 	providedIn: 'root'
 })
 export class CustomersDataService extends DataService<Customer> {
-	private apiUrl = '/api/api/v1/customers/query/all';
+	private apiUrl = '/api/v1/customers/query/all';
 
 	constructor(public http: HttpClient) {
-		super(http, '/api/api/v1/customers')
+		super(http, '/api/v1/customers')
 	}
 
 	list(): Observable<Customer[]> {

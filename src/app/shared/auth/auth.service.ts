@@ -15,8 +15,8 @@ export const defaultConfig = {
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-  private static AUTH_URL = '/api/auth/login';
-  private static RE_AUTH_URL = '/api/auth/refresh';
+  private static AUTH_URL = '/auth/login';
+  private static RE_AUTH_URL = '/auth/refresh';
   private rememberMe: boolean = false;
 
   public $viewConfig: BehaviorSubject<UserViewConfig> = new BehaviorSubject<UserViewConfig>(defaultConfig)

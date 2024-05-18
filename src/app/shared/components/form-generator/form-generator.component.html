@@ -6,6 +6,7 @@
                  fxLayoutAlign="left">
                 <ng-container [ngSwitch]="field.type">
                     <ng-container *ngSwitchCase="'text'" [ngTemplateOutlet]="textTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="'number'" [ngTemplateOutlet]="numberTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
                     <ng-container *ngSwitchCase="'textarea'" [ngTemplateOutlet]="textareaTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
                     <ng-container *ngSwitchCase="'password'" [ngTemplateOutlet]="passwordTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
                     <ng-container *ngSwitchCase="'email'" [ngTemplateOutlet]="email" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
@@ -18,6 +19,13 @@
         </ng-container>
 
         <ng-template #textTemplate let-field>
+            <mat-form-field appearance="outline">
+                <mat-label>{{field.label}}</mat-label>
+                <input matInput [formControlName]="field.name" [type]="field.type">
+            </mat-form-field>
+        </ng-template>
+
+        <ng-template #numberTemplate let-field>
             <mat-form-field appearance="outline">
                 <mat-label>{{field.label}}</mat-label>
                 <input matInput [formControlName]="field.name" [type]="field.type">

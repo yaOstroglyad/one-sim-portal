@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { UploadResourceService } from '../upload-resource.service';
+import { UploadResourceService } from './upload-resource.service';
 
 @Component({
 	selector: 'app-upload-dialog',
@@ -21,8 +21,6 @@ export class UploadDialogComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.serviceProviderId = this.data.serviceProviderId;
-		console.log('this.data', this.data);
-		console.log('this.serviceProviderId', this.serviceProviderId);
 	}
 
 	onDragOver(event: DragEvent): void {

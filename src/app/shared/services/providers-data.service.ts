@@ -9,10 +9,10 @@ import { DataService } from '../index';
 	providedIn: 'root'
 })
 export class ProvidersDataService extends DataService<Provider> {
-	private apiUrl = '/api/api/v1/service-providers/query/all';
+	private apiUrl = '/api/v1/service-providers/query/all';
 
 	constructor(public http: HttpClient) {
-		super(http, '/api/api/v1/service-providers')
+		super(http, '/api/v1/service-providers')
 	}
 
 	list(): Observable<Provider[]> {

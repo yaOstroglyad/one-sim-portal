@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 export enum FieldType {
 	text = 'text',
+	number = 'number',
 	email = 'email',
 	password = 'password',
 	datepicker = 'datepicker',

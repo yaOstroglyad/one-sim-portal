@@ -1,4 +1,7 @@
 {
+  "shared": {
+    "no-data": "No data"
+  },
   "provider": {
     "id": "ID",
     "name": "Name"
@@ -19,8 +22,14 @@
   "resource": {
     "id": "ID",
     "lpa": "LPA",
-    "server":  "Server",
+    "server": "Server",
     "code": "Code",
-    "oid":  "OID"
+    "oid": "OID",
+    "iccid": "ICCID",
+    "imei": "IMEI",
+    "imsi": "IMSI",
+    "msisdn": "MSISDN",
+    "status": "Status",
+    "provider": "Name"
   }
 }

@@ -18,6 +18,7 @@
                     </th>
                 </ng-container>
                 <th scope="col"
+                    class="sticky-column"
                     *ngIf="config.showEditButton"></th>
             </tr>
             </thead>
@@ -34,7 +35,7 @@
                 <ng-container *ngFor="let col of config.columns">
                     <td *ngIf="col.visible">
                         <ng-container [ngSwitch]="col.templateType">
-                            <ng-container *ngSwitchCase="'text'">{{ item[col.key] }}</ng-container>
+                            <ng-container *ngSwitchCase="'text'">{{ item | displayValueByKey: col.key }}</ng-container>
                             <ng-container *ngSwitchCase="'date'">{{ item[col.key] | date: col.dateFormat }}
                             </ng-container>
                             <ng-container *ngSwitchCase="'time'">{{ item[col.key] | formatTime }}</ng-container>
@@ -48,13 +49,28 @@
                 </ng-container>
                 <td *ngIf="config.showEditButton"
                     (click)="onEdit(item)"
-                    class="min-w-3r text-center c-pointer">
+                    class="min-w-3r text-center c-pointer sticky-column">
                     <svg cIcon
                          name="cilPencil"></svg>
                 </td>
             </tr>
             </tbody>
         </table>
+        <ng-container *ngIf="config.pagination?.enabled">
+            <c-pagination aria-label="Page navigation">
+                <li cPageItem (click)="changePage(currentPage - 1, config.pagination?.serverSide)" [class.disabled]="currentPage === 1">
+                    <div cPageLink>Previous</div>
+                </li>
+
+                <li cPageItem>
+                    <div cPageLink>{{ currentPage + 1 }} of {{ totalPages }}</div>
+                </li>
+
+                <li cPageItem (click)="changePage(currentPage + 1, config.pagination?.serverSide)" [class.disabled]="currentPage === totalPages">
+                    <div cPageLink>Next</div>
+                </li>
+            </c-pagination>
+        </ng-container>
     </c-card>
 </ng-container>
 

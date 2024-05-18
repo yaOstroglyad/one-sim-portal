@@ -14,6 +14,12 @@ export interface TableConfig {
 	translatePrefix?: string;
 	showCheckboxes?: boolean;
 	showEditButton?: boolean;
+	pagination?: {
+		enabled: boolean;
+		serverSide: boolean;
+		page?: number,
+		size?: number
+	};
 }
 
 export enum TemplateType {

@@ -9,10 +9,10 @@ import { DataService } from '../../shared';
 	providedIn: 'root'
 })
 export class ProductsDataService extends DataService<Package>{
-	private apiUrl = '/api/api/v1/products/query/all';
+	private apiUrl = '/api/v1/products/query/all';
 
 	constructor(public http: HttpClient) {
-		super(http, '/api/api/v1/products')
+		super(http, '/api/v1/products')
 	}
 
 	list(): Observable<Package[]> {

@@ -5,9 +5,29 @@
     <button cButton
             color="dark"
             class="me-1"
+            [matTooltip]="'Upload Resource'"
             (click)="openSelectionDialog()" header-actions>
         <svg cIcon name="cilDataTransferUp"></svg>
     </button>
+    <button cButton
+            color="dark"
+            class="me-1"
+            [matTooltip]="'Move Resource'"
+            (click)="onMoveResource()" header-actions>
+        <svg cIcon name="cilArrowThickToRight"></svg>
+    </button>
 </app-header>
 <generic-table [config$]="tableConfig$"
-               [data$]="dataList$"></generic-table>
+               [data$]="dataList$"
+               (pageChange)="onPageChange($event)"></generic-table>
+
+<mat-card *ngIf="moveResult.isActive"
+          class="notification-card"
+          style="background: #7b7bff">
+    <mat-card-content>
+        <div style="color: #ffffff">
+            <p>{{moveResult.movedSims}} SIM cards have been moved</p>
+            <p>There are still available cards to move: {{moveResult.availableSims}}</p>
+        </div>
+    </mat-card-content>
+</mat-card>

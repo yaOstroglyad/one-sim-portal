@@ -9,12 +9,25 @@ import { TableConfig } from './table-column-config.interface';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GenericTableComponent {
+	public currentPage = 0;
+	public pageSize = 10;
+	//TODO need to be updated based on BE response
+	public totalPages: number = 20;
+
 	@Input() config$: Observable<TableConfig>;
 	@Input() data$: Observable<any[]>;
+
 	@Output() selectedItemsChange = new EventEmitter<any>;
 	@Output() toggleAction = new EventEmitter<any>;
+	@Output() pageChange = new EventEmitter<any>;
 
 	public selectedItems = new Set<any>();
+
+	public changePage(newPage: number, isServerSide: boolean): void {
+		this.currentPage = newPage;
+		this.pageChange.emit({ page: this.currentPage, size: this.pageSize, isServerSide });
+	}
+
 	public toggleAll(event: any): void {
 		if (event.target.checked) {
 			this.data$.pipe(

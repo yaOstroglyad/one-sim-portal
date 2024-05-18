@@ -40,7 +40,7 @@ import {
   cilCode, cilColumns,
   cilCommentSquare,
   cilCreditCard,
-  cilCursor, cilDataTransferDown, cilDataTransferUp,
+  cilCursor, cilDataTransferDown, cilDataTransferUp, cilArrowThickToRight,
   cilDollar,
   cilDrop,
   cilEnvelopeClosed,
@@ -193,6 +193,7 @@ export const iconSubset = {
   cilPlus,
   cilDataTransferDown,
   cilDataTransferUp,
+  cilArrowThickToRight,
   cilColumns
 };
 
@@ -293,4 +294,5 @@ export enum IconSubset {
   cilPlus = 'cilPlus',
   cilDataTransferDown = 'cilDataTransferDown',
   cilDataTransferUp = 'cilDataTransferUp',
+  cilArrowThickToRight = 'cilArrowThickToRight',
 }

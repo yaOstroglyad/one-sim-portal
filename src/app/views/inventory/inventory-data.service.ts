@@ -9,14 +9,14 @@ import { resourcesMock } from './resources-mock';
 	providedIn: 'root'
 })
 export class InventoryDataService extends DataService<Resource> {
-	private apiUrl = '/api/api/v1/resource/query/all';
+	private apiUrl = '/api/v1/sims/query/all';
 
 	constructor(public http: HttpClient) {
-		super(http, '/api/api/v1/resource')
+		super(http, '/api/v1/resource')
 	}
 
-	list(): Observable<Resource[]> {
-		return this.http.get<Resource[]>(this.apiUrl).pipe(
+	list(params?: any): Observable<any> {
+		return this.http.get<any>(this.apiUrl, { params }).pipe(
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
 				return of(resourcesMock)

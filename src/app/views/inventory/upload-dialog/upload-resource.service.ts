@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 	providedIn: 'root'
 })
 export class UploadResourceService {
-	private baseUrl = '/api/api/v1/sims/load';
+	private baseUrl = '/api/v1/sims/load';
 
 	constructor(private http: HttpClient) {}
 

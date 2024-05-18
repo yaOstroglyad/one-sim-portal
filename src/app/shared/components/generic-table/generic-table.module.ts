@@ -2,10 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GenericTableComponent } from './generic-table.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { CardComponent, TableDirective } from '@coreui/angular';
+import {
+	CardComponent,
+	PageItemDirective,
+	PageLinkDirective,
+	PaginationComponent,
+	TableDirective
+} from '@coreui/angular';
 import { FormatTimeModule } from '../../pipes/format-time/format-time.module';
 import { NoDataModule } from '../no-data/no-data.module';
 import { IconDirective } from '@coreui/icons-angular';
+import { DisplayValueByKeyPipe } from '../../pipes/display-value-by-key/display-value-by-key.pipe';
 
 
 @NgModule({
@@ -19,7 +26,11 @@ import { IconDirective } from '@coreui/icons-angular';
 		CardComponent,
 		FormatTimeModule,
 		NoDataModule,
-		IconDirective
+		IconDirective,
+		PaginationComponent,
+		PageItemDirective,
+		PageLinkDirective,
+		DisplayValueByKeyPipe
 	],
 	exports: [
 		GenericTableComponent
