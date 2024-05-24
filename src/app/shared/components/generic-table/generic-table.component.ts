@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { TableConfig } from './table-column-config.interface';
 
@@ -16,6 +16,7 @@ export class GenericTableComponent {
 
 	@Input() config$: Observable<TableConfig>;
 	@Input() data$: Observable<any[]>;
+	@Input() menu: TemplateRef<any>;
 
 	@Output() selectedItemsChange = new EventEmitter<any>;
 	@Output() toggleAction = new EventEmitter<any>;

@@ -12,6 +12,30 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./edit-product.component.scss']
 })
 export class EditProductComponent {
+// {
+//   "serviceProviderId": "c197691a-80f5-410a-87fa-083c93fe8ccd",
+//   "providerData": {
+//     "extensionId": 4161,
+//     "offerId": 2740
+//   },
+//   "name": "OnlySim Europe 5Gb",
+//   "description": "Real 5Gb for 7 Days in Europe",
+//   "price": 15.00,
+//   "currency": "usd",
+//   "usage": [
+//     {
+//       "value": 5,
+//       "unitType": "Gigabyte"
+//     }
+//   ],
+//   "validity": {
+//     "period": 7,
+//     "timeUnit": "days"
+//   }
+// }
+
+
+
   form: FormGroup = new FormGroup({
     id: new FormControl(null),
     name: new FormControl(null),

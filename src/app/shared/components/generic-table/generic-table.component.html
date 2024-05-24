@@ -19,7 +19,10 @@
                 </ng-container>
                 <th scope="col"
                     class="sticky-column"
-                    *ngIf="config.showEditButton"></th>
+                    *ngIf="config.showEditButton && !config.showMenu"></th>
+                <th scope="col"
+                    class="sticky-column"
+                    *ngIf="config.showMenu"></th>
             </tr>
             </thead>
             <tbody>
@@ -47,11 +50,14 @@
                         </ng-container>
                     </td>
                 </ng-container>
-                <td *ngIf="config.showEditButton"
+                <td *ngIf="config.showEditButton && !config.showMenu"
                     (click)="onEdit(item)"
                     class="min-w-3r text-center c-pointer sticky-column">
                     <svg cIcon
                          name="cilPencil"></svg>
+                </td>
+                <td class="min-w-3r text-center c-pointer sticky-column" *ngIf="config.showMenu">
+                    <ng-container *ngTemplateOutlet="menu; context: { $implicit: item }"></ng-container>
                 </td>
             </tr>
             </tbody>

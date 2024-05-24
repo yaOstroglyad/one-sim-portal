@@ -14,6 +14,7 @@ export interface TableConfig {
 	translatePrefix?: string;
 	showCheckboxes?: boolean;
 	showEditButton?: boolean;
+	showMenu?: boolean;
 	pagination?: {
 		enabled: boolean;
 		serverSide: boolean;

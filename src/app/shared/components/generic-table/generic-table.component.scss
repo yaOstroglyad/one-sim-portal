@@ -10,10 +10,16 @@ th, td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-width: 100px;
+  min-width: 60px;
   max-width: 300px;
 }
 
 c-pagination {
   padding-left: 18px;
+}
+.sticky-column {
+  position: sticky;
+  right: 0;
+  background-color: white;
+  z-index: 1;
 }
