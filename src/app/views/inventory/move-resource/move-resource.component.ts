@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ProvidersDataService } from '../../../shared/services/providers-data.service';
 import { FormConfig } from '../../../shared/components/form-generator/field-config';
 import { getMoveResourceFormConfig } from './move-resource.utils';
 import { MoveResourceService } from './move-resource.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { CustomersDataService, ProvidersDataService } from '../../../shared';
 
 @Component({
   selector: 'app-move-resource',
@@ -24,9 +24,10 @@ export class MoveResourceComponent implements OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<MoveResourceComponent>,
     private providersDataService: ProvidersDataService,
+    private customersDataService: CustomersDataService,
     private moveResourceService: MoveResourceService,
   ) {
-    this.moveResourceFormConfig = getMoveResourceFormConfig(this.providersDataService);
+    this.moveResourceFormConfig = getMoveResourceFormConfig(this.providersDataService, this.customersDataService);
   }
 
   handleFormChanges(form: FormGroup): void {

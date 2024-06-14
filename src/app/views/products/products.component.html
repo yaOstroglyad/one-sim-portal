@@ -1,11 +1,10 @@
 <app-header [config]="headerConfig"
             [tableConfig$]="tableConfig$"
-            (onAddAction)="edit()"
+            (onAddAction)="create()"
             (columnSelectionChange)="onColumnSelectionChanged($event)"
             (filteredData)="applyFilter($event)">
 </app-header>
 <generic-table [config$]="tableConfig$"
-               (toggleAction)="edit($event)"
                [data$]="dataList$"></generic-table>
 
 <ng-template #usageTemplate let-data='context'>

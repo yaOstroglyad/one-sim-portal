@@ -23,4 +23,49 @@ export class ProductsDataService extends DataService<Package>{
 			})
 		);
 	}
+
+	create(product: any): Observable<any> {
+		return this.http.post<any>(`/api/v1/products/command/create`, product).pipe(
+			catchError(() => {
+				console.warn('error happened, presenting mocked data');
+				return of([])
+			})
+		);
+	}
+
+	update(product: any): Observable<any> {
+		return this.http.post<any>(`/api/v1/products/command/create`, product).pipe(
+			catchError(() => {
+				console.warn('error happened, presenting mocked data');
+				return of([])
+			})
+		);
+	}
+
+	getCurrencies(): Observable<any> {
+		return this.http.get<any>(`/api/v1/products/currency`).pipe(
+			catchError(() => {
+				console.warn('error happened, presenting mocked data');
+				return of([])
+			})
+		);
+	}
+
+	getProductTemplate(bundleId?: string, productId?: string): Observable<any> {
+		let params: any = {};
+
+		if (bundleId) {
+			params.bundleId = bundleId;
+		}
+		if (productId) {
+			params.productId = productId;
+		}
+
+		return this.http.get<any>(`/api/v1/products/command/template`, { params }).pipe(
+			catchError(() => {
+				console.warn('error happened, presenting mocked data');
+				return of({})
+			})
+		);
+	}
 }

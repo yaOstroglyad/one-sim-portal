@@ -18,7 +18,7 @@
                         [currentSelectedColumns]="currentSelectedColumns"
                         (columnSelectionChange)="onColumnSelectionChanged($event)"></column-control>
         <!-- Reset button -->
-        <button *ngIf="tableConfig.showEditButton"
+        <button *ngIf="tableConfig.showAddButton"
                 class="me-1"
                 cButton color="primary"
                 (click)="addNewEntity()">

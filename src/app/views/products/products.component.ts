@@ -7,6 +7,7 @@ import { ProductsDataService } from './products-data.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EditProductComponent } from './edit-product/edit-product.component';
+import { CreateProductComponent } from './create-product/create-product.component';
 
 @Component({
 	selector: 'app-products',
@@ -28,20 +29,14 @@ export class ProductsComponent implements OnInit {
 							private dialog: MatDialog,
 							public translateService: TranslateService,
 	) {
-		this.initheaderConfig();
+		this.initHeaderConfig();
 	}
 
 	ngOnInit(): void {
-		this.productsDataService.list().subscribe(data => {
-			this.tableService.updateTableData(data);
-			this.tableService.addCustomColumns(this);
-			this.tableConfig$ = this.tableService.getTableConfig();
-			this.dataList$ = this.tableService.dataList$;
-			this.cdr.detectChanges();
-		});
+		this.getProducts();
 	}
 
-	private initheaderConfig(): void {
+	private initHeaderConfig(): void {
 		this.headerConfig = {
 			name: {type: TableFilterFieldType.Text, placeholder: 'Filter by name'}
 		};
@@ -56,14 +51,39 @@ export class ProductsComponent implements OnInit {
 		this.tableService.updateColumnVisibility(selectedColumns);
 	}
 
-	edit(product?: Package): void {
-		const dialogRef = this.dialog.open(EditProductComponent, {
-			width: '650px',
-			data: product
+	create(): void {
+		const dialogRef = this.dialog.open(CreateProductComponent, {
+			width: '650px'
 		});
 
 		dialogRef.afterClosed().subscribe(result => {
 			console.log('Результат диалога:', result);
+			this.productsDataService.create(result).subscribe(e => {
+				this.getProducts();
+			});
+		});
+	}
+
+	edit(product?: Package): void {
+		const dialogRef = this.dialog.open(EditProductComponent, {
+			width: '650px'
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			console.log('Результат диалога:', result);
+			this.productsDataService.update(result).subscribe(e => {
+				this.getProducts();
+			});
+		});
+	}
+
+	getProducts() {
+		this.productsDataService.list().subscribe(data => {
+			this.tableService.updateTableData(data);
+			this.tableService.addCustomColumns(this);
+			this.tableConfig$ = this.tableService.getTableConfig();
+			this.dataList$ = this.tableService.dataList$;
+			this.cdr.detectChanges();
 		});
 	}
 }

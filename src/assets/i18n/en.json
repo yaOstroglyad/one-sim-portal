@@ -13,10 +13,12 @@
   "package": {
     "id": "ID",
     "name": "Name",
+    "description": "Description",
     "providerName": "Provider name",
     "usages": "Usages",
     "effectiveDate": "Effective Date",
     "price": "Price",
+    "currency": "Currency",
     "unitType": "Unit Type"
   },
   "resource": {

@@ -1,50 +1,124 @@
-<h2 mat-dialog-title class="dialog-header">{{ data ? 'Edit' : 'Create' }} product</h2>
-<mat-dialog-content class="mat-typography dialog-content">
-    <form [formGroup]="form" class="product-form">
-        <div class="grid-container">
-            <mat-form-field class="grid-item" appearance="fill">
-                <mat-label>Product name</mat-label>
-                <input matInput formControlName="name">
-            </mat-form-field>
+<!--<h2 mat-dialog-title class="dialog-header">{{ data ? 'Edit' : 'Create' }} product</h2>-->
+<!--<mat-dialog-content class="mat-typography dialog-content">-->
 
-        <mat-form-field class="grid-item" appearance="fill">
-            <mat-label>Provider name</mat-label>
-            <select matNativeControl formControlName="providerName">
-                <option value="" disabled>Select provider</option>
-                <option *ngFor="let provider of providers" [value]="provider">{{provider}}</option>
-            </select>
-        </mat-form-field>
+<!--    &lt;!&ndash;    определяем рут или не рут &ndash;&gt;-->
+<!--    &lt;!&ndash;    0. проверить админ ли я &ndash;&gt;-->
+<!--    &lt;!&ndash;    1. на уровне админа:  запроси GET /api/v1/provider-bundles/query/all &ndash;&gt;-->
+<!--    &lt;!&ndash;    1. на уровне ребёнка: API еще не готов &ndash;&gt;-->
+<!--    &lt;!&ndash;    2. на уровне админа по id из пункта 1 , запрашиваю GET /api/v1/products/command/template/bundle/{id} &ndash;&gt;-->
+<!--    &lt;!&ndash;    2. на уровне ребёнка по id из пункта 1 , запрашиваю GET /api/v1/products/command/template/{id} &ndash;&gt;-->
+<!--    &lt;!&ndash;    3. на основе результата заполнить форму и дать возможность заполнять-->
+<!--    product data:-->
+<!--                "name": "string",-->
+<!--                "description": "string",-->
+<!--                "price": 0,-->
+<!--                "currency": "string",-->
+<!--                "isCorporate": false-->
+<!--                "customers": ["ids"] - use api api/v1/customers/query/all/corporate-->
 
-        <mat-form-field class="grid-item" appearance="fill">
-            <mat-label>Usages</mat-label>
-            <select matNativeControl formControlName="usages" multiple>
-                <option *ngFor="let usage of usages" [value]="usage">{{usage.total}} {{usage.unitType}}</option>
-            </select>
-        </mat-form-field>
+<!--                если    "isFlexible": true , дать возможность менять поля-->
+<!--                "unitType": "string" - GET /api/v1/provider-bundles/usage/types-->
+<!--                "timeUnit": - GET /api/v1/provider-bundles/validity/timeunits-->
+<!--    bundle data:-->
+<!--                name": "string",-->
+<!--                "description": "string",-->
+<!--                "usage": [-->
+<!--                  {-->
+<!--                    "value": 0,-->
+<!--                    "unitType": "string"-->
+<!--                  }-->
+<!--                ],-->
+<!--                "validity": {-->
+<!--                  "period": 0,-->
+<!--                  "timeUnit": "days"-->
+<!--                },-->
+<!--    &ndash;&gt;-->
 
-        <mat-form-field class="grid-item" appearance="fill">
-            <mat-label>Effective date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="effectiveDate">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
 
-        <mat-form-field class="grid-item" appearance="fill">
-            <mat-label>Price</mat-label>
-            <input matInput formControlName="price" placeholder="Product price">
-        </mat-form-field>
+<!--    <form [formGroup]="form" class="product-form">-->
+<!--        <mat-form-field>-->
+<!--            <mat-label>Product Name</mat-label>-->
+<!--            <input matInput formControlName="productName">-->
+<!--        </mat-form-field>-->
 
-        <mat-form-field class="grid-item" appearance="fill">
-            <mat-label>Currency</mat-label>
-            <select matNativeControl formControlName="currency">
-                <option value="" disabled>Select currency</option>
-                <option *ngFor="let currency of currencies" [value]="currency">{{currency}}</option>
-            </select>
-        </mat-form-field>
-        </div>
-    </form>
-</mat-dialog-content>
-<mat-dialog-actions class="dialog-footer" align="end">
-    <button mat-button (click)="close()">Cancel</button>
-    <button mat-button color="primary" (click)="submit()">Save changes</button>
-</mat-dialog-actions>
+<!--        <mat-form-field>-->
+<!--            <mat-label>Description</mat-label>-->
+<!--            <textarea matInput formControlName="productDescription"></textarea>-->
+<!--        </mat-form-field>-->
+
+<!--        <mat-form-field>-->
+<!--            <mat-label>Price</mat-label>-->
+<!--            <input matInput type="number" formControlName="productPrice">-->
+<!--        </mat-form-field>-->
+
+<!--        <mat-form-field>-->
+<!--            <mat-label>Currency</mat-label>-->
+<!--            <mat-select formControlName="productCurrency">-->
+<!--                <mat-option *ngFor="let currency of currencies" [value]="currency">-->
+<!--                    {{ currency }}-->
+<!--                </mat-option>-->
+<!--            </mat-select>-->
+<!--        </mat-form-field>-->
+
+<!--&lt;!&ndash;        <mat-checkbox formControlName="isCorporate">Corporate Product</mat-checkbox>&ndash;&gt;-->
+
+<!--        <mat-form-field>-->
+<!--            <mat-label>Customers</mat-label>-->
+<!--            <mat-select formControlName="customers" multiple>-->
+<!--                <mat-option *ngFor="let customer of customers" [value]="customer.id">-->
+<!--                    {{ customer.name }}-->
+<!--                </mat-option>-->
+<!--            </mat-select>-->
+<!--        </mat-form-field>-->
+
+<!--        <h3>Bundle Information</h3>-->
+
+<!--        <mat-form-field>-->
+<!--            <mat-label>Bundle Name</mat-label>-->
+<!--            <input matInput formControlName="bundleName">-->
+<!--        </mat-form-field>-->
+
+<!--        <mat-form-field>-->
+<!--            <mat-label>Bundle Description</mat-label>-->
+<!--            <textarea matInput formControlName="bundleDescription"></textarea>-->
+<!--        </mat-form-field>-->
+
+<!--        <div formArrayName="usage">-->
+<!--            <div *ngFor="let usage of usageArray.controls; let i=index" [formGroupName]="i">-->
+<!--                <mat-form-field>-->
+<!--                    <mat-label>Usage Value</mat-label>-->
+<!--                    <input matInput type="number" formControlName="value">-->
+<!--                </mat-form-field>-->
+
+<!--                <mat-form-field>-->
+<!--                    <mat-label>Unit Type</mat-label>-->
+<!--                    <mat-select formControlName="unitType">-->
+<!--                        <mat-option value="sms">SMS</mat-option>-->
+<!--                        <mat-option value="data">Data</mat-option>-->
+<!--                        <mat-option value="voice">Voice</mat-option>-->
+<!--                    </mat-select>-->
+<!--                </mat-form-field>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <mat-form-field>-->
+<!--            <mat-label>Validity Period</mat-label>-->
+<!--            <input matInput type="number" formControlName="period">-->
+<!--        </mat-form-field>-->
+
+<!--        <mat-form-field>-->
+<!--            <mat-label>Time Unit</mat-label>-->
+<!--            <mat-select formControlName="timeUnit">-->
+<!--                <mat-option value="days">Days</mat-option>-->
+<!--                <mat-option value="months">Months</mat-option>-->
+<!--                <mat-option value="years">Years</mat-option>-->
+<!--            </mat-select>-->
+<!--        </mat-form-field>-->
+
+<!--        <mat-checkbox formControlName="isFlexible">Flexible</mat-checkbox>-->
+<!--    </form>-->
+<!--</mat-dialog-content>-->
+<!--<mat-dialog-actions class="dialog-footer" align="end">-->
+<!--    <button mat-button (click)="close()">Cancel</button>-->
+<!--    <button mat-button color="primary" (click)="submit()">Save changes</button>-->
+<!--</mat-dialog-actions>-->

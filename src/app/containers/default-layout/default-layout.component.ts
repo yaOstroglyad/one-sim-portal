@@ -18,7 +18,7 @@ export class DefaultLayoutComponent implements OnInit {
     alt: 'esim'
   };
   public brandNarrow = {
-    src: 'assets/img/brand/logo-small.png',
+    src: 'assets/img/brand/1e-sim.png',
     width: 46,
     height: 46,
     alt: 'esim'

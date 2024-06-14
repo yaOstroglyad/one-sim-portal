@@ -31,12 +31,17 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { GenericTableModule, HeaderModule } from '../../shared';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { CreateProductComponent } from './create-product/create-product.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
 @NgModule({
   declarations: [
     ProductsComponent,
+		CreateProductComponent,
     EditProductComponent
   ],
 	imports: [
@@ -68,7 +73,10 @@ import { MatButtonModule } from '@angular/material/button';
 		GenericTableModule,
 		HeaderModule,
 		MatDialogModule,
-		MatButtonModule
+		MatButtonModule,
+		MatSelectModule,
+		MatCheckboxModule,
+		MatIconModule
 	],
 	providers: [
 		MatDatepickerModule

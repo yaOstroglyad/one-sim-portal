@@ -1,10 +1,10 @@
 import { FieldType, FormConfig } from '../../../shared/components/form-generator/field-config';
 import { Validators } from '@angular/forms';
-import { ProvidersDataService } from '../../../shared/services/providers-data.service';
 import { map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { CustomersDataService, ProvidersDataService } from '../../../shared';
 
-export function getMoveResourceFormConfig(dataService: ProvidersDataService): FormConfig {
+export function getMoveResourceFormConfig(serviceProviderDataService: ProvidersDataService,
+																					customersDataService: CustomersDataService): FormConfig {
 	return {
 		fields: [
 			{
@@ -12,16 +12,20 @@ export function getMoveResourceFormConfig(dataService: ProvidersDataService): Fo
 				name: 'customerId',
 				label: 'Customer',
 				validators: [Validators.required],
-				options: of([
-					{ value: '02599516-3f9f-45cd-9cae-137a5487294e', displayValue: 'Anex' }
-				])
+				options: customersDataService.list().pipe(
+					map(customers => customers.map(
+						customer => ({
+							value: customer.id, displayValue: customer.name
+						})
+					))
+				)
 			},
 			{
 				type: FieldType.select,
 				name: 'serviceProviderId',
 				label: 'Service Provider',
 				validators: [Validators.required],
-				options: dataService.list().pipe(
+				options: serviceProviderDataService.list().pipe(
 					map(providers => providers.map(
 						provider => ({
 							value: provider.id, displayValue: provider.name

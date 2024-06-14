@@ -13,13 +13,13 @@ export class ProductsTableService extends TableConfigAbstractService {
 	public tableConfigSubject = new BehaviorSubject<TableConfig>({
 		translatePrefix: 'package.',
 		showCheckboxes: false,
-		showEditButton: true,
+		showEditButton: false,
+		showAddButton: true,
 		columns: [
-			{visible: true, key: 'id', header: 'id'},
 			{visible: true, key: 'name', header: 'name' },
-			{visible: true, key: 'providerName', header: 'providerName' },
-			{visible: true, key: 'effectiveDate', header: 'effectiveDate' },
+			{visible: true, key: 'description', header: 'description' },
 			{visible: true, key: 'price', header: 'price' },
+			{visible: true, key: 'currency', header: 'currency' },
 		]
 	});
 

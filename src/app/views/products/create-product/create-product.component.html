@@ -1,0 +1,156 @@
+<h2 mat-dialog-title class="dialog-header">{{ data ? 'Edit' : 'Create' }} product</h2>
+<mat-dialog-content class="mat-typography dialog-content">
+
+    <!--    определяем рут или не рут -->
+    <!--    0. проверить админ ли я -->
+    <!--    1. на уровне админа:  запроси GET /api/v1/provider-bundles/query/all -->
+    <!--    1. на уровне ребёнка: API еще не готов -->
+    <!--    2. на уровне админа по id из пункта 1 , запрашиваю GET /api/v1/products/command/template/bundle/{id} -->
+    <!--    2. на уровне ребёнка по id из пункта 1 , запрашиваю GET /api/v1/products/command/template/{id} -->
+    <!--    3. на основе результата заполнить форму и дать возможность заполнять
+    product data:
+                "name": "string",
+                "description": "string",
+                "price": 0,
+                "currency": "string",
+                "isCorporate": false
+                "customers": ["ids"] - use api api/v1/customers/query/all/corporate
+
+                если    "isFlexible": true , дать возможность менять поля
+                "unitType": "string" - GET /api/v1/provider-bundles/usage/types
+                "timeUnit": - GET /api/v1/provider-bundles/validity/timeunits
+    bundle data:
+                name": "string",
+                "description": "string",
+                "usage": [
+                  {
+                    "value": 0,
+                    "unitType": "string"
+                  }
+                ],
+                "validity": {
+                  "period": 0,
+                  "timeUnit": "days"
+                },
+    -->
+
+
+    <form [formGroup]="form">
+        <div class="form-group">
+
+            <mat-form-field class="full-width">
+                <mat-label>Provider Bundle</mat-label>
+                <mat-select (selectionChange)="onProviderBundleChange($event.value)">
+                    <mat-option *ngFor="let bundle of providerBundles" [value]="bundle.id">
+                        {{ bundle.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <ng-container formGroupName="productCommand">
+                <mat-form-field class="full-width">
+                    <mat-label>Product Name</mat-label>
+                    <input matInput formControlName="name">
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>Description</mat-label>
+                        <textarea matInput formControlName="description"></textarea>
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>Price</mat-label>
+                        <input matInput type="number" formControlName="price">
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>Currency</mat-label>
+                        <mat-select formControlName="currency">
+                            <mat-option *ngFor="let currency of currencies" [value]="currency">
+                                {{currency}}
+                            </mat-option>
+                        </mat-select>
+                </mat-form-field>
+
+                <mat-checkbox formControlName="isCorporate">Corporate Product</mat-checkbox>
+
+                <mat-form-field class="half-width">
+                    <mat-label>Customers</mat-label>
+                    <mat-select formControlName="customers" multiple>
+                        <mat-option *ngFor="let customer of customers" [value]="customer.id">
+                            {{ customer.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </ng-container>
+
+            <h3>Bundle Information</h3>
+
+            <ng-container formGroupName="bundleCommand">
+                <mat-form-field class="full-width">
+                    <mat-label>Bundle Name</mat-label>
+                        <input matInput formControlName="name">
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>Bundle Description</mat-label>
+                        <textarea matInput formControlName="description"></textarea>
+                </mat-form-field>
+
+                <div formArrayName="usage" class="usage-group">
+                    <div *ngFor="let usage of usageArray.controls; let i=index" [formGroupName]="i" class="usage-item">
+                        <mat-form-field class="full-width">
+                            <mat-label>Usage Value</mat-label>
+                                <input matInput type="number" formControlName="value">
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width">
+                            <mat-label>Type</mat-label>
+                            <mat-select formControlName="type">
+                                <mat-option *ngFor="let type of allUsageTypes" [value]="type.type" [disabled]="isUsageTypeDisabled(type.type)">
+                                    {{type.type}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width">
+                            <mat-label>Unit Type</mat-label>
+                                <mat-select formControlName="unitType">
+                                    <mat-option *ngFor="let unit of getUnitTypesForType(usage.get('type')?.value)" [value]="unit">
+                                        {{unit}}
+                                    </mat-option>
+                                </mat-select>
+                        </mat-form-field>
+
+                        <button mat-icon-button (click)="removeUsage(i)" *ngIf="usageArray.length > 1">
+                            <mat-icon>remove_circle</mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <button mat-button (click)="addUsage()" [disabled]="usageArray.length >= 3 || this.form.get('bundleCommand').disabled">Add Usage</button>
+
+                <div formGroupName="validity">
+                    <mat-form-field class="full-width">
+                        <mat-label>Validity Period</mat-label>
+                            <input matInput type="number" formControlName="period">
+                    </mat-form-field>
+
+                    <mat-form-field class="full-width">
+                        <mat-label>Time Unit</mat-label>
+                        <mat-select formControlName="timeUnit">
+                            <mat-option *ngFor="let unit of timeUnits" [value]="unit">
+                                {{unit}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <mat-checkbox formControlName="isFlexible">Flexible</mat-checkbox>
+            </ng-container>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-footer" align="end">
+    <button mat-button (click)="close()">Cancel</button>
+    <button mat-button color="primary" (click)="submit()">Save changes</button>
+</mat-dialog-actions>
