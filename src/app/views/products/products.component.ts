@@ -66,7 +66,8 @@ export class ProductsComponent implements OnInit {
 
 	edit(product?: Package): void {
 		const dialogRef = this.dialog.open(EditProductComponent, {
-			width: '650px'
+			width: '650px',
+			data: product
 		});
 
 		dialogRef.afterClosed().subscribe(result => {

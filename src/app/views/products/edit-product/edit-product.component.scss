@@ -6,6 +6,8 @@
 .dialog-content {
   display: block;
   padding-top: 20px;
+  max-height: 400px; /* Adjust the height as necessary */
+  overflow-y: auto;
 }
 
 .dialog-footer {
@@ -21,4 +23,44 @@
 
 .grid-item {
   width: 100%;
+}
+
+
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-group, .usage-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.usage-item {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+mat-form-field {
+  margin-bottom: 16px;
+}
+
+mat-dialog-content {
+  overflow: hidden;
+}
+
+h3 {
+  margin-top: 24px;
 }

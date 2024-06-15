@@ -34,7 +34,7 @@ export class ProductsDataService extends DataService<Package>{
 	}
 
 	update(product: any): Observable<any> {
-		return this.http.post<any>(`/api/v1/products/command/create`, product).pipe(
+		return this.http.post<any>(`/api/v1/products/command/update`, product).pipe(
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
 				return of([])
@@ -51,17 +51,17 @@ export class ProductsDataService extends DataService<Package>{
 		);
 	}
 
-	getProductTemplate(bundleId?: string, productId?: string): Observable<any> {
-		let params: any = {};
-
-		if (bundleId) {
-			params.bundleId = bundleId;
-		}
-		if (productId) {
-			params.productId = productId;
-		}
-
+	getProductTemplate(params: any): Observable<any> {
 		return this.http.get<any>(`/api/v1/products/command/template`, { params }).pipe(
+			catchError(() => {
+				console.warn('error happened, presenting mocked data');
+				return of({})
+			})
+		);
+	}
+
+	getParentProducts(): Observable<any> {
+		return this.http.get<any>(`/api/v1/products/query/parent`).pipe(
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
 				return of({})

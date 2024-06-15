@@ -39,7 +39,11 @@ export class LoginService {
     clearInterval(this.reLoginInterval);
     if (this.startInterval) {
       this.reLoginInterval = setInterval(() => {
-        this.updateToken(token);
+        if (this.authService.isAuthenticated()) {
+          this.updateToken(token);
+        } else {
+          this.logout();
+        }
       }, 150000);
     }
   }

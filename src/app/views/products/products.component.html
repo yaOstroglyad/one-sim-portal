@@ -5,6 +5,7 @@
             (filteredData)="applyFilter($event)">
 </app-header>
 <generic-table [config$]="tableConfig$"
+               (toggleAction)="edit($event)"
                [data$]="dataList$"></generic-table>
 
 <ng-template #usageTemplate let-data='context'>

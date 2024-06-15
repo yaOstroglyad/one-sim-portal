@@ -1,78 +1,74 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { UsageInfo } from '../../../shared';
-import UnitTypeDataEnum = UsageInfo.UnitTypeDataEnum;
-import UsageTypeEnum = UsageInfo.UsageTypeEnum;
-import UnitTypeAmountEnum = UsageInfo.UnitTypeAmountEnum;
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CustomersDataService } from '../../../shared';
+import { SessionStorageService } from 'ngx-webstorage';
+import { ProductsDataService } from '../products-data.service';
 
 @Component({
-  selector: 'app-edit-product',
-  templateUrl: './edit-product.component.html',
-  styleUrls: ['./edit-product.component.scss']
+	selector: 'app-edit-product',
+	templateUrl: './edit-product.component.html',
+	styleUrls: ['./edit-product.component.scss']
 })
 export class EditProductComponent {
-  form: FormGroup = new FormGroup({
-    id: new FormControl(null),
-    name: new FormControl(null),
-    providerName: new FormControl(null),
-    usages: new FormControl(null),
-    effectiveDate: new FormControl(null),
-    price: new FormControl(null),
-    currency: new FormControl(null)
-  });
+	form: FormGroup = new FormGroup({
+		id: new FormControl(null),
+		name: new FormControl(null),
+		description: new FormControl(null),
+		price: new FormControl(null),
+		currency: new FormControl(null),
+		isCorporate: new FormControl(false),
+		customers: new FormControl([])
+	});
 
-  currencies = [];
-  providers = [];
+	currencies = [];
+	customers = [];
+	isAdmin: boolean;
 
-  usages = [{
-    unitType: UnitTypeDataEnum.Gb,
-    type: UsageTypeEnum.data,
-    total: 1,
-    used: 0,
-    remaining: 1
-  },{
-    unitType: UnitTypeAmountEnum.Sms,
-    type: UsageTypeEnum.sms,
-    total: 100,
-    used: 0,
-    remaining: 100
-  },{
-    unitType: UnitTypeAmountEnum.Min,
-    type: UsageTypeEnum.voice,
-    total: 100,
-    used: 0,
-    remaining: 100
-  }]
+	constructor(
+		public dialogRef: MatDialogRef<EditProductComponent>,
+		@Inject(MAT_DIALOG_DATA) public data: any,
+		private customersDataService: CustomersDataService,
+    private productsDataService: ProductsDataService,
+		private $sessionStorage: SessionStorageService
+	) {
+		this.isAdmin = this.$sessionStorage.retrieve('isAdmin');
+		if (this.data) {
+			this.initializeFormData(this.data);
+		}
+		this.loadCustomers();
+		this.loadCurrencies();
+	}
 
-  constructor(
-    public dialogRef: MatDialogRef<EditProductComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    if (this.data) {
-      this.initializeFormData(this.data);
-    }
-  }
+	private initializeFormData(data: any): void {
+		this.form.patchValue({
+			id: data.id || null,
+			name: data.name || '',
+			description: data.description || '',
+			price: data.price || '',
+			currency: data.currency || '',
+			isCorporate: data.isCorporate || false,
+			customers: data.customers || []
+		});
+	}
 
-  private initializeFormData(data: any): void {
-    this.form.patchValue({
-      id: data.id || null,
-      name: data.name || '',
-      providerName: data.providerName || '',
-      usages: data.usages || [],
-      effectiveDate: data.effectiveDate || '',
-      price: data.price || '',
-      currency: data.currency || ''
-    });
-  }
+	private loadCustomers(): void {
+		this.customersDataService.list().subscribe(customers => {
+			this.customers = customers;
+		});
+	}
 
-  close(): void {
-    this.dialogRef.close();
-  }
+	private loadCurrencies(): void {
+		this.productsDataService.getCurrencies().subscribe(currencies => {
+			this.currencies = currencies;
+		});
+	}
 
-  submit(): void {
-    // Обработка отправки формы
-    console.log('form', this.form.value);
-    this.dialogRef.close(this.form.value); // Можно передать данные формы обратно
-  }
+	close(): void {
+		this.dialogRef.close();
+	}
+
+	submit(): void {
+		this.dialogRef.close(this.form.value);
+	}
 }

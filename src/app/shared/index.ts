@@ -7,6 +7,7 @@ export * from './components/generic-table/table-config-abstract.service';
 export * from './components/column-control/column-control.module'
 export * from './components/table-initialization-error/table-initialization-error.module'
 export * from './components/no-data/no-data.module'
+export * from './components/confirmation-dialog/confirmation-dialog.component'
 
 export * from './pipes/format-time/format-time.module';
 

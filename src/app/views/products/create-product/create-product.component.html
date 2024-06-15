@@ -1,48 +1,22 @@
-<h2 mat-dialog-title class="dialog-header">{{ data ? 'Edit' : 'Create' }} product</h2>
+<h2 mat-dialog-title class="dialog-header">Create product</h2>
 <mat-dialog-content class="mat-typography dialog-content">
-
-    <!--    определяем рут или не рут -->
-    <!--    0. проверить админ ли я -->
-    <!--    1. на уровне админа:  запроси GET /api/v1/provider-bundles/query/all -->
-    <!--    1. на уровне ребёнка: API еще не готов -->
-    <!--    2. на уровне админа по id из пункта 1 , запрашиваю GET /api/v1/products/command/template/bundle/{id} -->
-    <!--    2. на уровне ребёнка по id из пункта 1 , запрашиваю GET /api/v1/products/command/template/{id} -->
-    <!--    3. на основе результата заполнить форму и дать возможность заполнять
-    product data:
-                "name": "string",
-                "description": "string",
-                "price": 0,
-                "currency": "string",
-                "isCorporate": false
-                "customers": ["ids"] - use api api/v1/customers/query/all/corporate
-
-                если    "isFlexible": true , дать возможность менять поля
-                "unitType": "string" - GET /api/v1/provider-bundles/usage/types
-                "timeUnit": - GET /api/v1/provider-bundles/validity/timeunits
-    bundle data:
-                name": "string",
-                "description": "string",
-                "usage": [
-                  {
-                    "value": 0,
-                    "unitType": "string"
-                  }
-                ],
-                "validity": {
-                  "period": 0,
-                  "timeUnit": "days"
-                },
-    -->
-
-
     <form [formGroup]="form">
         <div class="form-group">
 
-            <mat-form-field class="full-width">
+            <mat-form-field class="full-width" *ngIf="isAdmin">
                 <mat-label>Provider Bundle</mat-label>
-                <mat-select (selectionChange)="onProviderBundleChange($event.value)">
+                <mat-select (selectionChange)="onProviderBundleOrProductChange($event.value)">
                     <mat-option *ngFor="let bundle of providerBundles" [value]="bundle.id">
                         {{ bundle.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+                <mat-label>Products</mat-label>
+                <mat-select (selectionChange)="onProviderBundleOrProductChange($event.value)">
+                    <mat-option *ngFor="let product of parentProducts" [value]="product.id">
+                        {{ product.name }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -72,7 +46,7 @@
                         </mat-select>
                 </mat-form-field>
 
-                <mat-checkbox formControlName="isCorporate">Corporate Product</mat-checkbox>
+                <mat-checkbox *ngIf="isAdmin" formControlName="isCorporate">Corporate Product</mat-checkbox>
 
                 <mat-form-field class="half-width">
                     <mat-label>Customers</mat-label>
@@ -145,7 +119,7 @@
                     </mat-form-field>
                 </div>
 
-                <mat-checkbox formControlName="isFlexible">Flexible</mat-checkbox>
+                <mat-checkbox *ngIf="isAdmin" formControlName="isFlexible">Flexible</mat-checkbox>
             </ng-container>
         </div>
     </form>
