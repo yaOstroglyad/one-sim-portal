@@ -57,7 +57,6 @@ export class ProductsComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('Результат диалога:', result);
 			this.productsDataService.create(result).subscribe(e => {
 				this.getProducts();
 			});
@@ -71,7 +70,6 @@ export class ProductsComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log('Результат диалога:', result);
 			this.productsDataService.update(result).subscribe(e => {
 				this.getProducts();
 			});

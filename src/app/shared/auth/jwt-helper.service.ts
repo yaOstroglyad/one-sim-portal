@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
-import jwt_decode from "jwt-decode";
+import jwt_decode from 'jwt-decode';
 
 @Injectable({providedIn: 'root'})
 export class JwtHelperService {
 
-	private getTokenExpirationDate(token: any) {
+	constructor() {
+	}
+
+	private getTokenExpirationDate(token: any): Date | null {
 		const decoded = this.decodeToken(token);
 
-		if (typeof decoded.exp === "undefined") {
+		if (typeof decoded.exp === 'undefined') {
 			return null;
 		}
 
-		const d = new Date(0); // The 0 here is the key, which sets the date to the epoch
-		d.setUTCSeconds(decoded.exp);
+		const date = new Date(0);
+		date.setUTCSeconds(decoded.exp);
 
-		return d;
-	};
-
-	constructor() {
+		return date;
 	}
 
 	public isToken(token: any): boolean {
@@ -26,21 +26,31 @@ export class JwtHelperService {
 
 	public isAdmin(token: any): boolean {
 		const decodedToken = this.decodeToken(token);
-		// return decodedToken && decodedToken.roles && decodedToken.roles.includes('ROLE_ADMIN');
-		// добавить роль в keycloak и заменить этот кал ниже...
 		return decodedToken && decodedToken.preferred_username === 'admin';
 	}
 
 	public decodeToken(token: any): any {
-		return jwt_decode(token);
+		try {
+			return jwt_decode(token);
+		} catch (error) {
+			console.error('Invalid token specified', error);
+			return null;
+		}
 	}
 
-	public isTokenExpired(token: any, offsetSeconds: number): boolean {
-		const d = this.getTokenExpirationDate(token);
-		offsetSeconds = offsetSeconds || 0;
-		if (d === null) {
+	public isTokenExpired(token: any, offsetSeconds: number = 0): boolean {
+		const date = this.getTokenExpirationDate(token);
+		if (date === null) {
 			return false;
 		}
-		return !(d.valueOf() > (new Date().valueOf() + (offsetSeconds * 1000)));
-	};
+		return !(date.valueOf() > (new Date().valueOf() + (offsetSeconds * 1000)));
+	}
+
+	public getTokenExpiresIn(token: any): number {
+		const decodedToken = this.decodeToken(token);
+		if (!decodedToken || !decodedToken.exp) {
+			return 0;
+		}
+		return decodedToken.exp * 1000 - Date.now();
+	}
 }

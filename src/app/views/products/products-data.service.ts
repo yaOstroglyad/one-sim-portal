@@ -34,7 +34,7 @@ export class ProductsDataService extends DataService<Package>{
 	}
 
 	update(product: any): Observable<any> {
-		return this.http.post<any>(`/api/v1/products/command/update`, product).pipe(
+		return this.http.patch<any>(`/api/v1/products/command/update`, product).pipe(
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
 				return of([])

@@ -12,7 +12,7 @@
                 </mat-select>
             </mat-form-field>
 
-            <mat-form-field class="full-width">
+            <mat-form-field class="full-width" *ngIf="!isAdmin">
                 <mat-label>Products</mat-label>
                 <mat-select (selectionChange)="onProviderBundleOrProductChange($event.value)">
                     <mat-option *ngFor="let product of parentProducts" [value]="product.id">
@@ -46,16 +46,18 @@
                         </mat-select>
                 </mat-form-field>
 
-                <mat-checkbox *ngIf="isAdmin" formControlName="isCorporate">Corporate Product</mat-checkbox>
+                <ng-container *ngIf="isAdmin">
+                    <mat-checkbox formControlName="isCorporate">Corporate Product</mat-checkbox>
 
-                <mat-form-field class="half-width">
-                    <mat-label>Customers</mat-label>
-                    <mat-select formControlName="customers" multiple>
-                        <mat-option *ngFor="let customer of customers" [value]="customer.id">
-                            {{ customer.name }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                    <mat-form-field class="half-width">
+                        <mat-label>Customers</mat-label>
+                        <mat-select formControlName="customers" multiple>
+                            <mat-option *ngFor="let customer of customers" [value]="customer.id">
+                                {{ customer.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </ng-container>
             </ng-container>
 
             <h3>Bundle Information</h3>

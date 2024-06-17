@@ -63,13 +63,8 @@ export class AuthService {
 	}
 
 	public storeAuthenticationToken(token: any): void {
-		// if (this.rememberMe) {
-		//   this.$LocalStorageService.store('authenticationToken', jwt);
-		// } else {
-		//TODO add option remember me and replace local from here
 		this.$LocalStorageService.store('authenticationToken', token);
 		this.$SessionStorageService.store('authenticationToken', token);
-		// }
 	}
 
 	public deleteAuthenticationToken(): void {
@@ -101,23 +96,28 @@ export class AuthService {
 	}
 
 	public reLogin(token: string): Observable<any> {
-		const headers = new HttpHeaders();
-		const bodyString = JSON.stringify(token);
-		headers.set('Content-Type', 'application/json');
-		return this.http.post(
+		const headers = new HttpHeaders({
+			'Content-Type': 'application/json'
+		});
+		const body = {refreshToken: token};
+		return this.http.post<any>(
 			AuthService.RE_AUTH_URL,
-			bodyString,
+			body,
 			{
 				headers: headers,
-				responseType: 'text',
+				responseType: 'json', // Указываем 'json', так как мы ожидаем JSON-ответ
 				observe: 'response'
-			}).pipe(
+			}
+		).pipe(
 			tap(res => {
-				const result = JSON.parse(<any>res.body);
-				this.updateViewConfig(result.token);
-				this.storeAuthenticationToken(result.token);
+				const result = res.body;
+				if (result && result.token) {
+					this.updateViewConfig(result.token);
+					this.storeAuthenticationToken(result.token);
+				}
 			})
 		);
 	}
+
 
 }

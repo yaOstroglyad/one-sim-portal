@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
-import { navItems } from './_nav';
+import { menuItemToPermission, navItems } from './_nav';
 import { TranslateService } from '@ngx-translate/core';
 import { INavData } from '@coreui/angular';
+import { SessionStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,15 +25,37 @@ export class DefaultLayoutComponent implements OnInit {
   };
 
   constructor(
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private $sessionStorage: SessionStorageService
   ) {}
 
   ngOnInit(): void {
-    this.translateNavItems();
+    this.filterAndTranslateNavItems();
   }
 
-  private translateNavItems(): void {
-    this.translatedNavItems = navItems.map(item => ({
+  private isAdmin(): boolean {
+    return this.$sessionStorage.retrieve('isAdmin');
+  }
+
+  private filterNavItems(items: INavData[]): INavData[] {
+    return items.filter(item => {
+      const permission = menuItemToPermission[item.name];
+      if (!permission) {
+        return false;
+      }
+      if (permission.includes('all')) {
+        return true;
+      }
+      if (permission.includes('admin') && this.isAdmin()) {
+        return true;
+      }
+      return false;
+    });
+  }
+
+  private filterAndTranslateNavItems(): void {
+    const filteredNavItems = this.filterNavItems(navItems);
+    this.translatedNavItems = filteredNavItems.map(item => ({
       ...item,
       name: this.translateService.instant(item.name)
     }));

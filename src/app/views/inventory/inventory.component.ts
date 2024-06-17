@@ -10,6 +10,7 @@ import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';
 import { SetupResourceComponent } from './setup-resource/setup-resource.component';
 import { takeUntil } from 'rxjs/operators';
 import { MoveResourceComponent } from './move-resource/move-resource.component';
+import { SessionStorageService } from 'ngx-webstorage';
 
 @Component({
 	selector: 'app-inventory',
@@ -26,11 +27,13 @@ export class InventoryComponent implements OnInit, OnDestroy {
 		"movedSims": 0,
 		"availableSims": 0
 	}
+	public isAdmin: boolean;
 
 	constructor(private cdr: ChangeDetectorRef,
 							private tableService: InventoryTableService,
 							private inventoryDataService: InventoryDataService,
 							private dialog: MatDialog,
+							private $sessionStorage: SessionStorageService,
 							public translateService: TranslateService
 	) {
 		this.initHeaderConfig();
@@ -43,6 +46,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 			this.tableService.updateTableData(data.content);
 			this.tableConfig$ = this.tableService.getTableConfig();
 			this.dataList$ = this.tableService.dataList$;
+			this.isAdmin = this.$sessionStorage.retrieve('isAdmin');
 			this.cdr.detectChanges();
 		});
 	}

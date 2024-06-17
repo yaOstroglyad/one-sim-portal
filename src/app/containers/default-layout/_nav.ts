@@ -1,5 +1,12 @@
 import { INavData } from '@coreui/angular';
 
+export const menuItemToPermission = {
+  Providers: ['admin'],
+  Customers: ['admin'],
+  Products: ['all'],
+  Inventory: ['all']
+}
+
 export const navItems: INavData[] = [
   // {
   //   name: 'Users',

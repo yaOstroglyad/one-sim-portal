@@ -2,14 +2,16 @@
             [tableConfig$]="tableConfig$"
             (columnSelectionChange)="onColumnSelectionChanged($event)"
             (filteredData)="applyFilter($event)">
-    <button cButton
+    <button *ngIf="isAdmin"
+            cButton
             color="dark"
             class="me-1"
             [matTooltip]="'Upload Resource'"
             (click)="openSelectionDialog()" header-actions>
         <svg cIcon name="cilDataTransferUp"></svg>
     </button>
-    <button cButton
+    <button *ngIf="isAdmin"
+            cButton
             color="dark"
             class="me-1"
             [matTooltip]="'Move Resource'"
