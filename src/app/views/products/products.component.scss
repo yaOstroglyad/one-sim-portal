@@ -1,14 +1,20 @@
 @import "../../../scss/custom";
 
-.GB-badge {
+.Gigabyte-badge,
+.Byte-badge,
+.Kilobyte-badge,
+.Megabyte-badge {
   background: #306fe1;
 }
-.SMS-badge {
+
+.Sms-badge {
   background: #e18030;
 }
-.VOICE-badge, .Min-badge  {
+
+.Voice-badge, .Min-badge {
   background: #867d21;
 }
+
 .badge-display {
   display: flex;
   justify-content: space-between;

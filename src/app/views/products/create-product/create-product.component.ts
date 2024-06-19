@@ -157,9 +157,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 	}
 
 	submit(): void {
-		if (this.form.valid) {
-			this.dialogRef.close(this.form.value);
-		}
+		this.form.dirty && this.form.valid ? this.dialogRef.close(this.form.value) : this.dialogRef.close();
 	}
 
 	onProviderBundleOrProductChange(id: string) {

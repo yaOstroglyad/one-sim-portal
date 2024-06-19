@@ -35,7 +35,6 @@ export class HeaderComponent implements OnInit {
       group[key] = new FormControl(this.config[key].defaultValue || '');
     });
     this.headerForm = new FormGroup(group);
-
     this.headerForm.valueChanges.subscribe(val => this.filteredData.emit(val));
   }
 

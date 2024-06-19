@@ -35,6 +35,8 @@ import { CreateProductComponent } from './create-product/create-product.componen
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+import { ItemNamesPipe } from '../../shared/pipes/item-names/item-names.pipe';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -76,7 +78,9 @@ import { MatIconModule } from '@angular/material/icon';
 		MatButtonModule,
 		MatSelectModule,
 		MatCheckboxModule,
-		MatIconModule
+		MatIconModule,
+		ItemNamesPipe,
+		MatTooltipModule
 	],
 	providers: [
 		MatDatepickerModule

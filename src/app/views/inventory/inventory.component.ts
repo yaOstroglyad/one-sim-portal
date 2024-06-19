@@ -53,7 +53,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
 	private initHeaderConfig(): void {
 		this.headerConfig = {
-			name: {type: TableFilterFieldType.Text, placeholder: 'Filter by name'}
+			value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
 		};
 	}
 

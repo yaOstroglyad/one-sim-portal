@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TableConfig, TableConfigAbstractService } from 'src/app/shared';
-import { map } from 'rxjs/operators';
 import { Provider } from '../../shared/model/provider';
 
 @Injectable({
 	providedIn: 'root'
 })
-export class ProvidersTableService extends TableConfigAbstractService {
-	private originalDataSubject = new BehaviorSubject<Provider[]>([]);
+export class ProvidersTableService extends TableConfigAbstractService<Provider> {
+	public originalDataSubject = new BehaviorSubject<Provider[]>([]);
 	public dataList$: Observable<Provider[]> = this.originalDataSubject.asObservable();
 	public tableConfigSubject = new BehaviorSubject<TableConfig>({
 		translatePrefix: 'provider.',
@@ -27,17 +26,5 @@ export class ProvidersTableService extends TableConfigAbstractService {
 
 	public updateTableData(data: Provider[]): void {
 		this.originalDataSubject.next(data);
-	}
-
-	applyFilter(filterValues: any): void {
-		if (!filterValues) {
-			this.dataList$ = this.originalDataSubject.asObservable();
-		} else {
-			this.dataList$ = this.originalDataSubject.pipe(
-				map(data => data.filter(item =>
-					(filterValues.name ? item.name.toUpperCase().includes(filterValues.name.toUpperCase()) : true)
-				))
-			);
-		}
 	}
 }

@@ -35,7 +35,7 @@ export class CustomersComponent implements OnInit {
 
   private initheaderConfig(): void {
     this.headerConfig = {
-      name: {type: TableFilterFieldType.Text, placeholder: 'Filter by name'},
+      value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
     };
   }
 

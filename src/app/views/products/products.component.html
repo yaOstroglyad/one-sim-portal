@@ -11,11 +11,25 @@
 <ng-template #usageTemplate let-data='context'>
     <td>
         <div class="badge-display">
-            <c-badge *ngFor="let usage of data.usages"
+            <c-badge *ngFor="let usage of data.bundle.usage"
                      [class]="usage?.unitType + '-badge'"
                      class="me-1"
-                     shape="rounded-pill">{{ usage?.total }} {{ usage?.unitType }}
+                     shape="rounded-pill">{{ usage?.value }} {{ usage?.unitType }}
             </c-badge>
         </div>
+    </td>
+</ng-template>
+
+<ng-template #validityTemplate let-data='context'>
+    <td *ngIf="data.bundle && data.bundle.validity">
+        {{data.bundle?.validity?.period + ' ' + data.bundle?.validity?.timeUnit}}
+    </td>
+</ng-template>
+
+<ng-template #customersTemplate let-data='context'>
+    <td *ngIf="data.customers && data.customers.length">
+            <span matTooltip="{{data.customers | itemNames:100:'name'}}" matTooltipPosition="above">
+              {{ data.customers | itemNames }}
+            </span>
     </td>
 </ng-template>

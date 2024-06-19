@@ -19,6 +19,8 @@
     "effectiveDate": "Effective Date",
     "price": "Price",
     "currency": "Currency",
+    "customers": "Customers",
+    "validity": "Validity",
     "unitType": "Unit Type"
   },
   "resource": {
@@ -30,6 +32,7 @@
     "iccid": "ICCID",
     "imei": "IMEI",
     "imsi": "IMSI",
+    "customer": "Customer",
     "msisdn": "MSISDN",
     "status": "Status",
     "provider": "Name"

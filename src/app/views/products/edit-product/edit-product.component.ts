@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CustomersDataService } from '../../../shared';
@@ -10,7 +10,7 @@ import { ProductsDataService } from '../products-data.service';
 	templateUrl: './edit-product.component.html',
 	styleUrls: ['./edit-product.component.scss']
 })
-export class EditProductComponent {
+export class EditProductComponent implements OnInit {
 	form: FormGroup = new FormGroup({
 		id: new FormControl(null),
 		name: new FormControl(null),
@@ -29,15 +29,15 @@ export class EditProductComponent {
 		public dialogRef: MatDialogRef<EditProductComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
 		private customersDataService: CustomersDataService,
-    private productsDataService: ProductsDataService,
+		private productsDataService: ProductsDataService,
 		private $sessionStorage: SessionStorageService
 	) {
 		this.isAdmin = this.$sessionStorage.retrieve('isAdmin');
-		if (this.data) {
-			this.initializeFormData(this.data);
-		}
-		this.loadCustomers();
+	}
+
+	ngOnInit(): void {
 		this.loadCurrencies();
+		this.loadCustomers();
 	}
 
 	private initializeFormData(data: any): void {
@@ -48,13 +48,16 @@ export class EditProductComponent {
 			price: data.price || '',
 			currency: data.currency || '',
 			isCorporate: data.isCorporate || false,
-			customers: data.customers || []
+			customers: data.customers.map(c => c.id) || []
 		});
 	}
 
 	private loadCustomers(): void {
 		this.customersDataService.list().subscribe(customers => {
 			this.customers = customers;
+			if (this.data) {
+				this.initializeFormData(this.data);
+			}
 		});
 	}
 
@@ -69,6 +72,6 @@ export class EditProductComponent {
 	}
 
 	submit(): void {
-		this.dialogRef.close(this.form.value);
+		this.form.dirty && this.form.valid ? this.dialogRef.close(this.form.value) : this.dialogRef.close();
 	}
 }

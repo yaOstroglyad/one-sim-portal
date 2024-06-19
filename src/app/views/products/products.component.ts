@@ -17,6 +17,9 @@ import { CreateProductComponent } from './create-product/create-product.componen
 })
 export class ProductsComponent implements OnInit {
 	@ViewChild('usageTemplate') usageTemplate: TemplateRef<any>;
+	@ViewChild('customersTemplate') customersTemplate: TemplateRef<any>;
+	@ViewChild('validityTemplate') validityTemplate: TemplateRef<any>;
+
 	public visible: boolean;
 	public selectedData: Package;
 	public tableConfig$: BehaviorSubject<TableConfig>;
@@ -27,7 +30,7 @@ export class ProductsComponent implements OnInit {
 							private tableService: ProductsTableService,
 							private productsDataService: ProductsDataService,
 							private dialog: MatDialog,
-							public translateService: TranslateService,
+							public translateService: TranslateService
 	) {
 		this.initHeaderConfig();
 	}
@@ -38,7 +41,7 @@ export class ProductsComponent implements OnInit {
 
 	private initHeaderConfig(): void {
 		this.headerConfig = {
-			name: {type: TableFilterFieldType.Text, placeholder: 'Filter by name'}
+			value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
 		};
 	}
 
@@ -57,9 +60,11 @@ export class ProductsComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed().subscribe(result => {
-			this.productsDataService.create(result).subscribe(e => {
-				this.getProducts();
-			});
+			if (result) {
+				this.productsDataService.create(result).subscribe(e => {
+					this.getProducts();
+				});
+			}
 		});
 	}
 
@@ -70,9 +75,11 @@ export class ProductsComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed().subscribe(result => {
-			this.productsDataService.update(result).subscribe(e => {
-				this.getProducts();
-			});
+			if (result) {
+				this.productsDataService.update(result).subscribe(e => {
+					this.getProducts();
+				});
+			}
 		});
 	}
 
