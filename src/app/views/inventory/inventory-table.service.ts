@@ -22,7 +22,7 @@ export class InventoryTableService extends TableConfigAbstractService<Resource> 
 			{visible: true, key: 'imei', header: 'imei'},
 			{visible: true, key: 'imsi', header: 'imsi'},
 			{visible: true, key: 'msisdn', header: 'msisdn'},
-			{visible: true, key: 'customer', header: 'customer'},
+			{visible: true, templateType: TemplateType.Text, key: 'customer.name', header: 'customer'},
 			{visible: true, templateType: TemplateType.Text, key: 'serviceProvider.name', header: 'provider'},
 			{visible: true, key: 'status', header: 'status'}
 		]
