@@ -29,14 +29,14 @@ export const navItems: INavData[] = [
   //   iconComponent: { name: 'cil-group' },
   // },
   {
-    name: 'Providers',
-    url: 'providers',
-    iconComponent: { name: 'cil-apps-settings' },
-  },
-  {
     name: 'Customers',
     url: 'customers',
     iconComponent: { name: 'cil-industry' },
+  },
+  {
+    name: 'Providers',
+    url: 'providers',
+    iconComponent: { name: 'cil-apps-settings' },
   },
   {
     name: 'Products',

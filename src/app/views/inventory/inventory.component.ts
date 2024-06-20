@@ -44,6 +44,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {
 			this.tableService.updateTableData(data.content);
+			this.tableService.updateConfigData(data?.totalPages || 20);
 			this.tableConfig$ = this.tableService.getTableConfig();
 			this.dataList$ = this.tableService.dataList$;
 			this.isAdmin = this.$sessionStorage.retrieve('isAdmin');

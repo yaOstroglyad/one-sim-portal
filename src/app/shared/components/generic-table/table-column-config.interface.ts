@@ -20,6 +20,7 @@ export interface TableConfig {
 		enabled: boolean;
 		serverSide: boolean;
 		page?: number,
+		totalPages?: number,
 		size?: number
 	};
 }

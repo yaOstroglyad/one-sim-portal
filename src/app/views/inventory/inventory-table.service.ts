@@ -12,7 +12,8 @@ export class InventoryTableService extends TableConfigAbstractService<Resource> 
 	public tableConfigSubject = new BehaviorSubject<TableConfig>({
 		pagination: {
 			enabled: true,
-			serverSide: true
+			serverSide: true,
+			totalPages: 20
 		},
 		translatePrefix: 'resource.',
 		showCheckboxes: false,
@@ -35,5 +36,18 @@ export class InventoryTableService extends TableConfigAbstractService<Resource> 
 
 	public updateTableData(data: Resource[]): void {
 		this.originalDataSubject.next(data);
+	}
+
+	public updateConfigData(totalPages: number): void {
+		const currentConfig = this.tableConfigSubject.value;
+		const updatedConfig = {
+			...currentConfig,
+			pagination: {
+				...currentConfig.pagination,
+				totalPages
+			}
+		};
+
+		this.tableConfigSubject.next(updatedConfig);
 	}
 }

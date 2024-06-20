@@ -38,8 +38,10 @@ export class LoginComponent implements OnInit {
 	}
 
 	quickLoginByAdmin(): void {
-		this.form.controls['loginName'].setValue('admin');
-		this.form.controls['password'].setValue('admin');
+		// this.form.controls['loginName'].setValue('admin');
+		// this.form.controls['password'].setValue('admin');
+		this.form.controls['loginName'].setValue('anex@mail.com');
+		this.form.controls['password'].setValue('customer');
 		this.form.controls['rememberMe'].setValue(true);
 		this.loginService.login(this.form.value);
 		this.router.navigate(['/home']);

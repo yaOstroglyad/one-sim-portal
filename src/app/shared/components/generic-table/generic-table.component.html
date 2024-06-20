@@ -64,15 +64,21 @@
         </table>
         <ng-container *ngIf="config.pagination?.enabled">
             <c-pagination aria-label="Page navigation">
-                <li cPageItem (click)="changePage(currentPage - 1, config.pagination?.serverSide)" [class.disabled]="currentPage === 1">
+                <li cPageItem
+                    class="c-pointer"
+                    (click)="!(currentPage === 0) && changePage(currentPage - 1, config.pagination?.serverSide)"
+                    [class.disabled]="currentPage === 0">
                     <div cPageLink>Previous</div>
                 </li>
 
                 <li cPageItem>
-                    <div cPageLink>{{ currentPage + 1 }} of {{ totalPages }}</div>
+                    <div cPageLink>{{ currentPage + 1 }} of {{ config.pagination?.totalPages ?? totalPages }}</div>
                 </li>
 
-                <li cPageItem (click)="changePage(currentPage + 1, config.pagination?.serverSide)" [class.disabled]="currentPage === totalPages">
+                <li cPageItem
+                    class="c-pointer"
+                    (click)="!(currentPage + 1 === config.pagination?.totalPages) && changePage(currentPage + 1, config.pagination?.serverSide)"
+                    [class.disabled]="config.pagination?.totalPages ? currentPage + 1 === config.pagination?.totalPages : currentPage + 1 === totalPages">
                     <div cPageLink>Next</div>
                 </li>
             </c-pagination>
