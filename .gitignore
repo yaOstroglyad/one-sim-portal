@@ -1,5 +1,5 @@
 /node_modules/
 /.idea/
 /.angular/
-/package-lock.json
 /dist/
+/package-lock.json
