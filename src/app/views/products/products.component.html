@@ -4,10 +4,12 @@
             (columnSelectionChange)="onColumnSelectionChanged($event)"
             (filteredData)="applyFilter($event)">
 </app-header>
+
 <generic-table [config$]="tableConfig$"
                [data$]="dataList$"
                [menu]="menuTemplate"
-               (toggleAction)="edit($event)"></generic-table>
+               (toggleAction)="edit($event)">
+</generic-table>
 
 <ng-template #menuTemplate let-item>
     <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -15,8 +17,20 @@
     </button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="edit(item)">Edit</button>
-        <button [disabled]="!validStatuses.includes(item.status)" mat-menu-item (click)="openChangeStatus(item)">Change status</button>
+        <button [disabled]="!validStatuses.includes(item.status)"
+                mat-menu-item (click)="openChangeStatus(item)">Change status</button>
     </mat-menu>
+</ng-template>
+
+<ng-template #statusTemplate let-data='context'>
+    <td>
+        <div class="badge-display">
+            <c-badge [class]="data?.status + '-badge'"
+                     class="me-1"
+                     shape="rounded-pill">{{ data?.status }}
+            </c-badge>
+        </div>
+    </td>
 </ng-template>
 
 <ng-template #usageTemplate let-data='context'>
@@ -39,8 +53,8 @@
 
 <ng-template #customersTemplate let-data='context'>
     <td *ngIf="data.customers && data.customers.length">
-            <span matTooltip="{{data.customers | itemNames:100:'name'}}" matTooltipPosition="above">
-              {{ data.customers | itemNames }}
-            </span>
+        <span matTooltip="{{data.customers | itemNames:100:'name'}}" matTooltipPosition="above">
+            {{ data.customers | itemNames }}
+        </span>
     </td>
 </ng-template>

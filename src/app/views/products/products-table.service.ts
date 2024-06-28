@@ -20,7 +20,6 @@ export class ProductsTableService extends TableConfigAbstractService<Package> {
 		columns: [
 			{visible: true, key: 'name', header: 'name' },
 			{visible: true, key: 'description', header: 'description' },
-			{visible: true, key: 'status', header: 'status' },
 			{visible: true, key: 'price', header: 'price' },
 			{visible: true, key: 'currency', header: 'currency' }
 		]
@@ -39,13 +38,13 @@ export class ProductsTableService extends TableConfigAbstractService<Package> {
 		const currentConfig = this.tableConfigSubject.value;
 		const newConfig = { ...currentConfig, columns: [...currentConfig.columns] };
 
-		if (!newConfig.columns.find(c => c.key === 'usages')) {
+		if (!newConfig.columns.find(c => c.key === 'status')) {
 			newConfig.columns.push({
 				visible: true,
-				key: 'usages',
-				header: 'usages',
+				key: 'status',
+				header: 'status',
 				templateType: TemplateType.Custom,
-				customTemplate: () => parent.usageTemplate
+				customTemplate: () => parent.statusTemplate
 			});
 		}
 
@@ -56,6 +55,16 @@ export class ProductsTableService extends TableConfigAbstractService<Package> {
 				header: 'customers',
 				templateType: TemplateType.Custom,
 				customTemplate: () => parent.customersTemplate
+			});
+		}
+
+		if (!newConfig.columns.find(c => c.key === 'usages')) {
+			newConfig.columns.push({
+				visible: true,
+				key: 'usages',
+				header: 'usages',
+				templateType: TemplateType.Custom,
+				customTemplate: () => parent.usageTemplate
 			});
 		}
 
