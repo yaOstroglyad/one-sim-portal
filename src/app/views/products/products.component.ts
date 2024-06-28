@@ -5,7 +5,6 @@ import { catchError, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
 import { ProductsTableService } from './products-table.service';
 import { ProductsDataService } from './products-data.service';
-import { TranslateService } from '@ngx-translate/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditProductComponent } from './edit-product/edit-product.component';
 import { CreateProductComponent } from './create-product/create-product.component';
@@ -33,8 +32,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 	constructor(
 		private tableService: ProductsTableService,
 		private productsDataService: ProductsDataService,
-		private dialog: MatDialog,
-		public translateService: TranslateService
+		private dialog: MatDialog
 	) {
 		this.headerConfig = {
 			value: { type: TableFilterFieldType.Text, placeholder: 'Filter table data' }
@@ -125,7 +123,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 	}
 
 	private openDialog<T>(component: new (...args: any[]) => T, data?: any): Observable<any> {
-		const dialogRef: MatDialogRef<T, any> = this.dialog.open(component, {
+		const dialogRef: MatDialogRef<T> = this.dialog.open(component, {
 			width: '650px',
 			data
 		});
