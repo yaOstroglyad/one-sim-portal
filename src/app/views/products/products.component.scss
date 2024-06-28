@@ -1,4 +1,10 @@
 @import "../../../scss/custom";
+:host ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+  --mdc-icon-button-state-layer-size: 24px; /* Уменьшение размера в два раза */
+  width: var(--mdc-icon-button-state-layer-size);
+  height: var(--mdc-icon-button-state-layer-size);
+  padding: 0px; /* Соответствующее уменьшение padding */
+}
 
 .Gigabyte-badge,
 .Byte-badge,

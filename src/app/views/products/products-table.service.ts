@@ -16,9 +16,11 @@ export class ProductsTableService extends TableConfigAbstractService<Package> {
 		showCheckboxes: false,
 		showEditButton: true,
 		showAddButton: true,
+		showMenu: true,
 		columns: [
 			{visible: true, key: 'name', header: 'name' },
 			{visible: true, key: 'description', header: 'description' },
+			{visible: true, key: 'status', header: 'status' },
 			{visible: true, key: 'price', header: 'price' },
 			{visible: true, key: 'currency', header: 'currency' }
 		]

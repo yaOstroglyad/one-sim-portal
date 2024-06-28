@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Package } from '../../shared/model/package';
+import { Package, StatusEnum } from '../../shared/model/package';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
 import { ProductsTableService } from './products-table.service';
@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EditProductComponent } from './edit-product/edit-product.component';
 import { CreateProductComponent } from './create-product/create-product.component';
+import { ChangeStatusDialogComponent } from './change-status-dialog/change-status-dialog.component';
 
 @Component({
 	selector: 'app-products',
@@ -25,6 +26,7 @@ export class ProductsComponent implements OnInit {
 	public tableConfig$: BehaviorSubject<TableConfig>;
 	public dataList$: Observable<Package[]>;
 	public headerConfig: HeaderConfig = {};
+	public validStatuses = Object.values(StatusEnum);
 
 	constructor(private cdr: ChangeDetectorRef,
 							private tableService: ProductsTableService,
@@ -90,6 +92,25 @@ export class ProductsComponent implements OnInit {
 			this.tableConfig$ = this.tableService.getTableConfig();
 			this.dataList$ = this.tableService.dataList$;
 			this.cdr.detectChanges();
+		});
+	}
+
+	openChangeStatus(product: Package) {
+		const dialogRef = this.dialog.open(ChangeStatusDialogComponent, {
+			width: '250px',
+			data: {currentStatus: product.status}
+		});
+
+		dialogRef.afterClosed().subscribe(newStatus => {
+			if (newStatus !== undefined) {
+				const updateStatus = {
+					id: product.id,
+					status: newStatus
+				}
+				this.productsDataService.updateStatus(updateStatus).subscribe(e => {
+					this.getProducts()
+				});
+			}
 		});
 	}
 }

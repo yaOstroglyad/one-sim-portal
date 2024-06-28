@@ -37,6 +37,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { ItemNamesPipe } from '../../shared/pipes/item-names/item-names.pipe';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { ChangeStatusDialogComponent } from './change-status-dialog/change-status-dialog.component';
 
 
 
@@ -44,7 +46,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   declarations: [
     ProductsComponent,
 		CreateProductComponent,
-    EditProductComponent
+    EditProductComponent,
+    ChangeStatusDialogComponent
   ],
 	imports: [
 		CommonModule,
@@ -80,7 +83,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 		MatCheckboxModule,
 		MatIconModule,
 		ItemNamesPipe,
-		MatTooltipModule
+		MatTooltipModule,
+		MatMenuModule
 	],
 	providers: [
 		MatDatepickerModule

@@ -36,7 +36,25 @@ export class ProductsDataService extends DataService<Package>{
 	update(product: any): Observable<any> {
 		return this.http.patch<any>(`/api/v1/products/command/update`, product).pipe(
 			catchError(() => {
-				console.warn('error happened, presenting mocked data');
+				console.warn('error happened, cant update');
+				return of([])
+			})
+		);
+	}
+
+	updateStatus(changeStatus: any): Observable<any> {
+		return this.http.patch<any>(`/api/v1/products/command/update-status`, changeStatus).pipe(
+			catchError(() => {
+				console.warn('error happened, cant update status');
+				return of([])
+			})
+		);
+	}
+
+	getStatuses(): Observable<string[]> {
+		return this.http.get<any>(`/api/v1/products/statuses`).pipe(
+			catchError(() => {
+				console.warn('error happened, cant get statuses');
 				return of([])
 			})
 		);

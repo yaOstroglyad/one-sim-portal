@@ -5,8 +5,19 @@
             (filteredData)="applyFilter($event)">
 </app-header>
 <generic-table [config$]="tableConfig$"
-               (toggleAction)="edit($event)"
-               [data$]="dataList$"></generic-table>
+               [data$]="dataList$"
+               [menu]="menuTemplate"
+               (toggleAction)="edit($event)"></generic-table>
+
+<ng-template #menuTemplate let-item>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="edit(item)">Edit</button>
+        <button [disabled]="!validStatuses.includes(item.status)" mat-menu-item (click)="openChangeStatus(item)">Change status</button>
+    </mat-menu>
+</ng-template>
 
 <ng-template #usageTemplate let-data='context'>
     <td>

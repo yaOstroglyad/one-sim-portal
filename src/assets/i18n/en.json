@@ -18,6 +18,7 @@
     "usages": "Usages",
     "effectiveDate": "Effective Date",
     "price": "Price",
+    "status": "Status",
     "currency": "Currency",
     "customers": "Customers",
     "validity": "Validity",
