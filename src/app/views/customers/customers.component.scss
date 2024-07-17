@@ -5,3 +5,8 @@
   height: var(--mdc-icon-button-state-layer-size);
   padding: 0;
 }
+
+
+:host .table > :not(caption) > * > * {
+  padding: 0.5rem 0.5rem 0 0.5rem;
+}

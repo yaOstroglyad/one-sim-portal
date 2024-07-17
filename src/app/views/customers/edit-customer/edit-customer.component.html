@@ -18,10 +18,10 @@
                     <input matInput formControlName="externalId">
                 </mat-form-field>
 
-                <mat-form-field class="full-width">
-                    <mat-label>Tags</mat-label>
-                    <input matInput formControlName="tags">
-                </mat-form-field>
+                <app-chips-input class="full-width"
+                                 [label]="'Tags'"
+                                 [placeholder]="'Enter tags...'"
+                                 (itemsChange)="updateTags($event)"></app-chips-input>
 
                 <mat-form-field class="full-width">
                     <mat-label>Type</mat-label>
@@ -34,13 +34,12 @@
 
             <div formGroupName="subscriberCommand">
                 <mat-form-field class="full-width">
-                    <mat-label>Service Provider ID</mat-label>
-                    <input matInput formControlName="serviceProviderId">
-                </mat-form-field>
-
-                <mat-form-field class="full-width">
-                    <mat-label>SIM ID</mat-label>
-                    <input matInput formControlName="simId">
+                    <mat-label>Service Provider</mat-label>
+                    <mat-select formControlName="serviceProviderId">
+                        <mat-option *ngFor="let provider of providers" [value]="provider.id">
+                            {{provider.name}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
 
                 <mat-form-field class="full-width">

@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
+import { ChipsInputComponent } from '../../shared/components/chips-input/chips-input.component';
 
 
 
@@ -33,7 +34,8 @@ import { MatIconModule } from '@angular/material/icon';
 		MatSelectModule,
 		MatButtonModule,
 		MatMenuModule,
-		MatIconModule
+		MatIconModule,
+		ChipsInputComponent
 	]
 })
 export class CustomersModule { }

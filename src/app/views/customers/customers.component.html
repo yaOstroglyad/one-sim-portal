@@ -6,8 +6,9 @@
 </app-header>
 
 <generic-table [config$]="tableConfig$"
-               [menu]="menuTemplate"
                [data$]="dataList$"></generic-table>
+
+<!--Add to table [menu]="menuTemplate"-->
 
 <ng-template #menuTemplate let-item>
     <button mat-icon-button [matMenuTriggerFor]="menu">

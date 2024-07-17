@@ -1,0 +1,20 @@
+<mat-form-field class="full-width">
+    <mat-label>{{ label }}</mat-label>
+    <mat-chip-grid #chipGrid aria-label="Enter items">
+        <mat-chip-row *ngFor="let item of items(); trackBy: trackByFn"
+                      (removed)="remove(item)"
+                      [editable]="true"
+                      (edited)="edit(item, $event)"
+                      [aria-description]="'press enter to edit ' + item">
+            {{ item }}
+            <button matChipRemove [attr.aria-label]="'remove ' + item">
+                <mat-icon>cancel</mat-icon>
+            </button>
+        </mat-chip-row>
+        <input [placeholder]="placeholder"
+               [matChipInputFor]="chipGrid"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+               [matChipInputAddOnBlur]="addOnBlur"
+               (matChipInputTokenEnd)="add($event)"/>
+    </mat-chip-grid>
+</mat-form-field>

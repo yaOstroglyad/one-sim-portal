@@ -1,10 +1,6 @@
 // Here you can add other styles
 @import "./variables";
 
-.table > :not(caption) > * > * {
-  padding: 0.5rem 0.5rem 0 0.5rem;
-}
-
 .text-center {
   text-align: center;
 }
@@ -84,14 +80,21 @@
   right: 50px;
   border-radius: 60px;
 }
+
 .c-pointer {
   cursor: pointer;
 }
+
 .text-center {
   text-align: center;
 }
+
 .sidebar-brand-full {
   position: fixed;
   left: -5px;
   top: 0;
+}
+
+.full-width {
+  width: 100%;
 }

@@ -1,6 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { CustomersDataService, HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
+import {
+  CustomersDataService,
+  HeaderConfig,
+  ProvidersDataService,
+  TableConfig,
+  TableFilterFieldType
+} from '../../shared';
 import { CustomersTableService } from './customers-table.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Customer } from '../../shared/model/customer';
