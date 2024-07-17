@@ -23,4 +23,13 @@ export class CustomersDataService extends DataService<Customer> {
 			})
 		);
 	}
+
+	create(customer: Customer): Observable<any> {
+		return this.http.post<any>(`/api/v1/customers/command/create`, customer).pipe(
+			catchError(() => {
+				console.warn('error happened, presenting mocked data');
+				return of([])
+			})
+		);
+	}
 }

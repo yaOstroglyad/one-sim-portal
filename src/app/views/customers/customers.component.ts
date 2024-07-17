@@ -4,6 +4,8 @@ import { CustomersDataService, HeaderConfig, TableConfig, TableFilterFieldType }
 import { CustomersTableService } from './customers-table.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Customer } from '../../shared/model/customer';
+import { EditCustomerComponent } from './edit-customer/edit-customer.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-customers',
@@ -19,17 +21,52 @@ export class CustomersComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef,
               private tableService: CustomersTableService,
               private customersDataService: CustomersDataService,
-              public translateService: TranslateService
+              public translateService: TranslateService,
+              private dialog: MatDialog
   ) {
     this.initheaderConfig();
   }
 
   ngOnInit(): void {
+    this.loadCustomers();
+  }
+
+  private loadCustomers(): void {
     this.customersDataService.list().subscribe(data => {
       this.tableService.updateTableData(data);
       this.tableConfig$ = this.tableService.getTableConfig();
       this.dataList$ = this.tableService.dataList$;
       this.cdr.detectChanges();
+    });
+  }
+
+  createCustomer(): void {
+    const dialogRef = this.dialog.open(EditCustomerComponent, {
+      width: '650px',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.customersDataService.create(result).subscribe(() => {
+          this.loadCustomers();
+        });
+      }
+    });
+  }
+
+  editCustomer(customer: Customer): void {
+    const dialogRef = this.dialog.open(EditCustomerComponent, {
+      width: '650px',
+      data: customer
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.customersDataService.update(result.id, result).subscribe(() => {
+          this.loadCustomers();
+        });
+      }
     });
   }
 

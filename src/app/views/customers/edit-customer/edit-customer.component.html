@@ -1,0 +1,57 @@
+<h2 mat-dialog-title class="dialog-header">{{ data ? 'Edit Customer' : 'Create Customer' }}</h2>
+<mat-dialog-content class="mat-typography dialog-content">
+    <form [formGroup]="form">
+        <div class="form-group">
+            <div formGroupName="customerCommand">
+                <mat-form-field class="full-width">
+                    <mat-label>Customer Name</mat-label>
+                    <input matInput formControlName="name">
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput formControlName="description"></textarea>
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>Customer External ID</mat-label>
+                    <input matInput formControlName="externalId">
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>Tags</mat-label>
+                    <input matInput formControlName="tags">
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>Type</mat-label>
+                    <mat-select formControlName="type">
+                        <mat-option value="Private">Private</mat-option>
+                        <mat-option value="Corporate">Corporate</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div formGroupName="subscriberCommand">
+                <mat-form-field class="full-width">
+                    <mat-label>Service Provider ID</mat-label>
+                    <input matInput formControlName="serviceProviderId">
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>SIM ID</mat-label>
+                    <input matInput formControlName="simId">
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                    <mat-label>Subscriber External ID</mat-label>
+                    <input matInput formControlName="externalId">
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-footer" align="end">
+    <button mat-button (click)="close()">Cancel</button>
+    <button mat-button color="primary" (click)="submit()">Save</button>
+</mat-dialog-actions>

@@ -12,7 +12,9 @@ export class CustomersTableService extends TableConfigAbstractService<Customer> 
 	public tableConfigSubject = new BehaviorSubject<TableConfig>({
 		translatePrefix: 'customer.',
 		showCheckboxes: false,
-		showEditButton: false,
+		showEditButton: true,
+		showAddButton: true,
+		showMenu: true,
 		columns: [
 			{visible: true, key: 'id', header: 'id'},
 			{visible: true, key: 'name', header: 'name' },

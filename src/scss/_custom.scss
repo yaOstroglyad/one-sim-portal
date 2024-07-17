@@ -1,6 +1,10 @@
 // Here you can add other styles
 @import "./variables";
 
+.table > :not(caption) > * > * {
+  padding: 0.5rem 0.5rem 0 0.5rem;
+}
+
 .text-center {
   text-align: center;
 }
