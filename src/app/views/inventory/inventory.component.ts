@@ -73,14 +73,16 @@ export class InventoryComponent implements OnInit, OnDestroy {
 		});
 
 		selectionDialogRef.afterClosed().subscribe(selectionResult => {
-			this.moveResult = {
-				...selectionResult,
-				isActive: true
+			if(selectionResult) {
+				this.moveResult = {
+					...selectionResult,
+					isActive: true
+				}
+				this.onPageChange({ page: 0, size: 10 })
+				setTimeout(() => {
+					this.moveResult.isActive = false;
+				}, 5000)
 			}
-			this.onPageChange({ page: 0, size: 10 })
-			setTimeout(() => {
-				this.moveResult.isActive = false;
-			}, 5000)
 		});
 	}
 

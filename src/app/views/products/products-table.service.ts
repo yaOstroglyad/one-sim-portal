@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TableConfig, TableConfigAbstractService, TemplateType } from 'src/app/shared';
-import { map } from 'rxjs/operators';
 import { Package } from '../../shared/model/package';
-import { deepSearch } from '../../shared/utils/utils';
 
 @Injectable({
 	providedIn: 'root'

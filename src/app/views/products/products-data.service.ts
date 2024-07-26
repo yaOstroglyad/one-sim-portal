@@ -19,7 +19,7 @@ export class ProductsDataService extends DataService<Package>{
 		return this.http.get<Package[]>(this.apiUrl).pipe(
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
-				return of(packagesMock)
+				return of([])
 			})
 		);
 	}

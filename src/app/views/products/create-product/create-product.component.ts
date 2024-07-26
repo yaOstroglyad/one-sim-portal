@@ -79,11 +79,13 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this.isAdmin = this.$sessionStorage.retrieve('isAdmin');
 
-		this.subscriptions.push(
-			this.providerBundlesDataService.list().subscribe(bundles => {
-				this.providerBundles = bundles;
-			})
-		);
+		if(this.isAdmin) {
+			this.subscriptions.push(
+				this.providerBundlesDataService.list().subscribe(bundles => {
+					this.providerBundles = bundles;
+				})
+			);
+		}
 
 		this.subscriptions.push(
 			this.productsDataService.getParentProducts().subscribe(products => {
@@ -183,7 +185,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 						description: template.productCommand.description,
 						price: template.productCommand.price,
 						currency: template.productCommand.currency,
-						isCorporate: template.productCommand.isCorporate
+						isCorporate: template.productCommand.isCorporate || false
 					},
 					bundleCommand: {
 						id: template.bundleCommand.id,
@@ -220,6 +222,8 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 				if (!template.bundleCommand.isFlexible) {
 					this.form.get('bundleCommand').disable();
 				}
+
+				this.form.markAsDirty();
 			})
 		);
 	}

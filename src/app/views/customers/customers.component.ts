@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
   CustomersDataService,
   HeaderConfig,
-  ProvidersDataService,
   TableConfig,
   TableFilterFieldType
 } from '../../shared';

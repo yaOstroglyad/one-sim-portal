@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProvidersDataService } from '../../../shared';
 import { Subscription } from 'rxjs';
@@ -33,8 +33,12 @@ export class EditCustomerComponent implements OnInit, OnDestroy {
 			subscriberCommand: this.fb.group({
 				serviceProviderId: [data?.subscriberCommand?.serviceProviderId || '', Validators.required],
 				externalId: [data?.subscriberCommand?.externalId || '']
-			})
+			}),
+			registrationEmail: [data?.registrationEmail || '', Validators.email],
 		});
+
+		// Set initial validators based on type
+		this.setValidators(this.form.get('customerCommand.type').value);
 	}
 
 	ngOnDestroy(): void {
@@ -61,5 +65,36 @@ export class EditCustomerComponent implements OnInit, OnDestroy {
 		if (this.form.valid) {
 			this.dialogRef.close(this.form.value);
 		}
+	}
+
+	onTypeChange(type: string): void {
+		this.setValidators(type);
+	}
+
+	private setValidators(type: string): void {
+		const registrationEmailControl = this.form.get('registrationEmail');
+		const serviceProviderIdControl = this.form.get('subscriberCommand.serviceProviderId');
+
+		if (type === 'Private') {
+			registrationEmailControl.setValidators([Validators.required, Validators.email]);
+			serviceProviderIdControl.setValidators([Validators.required]);
+		} else if (type === 'Corporate') {
+			registrationEmailControl.setValidators([Validators.email]);
+			serviceProviderIdControl.setValidators(null);
+		}
+
+		registrationEmailControl.updateValueAndValidity();
+		serviceProviderIdControl.updateValueAndValidity();
+	}
+
+	isFieldRequired(fieldName: string): boolean {
+		const control = this.form.get(fieldName);
+		if (control) {
+			const validators = control.validator ? control.validator({} as AbstractControl) : null;
+			if (validators && validators.required) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

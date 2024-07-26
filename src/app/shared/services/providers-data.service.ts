@@ -19,7 +19,7 @@ export class ProvidersDataService extends DataService<Provider> {
 		return this.http.get<Provider[]>(this.apiUrl).pipe(
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
-				return of(providersMock)
+				return of([])
 			})
 		);
 	}

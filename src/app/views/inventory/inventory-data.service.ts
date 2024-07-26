@@ -19,7 +19,7 @@ export class InventoryDataService extends DataService<Resource> {
 		return this.http.get<any>(this.apiUrl, { params }).pipe(
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
-				return of(resourcesMock)
+				return of([])
 			})
 		);
 	}

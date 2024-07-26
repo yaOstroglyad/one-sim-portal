@@ -43,7 +43,6 @@ export class MoveResourceComponent implements OnDestroy {
     this.moveResourceService.moveResource(this.form.value)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(result => {
-      console.log('result', result);
       this.dialogRef.close(result);
     })
   }

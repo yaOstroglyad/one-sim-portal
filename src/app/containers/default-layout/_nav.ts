@@ -1,8 +1,8 @@
 import { INavData } from '@coreui/angular';
 
 export const menuItemToPermission = {
-  Providers: ['admin'],
-  Customers: ['admin'],
+  Providers: ['all'], // can be ['admin'] as well
+  Customers: ['all'],
   Products: ['all'],
   Inventory: ['all']
 }

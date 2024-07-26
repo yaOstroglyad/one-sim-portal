@@ -19,7 +19,7 @@ export class CustomersDataService extends DataService<Customer> {
 		return this.http.get<Customer[]>(this.apiUrl).pipe(
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
-				return of(customersMock)
+				return of([])
 			})
 		);
 	}
