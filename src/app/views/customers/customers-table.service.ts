@@ -18,9 +18,11 @@ export class CustomersTableService extends TableConfigAbstractService<Customer> 
 		columns: [
 			{visible: true, key: 'id', header: 'id'},
 			{visible: true, key: 'name', header: 'name' },
+			{visible: true, key: 'type', header: 'type' },
+			{visible: true, key: 'tags', header: 'tags' },
+			{visible: true, key: 'description', header: 'description' },
 		]
 	});
-
 
 	constructor() {
 		super();

@@ -8,7 +8,10 @@
   },
   "customer": {
     "id": "ID",
-    "name": "Name"
+    "name": "Name",
+    "tags": "Tags",
+    "type": "Type",
+    "description": "Description"
   },
   "package": {
     "id": "ID",
