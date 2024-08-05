@@ -2,8 +2,9 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProvidersDataService } from '../../../shared';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Provider } from '../../../shared/model/provider';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-edit-customer',
@@ -11,9 +12,9 @@ import { Provider } from '../../../shared/model/provider';
 	styleUrls: ['./edit-customer.component.scss']
 })
 export class EditCustomerComponent implements OnInit, OnDestroy {
+	private unsubscribe$ = new Subject<void>();
 	form: FormGroup;
 	providers: Provider[] = [];
-	private subscriptions: Subscription = new Subscription();
 
 	constructor(
 		private fb: FormBuilder,
@@ -42,15 +43,16 @@ export class EditCustomerComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-		this.subscriptions.unsubscribe();
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
 	}
 
 	ngOnInit(): void {
-		const providersSubscription = this.providersDataService.list().subscribe((providers: Provider[]) => {
+		this.providersDataService.list()
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe((providers: Provider[]) => {
 			this.providers = providers;
 		});
-
-		this.subscriptions.add(providersSubscription);
 	}
 
 	updateTags(tags: string[]): void {

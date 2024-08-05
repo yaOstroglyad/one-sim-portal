@@ -1,24 +1,20 @@
-// Ionic Variables and Theming. For more info, please see:
-// http://ionicframework.com/docs/theming/
-
-/** Ionic CSS Variables **/
 :root {
-  //TODO в будущем необходимо построить зависимость от primary
-
-  /* Определение основного цвета  */
+  /* everything described below is just default settings,
+  the main color comes from the white-label.service.ts  */
+  /* Initiation of primary color  */
   --sc-color-primary: #f9a743;
 
-  /* Основной цвет в формате HSL */
-  --sc-color-primary-h: 32; /* Оттенок */
-  --sc-color-primary-s: 93%; /* Насыщенность */
-  --sc-color-primary-l: 61%; /* Светлота */
+  /* primary color in format HSL */
+  --sc-color-primary-h: 32; /* hue */
+  --sc-color-primary-s: 93%; /* saturation */
+  --sc-color-primary-l: 61%; /* lightness */
 
-  /* Создание вариаций на основе HSL */
+  /* create variables based on HSL */
   --sc-color-primary-tint: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 70%);
   --sc-color-primary-shade: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 52%);
   --sc-color-primary-border: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 61%);
 
-  /* Вариации с прозрачностью */
+  /* variables with opacity */
   --sc-color-primary-opacity: hsla(var(--sc-color-primary-h), var(--sc-color-primary-s), var(--sc-color-primary-l), 0.5);
   --sc-color-primary-opacity-03: hsla(var(--sc-color-primary-h), var(--sc-color-primary-s), var(--sc-color-primary-l), 0.3);
   --sc-color-primary-opacity-04: hsla(var(--sc-color-primary-h), var(--sc-color-primary-s), var(--sc-color-primary-l), 0.4);
@@ -26,7 +22,7 @@
 
   /** primary **/
   --ion-color-primary: var(--sc-color-primary);
-  --ion-color-primary-rgb: 56, 128, 255;
+  --ion-color-primary-rgb: 249, 67, 143;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: var(--sc-color-primary-shade);
@@ -42,7 +38,7 @@
 
   /** tertiary **/
   --ion-color-tertiary: var(--sc-color-primary);
-  --ion-color-tertiary-rgb: 82, 96, 255;
+  --ion-color-tertiary-rgb: 249, 67, 143;
   --ion-color-tertiary-contrast: #ffffff;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
   --ion-color-tertiary-shade: var(--sc-color-primary-shade);
@@ -100,11 +96,47 @@
 $enable-shadows: true;
 
 /** variables **/
-$primary-color: var(--sc-color-primary);
-$primary-color-shade: var(--sc-color-primary-shade);
-$primary-color-border: var(--sc-color-primary-border);
-$primary-with-opacity: var(--sc-color-primary-opacity);
-$primary-with-opacity-03: var(--sc-color-primary-opacity-03);
-$primary-with-opacity-04: var(--sc-color-primary-opacity-04);
-$primary-with-opacity-05: var(--sc-color-primary-opacity-05);
+$primary-color: #{var(--sc-color-primary)};
+$primary-color-shade: #{var(--sc-color-primary-shade)};
+$primary-color-border: #{var(--sc-color-primary-border)};
+$primary-with-opacity: #{var(--sc-color-primary-opacity)};
+$primary-with-opacity-03: #{var(--sc-color-primary-opacity-03)};
+$primary-with-opacity-04: #{var(--sc-color-primary-opacity-04)};
+$primary-with-opacity-05: #{var(--sc-color-primary-opacity-05)};
+$primary-tint: #{var(--sc-color-primary-tint)};
+$primary-shade: #{var(--sc-color-primary-shade)};
+$black-87-opacity: rgba(0, 0, 0, 0.87);
+$white-87-opacity: rgba(255, 255, 255, 0.87);
 
+$primary-palette: (
+        50: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 95%),
+        100: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 90%),
+        200: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 80%),
+        300: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 70%),
+        400: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 65%),
+        500: var(--sc-color-primary),
+        600: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 52%),
+        700: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 45%),
+        800: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 39%),
+        900: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 33%),
+        A100: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 95%),
+        A200: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 90%),
+        A400: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 65%),
+        A700: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 45%),
+        contrast: (
+                50: rgba(0, 0, 0, 0.87),
+                100: rgba(0, 0, 0, 0.87),
+                200: rgba(0, 0, 0, 0.87),
+                300: rgba(0, 0, 0, 0.87),
+                400: rgba(0, 0, 0, 0.87),
+                500: rgba(0, 0, 0, 0.87),
+                600: rgba(0, 0, 0, 0.87),
+                700: rgba(255, 255, 255, 1),
+                800: rgba(255, 255, 255, 1),
+                900: rgba(255, 255, 255, 1),
+                A100: rgba(0, 0, 0, 0.87),
+                A200: rgba(0, 0, 0, 0.87),
+                A400: rgba(0, 0, 0, 0.87),
+                A700: rgba(0, 0, 0, 0.87)
+        )
+);

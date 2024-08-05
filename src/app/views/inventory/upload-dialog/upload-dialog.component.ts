@@ -1,13 +1,16 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UploadResourceService } from './upload-resource.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-upload-dialog',
 	templateUrl: './upload-dialog.component.html',
 	styleUrls: ['./upload-dialog.component.scss']
 })
-export class UploadDialogComponent implements OnInit {
+export class UploadDialogComponent implements OnInit, OnDestroy {
+	public unsubscribe$: Subject<void> = new Subject<void>();
 	serviceProviderId: string;
 	uploadSuccess: boolean = false;
 	uploadError: boolean = false;
@@ -18,6 +21,11 @@ export class UploadDialogComponent implements OnInit {
 		@Inject(MAT_DIALOG_DATA) public data: any,
 		private uploadResourceService: UploadResourceService
 	) {}
+
+	ngOnDestroy(): void {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
+    }
 
 	ngOnInit(): void {
 		this.serviceProviderId = this.data.serviceProviderId;
@@ -59,7 +67,9 @@ export class UploadDialogComponent implements OnInit {
 	private uploadFile(): void {
 		if (!this.file) return;
 
-		this.uploadResourceService.uploadFile(this.file, this.serviceProviderId).subscribe({
+		this.uploadResourceService.uploadFile(this.file, this.serviceProviderId)
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe({
 			next: (res) => {
 				this.uploadSuccess = true;
 			},

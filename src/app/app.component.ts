@@ -5,48 +5,70 @@ import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { Title } from '@angular/platform-browser';
 import { LanguageService } from './shared';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { WhiteLabelService } from './shared/services/white-label.service';
+import { takeUntil } from 'rxjs/operators';
+import { UserViewConfig } from './shared/model/userViewConfig';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
-  selector: 'app-root',
-  template: '<router-outlet></router-outlet>'
+	selector: 'app-root',
+	template: '<router-outlet></router-outlet>'
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private langSubscription!: Subscription;
-  title = 'One Sim';
+	private unsubscribe$ = new Subject<void>();
+	title = 'One Sim';
 
-  constructor(
-    private router: Router,
-    private titleService: Title,
-    private iconSetService: IconSetService,
-    private languageService: LanguageService,
-    private translateService: TranslateService) {
-  }
+	constructor(
+		private router: Router,
+		private titleService: Title,
+		private iconSetService: IconSetService,
+		private whiteLabelService: WhiteLabelService,
+		private languageService: LanguageService,
+		private $LocalStorageService: LocalStorageService,
+		private translateService: TranslateService) {
+	}
 
-  ngOnInit(): void {
-    this.titleService.setTitle(this.title);
-    this.iconSetService.icons = {...iconSubset};
-    this.router.events.subscribe((evt) => {
-      if (!(evt instanceof NavigationEnd)) {
-        return;
-      }
-    });
-    this.langSubscription = this.languageService.getLanguage().subscribe(lang => {
-      this.translateService.use(lang);
-      this.updateHtmlLangAndDir(lang);
-    });
-  }
+	ngOnInit(): void {
+		this.titleService.setTitle(this.title);
+		this.iconSetService.icons = {...iconSubset};
+		this.router.events
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe((evt) => {
+				if (!(evt instanceof NavigationEnd)) {
+					return;
+				}
+			});
+		this.whiteLabelService.initViewBasedOnCurrentUser();
 
-  ngOnDestroy(): void {
-    if (this.langSubscription) {
-      this.langSubscription.unsubscribe();
-    }
-  }
+		this.whiteLabelService.$viewConfig
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe((config: UserViewConfig) => {
+				this.whiteLabelService.updateStoreDate(config);
+				this.whiteLabelService.updateDocumentViewBasedConfig(config);
 
-  public updateHtmlLangAndDir(lang: string): void {
-    const htmlTag = document.getElementsByTagName('html')[0];
-    htmlTag.setAttribute('lang', lang);
-    htmlTag.setAttribute('dir', lang === 'he' ? 'rtl' : 'ltr'); // Пример с арабским языком
-  }
+				const storedLanguage = this.$LocalStorageService.retrieve('language');
+				this.translateService.use(storedLanguage ? storedLanguage : config.language);
+				this.languageService.setLanguage(storedLanguage ? storedLanguage : config.language);
+			});
+
+		this.languageService.$currentLanguage
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe(lang => {
+				this.translateService.use(lang);
+				this.updateHtmlLangAndDir(lang);
+			});
+	}
+
+	ngOnDestroy(): void {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
+	}
+
+	public updateHtmlLangAndDir(lang: string): void {
+		const htmlTag = document.getElementsByTagName('html')[0];
+		htmlTag.setAttribute('lang', lang);
+		htmlTag.setAttribute('dir', lang === 'he' ? 'rtl' : 'ltr');
+	}
 }

@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HeaderConfig, ProvidersDataService, TableConfig, TableFilterFieldType } from '../../shared';
 import { Provider } from '../../shared/model/provider';
 import { ProvidersTableService } from './providers-table.service';
 import { TranslateService } from '@ngx-translate/core';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-providers',
@@ -11,7 +12,8 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./providers.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProvidersComponent implements OnInit {
+export class ProvidersComponent implements OnInit, OnDestroy {
+  public unsubscribe$: Subject<void> = new Subject<void>();
   public tableConfig$: BehaviorSubject<TableConfig>;
   public dataList$: Observable<Provider[]>;
   public headerConfig: HeaderConfig = {};
@@ -24,8 +26,15 @@ export class ProvidersComponent implements OnInit {
     this.initheaderConfig();
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   ngOnInit(): void {
-    this.providersDataService.list().subscribe(data => {
+    this.providersDataService.list()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
       this.tableService.updateTableData(data);
       this.tableConfig$ = this.tableService.getTableConfig();
       this.dataList$ = this.tableService.dataList$;

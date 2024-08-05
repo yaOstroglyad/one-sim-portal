@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { getSetupResourceFormConfig } from './setup-resource.utils';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ProvidersDataService } from '../../../shared/services/providers-data.service';
+import { ProvidersDataService } from '../../../shared';
 import { FormConfig } from '../../../shared/components/form-generator/field-config';
 
 @Component({

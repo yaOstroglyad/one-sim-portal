@@ -27,7 +27,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 	public dataList$: Observable<Package[]>;
 	public headerConfig: HeaderConfig;
 	public validStatuses = Object.values(StatusEnum);
-	private destroy$ = new Subject<void>();
+	private unsubscribe$ = new Subject<void>();
 
 	constructor(
 		private tableService: ProductsTableService,
@@ -45,8 +45,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-		this.destroy$.next();
-		this.destroy$.complete();
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
 	}
 
 	public applyFilter(filterValues: any): void {
@@ -61,6 +61,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 	public create(): void {
 		this.openDialog(CreateProductComponent)
 			.pipe(
+				takeUntil(this.unsubscribe$),
 				switchMap(result => {
 					if (this.isChanged(result, null)) {
 						return this.productsDataService.create(result).pipe(
@@ -75,6 +76,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 	public edit(product?: Package): void {
 		this.openDialog(EditProductComponent, product)
 			.pipe(
+				takeUntil(this.unsubscribe$),
 				switchMap(result => {
 					if (this.isChanged(result, product)) {
 						return this.productsDataService.update(result).pipe(
@@ -93,6 +95,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 		});
 
 		dialogRef.afterClosed().pipe(
+			takeUntil(this.unsubscribe$),
 			switchMap(newStatus => {
 				if (this.isChanged(newStatus, product.status)) {
 					return this.productsDataService.updateStatus({ id: product.id, status: newStatus }).pipe(
@@ -106,7 +109,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
 	private loadProducts(): void {
 		this.productsDataService.list().pipe(
-			takeUntil(this.destroy$),
+			takeUntil(this.unsubscribe$),
 			tap(data => {
 				this.tableService.updateTableData(data);
 				this.tableService.addCustomColumns(this);
@@ -127,7 +130,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 			width: '650px',
 			data
 		});
-		return dialogRef.afterClosed().pipe(takeUntil(this.destroy$));
+		return dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe$));
 	}
 
 	private isChanged(newValue: any, originalValue: any): boolean {

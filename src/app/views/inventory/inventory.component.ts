@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
 import { TranslateService } from '@ngx-translate/core';
@@ -15,7 +15,8 @@ import { SessionStorageService } from 'ngx-webstorage';
 @Component({
 	selector: 'app-inventory',
 	templateUrl: './inventory.component.html',
-	styleUrls: ['./inventory.component.scss']
+	styleUrls: ['./inventory.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InventoryComponent implements OnInit, OnDestroy {
   public unsubscribe$: Subject<void> = new Subject<void>();
@@ -37,6 +38,11 @@ export class InventoryComponent implements OnInit, OnDestroy {
 							public translateService: TranslateService
 	) {
 		this.initHeaderConfig();
+	}
+
+	ngOnDestroy(): void {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
 	}
 
 	ngOnInit(): void {
@@ -118,9 +124,4 @@ export class InventoryComponent implements OnInit, OnDestroy {
 			this.tableService.updateTableData(data.content);
 		});
 	}
-
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 }

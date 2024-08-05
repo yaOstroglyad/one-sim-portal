@@ -2,16 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { JwtHelperService } from './jwt-helper.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LoginRequest } from '../model/loginRequest';
-import { UserViewConfig } from '../model/userViewConfig';
-
-export const defaultConfig = {
-	primaryColor: '#f9a743',
-	language: 'en',
-	logoName: 'logo-esim.png'
-};
+import { WhiteLabelService } from '../services/white-label.service';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -19,21 +13,11 @@ export class AuthService {
 	private static RE_AUTH_URL = '/auth/refresh';
 	private rememberMe: boolean = false;
 
-	public $viewConfig: BehaviorSubject<UserViewConfig> = new BehaviorSubject<UserViewConfig>(defaultConfig);
-
 	constructor(private http: HttpClient,
 							private jwtHelper: JwtHelperService,
+							private whiteLabelService: WhiteLabelService,
 							private $SessionStorageService: SessionStorageService,
 							private $LocalStorageService: LocalStorageService) {
-	}
-
-	public initViewBasedOnCurrentUser(): void {
-		let token = this.$LocalStorageService.retrieve('authenticationToken');
-		if (!token) {
-			token = this.$SessionStorageService.retrieve('authenticationToken');
-		}
-
-		this.updateViewConfig(token);
 	}
 
 	public authorize(credentials: LoginRequest): Observable<any> {
@@ -51,7 +35,7 @@ export class AuthService {
 			observe: 'response'
 		}).pipe(tap(res => {
 			const result = JSON.parse(<any>res.body);
-			this.updateViewConfig(result.token);
+			this.whiteLabelService.updateViewConfig(result.token);
 			this.storeAuthenticationToken(result.token);
 			this.storeUserRole(result.token);
 		}));
@@ -83,18 +67,6 @@ export class AuthService {
 		return false;
 	}
 
-	public updateViewConfig(token: any): void {
-		if (this.jwtHelper.isToken(token)) {
-			const jwtToken = this.jwtHelper.decodeToken(token);
-
-			this.$viewConfig.next({
-				primaryColor: jwtToken?.primaryColor || defaultConfig.primaryColor,
-				language: jwtToken?.language || defaultConfig.language,
-				logoName: jwtToken?.logoName || defaultConfig.logoName
-			});
-		}
-	}
-
 	public reLogin(token: string): Observable<any> {
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json'
@@ -112,7 +84,7 @@ export class AuthService {
 			tap(res => {
 				const result = res.body;
 				if (result && result.token) {
-					this.updateViewConfig(result.token);
+					this.whiteLabelService.updateViewConfig(result.token);
 					this.storeAuthenticationToken(result.token);
 				}
 			})

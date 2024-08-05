@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {
   CustomersDataService,
   HeaderConfig,
@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Customer } from '../../shared/model/customer';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 import { MatDialog } from '@angular/material/dialog';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-customers',
@@ -18,7 +19,8 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./customers.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomersComponent implements OnInit {
+export class CustomersComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public tableConfig$: BehaviorSubject<TableConfig>;
   public dataList$: Observable<Customer[]>;
   public headerConfig: HeaderConfig = {};
@@ -32,12 +34,19 @@ export class CustomersComponent implements OnInit {
     this.initheaderConfig();
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   ngOnInit(): void {
     this.loadCustomers();
   }
 
   private loadCustomers(): void {
-    this.customersDataService.list().subscribe(data => {
+    this.customersDataService.list()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
       this.tableService.updateTableData(data);
       this.tableConfig$ = this.tableService.getTableConfig();
       this.dataList$ = this.tableService.dataList$;
