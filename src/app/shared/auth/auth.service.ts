@@ -61,6 +61,7 @@ export class AuthService {
 		if (!token) {
 			token = this.$SessionStorageService.retrieve('authenticationToken');
 		}
+
 		if (this.jwtHelper.isToken(token)) {
 			return !this.jwtHelper.isTokenExpired(token, 100);
 		}
@@ -71,13 +72,14 @@ export class AuthService {
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json'
 		});
-		const body = {refreshToken: token};
+		const jwtToken = this.jwtHelper.decodeToken(token);
+		const body = {refreshToken: jwtToken.refreshToken};
 		return this.http.post<any>(
 			AuthService.RE_AUTH_URL,
 			body,
 			{
 				headers: headers,
-				responseType: 'json', // Указываем 'json', так как мы ожидаем JSON-ответ
+				responseType: 'json',
 				observe: 'response'
 			}
 		).pipe(

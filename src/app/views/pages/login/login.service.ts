@@ -24,7 +24,7 @@ export class LoginService {
 			const token = this.$sessionStorage.retrieve('authenticationToken');
 			if (token) {
 				this.cookieHelperService.setTokenToCookie(token);
-				// this.scheduleTokenRefresh(token);
+				this.scheduleTokenRefresh(token);
 				this.router.navigate(['/home']);
 			} else {
 				console.error('Token not found after authorization.');
@@ -37,11 +37,14 @@ export class LoginService {
 
 		if (this.jwtHelper.isToken(token)) {
 			const expiresIn = this.jwtHelper.getTokenExpiresIn(token);
-			const refreshTime = expiresIn - 5 * 60 * 1000;
-
-			this.reLoginTimeout = setTimeout(() => {
+			const refreshTime = Math.max(0, expiresIn);
+			if (refreshTime > 0) {
+				this.reLoginTimeout = setTimeout(() => {
+					this.updateToken();
+				}, refreshTime);
+			} else {
 				this.updateToken();
-			}, refreshTime);
+			}
 
 		} else {
 			console.error('Invalid token specified');

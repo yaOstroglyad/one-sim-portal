@@ -20,9 +20,9 @@ export class InventoryTableService extends TableConfigAbstractService<Resource> 
 		showEditButton: false,
 		columns: [
 			{visible: true, key: 'iccid', header: 'iccid'},
-			{visible: true, key: 'imei', header: 'imei'},
-			{visible: true, key: 'imsi', header: 'imsi'},
-			{visible: true, key: 'msisdn', header: 'msisdn'},
+			{visible: false, key: 'imei', header: 'imei'},
+			{visible: false, key: 'imsi', header: 'imsi'},
+			{visible: false, key: 'msisdn', header: 'msisdn'},
 			{visible: true, templateType: TemplateType.Text, key: 'customer.name', header: 'customer'},
 			{visible: true, templateType: TemplateType.Text, key: 'serviceProvider.name', header: 'provider'},
 			{visible: true, key: 'status', header: 'status'}

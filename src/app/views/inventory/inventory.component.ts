@@ -35,7 +35,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
 							private inventoryDataService: InventoryDataService,
 							private dialog: MatDialog,
 							private $sessionStorage: SessionStorageService,
-							public translateService: TranslateService
 	) {
 		this.initHeaderConfig();
 	}

@@ -52,13 +52,13 @@
                 <input matInput
                        [formControlName]="field.name"
                        [type]="field.type"
-                       placeholder="Введите ваш email"
+                       placeholder="Enter your email"
                        type="email">
                 <mat-error *ngIf="form.controls[field.name].hasError('required')" class="error">
-                    Email обязателен к заполнению
+                    Email is required
                 </mat-error>
                 <mat-error *ngIf="form.controls[field.name].hasError('email')" class="error">
-                    Пожалуйста, введите действительный email
+                    Please, enter email format
                 </mat-error>
             </mat-form-field>
         </ng-template>
@@ -70,7 +70,7 @@
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
                 <mat-error *ngIf="form.controls[field.name].hasError('required')" class="error">
-                    Дата обязательна к заполнению
+                    The field is required
                 </mat-error>
             </mat-form-field>
         </ng-template>
@@ -78,7 +78,7 @@
         <ng-template #selectTemplate let-field>
             <mat-form-field appearance="outline">
                 <mat-label>{{field.label}}</mat-label>
-                <mat-select [formControlName]="field.name">
+                <mat-select [formControlName]="field.name" (selectionChange)="onInputChange($event, field)">
                     <mat-option *ngFor="let option of field.options | async" [value]="option.value">
                         {{option.displayValue}}
                     </mat-option>

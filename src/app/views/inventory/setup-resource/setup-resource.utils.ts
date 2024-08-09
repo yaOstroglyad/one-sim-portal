@@ -18,6 +18,12 @@ export function getSetupResourceFormConfig(dataService: ProvidersDataService): F
 						})
 					))
 				)
+			},
+			{
+				type: FieldType.textarea,
+				name: 'orderDescription',
+				label: 'Order Description',
+				validators: [Validators.required]
 			}
 		]
 	};

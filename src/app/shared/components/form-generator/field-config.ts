@@ -23,7 +23,8 @@ export interface FieldConfig {
 	disabled?: boolean;
 	displayOptions?: {
 		newLine?: boolean;
-	}
+	},
+	inputEvent?: (event: any, formGenerator: any, field: FieldConfig) => any
 }
 
 export interface FormConfig {

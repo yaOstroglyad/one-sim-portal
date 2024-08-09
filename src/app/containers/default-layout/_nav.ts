@@ -2,6 +2,7 @@ import { INavData } from '@coreui/angular';
 
 export const menuItemToPermission = {
   Providers: ['all'], // can be ['admin'] as well
+  Orders: ['all'],
   Customers: ['all'],
   Products: ['all'],
   Inventory: ['all']
@@ -37,6 +38,11 @@ export const navItems: INavData[] = [
     name: 'Providers',
     url: 'providers',
     iconComponent: { name: 'cil-apps-settings' },
+  },
+  {
+    name: 'Orders',
+    url: 'orders',
+    iconComponent: { name: 'cil-basket' },
   },
   {
     name: 'Products',

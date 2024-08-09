@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { TableConfig } from './table-column-config.interface';
 import { map } from 'rxjs/operators';
 import { deepSearch } from '../../utils/utils';
-import { Resource } from '../../model/resource';
 
 @Injectable({
 	providedIn: 'root'

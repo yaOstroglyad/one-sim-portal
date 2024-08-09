@@ -33,6 +33,11 @@ const routes: Routes = [
         loadChildren: () =>
             import('../../views/customers/customers.module').then((m) => m.CustomersModule)
       },
+      {
+        path: 'orders',
+        loadChildren: () =>
+            import('../../views/orders/orders.module').then((m) => m.OrdersModule)
+      },
     ]
   }
 ];

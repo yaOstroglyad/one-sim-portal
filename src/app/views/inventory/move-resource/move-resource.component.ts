@@ -7,6 +7,7 @@ import { MoveResourceService } from './move-resource.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CustomersDataService, ProvidersDataService } from '../../../shared';
+import { OrdersDataService } from '../../../shared/services/orders-data.service';
 
 @Component({
   selector: 'app-move-resource',
@@ -26,8 +27,13 @@ export class MoveResourceComponent implements OnDestroy {
     private providersDataService: ProvidersDataService,
     private customersDataService: CustomersDataService,
     private moveResourceService: MoveResourceService,
+    private ordersDataService: OrdersDataService,
   ) {
-    this.moveResourceFormConfig = getMoveResourceFormConfig(this.providersDataService, this.customersDataService);
+    this.moveResourceFormConfig = getMoveResourceFormConfig(
+      this.providersDataService,
+      this.customersDataService,
+      this.ordersDataService
+    );
   }
 
   handleFormChanges(form: FormGroup): void {

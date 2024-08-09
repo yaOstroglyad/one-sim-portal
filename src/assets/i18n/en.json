@@ -13,6 +13,14 @@
     "type": "Type",
     "description": "Description"
   },
+  "order": {
+    "id": "ID",
+    "type": "Type",
+    "description": "Description",
+    "createdDate": "Created Date",
+    "fromOwner": "From Customer",
+    "toOwner": "To Customer"
+  },
   "package": {
     "id": "ID",
     "name": "Name",
