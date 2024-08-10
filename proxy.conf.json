@@ -8,5 +8,8 @@
     "target": "https://esim-server.dev.global-sim.app",
     "secure": false,
     "changeOrigin": true
+  },
+  "/" : {
+    "target": "http://localhost:4200/"
   }
 }

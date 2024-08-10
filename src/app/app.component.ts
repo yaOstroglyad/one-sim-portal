@@ -1,16 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { Title } from '@angular/platform-browser';
-import { LanguageService } from './shared';
+import { AuthService, LanguageService } from './shared';
 import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { WhiteLabelService } from './shared/services/white-label.service';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 import { UserViewConfig } from './shared/model/userViewConfig';
-import { LocalStorageService } from 'ngx-webstorage';
+import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 
 @Component({
 	selector: 'app-root',
@@ -26,39 +25,17 @@ export class AppComponent implements OnInit, OnDestroy {
 		private iconSetService: IconSetService,
 		private whiteLabelService: WhiteLabelService,
 		private languageService: LanguageService,
-		private $LocalStorageService: LocalStorageService,
-		private translateService: TranslateService) {
-	}
+		private $localStorage: LocalStorageService,
+		private $sessionStorage: SessionStorageService,
+		private authService: AuthService,
+		private translateService: TranslateService
+	) {}
 
 	ngOnInit(): void {
-		this.titleService.setTitle(this.title);
-		this.iconSetService.icons = {...iconSubset};
-		this.router.events
-			.pipe(takeUntil(this.unsubscribe$))
-			.subscribe((evt) => {
-				if (!(evt instanceof NavigationEnd)) {
-					return;
-				}
-			});
-		this.whiteLabelService.initViewBasedOnCurrentUser();
-
-		this.whiteLabelService.$viewConfig
-			.pipe(takeUntil(this.unsubscribe$))
-			.subscribe((config: UserViewConfig) => {
-				this.whiteLabelService.updateStoreDate(config);
-				this.whiteLabelService.updateDocumentViewBasedConfig(config);
-
-				const storedLanguage = this.$LocalStorageService.retrieve('language');
-				this.translateService.use(storedLanguage ? storedLanguage : config.language);
-				this.languageService.setLanguage(storedLanguage ? storedLanguage : config.language);
-			});
-
-		this.languageService.$currentLanguage
-			.pipe(takeUntil(this.unsubscribe$))
-			.subscribe(lang => {
-				this.translateService.use(lang);
-				this.updateHtmlLangAndDir(lang);
-			});
+		this.initializeApp();
+		this.setupRouterEvents();
+		this.subscribeToViewConfigChanges();
+		this.subscribeToLanguageChanges();
 	}
 
 	ngOnDestroy(): void {
@@ -66,8 +43,54 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.unsubscribe$.complete();
 	}
 
-	public updateHtmlLangAndDir(lang: string): void {
-		const htmlTag = document.getElementsByTagName('html')[0];
+	private initializeApp(): void {
+		const loginResponse = this.$sessionStorage.retrieve('loginResponse') || this.$localStorage.retrieve('loginResponse');
+		if (loginResponse) {
+			this.authService.scheduleTokenRefresh(loginResponse);
+		}
+
+		this.titleService.setTitle(this.title);
+		this.iconSetService.icons = { ...iconSubset };
+		this.whiteLabelService.initViewBasedOnCurrentUser();
+	}
+
+	private setupRouterEvents(): void {
+		this.router.events
+			.pipe(
+				takeUntil(this.unsubscribe$),
+				filter(event => event instanceof NavigationEnd)
+			)
+			.subscribe(() => {
+				// Можно добавить логику, если нужно
+			});
+	}
+
+	private subscribeToViewConfigChanges(): void {
+		this.whiteLabelService.$viewConfig
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe((config: UserViewConfig) => {
+				this.whiteLabelService.updateStoreDate(config);
+				this.whiteLabelService.updateDocumentViewBasedConfig(config);
+
+				const language = this.$localStorage.retrieve('language') || config.language;
+				this.setLanguage(language);
+			});
+	}
+
+	private subscribeToLanguageChanges(): void {
+		this.languageService.$currentLanguage
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe(lang => this.setLanguage(lang));
+	}
+
+	private setLanguage(lang: string): void {
+		this.translateService.use(lang);
+		this.languageService.setLanguage(lang);
+		this.updateHtmlLangAndDir(lang);
+	}
+
+	private updateHtmlLangAndDir(lang: string): void {
+		const htmlTag = document.documentElement;
 		htmlTag.setAttribute('lang', lang);
 		htmlTag.setAttribute('dir', lang === 'he' ? 'rtl' : 'ltr');
 	}

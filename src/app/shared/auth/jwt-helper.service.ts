@@ -7,7 +7,7 @@ export class JwtHelperService {
 	constructor() {
 	}
 
-	private getTokenExpirationDate(token: any): Date | null {
+	public getTokenExpirationDate(token: any): Date | null {
 		const decoded = this.decodeToken(token);
 
 		if (typeof decoded.exp === 'undefined') {

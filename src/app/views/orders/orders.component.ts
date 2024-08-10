@@ -9,12 +9,12 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import {
   HeaderConfig,
   TableConfig,
-  TableFilterFieldType
+  TableFilterFieldType,
+  OrdersDataService
 } from '../../shared';
 import { OrdersTableService } from './orders-table.service';
 import { switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Order } from '../../shared/model/order';
-import { OrdersDataService } from '../../shared/services/orders-data.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditOrderDescriptionComponent } from './edit-order-description/edit-order-description.component';
 
@@ -92,7 +92,11 @@ export class OrdersComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private isDescriptionChanged(newDescription: string, description: string) {
-    return newDescription !== description;
+  private isDescriptionChanged(newDescription: string, description: string): boolean {
+    if(newDescription) {
+      return newDescription !== description;
+    } else {
+      return false;
+    }
   }
 }

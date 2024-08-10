@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { mapToCanActivate, RouterModule, Routes } from '@angular/router';
 
 import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./containers/default-layout/default-layout.module').then((m) => m.DefaultLayoutModule),
-    canActivate: [AuthGuardService]
+    canActivate: mapToCanActivate([AuthGuardService])
   },
   {
     path: 'login',

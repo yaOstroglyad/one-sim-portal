@@ -15,6 +15,7 @@ export * from './services/data.service';
 export * from './services/language.service';
 export * from './services/providers-data.service';
 export * from './services/customers-data.service';
+export * from './services/orders-data.service';
 export * from './services/provider-bundles-data.service';
 
 export * from './auth/index';

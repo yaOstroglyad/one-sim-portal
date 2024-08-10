@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { DataService } from './data.service';
-import { CustomerType } from '../model/customer';
 import { AvailableOrders, Order } from '../model/order';
 import { ordersMock } from '../../views/orders/orders-mock';
 
