@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 							private router: Router) { }
 
 	ngOnInit(): void {
-		this.authService.deleteAuthenticationToken();
+		this.authService.deleteLoginResponse();
 	}
 
 	login(): void {

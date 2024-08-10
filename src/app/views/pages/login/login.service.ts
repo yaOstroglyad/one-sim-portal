@@ -1,30 +1,29 @@
-import { Injectable } from '@angular/core';
-import { SessionStorageService } from 'ngx-webstorage';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { take } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { AuthService, CookieHelperService, JwtHelperService } from '../../../shared';
+import { Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
+import { AuthService, CookieHelperService, JwtHelperService, LoginRequest, LoginResponse } from '../../../shared';
 
 
 @Injectable({providedIn: 'root'})
-export class LoginService {
+export class LoginService implements OnDestroy {
+	private unsubscribe$ = new Subject<void>();
 	reLoginInterval: any;
 	reLoginTimeout: any;
 	startInterval: boolean;
 
 	constructor(private authService: AuthService,
 							private jwtHelper: JwtHelperService,
-							private $sessionStorage: SessionStorageService,
 							private cookieHelperService: CookieHelperService,
 							private router: Router) {
 	}
 
-	public login(credentials: any): void {
-		this.authService.authorize(credentials).subscribe(result => {
-			const token = this.$sessionStorage.retrieve('authenticationToken');
-			if (token) {
-				this.cookieHelperService.setTokenToCookie(token);
-				this.scheduleTokenRefresh(token);
+	public login(credentials: LoginRequest): void {
+		this.authService.authorize(credentials)
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe((result: LoginResponse) => {
+			if (result) {
+				this.scheduleTokenRefresh(result);
 				this.router.navigate(['/home']);
 			} else {
 				console.error('Token not found after authorization.');
@@ -32,45 +31,13 @@ export class LoginService {
 		});
 	}
 
-	private scheduleTokenRefresh(token: string): void {
-		clearTimeout(this.reLoginTimeout);
-
-		if (this.jwtHelper.isToken(token)) {
-			const expiresIn = this.jwtHelper.getTokenExpiresIn(token);
-			const refreshTime = Math.max(0, expiresIn);
-			if (refreshTime > 0) {
-				this.reLoginTimeout = setTimeout(() => {
-					this.updateToken();
-				}, refreshTime);
-			} else {
-				this.updateToken();
-			}
-
-		} else {
-			console.error('Invalid token specified');
-		}
-	}
-
-	public logout(): void {
-		this.startInterval = false;
-		clearInterval(this.reLoginInterval);
-		this.authService.deleteAuthenticationToken();
-		this.cookieHelperService.deleteTokenFromCookie();
-		this.router.navigate(['/login']);
-	}
-
-	private updateToken(): void {
-		const token = this.$sessionStorage.retrieve('authenticationToken');
-		if (token && this.jwtHelper.isToken(token)) {
-			this.authService.reLogin(token).pipe(
-				take(1),
+	private updateToken(loginResponse: LoginResponse): void {
+		if (loginResponse && loginResponse?.refreshToken) {
+			this.authService.reLogin(loginResponse?.refreshToken).pipe(
+				takeUntil(this.unsubscribe$),
 				tap({
-					next: (response) => {
-						const newToken = response.body.token;
-						this.authService.storeAuthenticationToken(newToken);
-						this.cookieHelperService.deleteTokenFromCookie();
-						this.cookieHelperService.setTokenToCookie(newToken);
-						this.scheduleTokenRefresh(newToken);
+					next: (result: LoginResponse) => {
+						this.scheduleTokenRefresh(result);
 					},
 					error: (error) => {
 						console.error('Error during token update', error);
@@ -81,8 +48,38 @@ export class LoginService {
 				})
 			).subscribe();
 		} else {
-			console.error('Invalid or missing token during update');
+			console.error('Invalid or missing refreshToken during update');
 			this.logout();
 		}
+	}
+
+	private scheduleTokenRefresh(loginResponse: LoginResponse): void {
+		clearTimeout(this.reLoginTimeout);
+
+		if (this.jwtHelper.isToken(loginResponse?.refreshToken)) {
+			const refreshTime = loginResponse.tokenExpiresIn * 1000;
+			if (refreshTime > 0) {
+				this.reLoginTimeout = setTimeout(() => {
+					this.updateToken(loginResponse);
+				}, refreshTime);
+			}
+		} else {
+			console.error('Invalid token specified');
+		}
+	}
+
+	public logout(): void {
+		this.startInterval = false;
+		clearInterval(this.reLoginInterval);
+		this.authService.token$.next(null);
+		this.authService.deleteLoginResponse();
+		this.authService.deleteUserRole();
+		this.cookieHelperService.deleteTokenFromCookie();
+		this.router.navigate(['/login']);
+	}
+
+	ngOnDestroy(): void {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
 	}
 }

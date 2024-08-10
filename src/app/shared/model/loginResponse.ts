@@ -15,13 +15,17 @@ export interface LoginResponse {
      */
     refreshToken?: string;
     /**
+     * Refresh token expiration time in seconds
+     */
+    refreshTokenExpiresIn?: string;
+    /**
      * Token type
      */
     tokenType?: string;
     /**
      * Token expiration time in seconds
      */
-    expiresIn?: number;
+    tokenExpiresIn?: number;
     /**
      * Token scope
      */
@@ -31,4 +35,3 @@ export interface LoginResponse {
      */
     jti?: string;
 }
-

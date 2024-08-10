@@ -6,8 +6,7 @@ export class GlobalErrorHandlerService implements ErrorHandler {
 	constructor(private router: Router) {}
 
 	handleError(error: any): void {
-		const chunkFailedMessage = /Error: Uncaught (in promise): ChunkLoadError: Loading/;
-
+		const chunkFailedMessage = /Loading chunk [\d]+ failed/;
 		if (chunkFailedMessage.test(error.message)) {
 			window.location.reload();
 		} else {
