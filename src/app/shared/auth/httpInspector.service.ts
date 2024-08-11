@@ -10,11 +10,13 @@ import {
 	HttpErrorResponse
 } from '@angular/common/http';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
+import { Router } from '@angular/router';
 
 
 @Injectable({providedIn: 'root'})
 export class CustomHttpInterceptor implements HttpInterceptor {
 	constructor(
+		private router: Router,
 		private $localStorage: LocalStorageService,
 		private $sessionStorage: SessionStorageService
 	) {}
@@ -33,7 +35,7 @@ export class CustomHttpInterceptor implements HttpInterceptor {
 		return next.handle(req).pipe(
 			catchError((errorResponse: HttpErrorResponse) => {
 				if (errorResponse.status === 401) {
-					console.log('401');
+					this.router.navigate(['login']);
 				}
 				return throwError(errorResponse);
 			})
