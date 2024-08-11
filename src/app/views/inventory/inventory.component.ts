@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
-import { TranslateService } from '@ngx-translate/core';
 import { Resource } from '../../shared/model/resource';
 import { InventoryDataService } from './inventory-data.service';
 import { InventoryTableService } from './inventory-table.service';

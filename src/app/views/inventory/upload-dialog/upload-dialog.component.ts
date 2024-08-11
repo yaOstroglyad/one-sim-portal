@@ -12,6 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 export class UploadDialogComponent implements OnInit, OnDestroy {
 	public unsubscribe$: Subject<void> = new Subject<void>();
 	serviceProviderId: string;
+	orderDescription: string;
 	uploadSuccess: boolean = false;
 	uploadError: boolean = false;
 	file: File;
@@ -29,6 +30,7 @@ export class UploadDialogComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.serviceProviderId = this.data.serviceProviderId;
+		this.orderDescription = this.data.orderDescription;
 	}
 
 	onDragOver(event: DragEvent): void {
@@ -67,7 +69,11 @@ export class UploadDialogComponent implements OnInit, OnDestroy {
 	private uploadFile(): void {
 		if (!this.file) return;
 
-		this.uploadResourceService.uploadFile(this.file, this.serviceProviderId)
+		this.uploadResourceService.uploadFile(
+			this.file,
+			this.serviceProviderId,
+			this.orderDescription
+		)
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe({
 			next: (res) => {
