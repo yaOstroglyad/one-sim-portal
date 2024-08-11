@@ -17,13 +17,13 @@ export class LoginService implements OnDestroy {
 		this.authService.authorize(credentials)
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe((result: LoginResponse) => {
-			if (result) {
-				this.authService.scheduleTokenRefresh(result);
-				this.router.navigate(['/home']);
-			} else {
-				console.error('Token not found after authorization.');
-			}
-		});
+				if (result) {
+					this.authService.scheduleTokenRefresh(result);
+					this.router.navigate(['/home']);
+				} else {
+					console.error('Token not found after authorization.');
+				}
+			});
 	}
 
 	public logout(): void {

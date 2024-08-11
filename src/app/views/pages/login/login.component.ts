@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostListener, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { AuthService } from '../../../shared';
 import { LoginService } from './login.service';
 
@@ -25,8 +24,7 @@ export class LoginComponent implements OnInit {
 	});
 
 	constructor(private loginService: LoginService,
-							private authService: AuthService,
-							private router: Router) { }
+							private authService: AuthService) { }
 
 	ngOnInit(): void {
 		this.authService.deleteLoginResponse();
@@ -34,7 +32,6 @@ export class LoginComponent implements OnInit {
 
 	login(): void {
 		this.loginService.login(this.form.value);
-		this.router.navigate(['/home']);
 	}
 
 	quickLoginByAdmin(): void {
@@ -44,6 +41,5 @@ export class LoginComponent implements OnInit {
 		// this.form.controls['password'].setValue('customer');
 		this.form.controls['rememberMe'].setValue(true);
 		this.loginService.login(this.form.value);
-		this.router.navigate(['/home']);
 	}
 }
