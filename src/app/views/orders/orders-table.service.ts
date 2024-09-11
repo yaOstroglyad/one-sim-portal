@@ -16,6 +16,7 @@ export class OrdersTableService extends TableConfigAbstractService<Order> {
 		showMenu: true,
 		columns: [
 			{visible: false, key: 'id', header: 'id'},
+			{visible: true, key: 'serialNumber', header: 'serialNumber' },
 			{visible: true, key: 'description', header: 'description' },
 			{visible: true, templateType: TemplateType.Date, dateFormat: 'dd/MM/YYYY', key: 'createdDate', header: 'createdDate' },
 			{visible: true, key: 'type', header: 'type' },
