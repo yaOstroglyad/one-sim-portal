@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FieldConfig, FormConfig } from './field-config';
+import { FieldConfig, FieldType, FormConfig } from './field-config';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { createControl } from './form-generator.utils';
 import { isFunction } from 'rxjs/internal/util/isFunction';
@@ -49,4 +49,6 @@ export class FormGeneratorComponent implements OnInit, OnDestroy {
 			field.inputEvent(event, this.form, field);
 		}
 	}
+
+	protected readonly FieldType = FieldType;
 }

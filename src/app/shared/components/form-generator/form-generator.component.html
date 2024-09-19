@@ -5,55 +5,69 @@
                  fxLayoutGap="3.5%"
                  fxLayoutAlign="left">
                 <ng-container [ngSwitch]="field.type">
-                    <ng-container *ngSwitchCase="'text'" [ngTemplateOutlet]="textTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="'number'" [ngTemplateOutlet]="numberTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="'textarea'" [ngTemplateOutlet]="textareaTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="'password'" [ngTemplateOutlet]="passwordTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="'email'" [ngTemplateOutlet]="email" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="'datepicker'" [ngTemplateOutlet]="datePickerTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="'select'" [ngTemplateOutlet]="selectTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="'checkbox'" [ngTemplateOutlet]="checkboxTemplate" [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <!-- Добавьте другие ngSwitchCase для разных типов полей -->
+                    <ng-container *ngSwitchCase="FieldType.text" [ngTemplateOutlet]="textTemplate"
+                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="FieldType.number" [ngTemplateOutlet]="numberTemplate"
+                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="FieldType.textarea" [ngTemplateOutlet]="textareaTemplate"
+                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="FieldType.password" [ngTemplateOutlet]="passwordTemplate"
+                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="FieldType.email" [ngTemplateOutlet]="email"
+                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="FieldType.datepicker" [ngTemplateOutlet]="datePickerTemplate"
+                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="FieldType.select" [ngTemplateOutlet]="selectTemplate"
+                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="FieldType.checkbox" [ngTemplateOutlet]="checkboxTemplate"
+                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="FieldType.chips" [ngTemplateOutlet]="chipsTemplate"
+                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
                 </ng-container>
             </div>
         </ng-container>
 
         <ng-template #textTemplate let-field>
             <mat-form-field appearance="outline">
-                <mat-label>{{field.label}}</mat-label>
+                <mat-label>{{ field.label }}</mat-label>
                 <input matInput [formControlName]="field.name" [type]="field.type">
+                <mat-hint [attr.class]="'small-hint ' + field.className">{{ field.hintMessage }}</mat-hint>
             </mat-form-field>
         </ng-template>
 
         <ng-template #numberTemplate let-field>
             <mat-form-field appearance="outline">
-                <mat-label>{{field.label}}</mat-label>
+                <mat-label>{{ field.label }}</mat-label>
                 <input matInput [formControlName]="field.name" [type]="field.type">
+                <mat-hint [attr.class]="'small-hint ' + field.className">{{ field.hintMessage }}</mat-hint>
             </mat-form-field>
         </ng-template>
 
         <ng-template #textareaTemplate let-field>
             <mat-form-field appearance="outline">
-                <mat-label>{{field.label}}</mat-label>
+                <mat-label>{{ field.label }}</mat-label>
                 <textarea matInput [placeholder]="field.placeholder" [formControlName]="field.name"></textarea>
+                <mat-hint [attr.class]="'small-hint ' + field.className">{{ field.hintMessage }}</mat-hint>
             </mat-form-field>
         </ng-template>
 
         <ng-template #passwordTemplate let-field>
             <mat-form-field appearance="outline">
-                <mat-label>{{field.label}}</mat-label>
+                <mat-label>{{ field.label }}</mat-label>
                 <input matInput [formControlName]="field.name" [type]="field.type">
+                <mat-hint [attr.class]="'small-hint ' + field.className">{{ field.hintMessage }}</mat-hint>
             </mat-form-field>
         </ng-template>
 
         <ng-template #email let-field>
             <mat-form-field appearance="outline">
-                <mat-label>{{field.label}}</mat-label>
+                <mat-label>{{ field.label }}</mat-label>
                 <input matInput
                        [formControlName]="field.name"
                        [type]="field.type"
                        placeholder="Enter your email"
                        type="email">
+                <mat-hint [attr.class]="'small-hint ' + field.className">{{ field.hintMessage }}</mat-hint>
                 <mat-error *ngIf="form.controls[field.name].hasError('required')" class="error">
                     Email is required
                 </mat-error>
@@ -65,10 +79,11 @@
 
         <ng-template #datePickerTemplate let-field>
             <mat-form-field appearance="outline">
-                <mat-label>{{field.label}}</mat-label>
+                <mat-label>{{ field.label }}</mat-label>
                 <input matInput [matDatepicker]="picker" [formControlName]="field.name">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
+                <mat-hint [attr.class]="'small-hint ' + field.className">{{ field.hintMessage }}</mat-hint>
                 <mat-error *ngIf="form.controls[field.name].hasError('required')" class="error">
                     The field is required
                 </mat-error>
@@ -77,12 +92,13 @@
 
         <ng-template #selectTemplate let-field>
             <mat-form-field appearance="outline">
-                <mat-label>{{field.label}}</mat-label>
+                <mat-label>{{ field.label }}</mat-label>
                 <mat-select [formControlName]="field.name" (selectionChange)="onInputChange($event, field)">
                     <mat-option *ngFor="let option of field.options | async" [value]="option.value">
-                        {{option.displayValue}}
+                        {{ option.displayValue }}
                     </mat-option>
                 </mat-select>
+                <mat-hint [attr.class]="'small-hint ' + field.className">{{ field.hintMessage }}</mat-hint>
             </mat-form-field>
         </ng-template>
 
@@ -91,11 +107,21 @@
             <mat-checkbox [formControlName]="field.name"
                           [color]="'primary'"
                           [disabled]="field.disabled">
-                {{field.label}}
+                {{ field.label }}
             </mat-checkbox>
         </ng-template>
 
-
+        <ng-template #chipsTemplate let-field>
+            <app-chips-input
+                    [label]="field.label"
+                    [placeholder]="field.placeholder"
+                    [formControlName]="field.name"
+                    [addOnBlur]="field.addOnBlur"
+                    [separatorKeysCodes]="field.separatorKeysCodes"
+                    [selectable]="field.selectable"
+                    [removable]="field.removable">
+            </app-chips-input>
+        </ng-template>
 
     </form>
 </ng-container>

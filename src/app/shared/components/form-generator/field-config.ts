@@ -10,6 +10,7 @@ export enum FieldType {
 	datepicker = 'datepicker',
 	textarea = 'textarea',
 	select = 'select',
+	chips = 'chips',
 	checkbox = 'checkbox',
 }
 
@@ -17,14 +18,25 @@ export interface FieldConfig {
 	type: FieldType;
 	name: string;
 	label: string;
+	placeholder?: string;
+	className?: string;
+	hintMessage?: string;
 	value?: any;
+	disabled?: boolean;
+	inputEvent?: (event: any, formGenerator: any, field: FieldConfig) => any
+
+	//select
 	options?: Observable<Array<{value: any; displayValue: string}>>;
 	validators?: ValidatorFn | ValidatorFn[];
-	disabled?: boolean;
 	displayOptions?: {
 		newLine?: boolean;
 	},
-	inputEvent?: (event: any, formGenerator: any, field: FieldConfig) => any
+
+	//chips
+	addOnBlur?: boolean;
+	selectable?: boolean;
+	removable?: boolean;
+	separatorKeysCodes?: Array<any>;
 }
 
 export interface FormConfig {

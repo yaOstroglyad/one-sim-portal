@@ -1,8 +1,7 @@
 import { FieldType, FormConfig } from '../../../shared/components/form-generator/field-config';
 import { Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
-import { CustomersDataService, ProvidersDataService } from '../../../shared';
-import { OrdersDataService } from '../../../shared/services/orders-data.service';
+import { CustomersDataService, ProvidersDataService, OrdersDataService } from '../../../shared';
 
 export function getMoveResourceFormConfig(
 	serviceProviderDataService: ProvidersDataService,
@@ -14,7 +13,7 @@ export function getMoveResourceFormConfig(
 			{
 				type: FieldType.select,
 				name: 'customerId',
-				label: 'Customer',
+				label: 'To Customer',
 				validators: [Validators.required],
 				options: customersDataService.list().pipe(
 					map(customers => customers.map(
@@ -28,7 +27,7 @@ export function getMoveResourceFormConfig(
 			{
 				type: FieldType.select,
 				name: 'serviceProviderId',
-				label: 'Service Provider',
+				label: 'Select Service Provider',
 				validators: [Validators.required],
 				options: serviceProviderDataService.list().pipe(
 					map(providers => providers.map(
@@ -42,7 +41,7 @@ export function getMoveResourceFormConfig(
 			{
 				type: FieldType.select,
 				name: 'parentOrderId',
-				label: 'Parent Order',
+				label: 'Select Parent Order',
 				validators: [Validators.required],
 				options: ordersDataService.availableOrders().pipe(
 					map(availableOrders => availableOrders.map(
@@ -53,17 +52,13 @@ export function getMoveResourceFormConfig(
 					))
 				),
 				inputEvent: (event, formGenerator, field) => {
-					// add "setValue"
-					// formGenerator.get('orderDescription').setValue()
-					console.log('event', event);
-					console.log('formGenerator', formGenerator);
-					console.log('field', field);
+					//not sure what should I do
 				}
 			},
 			{
 				type: FieldType.textarea,
 				name: 'orderDescription',
-				label: 'Order Description',
+				label: 'Set Order Description',
 				validators: [Validators.required]
 			},
 			{

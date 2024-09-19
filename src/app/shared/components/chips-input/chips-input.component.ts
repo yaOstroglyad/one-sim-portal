@@ -3,7 +3,7 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
+  EventEmitter, forwardRef,
   inject,
   Input,
   Output,
@@ -12,13 +12,20 @@ import {
 import {MatChipEditedEvent, MatChipInputEvent, MatChipsModule} from '@angular/material/chips';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
-import { ControlValueAccessor } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-chips-input',
   templateUrl: './chips-input.component.html',
   styleUrls: ['./chips-input.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ChipsInputComponent),
+      multi: true
+    }
+  ],
   standalone: true,
   imports: [MatFormFieldModule, MatChipsModule, MatIconModule, NgForOf],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -107,5 +114,10 @@ export class ChipsInputComponent implements ControlValueAccessor {
 
   trackByFn(index: number, item: string): number {
     return index;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    // You may want to disable the input when the form control is disabled
+    // Example: handle disabling logic for the component here
   }
 }

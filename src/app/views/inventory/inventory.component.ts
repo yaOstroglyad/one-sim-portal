@@ -72,6 +72,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 	}
 
 	onMoveResource() {
+		//Move can be done only by corporate customer
 		const selectionDialogRef = this.dialog.open(MoveResourceComponent, {
 			width: '600px'
 		});

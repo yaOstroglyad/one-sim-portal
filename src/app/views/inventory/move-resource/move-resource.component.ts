@@ -6,8 +6,7 @@ import { getMoveResourceFormConfig } from './move-resource.utils';
 import { MoveResourceService } from './move-resource.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CustomersDataService, ProvidersDataService } from '../../../shared';
-import { OrdersDataService } from '../../../shared/services/orders-data.service';
+import { CustomersDataService, ProvidersDataService, OrdersDataService } from '../../../shared';
 
 @Component({
   selector: 'app-move-resource',
