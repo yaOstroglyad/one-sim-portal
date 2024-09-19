@@ -52,7 +52,9 @@ export function getMoveResourceFormConfig(
 					))
 				),
 				inputEvent: () => {
-					//not sure what should I do
+					// set description by default
+					// add "setValue"
+					// formGenerator.get('orderDescription').setValue()
 				}
 			},
 			{
