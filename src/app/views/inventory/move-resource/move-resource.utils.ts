@@ -51,7 +51,7 @@ export function getMoveResourceFormConfig(
 						})
 					))
 				),
-				inputEvent: (event, formGenerator, field) => {
+				inputEvent: () => {
 					//not sure what should I do
 				}
 			},
