@@ -20,6 +20,7 @@ export interface FieldConfig {
 	label: string;
 	placeholder?: string;
 	className?: string;
+	hintClassName?: string;
 	hintMessage?: string;
 	value?: any;
 	disabled?: boolean;

@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { ChipsInputComponent } from '../../shared/components/chips-input/chips-input.component';
+import { FormGeneratorModule } from '../../shared/components/form-generator/form-generator.module';
 
 
 
@@ -35,7 +36,8 @@ import { ChipsInputComponent } from '../../shared/components/chips-input/chips-i
 		MatButtonModule,
 		MatMenuModule,
 		MatIconModule,
-		ChipsInputComponent
+		ChipsInputComponent,
+		FormGeneratorModule
 	]
 })
 export class CustomersModule { }

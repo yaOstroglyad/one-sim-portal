@@ -6,5 +6,6 @@ export enum CustomerType {
 export interface Customer {
   id: string,
   name: string,
+  description: string,
   type: CustomerType
 }

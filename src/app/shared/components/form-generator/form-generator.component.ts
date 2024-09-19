@@ -46,9 +46,28 @@ export class FormGeneratorComponent implements OnInit, OnDestroy {
 
 	onInputChange(event: any, field: FieldConfig) {
 		if (isFunction(field.inputEvent)) {
-			field.inputEvent(event, this.form, field);
+			field.inputEvent(event, this, field);
 		}
 	}
+
+	updateFieldValidators(fieldName: string, validators: any[]): void {
+		const control = this.form.get(fieldName);
+
+		if (control) {
+			control.clearValidators();
+			control.setValidators(validators);
+			control.updateValueAndValidity();
+		}
+	}
+
+	toggleFieldHint(fieldName: string, hintMessage: string | null, className?: string): void {
+		const fieldConfig = this.config.fields.find(field => field.name === fieldName);
+		if (fieldConfig) {
+			fieldConfig.hintMessage = hintMessage;
+			fieldConfig.className = className;
+		}
+	}
+
 
 	protected readonly FieldType = FieldType;
 }

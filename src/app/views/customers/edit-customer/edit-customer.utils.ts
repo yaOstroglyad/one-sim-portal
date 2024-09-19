@@ -4,35 +4,61 @@ import { of } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ProvidersDataService } from '../../../shared';
 import { map } from 'rxjs/operators';
+import { Customer, CustomerType } from '../../../shared/model/customer';
+
+const typeHintMessage = 'The SIM card is automatically attached to the subscriber, ' +
+	'who is created automatically at the moment of private customer creation.'
+
+const emailHintMessage = 'Email will be sent to register the user, hence this field is mandatory.'
 
 export function getEditCustomerFormConfig(
-	serviceProviderDataService: ProvidersDataService): FormConfig {
+	serviceProviderDataService: ProvidersDataService,
+	data: Customer
+): FormConfig {
 	return {
 		fields: [
 			{
 				type: FieldType.select,
 				name: 'type',
 				label: 'Type',
+				value: data.type,
 				validators: [Validators.required],
 				options: of([
-					{ value: 'Private', displayValue: 'Private' },
-					{ value: 'Corporate', displayValue: 'Corporate' }
+					{ value: CustomerType.Private, displayValue: CustomerType.Private },
+					{ value: CustomerType.Corporate, displayValue: CustomerType.Corporate }
 				]),
-				inputEvent: (event, formGenerator) => {
-					formGenerator.updateFieldValidators('registrationEmail', event === 'Private' ? [Validators.required, Validators.email] : [Validators.email]);
-					formGenerator.updateFieldValidators('serviceProviderId', event === 'Private' ? [Validators.required] : []);
+				inputEvent: (event, formGeneratorComponent) => {
+					const isPrivate = event.value === CustomerType.Private;
+
+					// Update validators for fields
+					formGeneratorComponent.updateFieldValidators('registrationEmail',
+						isPrivate ? [Validators.required, Validators.email] : [Validators.email]);
+					formGeneratorComponent.updateFieldValidators('serviceProviderId',
+						isPrivate ? [Validators.required] : []);
+
+					// Define hints and class names based on the customer type
+					const typeHint = isPrivate ? typeHintMessage : null;
+					const typeClassName = isPrivate ? 'height-100px' : null;
+					const emailHint = isPrivate ? emailHintMessage : null;
+					const emailClassName = isPrivate ? 'height-100px' : null;
+
+					// Toggle field hints
+					formGeneratorComponent.toggleFieldHint('type', typeHint, typeClassName);
+					formGeneratorComponent.toggleFieldHint('registrationEmail', emailHint, emailClassName);
 				}
 			},
 			{
 				type: FieldType.text,
 				name: 'name',
 				label: 'Customer Name',
+				value: data.name,
 				validators: [Validators.required]
 			},
 			{
 				type: FieldType.textarea,
 				name: 'description',
 				label: 'Description',
+				value: data.description,
 			},
 			{
 				type: FieldType.text,

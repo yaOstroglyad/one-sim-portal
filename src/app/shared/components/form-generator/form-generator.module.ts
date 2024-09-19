@@ -10,8 +10,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatLegacyChipsModule } from '@angular/material/legacy-chips';
 import { ChipsInputComponent } from '../chips-input/chips-input.component';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -33,8 +33,8 @@ import { ChipsInputComponent } from '../chips-input/chips-input.component';
 		MatSelectModule,
 		MatCheckboxModule,
 		FlexLayoutModule,
-		MatLegacyChipsModule,
-		ChipsInputComponent
+		ChipsInputComponent,
+		MatIconModule
 	]
 })
 export class FormGeneratorModule { }

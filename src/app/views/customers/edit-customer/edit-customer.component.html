@@ -1,71 +1,8 @@
 <h2 mat-dialog-title class="dialog-header">{{ data ? 'Edit Customer' : 'Create Customer' }}</h2>
 <mat-dialog-content class="mat-typography dialog-content">
-    <form [formGroup]="form">
-        <div class="form-group">
-            <div formGroupName="customerCommand">
-                <mat-form-field class="full-width">
-                    <mat-label>Type</mat-label>
-                    <mat-select formControlName="type" (selectionChange)="onTypeChange($event.value)">
-                        <mat-option value="Private">Private</mat-option>
-                        <mat-option value="Corporate">Corporate</mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <mat-form-field class="full-width">
-                    <mat-label>Customer Name</mat-label>
-                    <input matInput formControlName="name">
-                </mat-form-field>
-
-                <mat-form-field class="full-width">
-                    <mat-label>Description</mat-label>
-                    <textarea matInput formControlName="description"></textarea>
-                </mat-form-field>
-
-                <mat-form-field class="full-width">
-                    <mat-label>Customer External ID</mat-label>
-                    <input matInput formControlName="externalId">
-                </mat-form-field>
-
-                <app-chips-input class="full-width"
-                                 [label]="'Tags'"
-                                 [placeholder]="'Enter tags...'"
-                                 (itemsChange)="updateTags($event)"></app-chips-input>
-            </div>
-
-            <mat-form-field class="full-width">
-                <mat-label>Registration email</mat-label>
-                <input matInput type="email" formControlName="registrationEmail">
-                <mat-hint *ngIf="isFieldRequired('registrationEmail')">
-                    <mat-icon fontIcon="info_outline"></mat-icon>
-                    Email will be sent to register the user, hence this field is mandatory.
-                </mat-hint>
-                <mat-error *ngIf="form.controls.registrationEmail.hasError('required')">
-                    Registration email is required
-                </mat-error>
-                <mat-error *ngIf="form.controls.registrationEmail.hasError('email')">
-                    Please enter a valid email address
-                </mat-error>
-            </mat-form-field>
-
-            <div formGroupName="subscriberCommand">
-                <mat-form-field class="full-width">
-                    <mat-label>Service Provider</mat-label>
-                    <mat-select formControlName="serviceProviderId">
-                        <mat-option *ngFor="let provider of providers" [value]="provider.id">
-                            {{provider.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <mat-form-field class="full-width">
-                    <mat-label>Subscriber External ID</mat-label>
-                    <input matInput formControlName="externalId">
-                </mat-form-field>
-            </div>
-        </div>
-    </form>
+    <app-form-generator [config]="formConfig" (formChanges)="handleFormChanges($event)"></app-form-generator>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-footer" align="end">
     <button mat-button (click)="close()">Cancel</button>
-    <button mat-button color="primary" (click)="submit()">Save</button>
+    <button mat-button color="primary" [disabled]="!isFormValid" (click)="submit()">Save</button>
 </mat-dialog-actions>
