@@ -111,7 +111,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 			}
 		});
 
-		uploadDialogRef.afterClosed().subscribe(result => {
+		uploadDialogRef.afterClosed().subscribe(() => {
 			// Обработка результата второго диалогового окна
 		});
 	}

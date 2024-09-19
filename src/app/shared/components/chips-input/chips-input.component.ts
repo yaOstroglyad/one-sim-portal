@@ -112,7 +112,7 @@ export class ChipsInputComponent implements ControlValueAccessor {
     }
   }
 
-  trackByFn(index: number, item: string): number {
+  trackByFn(index: number): number {
     return index;
   }
 

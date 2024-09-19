@@ -6,9 +6,7 @@ import { ProvidersDataService } from '../../../shared';
 import { map } from 'rxjs/operators';
 
 export function getEditCustomerFormConfig(
-	serviceProviderDataService: ProvidersDataService,
-	data: any
-): FormConfig {
+	serviceProviderDataService: ProvidersDataService): FormConfig {
 	return {
 		fields: [
 			{
@@ -20,7 +18,7 @@ export function getEditCustomerFormConfig(
 					{ value: 'Private', displayValue: 'Private' },
 					{ value: 'Corporate', displayValue: 'Corporate' }
 				]),
-				inputEvent: (event, formGenerator, field) => {
+				inputEvent: (event, formGenerator) => {
 					formGenerator.updateFieldValidators('registrationEmail', event === 'Private' ? [Validators.required, Validators.email] : [Validators.email]);
 					formGenerator.updateFieldValidators('serviceProviderId', event === 'Private' ? [Validators.required] : []);
 				}
