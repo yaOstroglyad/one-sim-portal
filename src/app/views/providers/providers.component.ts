@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HeaderConfig, ProvidersDataService, TableConfig, TableFilterFieldType } from '../../shared';
 import { Provider } from '../../shared/model/provider';
 import { ProvidersTableService } from './providers-table.service';
-import { TranslateService } from '@ngx-translate/core';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -20,8 +19,7 @@ export class ProvidersComponent implements OnInit, OnDestroy {
 
   constructor(private cdr: ChangeDetectorRef,
               private tableService: ProvidersTableService,
-              private providersDataService: ProvidersDataService,
-              public translateService: TranslateService
+              private providersDataService: ProvidersDataService
   ) {
     this.initheaderConfig();
   }

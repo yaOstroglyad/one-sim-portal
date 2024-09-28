@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	Input, OnChanges,
+	OnDestroy,
+	OnInit,
+	Output,
+	SimpleChanges
+} from '@angular/core';
 import { FieldConfig, FieldType, FormConfig } from './field-config';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { createControl } from './form-generator.utils';
@@ -12,7 +21,7 @@ import { takeUntil } from 'rxjs/operators';
 	styleUrls: ['./form-generator.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormGeneratorComponent implements OnInit, OnDestroy {
+export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges {
 	private unsubscribe$ = new Subject<void>();
 	@Input() config: FormConfig;
 	@Output() formChanges = new EventEmitter<FormGroup>();
@@ -28,6 +37,12 @@ export class FormGeneratorComponent implements OnInit, OnDestroy {
 			.subscribe(() => {
 				this.formChanges.emit(this.form);
 			});
+	}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['config']) {
+			console.log('Form config received in form generator:', this.config);
+		}
 	}
 
 	ngOnDestroy(): void {

@@ -1,0 +1,30 @@
+<ng-container *ngIf="!isAdmin; else forAdmin">
+    <mat-hint class="hint">
+        <mat-icon fontIcon="info_outline"></mat-icon>
+        In this section, you can configure all the payment gateways available to you.
+    </mat-hint>
+
+    <ng-container *ngFor="let componentConfig of pgComponentConfigs">
+        <div [ngSwitch]="componentConfig.type">
+            <div *ngSwitchCase="'anex'">
+                <app-pg-anex [componentConfig]="componentConfig"></app-pg-anex>
+            </div>
+
+            <div *ngSwitchCase="'PayPal'">
+                <!-- Add PayPal component or logic here -->
+            </div>
+
+            <div *ngSwitchDefault>
+                <h2>Not Found</h2>
+                <p>The selected view is not available.</p>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>
+
+<ng-template #forAdmin>
+    <mat-hint class="hint">
+        <mat-icon fontIcon="info_outline"></mat-icon>
+        This configuration is available to non-admin users only.
+    </mat-hint>
+</ng-template>

@@ -92,3 +92,14 @@
 .full-width {
   width: 100%;
 }
+
+.hint {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #666;
+  .hint-icon {
+    font-size: 16px;
+    margin-right: 4px;
+  }
+}

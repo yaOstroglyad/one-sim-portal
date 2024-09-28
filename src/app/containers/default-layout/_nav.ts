@@ -5,7 +5,8 @@ export const menuItemToPermission = {
   Orders: ['all'],
   Customers: ['all'],
   Products: ['all'],
-  Inventory: ['all']
+  Inventory: ['all'],
+  Settings: ['all'], // can be ['admin'] as well
 }
 
 export const navItems: INavData[] = [
@@ -54,9 +55,9 @@ export const navItems: INavData[] = [
     url: 'inventory',
     iconComponent: { name: 'cil-sim' },
   },
-  // {
-  //   name: 'Settings',
-  //   url: 'settings',
-  //   iconComponent: { name: 'cil-settings' },
-  // },
+  {
+    name: 'Settings',
+    url: 'settings',
+    iconComponent: { name: 'cil-settings' },
+  },
 ];

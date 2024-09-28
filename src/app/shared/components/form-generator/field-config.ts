@@ -14,6 +14,13 @@ export enum FieldType {
 	checkbox = 'checkbox',
 }
 
+export interface BackendFieldConfig {
+	name: string,
+	displayName: string,
+	type: FieldType,
+	sensitive: boolean
+}
+
 export interface FieldConfig {
 	type: FieldType;
 	name: string;
@@ -27,7 +34,7 @@ export interface FieldConfig {
 	inputEvent?: (event: any, formGenerator: any, field: FieldConfig) => any
 
 	//select
-	options?: Observable<Array<{value: any; displayValue: string}>>;
+	options?: Observable<Array<{ value: any; displayValue: string }>>;
 	validators?: ValidatorFn | ValidatorFn[];
 	displayOptions?: {
 		newLine?: boolean;
@@ -42,5 +49,5 @@ export interface FieldConfig {
 
 export interface FormConfig {
 	fields: FieldConfig[];
-	formValidators?: ValidatorFn[]
+	formValidators?: ValidatorFn[];
 }
