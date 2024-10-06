@@ -10,6 +10,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class PgPaypalComponent {
   @Input() componentConfig: PgComponentConfig;
+  @Input() isActive!: boolean;
   form: FormGroup;
   isFormValid = false;
 
@@ -18,6 +19,15 @@ export class PgPaypalComponent {
   handleFormChanges(form: FormGroup): void {
     this.form = form;
     this.isFormValid = form.valid;
+  }
+
+  updateStatus() {
+    this.isActive = !this.isActive;
+    const status = {
+      id: this.componentConfig.id,
+      active: this.isActive
+    }
+    this.paymentGatewayService.updateStatus(status).subscribe()
   }
 
   submit(): void {

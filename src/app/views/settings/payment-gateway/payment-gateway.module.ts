@@ -4,7 +4,7 @@ import { PgPaypalComponent } from './pg-paypal/pg-paypal.component';
 import { PaymentGatewayComponent } from './payment-gateway.component';
 import { JsonPipe, NgComponentOutlet, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { FormGeneratorModule } from '../../../shared/components/form-generator/form-generator.module';
-import { ButtonDirective } from '@coreui/angular';
+import { ButtonDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +32,10 @@ import { MatIconModule } from '@angular/material/icon';
     ButtonDirective,
     IconDirective,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective
   ]
 })
 export class PaymentGatewayModule { }

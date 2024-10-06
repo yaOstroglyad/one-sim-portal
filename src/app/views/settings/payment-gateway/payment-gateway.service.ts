@@ -30,6 +30,18 @@ export class PaymentGatewayService {
     );
   }
 
+  updateStatus(status: {
+    "id": string,
+    "active": boolean
+  }): Observable<any> {
+    return this.http.patch<any>('/api/v1/payment-method/command/update-status', status).pipe(
+      catchError(() => {
+        console.warn('error happened, presenting mocked data');
+        return of([])
+      })
+    );
+  }
+
   list(): Observable<PaymentStrategies[]> {
     return this.http.get<PaymentStrategies[]>('/api/v1/payment-method/query/all').pipe(
       catchError(() => {
@@ -49,35 +61,15 @@ export class PaymentGatewayService {
   }
 
   getFieldsByStrategyType(strategyType: string): Observable<any> {
-    console.log('Fetching fields for type:', strategyType); // Логируем перед вызовом API
-
     if(strategyType === 'PayPal') {
       return of([]);
     }
 
     return this.http.get<any>(`/api/v1/payment-method/query/fields/${strategyType}`).pipe(
-      tap(fields => console.log('Fields fetched:', fields)), // Логируем результат
       catchError(error => {
         console.error('Error fetching fields:', error);
         return throwError(error);
       })
     );
-  }
-
-  getPgMetadata(): Observable<any> {
-      return of([
-        {
-          "id": null,
-          "name": "anex",
-          "isActive": true,
-          "paymentStrategy": "anex",
-          "paymentMethodParameters": {
-            "name": "string",
-            "samo_action": "string",
-            "oauth_token": "string"
-          },
-          "createdDate": "2024-09-28T13:23:54.324Z"
-        }
-      ])
   }
 }

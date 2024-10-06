@@ -2,6 +2,7 @@ import { FormConfig } from '../components/form-generator/field-config';
 
 export interface PgComponentConfig {
 	id: string,
+	isActive: boolean,
 	type: string,
 	config: FormConfig
 }

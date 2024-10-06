@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { PaymentGatewayService } from './payment-gateway.service';
 import { forkJoin, combineLatest } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
@@ -42,6 +42,7 @@ export class PaymentGatewayComponent {
 
 							return {
 								id: strategyMetadata?.id,
+								isActive: strategyMetadata.isActive,
 								type,
 								config: this.paymentGatewayUtilsService.generateForm(fields, paymentMethodParameters)
 							};

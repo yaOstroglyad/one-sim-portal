@@ -1,6 +1,15 @@
 <ng-container *ngIf="componentConfig">
     <div class="pg-card">
-        <h1>{{ componentConfig.type }}</h1>
+        <div class="display-flex-space-between">
+            <h1>{{ componentConfig.type }}</h1>
+            <div  class="display-flex-space-between">
+                <label class="mr-1">{{ isActive ? 'Active' : 'Deactivated' }}</label>
+                <div></div>
+                <c-form-check [switch]="true">
+                    <input cFormCheckInput [checked]="isActive" type="checkbox" (change)="updateStatus()" />
+                </c-form-check>
+            </div>
+        </div>
 
         <app-form-generator [config]="componentConfig.config"
                             (formChanges)="handleFormChanges($event)"></app-form-generator>
