@@ -31,6 +31,7 @@ export function getEditCustomerFormConfig(
 					const isPrivate = event.value === CustomerType.Private;
 
 					// Update validators for fields
+
 					formGeneratorComponent.updateFieldValidators('registrationEmail',
 						isPrivate ? [Validators.required, Validators.email] : [Validators.email]);
 					formGeneratorComponent.updateFieldValidators('serviceProviderId',
@@ -74,7 +75,6 @@ export function getEditCustomerFormConfig(
 				separatorKeysCodes: [ENTER, COMMA],
 				selectable: true,
 				removable: true,
-				validators: [Validators.required]
 			},
 			{
 				type: FieldType.email,
