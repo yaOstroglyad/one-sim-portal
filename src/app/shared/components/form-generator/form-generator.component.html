@@ -76,7 +76,7 @@
                 <input matInput
                        [formControlName]="field.name"
                        [type]="field.type"
-                       placeholder="Enter your email"
+                       [placeholder]="field.placeholder ?? 'Enter your email'"
                        type="email">
 
                 <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">

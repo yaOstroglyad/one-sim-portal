@@ -1,101 +1,127 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {
-  CustomersDataService,
-  HeaderConfig,
-  TableConfig,
-  TableFilterFieldType
+	CustomersDataService,
+	HeaderConfig,
+	TableConfig,
+	TableFilterFieldType
 } from '../../shared';
 import { CustomersTableService } from './customers-table.service';
-import { TranslateService } from '@ngx-translate/core';
 import { Customer } from '../../shared/model/customer';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 import { MatDialog } from '@angular/material/dialog';
-import { takeUntil } from 'rxjs/operators';
+import { switchMap, takeUntil, tap } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Order } from '../../shared/model/order';
+import { ReSendInviteEmailComponent } from './re-send-invite-email/re-send-invite-email.component';
 
 @Component({
-  selector: 'app-customers',
-  templateUrl: './customers.component.html',
-  styleUrls: ['./customers.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+	selector: 'app-customers',
+	templateUrl: './customers.component.html',
+	styleUrls: ['./customers.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomersComponent implements OnInit, OnDestroy {
-  private unsubscribe$ = new Subject<void>();
-  public tableConfig$: BehaviorSubject<TableConfig>;
-  public dataList$: Observable<Customer[]>;
-  public headerConfig: HeaderConfig = {};
+	private unsubscribe$ = new Subject<void>();
+	public tableConfig$: BehaviorSubject<TableConfig>;
+	public dataList$: Observable<Customer[]>;
+	public headerConfig: HeaderConfig = {};
 
-  constructor(private cdr: ChangeDetectorRef,
-              private tableService: CustomersTableService,
-              private customersDataService: CustomersDataService,
-              public translateService: TranslateService,
-              private dialog: MatDialog
-  ) {
-    this.initheaderConfig();
-  }
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
+	constructor(private cdr: ChangeDetectorRef,
+							private tableService: CustomersTableService,
+							private customersDataService: CustomersDataService,
+							private dialog: MatDialog,
+							private snackBar: MatSnackBar
+	) {
+		this.initheaderConfig();
+	}
 
-  ngOnInit(): void {
-    this.loadCustomers();
-  }
+	ngOnDestroy(): void {
+		this.unsubscribe$.next();
+		this.unsubscribe$.complete();
+	}
 
-  private loadCustomers(): void {
-    this.customersDataService.list()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-      this.tableService.updateTableData(data);
-      this.tableConfig$ = this.tableService.getTableConfig();
-      this.dataList$ = this.tableService.dataList$;
-      this.cdr.detectChanges();
-    });
-  }
+	ngOnInit(): void {
+		this.loadCustomers();
+	}
 
-  createCustomer(): void {
-    const dialogRef = this.dialog.open(EditCustomerComponent, {
-      width: '650px',
-      data: {}
-    });
+	private loadCustomers(): void {
+		this.customersDataService.list()
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe(data => {
+				this.tableService.updateTableData(data);
+				this.tableConfig$ = this.tableService.getTableConfig();
+				this.dataList$ = this.tableService.dataList$;
+				this.cdr.detectChanges();
+			});
+	}
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.customersDataService.create(result).subscribe(() => {
-          this.loadCustomers();
-        });
-      }
-    });
-  }
+	createCustomer(): void {
+		const dialogRef = this.dialog.open(EditCustomerComponent, {
+			width: '650px',
+			data: {}
+		});
 
-  editCustomer(customer: Customer): void {
-    const dialogRef = this.dialog.open(EditCustomerComponent, {
-      width: '650px',
-      data: customer
-    });
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.customersDataService.create(result).subscribe(() => {
+					this.loadCustomers();
+				});
+			}
+		});
+	}
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.customersDataService.update(result.id, result).subscribe(() => {
-          this.loadCustomers();
-        });
-      }
-    });
-  }
+	editCustomer(customer: Customer): void {
+		const dialogRef = this.dialog.open(EditCustomerComponent, {
+			width: '650px',
+			data: customer
+		});
 
-  private initheaderConfig(): void {
-    this.headerConfig = {
-      value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
-    };
-  }
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.customersDataService.update(result.id, result).subscribe(() => {
+					this.loadCustomers();
+				});
+			}
+		});
+	}
 
-  applyFilter(filterValues: any): void {
-    this.tableService.applyFilter(filterValues);
-    this.dataList$ = this.tableService.dataList$;
-  }
+	private initheaderConfig(): void {
+		this.headerConfig = {
+			value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
+		};
+	}
 
-  onColumnSelectionChanged(selectedColumns: Set<string>): void {
-    this.tableService.updateColumnVisibility(selectedColumns);
-  }
+	applyFilter(filterValues: any): void {
+		this.tableService.applyFilter(filterValues);
+		this.dataList$ = this.tableService.dataList$;
+	}
+
+	onColumnSelectionChanged(selectedColumns: Set<string>): void {
+		this.tableService.updateColumnVisibility(selectedColumns);
+	}
+
+	public openSendEmail(item: Order): void {
+		const dialogRef = this.dialog.open(ReSendInviteEmailComponent, {
+			width: '400px',
+			data: item
+		});
+
+		dialogRef.afterClosed().pipe(
+			takeUntil(this.unsubscribe$),
+			switchMap(email => {
+				if (email) {
+					return this.customersDataService.reSendInviteEmail(item.id, email).pipe(
+						tap(() =>
+							this.snackBar.open('Mail sent successfully', null, {
+								panelClass: 'app-notification-success',
+								duration: 2000
+							})
+						)
+					);
+				}
+			})
+		).subscribe();
+	}
 }

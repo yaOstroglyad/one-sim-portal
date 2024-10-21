@@ -6,15 +6,15 @@
 </app-header>
 
 <generic-table [config$]="tableConfig$"
+               [menu]="menuTemplate"
                [data$]="dataList$"></generic-table>
-
-<!--               Add in case when edit will be done [menu]="menuTemplate"-->
 
 <ng-template #menuTemplate let-item>
     <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="editCustomer(item)">Edit</button>
+        <button mat-menu-item (click)="openSendEmail(item)">Resend invite email</button>
+<!--        <button mat-menu-item (click)="editCustomer(item)">Edit</button>-->
     </mat-menu>
 </ng-template>

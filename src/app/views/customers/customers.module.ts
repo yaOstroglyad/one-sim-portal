@@ -14,13 +14,16 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { ChipsInputComponent } from '../../shared/components/chips-input/chips-input.component';
 import { FormGeneratorModule } from '../../shared/components/form-generator/form-generator.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ReSendInviteEmailComponent } from './re-send-invite-email/re-send-invite-email.component';
 
 
 
 @NgModule({
   declarations: [
     CustomersComponent,
-		EditCustomerComponent
+		EditCustomerComponent,
+		ReSendInviteEmailComponent
   ],
 	imports: [
 		CommonModule,
@@ -37,6 +40,7 @@ import { FormGeneratorModule } from '../../shared/components/form-generator/form
 		MatMenuModule,
 		MatIconModule,
 		ChipsInputComponent,
+		MatSnackBarModule,
 		FormGeneratorModule
 	]
 })

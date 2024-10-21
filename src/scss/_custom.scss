@@ -113,3 +113,16 @@
 .mr-1 {
   margin-right: 10px;
 }
+
+.mat-mdc-snack-bar-container {
+  --mat-mdc-snack-bar-button-color: #ffffff;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+
+  &.app-notification-error {
+    --mdc-snackbar-container-color: #d2443a;
+  }
+
+  &.app-notification-success {
+    --mdc-snackbar-container-color: #5ecc60;
+  }
+}
