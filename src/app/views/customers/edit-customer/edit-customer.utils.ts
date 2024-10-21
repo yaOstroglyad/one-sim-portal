@@ -11,6 +11,24 @@ const typeHintMessage = 'The SIM card is automatically attached to the subscribe
 
 const emailHintMessage = 'Email will be sent to register the user, hence this field is mandatory.'
 
+export function getCustomerCreateRequest(form: any) {
+	return {
+		customerCommand: {
+			id: form?.id || null,
+			name: form.name,
+			description: form.description,
+			externalId: form.externalId || '',
+			tags: form?.tags || [],
+			type: form?.type || ''
+		},
+		subscriberCommand: {
+			serviceProviderId: form.serviceProviderId || '',
+			externalId: form.externalId || ''
+		},
+		registrationEmail: form.registrationEmail
+	}
+}
+
 export function getEditCustomerFormConfig(
 	serviceProviderDataService: ProvidersDataService,
 	data: Customer
