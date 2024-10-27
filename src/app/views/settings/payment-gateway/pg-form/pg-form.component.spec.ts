@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PgAnexComponent } from './pg-anex.component';
+import { PgFormComponent } from './pg-form.component';
 
 describe('PgAnexComponent', () => {
-  let component: PgAnexComponent;
-  let fixture: ComponentFixture<PgAnexComponent>;
+  let component: PgFormComponent;
+  let fixture: ComponentFixture<PgFormComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PgAnexComponent]
+      declarations: [PgFormComponent]
     });
-    fixture = TestBed.createComponent(PgAnexComponent);
+    fixture = TestBed.createComponent(PgFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
-import { PgAnexComponent } from './pg-anex/pg-anex.component';
-import { PgPaypalComponent } from './pg-paypal/pg-paypal.component';
+import { PgFormComponent } from './pg-form/pg-form.component';
 import { PaymentGatewayComponent } from './payment-gateway.component';
 import { JsonPipe, NgComponentOutlet, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
 import { FormGeneratorModule } from '../../../shared/components/form-generator/form-generator.module';
@@ -14,8 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 @NgModule({
   declarations: [
     PaymentGatewayComponent,
-    PgAnexComponent,
-    PgPaypalComponent
+    PgFormComponent,
   ],
   exports: [
     PaymentGatewayComponent

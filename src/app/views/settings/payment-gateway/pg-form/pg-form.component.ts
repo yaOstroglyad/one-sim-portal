@@ -4,11 +4,11 @@ import { PaymentGatewayService } from '../payment-gateway.service';
 import { PgComponentConfig } from '../../../../shared/model/payment-strategies';
 
 @Component({
-	selector: 'app-pg-anex',
-	templateUrl: './pg-anex.component.html',
-	styleUrls: ['./pg-anex.component.scss']
+	selector: 'app-pg-form',
+	templateUrl: './pg-form.component.html',
+	styleUrls: ['./pg-form.component.scss']
 })
-export class PgAnexComponent {
+export class PgFormComponent {
 	@Input() componentConfig: PgComponentConfig;
 	@Input() isActive!: boolean;
 

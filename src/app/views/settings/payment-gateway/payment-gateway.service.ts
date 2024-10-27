@@ -61,10 +61,6 @@ export class PaymentGatewayService {
   }
 
   getFieldsByStrategyType(strategyType: string): Observable<any> {
-    if(strategyType === 'PayPal') {
-      return of([]);
-    }
-
     return this.http.get<any>(`/api/v1/payment-method/query/fields/${strategyType}`).pipe(
       catchError(error => {
         console.error('Error fetching fields:', error);

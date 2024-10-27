@@ -5,21 +5,8 @@
     </mat-hint>
 
     <ng-container *ngFor="let componentConfig of pgComponentConfigs">
-        <div [ngSwitch]="componentConfig.type">
-            <div *ngSwitchCase="'anex'">
-                <app-pg-anex [componentConfig]="componentConfig"
-                             [isActive]="componentConfig.isActive"></app-pg-anex>
-            </div>
-
-            <div *ngSwitchCase="'PayPal'">
-                <!-- Add PayPal component or logic here -->
-            </div>
-
-            <div *ngSwitchDefault>
-                <h2>Not Found</h2>
-                <p>The selected view is not available.</p>
-            </div>
-        </div>
+        <app-pg-form [componentConfig]="componentConfig"
+                     [isActive]="componentConfig.isActive"></app-pg-form>
     </ng-container>
 </ng-container>
 
