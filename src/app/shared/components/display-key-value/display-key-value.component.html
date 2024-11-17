@@ -1,0 +1,27 @@
+<div class="key-value-container">
+    <div class="key-value-entry" *ngFor="let entry of entries">
+        <div class="key">{{ entry.key | titlecase }}</div>
+        <div class="value">
+            <ng-container *ngIf="isObject(entry.value); else primitiveValue">
+                <mat-card class="nested-object-card">
+                    <mat-card-header>
+                        <mat-card-title>{{ entry.key | titlecase }}</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <app-display-key-value [data]="entry.value"></app-display-key-value>
+                    </mat-card-content>
+                </mat-card>
+            </ng-container>
+            <ng-template #primitiveValue>
+                <ng-container *ngIf="isArray(entry.value); else singleValue">
+                    <ul class="list">
+                        <li *ngFor="let item of entry.value">
+                            <app-display-key-value [data]="item"></app-display-key-value>
+                        </li>
+                    </ul>
+                </ng-container>
+                <ng-template #singleValue>{{ entry.value }}</ng-template>
+            </ng-template>
+        </div>
+    </div>
+</div>

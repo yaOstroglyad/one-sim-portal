@@ -16,6 +16,7 @@ export class ProductsTableService extends TableConfigAbstractService<Package> {
 		showAddButton: true,
 		showMenu: true,
 		columns: [
+			{visible: false, key: 'id', header: 'id' },
 			{visible: true, key: 'name', header: 'name' },
 			{visible: true, key: 'description', header: 'description' },
 			{visible: true, key: 'price', header: 'price' },

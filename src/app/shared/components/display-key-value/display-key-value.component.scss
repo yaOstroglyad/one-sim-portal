@@ -1,0 +1,48 @@
+.key-value-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.key-value-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.key-value-entry:last-child {
+  border-bottom: none;
+}
+
+.key {
+  flex: 0 0 25%;
+  font-weight: 600;
+  color: #3f51b5;
+  word-break: break-word;
+}
+
+.value {
+  flex: 1;
+  color: #616161;
+  word-break: break-word;
+  margin-left: 16px;
+}
+
+.list {
+  padding-left: 16px;
+  margin: 8px 0;
+}
+
+li {
+  list-style-type: disc;
+}
+
+.nested-object-card {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}

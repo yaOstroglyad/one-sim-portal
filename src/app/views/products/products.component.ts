@@ -9,6 +9,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditProductComponent } from './edit-product/edit-product.component';
 import { CreateProductComponent } from './create-product/create-product.component';
 import { ChangeStatusDialogComponent } from './change-status-dialog/change-status-dialog.component';
+import {
+	DynamicEntityDetailsDialogComponent
+} from '../../shared/components/dynamic-entity-details-dialog/dynamic-entity-details-dialog.component';
 
 @Component({
 	selector: 'app-products',
@@ -73,6 +76,16 @@ export class ProductsComponent implements OnInit, OnDestroy {
 			).subscribe();
 	}
 
+	public openDetails(product?: Package): void {
+		this.openDialog(DynamicEntityDetailsDialogComponent, product, '800px')
+			.pipe(
+				takeUntil(this.unsubscribe$),
+				switchMap(result => {
+					return of(null);
+				})
+			).subscribe();
+	}
+
 	public edit(product?: Package): void {
 		this.openDialog(EditProductComponent, product)
 			.pipe(
@@ -125,9 +138,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
 		).subscribe();
 	}
 
-	private openDialog<T>(component: new (...args: any[]) => T, data?: any): Observable<any> {
+	private openDialog<T>(component: new (...args: any[]) => T, data?: any, width = '650px'): Observable<any> {
 		const dialogRef: MatDialogRef<T> = this.dialog.open(component, {
-			width: '650px',
+			width,
 			data
 		});
 		return dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe$));

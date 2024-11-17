@@ -1,0 +1,66 @@
+.dialog-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.dialog-content {
+  display: block;
+  padding-top: 20px;
+  max-height: 400px; /* Adjust the height as necessary */
+  overflow-y: auto;
+}
+
+.dialog-footer {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 10px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.grid-item {
+  width: 100%;
+}
+
+
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-group, .usage-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.usage-item {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+mat-form-field {
+  margin-bottom: 16px;
+}
+
+mat-dialog-content {
+  overflow: hidden;
+}
+
+h3 {
+  margin-top: 24px;
+}
