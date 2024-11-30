@@ -5,7 +5,6 @@ import { SettingsRoutingModule } from './settings-routing.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { WhiteLabelConfigurationComponent } from './white-label-configuration/white-label-configuration.component';
 import { MatCardModule } from '@angular/material/card';
-import { PaymentGatewayModule } from './payment-gateway/payment-gateway.module';
 import { PaymentGatewayTableModule } from './payment-gateway-table/payment-gateway-table.module';
 
 
@@ -20,7 +19,6 @@ import { PaymentGatewayTableModule } from './payment-gateway-table/payment-gatew
 		MatTabsModule,
 		WhiteLabelConfigurationComponent,
 		MatCardModule,
-		PaymentGatewayModule,
 		PaymentGatewayTableModule
 	]
 })

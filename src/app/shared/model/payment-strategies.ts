@@ -7,14 +7,13 @@ export interface PgComponentConfig {
 	config: FormConfig
 }
 
-export interface PaymentStrategies {
+export interface PaymentStrategy {
   "id"?: string,
   "name": string,
   "isActive"?: boolean,
-  "paymentStrategy": string,
-  "paymentMethodParameters": {
-    [key: string]: string;
-  },
+  "primary"?: boolean,
+  "paymentStrategy"?: string,
+	"paymentMethodParameters"?: PaymentMethodParameters,
   "createdDate"?: string
 }
 
@@ -24,14 +23,5 @@ export interface PaymentMethodParameters {
 	type?: string;
 	oauth_token?: string;
 	samo_action?: string;
-}
-
-export interface PaymentGateway {
-	id: string;
-	name: string;
-	isActive: boolean;
-	primary: boolean;
-	paymentStrategy: string;
-	paymentMethodParameters: PaymentMethodParameters;
-	createdDate: string;
+	[key: string]: string;
 }

@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { PgComponentConfig } from '../../../../shared/model/payment-strategies';
-import { PaymentGatewayService } from '../../payment-gateway/payment-gateway.service';
+import { PaymentStrategy, PgComponentConfig } from '../../../../shared/model/payment-strategies';
+import { PaymentGatewayService } from '../payment-gateway.service';
 import { map } from 'rxjs/operators';
-import { PaymentGatewayUtilsService } from '../../payment-gateway/payment-gateway.utils.service';
+import { PaymentGatewayUtilsService } from '../payment-gateway.utils.service';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -16,15 +16,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class EditPaymentGatewayComponent implements OnInit {
   public componentConfig$: Observable<PgComponentConfig>;
   public form: FormGroup;
-  public isActive = false;
-  public isPrimary = false;
-  public strategyId = null;
-  public isFormValid = false;
+  public isActive: boolean = false;
+  public isPrimary: boolean = false;
+  public strategyId: Partial<PaymentStrategy['id']> = null;
+  public isFormValid: boolean = false;
   private initialValues: any;
 
   constructor(
     public dialogRef: MatDialogRef<EditPaymentGatewayComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: PaymentStrategy,
     private paymentGatewayService: PaymentGatewayService,
     private paymentGatewayUtilsService: PaymentGatewayUtilsService,
     private snackBar: MatSnackBar
@@ -34,7 +34,7 @@ export class EditPaymentGatewayComponent implements OnInit {
   public ngOnInit(): void {
     this.componentConfig$ = this.paymentGatewayService.getFieldsByStrategyType(this.data.name).pipe(
       map(fields => {
-        const paymentMethodParameters = this.data.paymentMethodParameters || {};
+        const paymentMethodParameters = this.data?.paymentMethodParameters || {};
         this.isActive = this.data?.isActive;
         this.isPrimary = this.data?.primary;
         this.strategyId = this.data?.id || null;

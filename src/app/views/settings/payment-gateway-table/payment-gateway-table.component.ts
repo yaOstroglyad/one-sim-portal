@@ -12,9 +12,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { EditPaymentGatewayComponent } from './edit-payment-gateway/edit-payment-gateway.component';
 import { PaymentGatewayTableConfigService } from './payment-gateway-table-config.service';
-import { HeaderConfig, TableConfig, TableFilterFieldType } from 'src/app/shared';
-import { PaymentGatewayService } from '../payment-gateway/payment-gateway.service';
+import { TableConfig } from 'src/app/shared';
+import { PaymentGatewayService } from './payment-gateway.service';
 import { SessionStorageService } from 'ngx-webstorage';
+import { PaymentStrategy } from '../../../shared/model/payment-strategies';
 
 @Component({
 	selector: 'app-payment-gateway-table',
@@ -29,7 +30,6 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy {
 	public isAdmin: boolean;
 	public tableConfig$: BehaviorSubject<TableConfig>;
 	public dataList$: Observable<any[]>;
-	public headerConfig: HeaderConfig = {};
 	public strategyTypes$: Observable<any>;
 
 
@@ -39,7 +39,6 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy {
 							private $sessionStorage: SessionStorageService,
 							private dialog: MatDialog
 	) {
-		this.initHeaderConfig();
 		this.isAdmin = this.getAdmin();
 	}
 
@@ -79,13 +78,7 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy {
 		this.cdr.detectChanges();
 	}
 
-	private initHeaderConfig(): void {
-		this.headerConfig = {
-			value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
-		};
-	}
-
-	public edit(item: any): void {
+	public edit(item: PaymentStrategy): void {
 		const dialogRef = this.dialog.open(EditPaymentGatewayComponent, {
 			width: '650px',
 			data: item

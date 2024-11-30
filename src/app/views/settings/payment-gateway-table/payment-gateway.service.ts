@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, throwError } from 'rxjs';
-import { PaymentStrategies } from '../../../shared/model/payment-strategies';
+import { PaymentStrategy } from '../../../shared/model/payment-strategies';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class PaymentGatewayService {
 
 
 
-  create(paymentGatewayForm: PaymentStrategies): Observable<any> {
+  create(paymentGatewayForm: PaymentStrategy): Observable<any> {
     return this.http.post<any>('/api/v1/payment-method/command/create', paymentGatewayForm).pipe(
       catchError(() => {
         console.warn('error happened, presenting mocked data');
@@ -21,7 +21,7 @@ export class PaymentGatewayService {
     );
   }
 
-  update(paymentGatewayForm: PaymentStrategies): Observable<any> {
+  update(paymentGatewayForm: PaymentStrategy): Observable<any> {
     return this.http.patch<any>('/api/v1/payment-method/command/update', paymentGatewayForm).pipe(
       catchError(() => {
         console.warn('error happened, presenting mocked data');
@@ -42,8 +42,8 @@ export class PaymentGatewayService {
     );
   }
 
-  list(): Observable<PaymentStrategies[]> {
-    return this.http.get<PaymentStrategies[]>('/api/v1/payment-method/query/all').pipe(
+  list(): Observable<PaymentStrategy[]> {
+    return this.http.get<PaymentStrategy[]>('/api/v1/payment-method/query/all').pipe(
       catchError(() => {
         console.warn('error happened, presenting mocked data');
         return of([])

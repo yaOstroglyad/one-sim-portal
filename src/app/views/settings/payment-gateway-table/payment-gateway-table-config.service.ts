@@ -1,6 +1,7 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TableConfig, TableConfigAbstractService, TemplateType } from 'src/app/shared';
+import { PaymentStrategy } from '../../../shared/model/payment-strategies';
 
 @Injectable({
 	providedIn: 'root'
@@ -9,8 +10,8 @@ export class PaymentGatewayTableConfigService extends TableConfigAbstractService
 	isActiveFlagTemplate: TemplateRef<any>;
 	isPrimaryFlagTemplate: TemplateRef<any>;
 
-	public originalDataSubject = new BehaviorSubject<any[]>([]);
-	public dataList$: Observable<any[]> = this.originalDataSubject.asObservable();
+	public originalDataSubject = new BehaviorSubject<PaymentStrategy[]>([]);
+	public dataList$: Observable<PaymentStrategy[]> = this.originalDataSubject.asObservable();
 	public tableConfigSubject = new BehaviorSubject<TableConfig>({
 		translatePrefix: 'paymentGateway.',
 		showCheckboxes: false,
@@ -43,7 +44,7 @@ export class PaymentGatewayTableConfigService extends TableConfigAbstractService
 		super();
 	}
 
-	public updateTableData(data: any[]): void {
+	public updateTableData(data: PaymentStrategy[]): void {
 		this.originalDataSubject.next(data);
 	}
 }

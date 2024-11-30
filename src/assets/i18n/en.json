@@ -53,7 +53,7 @@
   "paymentGateway": {
     "id": "ID",
     "name": "Name",
-    "isActive": "Is Active",
+    "isActive": "Is active",
     "isPrimary": "Is primary",
     "paymentStrategy": "Payment Strategy",
     "createdDate": "Created Date"
