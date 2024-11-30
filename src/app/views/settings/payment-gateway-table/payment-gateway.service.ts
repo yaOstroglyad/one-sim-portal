@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, throwError } from 'rxjs';
 import { PaymentStrategy } from '../../../shared/model/payment-strategies';
-import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
