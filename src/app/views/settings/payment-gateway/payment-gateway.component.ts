@@ -43,7 +43,7 @@ export class PaymentGatewayComponent {
 								id: strategyMetadata?.id,
 								isActive: strategyMetadata?.isActive,
 								type,
-								config: this.paymentGatewayUtilsService.generateForm(fields, paymentMethodParameters)
+								config: this.paymentGatewayUtilsService.generateForm(fields, paymentMethodParameters, strategyMetadata)
 							};
 						})
 					);

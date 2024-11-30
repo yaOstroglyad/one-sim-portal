@@ -6,6 +6,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { WhiteLabelConfigurationComponent } from './white-label-configuration/white-label-configuration.component';
 import { MatCardModule } from '@angular/material/card';
 import { PaymentGatewayModule } from './payment-gateway/payment-gateway.module';
+import { PaymentGatewayTableModule } from './payment-gateway-table/payment-gateway-table.module';
 
 
 
@@ -13,13 +14,14 @@ import { PaymentGatewayModule } from './payment-gateway/payment-gateway.module';
   declarations: [
     SettingsComponent,
   ],
-  imports: [
-    CommonModule,
-    SettingsRoutingModule,
-    MatTabsModule,
-    WhiteLabelConfigurationComponent,
-    MatCardModule,
-    PaymentGatewayModule,
-  ]
+	imports: [
+		CommonModule,
+		SettingsRoutingModule,
+		MatTabsModule,
+		WhiteLabelConfigurationComponent,
+		MatCardModule,
+		PaymentGatewayModule,
+		PaymentGatewayTableModule
+	]
 })
 export class SettingsModule { }

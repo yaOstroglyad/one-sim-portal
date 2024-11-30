@@ -18,6 +18,8 @@
                                   [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
                     <ng-container *ngSwitchCase="FieldType.checkbox" [ngTemplateOutlet]="checkboxTemplate"
                                   [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="FieldType.slide" [ngTemplateOutlet]="slideTemplate"
+                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
                     <ng-container *ngSwitchCase="FieldType.chips" [ngTemplateOutlet]="chipsTemplate"
                                   [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
                 </ng-container>
@@ -124,7 +126,6 @@
             </mat-form-field>
         </ng-template>
 
-
         <ng-template #checkboxTemplate let-field>
             <mat-checkbox [attr.class]="'full-width ' + field.className"
                           [formControlName]="field.name"
@@ -132,6 +133,17 @@
                           [disabled]="field.disabled">
                 {{ field.label }}
             </mat-checkbox>
+        </ng-template>
+
+        <ng-template #slideTemplate let-field>
+            <div  class="display-flex-space-between">
+                <label class="mr-1">{{ field.label }}</label>
+                <div></div>
+                <c-form-check [switch]="true">
+                    <input [formControlName]="field.name"
+                           cFormCheckInput type="checkbox" />
+                </c-form-check>
+            </div>
         </ng-template>
 
         <ng-template #chipsTemplate let-field>

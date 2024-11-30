@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TableConfig, TableConfigAbstractService, TemplateType } from 'src/app/shared';
 import { Resource } from '../../shared/model/resource';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root'
@@ -18,6 +19,7 @@ export class InventoryTableService extends TableConfigAbstractService<Resource> 
 		translatePrefix: 'resource.',
 		showCheckboxes: false,
 		showEditButton: false,
+		showMenu: true,
 		columns: [
 			{visible: true, key: 'iccid', header: 'iccid'},
 			{visible: false, key: 'imei', header: 'imei'},

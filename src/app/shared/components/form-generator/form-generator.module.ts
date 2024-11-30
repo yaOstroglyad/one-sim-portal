@@ -12,6 +12,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChipsInputComponent } from '../chips-input/chips-input.component';
 import { MatIconModule } from '@angular/material/icon';
+import { FormCheckComponent, FormCheckInputDirective } from '@coreui/angular';
 
 
 
@@ -34,7 +35,9 @@ import { MatIconModule } from '@angular/material/icon';
 		MatCheckboxModule,
 		FlexLayoutModule,
 		ChipsInputComponent,
-		MatIconModule
+		MatIconModule,
+		FormCheckComponent,
+		FormCheckInputDirective
 	]
 })
 export class FormGeneratorModule { }

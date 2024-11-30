@@ -17,6 +17,8 @@ import { FormGeneratorModule } from '../../shared/components/form-generator/form
 import { MoveResourceComponent } from './move-resource/move-resource.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 
@@ -42,7 +44,9 @@ import { MatCardModule } from '@angular/material/card';
 		ReactiveFormsModule,
 		FormGeneratorModule,
 		MatTooltipModule,
-		MatCardModule
+		MatCardModule,
+		MatIconModule,
+		MatMenuModule
 	]
 })
 export class InventoryModule { }

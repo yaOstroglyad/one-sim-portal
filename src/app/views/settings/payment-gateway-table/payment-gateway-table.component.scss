@@ -1,0 +1,34 @@
+@import "../../../../scss/custom";
+
+:host ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
+  --mdc-icon-button-state-layer-size: 24px;
+  width: var(--mdc-icon-button-state-layer-size);
+  height: var(--mdc-icon-button-state-layer-size);
+  padding: 0;
+}
+
+:host .table > :not(caption) > * > * {
+  padding: 0.5rem 0.5rem 0 0.5rem;
+}
+
+.hint-icon {
+  mat-icon {
+    font-size: 14px;
+    width: auto;
+    height: auto;
+    margin-right: 5px;
+    margin-left: 10px;
+  }
+}
+
+.primary-badge {
+  background: #0083e1;
+}
+
+.active-badge {
+  background: #55a961;
+}
+
+.disabled-badge {
+  background: #909190;
+}

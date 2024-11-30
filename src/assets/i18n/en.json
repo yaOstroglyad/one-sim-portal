@@ -49,5 +49,13 @@
     "msisdn": "MSISDN",
     "status": "Status",
     "provider": "Name"
+  },
+  "paymentGateway": {
+    "id": "ID",
+    "name": "Name",
+    "isActive": "Is Active",
+    "isPrimary": "Is primary",
+    "paymentStrategy": "Payment Strategy",
+    "createdDate": "Created Date"
   }
 }

@@ -1,4 +1,5 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	Component,
 	EventEmitter,
@@ -21,7 +22,7 @@ import { takeUntil } from 'rxjs/operators';
 	styleUrls: ['./form-generator.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges {
+export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 	private unsubscribe$ = new Subject<void>();
 	@Input() config: FormConfig;
 	@Output() formChanges = new EventEmitter<FormGroup>();
@@ -30,7 +31,7 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges {
 	constructor(private fb: FormBuilder) {
 	}
 
-	ngOnInit(): void {
+	public ngOnInit(): void {
 		this.form = this.createGroup(this.config);
 		this.form.valueChanges.pipe(
 			takeUntil(this.unsubscribe$))
@@ -45,7 +46,11 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges {
 		}
 	}
 
-	ngOnDestroy(): void {
+	public ngAfterViewInit(): void {
+		this.formChanges.emit(this.form);
+	}
+
+	public ngOnDestroy(): void {
 		this.unsubscribe$.next();
 		this.unsubscribe$.complete();
 	}

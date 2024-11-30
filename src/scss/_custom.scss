@@ -110,8 +110,19 @@
   align-items: center;
 }
 
+.d-flex {
+  display: flex;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
 .mr-1 {
   margin-right: 10px;
+}
+.mb-1 {
+  margin-bottom: 10px;
 }
 
 .mat-mdc-snack-bar-container {
@@ -125,4 +136,8 @@
   &.app-notification-success {
     --mdc-snackbar-container-color: #5ecc60;
   }
+}
+
+.mat-mdc-tab-body-wrapper {
+  padding: 15px !important;
 }

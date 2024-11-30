@@ -12,6 +12,7 @@ export enum FieldType {
 	select = 'select',
 	chips = 'chips',
 	checkbox = 'checkbox',
+	slide = 'slide',
 }
 
 export interface BackendFieldConfig {
@@ -19,6 +20,11 @@ export interface BackendFieldConfig {
 	displayName: string,
 	type: FieldType,
 	sensitive: boolean
+}
+
+export interface SelectOption {
+	value: any,
+	displayValue: string;
 }
 
 export interface FieldConfig {
@@ -34,7 +40,7 @@ export interface FieldConfig {
 	inputEvent?: (event: any, formGenerator: any, field: FieldConfig) => any
 
 	//select
-	options?: Observable<Array<{ value: any; displayValue: string }>>;
+	options?: Observable<Array<SelectOption>>;
 	validators?: ValidatorFn | ValidatorFn[];
 	displayOptions?: {
 		newLine?: boolean;
