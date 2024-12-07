@@ -29,7 +29,7 @@ export class RefundProductComponent {
 		private refundProductService: RefundProductService
 	) {
 		this.formConfig = getRefundFormConfig(
-			this.refundProductService.list({iccid: data.iccid})
+			this.refundProductService.list({simId: data.id})
 		);
 	}
 

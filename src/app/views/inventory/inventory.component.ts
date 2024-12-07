@@ -59,7 +59,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 	}
 
 
-	private loadData(params: { page: number; size: number; searchByIccid?: string }): void {
+	private loadData(params: { page: number; size: number; searchIccid?: string }): void {
 		this.inventoryDataService.list(params)
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe(data => {
@@ -76,7 +76,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 		this.loadData({
 			page: 0,
 			size: 10,
-			...(this.filterValue ? {searchByIccid: this.filterValue} : {})
+			...(this.filterValue ? {searchIccid: this.filterValue} : {})
 		});
 	}
 
@@ -84,7 +84,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 		this.loadData({
 			page,
 			size,
-			...(this.filterValue ? {searchByIccid: this.filterValue} : {})
+			...(this.filterValue ? {searchIccid: this.filterValue} : {})
 		});
 	}
 

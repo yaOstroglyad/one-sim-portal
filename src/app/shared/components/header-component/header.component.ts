@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { debounceTime, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { TableConfig } from '../generic-table/table-column-config.interface';
 import { HeaderConfig } from './header-config.interface';
@@ -35,7 +35,9 @@ export class HeaderComponent implements OnInit {
       group[key] = new FormControl(this.config[key].defaultValue || '');
     });
     this.headerForm = new FormGroup(group);
-    this.headerForm.valueChanges.subscribe(val => this.filteredData.emit(val));
+    this.headerForm.valueChanges.pipe(
+      debounceTime(400)
+    ).subscribe(val => this.filteredData.emit(val));
   }
 
   subscribeToTableConfig() {

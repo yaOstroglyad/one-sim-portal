@@ -16,3 +16,14 @@ export interface Package {
   status?: string,
   price?: string,
 }
+
+export interface RefundableProduct {
+  id: string;
+  name: string;
+  price: {
+    price: number;
+    currency: string;
+  };
+  purchasedAt: number;
+  status: "ACTIVE" | "INACTIVE" | "REFUNDED";
+}

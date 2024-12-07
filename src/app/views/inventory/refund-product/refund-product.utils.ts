@@ -1,5 +1,6 @@
-import { FieldType, FormConfig } from '../../../shared/components/form-generator/field-config';
+import { FieldType, FormConfig, SelectOption } from '../../../shared/components/form-generator/field-config';
 import { Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 export function getRefundFormConfig(products: any): FormConfig {
 	return {
@@ -9,7 +10,7 @@ export function getRefundFormConfig(products: any): FormConfig {
 				name: 'product',
 				label: 'Product',
 				placeholder: 'Select product',
-				options: products,
+				options: products as Observable<SelectOption[]>,
 				validators: [Validators.required]
 			}
 		]
