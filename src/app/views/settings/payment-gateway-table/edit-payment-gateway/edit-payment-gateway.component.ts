@@ -70,7 +70,7 @@ export class EditPaymentGatewayComponent implements OnInit {
       const customerData = {
         id: this.data.id,
         name: this.data.name,
-        paymentStrategy: this.data.paymentStrategy,
+        paymentStrategy: this.data?.paymentStrategy ?? this.data.name,
         primary: this.form.get('primary').value,
         paymentMethodParameters: this.form.value
       };
