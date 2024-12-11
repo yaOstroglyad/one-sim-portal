@@ -7,13 +7,15 @@ import {
 	TableFilterFieldType
 } from '../../shared';
 import { CustomersTableService } from './customers-table.service';
-import { Customer } from '../../shared/model/customer';
+import { Customer, CustomerType } from '../../shared/model/customer';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { switchMap, takeUntil, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Order } from '../../shared/model/order';
 import { ReSendInviteEmailComponent } from './re-send-invite-email/re-send-invite-email.component';
+import { ActivatedRoute, Router, Routes } from '@angular/router';
+import { log10 } from 'chart.js/helpers';
 
 @Component({
 	selector: 'app-customers',
@@ -31,6 +33,8 @@ export class CustomersComponent implements OnInit, OnDestroy {
 	constructor(private cdr: ChangeDetectorRef,
 							private tableService: CustomersTableService,
 							private customersDataService: CustomersDataService,
+							private router: Router,
+							private route: ActivatedRoute,
 							private dialog: MatDialog,
 							private snackBar: MatSnackBar
 	) {
@@ -66,21 +70,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
 		dialogRef.afterClosed().subscribe(result => {
 			if (result) {
 				this.customersDataService.create(result).subscribe(() => {
-					this.loadCustomers();
-				});
-			}
-		});
-	}
-
-	editCustomer(customer: Customer): void {
-		const dialogRef = this.dialog.open(EditCustomerComponent, {
-			width: '650px',
-			data: customer
-		});
-
-		dialogRef.afterClosed().subscribe(result => {
-			if (result) {
-				this.customersDataService.update(result.id, result).subscribe(() => {
 					this.loadCustomers();
 				});
 			}
@@ -123,5 +112,9 @@ export class CustomersComponent implements OnInit, OnDestroy {
 				}
 			})
 		).subscribe();
+	}
+
+	openCustomerDetails(customer: Customer): void {
+		this.router.navigate([`home/customers/customer-details/${customer.type}`]);
 	}
 }

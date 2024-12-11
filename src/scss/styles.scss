@@ -3,6 +3,7 @@
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 @import "./variables";
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -15,6 +16,8 @@
 // hue. Available color palettes: https://material.io/design/color/
 $one-sim-portal-primary: mat.define-palette($primary-palette);
 $one-sim-portal-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$primary-font: "Nunito", sans-serif;
+$secondary-font: "Droid Serif", serif;
 
 // The warn palette is optional (defaults to red).
 $one-sim-portal-warn: mat.define-palette(mat.$red-palette);
@@ -56,4 +59,7 @@ $enable-rtl: true;
 @import "custom";
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: $primary-font;
+}

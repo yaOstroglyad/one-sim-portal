@@ -16,7 +16,7 @@ export class CustomersTableService extends TableConfigAbstractService<Customer> 
 		showAddButton: true,
 		showMenu: true,
 		columns: [
-			{visible: true, key: 'id', header: 'id'},
+			{visible: false, key: 'id', header: 'id'},
 			{visible: true, key: 'name', header: 'name' },
 			{visible: true, key: 'type', header: 'type' },
 			{visible: true, key: 'tags', header: 'tags' },

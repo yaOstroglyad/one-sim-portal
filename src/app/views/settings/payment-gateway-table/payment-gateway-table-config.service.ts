@@ -19,7 +19,7 @@ export class PaymentGatewayTableConfigService extends TableConfigAbstractService
 		showAddButton: true,
 		showMenu: true,
 		columns: [
-			{ visible: true, key: 'id', header: 'id' },
+			{ visible: false, key: 'id', header: 'id' },
 			{ visible: true, key: 'name', header: 'name' },
 			{
 				visible: true,

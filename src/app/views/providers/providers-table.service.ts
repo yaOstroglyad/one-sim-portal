@@ -14,7 +14,7 @@ export class ProvidersTableService extends TableConfigAbstractService<Provider> 
 		showCheckboxes: false,
 		showEditButton: false,
 		columns: [
-			{visible: true, key: 'id', header: 'id'},
+			{visible: false, key: 'id', header: 'id'},
 			{visible: true, key: 'name', header: 'name' },
 		]
 	});
