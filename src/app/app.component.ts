@@ -69,6 +69,7 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.whiteLabelService.$viewConfig
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe((config: UserViewConfig) => {
+				console.log('config', config);
 				this.whiteLabelService.updateStoreDate(config);
 				this.whiteLabelService.updateDocumentViewBasedConfig(config);
 

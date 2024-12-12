@@ -2,19 +2,42 @@
 
 :host {
   ng-scrollbar {
-    --scrollbar-thumb-color: var(--cui-border-color, --ion-color-light);
-    --scrollbar-track-color: var(--cui-body-color, --ion-color-medium-contrast);
+    --scrollbar-thumb-color: var(--cui-border-color, --os-color-light);
+    --scrollbar-track-color: var(--cui-body-color, $color-dark-contrast);
     --scrollbar-hover-size: calc(var(--scrollbar-size) * 1.5);
   }
   .p-bg {
-    background: $primary-color-border;
-    box-shadow: 0 0 12px var(--ion-color-medium-shade);
+    background: $white-87-opacity;
+    box-shadow: 0 0 12px $color-medium-shade;
+    border-right: 3px solid $primary-color;
   }
   .sidebar-toggler {
     background-color: $primary-color-border;
   }
   .sidebar-brand {
     background: none;
-    border-bottom: 1px solid #ac7734;
+  }
+
+  ::ng-deep .sidebar-nav {
+    .nav-link {
+      color: $primary-color-contrast;
+
+      &:hover {
+        color: $primary-color-contrast;
+        background: $color-light-shade;
+      }
+
+      &.active {
+        color: $primary-shade;
+
+        .nav-icon {
+          color: $primary-shade;
+        }
+      }
+
+      .nav-icon {
+        color: $primary-color-contrast;
+      }
+    }
   }
 }

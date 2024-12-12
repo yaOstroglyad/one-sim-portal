@@ -4,7 +4,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Raleway, sans-serif;
+  font-family: $primary-font;
 }
 
 .login-container {
@@ -37,7 +37,7 @@
 
 .login__input {
   border: none;
-  border-bottom: 2px solid var(--ion-color-light-shade);
+  border-bottom: 2px solid var(--os-color-light-shade);
   background: none;
   padding: 10px 10px 10px 24px;
   font-weight: 700;
@@ -53,12 +53,12 @@
 }
 
 .login__submit {
-  background: var(--ion-color-medium-contrast);
+  background: $color-dark-contrast;
   font-size: 14px;
   margin-top: 30px;
   padding: 16px 20px;
   border-radius: 26px;
-  border: 1px solid var(--ion-color-light-shade);
+  border: 1px solid var(--os-color-light-shade);
   text-transform: uppercase;
   font-weight: 700;
   display: flex;

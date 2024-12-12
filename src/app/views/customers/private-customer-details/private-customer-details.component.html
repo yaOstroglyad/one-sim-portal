@@ -3,10 +3,11 @@
         <h1>{{ customer.name }}</h1>
     </div>
     <div class="header-actions">
-        <button mat-button>Edit</button>
-        <button mat-button>Send Email</button>
-        <button mat-button color="warn">Delete</button>
-        <button mat-raised-button color="primary">New Transaction</button>
+        <button mat-button>Refund</button>
+        <button mat-button>Show QR code</button>
+        <button mat-button>Unblock</button>
+        <button mat-button color="warn">Block</button>
+<!--        <button mat-raised-button color="primary">New Transaction</button>-->
         <button mat-icon-button>
             <mat-icon>more_vert</mat-icon>
         </button>
@@ -14,7 +15,7 @@
 </div>
 
 <div class="tabs-container">
-    <mat-tab-group class="tabs">
+    <mat-tab-group class="tabs" mat-stretch-tabs="false"  mat-align-tabs="start">
         <mat-tab label="Overview">
             <div class="content">
                 <div class="left-panel">
@@ -76,11 +77,7 @@
                             <mat-card-title>Activity Timeline</mat-card-title>
                         </mat-card-header>
                         <mat-card-content>
-                            <mat-list>
-                                <mat-list-item *ngFor="let activity of customer.activities">
-                                    <p>{{ activity.date | date }}: {{ activity.description }}</p>
-                                </mat-list-item>
-                            </mat-list>
+                            <app-timeline [events]="timelineEvents"></app-timeline>
                         </mat-card-content>
                     </mat-card>
                 </div>

@@ -10,25 +10,27 @@ import { BrandNarrow } from '../model/brandNarrow';
 export const anexConfig: UserViewConfig = {
   primaryColor: '#0072ce',
   language: 'en',
+  height: 47,
   logoName: 'anex.png'
 };
 
 export const defaultConfig: UserViewConfig = {
   primaryColor: '#f9a743',
   language: 'en',
-  logoName: '1esim-logo.png'
+  logoName: '1esim-logo.png',
+  logoNameSmall: '1esim-logo-small.png'
 };
 
 @Injectable({providedIn: 'root'})
 export class WhiteLabelService {
   public defaultBrandFull: BrandFull = {
     src: 'assets/img/brand/1esim-logo.png',
-    height: 47,
+    height: 20,
     alt: 'esim'
   };
   public defaultBrandNarrow: BrandNarrow = {
-    src: 'assets/img/brand/1esim-logo.png',
-    width: 47,
+    src: 'assets/img/brand/1esim-logo-small.png',
+    width: 35,
     alt: 'esim'
   };
 
@@ -54,12 +56,15 @@ export class WhiteLabelService {
 
       //Remove hardcode when white label BE will be done
       if (this.isAnexCustomer(jwtToken)) {
+        console.log('if anex');
         this.$viewConfig.next(anexConfig);
       } else {
+        console.log('if else');
         this.$viewConfig.next({
           primaryColor: jwtToken?.primaryColor || defaultConfig.primaryColor,
           language: jwtToken?.language || defaultConfig.language,
-          logoName: jwtToken?.logoName || defaultConfig.logoName
+          logoName: jwtToken?.logoName || defaultConfig.logoName,
+          logoNameSmall: jwtToken?.logoNameSmall || defaultConfig.logoNameSmall,
         });
       }
     }
@@ -68,9 +73,12 @@ export class WhiteLabelService {
   public updateStoreDate(config: UserViewConfig): void {
     this.$LocalStorageService.store('primaryColor', config.primaryColor);
     this.$LocalStorageService.store('logoName', config.logoName);
+    this.$LocalStorageService.store('height', config?.height || null);
+    this.$LocalStorageService.store('logoNameSmall', config?.logoNameSmall || null);
   }
 
   public updateDocumentViewBasedConfig(config: UserViewConfig): void {
+    console.log('updateDocumentViewBasedConfigconfig', config);
     const rgbConfig = hexRgb(config.primaryColor);
     const [hue, saturation, lightness] = rgbToHsl(rgbConfig.red, rgbConfig.green, rgbConfig.blue);
 
@@ -83,6 +91,7 @@ export class WhiteLabelService {
 
   public updateBrandFull(): BrandFull {
     const logoName = this.$LocalStorageService.retrieve('logoName');
+    this.defaultBrandFull.height = this.$LocalStorageService.retrieve('height') || this.defaultBrandFull.height;
     this.defaultBrandFull.src = `assets/img/brand/` + logoName;
     this.defaultBrandFull.alt = logoName;
     return this.defaultBrandFull;
@@ -90,16 +99,25 @@ export class WhiteLabelService {
 
   public updateBrandNarrow(): BrandNarrow {
     const logoName = this.$LocalStorageService.retrieve('logoName');
-    this.defaultBrandNarrow.src = `assets/img/brand/` + logoName;
-    this.defaultBrandNarrow.alt = logoName;
+    const logoNameSmall = this.$LocalStorageService.retrieve('logoNameSmall');
+
+    const selectedLogo = logoNameSmall || logoName;
+
+    if (selectedLogo) {
+      this.defaultBrandNarrow.src = `assets/img/brand/${selectedLogo}`;
+      this.defaultBrandNarrow.alt = selectedLogo;
+    } else {
+      console.warn('No logoName or logoNameSmall found in LocalStorage');
+    }
+
     return this.defaultBrandNarrow;
   }
 
   private isAnexCustomer(data: any): boolean {
-    if (data && data.email) {
-      const email: string = data.email;
-      return email === 'anex@mail.com'
-    }
-    return false;
+    // if (data && data.email) {
+    //   const email: string = data.email;
+    //   return email === 'anex@mail.com' || email === 'sergey.tepkeev@anextour.com'
+    // }
+    return true;
   }
 }

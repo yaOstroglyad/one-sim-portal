@@ -6,12 +6,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
+import { TimelineComponent, TimelineEvent } from '../../../shared';
 
 @Component({
   selector: 'app-private-customer-details',
   templateUrl: './private-customer-details.component.html',
   styleUrls: ['./private-customer-details.component.scss'],
-  imports: [CommonModule, MatToolbarModule, MatButtonModule, MatIconModule, MatCardModule, MatListModule, MatTabsModule],
+  imports: [CommonModule, MatToolbarModule, MatButtonModule, MatIconModule, MatCardModule, MatListModule, MatTabsModule, TimelineComponent],
   standalone: true
 })
 export class PrivateCustomerDetailsComponent {
@@ -32,4 +33,40 @@ export class PrivateCustomerDetailsComponent {
       { date: '2017-05-12T01:35:00', description: 'Payment received: $11,760 applied to invoice.' }
     ]
   };
+
+  timelineEvents: TimelineEvent[] = [
+    {
+      date: new Date('2017-05-30T07:53:00'),
+      description: 'Invoice added: Expense of amount $123 billed as invoice INV-000230 by Patricia Boyle.',
+      detailsLink: 'https://example.com/invoice-details'
+    },
+    {
+      date: new Date('2017-05-12T01:35:00'),
+      description: 'Payment received: $11,760 received and applied for INV-000186 by Patricia Boyle.'
+    },
+    {
+      date: new Date('2017-05-10T11:15:00'),
+      description: 'Invoice updated: Invoice details were changed.'
+    },
+    {
+      date: new Date('2017-05-10T11:15:00'),
+      description: 'Invoice updated: Invoice details were changed.'
+    },
+    {
+      date: new Date('2017-05-10T11:15:00'),
+      description: 'Invoice updated: Invoice details were changed.'
+    },
+    {
+      date: new Date('2017-05-10T11:15:00'),
+      description: 'Invoice updated: Invoice details were changed.'
+    },
+    {
+      date: new Date('2017-05-10T11:15:00'),
+      description: 'Invoice updated: Invoice details were changed.'
+    },
+    {
+      date: new Date('2017-05-10T11:15:00'),
+      description: 'Invoice updated: Invoice details were changed.'
+    }
+  ];
 }

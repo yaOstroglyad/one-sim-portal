@@ -1,128 +1,142 @@
 :root {
   /* everything described below is just default settings,
   the main color comes from the white-label.service.ts  */
-  /* Initiation of primary color  */
-  --sc-color-primary: #f9a743;
 
-  /* primary color in format HSL */
-  --sc-color-primary-h: 32; /* hue */
-  --sc-color-primary-s: 93%; /* saturation */
-  --sc-color-primary-l: 61%; /* lightness */
-
-  /* create variables based on HSL */
-  --sc-color-primary-tint: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 70%);
-  --sc-color-primary-shade: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 52%);
-  --sc-color-primary-border: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 61%);
-
-  /* variables with opacity */
-  --sc-color-primary-opacity: hsla(var(--sc-color-primary-h), var(--sc-color-primary-s), var(--sc-color-primary-l), 0.5);
-  --sc-color-primary-opacity-03: hsla(var(--sc-color-primary-h), var(--sc-color-primary-s), var(--sc-color-primary-l), 0.3);
-  --sc-color-primary-opacity-04: hsla(var(--sc-color-primary-h), var(--sc-color-primary-s), var(--sc-color-primary-l), 0.4);
-  --sc-color-primary-opacity-05: hsla(var(--sc-color-primary-h), var(--sc-color-primary-s), var(--sc-color-primary-l), 0.5);
 
   /** primary **/
-  --ion-color-primary: var(--sc-color-primary);
-  --ion-color-primary-rgb: 249, 67, 143;
-  --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: var(--sc-color-primary-shade);
-  --ion-color-primary-tint: var(--sc-color-primary-tint);
+  --os-color-primary: #f9a743;
+  --os-color-primary-rgb: 249, 67, 143;
+  --os-color-primary-contrast: #3a3a3a;
+  --os-color-primary-contrast-rgb: 255, 255, 255;
+
+  /* primary color in format HSL */
+  --os-color-primary-h: 32; /* hue */
+  --os-color-primary-s: 93%; /* saturation */
+  --os-color-primary-l: 61%; /* lightness */
+
+  /* create variables based on HSL */
+  --os-color-primary-tint: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 70%);
+  --os-color-primary-shade: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 52%);
+  --os-color-primary-border: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 61%);
+
+  /* variables with opacity */
+  --os-color-primary-opacity: hsla(var(--os-color-primary-h), var(--os-color-primary-s), var(--os-color-primary-l), 0.5);
+  --os-color-primary-opacity-03: hsla(var(--os-color-primary-h), var(--os-color-primary-s), var(--os-color-primary-l), 0.3);
+  --os-color-primary-opacity-04: hsla(var(--os-color-primary-h), var(--os-color-primary-s), var(--os-color-primary-l), 0.4);
+  --os-color-primary-opacity-05: hsla(var(--os-color-primary-h), var(--os-color-primary-s), var(--os-color-primary-l), 0.5);
 
   /** secondary **/
-  --ion-color-secondary: #3dc2ff;
-  --ion-color-secondary-rgb: 61, 194, 255;
-  --ion-color-secondary-contrast: #ffffff;
-  --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #36abe0;
-  --ion-color-secondary-tint: #50c8ff;
+  --os-color-secondary: #3dc2ff;
+  --os-color-secondary-rgb: 61, 194, 255;
+  --os-color-secondary-contrast: #ffffff;
+  --os-color-secondary-contrast-rgb: 255, 255, 255;
+  --os-color-secondary-shade: #36abe0;
+  --os-color-secondary-tint: #50c8ff;
 
   /** tertiary **/
-  --ion-color-tertiary: var(--sc-color-primary);
-  --ion-color-tertiary-rgb: 249, 67, 143;
-  --ion-color-tertiary-contrast: #ffffff;
-  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-  --ion-color-tertiary-shade: var(--sc-color-primary-shade);
-  --ion-color-tertiary-tint: var(--sc-color-primary-tint);
+  --os-color-tertiary: var(--os-color-primary);
+  --os-color-tertiary-rgb: 249, 67, 143;
+  --os-color-tertiary-contrast: #ffffff;
+  --os-color-tertiary-contrast-rgb: 255, 255, 255;
+  --os-color-tertiary-shade: var(--os-color-primary-shade);
+  --os-color-tertiary-tint: var(--os-color-primary-tint);
 
   /** success **/
-  --ion-color-success: #2dd36f;
-  --ion-color-success-rgb: 45, 211, 111;
-  --ion-color-success-contrast: #ffffff;
-  --ion-color-success-contrast-rgb: 255, 255, 255;
-  --ion-color-success-shade: #28ba62;
-  --ion-color-success-tint: #42d77d;
+  --os-color-success: #2dd36f;
+  --os-color-success-rgb: 45, 211, 111;
+  --os-color-success-contrast: #ffffff;
+  --os-color-success-contrast-rgb: 255, 255, 255;
+  --os-color-success-shade: #28ba62;
+  --os-color-success-tint: #42d77d;
 
   /** warning **/
-  --ion-color-warning: #ffc409;
-  --ion-color-warning-rgb: 255, 196, 9;
-  --ion-color-warning-contrast: #000000;
-  --ion-color-warning-contrast-rgb: 0, 0, 0;
-  --ion-color-warning-shade: #e0ac08;
-  --ion-color-warning-tint: #ffca22;
+  --os-color-warning: #ffc409;
+  --os-color-warning-rgb: 255, 196, 9;
+  --os-color-warning-contrast: #000000;
+  --os-color-warning-contrast-rgb: 0, 0, 0;
+  --os-color-warning-shade: #e0ac08;
+  --os-color-warning-tint: #ffca22;
 
   /** danger **/
-  --ion-color-danger: #eb445a;
-  --ion-color-danger-rgb: 235, 68, 90;
-  --ion-color-danger-contrast: #ffffff;
-  --ion-color-danger-contrast-rgb: 255, 255, 255;
-  --ion-color-danger-shade: #cf3c4f;
-  --ion-color-danger-tint: #ed576b;
+  --os-color-danger: #eb445a;
+  --os-color-danger-rgb: 235, 68, 90;
+  --os-color-danger-contrast: #ffffff;
+  --os-color-danger-contrast-rgb: 255, 255, 255;
+  --os-color-danger-shade: #cf3c4f;
+  --os-color-danger-tint: #ed576b;
 
   /** dark **/
-  --ion-color-dark: #222428;
-  --ion-color-dark-rgb: 34, 36, 40;
-  --ion-color-dark-contrast: #ffffff;
-  --ion-color-dark-contrast-rgb: 255, 255, 255;
-  --ion-color-dark-shade: #1e2023;
-  --ion-color-dark-tint: #383a3e;
+  --os-color-dark: #222428;
+  --os-color-dark-rgb: 34, 36, 40;
+  --os-color-dark-contrast: #ffffff;
+  --os-color-dark-contrast-rgb: 255, 255, 255;
+  --os-color-dark-shade: #1e2023;
+  --os-color-dark-tint: #383a3e;
 
   /** medium **/
-  --ion-color-medium: #92949c;
-  --ion-color-medium-rgb: 146, 148, 156;
-  --ion-color-medium-contrast: #ffffff;
-  --ion-color-medium-contrast-rgb: 255, 255, 255;
-  --ion-color-medium-shade: #808289;
-  --ion-color-medium-tint: #9d9fa6;
+  --os-color-medium: #92949c;
+  --os-color-medium-rgb: 146, 148, 156;
+  --os-color-medium-contrast: #ffffff;
+  --os-color-medium-contrast-rgb: 255, 255, 255;
+  --os-color-medium-shade: #808289;
+  --os-color-medium-tint: #9d9fa6;
 
   /** light **/
-  --ion-color-light: #f4f5f8;
-  --ion-color-light-rgb: 244, 245, 248;
-  --ion-color-light-contrast: #000000;
-  --ion-color-light-contrast-rgb: 0, 0, 0;
-  --ion-color-light-shade: #d7d8da;
-  --ion-color-light-tint: #f5f6f9;
+  --os-color-light: #f4f5f8;
+  --os-color-light-rgb: 244, 245, 248;
+  --os-color-light-contrast: #000000;
+  --os-color-light-contrast-rgb: 0, 0, 0;
+  --os-color-light-shade: #d7d8da;
+  --os-color-light-tint: #f5f6f9;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+$primary-font: "Nunito", sans-serif;
+$secondary-font: "Droid Serif", serif;
 
 $enable-shadows: true;
 
 /** variables **/
-$primary-color: #{var(--sc-color-primary)};
-$primary-color-shade: #{var(--sc-color-primary-shade)};
-$primary-color-border: #{var(--sc-color-primary-border)};
-$primary-with-opacity: #{var(--sc-color-primary-opacity)};
-$primary-with-opacity-03: #{var(--sc-color-primary-opacity-03)};
-$primary-with-opacity-04: #{var(--sc-color-primary-opacity-04)};
-$primary-with-opacity-05: #{var(--sc-color-primary-opacity-05)};
-$primary-tint: #{var(--sc-color-primary-tint)};
-$primary-shade: #{var(--sc-color-primary-shade)};
+$primary-color: #{var(--os-color-primary)};
+$primary-color-contrast: #{var(--os-color-primary-contrast)};
+$primary-color-shade: #{var(--os-color-primary-shade)};
+$primary-color-border: #{var(--os-color-primary-border)};
+$primary-with-opacity: #{var(--os-color-primary-opacity)};
+$primary-with-opacity-03: #{var(--os-color-primary-opacity-03)};
+$primary-with-opacity-04: #{var(--os-color-primary-opacity-04)};
+$primary-with-opacity-05: #{var(--os-color-primary-opacity-05)};
+$primary-tint: #{var(--os-color-primary-tint)};
+$primary-shade: #{var(--os-color-primary-shade)};
+/**danger var**/
+$color-danger: #{var(--os-color-danger)};
+/**success var**/
+$color-success: #{var(--os-color-success)};
+/**medium var**/
+$color-medium: #{var(--os-color-medium)};
+$color-medium-shade: #{var(--os-color-medium-shade)};
+$color-medium-tint: #{var(--os-color-medium-tint)};
+/**light var**/
+$color-light-shade: #{var(--os-color-light-shade)};
+/**dark var**/
+$color-dark-contrast: #{var(--os-color-dark-contrast)};
 $black-87-opacity: rgba(0, 0, 0, 0.87);
 $white-87-opacity: rgba(255, 255, 255, 0.87);
 
 $primary-palette: (
-        50: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 95%),
-        100: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 90%),
-        200: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 80%),
-        300: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 70%),
-        400: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 65%),
-        500: var(--sc-color-primary),
-        600: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 52%),
-        700: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 45%),
-        800: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 39%),
-        900: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 33%),
-        A100: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 95%),
-        A200: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 90%),
-        A400: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 65%),
-        A700: hsl(var(--sc-color-primary-h), var(--sc-color-primary-s), 45%),
+        50: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 95%),
+        100: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 90%),
+        200: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 80%),
+        300: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 70%),
+        400: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 65%),
+        500: var(--os-color-primary),
+        600: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 52%),
+        700: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 45%),
+        800: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 39%),
+        900: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 33%),
+        A100: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 95%),
+        A200: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 90%),
+        A400: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 65%),
+        A700: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 45%),
         contrast: (
                 50: rgba(0, 0, 0, 0.87),
                 100: rgba(0, 0, 0, 0.87),

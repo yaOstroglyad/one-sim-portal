@@ -7,15 +7,14 @@ import {
 	TableFilterFieldType
 } from '../../shared';
 import { CustomersTableService } from './customers-table.service';
-import { Customer, CustomerType } from '../../shared/model/customer';
+import { Customer } from '../../shared/model/customer';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { switchMap, takeUntil, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Order } from '../../shared/model/order';
 import { ReSendInviteEmailComponent } from './re-send-invite-email/re-send-invite-email.component';
-import { ActivatedRoute, Router, Routes } from '@angular/router';
-import { log10 } from 'chart.js/helpers';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-customers',
@@ -34,7 +33,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
 							private tableService: CustomersTableService,
 							private customersDataService: CustomersDataService,
 							private router: Router,
-							private route: ActivatedRoute,
 							private dialog: MatDialog,
 							private snackBar: MatSnackBar
 	) {

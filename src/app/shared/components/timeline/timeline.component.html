@@ -1,0 +1,10 @@
+<div class="timeline">
+    <div class="timeline-item" *ngFor="let event of events">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+            <p class="timeline-date">{{ event.date | date: 'dd MMM yyyy, hh:mm a' }}</p>
+            <p class="timeline-description">{{ event.description }}</p>
+            <a *ngIf="event.detailsLink" [href]="event.detailsLink" class="timeline-link">View Details</a>
+        </div>
+    </div>
+</div>

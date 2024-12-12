@@ -47,7 +47,7 @@
 .screen__background__shape1 {
   height: 520px;
   width: 520px;
-  background: var(--ion-color-medium-contrast);
+  background: $color-dark-contrast;
   top: -50px;
   right: 120px;
   border-radius: 0 72px 0 0;
@@ -96,7 +96,7 @@
   display: flex;
   align-items: center;
   font-size: 12px;
-  color: #666;
+  color: $color-medium-shade;
   .hint-icon {
     font-size: 16px;
     margin-right: 4px;
@@ -125,14 +125,14 @@
 }
 
 .mat-mdc-snack-bar-container {
-  --mat-mdc-snack-bar-button-color: #ffffff;
-  --mdc-snackbar-supporting-text-color: #ffffff;
+  --mat-mdc-snack-bar-button-color: $color-dark-contrast;
+  --mdc-snackbar-supporting-text-color: $color-dark-contrast;
 
   &.app-notification-error {
-    --mdc-snackbar-container-color: #d2443a;
+    --mdc-snackbar-container-color: $color-danger;
   }
 
   &.app-notification-success {
-    --mdc-snackbar-container-color: #5ecc60;
+    --mdc-snackbar-container-color: $color-success;
   }
 }

@@ -27,6 +27,8 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
   ) {
     this.brandFull = this.whiteLabelService.defaultBrandFull;
     this.brandNarrow = this.whiteLabelService.defaultBrandNarrow;
+    console.log('this.brandFull', this.brandFull);
+    console.log('this.brandNarrow', this.brandNarrow);
   }
 
   ngOnDestroy(): void {

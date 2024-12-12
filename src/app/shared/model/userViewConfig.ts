@@ -11,5 +11,13 @@ export interface UserViewConfig {
      * User's default logoName
      */
     logoName: string;
+    /**
+     * User's default logoNameSmall
+     */
+    logoNameSmall?: string;
+    /**
+     * User's logo height
+     */
+    height?: number;
 }
 
