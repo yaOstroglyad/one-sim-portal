@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this.initializeApp();
 		this.setupRouterEvents();
-		this.subscribeToViewConfigChanges();
+		// this.subscribeToViewConfigChanges();
 		this.subscribeToLanguageChanges();
 	}
 
@@ -66,16 +66,16 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	private subscribeToViewConfigChanges(): void {
-		this.whiteLabelService.$viewConfig
-			.pipe(takeUntil(this.unsubscribe$))
-			.subscribe((config: UserViewConfig) => {
-				console.log('config', config);
-				this.whiteLabelService.updateStoreDate(config);
-				this.whiteLabelService.updateDocumentViewBasedConfig(config);
-
-				const language = this.$localStorage.retrieve('language') || config.language;
-				this.setLanguage(language);
-			});
+		// this.whiteLabelService.$viewConfig
+		// 	.pipe(takeUntil(this.unsubscribe$))
+		// 	.subscribe((config: UserViewConfig) => {
+		// 		console.log('config', config);
+		// 		this.whiteLabelService.updateStoreDate(config);
+		// 		this.whiteLabelService.updateDocumentViewBasedConfig(config);
+		//
+		// 		const language = this.$localStorage.retrieve('language') || config.language;
+		// 		this.setLanguage(language);
+		// 	});
 	}
 
 	private subscribeToLanguageChanges(): void {

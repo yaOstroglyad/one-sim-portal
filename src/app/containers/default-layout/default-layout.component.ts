@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { menuItemToPermission, navItems } from './_nav';
 import { TranslateService } from '@ngx-translate/core';
 import { INavData } from '@coreui/angular';
@@ -23,13 +23,9 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
   constructor(
     private translateService: TranslateService,
     private $sessionStorage: SessionStorageService,
-    private whiteLabelService: WhiteLabelService
-  ) {
-    this.brandFull = this.whiteLabelService.defaultBrandFull;
-    this.brandNarrow = this.whiteLabelService.defaultBrandNarrow;
-    console.log('this.brandFull', this.brandFull);
-    console.log('this.brandNarrow', this.brandNarrow);
-  }
+    private whiteLabelService: WhiteLabelService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -38,8 +34,12 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.filterAndTranslateNavItems();
-    this.brandFull = this.whiteLabelService.updateBrandFull();
-    this.brandNarrow = this.whiteLabelService.updateBrandNarrow();
+    this.whiteLabelService.$viewConfig.subscribe(config => {
+      this.brandFull = this.whiteLabelService.updateBrandFull();
+      this.brandNarrow = this.whiteLabelService.updateBrandNarrow();
+      this.whiteLabelService.updateDocumentViewBasedConfig(config);
+      this.cdr.detectChanges();
+    });
   }
 
   private isAdmin(): boolean {

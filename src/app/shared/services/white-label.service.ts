@@ -21,103 +21,106 @@ export const defaultConfig: UserViewConfig = {
   logoNameSmall: '1esim-logo-small.png'
 };
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class WhiteLabelService {
-  public defaultBrandFull: BrandFull = {
+  public currentBrandFull: BrandFull = {
     src: 'assets/img/brand/1esim-logo.png',
     height: 20,
-    alt: 'esim'
+    alt: 'onesim'
   };
-  public defaultBrandNarrow: BrandNarrow = {
+
+  public currentBrandNarrow: BrandNarrow = {
     src: 'assets/img/brand/1esim-logo-small.png',
     width: 35,
-    alt: 'esim'
+    alt: 'onesim'
   };
 
   public $viewConfig: BehaviorSubject<UserViewConfig> = new BehaviorSubject<UserViewConfig>(defaultConfig);
 
-  constructor(private jwtHelper: JwtHelperService,
-              private $SessionStorageService: SessionStorageService,
-              private $LocalStorageService: LocalStorageService) {}
-
+  constructor(
+    private jwtHelper: JwtHelperService,
+    private $SessionStorageService: SessionStorageService,
+    private $LocalStorageService: LocalStorageService
+  ) {}
 
   public initViewBasedOnCurrentUser(): void {
-    let token = this.$LocalStorageService.retrieve('authenticationToken');
-    if (!token) {
-      token = this.$SessionStorageService.retrieve('authenticationToken');
-    }
+    let token = this.$LocalStorageService.retrieve('authenticationToken') ||
+      this.$SessionStorageService.retrieve('authenticationToken');
 
-    this.updateViewConfig(token);
+    const savedConfig = this.loadConfigFromStorage();
+    if (savedConfig) {
+      this.$viewConfig.next(savedConfig);
+    } else {
+      this.updateViewConfig(token);
+    }
   }
 
-  public updateViewConfig(token: any): void {
+  public updateViewConfig(token: string): void {
     if (this.jwtHelper.isToken(token)) {
       const jwtToken = this.jwtHelper.decodeToken(token);
-
-      //Remove hardcode when white label BE will be done
-      if (this.isAnexCustomer(jwtToken)) {
-        console.log('if anex');
-        this.$viewConfig.next(anexConfig);
-      } else {
-        console.log('if else');
-        this.$viewConfig.next({
+      const newConfig: UserViewConfig = this.isAnexCustomer(jwtToken)
+        ? anexConfig
+        : {
           primaryColor: jwtToken?.primaryColor || defaultConfig.primaryColor,
           language: jwtToken?.language || defaultConfig.language,
           logoName: jwtToken?.logoName || defaultConfig.logoName,
           logoNameSmall: jwtToken?.logoNameSmall || defaultConfig.logoNameSmall,
-        });
-      }
+          height: jwtToken?.height || defaultConfig.height
+        };
+
+      this.$viewConfig.next(newConfig);
+      this.saveConfigToStorage(newConfig);
     }
   }
 
-  public updateStoreDate(config: UserViewConfig): void {
-    this.$LocalStorageService.store('primaryColor', config.primaryColor);
-    this.$LocalStorageService.store('logoName', config.logoName);
-    this.$LocalStorageService.store('height', config?.height || null);
-    this.$LocalStorageService.store('logoNameSmall', config?.logoNameSmall || null);
+  private saveConfigToStorage(config: UserViewConfig): void {
+    this.$LocalStorageService.store('viewConfig', JSON.stringify(config));
+  }
+
+  private loadConfigFromStorage(): UserViewConfig | null {
+    const config = this.$LocalStorageService.retrieve('viewConfig');
+    return config ? JSON.parse(config) : null;
   }
 
   public updateDocumentViewBasedConfig(config: UserViewConfig): void {
-    console.log('updateDocumentViewBasedConfigconfig', config);
     const rgbConfig = hexRgb(config.primaryColor);
     const [hue, saturation, lightness] = rgbToHsl(rgbConfig.red, rgbConfig.green, rgbConfig.blue);
 
-    document.documentElement.style.setProperty('--sc-color-primary', config.primaryColor);
-    document.documentElement.style.setProperty('--sc-color-primary-rgb', `${rgbConfig.red}, ${rgbConfig.green}, ${rgbConfig.blue}`);
-    document.documentElement.style.setProperty('--sc-color-primary-h', `${hue}`);
-    document.documentElement.style.setProperty('--sc-color-primary-s', `${saturation}%`);
-    document.documentElement.style.setProperty('--sc-color-primary-l', `${lightness}%`);
+    document.documentElement.style.setProperty('--os-color-primary', config.primaryColor);
+    document.documentElement.style.setProperty('--os-color-primary-rgb', `${rgbConfig.red}, ${rgbConfig.green}, ${rgbConfig.blue}`);
+    document.documentElement.style.setProperty('--os-color-primary-h', `${hue}`);
+    document.documentElement.style.setProperty('--os-color-primary-s', `${saturation}%`);
+    document.documentElement.style.setProperty('--os-color-primary-l', `${lightness}%`);
   }
 
   public updateBrandFull(): BrandFull {
-    const logoName = this.$LocalStorageService.retrieve('logoName');
-    this.defaultBrandFull.height = this.$LocalStorageService.retrieve('height') || this.defaultBrandFull.height;
-    this.defaultBrandFull.src = `assets/img/brand/` + logoName;
-    this.defaultBrandFull.alt = logoName;
-    return this.defaultBrandFull;
+    const config = this.loadConfigFromStorage() || defaultConfig;
+    this.currentBrandFull.height = config.height || this.currentBrandFull.height;
+    this.currentBrandFull.src = `assets/img/brand/${config.logoName}`;
+    this.currentBrandFull.alt = config.logoName;
+    return this.currentBrandFull;
   }
 
   public updateBrandNarrow(): BrandNarrow {
-    const logoName = this.$LocalStorageService.retrieve('logoName');
-    const logoNameSmall = this.$LocalStorageService.retrieve('logoNameSmall');
-
-    const selectedLogo = logoNameSmall || logoName;
+    const config = this.loadConfigFromStorage() || defaultConfig;
+    const selectedLogo = config.logoNameSmall || config.logoName;
 
     if (selectedLogo) {
-      this.defaultBrandNarrow.src = `assets/img/brand/${selectedLogo}`;
-      this.defaultBrandNarrow.alt = selectedLogo;
+      this.currentBrandNarrow.src = `assets/img/brand/${selectedLogo}`;
+      this.currentBrandNarrow.alt = selectedLogo;
     } else {
-      console.warn('No logoName or logoNameSmall found in LocalStorage');
+      console.warn('No logoName or logoNameSmall found in storage');
     }
 
-    return this.defaultBrandNarrow;
+    return this.currentBrandNarrow;
   }
 
   private isAnexCustomer(data: any): boolean {
-    // if (data && data.email) {
-    //   const email: string = data.email;
-    //   return email === 'anex@mail.com' || email === 'sergey.tepkeev@anextour.com'
-    // }
-    return true;
+    if (data && data.email) {
+      const email: string = data.email;
+      return email === 'anex@mail.com' || email === 'sergey.tepkeev@anextour.com'
+    }
+    return false;
   }
 }
+
