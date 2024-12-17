@@ -5,3 +5,7 @@ export * from './refreshTokenRequest';
 export * from './subscriberInfo';
 export * from './subscriberUsage';
 export * from './usageInfo';
+export * from './subscriberStatusEvent';
+export * from './purchaseHistory';
+export * from './sim';
+export * from './customer';

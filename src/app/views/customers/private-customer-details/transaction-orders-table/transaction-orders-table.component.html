@@ -1,0 +1,72 @@
+<div *ngIf="transactionsView$ | async as transactions; else loading"
+     class="trans-wrapper">
+    <table mat-table [dataSource]="transactions" class="mat-elevation-z0">
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef> Type</th>
+            <td mat-cell *matCellDef="let element"> {{ element.type }}</td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Status</th>
+            <td mat-cell *matCellDef="let element"> {{ element.status }}</td>
+        </ng-container>
+
+        <!-- Product -->
+        <ng-container matColumnDef="productName">
+            <th mat-header-cell *matHeaderCellDef> Product name</th>
+            <td mat-cell *matCellDef="let element"> {{ element.data.productName }}</td>
+        </ng-container>
+
+        <!-- Product Price -->
+        <ng-container matColumnDef="productPrice">
+            <th mat-header-cell *matHeaderCellDef> Product price</th>
+            <td mat-cell *matCellDef="let element"> {{ element.data.cost + " " + element.data.currency }}</td>
+        </ng-container>
+
+        <!-- Created At Column -->
+        <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef> Created At</th>
+            <td mat-cell *matCellDef="let element"> {{ element.createdAt | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <!-- Created By Column -->
+        <ng-container matColumnDef="createdBy">
+            <th mat-header-cell *matHeaderCellDef> Created By</th>
+            <td mat-cell *matCellDef="let element"> {{ element.createdBy }}</td>
+        </ng-container>
+
+        <!-- Updated At Column -->
+        <ng-container matColumnDef="updatedAt">
+            <th mat-header-cell *matHeaderCellDef> Updated At</th>
+            <td mat-cell *matCellDef="let element"> {{ element.updatedAt | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <!-- Updated By Column -->
+        <ng-container matColumnDef="updatedBy">
+            <th mat-header-cell *matHeaderCellDef> Updated By</th>
+            <td mat-cell *matCellDef="let element"> {{ element.updatedBy }}</td>
+        </ng-container>
+
+        <!-- External Transaction ID Column -->
+        <ng-container matColumnDef="externalTransactionId">
+            <th mat-header-cell *matHeaderCellDef> External ID</th>
+            <td mat-cell *matCellDef="let element"> {{ element.externalTransactionId }}</td>
+        </ng-container>
+
+        <!-- Trigger Type Column -->
+        <ng-container matColumnDef="triggerType">
+            <th mat-header-cell *matHeaderCellDef> Trigger Type</th>
+            <td mat-cell *matCellDef="let element"> {{ element.triggerType }}</td>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+
+<ng-template #loading>
+    <p>Loading transaction orders...</p>
+</ng-template>

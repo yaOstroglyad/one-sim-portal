@@ -1,6 +1,5 @@
-<!--sidebar-->
 <c-sidebar #sidebar="cSidebar"
-           class="d-print-none sidebar sidebar-fixed p-bg"
+           class="d-print-none sidebar sidebar-fixed sidebar-bg"
            id="sidebar"
            visible>
     <c-sidebar-brand [brandFull]="brandFull"
@@ -17,8 +16,10 @@
 </c-sidebar>
 
 <div class="wrapper d-flex flex-column min-vh-100 bg-light dark:bg-transparent">
-    <app-default-header class="mb-3 d-print-none header header-sticky" position="sticky" sidebarId="sidebar"/>
-    <div class="body flex-grow-1 px-3">
+    <app-default-header class="d-print-none header header-sticky bg-light border-0"
+                        position="sticky"
+                        sidebarId="sidebar"/>
+    <div class="body flex-grow-1">
         <c-container [breakpoint]="'xs'" class="h-auto">
             <router-outlet/>
         </c-container>

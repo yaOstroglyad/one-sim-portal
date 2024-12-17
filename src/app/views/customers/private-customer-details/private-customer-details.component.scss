@@ -27,17 +27,3 @@
 .tabs-container {
   margin-top: 16px;
 }
-
-.content {
-  display: flex;
-  gap: 20px;
-
-  .left-panel {
-    flex: 1;
-    max-width: 300px;
-  }
-
-  .right-panel {
-    flex: 2;
-  }
-}

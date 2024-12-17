@@ -1,4 +1,5 @@
-<app-header [config]="headerConfig"
+<app-header class="os-header-sticky"
+            [config]="headerConfig"
             [tableConfig$]="tableConfig$"
             (onAddAction)="createCustomer()"
             (columnSelectionChange)="onColumnSelectionChanged($event)"

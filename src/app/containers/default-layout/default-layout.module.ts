@@ -23,6 +23,7 @@ import {
 import { IconModule } from '@coreui/icons-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 		BadgeModule,
 		ListGroupModule,
 		CardModule,
-		NgScrollbarModule
+		NgScrollbarModule,
+		BreadcrumbComponent
 	]
 })
 export class DefaultLayoutModule {}

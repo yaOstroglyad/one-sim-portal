@@ -18,12 +18,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReSendInviteEmailComponent } from './re-send-invite-email/re-send-invite-email.component';
 
 
-
 @NgModule({
   declarations: [
     CustomersComponent,
 		EditCustomerComponent,
-		ReSendInviteEmailComponent,
+		ReSendInviteEmailComponent
   ],
 	imports: [
 		CommonModule,

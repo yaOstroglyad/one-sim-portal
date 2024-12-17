@@ -1,0 +1,12 @@
+<div *ngIf="bundlesView$ | async as usages" class="content-b">
+    <div #scrollContainer class="scroll-container">
+        <div *ngFor="let usage of usages" class="bundle-item">
+            <app-chart [chartData]="usage"></app-chart>
+        </div>
+    </div>
+
+    <div class="navigation-buttons" *ngIf="usages.length > 2">
+        <button class="nav-button" (click)="scrollLeft()">&#10094;</button>
+        <button class="nav-button" (click)="scrollRight()">&#10095;</button>
+    </div>
+</div>

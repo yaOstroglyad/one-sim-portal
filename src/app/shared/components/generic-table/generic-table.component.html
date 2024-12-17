@@ -1,5 +1,6 @@
 <ng-container *ngIf="config$ | async as config">
-    <c-card *ngIf="(data$ | async)?.length; else noData">
+    <c-card *ngIf="(data$ | async)?.length; else noData"
+            class="mx-3">
         <table cTable [responsive]="true">
             <thead>
             <tr>

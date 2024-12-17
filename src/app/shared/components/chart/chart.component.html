@@ -1,0 +1,15 @@
+<div class="chart cursor-pointer">
+  <div class="label">
+    <b class="current-usage">{{
+        'left ' + chartData.remaining +' '+ chartData.unitType + ' of'
+      }}</b><br/>
+    <div class="total-amount">{{
+        'usage ' + this.chartData.total + ' ' +this.chartData.unitType
+        }}
+    </div>
+    <div class="expired-date" *ngIf="expiredAt">
+      {{ 'data-chart.expired-date' | translate: {date: expiredAt | date: 'dd/MM/yyyy'} }}
+    </div>
+  </div>
+  <canvas #doughnutChartCanvas width="100" height="100"></canvas>
+</div>

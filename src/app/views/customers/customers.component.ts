@@ -113,6 +113,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
 	}
 
 	openCustomerDetails(customer: Customer): void {
-		this.router.navigate([`home/customers/customer-details/${customer.type}`]);
+		this.router.navigate([`home/customers/customer-details/${customer.type}/${customer.id}`]);
 	}
 }

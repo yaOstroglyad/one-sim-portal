@@ -9,7 +9,7 @@ import { BrandNarrow } from '../../shared/model/brandNarrow';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-default-layout',
   templateUrl: './default-layout.component.html',
   styleUrls: ['./default-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -49,16 +49,7 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
   private filterNavItems(items: INavData[]): INavData[] {
     return items.filter(item => {
       const permission = menuItemToPermission[item.name];
-      if (!permission) {
-        return false;
-      }
-      if (permission.includes('all')) {
-        return true;
-      }
-      if (permission.includes('admin') && this.isAdmin()) {
-        return true;
-      }
-      return false;
+      return permission && (permission.includes('all') || (permission.includes('admin') && this.isAdmin()));
     });
   }
 

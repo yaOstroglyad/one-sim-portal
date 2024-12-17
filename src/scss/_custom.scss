@@ -124,6 +124,26 @@
   margin-bottom: 10px;
 }
 
+.os-header-sticky {
+  position: sticky;
+  top: 64px;
+  z-index: 1028;
+}
+
+.content {
+  display: flex;
+  gap: 20px;
+
+  .left-panel {
+    width: 45%;
+    flex: 1;
+  }
+
+  .right-panel {
+    flex: 2;
+  }
+}
+
 .mat-mdc-snack-bar-container {
   --mat-mdc-snack-bar-button-color: $color-dark-contrast;
   --mdc-snackbar-supporting-text-color: $color-dark-contrast;
@@ -135,4 +155,24 @@
   &.app-notification-success {
     --mdc-snackbar-container-color: $color-success;
   }
+}
+
+.btn-primary {
+  --cui-btn-color: var(--os-color-primary-contrast); /* Цвет текста */
+  --cui-btn-bg: var(--os-color-primary); /* Основной фоновый цвет */
+  --cui-btn-border-color: var(--os-color-primary);
+
+  --cui-btn-hover-color: var(--os-color-primary-contrast); /* Цвет текста при наведении */
+  --cui-btn-hover-bg: var(--os-color-primary-shade); /* Осветляем основной цвет */
+  --cui-btn-hover-border-color: var(--os-color-primary-shade);
+
+  --cui-btn-focus-shadow-rgb: rgb(var(--os-color-primary-rgb)); /* RGB-версия для фокуса */
+
+  --cui-btn-active-color: var(--os-color-primary-contrast); /* Цвет текста при нажатии */
+  --cui-btn-active-bg: var(--os-color-primary-shade); /* Затемняем основной цвет */
+  --cui-btn-active-border-color: var(--os-color-primary-shade);
+
+  --cui-btn-disabled-color: var(--os-color-medium); /* Цвет текста в состоянии disabled */
+  --cui-btn-disabled-bg: var(--os-color-primary-opacity);
+  --cui-btn-disabled-border-color: var(--os-color-primary-opacity);
 }

@@ -1,33 +1,24 @@
 <ng-container>
     <c-container [fluid]="true">
-        <div></div>
-
+        <app-breadcrumb></app-breadcrumb>
         <c-header-nav class="ms-3">
             <ng-container *ngTemplateOutlet="userDropdown"></ng-container>
         </c-header-nav>
-
-    </c-container>
-    <c-header-divider></c-header-divider>
-    <c-container [fluid]="true">
-        <c-breadcrumb-router class="ms-2"></c-breadcrumb-router>
     </c-container>
 </ng-container>
-<!--</c-header>-->
 
 <ng-template #userDropdown>
     <c-dropdown alignment="end" variant="nav-item">
-        <button cButton
-                color="light"
-                [caret]="false"
-                cDropdownToggle
-                class="py-0">
+        <div [caret]="false"
+             cDropdownToggle
+             class="py-0 c-pointer">
             <c-avatar cTextColor="primary"
                       shape="rounded-1"
                       [size]="'md'"
                       src="./assets/img/avatars/9.jpg"
                       status="success">
             </c-avatar>
-        </button>
+        </div>
         <ul cDropdownMenu class="pt-0 pr-5" style="width: 200px">
             <li>
                 <h6 cDropdownHeader class="bg-light fw-semibold py-2">Language</h6>

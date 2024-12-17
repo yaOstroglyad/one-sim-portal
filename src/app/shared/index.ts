@@ -9,6 +9,7 @@ export * from './components/table-initialization-error/table-initialization-erro
 export * from './components/no-data/no-data.module'
 export * from './components/confirmation-dialog/confirmation-dialog.component'
 export * from './components/timeline/timeline.component'
+export * from './components/chart/chart.component'
 
 export * from './pipes/format-time/format-time.module';
 
@@ -18,5 +19,8 @@ export * from './services/providers-data.service';
 export * from './services/customers-data.service';
 export * from './services/orders-data.service';
 export * from './services/provider-bundles-data.service';
+export * from './services/purchased-products-data.service';
+export * from './services/subscriber-data.service';
+export * from './services/transaction-data.service';
 
 export * from './auth/index';

@@ -1,111 +1,97 @@
-<div class="header">
-    <div class="header-title">
-        <h1>{{ customer.name }}</h1>
+<div class="px-3" *ngIf="customerDetailsView$ | async as customerDetailsView">
+    <div class="header">
+        <div class="header-title">
+            <h1>{{ customerDetailsView.customer.name }}</h1>
+        </div>
+        <div class="header-actions">
+            <button mat-button>Refund</button>
+            <button mat-button>Show QR code</button>
+            <button mat-button>Unblock</button>
+            <button mat-button color="warn">Block</button>
+            <button mat-icon-button>
+                <mat-icon>more_vert</mat-icon>
+            </button>
+        </div>
     </div>
-    <div class="header-actions">
-        <button mat-button>Refund</button>
-        <button mat-button>Show QR code</button>
-        <button mat-button>Unblock</button>
-        <button mat-button color="warn">Block</button>
-<!--        <button mat-raised-button color="primary">New Transaction</button>-->
-        <button mat-icon-button>
-            <mat-icon>more_vert</mat-icon>
-        </button>
+
+    <div class="tabs-container">
+        <mat-tab-group class="tabs" mat-stretch-tabs="false" mat-align-tabs="start">
+            <mat-tab label="Overview">
+                <div class="content">
+                    <div class="left-panel">
+                        <mat-card>
+                            <mat-card-header>
+                                <mat-card-title>Address</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <p><strong>Billing Address:</strong> {{ customer.billingAddress }}</p>
+                                <button mat-stroked-button>Add additional address</button>
+                            </mat-card-content>
+                        </mat-card>
+
+                        <mat-card>
+                            <mat-card-header>
+                                <mat-card-title>Other Details</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <p><strong>Currency Code:</strong> {{ customer.currencyCode }}</p>
+                                <p><strong>Status:</strong> {{ customerDetailsView.customer.status }}</p>
+                                <p><strong>Language:</strong> {{ customer.portalLanguage }}</p>
+                            </mat-card-content>
+                        </mat-card>
+
+                        <mat-card>
+                            <mat-card-header>
+                                <mat-card-title>Contact Persons</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ng-container *ngIf="customer.contactPersons?.length; else noContacts">
+                                    <mat-list>
+                                        <mat-list-item *ngFor="let person of customer.contactPersons">
+                                            {{ person.name }} ({{ person.email }})
+                                        </mat-list-item>
+                                    </mat-list>
+                                </ng-container>
+                                <ng-template #noContacts>
+                                    <p>No contact persons found.</p>
+                                </ng-template>
+                                <button mat-stroked-button>Add Contact Person</button>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+
+                    <div class="right-panel">
+                        <mat-card>
+                            <mat-card-header>
+                                <mat-card-title>Financial Summary</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <p><strong>Unused Credits:</strong> {{ customer.unusedCredits }}</p>
+                                <p><strong>Outstanding Receivables:</strong> {{ customer.outstandingReceivables }}</p>
+                                <p><strong>Payment Due Period:</strong> {{ customer.paymentDuePeriod }}</p>
+                            </mat-card-content>
+                        </mat-card>
+
+                        <mat-card>
+                            <mat-card-header>
+                                <mat-card-title>Activity Timeline</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <app-timeline [events]="timelineEvents"></app-timeline>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <ng-container *ngFor="let subscriber of customerDetailsView.subscribers; trackBy: trackBySubscriber">
+                <mat-tab label="{{subscriber.name}}">
+                    <div class="tab-content">
+                        <app-subscriber-details [subscriber]="subscriber"></app-subscriber-details>
+                    </div>
+                </mat-tab>
+            </ng-container>
+
+        </mat-tab-group>
     </div>
-</div>
-
-<div class="tabs-container">
-    <mat-tab-group class="tabs" mat-stretch-tabs="false"  mat-align-tabs="start">
-        <mat-tab label="Overview">
-            <div class="content">
-                <div class="left-panel">
-                    <mat-card>
-                        <mat-card-header>
-                            <mat-card-title>Address</mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <p><strong>Billing Address:</strong> {{ customer.billingAddress }}</p>
-                            <button mat-stroked-button>Add additional address</button>
-                        </mat-card-content>
-                    </mat-card>
-
-                    <mat-card>
-                        <mat-card-header>
-                            <mat-card-title>Other Details</mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <p><strong>Currency Code:</strong> {{ customer.currencyCode }}</p>
-                            <p><strong>Portal Status:</strong> {{ customer.portalStatus }}</p>
-                            <p><strong>Portal Language:</strong> {{ customer.portalLanguage }}</p>
-                        </mat-card-content>
-                    </mat-card>
-
-                    <mat-card>
-                        <mat-card-header>
-                            <mat-card-title>Contact Persons</mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <ng-container *ngIf="customer.contactPersons?.length; else noContacts">
-                                <mat-list>
-                                    <mat-list-item *ngFor="let person of customer.contactPersons">
-                                        {{ person.name }} ({{ person.email }})
-                                    </mat-list-item>
-                                </mat-list>
-                            </ng-container>
-                            <ng-template #noContacts>
-                                <p>No contact persons found.</p>
-                            </ng-template>
-                            <button mat-stroked-button>Add Contact Person</button>
-                        </mat-card-content>
-                    </mat-card>
-                </div>
-
-                <div class="right-panel">
-                    <mat-card>
-                        <mat-card-header>
-                            <mat-card-title>Financial Summary</mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <p><strong>Unused Credits:</strong> {{ customer.unusedCredits }}</p>
-                            <p><strong>Outstanding Receivables:</strong> {{ customer.outstandingReceivables }}</p>
-                            <p><strong>Payment Due Period:</strong> {{ customer.paymentDuePeriod }}</p>
-                        </mat-card-content>
-                    </mat-card>
-
-                    <mat-card>
-                        <mat-card-header>
-                            <mat-card-title>Activity Timeline</mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <app-timeline [events]="timelineEvents"></app-timeline>
-                        </mat-card-content>
-                    </mat-card>
-                </div>
-            </div>
-        </mat-tab>
-
-        <mat-tab label="Comments">
-            <div class="tab-content">
-                <p>Comments section will go here.</p>
-            </div>
-        </mat-tab>
-
-        <mat-tab label="Sales">
-            <div class="tab-content">
-                <p>Sales data will go here.</p>
-            </div>
-        </mat-tab>
-
-        <mat-tab label="Mails">
-            <div class="tab-content">
-                <p>Mails section will go here.</p>
-            </div>
-        </mat-tab>
-
-        <mat-tab label="Statement">
-            <div class="tab-content">
-                <p>Statement section will go here.</p>
-            </div>
-        </mat-tab>
-    </mat-tab-group>
 </div>
