@@ -53,8 +53,12 @@ export class PurchasedProductsComponent implements OnInit {
 		}
 	}
 
-	convertData(usage: any, key: string): number {
+	public convertData(usage: any, key: string): number {
 		const conversionFactor = usage.balance[0].unitType === 'Gigabyte' as any ? 1024 * 1024 * 1024 : 1;
 		return Math.round((usage.balance[0]?.[key] || 0) / conversionFactor * 100) / 100;
 	}
+
+	public getUnitType(usage: any): string {
+		return usage.balance[0].unitType === 'Gigabyte' ? 'GB' : usage.balance[0].unitType;
+ 	}
 }
