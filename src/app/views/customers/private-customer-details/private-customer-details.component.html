@@ -15,12 +15,22 @@
                     Refund
                 </button>
             </div>
-            <button mat-button>Show QR code</button>
-            <button mat-button>Unblock</button>
-            <button mat-button color="warn">Block</button>
-            <button mat-icon-button>
-                <mat-icon>more_vert</mat-icon>
-            </button>
+            <div [matTooltipDisabled]="!!selectedSubscriber"
+                 class="c-pointer"
+                 matTooltip="Please select a subscriber to present his QR code"
+                 matTooltipPosition="below"
+                 matTooltipClass="tooltip">
+                <button mat-button
+                        [disabled]="!selectedSubscriber"
+                        (click)="openShowQRCode(selectedSubscriber)">
+                    Show QR code
+                </button>
+            </div>
+<!--            <button mat-button>Unblock</button>-->
+<!--            <button mat-button color="warn">Block</button>-->
+<!--            <button mat-icon-button>-->
+<!--                <mat-icon>more_vert</mat-icon>-->
+<!--            </button>-->
         </div>
     </div>
 

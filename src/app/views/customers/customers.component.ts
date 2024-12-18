@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {
+	Customer,
 	CustomersDataService,
+	CustomerType,
 	HeaderConfig,
 	TableConfig,
 	TableFilterFieldType
 } from '../../shared';
 import { CustomersTableService } from './customers-table.service';
-import { Customer } from '../../shared';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -23,6 +24,7 @@ import { Router } from '@angular/router';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomersComponent implements OnInit, OnDestroy {
+	protected readonly CustomerType = CustomerType;
 	private unsubscribe$ = new Subject<void>();
 	public tableConfig$: BehaviorSubject<TableConfig>;
 	public dataList$: Observable<Customer[]>;
@@ -59,7 +61,22 @@ export class CustomersComponent implements OnInit, OnDestroy {
 			});
 	}
 
-	createCustomer(): void {
+	private initheaderConfig(): void {
+		this.headerConfig = {
+			value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
+		};
+	}
+
+	public applyFilter(filterValues: any): void {
+		this.tableService.applyFilter(filterValues);
+		this.dataList$ = this.tableService.dataList$;
+	}
+
+	public onColumnSelectionChanged(selectedColumns: Set<string>): void {
+		this.tableService.updateColumnVisibility(selectedColumns);
+	}
+
+	public createCustomer(): void {
 		const dialogRef = this.dialog.open(EditCustomerComponent, {
 			width: '650px',
 			data: {}
@@ -72,21 +89,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
 				});
 			}
 		});
-	}
-
-	private initheaderConfig(): void {
-		this.headerConfig = {
-			value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
-		};
-	}
-
-	applyFilter(filterValues: any): void {
-		this.tableService.applyFilter(filterValues);
-		this.dataList$ = this.tableService.dataList$;
-	}
-
-	onColumnSelectionChanged(selectedColumns: Set<string>): void {
-		this.tableService.updateColumnVisibility(selectedColumns);
 	}
 
 	public openSendEmail(item: Order): void {
@@ -112,7 +114,9 @@ export class CustomersComponent implements OnInit, OnDestroy {
 		).subscribe();
 	}
 
-	openCustomerDetails(customer: Customer): void {
-		this.router.navigate([`home/customers/customer-details/${customer.type}/${customer.id}`]);
+	public openCustomerDetails(customer: Customer): void {
+		if (customer.type === CustomerType.Private) {
+			this.router.navigate([`home/customers/customer-details/${customer.type}/${customer.id}`]);
+		}
 	}
 }

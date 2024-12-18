@@ -31,8 +31,8 @@ import {
 } from './utils/customer-details.utils';
 import { SubscriberDetailsComponent } from './subscriber-details/subscriber-details.component';
 import { MatDialog } from '@angular/material/dialog';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ShowQrCodeDialogComponent } from './show-qr-code-dialog/show-qr-code-dialog.component';
 
 @Component({
 	selector: 'app-private-customer-details',
@@ -132,6 +132,10 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 		return item.id;
 	}
 
+	onTabChange(event: MatTabChangeEvent): void {
+		this.selectedSubscriber = getSubscriberByName(this.subscribers, event.tab.textLabel);
+	}
+
 	openRefund(subscriber: Subscriber): void {
 		const data = {id: subscriber.simId};
 		const uploadDialogRef = this.dialog.open(RefundProductComponent, {
@@ -139,13 +143,17 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 			data
 		});
 
-		uploadDialogRef.afterClosed().pipe(
-			takeUntilDestroyed()
-		).subscribe();
+		uploadDialogRef.afterClosed().subscribe();
 	}
 
-	onTabChange(event: MatTabChangeEvent): void {
-		this.selectedSubscriber = getSubscriberByName(this.subscribers, event.tab.textLabel);
-	}
+	public openShowQRCode(subscriber: Subscriber): void {
+		this.subscriberDataService.getSimDetails({ id: subscriber.simId }).subscribe(sim => {
+			const uploadDialogRef = this.dialog.open(ShowQrCodeDialogComponent, {
+				width: '225px',
+				data: sim.qrCode
+			});
 
+			uploadDialogRef.afterClosed().subscribe();
+		})
+	}
 }
