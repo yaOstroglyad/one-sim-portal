@@ -4,7 +4,8 @@ import {
   Subscriber,
   SimInfo,
   TimelineComponent,
-  SubscriberDataService
+  SubscriberDataService,
+  SimLocations
 } from '../../../../shared';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -43,7 +44,7 @@ export class SubscriberDetailsComponent implements OnInit {
 
   @Input() subscriber: Subscriber;
 
-  simView$: Observable<{ simDetails: SimInfo; locations: any[] }>;
+  simView$: Observable<{ simDetails: SimInfo; locations: SimLocations[] }>;
 
   ngOnInit(): void {
     this.simView$ = combineLatest([

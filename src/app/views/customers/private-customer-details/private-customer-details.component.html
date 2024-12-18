@@ -4,7 +4,17 @@
             <h1>{{ customerDetailsView.customer.name }}</h1>
         </div>
         <div class="header-actions">
-            <button mat-button>Refund</button>
+            <div [matTooltipDisabled]="!!selectedSubscriber"
+                 class="c-pointer"
+                 matTooltip="Please select a subscriber to refund"
+                 matTooltipPosition="below"
+                 matTooltipClass="tooltip">
+                <button mat-button
+                        [disabled]="!selectedSubscriber"
+                        (click)="openRefund(selectedSubscriber)">
+                    Refund
+                </button>
+            </div>
             <button mat-button>Show QR code</button>
             <button mat-button>Unblock</button>
             <button mat-button color="warn">Block</button>
@@ -15,17 +25,22 @@
     </div>
 
     <div class="tabs-container">
-        <mat-tab-group class="tabs" mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab-group class="tabs"
+                       mat-stretch-tabs="false"
+                       mat-align-tabs="start"
+                       (selectedTabChange)="onTabChange($event)">
             <mat-tab label="Overview">
                 <div class="content">
                     <div class="left-panel">
                         <mat-card>
                             <mat-card-header>
-                                <mat-card-title>Address</mat-card-title>
+                                <mat-card-title>Location</mat-card-title>
                             </mat-card-header>
-                            <mat-card-content>
-                                <p><strong>Billing Address:</strong> {{ customer.billingAddress }}</p>
-                                <button mat-stroked-button>Add additional address</button>
+                            <mat-card-content *ngIf="simLocations">
+                                <p><strong>IMSI:</strong> {{ simLocations[0]?.imsi || 'N/A' }}</p>
+                                <p><strong>State:</strong> {{ simLocations[0]?.state || 'N/A' }}</p>
+                                <p><strong>Country:</strong> {{ simLocations[0]?.country || 'N/A' }}</p>
+                                <p><strong>Operator:</strong> {{ simLocations[0]?.operator || 'N/A' }}</p>
                             </mat-card-content>
                         </mat-card>
 
@@ -34,28 +49,9 @@
                                 <mat-card-title>Other Details</mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
-                                <p><strong>Currency Code:</strong> {{ customer.currencyCode }}</p>
-                                <p><strong>Status:</strong> {{ customerDetailsView.customer.status }}</p>
-                                <p><strong>Language:</strong> {{ customer.portalLanguage }}</p>
-                            </mat-card-content>
-                        </mat-card>
-
-                        <mat-card>
-                            <mat-card-header>
-                                <mat-card-title>Contact Persons</mat-card-title>
-                            </mat-card-header>
-                            <mat-card-content>
-                                <ng-container *ngIf="customer.contactPersons?.length; else noContacts">
-                                    <mat-list>
-                                        <mat-list-item *ngFor="let person of customer.contactPersons">
-                                            {{ person.name }} ({{ person.email }})
-                                        </mat-list-item>
-                                    </mat-list>
-                                </ng-container>
-                                <ng-template #noContacts>
-                                    <p>No contact persons found.</p>
-                                </ng-template>
-                                <button mat-stroked-button>Add Contact Person</button>
+                                <p><strong>Currency Code: </strong>{{ currency.toUpperCase() }}</p>
+                                <p><strong>Status: </strong> {{ customerDetailsView.customer.status }}</p>
+                                <p><strong>Language: </strong>EN</p>
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -66,9 +62,8 @@
                                 <mat-card-title>Financial Summary</mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
-                                <p><strong>Unused Credits:</strong> {{ customer.unusedCredits }}</p>
-                                <p><strong>Outstanding Receivables:</strong> {{ customer.outstandingReceivables }}</p>
-                                <p><strong>Payment Due Period:</strong> {{ customer.paymentDuePeriod }}</p>
+                                <p><strong>Total Spent:</strong> {{ totalSpent }} {{ currency.toUpperCase() }}</p>
+                                <p><strong>Total Used Data:</strong> {{ totalUsedGB }} GB</p>
                             </mat-card-content>
                         </mat-card>
 
@@ -77,6 +72,12 @@
                                 <mat-card-title>Activity Timeline</mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
+                                <app-empty-state
+                                        *ngIf="!timelineEvents || timelineEvents.length === 0"
+                                        [title]="'No activities'"
+                                        [message]="'The customer hasn’t performed any activities yet.'"
+                                        [imageSrc]="'assets/img/empty-states/no-activities.svg'">
+                                </app-empty-state>
                                 <app-timeline [events]="timelineEvents"></app-timeline>
                             </mat-card-content>
                         </mat-card>

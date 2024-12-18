@@ -9,7 +9,7 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { TableColumnConfig, TableConfig } from '../generic-table/table-column-config.interface';
+import { TableColumnConfig, TableConfig } from '../../model';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

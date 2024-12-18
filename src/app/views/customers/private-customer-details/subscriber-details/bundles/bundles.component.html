@@ -1,5 +1,14 @@
 <div *ngIf="bundlesView$ | async as usages" class="content-b">
-    <div #scrollContainer class="scroll-container">
+
+    <app-empty-state *ngIf="!usages || usages.length === 0"
+                     [title]="'No Bundles Found'"
+                     [imageSrc]="'assets/img/empty-states/no-products.svg'">
+    </app-empty-state>
+
+    <div #scrollContainer
+         *ngIf="usages.length > 0"
+         [ngClass]="usages.length == 1 ? 'center' : null"
+         class="scroll-container">
         <div *ngFor="let usage of usages" class="bundle-item">
             <app-chart [chartData]="usage"></app-chart>
         </div>

@@ -1,5 +1,5 @@
 import { Validators } from '@angular/forms';
-import { FieldType, FormConfig } from 'src/app/shared/components/form-generator/field-config';
+import { FieldType, FormConfig } from 'src/app/shared/model/field-config';
 
 export function getEditPaymentGatewayFormConfig(): FormConfig {
 	return {

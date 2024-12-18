@@ -1,5 +1,5 @@
 import { FormControl } from '@angular/forms';
-import { FieldConfig } from './field-config';
+import { FieldConfig } from '../../model/field-config';
 
 export function createControl(field: FieldConfig): FormControl {
 	const { value, disabled, validators } = field;

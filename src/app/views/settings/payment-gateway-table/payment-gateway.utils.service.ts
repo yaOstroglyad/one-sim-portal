@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormConfig, BackendFieldConfig, FieldType } from '../../../shared/components/form-generator/field-config';
+import { FormConfig, BackendFieldConfig, FieldType } from '../../../shared/model/field-config';
 import { Validators } from '@angular/forms';
 import { PaymentMethodParameters, PaymentStrategy } from '../../../shared/model/payment-strategies';
 

@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProvidersDataService } from '../../../shared';
 import { Subject } from 'rxjs';
 import { getCustomerCreateRequest, getEditCustomerFormConfig } from './edit-customer.utils';
-import { FormConfig } from '../../../shared/components/form-generator/field-config';
+import { FormConfig } from '../../../shared/model/field-config';
 
 @Component({
 	selector: 'app-edit-customer',

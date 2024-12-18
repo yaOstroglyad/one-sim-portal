@@ -5,92 +5,147 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
-import { MatTabsModule } from '@angular/material/tabs';
-import { CustomersDataService, TimelineComponent, TimelineEvent, DataObject } from '../../../shared';
-import { Observable, Subscriber } from 'rxjs';
-import { SubscriberDetailsComponent } from './subscriber-details/subscriber-details.component';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import {
+	CustomersDataService,
+	TimelineComponent,
+	TimelineEvent,
+	DataObject,
+	TransactionDataService,
+	PurchasedProductsDataService,
+	SubscriberDataService,
+  SimLocations,
+  EmptyStateComponent,
+  RefundProductComponent,
+  Subscriber
+} from '../../../shared';
+import { forkJoin, Observable, of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { map, switchMap } from 'rxjs/operators';
+import {
+	combineAndSortEvents,
+	mapPurchaseEvents,
+	mapTransactionEvents,
+	calculateFinancialSummary,
+	getSubscriberByName
+} from './utils/customer-details.utils';
+import { SubscriberDetailsComponent } from './subscriber-details/subscriber-details.component';
+import { MatDialog } from '@angular/material/dialog';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-private-customer-details',
-  templateUrl: './private-customer-details.component.html',
-  styleUrls: ['./private-customer-details.component.scss'],
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule,
-    MatListModule,
-    MatTabsModule,
-    TimelineComponent,
-    SubscriberDetailsComponent
-  ],
-  standalone: true
+	selector: 'app-private-customer-details',
+	templateUrl: './private-customer-details.component.html',
+	styleUrls: ['./private-customer-details.component.scss'],
+	imports: [
+		CommonModule,
+		MatToolbarModule,
+		MatButtonModule,
+		MatIconModule,
+		MatCardModule,
+		MatListModule,
+		MatTabsModule,
+		TimelineComponent,
+		EmptyStateComponent,
+		SubscriberDetailsComponent,
+		MatTooltipModule
+	],
+	standalone: true
 })
 export class PrivateCustomerDetailsComponent implements OnInit {
-  customerDetailsView$: Observable<DataObject>;
-  route = inject(ActivatedRoute);
-  customerDataService = inject(CustomersDataService);
-  ngOnInit(): void {
-    const customerId = this.route.snapshot.paramMap.get('id');
-    this.customerDetailsView$ = this.customerDataService.getCustomerDetails(customerId);
-  }
-  customer = {
-    name: 'Aaron Brown',
-    billingAddress: '22, Winchester avenue, Beach Haven, Auckland, 0626, New Zealand',
-    shippingAddress: '22, Winchester avenue, Beach Haven, Auckland, 0626, New Zealand',
-    additionalAddress: '48, Miller\'s drive, Christchurch, New Zealand',
-    currencyCode: 'USD',
-    portalStatus: 'Disabled',
-    portalLanguage: 'English',
-    unusedCredits: '$0.000',
-    outstandingReceivables: '$880.000',
-    paymentDuePeriod: 'Due on Receipt',
-    contactPersons: [],
-    activities: [
-      { date: '2017-05-30T07:53:00', description: 'Invoice added: Expense of $123 billed.' },
-      { date: '2017-05-12T01:35:00', description: 'Payment received: $11,760 applied to invoice.' }
-    ]
-  };
+	customerDetailsView$: Observable<DataObject>;
+	timelineEvents: TimelineEvent[] = [];
+	totalSpent: number = 0;
+	totalUsedGB: number = 0;
+	currency: string = 'USD';
+	simLocations: SimLocations[];
 
-  timelineEvents: TimelineEvent[] = [
-    {
-      date: new Date('2017-05-30T07:53:00'),
-      description: 'Invoice added: Expense of amount $123 billed as invoice INV-000230 by Patricia Boyle.',
-      detailsLink: 'https://example.com/invoice-details'
-    },
-    {
-      date: new Date('2017-05-12T01:35:00'),
-      description: 'Payment received: $11,760 received and applied for INV-000186 by Patricia Boyle.'
-    },
-    {
-      date: new Date('2017-05-10T11:15:00'),
-      description: 'Invoice updated: Invoice details were changed.'
-    },
-    {
-      date: new Date('2017-05-10T11:15:00'),
-      description: 'Invoice updated: Invoice details were changed.'
-    },
-    {
-      date: new Date('2017-05-10T11:15:00'),
-      description: 'Invoice updated: Invoice details were changed.'
-    },
-    {
-      date: new Date('2017-05-10T11:15:00'),
-      description: 'Invoice updated: Invoice details were changed.'
-    },
-    {
-      date: new Date('2017-05-10T11:15:00'),
-      description: 'Invoice updated: Invoice details were changed.'
-    },
-    {
-      date: new Date('2017-05-10T11:15:00'),
-      description: 'Invoice updated: Invoice details were changed.'
-    }
-  ];
+	route = inject(ActivatedRoute);
+	customerDataService = inject(CustomersDataService);
+	transactionDataService = inject(TransactionDataService);
+	purchasedProductsDataService = inject(PurchasedProductsDataService);
+	subscriberDataService = inject(SubscriberDataService);
+	dialog = inject(MatDialog);
+	customerId: string;
+	subscribers: Subscriber[];
+	selectedSubscriber: Subscriber;
 
-  trackBySubscriber(index: number, subscriber: any): string {
-    return subscriber.id;
-  }
+	ngOnInit(): void {
+		this.customerId = this.route.snapshot.paramMap.get('id') || '';
+		this.customerDetailsView$ = this.customerDataService.getCustomerDetails(this.customerId);
+
+		this.loadTimelineEvents();
+	}
+
+	private loadTimelineEvents(): void {
+		this.customerDetailsView$
+			.pipe(
+				switchMap((customerDetails: DataObject) => {
+					const subscriberId = customerDetails?.subscribers[0]?.id;
+					this.subscribers = customerDetails.subscribers;
+
+					if (!subscriberId) {
+						return of([]);
+					}
+
+					this.loadSimLocation(customerDetails.subscribers[0].simId);
+
+					return forkJoin({
+						transactions: this.transactionDataService.getTransactions(this.customerId),
+						purchasedProducts: this.purchasedProductsDataService.getPurchasedProducts({subscriberId})
+					}).pipe(
+						map(({transactions, purchasedProducts}) => {
+							const financialSummary = calculateFinancialSummary(purchasedProducts);
+							this.totalSpent = financialSummary.totalSpent;
+							this.totalUsedGB = financialSummary.totalUsedGB;
+							this.currency = financialSummary.currency;
+
+							const transactionEvents = mapTransactionEvents(transactions);
+							const purchaseEvents = mapPurchaseEvents(purchasedProducts);
+							return combineAndSortEvents(transactionEvents, purchaseEvents);
+						})
+					);
+				})
+			)
+			.subscribe(events => {
+				this.timelineEvents = events;
+			});
+	}
+
+	private loadSimLocation(simId: string): void {
+		if (!simId) {
+			return;
+		}
+
+		this.subscriberDataService.getSimLocations(simId).subscribe({
+			next: (locations: SimLocations[]) => {
+				this.simLocations = locations;
+			},
+			error: () => {
+				this.simLocations = [];
+			}
+		});
+	}
+
+	trackBySubscriber(index: number, item: any): string {
+		return item.id;
+	}
+
+	openRefund(subscriber: Subscriber): void {
+		const data = {id: subscriber.simId};
+		const uploadDialogRef = this.dialog.open(RefundProductComponent, {
+			width: '600px',
+			data
+		});
+
+		uploadDialogRef.afterClosed().pipe(
+			takeUntilDestroyed()
+		).subscribe();
+	}
+
+	onTabChange(event: MatTabChangeEvent): void {
+		this.selectedSubscriber = getSubscriberByName(this.subscribers, event.tab.textLabel);
+	}
+
 }

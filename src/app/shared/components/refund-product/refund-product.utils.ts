@@ -1,4 +1,4 @@
-import { FieldType, FormConfig, SelectOption } from '../../../shared/components/form-generator/field-config';
+import { FieldType, FormConfig, SelectOption } from '../../model/field-config';
 import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 

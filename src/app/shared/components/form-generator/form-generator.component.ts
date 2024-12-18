@@ -9,7 +9,7 @@ import {
 	Output,
 	SimpleChanges
 } from '@angular/core';
-import { FieldConfig, FieldType, FormConfig } from './field-config';
+import { FieldConfig, FieldType, FormConfig } from '../../model/field-config';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { createControl } from './form-generator.utils';
 import { isFunction } from 'rxjs/internal/util/isFunction';

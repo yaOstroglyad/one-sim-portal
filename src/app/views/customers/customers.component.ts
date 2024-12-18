@@ -7,7 +7,7 @@ import {
 	TableFilterFieldType
 } from '../../shared';
 import { CustomersTableService } from './customers-table.service';
-import { Customer } from '../../shared/model/customer';
+import { Customer } from '../../shared';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { switchMap, takeUntil, tap } from 'rxjs/operators';

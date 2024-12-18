@@ -1,68 +1,83 @@
-<ng-container *ngIf="purchasedProductsView$ | async as purchasedProducts">
-<table mat-table [dataSource]="purchasedProducts" class="mat-elevation-z0">
-    <!-- Status Column -->
-    <ng-container matColumnDef="productName">
-        <th mat-header-cell *matHeaderCellDef> Product Name </th>
-        <td mat-cell *matCellDef="let element">
-            {{ element.productName }}
-        </td>
-    </ng-container>
-    <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef> Status </th>
-        <td mat-cell *matCellDef="let element" [ngClass]="getStatusClass(element.status)">
-            {{ element.status }}
-        </td>
-    </ng-container>
+<ng-container *ngIf="purchasedProductsView$ | async as purchasedProducts; else loading">
+    <app-empty-state
+            *ngIf="!purchasedProducts || purchasedProducts.length === 0"
+            [title]="'No purchased products history found'"
+            [message]="'The customer hasn\'t made any purchases yet.'"
+            [imageSrc]="'assets/img/empty-states/file-not-found.svg'">
+    </app-empty-state>
 
-    <!-- Usage Balance Column -->
-    <ng-container matColumnDef="remainingBalance">
-        <th mat-header-cell *matHeaderCellDef> Remaining Balance </th>
-        <td mat-cell *matCellDef="let element"> {{ this.convertData(element.usage, 'remaining') }} </td>
-    </ng-container>
+    <table *ngIf="purchasedProducts.length > 0"
+           [dataSource]="purchasedProducts"
+           mat-table
+           class="mat-elevation-z0">
+        <!-- Status Column -->
+        <ng-container matColumnDef="productName">
+            <th mat-header-cell *matHeaderCellDef> Product Name</th>
+            <td mat-cell *matCellDef="let element">
+                {{ element.productName }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Status</th>
+            <td mat-cell *matCellDef="let element" [ngClass]="getStatusClass(element.status)">
+                {{ element.status }}
+            </td>
+        </ng-container>
 
-    <!-- Usage Balance Column -->
-    <ng-container matColumnDef="totalBalance">
-        <th mat-header-cell *matHeaderCellDef> Total Balance </th>
-        <td mat-cell *matCellDef="let element"> {{ convertData(element.usage, 'total') }} </td>
-    </ng-container>
+        <!-- Usage Balance Column -->
+        <ng-container matColumnDef="remainingBalance">
+            <th mat-header-cell *matHeaderCellDef> Remaining Balance</th>
+            <td mat-cell *matCellDef="let element"> {{ this.convertData(element.usage, 'remaining') }}</td>
+        </ng-container>
 
-    <!-- Price Column -->
-    <ng-container matColumnDef="price">
-        <th mat-header-cell *matHeaderCellDef> Price </th>
-        <td mat-cell *matCellDef="let element"> {{ element.price.price + " " + element.price.currency}} </td>
-    </ng-container>
+        <!-- Usage Balance Column -->
+        <ng-container matColumnDef="totalBalance">
+            <th mat-header-cell *matHeaderCellDef> Total Balance</th>
+            <td mat-cell *matCellDef="let element"> {{ convertData(element.usage, 'total') }}</td>
+        </ng-container>
 
-    <!-- Purchased At Column -->
-    <ng-container matColumnDef="purchasedAt">
-        <th mat-header-cell *matHeaderCellDef> Purchased At </th>
-        <td mat-cell *matCellDef="let element"> {{ element.purchasedAt | date: 'dd/MM/yyyy HH:mm' }} </td>
-    </ng-container>
+        <!-- Price Column -->
+        <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef> Price</th>
+            <td mat-cell *matCellDef="let element"> {{ element.price.price + " " + element.price.currency }}</td>
+        </ng-container>
 
-    <!-- Updated At Column -->
-    <ng-container matColumnDef="updatedAt">
-        <th mat-header-cell *matHeaderCellDef> Updated At </th>
-        <td mat-cell *matCellDef="let element"> {{ element.updatedAt | date: 'dd/MM/yyyy HH:mm' }} </td>
-    </ng-container>
+        <!-- Purchased At Column -->
+        <ng-container matColumnDef="purchasedAt">
+            <th mat-header-cell *matHeaderCellDef> Purchased At</th>
+            <td mat-cell *matCellDef="let element"> {{ element.purchasedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
 
-    <!-- Updated By Column -->
-    <ng-container matColumnDef="updatedBy">
-        <th mat-header-cell *matHeaderCellDef> Updated By </th>
-        <td mat-cell *matCellDef="let element"> {{ element.updatedBy }} </td>
-    </ng-container>
+        <!-- Updated At Column -->
+        <ng-container matColumnDef="updatedAt">
+            <th mat-header-cell *matHeaderCellDef> Updated At</th>
+            <td mat-cell *matCellDef="let element"> {{ element.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
 
-    <!-- Usage Started At Column -->
-    <ng-container matColumnDef="usageStartedAt">
-        <th mat-header-cell *matHeaderCellDef> Usage Started At </th>
-        <td mat-cell *matCellDef="let element"> {{ element.usage.startedAt | date: 'dd/MM/yyyy' }} </td>
-    </ng-container>
+        <!-- Updated By Column -->
+        <ng-container matColumnDef="updatedBy">
+            <th mat-header-cell *matHeaderCellDef> Updated By</th>
+            <td mat-cell *matCellDef="let element"> {{ element.updatedBy }}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="usageExpiredAt">
-        <th mat-header-cell *matHeaderCellDef> Usage Expired At </th>
-        <td mat-cell *matCellDef="let element"> {{ element.usage.expiredAt | date: 'dd/MM/yyyy' }} </td>
-    </ng-container>
+        <!-- Usage Started At Column -->
+        <ng-container matColumnDef="usageStartedAt">
+            <th mat-header-cell *matHeaderCellDef> Usage Started At</th>
+            <td mat-cell *matCellDef="let element"> {{ element.usage.startedAt | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
 
-    <!-- Header and Row Definitions -->
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+        <ng-container matColumnDef="usageExpiredAt">
+            <th mat-header-cell *matHeaderCellDef> Usage Expired At</th>
+            <td mat-cell *matCellDef="let element"> {{ element.usage.expiredAt | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 </ng-container>
+
+<!-- Loading Template -->
+<ng-template #loading>
+    <p>Loading transaction orders...</p>
+</ng-template>

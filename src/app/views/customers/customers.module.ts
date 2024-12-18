@@ -22,7 +22,7 @@ import { ReSendInviteEmailComponent } from './re-send-invite-email/re-send-invit
   declarations: [
     CustomersComponent,
 		EditCustomerComponent,
-		ReSendInviteEmailComponent
+		ReSendInviteEmailComponent,
   ],
 	imports: [
 		CommonModule,

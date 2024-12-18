@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { getSetupResourceFormConfig } from './setup-resource.utils';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ProvidersDataService } from '../../../shared';
-import { FormConfig } from '../../../shared/components/form-generator/field-config';
+import { FormConfig } from '../../../shared/model/field-config';
 
 @Component({
   selector: 'app-setup-resource',

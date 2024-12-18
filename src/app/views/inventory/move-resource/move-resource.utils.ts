@@ -1,4 +1,4 @@
-import { FieldType, FormConfig } from '../../../shared/components/form-generator/field-config';
+import { FieldType, FormConfig } from '../../../shared/model/field-config';
 import { Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { CustomersDataService, ProvidersDataService, OrdersDataService } from '../../../shared';

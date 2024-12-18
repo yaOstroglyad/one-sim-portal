@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { Observable, take } from 'rxjs';
-import { TableConfig } from './table-column-config.interface';
+import { TableConfig } from '../../model/table-column-config.interface';
 
 @Component({
 	selector: 'generic-table',
@@ -17,8 +17,10 @@ export class GenericTableComponent {
 	@Input() config$: Observable<TableConfig>;
 	@Input() data$: Observable<any[]>;
 	@Input() menu: TemplateRef<any>;
+	@Input() isRowClickable: boolean = false;
 
 	@Output() selectedItemsChange = new EventEmitter<any>;
+	@Output() onRowClickEvent = new EventEmitter<any>;
 	@Output() toggleAction = new EventEmitter<any>;
 	@Output() pageChange = new EventEmitter<any>;
 
@@ -62,5 +64,9 @@ export class GenericTableComponent {
 
 	public onEdit(item: any): void {
 		this.toggleAction.emit(item);
+	}
+
+	onRowClick(item: any): void {
+		this.onRowClickEvent.emit(item)
 	}
 }

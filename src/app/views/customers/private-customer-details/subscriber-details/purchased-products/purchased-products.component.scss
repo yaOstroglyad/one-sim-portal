@@ -2,14 +2,14 @@ table.mat-elevation-z8, .mat-mdc-elevation-specific.mat-elevation-z8 {
   box-shadow: none;
 }
 table {
-  width: 100%; /* Таблица занимает ширину контейнера */
-  max-width: 100%; /* Ограничение максимальной ширины */
-  table-layout: auto; /* Динамическое распределение ширины столбцов */
-  border-collapse: collapse; /* Устраняет дополнительные промежутки */
+  width: 100%;
+  max-width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
 }
 
 th, td {
-  padding: 8px; /* Устанавливает отступ внутри ячеек */
+  padding: 8px;
   text-align: left;
-  white-space: nowrap; /* Предотвращает перенос текста */
+  white-space: nowrap;
 }

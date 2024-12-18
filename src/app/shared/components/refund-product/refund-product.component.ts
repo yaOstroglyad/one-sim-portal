@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { FormConfig } from '../../../shared/components/form-generator/field-config';
-import { FormGeneratorModule } from '../../../shared/components/form-generator/form-generator.module';
+import { FormConfig } from '../../model/field-config';
+import { FormGeneratorModule } from '../form-generator/form-generator.module';
 import { MatButtonModule } from '@angular/material/button';
 import { getRefundFormConfig } from './refund-product.utils';
 import { RefundProductService } from './refund-product.service';

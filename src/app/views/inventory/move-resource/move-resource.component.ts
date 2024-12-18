@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormConfig } from '../../../shared/components/form-generator/field-config';
+import { FormConfig } from '../../../shared/model/field-config';
 import { getMoveResourceFormConfig } from './move-resource.utils';
 import { MoveResourceService } from './move-resource.service';
 import { Subject } from 'rxjs';

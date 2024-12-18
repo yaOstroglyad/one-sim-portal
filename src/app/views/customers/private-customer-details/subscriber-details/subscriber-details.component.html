@@ -7,9 +7,10 @@
                 <mat-card-header>
                     <mat-card-title>Location</mat-card-title>
                 </mat-card-header>
-                <mat-card-content>
-                    <p><strong>Operator:</strong> {{ simView.simDetails.serviceProvider?.name || 'N/A' }}</p>
-                    <p><strong>State:</strong> {{ simView.simDetails.networkStatus || 'N/A' }}</p>
+                <mat-card-content *ngIf="simView.simDetails && simView.locations">
+                    <p><strong>State:</strong> {{ simView.simDetails.networkStatus }}</p>
+                    <p><strong>Country:</strong> {{ simView.locations[0]?.country || 'N/A' }}</p>
+                    <p><strong>Operator:</strong> {{ simView.locations[0]?.operator || 'N/A' }}</p>
                     <p><strong>Last updated at:</strong> {{ simView.simDetails.updatedAt | date: 'dd/MM/yyyy HH:mm' || 'N/A' }}</p>
                 </mat-card-content>
             </mat-card>
@@ -24,10 +25,8 @@
             </mat-card>
         </div>
 
-        <!-- Правая панель -->
         <div class="right-panel">
 
-            <!-- Other Details -->
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>Sim Details</mat-card-title>
@@ -51,10 +50,7 @@
         </div>
     </div>
 
-
-    <!-- Нижние панели -->
     <div style="width: 100%">
-        <!-- Purchased Products -->
         <mat-card>
             <mat-card-header>
                 <mat-card-title>Purchased Products History</mat-card-title>

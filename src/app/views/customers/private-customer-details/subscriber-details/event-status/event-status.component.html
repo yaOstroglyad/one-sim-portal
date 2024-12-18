@@ -1,5 +1,14 @@
 <ng-container *ngIf="subscriberEventsView$ | async as subscriberEvents; else loading">
-    <table mat-table [dataSource]="subscriberEvents" class="mat-elevation-z8">
+    <app-empty-state
+            *ngIf="!subscriberEvents || subscriberEvents.length === 0"
+            [title]="'No any events yet'"
+            [imageSrc]="'assets/img/empty-states/file-not-found.svg'">
+    </app-empty-state>
+
+    <table *ngIf="subscriberEvents.length > 0"
+           [dataSource]="subscriberEvents"
+           mat-table
+           class="mat-elevation-z0">
         <ng-container matColumnDef="eventTimestamp">
             <th mat-header-cell *matHeaderCellDef> Time Stamp</th>
             <td mat-cell *matCellDef="let element">

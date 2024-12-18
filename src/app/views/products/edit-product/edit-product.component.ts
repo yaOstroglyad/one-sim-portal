@@ -1,10 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CustomersDataService } from '../../../shared';
+import { CustomersDataService, CustomerType } from '../../../shared';
 import { SessionStorageService } from 'ngx-webstorage';
 import { ProductsDataService } from '../products-data.service';
-import { CustomerType } from '../../../shared/model/customer';
 
 @Component({
 	selector: 'app-edit-product',

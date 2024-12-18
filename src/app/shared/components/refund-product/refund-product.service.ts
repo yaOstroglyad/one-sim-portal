@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { RefundableProduct } from '../../../shared/model/package';
-import { SelectOption } from '../../../shared/components/form-generator/field-config';
+import { RefundableProduct } from '../../model/package';
+import { SelectOption } from '../../model/field-config';
 
 @Injectable({
 	providedIn: 'root'

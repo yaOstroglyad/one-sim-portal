@@ -1,6 +1,15 @@
-<div *ngIf="transactionsView$ | async as transactions; else loading"
-     class="trans-wrapper">
-    <table mat-table [dataSource]="transactions" class="mat-elevation-z0">
+<div *ngIf="transactionsView$ | async as transactions; else loading" class="trans-wrapper">
+    <app-empty-state
+            *ngIf="!transactions || transactions.length === 0"
+            [title]="'No transaction orders found'"
+            [message]="'The customer haven’t made any transactions yet.'"
+            [imageSrc]="'assets/img/empty-states/file-not-found.svg'">
+    </app-empty-state>
+
+    <table *ngIf="transactions.length > 0"
+           [dataSource]="transactions"
+           mat-table
+           class="mat-elevation-z0">
         <!-- Type Column -->
         <ng-container matColumnDef="type">
             <th mat-header-cell *matHeaderCellDef> Type</th>
@@ -67,6 +76,7 @@
     </table>
 </div>
 
+<!-- Loading Template -->
 <ng-template #loading>
     <p>Loading transaction orders...</p>
 </ng-template>

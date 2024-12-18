@@ -1,4 +1,4 @@
-import { FormConfig } from '../components/form-generator/field-config';
+import { FormConfig } from './field-config';
 
 export interface PgComponentConfig {
 	id: string,

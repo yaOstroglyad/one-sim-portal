@@ -1,7 +1,9 @@
 <ng-container *ngIf="config$ | async as config">
     <c-card *ngIf="(data$ | async)?.length; else noData"
+            [class.clickable]="isRowClickable"
             class="mx-3">
-        <table cTable [responsive]="true">
+        <table cTable
+               [responsive]="true">
             <thead>
             <tr>
                 <th *ngIf="config.showCheckboxes"
@@ -27,13 +29,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let item of data$ | async">
+            <tr *ngFor="let item of data$ | async"
+                (click)="isRowClickable && onRowClick(item)">
                 <td *ngIf="config.showCheckboxes"
                     class="min-w-3r text-center">
                     <input type="checkbox"
                            class="c-pointer"
                            [checked]="isSelected(item)"
                            [value]="item"
+                           (click)="$event.stopPropagation()"
                            (change)="toggleItemSelection(item, $event)">
                 </td>
                 <ng-container *ngFor="let col of config.columns">
@@ -52,13 +56,14 @@
                     </td>
                 </ng-container>
                 <td *ngIf="config.showEditButton && !config.showMenu"
-                    (click)="onEdit(item)"
+                    (click)="$event.stopPropagation(); onEdit(item)"
                     class="min-w-3r text-center c-pointer sticky-column">
                     <svg cIcon
                          name="cilPencil"></svg>
                 </td>
-                <td class="min-w-3r text-center c-pointer sticky-column" *ngIf="config.showMenu">
-                    <ng-container *ngTemplateOutlet="menu; context: { $implicit: item }"></ng-container>
+                <td class="min-w-3r text-end c-pointer sticky-column" *ngIf="config.showMenu">
+                    <ng-container *ngTemplateOutlet="menu; context: { $implicit: item }"
+                                  (click)="$event.stopPropagation()"></ng-container>
                 </td>
             </tr>
             </tbody>

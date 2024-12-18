@@ -1,4 +1,4 @@
-import { FieldType, FormConfig } from '../../../shared/components/form-generator/field-config';
+import { FieldType, FormConfig } from '../../../shared/model/field-config';
 import { Validators } from '@angular/forms';
 import { of } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';

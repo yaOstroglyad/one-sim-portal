@@ -2,8 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { TableConfig } from '../generic-table/table-column-config.interface';
-import { HeaderConfig } from './header-config.interface';
+import { TableConfig, HeaderConfig } from '../../model';
 
 @Component({
   selector: 'app-header',

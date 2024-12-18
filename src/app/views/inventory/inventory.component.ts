@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
+import { HeaderConfig, TableConfig, TableFilterFieldType, RefundProductComponent } from '../../shared';
 import { Resource } from '../../shared/model/resource';
 import { InventoryDataService } from './inventory-data.service';
 import { InventoryTableService } from './inventory-table.service';
@@ -10,7 +10,6 @@ import { SetupResourceComponent } from './setup-resource/setup-resource.componen
 import { MoveResourceComponent } from './move-resource/move-resource.component';
 import { SessionStorageService } from 'ngx-webstorage';
 import { takeUntil } from 'rxjs/operators';
-import { RefundProductComponent } from './refund-product/refund-product.component';
 
 @Component({
 	selector: 'app-inventory',
@@ -30,7 +29,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 	};
 	public isAdmin: boolean;
 
-	private filterValue: string | null = null; // Сохраняем текущий фильтр
+	private filterValue: string | null = null;
 
 	constructor(
 		private cdr: ChangeDetectorRef,
