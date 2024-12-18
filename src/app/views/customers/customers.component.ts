@@ -115,7 +115,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 	}
 
 	public openCustomerDetails(customer: Customer): void {
-		if (customer.type === CustomerType.Private) {
+		if (customer.type.toUpperCase() === CustomerType.Private.toUpperCase()) {
 			this.router.navigate([`home/customers/customer-details/${customer.type}/${customer.id}`]);
 		}
 	}

@@ -18,7 +18,7 @@
     </button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="openSendEmail(item)">Resend invite email</button>
-        <button *ngIf="item.type === CustomerType.Private"
+        <button *ngIf="item.type.toUpperCase() === CustomerType.Private.toUpperCase()"
                 mat-menu-item
                 (click)="openCustomerDetails(item)">Details</button>
     </mat-menu>
