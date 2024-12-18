@@ -149,7 +149,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	public openShowQRCode(subscriber: Subscriber): void {
 		this.subscriberDataService.getSimDetails({ id: subscriber.simId }).subscribe(sim => {
 			const uploadDialogRef = this.dialog.open(ShowQrCodeDialogComponent, {
-				width: '225px',
+				width: '350px',
 				data: sim.qrCode
 			});
 
