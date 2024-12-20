@@ -141,15 +141,15 @@
 }
 
 .mat-mdc-snack-bar-container {
-  --mat-mdc-snack-bar-button-color: $color-dark-contrast;
-  --mdc-snackbar-supporting-text-color: $color-dark-contrast;
+  --mat-mdc-snack-bar-button-color: var(--os-color-dark-contrast);
+  --mdc-snackbar-supporting-text-color: var(--os-color-dark-contrast);
 
   &.app-notification-error {
-    --mdc-snackbar-container-color: $color-danger;
+    --mdc-snackbar-container-color: var(--os-color-danger)
   }
 
   &.app-notification-success {
-    --mdc-snackbar-container-color: $color-success;
+    --mdc-snackbar-container-color: var(--os-color-success);
   }
 }
 

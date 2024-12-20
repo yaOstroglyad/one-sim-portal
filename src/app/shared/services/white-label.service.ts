@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { UserViewConfig } from '../model/userViewConfig';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { JwtHelperService } from '../auth';
-import { hexRgb, rgbToHsl } from './rgb-hex-convertor';
+import { hexRgb, rgbToHsl } from '../utils/rgb-hex-convertor';
 import { BrandFull } from '../model/brandFull';
 import { BrandNarrow } from '../model/brandNarrow';
 

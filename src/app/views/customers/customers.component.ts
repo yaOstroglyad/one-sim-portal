@@ -126,7 +126,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
 	private setupFilters(): void {
 		this.filterForm.valueChanges.pipe(
-			debounceTime(400),
+			debounceTime(700),
 			takeUntil(this.unsubscribe$)
 		).subscribe(() => {
 			this.applyFilter();
@@ -149,6 +149,12 @@ export class CustomersComponent implements OnInit, OnDestroy {
 				this.tableConfig$ = this.tableService.getTableConfig();
 				this.dataList$ = of(data.content);
 				this.cdr.detectChanges();
+				if (this.filterForm.dirty) {
+					this.snackBar.open('Search results loaded successfully', null, {
+						panelClass: 'app-notification-success',
+						duration: 1000
+					});
+				}
 			});
 	}
 }

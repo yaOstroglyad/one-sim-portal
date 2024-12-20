@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
-import { SimInfo } from '../model/subscriberInfo';
-import { SubscriberStatusEvent } from '../model/subscriberStatusEvent';
-import { SimLocations } from '../model/sim';
+import { SimInfo } from '../model';
+import { SubscriberStatusEvent } from '../model';
+import { SimLocations } from '../model';
 
 @Injectable({
 	providedIn: 'root'
