@@ -150,7 +150,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 				this.dataList$ = of(data.content);
 				this.cdr.detectChanges();
 				if (this.filterForm.dirty) {
-					this.snackBar.open('Search results loaded successfully', null, {
+					this.snackBar.open(`Search results loaded successfully. Total elements: ${data.totalElements}`, null, {
 						panelClass: 'app-notification-success',
 						duration: 1000
 					});
