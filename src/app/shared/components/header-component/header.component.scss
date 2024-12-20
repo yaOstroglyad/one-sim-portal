@@ -1,0 +1,16 @@
+:host {
+  form {
+    align-items: center;
+    gap: 0.5rem;
+
+    ::ng-deep input[type="text"] {
+      flex: 1;
+      min-width: 0;
+    }
+
+    button {
+      flex-shrink: 0;
+    }
+  }
+
+}

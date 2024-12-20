@@ -28,6 +28,33 @@ export class CustomersDataService extends DataService<Customer> {
 		);
 	}
 
+	paginatedCustomers(searchParams: any = {}, page: number = 0, size: number = 20, sort: string[] = []): Observable<any> {
+		let params = new HttpParams()
+			.set('page', page.toString())
+			.set('size', size.toString());
+
+		if (sort.length) {
+			params = params.set('sort', sort.join(','));
+		}
+
+		Object.keys(searchParams).forEach(key => {
+			if (searchParams[key]) {
+				params = params.set(key, searchParams[key]);
+			}
+		});
+
+		return this.http.get<any>('/api/v1/customers/query/all/page', { params }).pipe(
+			catchError(() => {
+				console.warn('error happened, presenting mocked data');
+				return of({
+					totalElements: 0,
+					totalPages: 0,
+					content: []
+				});
+			})
+		);
+	}
+
 	getCustomerDetails(id: Customer['id']): Observable<DataObject> {
 		return this.http.get<DataObject>(`/api/v1/customers/query/${id}/details`).pipe(
 			catchError(() => {

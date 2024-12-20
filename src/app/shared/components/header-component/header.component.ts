@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit {
   @Output() onAddAction = new EventEmitter<any>();
   @Output() columnSelectionChange = new EventEmitter<Set<string>>();
 
-  headerForm: FormGroup;
+  headerForm: FormGroup = new FormGroup({});
   formKeys: string[] = [];
   private initialTableConfig: TableConfig;
   public currentSelectedColumns = new Set<string>();
@@ -28,15 +28,17 @@ export class HeaderComponent implements OnInit {
   }
 
   initForm() {
-    const group = {};
-    this.formKeys = Object.keys(this.config);
-    this.formKeys.forEach(key => {
-      group[key] = new FormControl(this.config[key].defaultValue || '');
-    });
-    this.headerForm = new FormGroup(group);
-    this.headerForm.valueChanges.pipe(
-      debounceTime(400)
-    ).subscribe(val => this.filteredData.emit(val));
+    if(this.config) {
+      const group = {};
+      this.formKeys = Object.keys(this.config);
+      this.formKeys.forEach(key => {
+        group[key] = new FormControl(this.config[key].defaultValue || '');
+      });
+      this.headerForm = new FormGroup(group);
+      this.headerForm.valueChanges.pipe(
+        debounceTime(400)
+      ).subscribe(val => this.filteredData.emit(val));
+    }
   }
 
   subscribeToTableConfig() {

@@ -29,6 +29,19 @@ export class TableConfigAbstractService<T> {
 		return this.tableConfigSubject;
 	}
 
+	public updateConfigData(totalPages: number): void {
+		const currentConfig = this.tableConfigSubject.value;
+		const updatedConfig = {
+			...currentConfig,
+			pagination: {
+				...currentConfig.pagination,
+				totalPages
+			}
+		};
+
+		this.tableConfigSubject.next(updatedConfig);
+	}
+
 	public applyFilter(filterForm: any): void {
 		if (filterForm && filterForm.value !== undefined) {
 			const lowerCaseFilterString = filterForm.value.toLowerCase();

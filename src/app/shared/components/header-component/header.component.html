@@ -1,18 +1,20 @@
-
+<!-- src/app/shared/components/header-component/header.component.html -->
 <form [formGroup]="headerForm" class="pb-2 d-flex px-3 pt-3 bg-light">
-    <button class="me-1" cButton color="secondary">
+    <button cButton color="secondary">
         <svg cIcon name="cilFilter"></svg>
     </button>
     <!-- Dynamic input/select components based on config -->
     <ng-container *ngFor="let key of formKeys">
-        <input *ngIf="config[key].type === 'text'" class="me-1" [formControlName]="key"
-               [placeholder]="config[key].placeholder" cFormControl type="text">
-        <select *ngIf="config[key].type === 'select'" class="me-1" [formControlName]="key" cSelect>
+        <input *ngIf="config[key].type === 'text'" [formControlName]="key"
+               [placeholder]="config[key].placeholder" cFormControl [type]="'text'">
+        <select *ngIf="config[key].type === 'select'" [formControlName]="key" cSelect>
             <option *ngFor="let option of config[key].options" [value]="option.value">
                 {{ option.label }}
             </option>
         </select>
     </ng-container>
+    <!-- Slot for custom inputs -->
+    <ng-content select="[header-custom-inputs]"></ng-content>
     <!-- Column picker -->
     <ng-container *ngIf="tableConfig$ | async as tableConfig">
         <column-control [config$]="tableConfig$"
@@ -20,7 +22,6 @@
                         (columnSelectionChange)="onColumnSelectionChanged($event)"></column-control>
         <!-- Reset button -->
         <button *ngIf="tableConfig.showAddButton"
-                class="me-1"
                 cButton color="primary"
                 (click)="addNewEntity()">
             <svg cIcon name="cilPlus"></svg>
@@ -29,7 +30,7 @@
     <!-- Slot for additional actions -->
     <ng-content select="[header-actions]"></ng-content>
     <!-- Reset button -->
-    <button class="me-1" [disabled]="headerForm.pristine" cButton color="secondary" (click)="resetForm()">
+    <button *ngIf="formKeys.length > 0" [disabled]="headerForm.pristine" cButton color="secondary" (click)="resetForm()">
         <svg cIcon name="cilReload"></svg>
     </button>
 </form>

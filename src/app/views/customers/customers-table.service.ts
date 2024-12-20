@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TableConfig, TableConfigAbstractService } from 'src/app/shared';
-import { Customer } from '../../shared/model/customer';
+import { Customer } from '../../shared';
 
 @Injectable({
 	providedIn: 'root'
@@ -10,6 +10,11 @@ export class CustomersTableService extends TableConfigAbstractService<Customer> 
 	public originalDataSubject = new BehaviorSubject<Customer[]>([]);
 	public dataList$: Observable<Customer[]> = this.originalDataSubject.asObservable();
 	public tableConfigSubject = new BehaviorSubject<TableConfig>({
+		pagination: {
+			enabled: true,
+			serverSide: true,
+			totalPages: 20
+		},
 		translatePrefix: 'customer.',
 		showCheckboxes: false,
 		showEditButton: true,

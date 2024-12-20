@@ -1,21 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import {
-	Customer,
-	CustomersDataService,
-	CustomerType,
-	HeaderConfig,
-	TableConfig,
-	TableFilterFieldType
-} from '../../shared';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { Customer, CustomersDataService, CustomerType, TableConfig } from '../../shared';
 import { CustomersTableService } from './customers-table.service';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 import { MatDialog } from '@angular/material/dialog';
-import { switchMap, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Order } from '../../shared/model/order';
 import { ReSendInviteEmailComponent } from './re-send-invite-email/re-send-invite-email.component';
 import { Router } from '@angular/router';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
 	selector: 'app-customers',
@@ -28,48 +22,44 @@ export class CustomersComponent implements OnInit, OnDestroy {
 	private unsubscribe$ = new Subject<void>();
 	public tableConfig$: BehaviorSubject<TableConfig>;
 	public dataList$: Observable<Customer[]>;
-	public headerConfig: HeaderConfig = {};
+	public filterForm: FormGroup;
 
-
-	constructor(private cdr: ChangeDetectorRef,
-							private tableService: CustomersTableService,
-							private customersDataService: CustomersDataService,
-							private router: Router,
-							private dialog: MatDialog,
-							private snackBar: MatSnackBar
+	constructor(
+		private cdr: ChangeDetectorRef,
+		private tableService: CustomersTableService,
+		private customersDataService: CustomersDataService,
+		private router: Router,
+		private dialog: MatDialog,
+		private snackBar: MatSnackBar
 	) {
-		this.initheaderConfig();
 	}
 
-	ngOnDestroy(): void {
+	public ngOnInit(): void {
+		this.initFormControls();
+		this.loadData();
+		this.setupFilters();
+	}
+
+	public ngOnDestroy(): void {
 		this.unsubscribe$.next();
 		this.unsubscribe$.complete();
 	}
 
-	ngOnInit(): void {
-		this.loadCustomers();
+	public onPageChange({page, size}: { page: number; size: number }): void {
+		this.loadData({
+			page,
+			size,
+			...this.filterForm.getRawValue()
+		});
 	}
 
-	private loadCustomers(): void {
-		this.customersDataService.list()
-			.pipe(takeUntil(this.unsubscribe$))
-			.subscribe(data => {
-				this.tableService.updateTableData(data);
-				this.tableConfig$ = this.tableService.getTableConfig();
-				this.dataList$ = this.tableService.dataList$;
-				this.cdr.detectChanges();
-			});
-	}
-
-	private initheaderConfig(): void {
-		this.headerConfig = {
-			value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
+	public applyFilter(): void {
+		const params = {
+			page: 0,
+			size: 10,
+			...this.filterForm.getRawValue()
 		};
-	}
-
-	public applyFilter(filterValues: any): void {
-		this.tableService.applyFilter(filterValues);
-		this.dataList$ = this.tableService.dataList$;
+		this.loadData(params);
 	}
 
 	public onColumnSelectionChanged(selectedColumns: Set<string>): void {
@@ -85,7 +75,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 		dialogRef.afterClosed().subscribe(result => {
 			if (result) {
 				this.customersDataService.create(result).subscribe(() => {
-					this.loadCustomers();
+					this.loadData();
 				});
 			}
 		});
@@ -118,5 +108,47 @@ export class CustomersComponent implements OnInit, OnDestroy {
 		if (customer.type.toUpperCase() === CustomerType.Private.toUpperCase()) {
 			this.router.navigate([`home/customers/customer-details/${customer.type}/${customer.id}`]);
 		}
+	}
+
+	public resetForm(): void {
+		this.filterForm.reset();
+	}
+
+	private initFormControls(): void {
+		this.filterForm = new FormGroup({
+			iccid: new FormControl(null),
+			name: new FormControl(null),
+			externalId: new FormControl(null),
+			externalTransactionId: new FormControl(null),
+			type: new FormControl(null)
+		});
+	}
+
+	private setupFilters(): void {
+		this.filterForm.valueChanges.pipe(
+			debounceTime(400),
+			takeUntil(this.unsubscribe$)
+		).subscribe(() => {
+			this.applyFilter();
+		});
+	}
+
+	private loadData(params: {
+		page: number;
+		size: number;
+		iccid?: string;
+		name?: string;
+		externalId?: string;
+		externalTransactionId?: string;
+		type?: string
+	} = {page: 0, size: 10}): void {
+		this.customersDataService.paginatedCustomers(params, params.page, params.size)
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe(data => {
+				this.tableService.updateConfigData(data?.totalPages || 20);
+				this.tableConfig$ = this.tableService.getTableConfig();
+				this.dataList$ = of(data.content);
+				this.cdr.detectChanges();
+			});
 	}
 }

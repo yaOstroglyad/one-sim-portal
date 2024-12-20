@@ -6,14 +6,17 @@
     --scrollbar-track-color: var(--cui-body-color, $color-dark-contrast);
     --scrollbar-hover-size: calc(var(--scrollbar-size) * 1.5);
   }
+
   .sidebar-bg {
     background: $white-87-opacity;
     box-shadow: 0 0 12px $color-medium-shade;
     border-right: 3px solid $primary-color-border;
   }
+
   .sidebar-toggler {
     background-color: $primary-color-border;
   }
+
   .sidebar-brand {
     background: none;
   }
@@ -37,6 +40,40 @@
 
       .nav-icon {
         color: $primary-color-contrast;
+      }
+    }
+  }
+}
+
+:host-context([dir="rtl"]) {
+  .sidebar-bg {
+    border-left: 3px solid $primary-color-border;
+    border-right: none;
+  }
+
+  ::ng-deep .sidebar-nav {
+    .nav-link {
+      justify-content: right;
+
+      .nav-icon {
+        order: 1;
+        margin-right: calc(var(--cui-sidebar-nav-link-padding-y) * -1.4);
+      }
+    }
+  }
+
+  ::ng-deep .sidebar-narrow-unfoldable {
+    .nav-icon {
+      + c-sidebar-nav-link-content {
+        display: none;
+      }
+    }
+
+    &:hover {
+      .nav-icon {
+        + c-sidebar-nav-link-content {
+          display: block;
+        }
       }
     }
   }
