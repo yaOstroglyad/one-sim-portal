@@ -22,7 +22,6 @@
 </app-header>
 <generic-table [config$]="tableConfig$"
                [data$]="dataList$"
-               [menu]="menuTemplate"
                (pageChange)="onPageChange($event)"></generic-table>
 
 <mat-card *ngIf="moveResult.isActive"
@@ -35,12 +34,3 @@
         </div>
     </mat-card-content>
 </mat-card>
-
-<ng-template #menuTemplate let-item>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="openRefund(item)">Refund product</button>
-    </mat-menu>
-</ng-template>

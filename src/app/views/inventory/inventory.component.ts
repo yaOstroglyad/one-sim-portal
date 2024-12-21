@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { HeaderConfig, TableConfig, TableFilterFieldType, RefundProductComponent } from '../../shared';
+import { HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
 import { Resource } from '../../shared/model/resource';
 import { InventoryDataService } from './inventory-data.service';
 import { InventoryTableService } from './inventory-table.service';
@@ -132,18 +132,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
 		const uploadDialogRef = this.dialog.open(UploadDialogComponent, {
 			width: '600px',
 			data: {...selectionResult}
-		});
-
-		uploadDialogRef.afterClosed()
-			.pipe(
-				takeUntil(this.unsubscribe$)
-			).subscribe();
-	}
-
-	openRefund(data: any) {
-		const uploadDialogRef = this.dialog.open(RefundProductComponent, {
-			width: '600px',
-			data
 		});
 
 		uploadDialogRef.afterClosed()

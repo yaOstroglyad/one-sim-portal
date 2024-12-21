@@ -1,0 +1,22 @@
+:host {
+  .loader-wrapper {
+    min-height: 100px;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .loader {
+    width: 15px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    animation: l5 1s infinite linear alternate;
+  }
+  @keyframes l5 {
+    0%  {box-shadow: 20px 0 var(--os-color-primary), -20px 0 var(--os-color-primary-opacity-03); background: var(--os-color-primary) }
+    33% {box-shadow: 20px 0 var(--os-color-primary), -20px 0 var(--os-color-primary-opacity-03); background: var(--os-color-primary-opacity-03)}
+    66% {box-shadow: 20px 0 var(--os-color-primary-opacity-03), -20px 0 var(--os-color-primary); background: var(--os-color-primary-opacity-03)}
+    100%{box-shadow: 20px 0 var(--os-color-primary-opacity-03), -20px 0 var(--os-color-primary); background: var(--os-color-primary) }
+  }
+}
