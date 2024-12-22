@@ -16,6 +16,7 @@ import { ChipsInputComponent } from '../../shared/components/chips-input/chips-i
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReSendInviteEmailComponent } from './re-send-invite-email/re-send-invite-email.component';
 import { IconDirective } from '@coreui/icons-angular';
+import { HasPermissionDirective } from '../../shared/directives/has-permission.directive';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { IconDirective } from '@coreui/icons-angular';
 		FormGeneratorModule,
 		FormControlDirective,
 		IconDirective,
-		ButtonDirective
+		ButtonDirective,
+		HasPermissionDirective
 	]
 })
 export class CustomersModule { }

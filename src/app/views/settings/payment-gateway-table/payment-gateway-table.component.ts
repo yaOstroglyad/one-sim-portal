@@ -12,9 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { EditPaymentGatewayComponent } from './edit-payment-gateway/edit-payment-gateway.component';
 import { PaymentGatewayTableConfigService } from './payment-gateway-table-config.service';
-import { TableConfig } from 'src/app/shared';
+import { ADMIN_PERMISSION, AuthService, TableConfig } from 'src/app/shared';
 import { PaymentGatewayService } from './payment-gateway.service';
-import { SessionStorageService } from 'ngx-webstorage';
 import { PaymentStrategy } from '../../../shared/model/payment-strategies';
 
 @Component({
@@ -36,10 +35,10 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy {
 	constructor(private cdr: ChangeDetectorRef,
 							private tableService: PaymentGatewayTableConfigService,
 							private paymentGatewayService: PaymentGatewayService,
-							private $sessionStorage: SessionStorageService,
+							private authService: AuthService,
 							private dialog: MatDialog
 	) {
-		this.isAdmin = this.getAdmin();
+		this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	}
 
 	ngOnDestroy(): void {
@@ -90,9 +89,5 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy {
 				this.loadPaymentGateways()
 			}, 3000);
 		});
-	}
-
-	public getAdmin(): boolean {
-		return this.$sessionStorage.retrieve('isAdmin');
 	}
 }

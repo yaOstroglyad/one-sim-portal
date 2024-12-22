@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { first, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService, LoginRequest, LoginResponse } from '../../../shared';
 
@@ -18,8 +18,12 @@ export class LoginService implements OnDestroy {
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe((result: LoginResponse) => {
 				if (result) {
-					this.authService.scheduleTokenRefresh(result);
-					this.router.navigate(['/home']);
+					this.authService.loadPermissions().pipe(
+						first()
+					).subscribe(() => {
+						this.authService.scheduleTokenRefresh(result);
+						this.router.navigate(['/home']);
+					});
 				} else {
 					console.error('Token not found after authorization.');
 				}

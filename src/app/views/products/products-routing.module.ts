@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProductsComponent } from './products.component';
+import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, permissionGuard } from '../../shared';
 
 const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Products'
+      title: 'Products',
+      permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
     },
     component: ProductsComponent,
+    canActivate: [permissionGuard]
   }
 ];
 

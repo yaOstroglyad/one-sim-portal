@@ -4,7 +4,7 @@ import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { Title } from '@angular/platform-browser';
 import { AuthService, LanguageService } from './shared';
-import { Subject } from 'rxjs';
+import { first, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { WhiteLabelService } from './shared/services/white-label.service';
 import { takeUntil, filter } from 'rxjs/operators';

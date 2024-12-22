@@ -39,6 +39,7 @@ import { ItemNamesPipe } from '../../shared/pipes/item-names/item-names.pipe';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { ChangeStatusDialogComponent } from './change-status-dialog/change-status-dialog.component';
+import { HasPermissionDirective } from '../../shared/directives/has-permission.directive';
 
 
 
@@ -84,7 +85,8 @@ import { ChangeStatusDialogComponent } from './change-status-dialog/change-statu
 		MatIconModule,
 		ItemNamesPipe,
 		MatTooltipModule,
-		MatMenuModule
+		MatMenuModule,
+		HasPermissionDirective
 	],
 	providers: [
 		MatDatepickerModule

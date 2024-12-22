@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { InventoryComponent } from './inventory.component';
+import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, permissionGuard } from '../../shared';
 
 const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Inventory'
+      title: 'Inventory',
+      permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
     },
     component: InventoryComponent,
+    canActivate: [permissionGuard]
   }
 ];
 

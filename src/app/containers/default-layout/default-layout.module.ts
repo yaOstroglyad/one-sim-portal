@@ -25,7 +25,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 
-
 @NgModule({
 	declarations: [
 		DefaultFooterComponent,
@@ -58,7 +57,7 @@ import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcru
 		ListGroupModule,
 		CardModule,
 		NgScrollbarModule,
-		BreadcrumbComponent
+		BreadcrumbComponent,
 	]
 })
 export class DefaultLayoutModule {}

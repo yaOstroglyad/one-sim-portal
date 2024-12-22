@@ -24,11 +24,6 @@ export class JwtHelperService {
 		return token !== null && token !== undefined;
 	}
 
-	public isAdmin(token: any): boolean {
-		const decodedToken = this.decodeToken(token);
-		return decodedToken && decodedToken.preferred_username === 'admin';
-	}
-
 	public decodeToken(token: any): any {
 		try {
 			return jwt_decode(token);

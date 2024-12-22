@@ -13,23 +13,24 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { CustomHttpInterceptor } from './shared';
+import { AuthService, CustomHttpInterceptor } from './shared';
 import { GlobalErrorHandlerService } from './shared/auth/error-handler.service';
+import { HasPermissionDirective } from './shared/directives/has-permission.directive';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-export function initializeApp(translate: TranslateService) {
+export function combinedInitializer(translate: TranslateService, authService: AuthService) {
   return async (): Promise<any> => {
     try {
       await firstValueFrom(translate.use('en'));
+      await firstValueFrom(authService.loadPermissions());
     } catch (error) {
-      console.error("Ошибка при инициализации приложения с языком 'en':", error);
+      console.error('Error during app initialization:', error);
     }
   };
 }
-
 
 @NgModule({
   declarations: [AppComponent],
@@ -65,8 +66,8 @@ export function initializeApp(translate: TranslateService) {
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: initializeApp,
-      deps: [TranslateService],
+      useFactory: combinedInitializer,
+      deps: [TranslateService, AuthService],
       multi: true
     },
     IconSetService,
@@ -74,5 +75,4 @@ export function initializeApp(translate: TranslateService) {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

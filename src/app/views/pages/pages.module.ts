@@ -9,7 +9,7 @@ import { IconModule } from '@coreui/icons-angular';
 @NgModule({
   declarations: [
     Page404Component,
-    Page500Component
+    Page500Component,
   ],
   imports: [
     CommonModule,

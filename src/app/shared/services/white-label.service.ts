@@ -115,6 +115,7 @@ export class WhiteLabelService {
     return this.currentBrandNarrow;
   }
 
+  //TODO remove hardcode when white label will be done
   private isAnexCustomer(data: any): boolean {
     if (data && data.email) {
       const email: string = data.email;

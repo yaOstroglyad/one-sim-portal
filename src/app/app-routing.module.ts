@@ -5,6 +5,7 @@ import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
 import { RegisterComponent } from './views/pages/register/register.component';
 import { AuthGuardService } from './shared';
+import { Page403Component } from './views/pages/page403/page403.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,13 @@ const routes: Routes = [
     component: Page404Component,
     data: {
       title: 'Page 404'
+    }
+  },
+  {
+    path: '403',
+    component: Page403Component,
+    data: {
+      title: 'Page 403'
     }
   },
   {

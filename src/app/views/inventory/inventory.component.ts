@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
+import { ADMIN_PERMISSION, AuthService, HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
 import { Resource } from '../../shared/model/resource';
 import { InventoryDataService } from './inventory-data.service';
 import { InventoryTableService } from './inventory-table.service';
@@ -36,7 +36,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 		private tableService: InventoryTableService,
 		private inventoryDataService: InventoryDataService,
 		private dialog: MatDialog,
-		private $sessionStorage: SessionStorageService
+		private authService: AuthService,
 	) {
 		this.initHeaderConfig();
 	}
@@ -48,7 +48,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.loadData({page: 0, size: 10});
-		this.isAdmin = this.$sessionStorage.retrieve('isAdmin');
+		this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	}
 
 	private initHeaderConfig(): void {

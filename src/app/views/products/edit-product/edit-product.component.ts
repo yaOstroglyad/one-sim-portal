@@ -1,8 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CustomersDataService, CustomerType } from '../../../shared';
-import { SessionStorageService } from 'ngx-webstorage';
+import { ADMIN_PERMISSION, AuthService, CustomersDataService, CustomerType } from '../../../shared';
 import { ProductsDataService } from '../products-data.service';
 
 @Component({
@@ -30,9 +29,9 @@ export class EditProductComponent implements OnInit {
 		@Inject(MAT_DIALOG_DATA) public data: any,
 		private customersDataService: CustomersDataService,
 		private productsDataService: ProductsDataService,
-		private $sessionStorage: SessionStorageService
+		private authService: AuthService,
 	) {
-		this.isAdmin = this.$sessionStorage.retrieve('isAdmin');
+		this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	}
 
 	ngOnInit(): void {
