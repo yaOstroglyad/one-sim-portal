@@ -73,7 +73,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.customerId = this.route.snapshot.paramMap.get('id') || '';
-		this.customerDetailsView$ = this.customerDataService.getCustomerDetails(this.customerId);
+		this.loadCustomerDetails();
 
 		this.loadTimelineEvents();
 	}
@@ -113,6 +113,10 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 			});
 	}
 
+	private loadCustomerDetails(): void {
+		this.customerDetailsView$ = this.customerDataService.getCustomerDetails(this.customerId);
+	}
+
 	private loadSimLocation(simId: string): void {
 		if (!simId) {
 			return;
@@ -143,7 +147,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 			data
 		});
 
-		uploadDialogRef.afterClosed().subscribe();
+		uploadDialogRef.afterClosed().subscribe(() => this.loadCustomerDetails());
 	}
 
 	public openShowQRCode(subscriber: Subscriber): void {
