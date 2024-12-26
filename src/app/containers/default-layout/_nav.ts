@@ -32,6 +32,12 @@ export const navItems: any[] = [
 		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
 	},
 	{
+		name: 'Users',
+		url: 'users',
+		iconComponent: {name: 'cil-user'},
+		permissions: [ADMIN_PERMISSION]
+	},
+	{
 		name: 'Settings',
 		url: 'settings',
 		iconComponent: {name: 'cil-settings'},

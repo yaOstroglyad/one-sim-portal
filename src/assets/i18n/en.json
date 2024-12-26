@@ -57,5 +57,13 @@
     "isPrimary": "Is primary",
     "paymentStrategy": "Payment Strategy",
     "createdDate": "Created Date"
+  },
+  "user": {
+    "username": "Username",
+    "accountId": "Account ID",
+    "accountType": "Account Type",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email"
   }
 }

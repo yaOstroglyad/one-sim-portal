@@ -33,12 +33,12 @@ export class AuthService {
   reLoginTimeout: any;
 
   loadPermissions(): Observable<string[]> {
-    return this.http.get<string[]>('/api/permissions').pipe(
-      tap(permissions => {
-        this.permissions = permissions;
-      }),
-      catchError(() => {
-        const admins = ['admin'];
+    // return this.http.get<string[]>('/api/permissions').pipe(
+    //   tap(permissions => {
+    //     this.permissions = permissions;
+    //   }),
+    //   catchError(() => {
+        const admins = ['admin', 'daniel@1-esim.com'];
         const customers = ['anex@mail.com', 'sergey.tepkeev@anextour.com', 'daniel@1-esim.com', 'daniel-1esim', 'vasily@1-esim.com', 'vb@venturebot.fund'];
         const support = [];
         const loginResponse = this.$SessionStorageService.retrieve('loginResponse') || this.$LocalStorageService.retrieve('loginResponse');
@@ -60,8 +60,8 @@ export class AuthService {
 
         console.log('Error loading permissions, defaulting to:', this.permissions);
         return of([]);
-      })
-    );
+    //   })
+    // );
   }
 
   hasPermission(permission: string): boolean {

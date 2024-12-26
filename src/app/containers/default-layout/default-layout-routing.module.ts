@@ -39,6 +39,11 @@ const routes: Routes = [
             import('../../views/orders/orders.module').then((m) => m.OrdersModule)
       },
       {
+        path: 'users',
+        loadChildren: () =>
+          import('../../views/users/users.module').then((m) => m.UsersModule)
+      },
+      {
         path: 'settings',
         loadChildren: () =>
             import('../../views/settings/settings.module').then((m) => m.SettingsModule)

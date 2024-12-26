@@ -4,11 +4,10 @@ import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { Title } from '@angular/platform-browser';
 import { AuthService, LanguageService } from './shared';
-import { first, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { WhiteLabelService } from './shared/services/white-label.service';
 import { takeUntil, filter } from 'rxjs/operators';
-import { UserViewConfig } from './shared/model/userViewConfig';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 
 @Component({
@@ -17,7 +16,7 @@ import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 })
 export class AppComponent implements OnInit, OnDestroy {
 	private unsubscribe$ = new Subject<void>();
-	title = 'One Sim';
+	title = 'One eSim';
 
 	constructor(
 		private router: Router,
@@ -60,9 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
 				takeUntil(this.unsubscribe$),
 				filter(event => event instanceof NavigationEnd)
 			)
-			.subscribe(() => {
-				// Можно добавить логику, если нужно
-			});
+			.subscribe();
 	}
 
 	private subscribeToViewConfigChanges(): void {

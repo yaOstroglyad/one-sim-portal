@@ -15,7 +15,6 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthService, CustomHttpInterceptor } from './shared';
 import { GlobalErrorHandlerService } from './shared/auth/error-handler.service';
-import { HasPermissionDirective } from './shared/directives/has-permission.directive';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

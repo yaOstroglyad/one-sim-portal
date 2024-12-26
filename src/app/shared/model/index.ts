@@ -9,6 +9,7 @@ export * from './subscriberStatusEvent';
 export * from './purchaseHistory';
 export * from './sim';
 export * from './customer';
+export * from './user';
 export * from './field-config';
 export * from './header-config.interface';
 export * from './table-column-config.interface';

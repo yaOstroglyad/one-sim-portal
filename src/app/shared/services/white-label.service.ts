@@ -25,7 +25,7 @@ export const defaultConfig: UserViewConfig = {
 export class WhiteLabelService {
   public currentBrandFull: BrandFull = {
     src: 'assets/img/brand/1esim-logo.png',
-    height: 20,
+    height: 47,
     alt: 'onesim'
   };
 

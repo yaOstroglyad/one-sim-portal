@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormConfig } from '../../../shared/model/field-config';
+import { FormConfig } from '../../../shared';
 import { getResendInviteEmailFormConfig } from './re-send-invite-email.utils';
 
 @Component({

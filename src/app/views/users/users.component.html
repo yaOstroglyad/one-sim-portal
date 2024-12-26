@@ -1,0 +1,28 @@
+<app-header class="os-header-sticky"
+            [formGroup]="filterForm"
+            [tableConfig$]="tableConfig$"
+            (onAddAction)="createUser()"
+            (columnSelectionChange)="onColumnSelectionChanged($event)">
+    <ng-container header-custom-inputs>
+        <input cFormControl formControlName="name" [type]="'text'" placeholder="Name">
+        <button cButton
+                color="secondary"
+                [disabled]="filterForm.pristine"
+                (click)="resetForm()">
+            <svg cIcon name="cilReload"></svg>
+        </button>
+    </ng-container>
+</app-header>
+<generic-table [config$]="tableConfig$"
+               [menu]="menuTemplate"
+               [data$]="dataList$"
+               (pageChange)="onPageChange($event)"></generic-table>
+
+<ng-template #menuTemplate let-item>
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="resetPassword(item)">Reset password</button>
+    </mat-menu>
+</ng-template>
