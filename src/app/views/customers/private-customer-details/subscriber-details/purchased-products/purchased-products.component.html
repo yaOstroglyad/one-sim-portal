@@ -1,8 +1,8 @@
 <ng-container *ngIf="purchasedProductsView$ | async as purchasedProducts; else loading">
     <app-empty-state
             *ngIf="!purchasedProducts || purchasedProducts.length === 0"
-            [title]="'No purchased products history found'"
-            [message]="'The customer hasn\'t made any purchases yet.'"
+            [title]="'purchasedProducts.noPurchasedProductsFound' | translate"
+            [message]="'purchasedProducts.noPurchasesMessage' | translate"
             [imageSrc]="'assets/img/empty-states/file-not-found.svg'">
     </app-empty-state>
 
@@ -10,64 +10,67 @@
            [dataSource]="purchasedProducts"
            mat-table
            class="mat-elevation-z0">
-        <!-- Status Column -->
+        <!-- Product Name Column -->
         <ng-container matColumnDef="productName">
-            <th mat-header-cell *matHeaderCellDef> Product Name</th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.productName' | translate }}</th>
             <td mat-cell *matCellDef="let element">
                 {{ element.productName }}
             </td>
         </ng-container>
+
+        <!-- Status Column -->
         <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef> Status</th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.status' | translate }}</th>
             <td mat-cell *matCellDef="let element" [ngClass]="getStatusClass(element.status)">
                 {{ element.status }}
             </td>
         </ng-container>
 
-        <!-- Usage Balance Column -->
+        <!-- Remaining Balance Column -->
         <ng-container matColumnDef="remainingBalance">
-            <th mat-header-cell *matHeaderCellDef> Remaining Balance</th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.remainingBalance' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ this.convertData(element.usage, 'remaining') + this.getUnitType(element.usage) }}</td>
         </ng-container>
 
-        <!-- Usage Balance Column -->
+        <!-- Total Balance Column -->
         <ng-container matColumnDef="totalBalance">
-            <th mat-header-cell *matHeaderCellDef> Total Balance</th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.totalBalance' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ convertData(element.usage, 'total') + this.getUnitType(element.usage) }}</td>
         </ng-container>
 
         <!-- Price Column -->
         <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef> Price</th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.price' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ element.price.price + " " + element.price.currency }}</td>
         </ng-container>
 
         <!-- Purchased At Column -->
         <ng-container matColumnDef="purchasedAt">
-            <th mat-header-cell *matHeaderCellDef> Purchased At</th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.purchasedAt' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ element.purchasedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
         </ng-container>
 
         <!-- Updated At Column -->
         <ng-container matColumnDef="updatedAt">
-            <th mat-header-cell *matHeaderCellDef> Updated At</th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.updatedAt' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ element.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
         </ng-container>
 
         <!-- Updated By Column -->
         <ng-container matColumnDef="updatedBy">
-            <th mat-header-cell *matHeaderCellDef> Updated By</th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.updatedBy' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ element.updatedBy }}</td>
         </ng-container>
 
         <!-- Usage Started At Column -->
         <ng-container matColumnDef="usageStartedAt">
-            <th mat-header-cell *matHeaderCellDef> Usage Started At</th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.usageStartedAt' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ element.usage.startedAt | date: 'dd/MM/yyyy' }}</td>
         </ng-container>
 
+        <!-- Usage Expired At Column -->
         <ng-container matColumnDef="usageExpiredAt">
-            <th mat-header-cell *matHeaderCellDef> Usage Expired At</th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.usageExpiredAt' | translate }}</th>
             <td mat-cell *matCellDef="let element"> {{ element.usage.expiredAt | date: 'dd/MM/yyyy' }}</td>
         </ng-container>
 
@@ -79,5 +82,5 @@
 
 <!-- Loading Template -->
 <ng-template #loading>
-    <p>Loading transaction orders...</p>
+    <p>{{ 'purchasedProducts.loading' | translate }}</p>
 </ng-template>

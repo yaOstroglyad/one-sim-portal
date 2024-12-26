@@ -1,0 +1,334 @@
+{
+  "page500": {
+    "serverError": "יוסטון, יש לנו בעיה!",
+    "unavailableMessage": "הדף שאתה מחפש אינו זמין זמנית."
+  },
+  "page404": {
+    "pageNotFound": "אופס! אתה אבוד.",
+    "notFoundMessage": "הדף שאתה מחפש לא נמצא."
+  },
+  "page403": {
+    "accessDenied": "הגישה נדחתה!",
+    "noPermissionMessage": "אין לך הרשאה לצפות בדף זה.",
+    "goHomeButton": "לך לדף הבית"
+  },
+  "login": {
+    "userNamePlaceholder": "שם משתמש / אימייל",
+    "passwordPlaceholder": "סיסמה",
+    "loginButton": "התחבר"
+  },
+  "register": {
+    "emailLabel": "אימייל",
+    "passwordLabel": "סיסמה",
+    "confirmPasswordLabel": "אשר סיסמה",
+    "submitButton": "שלח"
+  },
+  "shared": {
+    "no-data": "אין נתונים"
+  },
+  "pagination": {
+    "previous": "הקודם",
+    "next": "הבא",
+    "of": "מתוך"
+  },
+  "common": {
+    "cancel": "בטל",
+    "send": "שלח",
+    "save": "שמור",
+    "apply": "החל",
+    "submit": "שלח",
+    "table": {
+      "filterPlaceholder": "סנן נתוני טבלה"
+    }
+  },
+  "default-header": {
+    "language": "שפה",
+    "english": "אנגלית",
+    "hebrew": "עברית",
+    "ukrainian": "אוקראינית",
+    "russian": "רוסית",
+    "account": "חשבון",
+    "notifications": "התראות",
+    "settings": "הגדרות",
+    "profile": "פרופיל",
+    "logout": "התנתק"
+  },
+  "nav": {
+    "customers": "לקוחות",
+    "providers": "ספקים",
+    "orders": "הזמנות",
+    "products": "מוצרים",
+    "inventory": "מלאי",
+    "users": "משתמשים",
+    "settings": "הגדרות"
+  },
+  "dynamicEntityDetails": {
+    "title": "פרטי ישות"
+  },
+  "chipsInput": {
+    "pressEnterToEdit": "לחץ Enter לעריכה {{item}}",
+    "remove": "הסר {{item}}"
+  },
+  "provider": {
+    "id": "מזהה",
+    "name": "שם"
+  },
+  "qrCode": {
+    "noQrCode": "אין קוד QR למנוי"
+  },
+  "refundProduct": {
+    "title": "החזר מוצר",
+    "noProducts": "אין מוצרים להחזר.",
+    "cancel": "בטל",
+    "send": "שלח"
+  },
+  "customer": {
+    "id": "מזהה",
+    "name": "שם",
+    "tags": "תגיות",
+    "type": "סוג",
+    "description": "תיאור",
+    "iccid": "ICCID",
+    "externalId": "מזהה חיצוני",
+    "externalTransactionId": "מזהה עסקה חיצוני",
+    "resendInviteEmail": "שלח שוב הזמנת אימייל",
+    "details": "פרטים",
+    "edit": "ערוך לקוח",
+    "create": "צור לקוח",
+    "private-customer-details": {
+      "refundTooltip": "בחר מנוי להחזר",
+      "refund": "החזר",
+      "qrCodeTooltip": "בחר מנוי להצגת קוד ה-QR שלו",
+      "showQRCode": "הצג קוד QR",
+      "overview": "סקירה כללית",
+      "location": "מיקום",
+      "imsi": "IMSI",
+      "state": "מדינה",
+      "country": "ארץ",
+      "operator": "מפעיל",
+      "otherDetails": "פרטים נוספים",
+      "currencyCode": "קוד מטבע",
+      "status": "מצב",
+      "language": "שפה",
+      "financialSummary": "סיכום פיננסי",
+      "totalSpent": "סה\"כ הוצא",
+      "totalUsedData": "סה\"כ נתונים בשימוש",
+      "activityTimeline": "ציר זמן פעילות",
+      "noActivities": "אין פעילויות",
+      "noActivitiesMessage": "המנוי לא ביצע פעילויות עדיין."
+    },
+    "showQrCodeDialog": {
+      "title": "תצוגת קוד QR"
+    }
+  },
+  "bundles": {
+    "noBundlesFound": "לא נמצאו חבילות"
+  },
+  "eventStatus": {
+    "noEventsFound": "אין אירועים עדיין",
+    "timeStamp": "חותם זמן",
+    "notificationPoint": "נקודת התראה",
+    "status": "מצב",
+    "loading": "טוען אירועים..."
+  },
+  "purchasedProducts": {
+    "noPurchasedProductsFound": "לא נמצאה היסטוריית מוצרים שנרכשו",
+    "noPurchasesMessage": "המנוי לא ביצע רכישות עדיין.",
+    "productName": "שם המוצר",
+    "status": "מצב",
+    "remainingBalance": "יתרה נותרת",
+    "totalBalance": "יתרה כוללת",
+    "price": "מחיר",
+    "purchasedAt": "נרכש ב-",
+    "updatedAt": "עודכן ב-",
+    "updatedBy": "עודכן על ידי",
+    "usageStartedAt": "תחילת שימוש ב-",
+    "usageExpiredAt": "תום שימוש ב-",
+    "loading": "טוען הזמנות עסקה..."
+  },
+  "subscriberDetails": {
+    "location": "מיקום",
+    "state": "מדינה",
+    "country": "ארץ",
+    "operator": "מפעיל",
+    "lastUpdatedAt": "עודכן לאחרונה ב-",
+    "bundles": "חבילות",
+    "simDetails": "פרטי סים",
+    "status": "מצב",
+    "networkStatus": "מצב רשת",
+    "imsi": "IMSI",
+    "msisdn": "MSISDN",
+    "imei": "IMEI",
+    "iccid": "ICCID",
+    "createdAt": "נוצר ב-",
+    "createdBy": "נוצר על ידי",
+    "updatedAt": "עודכן ב-",
+    "updatedBy": "עודכן על ידי",
+    "externalReferenceId": "מזהה חיצוני",
+    "purchasedProductsHistory": "היסטוריית מוצרים שנרכשו",
+    "transactionOrders": "הזמנות עסקה",
+    "statusEvent": "אירוע מצב"
+  },
+  "transactionOrdersTable": {
+    "noTransactionOrdersFound": "לא נמצאו הזמנות עסקה",
+    "noTransactionsMessage": "המנוי לא ביצע עסקאות עדיין.",
+    "type": "סוג",
+    "status": "מצב",
+    "productName": "שם המוצר",
+    "productPrice": "מחיר המוצר",
+    "createdAt": "נוצר ב-",
+    "createdBy": "נוצר על ידי",
+    "updatedAt": "עודכן ב-",
+    "updatedBy": "עודכן על ידי",
+    "externalTransactionId": "מזהה חיצוני",
+    "triggerType": "סוג טריגר",
+    "loading": "טוען הזמנות עסקה..."
+  },
+  "order": {
+    "id": "מזהה",
+    "serialNumber": "מספר סידורי",
+    "type": "סוג",
+    "description": "תיאור",
+    "createdDate": "תאריך יצירה",
+    "fromOwner": "מלקוח",
+    "toOwner": "ללקוח",
+    "editDescription": "ערוך תיאור"
+  },
+  "editOrderDescription": {
+    "title": "ערוך תיאור"
+  },
+  "package": {
+    "id": "מזהה",
+    "name": "שם",
+    "description": "תיאור",
+    "providerName": "שם הספק",
+    "usages": "שימושים",
+    "effectiveDate": "תאריך תחילה",
+    "price": "מחיר",
+    "status": "מצב",
+    "currency": "מטבע",
+    "customers": "לקוחות",
+    "validity": "תוקף",
+    "unitType": "סוג יחידה",
+    "details": "פרטים",
+    "edit": "ערוך",
+    "changeStatus": "שנה מצב"
+  },
+  "changeStatusDialog": {
+    "changeStatus": "שנה מצב",
+    "status": "מצב"
+  },
+  "createProduct": {
+    "createProduct": "צור מוצר",
+    "providerBundle": "חבילת ספק",
+    "products": "מוצרים",
+    "productName": "שם המוצר",
+    "description": "תיאור",
+    "price": "מחיר",
+    "currency": "מטבע",
+    "corporateProduct": "מוצר תאגידי",
+    "customers": "לקוחות",
+    "bundleInformation": "מידע חבילה",
+    "bundleName": "שם החבילה",
+    "bundleDescription": "תיאור החבילה",
+    "usageValue": "ערך שימוש",
+    "type": "סוג",
+    "unitType": "סוג יחידה",
+    "addUsage": "הוסף שימוש",
+    "validityPeriod": "תקופת תוקף",
+    "timeUnit": "יחידת זמן",
+    "flexible": "גמיש"
+  },
+  "editProduct": {
+    "editProduct": "ערוך מוצר",
+    "productName": "שם המוצר",
+    "description": "תיאור",
+    "price": "מחיר",
+    "currency": "מטבע",
+    "corporateProduct": "מוצר תאגידי",
+    "customers": "לקוחות",
+    "cancel": "בטל",
+    "saveChanges": "שמור שינויים"
+  },
+  "moveResource": {
+    "title": "העבר משאב"
+  },
+  "setupResource": {
+    "title": "הגדר משאב"
+  },
+  "uploadDialog": {
+    "title": "העלה סיבות",
+    "dropZoneMessage": "גרור ושחרר את הקובץ שלך כאן או לחץ על הכפתור למטה לבחירת הקובץ.",
+    "chooseFileButton": "בחר קובץ",
+    "uploadSuccessMessage": "{{fileName}} הועלה בהצלחה!",
+    "uploadErrorMessage": "משהו השתבש. אנא נסה שוב."
+  },
+  "inventory": {
+    "id": "מזהה",
+    "lpa": "LPA",
+    "server": "שרת",
+    "code": "קוד",
+    "oid": "OID",
+    "iccid": "ICCID",
+    "imei": "IMEI",
+    "imsi": "IMSI",
+    "customer": "לקוח",
+    "msisdn": "MSISDN",
+    "status": "מצב",
+    "provider": "שם",
+    "uploadResource": "העלה משאב",
+    "moveResource": "העבר משאב",
+    "movedSimsMessage": "{{movedSims}} כרטיסי SIM הועברו",
+    "availableSimsMessage": "עדיין יש כרטיסי SIM זמינים להעברה: {{availableSims}}"
+  },
+  "editPaymentGateway": {
+    "setupPaymentGateway": "הגדר שער תשלום",
+    "active": "פעיל",
+    "deactivated": "מושבת",
+    "primaryPaymentGatewayTooltip": "שער התשלום הראשי, לא ניתן להשבית",
+    "statusUpdated": "הסטטוס עודכן בהצלחה",
+    "configurationCreated": "הקונפיגורציה נוצרה בהצלחה",
+    "configurationUpdated": "הקונפיגורציה עודכנה בהצלחה",
+    "formInvalid": "הטופס אינו חוקי"
+  },
+  "settings": {
+    "paymentGateway": "שער תשלום",
+    "whiteLabelConfiguration": "הגדרת White Label"
+  },
+  "paymentGateway": {
+    "id": "מזהה",
+    "name": "שם",
+    "isActive": "פעיל",
+    "isPrimary": "ראשי",
+    "paymentStrategy": "אסטרטגיית תשלום",
+    "createdDate": "תאריך יצירה",
+    "hint": "בחלק זה, תוכל להגדיר את כל שערי התשלום הזמינים לך.",
+    "setupNew": "הגדר שער תשלום חדש",
+    "setup": "הגדר שער תשלום",
+    "adminHint": "הגדרה זו זמינה רק למשתמשים שאינם מנהלים."
+  },
+  "createUser": {
+    "title": "צור משתמש",
+    "email": "אימייל",
+    "emailPlaceholder": "הזן את האימייל של המשתמש",
+    "username": "שם משתמש",
+    "usernamePlaceholder": "הזן את שם המשתמש",
+    "firstName": "שם פרטי",
+    "firstNamePlaceholder": "הזן את השם הפרטי",
+    "lastName": "שם משפחה",
+    "lastNamePlaceholder": "הזן את שם המשפחה",
+    "accountId": "מזהה חשבון",
+    "accountIdPlaceholder": "הזן את מזהה החשבון",
+    "accountType": "סוג חשבון",
+    "accountTypePlaceholder": "הזן את סוג החשבון"
+  },
+  "user": {
+    "username": "שם משתמש",
+    "accountId": "מזהה חשבון",
+    "accountType": "סוג חשבון",
+    "firstName": "שם פרטי",
+    "lastName": "שם משפחה",
+    "email": "אימייל",
+    "resetPassword": "אפס סיסמה"
+  }
+}

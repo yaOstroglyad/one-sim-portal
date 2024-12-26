@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoaderComponent } from '../loader/loader.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-refund-product',
@@ -24,7 +25,8 @@ import { LoaderComponent } from '../loader/loader.component';
 		MatFormFieldModule,
 		MatIconModule,
 		NgIf,
-		LoaderComponent
+		LoaderComponent,
+		TranslateModule
 	],
 	styleUrls: ['./refund-product.component.scss']
 })

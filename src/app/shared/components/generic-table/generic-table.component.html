@@ -74,18 +74,18 @@
                     class="c-pointer"
                     (click)="!(currentPage === 0) && changePage(currentPage - 1, config.pagination?.serverSide)"
                     [class.disabled]="currentPage === 0">
-                    <div cPageLink>Previous</div>
+                    <div cPageLink>{{ 'pagination.previous' | translate }}</div>
                 </li>
 
                 <li cPageItem>
-                    <div cPageLink>{{ currentPage + 1 }} of {{ config.pagination?.totalPages ?? totalPages }}</div>
+                    <div cPageLink>{{ currentPage + 1 }} {{ 'pagination.of' | translate }} {{ config.pagination?.totalPages ?? totalPages }}</div>
                 </li>
 
                 <li cPageItem
                     class="c-pointer"
                     (click)="!(currentPage + 1 === config.pagination?.totalPages) && changePage(currentPage + 1, config.pagination?.serverSide)"
                     [class.disabled]="config.pagination?.totalPages ? currentPage + 1 === config.pagination?.totalPages : currentPage + 1 === totalPages">
-                    <div cPageLink>Next</div>
+                    <div cPageLink>{{ 'pagination.next' | translate }}</div>
                 </li>
             </c-pagination>
         </ng-container>

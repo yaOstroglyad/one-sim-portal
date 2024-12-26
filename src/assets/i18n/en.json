@@ -1,17 +1,188 @@
 {
+  "page500": {
+    "serverError": "Houston, we have a problem!",
+    "unavailableMessage": "The page you are looking for is temporarily unavailable."
+  },
+  "page404": {
+    "pageNotFound": "Oops! You're lost.",
+    "notFoundMessage": "The page you are looking for was not found."
+  },
+  "page403": {
+    "accessDenied": "Access Denied!",
+    "noPermissionMessage": "You do not have permission to view this page.",
+    "goHomeButton": "Go to Home"
+  },
+  "login": {
+    "userNamePlaceholder": "User name / Email",
+    "passwordPlaceholder": "Password",
+    "loginButton": "Log In"
+  },
+  "register": {
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "confirmPasswordLabel": "Confirm Password",
+    "submitButton": "Submit"
+  },
   "shared": {
     "no-data": "No data"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "of": "of"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "send": "Send",
+    "save": "Save",
+    "apply": "Apply",
+    "submit": "Submit",
+    "table": {
+      "filterPlaceholder": "Filter table data"
+    }
+  },
+  "default-header": {
+    "language": "Language",
+    "english": "English",
+    "hebrew": "Hebrew",
+    "ukrainian": "Ukrainian",
+    "russian": "Russian",
+    "account": "Account",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "nav": {
+    "customers": "Customers",
+    "providers": "Providers",
+    "orders": "Orders",
+    "products": "Products",
+    "inventory": "Inventory",
+    "users": "Users",
+    "settings": "Settings"
+  },
+  "dynamicEntityDetails": {
+    "title": "Entity Details"
+  },
+  "chipsInput": {
+    "pressEnterToEdit": "press enter to edit {{item}}",
+    "remove": "remove {{item}}"
   },
   "provider": {
     "id": "ID",
     "name": "Name"
+  },
+  "qrCode": {
+    "noQrCode": "No QR code for the subscriber"
+  },
+  "refundProduct": {
+    "title": "Refund Product",
+    "noProducts": "No products for refund.",
+    "cancel": "Cancel",
+    "send": "Send"
   },
   "customer": {
     "id": "ID",
     "name": "Name",
     "tags": "Tags",
     "type": "Type",
-    "description": "Description"
+    "description": "Description",
+    "iccid": "ICCID",
+    "externalId": "External ID",
+    "externalTransactionId": "External Transaction ID",
+    "resendInviteEmail": "Resend invite email",
+    "details": "Details",
+    "edit": "Edit Customer",
+    "create": "Create Customer",
+    "private-customer-details": {
+      "refundTooltip": "Please select a subscriber to refund",
+      "refund": "Refund",
+      "qrCodeTooltip": "Please select a subscriber to present his QR code",
+      "showQRCode": "Show QR code",
+      "overview": "Overview",
+      "location": "Location",
+      "imsi": "IMSI",
+      "state": "State",
+      "country": "Country",
+      "operator": "Operator",
+      "otherDetails": "Other Details",
+      "currencyCode": "Currency Code",
+      "status": "Status",
+      "language": "Language",
+      "financialSummary": "Financial Summary",
+      "totalSpent": "Total Spent",
+      "totalUsedData": "Total Used Data",
+      "activityTimeline": "Activity Timeline",
+      "noActivities": "No activities",
+      "noActivitiesMessage": "The customer hasn’t performed any activities yet."
+    },
+    "showQrCodeDialog": {
+      "title": "QR code view"
+    }
+  },
+  "bundles": {
+    "noBundlesFound": "No Bundles Found"
+  },
+  "eventStatus": {
+    "noEventsFound": "No any events yet",
+    "timeStamp": "Time Stamp",
+    "notificationPoint": "Notification Point",
+    "status": "Status",
+    "loading": "Loading events..."
+  },
+  "purchasedProducts": {
+    "noPurchasedProductsFound": "No purchased products history found",
+    "noPurchasesMessage": "The customer hasn’t made any purchases yet.",
+    "productName": "Product Name",
+    "status": "Status",
+    "remainingBalance": "Remaining Balance",
+    "totalBalance": "Total Balance",
+    "price": "Price",
+    "purchasedAt": "Purchased At",
+    "updatedAt": "Updated At",
+    "updatedBy": "Updated By",
+    "usageStartedAt": "Usage Started At",
+    "usageExpiredAt": "Usage Expired At",
+    "loading": "Loading transaction orders..."
+  },
+  "subscriberDetails": {
+    "location": "Location",
+    "state": "State",
+    "country": "Country",
+    "operator": "Operator",
+    "lastUpdatedAt": "Last updated at",
+    "bundles": "Bundles",
+    "simDetails": "Sim Details",
+    "status": "Status",
+    "networkStatus": "Network status",
+    "imsi": "IMSI",
+    "msisdn": "MSISDN",
+    "imei": "IMEI",
+    "iccid": "ICCID",
+    "createdAt": "Created At",
+    "createdBy": "Created By",
+    "updatedAt": "Updated At",
+    "updatedBy": "Updated By",
+    "externalReferenceId": "External Reference ID",
+    "purchasedProductsHistory": "Purchased Products History",
+    "transactionOrders": "Transaction Orders",
+    "statusEvent": "Status Event"
+  },
+  "transactionOrdersTable": {
+    "noTransactionOrdersFound": "No transaction orders found",
+    "noTransactionsMessage": "The customer hasn’t made any transactions yet.",
+    "type": "Type",
+    "status": "Status",
+    "productName": "Product name",
+    "productPrice": "Product price",
+    "createdAt": "Created At",
+    "createdBy": "Created By",
+    "updatedAt": "Updated At",
+    "updatedBy": "Updated By",
+    "externalTransactionId": "External ID",
+    "triggerType": "Trigger Type",
+    "loading": "Loading transaction orders..."
   },
   "order": {
     "id": "ID",
@@ -20,7 +191,11 @@
     "description": "Description",
     "createdDate": "Created Date",
     "fromOwner": "From Customer",
-    "toOwner": "To Customer"
+    "toOwner": "To Customer",
+    "editDescription": "Edit description"
+  },
+  "editOrderDescription": {
+    "title": "Edit description"
   },
   "package": {
     "id": "ID",
@@ -34,9 +209,61 @@
     "currency": "Currency",
     "customers": "Customers",
     "validity": "Validity",
-    "unitType": "Unit Type"
+    "unitType": "Unit Type",
+    "details": "Details",
+    "edit": "Edit",
+    "changeStatus": "Change status"
   },
-  "resource": {
+  "changeStatusDialog": {
+    "changeStatus": "Change Status",
+    "status": "Status"
+  },
+  "createProduct": {
+    "createProduct": "Create product",
+    "providerBundle": "Provider Bundle",
+    "products": "Products",
+    "productName": "Product Name",
+    "description": "Description",
+    "price": "Price",
+    "currency": "Currency",
+    "corporateProduct": "Corporate Product",
+    "customers": "Customers",
+    "bundleInformation": "Bundle Information",
+    "bundleName": "Bundle Name",
+    "bundleDescription": "Bundle Description",
+    "usageValue": "Usage Value",
+    "type": "Type",
+    "unitType": "Unit Type",
+    "addUsage": "Add Usage",
+    "validityPeriod": "Validity Period",
+    "timeUnit": "Time Unit",
+    "flexible": "Flexible"
+  },
+  "editProduct": {
+    "editProduct": "Edit product",
+    "productName": "Product Name",
+    "description": "Description",
+    "price": "Price",
+    "currency": "Currency",
+    "corporateProduct": "Corporate Product",
+    "customers": "Customers",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes"
+  },
+  "moveResource": {
+    "title": "Move resource"
+  },
+  "setupResource": {
+    "title": "Setup resource"
+  },
+  "uploadDialog": {
+    "title": "Upload reasons",
+    "dropZoneMessage": "Drag and drop your file here or click the button below to select the file.",
+    "chooseFileButton": "Choose File",
+    "uploadSuccessMessage": "{{fileName}} uploaded successfully!",
+    "uploadErrorMessage": "Something went wrong. Please try again."
+  },
+  "inventory": {
     "id": "ID",
     "lpa": "LPA",
     "server": "Server",
@@ -48,7 +275,25 @@
     "customer": "Customer",
     "msisdn": "MSISDN",
     "status": "Status",
-    "provider": "Name"
+    "provider": "Name",
+    "uploadResource": "Upload Resource",
+    "moveResource": "Move Resource",
+    "movedSimsMessage": "{{movedSims}} SIM cards have been moved",
+    "availableSimsMessage": "There are still available cards to move: {{availableSims}}"
+  },
+  "editPaymentGateway": {
+    "setupPaymentGateway": "Setup payment gateway",
+    "active": "Active",
+    "deactivated": "Deactivated",
+    "primaryPaymentGatewayTooltip": "Primary payment gateway, can't be deactivated",
+    "statusUpdated": "Status updated successfully",
+    "configurationCreated": "Configuration created successfully",
+    "configurationUpdated": "Configuration updated successfully",
+    "formInvalid": "Form is invalid"
+  },
+  "settings": {
+    "paymentGateway": "Payment Gateway",
+    "whiteLabelConfiguration": "White Label Configuration"
   },
   "paymentGateway": {
     "id": "ID",
@@ -56,7 +301,26 @@
     "isActive": "Is active",
     "isPrimary": "Is primary",
     "paymentStrategy": "Payment Strategy",
-    "createdDate": "Created Date"
+    "createdDate": "Created Date",
+    "hint": "In this section, you can configure all the payment gateways available to you.",
+    "setupNew": "Setup new payment-gateway",
+    "setup": "Setup payment gateway",
+    "adminHint": "This configuration is available to non-admin users only."
+  },
+  "createUser": {
+    "title": "Create User",
+    "email": "Email",
+    "emailPlaceholder": "Enter the user's email",
+    "username": "Username",
+    "usernamePlaceholder": "Enter the username",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Enter the first name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Enter the last name",
+    "accountId": "Account ID",
+    "accountIdPlaceholder": "Enter the account ID",
+    "accountType": "Account Type",
+    "accountTypePlaceholder": "Enter the account type"
   },
   "user": {
     "username": "Username",
@@ -64,6 +328,7 @@
     "accountType": "Account Type",
     "firstName": "First Name",
     "lastName": "Last Name",
-    "email": "Email"
+    "email": "Email",
+    "resetPassword": "Reset password"
   }
 }

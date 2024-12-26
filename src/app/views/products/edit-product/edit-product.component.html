@@ -1,25 +1,25 @@
-<h2 mat-dialog-title class="dialog-header">Edit product</h2>
+<h2 mat-dialog-title class="dialog-header">{{ 'editProduct.editProduct' | translate }}</h2>
 <mat-dialog-content class="mat-typography dialog-content">
     <form [formGroup]="form">
         <div class="form-group">
 
             <mat-form-field class="full-width">
-                <mat-label>Product Name</mat-label>
+                <mat-label>{{ 'editProduct.productName' | translate }}</mat-label>
                 <input matInput formControlName="name">
             </mat-form-field>
 
             <mat-form-field class="full-width">
-                <mat-label>Description</mat-label>
+                <mat-label>{{ 'editProduct.description' | translate }}</mat-label>
                 <textarea matInput formControlName="description"></textarea>
             </mat-form-field>
 
             <mat-form-field class="full-width">
-                <mat-label>Price</mat-label>
+                <mat-label>{{ 'editProduct.price' | translate }}</mat-label>
                 <input matInput type="number" formControlName="price">
             </mat-form-field>
 
             <mat-form-field class="full-width">
-                <mat-label>Currency</mat-label>
+                <mat-label>{{ 'editProduct.currency' | translate }}</mat-label>
                 <mat-select formControlName="currency">
                     <mat-option *ngFor="let currency of currencies" [value]="currency">
                         {{ currency }}
@@ -28,10 +28,10 @@
             </mat-form-field>
 
             <ng-container *ngIf="isAdmin">
-                <mat-checkbox formControlName="isCorporate">Corporate Product</mat-checkbox>
+                <mat-checkbox formControlName="isCorporate">{{ 'editProduct.corporateProduct' | translate }}</mat-checkbox>
 
                 <mat-form-field class="half-width">
-                    <mat-label>Customers</mat-label>
+                    <mat-label>{{ 'editProduct.customers' | translate }}</mat-label>
                     <mat-select formControlName="customers" multiple>
                         <mat-option *ngFor="let customer of customers" [value]="customer.id">
                             {{ customer.name }}
@@ -44,6 +44,6 @@
     </form>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-footer" align="end">
-    <button mat-button (click)="close()">Cancel</button>
-    <button mat-button color="primary" (click)="submit()">Save changes</button>
+    <button mat-button (click)="close()">{{ 'common.cancel' | translate }}</button>
+    <button mat-button color="primary" (click)="submit()">{{ 'common.save' | translate }}</button>
 </mat-dialog-actions>

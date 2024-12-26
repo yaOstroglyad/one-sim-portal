@@ -8,8 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';
 import { SetupResourceComponent } from './setup-resource/setup-resource.component';
 import { MoveResourceComponent } from './move-resource/move-resource.component';
-import { SessionStorageService } from 'ngx-webstorage';
 import { takeUntil } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-inventory',
@@ -37,6 +37,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 		private inventoryDataService: InventoryDataService,
 		private dialog: MatDialog,
 		private authService: AuthService,
+		private translate: TranslateService
 	) {
 		this.initHeaderConfig();
 	}
@@ -53,7 +54,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
 	private initHeaderConfig(): void {
 		this.headerConfig = {
-			value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
+			value: { type: TableFilterFieldType.Text, placeholder: this.translate.instant('common.table.filterPlaceholder') }
 		};
 	}
 

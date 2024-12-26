@@ -7,7 +7,7 @@
             cButton
             color="dark"
             class="me-1"
-            [matTooltip]="'Upload Resource'"
+            [matTooltip]="'inventory.uploadResource' | translate"
             (click)="openSelectionDialog()" header-actions>
         <svg cIcon name="cilDataTransferUp"></svg>
     </button>
@@ -15,7 +15,7 @@
             cButton
             color="dark"
             class="me-1"
-            [matTooltip]="'Move Resource'"
+            [matTooltip]="'inventory.moveResource' | translate"
             (click)="onMoveResource()" header-actions>
         <svg cIcon name="cilArrowThickToRight"></svg>
     </button>
@@ -23,14 +23,14 @@
 <generic-table [config$]="tableConfig$"
                [data$]="dataList$"
                (pageChange)="onPageChange($event)"></generic-table>
-
+<!--TODO refactor it, use snackbar instead-->
 <mat-card *ngIf="moveResult.isActive"
           class="notification-card"
           style="background: #7b7bff">
     <mat-card-content>
-        <div style="color: #ffffff">
-            <p>{{moveResult.movedSims}} SIM cards have been moved</p>
-            <p>There are still available cards to move: {{moveResult.availableSims}}</p>
+        <div class="text-white">
+            <p>{{ 'inventory.movedSimsMessage' | translate: { movedSims: moveResult.movedSims } }}</p>
+            <p>{{ 'inventory.availableSimsMessage' | translate: { availableSims: moveResult.availableSims } }}</p>
         </div>
     </mat-card-content>
 </mat-card>

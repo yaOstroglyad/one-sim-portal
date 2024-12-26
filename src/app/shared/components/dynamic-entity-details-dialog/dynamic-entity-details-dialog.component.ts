@@ -6,16 +6,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { DisplayKeyValueComponent } from '../display-key-value/display-key-value.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dynamic-entity-details-dialog',
   templateUrl: './dynamic-entity-details-dialog.component.html',
   styleUrls: ['./dynamic-entity-details-dialog.component.scss'],
-  imports: [
-    MatDialogModule,
-    MatButtonModule,
-    DisplayKeyValueComponent
-  ],
+	imports: [
+		MatDialogModule,
+		MatButtonModule,
+		DisplayKeyValueComponent,
+		TranslateModule
+	],
   standalone: true
 })
 export class DynamicEntityDetailsDialogComponent implements OnInit {

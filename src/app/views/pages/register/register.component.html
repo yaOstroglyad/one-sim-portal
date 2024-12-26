@@ -5,7 +5,7 @@
                 <app-form-generator [config]="RegistrationConfig"
                                     (formChanges)="handleFormChanges($event)"></app-form-generator>
 
-                <button mat-raised-button color="primary" [disabled]="!isFormValid">Submit</button>
+                <button mat-raised-button color="primary" [disabled]="!isFormValid">{{ 'common.submit' | translate }}</button>
             </div>
         </div>
         <div class="screen__background">

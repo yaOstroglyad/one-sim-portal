@@ -17,10 +17,10 @@
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="openDetails(item)">Details</button>
-        <button mat-menu-item (click)="edit(item)">Edit</button>
+        <button mat-menu-item (click)="openDetails(item)">{{ 'package.details' | translate }}</button>
+        <button mat-menu-item (click)="edit(item)">{{ 'package.edit' | translate }}</button>
         <button [disabled]="!validStatuses.includes(item.status)"
-                mat-menu-item (click)="openChangeStatus(item)">Change status</button>
+                mat-menu-item (click)="openChangeStatus(item)">{{ 'package.changeStatus' | translate }}</button>
     </mat-menu>
 </ng-template>
 

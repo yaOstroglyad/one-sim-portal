@@ -1,23 +1,20 @@
 <ng-container *ngIf="simView$ | async as simView">
     <div class="content">
-        <!-- Левая панель -->
         <div class="left-panel">
-            <!-- Location -->
             <mat-card>
                 <mat-card-header>
-                    <mat-card-title>Location</mat-card-title>
+                    <mat-card-title>{{ 'subscriberDetails.location' | translate }}</mat-card-title>
                 </mat-card-header>
                 <mat-card-content *ngIf="simView.simDetails && simView.locations">
-                    <p><strong>State:</strong> {{ simView.simDetails.networkStatus }}</p>
-                    <p><strong>Country:</strong> {{ simView.locations[0]?.country || 'N/A' }}</p>
-                    <p><strong>Operator:</strong> {{ simView.locations[0]?.operator || 'N/A' }}</p>
-                    <p><strong>Last updated at:</strong> {{ simView.simDetails.updatedAt | date: 'dd/MM/yyyy HH:mm' || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.state' | translate }}:</strong> {{ simView.simDetails.networkStatus }}</p>
+                    <p><strong>{{ 'subscriberDetails.country' | translate }}:</strong> {{ simView.locations[0]?.country || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.operator' | translate }}:</strong> {{ simView.locations[0]?.operator || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.lastUpdatedAt' | translate }}:</strong> {{ simView.simDetails.updatedAt | date: 'dd/MM/yyyy HH:mm' || 'N/A' }}</p>
                 </mat-card-content>
             </mat-card>
-            <!-- Bundles -->
             <mat-card>
                 <mat-card-header>
-                    <mat-card-title>Bundles</mat-card-title>
+                    <mat-card-title>{{ 'subscriberDetails.bundles' | translate }}</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                     <app-bundles [subscriber]="subscriber"></app-bundles>
@@ -26,43 +23,40 @@
         </div>
 
         <div class="right-panel">
-
             <mat-card>
                 <mat-card-header>
-                    <mat-card-title>Sim Details</mat-card-title>
+                    <mat-card-title>{{ 'subscriberDetails.simDetails' | translate }}</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <!--                    <p><strong>Currency Code:</strong> {{ simView.serviceProvider?.currency || 'N/A' }}</p>-->
-                    <p><strong>Status:</strong> {{ simView.simDetails.status || 'N/A' }}</p>
-                    <p><strong>Network status:</strong> {{ simView.simDetails.networkStatus || 'N/A' }}</p>
-                    <p><strong>IMSI:</strong> {{ simView.simDetails.imsi || 'N/A' }}</p>
-                    <p><strong>MSISDN:</strong> {{ simView.simDetails.msisdn || 'N/A' }}</p>
-                    <p><strong>IMEI:</strong> {{ simView.simDetails.imei || 'N/A' }}</p>
-                    <p><strong>ICCID:</strong> {{ simView.simDetails.iccid || 'N/A' }}</p>
-                    <p><strong>Created At:</strong> {{ simView.simDetails.createdAt | date: 'dd/MM/yyyy HH:mm' || 'N/A' }}</p>
-                    <p><strong>Created By:</strong> {{ simView.simDetails.createdBy || 'N/A' }}</p>
-                    <p><strong>Updated At:</strong> {{ simView.simDetails.updatedAt | date: 'dd/MM/yyyy HH:mm' || 'N/A' }}</p>
-                    <p><strong>Updated By:</strong> {{ simView.simDetails.updatedBy || 'N/A' }}</p>
-                    <p><strong>External Reference ID:</strong> {{ simView.simDetails.externalReferenceId || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.status' | translate }}:</strong> {{ simView.simDetails.status || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.networkStatus' | translate }}:</strong> {{ simView.simDetails.networkStatus || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.imsi' | translate }}:</strong> {{ simView.simDetails.imsi || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.msisdn' | translate }}:</strong> {{ simView.simDetails.msisdn || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.imei' | translate }}:</strong> {{ simView.simDetails.imei || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.iccid' | translate }}:</strong> {{ simView.simDetails.iccid || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.createdAt' | translate }}:</strong> {{ simView.simDetails.createdAt | date: 'dd/MM/yyyy HH:mm' || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.createdBy' | translate }}:</strong> {{ simView.simDetails.createdBy || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.updatedAt' | translate }}:</strong> {{ simView.simDetails.updatedAt | date: 'dd/MM/yyyy HH:mm' || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.updatedBy' | translate }}:</strong> {{ simView.simDetails.updatedBy || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.externalReferenceId' | translate }}:</strong> {{ simView.simDetails.externalReferenceId || 'N/A' }}</p>
                 </mat-card-content>
             </mat-card>
         </div>
     </div>
 
-    <div style="width: 100%">
+    <div class="w-100">
         <mat-card>
             <mat-card-header>
-                <mat-card-title>Purchased Products History</mat-card-title>
+                <mat-card-title>{{ 'subscriberDetails.purchasedProductsHistory' | translate }}</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 <app-purchased-products [subscriber]="subscriber"></app-purchased-products>
             </mat-card-content>
         </mat-card>
 
-        <!-- Transaction Orders -->
         <mat-card>
             <mat-card-header>
-                <mat-card-title>Transaction Orders</mat-card-title>
+                <mat-card-title>{{ 'subscriberDetails.transactionOrders' | translate }}</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 <app-transaction-orders-table
@@ -72,10 +66,9 @@
             </mat-card-content>
         </mat-card>
 
-        <!-- Status Event -->
         <mat-card>
             <mat-card-header>
-                <mat-card-title>Status Event</mat-card-title>
+                <mat-card-title>{{ 'subscriberDetails.statusEvent' | translate }}</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 <app-event-status [subscriber]="subscriber"></app-event-status>

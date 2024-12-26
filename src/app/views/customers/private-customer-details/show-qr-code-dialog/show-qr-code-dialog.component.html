@@ -1,7 +1,7 @@
-<h2 mat-dialog-title class="dialog-header">QR code view</h2>
+<h2 mat-dialog-title class="dialog-header">{{ 'customer.showQrCodeDialog.title' | translate }}</h2>
 <mat-dialog-content class="mat-typography dialog-content">
     <app-qr-code [qrCodeValue]="data"></app-qr-code>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-footer" align="end">
-    <button mat-button (click)="close()">Cancel</button>
+    <button mat-button (click)="close()">{{ 'common.cancel' | translate }}</button>
 </mat-dialog-actions>

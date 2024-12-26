@@ -5,25 +5,29 @@
         </div>
         <div class="header-actions">
             <div [matTooltipDisabled]="!!selectedSubscriber"
-                 class="c-pointer"
-                 matTooltip="Please select a subscriber to refund"
+                 class="c-pointer highlight-tab"
+                 matTooltip="{{ 'customer.private-customer-details.refundTooltip' | translate }}"
                  matTooltipPosition="below"
-                 matTooltipClass="tooltip">
+                 matTooltipClass="tooltip"
+                 (mouseenter)="!selectedSubscriber && highlightTab()"
+                 (mouseleave)="!selectedSubscriber && removeHighlightTab()">
                 <button mat-button
                         [disabled]="!selectedSubscriber"
                         (click)="openRefund(selectedSubscriber)">
-                    Refund
+                    {{ 'customer.private-customer-details.refund' | translate }}
                 </button>
             </div>
             <div [matTooltipDisabled]="!!selectedSubscriber"
                  class="c-pointer"
-                 matTooltip="Please select a subscriber to present his QR code"
+                 matTooltip="{{ 'customer.private-customer-details.qrCodeTooltip' | translate }}"
                  matTooltipPosition="below"
-                 matTooltipClass="tooltip">
+                 matTooltipClass="tooltip"
+                 (mouseenter)="!selectedSubscriber && highlightTab()"
+                 (mouseleave)="!selectedSubscriber && removeHighlightTab()">
                 <button mat-button
                         [disabled]="!selectedSubscriber"
                         (click)="openShowQRCode(selectedSubscriber)">
-                    Show QR code
+                    {{ 'customer.private-customer-details.showQRCode' | translate }}
                 </button>
             </div>
 <!--            <button mat-button>Unblock</button>-->
@@ -35,33 +39,34 @@
     </div>
 
     <div class="tabs-container">
-        <mat-tab-group class="tabs"
+        <mat-tab-group #tabGroup
+                       class="tabs"
                        mat-stretch-tabs="false"
                        mat-align-tabs="start"
                        (selectedTabChange)="onTabChange($event)">
-            <mat-tab label="Overview">
+            <mat-tab label="{{ 'customer.private-customer-details.overview' | translate }}">
                 <div class="content">
                     <div class="left-panel">
                         <mat-card>
                             <mat-card-header>
-                                <mat-card-title>Location</mat-card-title>
+                                <mat-card-title>{{ 'customer.private-customer-details.location' | translate }}</mat-card-title>
                             </mat-card-header>
                             <mat-card-content *ngIf="simLocations">
-                                <p><strong>IMSI:</strong> {{ simLocations[0]?.imsi || 'N/A' }}</p>
-                                <p><strong>State:</strong> {{ simLocations[0]?.state || 'N/A' }}</p>
-                                <p><strong>Country:</strong> {{ simLocations[0]?.country || 'N/A' }}</p>
-                                <p><strong>Operator:</strong> {{ simLocations[0]?.operator || 'N/A' }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.imsi' | translate }}:</strong> {{ simLocations[0]?.imsi || 'N/A' }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.state' | translate }}:</strong> {{ simLocations[0]?.state || 'N/A' }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.country' | translate }}:</strong> {{ simLocations[0]?.country || 'N/A' }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.operator' | translate }}:</strong> {{ simLocations[0]?.operator || 'N/A' }}</p>
                             </mat-card-content>
                         </mat-card>
 
                         <mat-card>
                             <mat-card-header>
-                                <mat-card-title>Other Details</mat-card-title>
+                                <mat-card-title>{{ 'customer.private-customer-details.otherDetails' | translate }}</mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
-                                <p><strong>Currency Code: </strong>{{ currency.toUpperCase() }}</p>
-                                <p><strong>Status: </strong> {{ customerDetailsView.customer.status }}</p>
-                                <p><strong>Language: </strong>EN</p>
+                                <p><strong>{{ 'customer.private-customer-details.currencyCode' | translate }}: </strong>{{ currency.toUpperCase() }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.status' | translate }}: </strong> {{ customerDetailsView.customer.status }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.language' | translate }}: </strong>EN</p>
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -69,23 +74,23 @@
                     <div class="right-panel">
                         <mat-card>
                             <mat-card-header>
-                                <mat-card-title>Financial Summary</mat-card-title>
+                                <mat-card-title>{{ 'customer.private-customer-details.financialSummary' | translate }}</mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
-                                <p><strong>Total Spent:</strong> {{ totalSpent }} {{ currency.toUpperCase() }}</p>
-                                <p><strong>Total Used Data:</strong> {{ totalUsedGB }} GB</p>
+                                <p><strong>{{ 'customer.private-customer-details.totalSpent' | translate }}:</strong> {{ totalSpent }} {{ currency.toUpperCase() }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.totalUsedData' | translate }}:</strong> {{ totalUsedGB }} GB</p>
                             </mat-card-content>
                         </mat-card>
 
                         <mat-card>
                             <mat-card-header>
-                                <mat-card-title>Activity Timeline</mat-card-title>
+                                <mat-card-title>{{ 'customer.private-customer-details.activityTimeline' | translate }}</mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
                                 <app-empty-state
                                         *ngIf="!timelineEvents || timelineEvents.length === 0"
-                                        [title]="'No activities'"
-                                        [message]="'The customer hasn’t performed any activities yet.'"
+                                        [title]="'customer.private-customer-details.noActivities' | translate"
+                                        [message]="'customer.private-customer-details.noActivitiesMessage' | translate"
                                         [imageSrc]="'assets/img/empty-states/no-activities.svg'">
                                 </app-empty-state>
                                 <app-timeline [events]="timelineEvents"></app-timeline>
@@ -96,7 +101,7 @@
             </mat-tab>
 
             <ng-container *ngFor="let subscriber of customerDetailsView.subscribers; trackBy: trackBySubscriber">
-                <mat-tab label="{{subscriber.name}}">
+                <mat-tab label="{{ subscriber.name }}">
                     <div class="tab-content">
                         <app-subscriber-details [subscriber]="subscriber"></app-subscriber-details>
                     </div>

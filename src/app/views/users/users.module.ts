@@ -11,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { CreateUserComponent } from './create-user/create-user.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -31,7 +32,8 @@ import { CreateUserComponent } from './create-user/create-user.component';
 		MatButtonModule,
 		MatIconModule,
 		MatMenuModule,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		TranslateModule
 	]
 })
 export class UsersModule { }

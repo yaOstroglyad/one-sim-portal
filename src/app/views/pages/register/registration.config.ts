@@ -1,4 +1,4 @@
-import { FieldType, FormConfig } from '../../../shared/model/field-config';
+import { FieldType, FormConfig } from '../../../shared';
 import { FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 export const passwordMatchValidator: ValidatorFn = (formGroup: FormGroup): ValidationErrors | null => {
@@ -12,7 +12,7 @@ export const RegistrationConfig: FormConfig = {
 		{
 			type: FieldType.email,
 			name: 'email',
-			label: 'Email',
+			label: 'register.emailLabel',
 			value: '',
 			validators: [
 				Validators.required,
@@ -26,7 +26,7 @@ export const RegistrationConfig: FormConfig = {
 		{
 			type: FieldType.password,
 			name: 'password',
-			label: 'Password',
+			label: 'register.passwordLabel',
 			value: '',
 			validators: [Validators.required, Validators.minLength(8)],
 			disabled: false,
@@ -37,7 +37,7 @@ export const RegistrationConfig: FormConfig = {
 		{
 			type: FieldType.password,
 			name: 'confirmPassword',
-			label: 'Confirm Password',
+			label: 'register.confirmPasswordLabel',
 			value: '',
 			validators: [Validators.required],
 			disabled: false,

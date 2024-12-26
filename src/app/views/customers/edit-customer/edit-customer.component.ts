@@ -1,10 +1,9 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ProvidersDataService } from '../../../shared';
+import { ProvidersDataService, FormConfig } from '../../../shared';
 import { Subject } from 'rxjs';
 import { getCustomerCreateRequest, getEditCustomerFormConfig } from './edit-customer.utils';
-import { FormConfig } from '../../../shared/model/field-config';
 
 @Component({
 	selector: 'app-edit-customer',

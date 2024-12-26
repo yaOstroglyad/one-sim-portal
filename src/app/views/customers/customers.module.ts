@@ -17,6 +17,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReSendInviteEmailComponent } from './re-send-invite-email/re-send-invite-email.component';
 import { IconDirective } from '@coreui/icons-angular';
 import { HasPermissionDirective } from '../../shared/directives/has-permission.directive';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { HasPermissionDirective } from '../../shared/directives/has-permission.d
 		FormControlDirective,
 		IconDirective,
 		ButtonDirective,
-		HasPermissionDirective
+		HasPermissionDirective,
+		TranslateModule
 	]
 })
 export class CustomersModule { }

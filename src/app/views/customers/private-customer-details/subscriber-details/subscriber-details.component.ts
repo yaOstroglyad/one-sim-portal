@@ -18,6 +18,7 @@ import { PurchasedProductsComponent } from './purchased-products/purchased-produ
 import { Observable, combineLatest, of } from 'rxjs';
 import { BundlesComponent } from './bundles/bundles.component';
 import { map, catchError } from 'rxjs/operators';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-subscriber-details',
@@ -34,7 +35,8 @@ import { map, catchError } from 'rxjs/operators';
     EventStatusComponent,
     TransactionOrdersTableComponent,
     PurchasedProductsComponent,
-    BundlesComponent
+    BundlesComponent,
+    TranslateModule
   ],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,16 +1,14 @@
 <ng-container *ngIf="!isAdmin; else forAdmin">
-    <div class="hint-icon">
-        <mat-hint class="hint mb-1">
-            <mat-icon fontIcon="info_outline"></mat-icon>
-            In this section, you can configure all the payment gateways available to you.
-        </mat-hint>
-    </div>
+    <mat-hint class="hint mb-1">
+        <mat-icon fontIcon="info_outline"></mat-icon>
+        {{ 'paymentGateway.hint' | translate }}
+    </mat-hint>
 
     <ng-container *ngIf="strategyTypes$ | async as strategies">
         <div class="d-flex flex-end mb-1" *ngIf="strategies && strategies.length > 0">
             <c-dropdown>
                 <button cButton cDropdownToggle color="secondary">
-                    Setup new payment-gateway
+                    {{ 'paymentGateway.setupNew' | translate }}
                 </button>
                 <ul cDropdownMenu>
                     <li *ngFor="let strategy of strategies">
@@ -29,7 +27,7 @@
             <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="edit(item)">Setup payment gateway</button>
+            <button mat-menu-item (click)="edit(item)">{{ 'paymentGateway.setup' | translate }}</button>
         </mat-menu>
     </ng-template>
 
@@ -59,6 +57,6 @@
 <ng-template #forAdmin>
     <mat-hint class="hint">
         <mat-icon fontIcon="info_outline"></mat-icon>
-        This configuration is available to non-admin users only.
+        {{ 'paymentGateway.adminHint' | translate }}
     </mat-hint>
 </ng-template>

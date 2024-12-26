@@ -24,6 +24,7 @@ import { IconModule } from '@coreui/icons-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
 	declarations: [
@@ -58,6 +59,7 @@ import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcru
 		CardModule,
 		NgScrollbarModule,
 		BreadcrumbComponent,
+		TranslateModule
 	]
 })
 export class DefaultLayoutModule {}

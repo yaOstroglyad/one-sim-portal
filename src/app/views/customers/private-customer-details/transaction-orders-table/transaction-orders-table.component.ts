@@ -9,6 +9,7 @@ import {
 import { MatTableModule } from '@angular/material/table';
 import { AsyncPipe, DatePipe, JsonPipe, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-transaction-orders-table',
@@ -21,7 +22,8 @@ import { Observable } from 'rxjs';
 		DatePipe,
 		AsyncPipe,
 		NgIf,
-		EmptyStateComponent
+		EmptyStateComponent,
+		TranslateModule
 	],
 	standalone: true
 })

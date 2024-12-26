@@ -1,10 +1,10 @@
-<h2 mat-dialog-title class="dialog-header">Create product</h2>
+<h2 mat-dialog-title class="dialog-header">{{ 'createProduct.createProduct' | translate }}</h2>
 <mat-dialog-content class="mat-typography dialog-content">
     <form [formGroup]="form">
         <div class="form-group">
 
             <mat-form-field class="full-width" *ngIf="isAdmin">
-                <mat-label>Provider Bundle</mat-label>
+                <mat-label>{{ 'createProduct.providerBundle' | translate }}</mat-label>
                 <mat-select (selectionChange)="onProviderBundleOrProductChange($event.value)">
                     <mat-option *ngFor="let bundle of providerBundles" [value]="bundle.id">
                         {{ bundle.name }}
@@ -13,7 +13,7 @@
             </mat-form-field>
 
             <mat-form-field class="full-width" *ngIf="!isAdmin">
-                <mat-label>Products</mat-label>
+                <mat-label>{{ 'createProduct.products' | translate }}</mat-label>
                 <mat-select (selectionChange)="onProviderBundleOrProductChange($event.value)">
                     <mat-option *ngFor="let product of parentProducts" [value]="product.id">
                         {{ product.name }}
@@ -23,34 +23,34 @@
 
             <ng-container formGroupName="productCommand">
                 <mat-form-field class="full-width">
-                    <mat-label>Product Name</mat-label>
+                    <mat-label>{{ 'createProduct.productName' | translate }}</mat-label>
                     <input matInput formControlName="name">
                 </mat-form-field>
 
                 <mat-form-field class="full-width">
-                    <mat-label>Description</mat-label>
-                        <textarea matInput formControlName="description"></textarea>
+                    <mat-label>{{ 'createProduct.description' | translate }}</mat-label>
+                    <textarea matInput formControlName="description"></textarea>
                 </mat-form-field>
 
                 <mat-form-field class="full-width">
-                    <mat-label>Price</mat-label>
-                        <input matInput type="number" formControlName="price">
+                    <mat-label>{{ 'createProduct.price' | translate }}</mat-label>
+                    <input matInput type="number" formControlName="price">
                 </mat-form-field>
 
                 <mat-form-field class="full-width">
-                    <mat-label>Currency</mat-label>
-                        <mat-select formControlName="currency">
-                            <mat-option *ngFor="let currency of currencies" [value]="currency">
-                                {{currency}}
-                            </mat-option>
-                        </mat-select>
+                    <mat-label>{{ 'createProduct.currency' | translate }}</mat-label>
+                    <mat-select formControlName="currency">
+                        <mat-option *ngFor="let currency of currencies" [value]="currency">
+                            {{ currency }}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
 
                 <ng-container *ngIf="isAdmin">
-                    <mat-checkbox formControlName="isCorporate">Corporate Product</mat-checkbox>
+                    <mat-checkbox formControlName="isCorporate">{{ 'createProduct.corporateProduct' | translate }}</mat-checkbox>
 
                     <mat-form-field class="half-width">
-                        <mat-label>Customers</mat-label>
+                        <mat-label>{{ 'createProduct.customers' | translate }}</mat-label>
                         <mat-select formControlName="customers" multiple>
                             <mat-option *ngFor="let customer of customers" [value]="customer.id">
                                 {{ customer.name }}
@@ -60,42 +60,42 @@
                 </ng-container>
             </ng-container>
 
-            <h3>Bundle Information</h3>
+            <h3>{{ 'createProduct.bundleInformation' | translate }}</h3>
 
             <ng-container formGroupName="bundleCommand">
                 <mat-form-field class="full-width">
-                    <mat-label>Bundle Name</mat-label>
-                        <input matInput formControlName="name">
+                    <mat-label>{{ 'createProduct.bundleName' | translate }}</mat-label>
+                    <input matInput formControlName="name">
                 </mat-form-field>
 
                 <mat-form-field class="full-width">
-                    <mat-label>Bundle Description</mat-label>
-                        <textarea matInput formControlName="description"></textarea>
+                    <mat-label>{{ 'createProduct.bundleDescription' | translate }}</mat-label>
+                    <textarea matInput formControlName="description"></textarea>
                 </mat-form-field>
 
                 <div formArrayName="usage" class="usage-group">
                     <div *ngFor="let usage of usageArray.controls; let i=index" [formGroupName]="i" class="usage-item">
                         <mat-form-field class="full-width">
-                            <mat-label>Usage Value</mat-label>
-                                <input matInput type="number" formControlName="value">
+                            <mat-label>{{ 'createProduct.usageValue' | translate }}</mat-label>
+                            <input matInput type="number" formControlName="value">
                         </mat-form-field>
 
                         <mat-form-field class="full-width">
-                            <mat-label>Type</mat-label>
+                            <mat-label>{{ 'createProduct.type' | translate }}</mat-label>
                             <mat-select formControlName="type">
                                 <mat-option *ngFor="let type of allUsageTypes" [value]="type.type" [disabled]="isUsageTypeDisabled(type.type)">
-                                    {{type.type}}
+                                    {{ type.type }}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
 
                         <mat-form-field class="full-width">
-                            <mat-label>Unit Type</mat-label>
-                                <mat-select formControlName="unitType">
-                                    <mat-option *ngFor="let unit of getUnitTypesForType(usage.get('type')?.value)" [value]="unit">
-                                        {{unit}}
-                                    </mat-option>
-                                </mat-select>
+                            <mat-label>{{ 'createProduct.unitType' | translate }}</mat-label>
+                            <mat-select formControlName="unitType">
+                                <mat-option *ngFor="let unit of getUnitTypesForType(usage.get('type')?.value)" [value]="unit">
+                                    {{ unit }}
+                                </mat-option>
+                            </mat-select>
                         </mat-form-field>
 
                         <button mat-icon-button (click)="removeUsage(i)" *ngIf="usageArray.length > 1">
@@ -103,30 +103,30 @@
                         </button>
                     </div>
                 </div>
-                <button mat-button (click)="addUsage()" [disabled]="usageArray.length >= 3 || this.form.get('bundleCommand').disabled">Add Usage</button>
+                <button mat-button (click)="addUsage()" [disabled]="usageArray.length >= 3 || this.form.get('bundleCommand').disabled">{{ 'createProduct.addUsage' | translate }}</button>
 
                 <div formGroupName="validity">
                     <mat-form-field class="full-width">
-                        <mat-label>Validity Period</mat-label>
-                            <input matInput type="number" formControlName="period">
+                        <mat-label>{{ 'createProduct.validityPeriod' | translate }}</mat-label>
+                        <input matInput type="number" formControlName="period">
                     </mat-form-field>
 
                     <mat-form-field class="full-width">
-                        <mat-label>Time Unit</mat-label>
+                        <mat-label>{{ 'createProduct.timeUnit' | translate }}</mat-label>
                         <mat-select formControlName="timeUnit">
                             <mat-option *ngFor="let unit of timeUnits" [value]="unit">
-                                {{unit}}
+                                {{ unit }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
 
-                <mat-checkbox *ngIf="isAdmin" formControlName="isFlexible">Flexible</mat-checkbox>
+                <mat-checkbox *ngIf="isAdmin" formControlName="isFlexible">{{ 'createProduct.flexible' | translate }}</mat-checkbox>
             </ng-container>
         </div>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-footer" align="end">
-    <button mat-button (click)="close()">Cancel</button>
-    <button mat-button color="primary" (click)="submit()">Save changes</button>
+    <button mat-button (click)="close()">{{ 'common.cancel' | translate }}</button>
+    <button mat-button color="primary" (click)="submit()">{{ 'common.save' | translate }}</button>
 </mat-dialog-actions>

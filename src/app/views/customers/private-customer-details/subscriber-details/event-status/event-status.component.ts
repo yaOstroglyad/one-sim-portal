@@ -3,6 +3,7 @@ import { AsyncPipe, DatePipe, NgClass, NgIf } from '@angular/common';
 import { Subscriber, SubscriberDataService, SubscriberStatusEvent, EmptyStateComponent } from '../../../../../shared';
 import { MatTableModule } from '@angular/material/table';
 import { Observable } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-event-status',
@@ -16,7 +17,8 @@ import { Observable } from 'rxjs';
 		NgClass,
 		AsyncPipe,
 		NgIf,
-		EmptyStateComponent
+		EmptyStateComponent,
+		TranslateModule
 	]
 })
 export class EventStatusComponent implements OnInit {

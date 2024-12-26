@@ -12,6 +12,7 @@ import { ChangeStatusDialogComponent } from './change-status-dialog/change-statu
 import {
 	DynamicEntityDetailsDialogComponent
 } from '../../shared/components/dynamic-entity-details-dialog/dynamic-entity-details-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-products',
@@ -35,10 +36,11 @@ export class ProductsComponent implements OnInit, OnDestroy {
 	constructor(
 		private tableService: ProductsTableService,
 		private productsDataService: ProductsDataService,
+		private translate: TranslateService,
 		private dialog: MatDialog
 	) {
 		this.headerConfig = {
-			value: { type: TableFilterFieldType.Text, placeholder: 'Filter table data' }
+			value: { type: TableFilterFieldType.Text, placeholder: this.translate.instant('common.table.filterPlaceholder') }
 		};
 		this.tableConfig$ = this.tableService.tableConfigSubject.asObservable();
 	}

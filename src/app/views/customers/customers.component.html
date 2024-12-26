@@ -4,10 +4,10 @@
             (onAddAction)="createCustomer()"
             (columnSelectionChange)="onColumnSelectionChanged($event)">
     <ng-container header-custom-inputs>
-        <input cFormControl formControlName="name" [type]="'text'" placeholder="Name">
-        <input cFormControl formControlName="iccid" [type]="'text'" placeholder="ICCID">
-        <input cFormControl formControlName="externalId" [type]="'text'" placeholder="External ID">
-        <input cFormControl formControlName="externalTransactionId" [type]="'text'" placeholder="External Transaction ID">
+        <input cFormControl formControlName="name" [type]="'text'" placeholder="{{ 'customer.name' | translate }}">
+        <input cFormControl formControlName="iccid" [type]="'text'" placeholder="{{ 'customer.iccid' | translate }}">
+        <input cFormControl formControlName="externalId" [type]="'text'" placeholder="{{ 'customer.externalId' | translate }}">
+        <input cFormControl formControlName="externalTransactionId" [type]="'text'" placeholder="{{ 'customer.externalTransactionId' | translate }}">
         <button cButton
                 color="secondary"
                 [disabled]="filterForm.pristine"
@@ -28,10 +28,10 @@
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="openSendEmail(item)">Resend invite email</button>
+        <button mat-menu-item (click)="openSendEmail(item)">{{ 'customer.resendInviteEmail' | translate }}</button>
         <button *ngIf="item.type.toUpperCase() === CustomerType.Private.toUpperCase()"
                 mat-menu-item
-                (click)="openCustomerDetails(item)">Details
+                (click)="openCustomerDetails(item)">{{ 'customer.details' | translate }}
         </button>
     </mat-menu>
 </ng-template>

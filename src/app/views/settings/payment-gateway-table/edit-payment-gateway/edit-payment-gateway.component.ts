@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { PaymentGatewayUtilsService } from '../payment-gateway.utils.service';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-payment-gateway',
@@ -27,7 +28,8 @@ export class EditPaymentGatewayComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: PaymentStrategy,
     private paymentGatewayService: PaymentGatewayService,
     private paymentGatewayUtilsService: PaymentGatewayUtilsService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {
   }
 
@@ -61,7 +63,7 @@ export class EditPaymentGatewayComponent implements OnInit {
       id: this.strategyId,
       active: this.isActive
     };
-    this.paymentGatewayService.updateStatus(status).subscribe(() => this.notify('Status updated successfully'));
+    this.paymentGatewayService.updateStatus(status).subscribe(() => this.notify(this.translate.instant('editPaymentGateway.statusUpdated')));
   }
 
   public submit(): void {
@@ -76,13 +78,13 @@ export class EditPaymentGatewayComponent implements OnInit {
       };
 
       if (!this.data.id) {
-        this.paymentGatewayService.create(customerData).subscribe(() => this.notify());
+        this.paymentGatewayService.create(customerData).subscribe(() => this.notify(this.translate.instant('editPaymentGateway.configurationCreated')));
       } else {
-        this.paymentGatewayService.update(customerData).subscribe(() => this.notify('Configuration updated successfully'));
+        this.paymentGatewayService.update(customerData).subscribe(() => this.notify(this.translate.instant('editPaymentGateway.configurationUpdated')));
       }
       this.close();
     } else {
-      this.isFormValid && console.warn('Form is invalid');
+      this.isFormValid && console.warn(this.translate.instant('editPaymentGateway.formInvalid'));
       this.close();
     }
   }
@@ -91,8 +93,7 @@ export class EditPaymentGatewayComponent implements OnInit {
     this.dialogRef.close()
   }
 
-  private notify(message = 'Configuration successfully',
-         panelClass = 'app-notification-success'): void {
+  private notify(message: string, panelClass = 'app-notification-success'): void {
     this.snackBar.open(
       message,
       null,

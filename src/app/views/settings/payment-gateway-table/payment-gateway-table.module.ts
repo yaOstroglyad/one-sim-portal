@@ -23,6 +23,7 @@ import { GenericTableModule, HeaderModule } from '../../../shared';
 import { ChipsInputComponent } from 'src/app/shared/components/chips-input/chips-input.component';
 import { FormGeneratorModule } from 'src/app/shared/components/form-generator/form-generator.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -59,7 +60,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 		DropdownItemDirective,
 		FormCheckComponent,
 		FormCheckInputDirective,
-		MatTooltipModule
+		MatTooltipModule,
+		TranslateModule
 	]
 })
 export class PaymentGatewayTableModule { }

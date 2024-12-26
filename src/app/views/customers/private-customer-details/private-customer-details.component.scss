@@ -27,3 +27,12 @@
 .tabs-container {
   margin-top: 16px;
 }
+
+.custom-highlight {
+  ::ng-deep .mat-mdc-focus-indicator:nth-child(2) .mdc-tab-indicator {
+    background-color: var(--os-color-primary-opacity-03);
+    border-bottom: 2px solid var(--os-color-primary-opacity-03);
+    box-shadow: 1px 12px 9px 2px var(--os-color-primary);
+    transition: all 0.2s ease-in-out;
+  }
+}

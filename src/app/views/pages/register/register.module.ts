@@ -5,6 +5,7 @@ import { FormGeneratorModule } from '../../../shared/components/form-generator/f
 import { RegisterRoutingModule } from './register-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { MatButtonModule } from '@angular/material/button';
 		FormGeneratorModule,
 		RegisterRoutingModule,
 		ReactiveFormsModule,
-		MatButtonModule
+		MatButtonModule,
+		TranslateModule
 	]
 })
 export class RegisterModule { }

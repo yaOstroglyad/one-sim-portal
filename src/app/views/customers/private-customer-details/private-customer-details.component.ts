@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,6 +33,7 @@ import { SubscriberDetailsComponent } from './subscriber-details/subscriber-deta
 import { MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ShowQrCodeDialogComponent } from './show-qr-code-dialog/show-qr-code-dialog.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-private-customer-details',
@@ -49,11 +50,14 @@ import { ShowQrCodeDialogComponent } from './show-qr-code-dialog/show-qr-code-di
 		TimelineComponent,
 		EmptyStateComponent,
 		SubscriberDetailsComponent,
-		MatTooltipModule
+		MatTooltipModule,
+		TranslateModule
 	],
 	standalone: true
 })
 export class PrivateCustomerDetailsComponent implements OnInit {
+	@ViewChild('tabGroup', { static: false, read: ElementRef }) tabGroup: ElementRef;
+
 	customerDetailsView$: Observable<DataObject>;
 	timelineEvents: TimelineEvent[] = [];
 	totalSpent: number = 0;
@@ -66,7 +70,9 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	transactionDataService = inject(TransactionDataService);
 	purchasedProductsDataService = inject(PurchasedProductsDataService);
 	subscriberDataService = inject(SubscriberDataService);
+	renderer = inject(Renderer2);
 	dialog = inject(MatDialog);
+	cdr = inject(ChangeDetectorRef);
 	customerId: string;
 	subscribers: Subscriber[];
 	selectedSubscriber: Subscriber;
@@ -110,6 +116,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 			)
 			.subscribe(events => {
 				this.timelineEvents = events;
+				this.cdr.detectChanges();
 			});
 	}
 
@@ -159,5 +166,21 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 
 			uploadDialogRef.afterClosed().subscribe();
 		})
+	}
+
+	public highlightTab(): void {
+		if (this.tabGroup) {
+			this.renderer.addClass(this.tabGroup.nativeElement, 'custom-highlight');
+		} else {
+			console.error('tabGroup is not defined');
+		}
+	}
+
+	public removeHighlightTab(): void {
+		if (this.tabGroup) {
+			this.renderer.removeClass(this.tabGroup.nativeElement, 'custom-highlight');
+		} else {
+			console.error('tabGroup is not defined');
+		}
 	}
 }

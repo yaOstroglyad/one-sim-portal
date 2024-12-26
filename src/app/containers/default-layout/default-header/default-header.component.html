@@ -21,47 +21,56 @@
         </div>
         <ul cDropdownMenu class="pt-0 pr-5" style="width: 200px">
             <li>
-                <h6 cDropdownHeader class="bg-light fw-semibold py-2">Language</h6>
+                <h6 cDropdownHeader class="bg-light fw-semibold py-2">{{ 'default-header.language' | translate }}</h6>
             </li>
             <li (click)="changeLang('en')">
                 <a routerLink="./" cDropdownItem>
-                    English
+                    {{ 'default-header.english' | translate }}
                 </a>
             </li>
             <li (click)="changeLang('he')">
                 <a routerLink="./" cDropdownItem>
-                    Hebrew
+                    {{ 'default-header.hebrew' | translate }}
+                </a>
+            </li>
+            <li (click)="changeLang('ua')">
+                <a routerLink="./" cDropdownItem>
+                    {{ 'default-header.ukrainian' | translate }}
+                </a>
+            </li>
+            <li (click)="changeLang('ru')">
+                <a routerLink="./" cDropdownItem>
+                    {{ 'default-header.russian' | translate }}
                 </a>
             </li>
             <li>
-                <h6 cDropdownHeader class="bg-light fw-semibold py-2">Account</h6>
+                <h6 cDropdownHeader class="bg-light fw-semibold py-2">{{ 'default-header.account' | translate }}</h6>
             </li>
             <li>
                 <a routerLink="./" cDropdownItem>
                     <svg cIcon class="me-2" name="cilBell"></svg>
-                    Notifications
+                    {{ 'default-header.notifications' | translate }}
                     <c-badge class="ms-2 float-end" color="info">
                         42
                     </c-badge>
                 </a>
             </li>
             <li>
-                <h6 cDropdownHeader class="bg-light fw-semibold py-2">Settings</h6>
+                <h6 cDropdownHeader class="bg-light fw-semibold py-2">{{ 'default-header.settings' | translate }}</h6>
             </li>
             <li></li>
             <li>
                 <a routerLink="./" cDropdownItem>
                     <svg cIcon class="me-2" name="cilUser"></svg>
-                    Profile
+                    {{ 'default-header.profile' | translate }}
                 </a>
             </li>
             <li>
                 <a (click)="logout()" cDropdownItem>
                     <svg cIcon class="me-2" name="cilUser"></svg>
-                    Logout
+                    {{ 'default-header.logout' | translate }}
                 </a>
             </li>
         </ul>
     </c-dropdown>
 </ng-template>
-

@@ -40,6 +40,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { ChangeStatusDialogComponent } from './change-status-dialog/change-status-dialog.component';
 import { HasPermissionDirective } from '../../shared/directives/has-permission.directive';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -86,7 +87,8 @@ import { HasPermissionDirective } from '../../shared/directives/has-permission.d
 		ItemNamesPipe,
 		MatTooltipModule,
 		MatMenuModule,
-		HasPermissionDirective
+		HasPermissionDirective,
+		TranslateModule
 	],
 	providers: [
 		MatDatepickerModule

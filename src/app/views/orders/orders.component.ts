@@ -17,6 +17,7 @@ import { switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Order } from '../../shared/model/order';
 import { MatDialog } from '@angular/material/dialog';
 import { EditOrderDescriptionComponent } from './edit-order-description/edit-order-description.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-orders',
@@ -33,6 +34,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   constructor(private cdr: ChangeDetectorRef,
               private tableService: OrdersTableService,
               private ordersDataService: OrdersDataService,
+              private translate: TranslateService,
               private dialog: MatDialog,
   ) {
     this.initheaderConfig();
@@ -60,7 +62,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   private initheaderConfig(): void {
     this.headerConfig = {
-      value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
+      value: { type: TableFilterFieldType.Text, placeholder: this.translate.instant('common.table.filterPlaceholder') }
     };
   }
 

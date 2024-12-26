@@ -6,6 +6,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { WhiteLabelConfigurationComponent } from './white-label-configuration/white-label-configuration.component';
 import { MatCardModule } from '@angular/material/card';
 import { PaymentGatewayTableModule } from './payment-gateway-table/payment-gateway-table.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -19,7 +20,8 @@ import { PaymentGatewayTableModule } from './payment-gateway-table/payment-gatew
 		MatTabsModule,
 		WhiteLabelConfigurationComponent,
 		MatCardModule,
-		PaymentGatewayTableModule
+		PaymentGatewayTableModule,
+		TranslateModule
 	]
 })
 export class SettingsModule { }

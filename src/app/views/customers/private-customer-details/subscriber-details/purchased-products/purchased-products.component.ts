@@ -4,6 +4,7 @@ import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe, CurrencyPipe, DatePipe, NgClass, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-purchased-products',
@@ -17,7 +18,8 @@ import { Observable } from 'rxjs';
 		NgClass,
 		AsyncPipe,
 		NgIf,
-		EmptyStateComponent
+		EmptyStateComponent,
+		TranslateModule
 	],
 	styleUrls: ['./purchased-products.component.scss']
 })

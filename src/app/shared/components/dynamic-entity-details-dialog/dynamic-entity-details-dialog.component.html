@@ -1,7 +1,7 @@
-<h2 mat-dialog-title class="dialog-header">Entity Details</h2>
+<h2 mat-dialog-title class="dialog-header">{{ 'dynamicEntityDetails.title' | translate }}</h2>
 <mat-dialog-content class="mat-typography dialog-content">
     <app-display-key-value [data]="data"></app-display-key-value>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-footer" align="end">
-    <button mat-button mat-dialog-close>Close</button>
+    <button mat-button mat-dialog-close>{{ 'common.close' | translate }}</button>
 </mat-dialog-actions>

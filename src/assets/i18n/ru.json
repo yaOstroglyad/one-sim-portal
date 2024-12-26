@@ -1,0 +1,334 @@
+{
+  "page500": {
+    "serverError": "Хьюстон, у нас проблема!",
+    "unavailableMessage": "Страница, которую вы ищете, временно недоступна."
+  },
+  "page404": {
+    "pageNotFound": "Ой! Вы потерялись.",
+    "notFoundMessage": "Страница, которую вы ищете, не найдена."
+  },
+  "page403": {
+    "accessDenied": "Доступ запрещен!",
+    "noPermissionMessage": "У вас нет разрешения на просмотр этой страницы.",
+    "goHomeButton": "Перейти на главную"
+  },
+  "login": {
+    "userNamePlaceholder": "Имя пользователя / Email",
+    "passwordPlaceholder": "Пароль",
+    "loginButton": "Войти"
+  },
+  "register": {
+    "emailLabel": "Email",
+    "passwordLabel": "Пароль",
+    "confirmPasswordLabel": "Подтвердите пароль",
+    "submitButton": "Отправить"
+  },
+  "shared": {
+    "no-data": "Нет данных"
+  },
+  "pagination": {
+    "previous": "Предыдущая",
+    "next": "Следующая",
+    "of": "из"
+  },
+  "common": {
+    "cancel": "Отмена",
+    "send": "Отправить",
+    "save": "Сохранить",
+    "apply": "Применить",
+    "submit": "Отправить",
+    "table": {
+      "filterPlaceholder": "Фильтровать данные таблицы"
+    }
+  },
+  "default-header": {
+    "language": "Язык",
+    "english": "Английский",
+    "hebrew": "Иврит",
+    "ukrainian": "Украинский",
+    "russian": "Русский",
+    "account": "Аккаунт",
+    "notifications": "Уведомления",
+    "settings": "Настройки",
+    "profile": "Профиль",
+    "logout": "Выйти"
+  },
+  "nav": {
+    "customers": "Клиенты",
+    "providers": "Поставщики",
+    "orders": "Заказы",
+    "products": "Продукты",
+    "inventory": "Инвентарь",
+    "users": "Пользователи",
+    "settings": "Настройки"
+  },
+  "dynamicEntityDetails": {
+    "title": "Детали объекта"
+  },
+  "chipsInput": {
+    "pressEnterToEdit": "Нажмите Enter для редактирования {{item}}",
+    "remove": "удалить {{item}}"
+  },
+  "provider": {
+    "id": "ID",
+    "name": "Имя"
+  },
+  "qrCode": {
+    "noQrCode": "QR-код для подписчика отсутствует"
+  },
+  "refundProduct": {
+    "title": "Возврат продукта",
+    "noProducts": "Нет продуктов для возврата.",
+    "cancel": "Отмена",
+    "send": "Отправить"
+  },
+  "customer": {
+    "id": "ID",
+    "name": "Имя",
+    "tags": "Теги",
+    "type": "Тип",
+    "description": "Описание",
+    "iccid": "ICCID",
+    "externalId": "Внешний ID",
+    "externalTransactionId": "Внешний ID транзакции",
+    "resendInviteEmail": "Отправить приглашение повторно",
+    "details": "Детали",
+    "edit": "Редактировать клиента",
+    "create": "Создать клиента",
+    "private-customer-details": {
+      "refundTooltip": "Пожалуйста, выберите подписчика для возврата",
+      "refund": "Возврат",
+      "qrCodeTooltip": "Пожалуйста, выберите подписчика для отображения его QR-кода",
+      "showQRCode": "Показать QR-код",
+      "overview": "Обзор",
+      "location": "Местоположение",
+      "imsi": "IMSI",
+      "state": "Штат",
+      "country": "Страна",
+      "operator": "Оператор",
+      "otherDetails": "Другие детали",
+      "currencyCode": "Код валюты",
+      "status": "Статус",
+      "language": "Язык",
+      "financialSummary": "Финансовая сводка",
+      "totalSpent": "Всего потрачено",
+      "totalUsedData": "Всего использовано данных",
+      "activityTimeline": "Лента активности",
+      "noActivities": "Нет активностей",
+      "noActivitiesMessage": "Клиент еще не выполнял активностей."
+    },
+    "showQrCodeDialog": {
+      "title": "Просмотр QR-кода"
+    }
+  },
+  "bundles": {
+    "noBundlesFound": "Пакеты не найдены"
+  },
+  "eventStatus": {
+    "noEventsFound": "События еще не зарегистрированы",
+    "timeStamp": "Временная метка",
+    "notificationPoint": "Точка уведомления",
+    "status": "Статус",
+    "loading": "Загрузка событий..."
+  },
+  "purchasedProducts": {
+    "noPurchasedProductsFound": "История покупок продуктов не найдена",
+    "noPurchasesMessage": "Клиент еще не совершал покупок.",
+    "productName": "Название продукта",
+    "status": "Статус",
+    "remainingBalance": "Оставшийся баланс",
+    "totalBalance": "Общий баланс",
+    "price": "Цена",
+    "purchasedAt": "Куплено в",
+    "updatedAt": "Обновлено в",
+    "updatedBy": "Обновлено пользователем",
+    "usageStartedAt": "Использование начато в",
+    "usageExpiredAt": "Использование истекло в",
+    "loading": "Загрузка заказов транзакций..."
+  },
+  "subscriberDetails": {
+    "location": "Местоположение",
+    "state": "Штат",
+    "country": "Страна",
+    "operator": "Оператор",
+    "lastUpdatedAt": "Последнее обновление в",
+    "bundles": "Пакеты",
+    "simDetails": "Детали SIM-карты",
+    "status": "Статус",
+    "networkStatus": "Состояние сети",
+    "imsi": "IMSI",
+    "msisdn": "MSISDN",
+    "imei": "IMEI",
+    "iccid": "ICCID",
+    "createdAt": "Создано в",
+    "createdBy": "Создано пользователем",
+    "updatedAt": "Обновлено в",
+    "updatedBy": "Обновлено пользователем",
+    "externalReferenceId": "Внешний идентификатор",
+    "purchasedProductsHistory": "История купленных продуктов",
+    "transactionOrders": "Транзакционные заказы",
+    "statusEvent": "Событие статуса"
+  },
+  "transactionOrdersTable": {
+    "noTransactionOrdersFound": "Транзакционные заказы не найдены",
+    "noTransactionsMessage": "Клиент еще не совершал транзакций.",
+    "type": "Тип",
+    "status": "Статус",
+    "productName": "Название продукта",
+    "productPrice": "Цена продукта",
+    "createdAt": "Создано в",
+    "createdBy": "Создано пользователем",
+    "updatedAt": "Обновлено в",
+    "updatedBy": "Обновлено пользователем",
+    "externalTransactionId": "Внешний ID",
+    "triggerType": "Тип триггера",
+    "loading": "Загрузка заказов транзакций..."
+  },
+  "order": {
+    "id": "ID",
+    "serialNumber": "Серийный номер",
+    "type": "Тип",
+    "description": "Описание",
+    "createdDate": "Дата создания",
+    "fromOwner": "От клиента",
+    "toOwner": "К клиенту",
+    "editDescription": "Редактировать описание"
+  },
+  "editOrderDescription": {
+    "title": "Редактировать описание"
+  },
+  "package": {
+    "id": "ID",
+    "name": "Название",
+    "description": "Описание",
+    "providerName": "Имя поставщика",
+    "usages": "Использования",
+    "effectiveDate": "Дата начала действия",
+    "price": "Цена",
+    "status": "Статус",
+    "currency": "Валюта",
+    "customers": "Клиенты",
+    "validity": "Срок действия",
+    "unitType": "Тип единицы",
+    "details": "Детали",
+    "edit": "Редактировать",
+    "changeStatus": "Изменить статус"
+  },
+  "changeStatusDialog": {
+    "changeStatus": "Изменить статус",
+    "status": "Статус"
+  },
+  "createProduct": {
+    "createProduct": "Создать продукт",
+    "providerBundle": "Пакет поставщика",
+    "products": "Продукты",
+    "productName": "Название продукта",
+    "description": "Описание",
+    "price": "Цена",
+    "currency": "Валюта",
+    "corporateProduct": "Корпоративный продукт",
+    "customers": "Клиенты",
+    "bundleInformation": "Информация о пакете",
+    "bundleName": "Название пакета",
+    "bundleDescription": "Описание пакета",
+    "usageValue": "Значение использования",
+    "type": "Тип",
+    "unitType": "Тип единицы",
+    "addUsage": "Добавить использование",
+    "validityPeriod": "Период действия",
+    "timeUnit": "Единица времени",
+    "flexible": "Гибкий"
+  },
+  "editProduct": {
+    "editProduct": "Редактировать продукт",
+    "productName": "Название продукта",
+    "description": "Описание",
+    "price": "Цена",
+    "currency": "Валюта",
+    "corporateProduct": "Корпоративный продукт",
+    "customers": "Клиенты",
+    "cancel": "Отмена",
+    "saveChanges": "Сохранить изменения"
+  },
+  "moveResource": {
+    "title": "Переместить ресурс"
+  },
+  "setupResource": {
+    "title": "Настроить ресурс"
+  },
+  "uploadDialog": {
+    "title": "Загрузить причины",
+    "dropZoneMessage": "Перетащите файл сюда или нажмите кнопку ниже для выбора файла.",
+    "chooseFileButton": "Выбрать файл",
+    "uploadSuccessMessage": "{{fileName}} успешно загружен!",
+    "uploadErrorMessage": "Что-то пошло не так. Попробуйте еще раз."
+  },
+  "inventory": {
+    "id": "ID",
+    "lpa": "LPA",
+    "server": "Сервер",
+    "code": "Код",
+    "oid": "OID",
+    "iccid": "ICCID",
+    "imei": "IMEI",
+    "imsi": "IMSI",
+    "customer": "Клиент",
+    "msisdn": "MSISDN",
+    "status": "Статус",
+    "provider": "Имя",
+    "uploadResource": "Загрузить ресурс",
+    "moveResource": "Переместить ресурс",
+    "movedSimsMessage": "{{movedSims}} SIM-карт перемещено",
+    "availableSimsMessage": "Доступно для перемещения SIM-карт: {{availableSims}}"
+  },
+  "editPaymentGateway": {
+    "setupPaymentGateway": "Настроить платежный шлюз",
+    "active": "Активен",
+    "deactivated": "Отключен",
+    "primaryPaymentGatewayTooltip": "Основной платежный шлюз, его нельзя отключить",
+    "statusUpdated": "Статус успешно обновлен",
+    "configurationCreated": "Конфигурация успешно создана",
+    "configurationUpdated": "Конфигурация успешно обновлена",
+    "formInvalid": "Форма недействительна"
+  },
+  "settings": {
+    "paymentGateway": "Платежный шлюз",
+    "whiteLabelConfiguration": "Конфигурация White Label"
+  },
+  "paymentGateway": {
+    "id": "ID",
+    "name": "Имя",
+    "isActive": "Активен",
+    "isPrimary": "Основной",
+    "paymentStrategy": "Стратегия оплаты",
+    "createdDate": "Дата создания",
+    "hint": "В этом разделе вы можете настроить все доступные вам платежные шлюзы.",
+    "setupNew": "Настроить новый платежный шлюз",
+    "setup": "Настроить платежный шлюз",
+    "adminHint": "Эта конфигурация доступна только для пользователей, не являющихся администраторами."
+  },
+  "createUser": {
+    "title": "Создать пользователя",
+    "email": "Email",
+    "emailPlaceholder": "Введите email пользователя",
+    "username": "Имя пользователя",
+    "usernamePlaceholder": "Введите имя пользователя",
+    "firstName": "Имя",
+    "firstNamePlaceholder": "Введите имя",
+    "lastName": "Фамилия",
+    "lastNamePlaceholder": "Введите фамилию",
+    "accountId": "ID аккаунта",
+    "accountIdPlaceholder": "Введите ID аккаунта",
+    "accountType": "Тип аккаунта",
+    "accountTypePlaceholder": "Введите тип аккаунта"
+  },
+  "user": {
+    "username": "Имя пользователя",
+    "accountId": "ID аккаунта",
+    "accountType": "Тип аккаунта",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "email": "Email",
+    "resetPassword": "Сбросить пароль"
+  }
+}

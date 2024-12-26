@@ -11,6 +11,11 @@ import { MatCardModule } from '@angular/material/card';
 import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
+
+interface ExtendedUsageInfo extends UsageInfo {
+	productName: string;
+}
 
 @Component({
 	selector: 'app-bundles',
@@ -25,11 +30,12 @@ import { MatButtonModule } from '@angular/material/button';
 		AsyncPipe,
 		EmptyStateComponent,
 		MatButtonModule,
-		NgClass
+		NgClass,
+		TranslateModule
 	]
 })
 export class BundlesComponent implements OnInit {
-	bundlesView$: Observable<UsageInfo[]>;
+	bundlesView$: Observable<ExtendedUsageInfo[]>;
 	purchasedProductsDataService = inject(PurchasedProductsDataService);
 	@Input() subscriber!: Subscriber;
 
@@ -50,17 +56,19 @@ export class BundlesComponent implements OnInit {
 				map((products: ProductPurchase[]) =>
 					products.filter(product => product.status === 'active')
 				),
-				map((activeProducts: ProductPurchase[]) =>
-					activeProducts.flatMap(product =>
-						product.usage.balance.map(balance => this.mapBalanceToUsageInfo(balance))
+				map((activeProducts: ProductPurchase[]) => activeProducts.flatMap(product =>
+						product.usage.balance.map(balance => this.mapBalanceToUsageInfo(balance, product))
 					)
+
+
 				)
 			);
 	}
 
-	private mapBalanceToUsageInfo(balance: Balance): UsageInfo {
+	private mapBalanceToUsageInfo(balance: Balance, product: ProductPurchase): ExtendedUsageInfo {
 		const conversionFactor = balance.unitType === 'Gigabyte' as any ? 1024 * 1024 * 1024 : 1;
 		return {
+			productName: product.productName,
 			type: balance.type,
 			total: Math.round(balance.total / conversionFactor * 100) / 100,
 			used: Math.round(balance.used / conversionFactor * 100) / 100,

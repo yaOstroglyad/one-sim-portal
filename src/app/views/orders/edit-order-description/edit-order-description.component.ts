@@ -1,7 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormConfig } from '../../../shared/model/field-config';
+import { TranslateService } from '@ngx-translate/core';
+import { FormConfig } from '../../../shared';
 import { getEditOrderFormConfig } from './edit-order-description.utils';
 
 @Component({
@@ -16,9 +17,10 @@ export class EditOrderDescriptionComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<EditOrderDescriptionComponent>
+    public dialogRef: MatDialogRef<EditOrderDescriptionComponent>,
+    private translate: TranslateService
   ) {
-    this.editOrderFormConfig = getEditOrderFormConfig(this.data);
+    this.editOrderFormConfig = getEditOrderFormConfig(this.data, this.translate);
   }
 
   handleFormChanges(form: FormGroup): void {

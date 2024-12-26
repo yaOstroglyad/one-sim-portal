@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { LocalStorageService } from 'ngx-webstorage';
-import { UsageInfo } from '../../model/usageInfo';
+import { UsageInfo } from '../../model';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -29,7 +29,7 @@ export class ChartComponent implements AfterViewInit, OnInit, OnChanges {
 
   chart: any;
 
-  @Input() chartData: UsageInfo;
+  @Input() chartData: any;
   @Input() expiredAt: string;
 
   private primaryColor: string;

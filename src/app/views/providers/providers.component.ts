@@ -4,6 +4,7 @@ import { HeaderConfig, ProvidersDataService, TableConfig, TableFilterFieldType }
 import { Provider } from '../../shared/model/provider';
 import { ProvidersTableService } from './providers-table.service';
 import { takeUntil } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-providers',
@@ -19,9 +20,10 @@ export class ProvidersComponent implements OnInit, OnDestroy {
 
   constructor(private cdr: ChangeDetectorRef,
               private tableService: ProvidersTableService,
-              private providersDataService: ProvidersDataService
+              private providersDataService: ProvidersDataService,
+              private translate: TranslateService
   ) {
-    this.initheaderConfig();
+    this.initHeaderConfig();
   }
 
   ngOnDestroy(): void {
@@ -40,9 +42,9 @@ export class ProvidersComponent implements OnInit, OnDestroy {
     });
   }
 
-  private initheaderConfig(): void {
+  private initHeaderConfig(): void {
     this.headerConfig = {
-      value: {type: TableFilterFieldType.Text, placeholder: 'Filter table data'}
+      value: { type: TableFilterFieldType.Text, placeholder: this.translate.instant('common.table.filterPlaceholder') }
     };
   }
 

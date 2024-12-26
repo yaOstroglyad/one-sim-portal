@@ -1,0 +1,334 @@
+{
+  "page500": {
+    "serverError": "Х'юстон, у нас проблема!",
+    "unavailableMessage": "Сторінка, яку ви шукаєте, тимчасово недоступна."
+  },
+  "page404": {
+    "pageNotFound": "Ой! Ви загубилися.",
+    "notFoundMessage": "Сторінка, яку ви шукаєте, не знайдена."
+  },
+  "page403": {
+    "accessDenied": "Доступ заборонено!",
+    "noPermissionMessage": "Ви не маєте дозволу на перегляд цієї сторінки.",
+    "goHomeButton": "Перейти на головну"
+  },
+  "login": {
+    "userNamePlaceholder": "Ім'я користувача / Email",
+    "passwordPlaceholder": "Пароль",
+    "loginButton": "Увійти"
+  },
+  "register": {
+    "emailLabel": "Email",
+    "passwordLabel": "Пароль",
+    "confirmPasswordLabel": "Підтвердіть пароль",
+    "submitButton": "Надіслати"
+  },
+  "shared": {
+    "no-data": "Немає даних"
+  },
+  "pagination": {
+    "previous": "Попередня",
+    "next": "Наступна",
+    "of": "з"
+  },
+  "common": {
+    "cancel": "Скасувати",
+    "send": "Надіслати",
+    "save": "Зберегти",
+    "apply": "Застосувати",
+    "submit": "Надіслати",
+    "table": {
+      "filterPlaceholder": "Фільтрувати дані таблиці"
+    }
+  },
+  "default-header": {
+    "language": "Мова",
+    "english": "Англійська",
+    "hebrew": "Іврит",
+    "ukrainian": "Українська",
+    "russian": "Російська",
+    "account": "Акаунт",
+    "notifications": "Сповіщення",
+    "settings": "Налаштування",
+    "profile": "Профіль",
+    "logout": "Вийти"
+  },
+  "nav": {
+    "customers": "Клієнти",
+    "providers": "Постачальники",
+    "orders": "Замовлення",
+    "products": "Продукти",
+    "inventory": "Інвентар",
+    "users": "Користувачі",
+    "settings": "Налаштування"
+  },
+  "dynamicEntityDetails": {
+    "title": "Деталі об'єкта"
+  },
+  "chipsInput": {
+    "pressEnterToEdit": "Натисніть Enter для редагування {{item}}",
+    "remove": "видалити {{item}}"
+  },
+  "provider": {
+    "id": "ID",
+    "name": "Ім'я"
+  },
+  "qrCode": {
+    "noQrCode": "QR-код для абонента відсутній"
+  },
+  "refundProduct": {
+    "title": "Повернення продукту",
+    "noProducts": "Немає продуктів для повернення.",
+    "cancel": "Скасувати",
+    "send": "Надіслати"
+  },
+  "customer": {
+    "id": "ID",
+    "name": "Ім'я",
+    "tags": "Теги",
+    "type": "Тип",
+    "description": "Опис",
+    "iccid": "ICCID",
+    "externalId": "Зовнішній ID",
+    "externalTransactionId": "Зовнішній ID транзакції",
+    "resendInviteEmail": "Повторно надіслати запрошення",
+    "details": "Деталі",
+    "edit": "Редагувати клієнта",
+    "create": "Створити клієнта",
+    "private-customer-details": {
+      "refundTooltip": "Оберіть абонента для повернення",
+      "refund": "Повернення",
+      "qrCodeTooltip": "Оберіть абонента для відображення його QR-коду",
+      "showQRCode": "Показати QR-код",
+      "overview": "Огляд",
+      "location": "Місцезнаходження",
+      "imsi": "IMSI",
+      "state": "Штат",
+      "country": "Країна",
+      "operator": "Оператор",
+      "otherDetails": "Інші деталі",
+      "currencyCode": "Код валюти",
+      "status": "Статус",
+      "language": "Мова",
+      "financialSummary": "Фінансовий підсумок",
+      "totalSpent": "Загальна сума витрат",
+      "totalUsedData": "Загальний обсяг використаних даних",
+      "activityTimeline": "Хронологія активності",
+      "noActivities": "Немає активностей",
+      "noActivitiesMessage": "Клієнт ще не виконував жодної активності."
+    },
+    "showQrCodeDialog": {
+      "title": "Перегляд QR-коду"
+    }
+  },
+  "bundles": {
+    "noBundlesFound": "Пакети не знайдено"
+  },
+  "eventStatus": {
+    "noEventsFound": "Події ще не зареєстровано",
+    "timeStamp": "Мітка часу",
+    "notificationPoint": "Точка сповіщення",
+    "status": "Статус",
+    "loading": "Завантаження подій..."
+  },
+  "purchasedProducts": {
+    "noPurchasedProductsFound": "Історія покупок продуктів не знайдена",
+    "noPurchasesMessage": "Клієнт ще не здійснював покупок.",
+    "productName": "Назва продукту",
+    "status": "Статус",
+    "remainingBalance": "Залишок балансу",
+    "totalBalance": "Загальний баланс",
+    "price": "Ціна",
+    "purchasedAt": "Придбано",
+    "updatedAt": "Оновлено",
+    "updatedBy": "Оновлено користувачем",
+    "usageStartedAt": "Початок використання",
+    "usageExpiredAt": "Закінчення використання",
+    "loading": "Завантаження замовлень транзакцій..."
+  },
+  "subscriberDetails": {
+    "location": "Місцезнаходження",
+    "state": "Штат",
+    "country": "Країна",
+    "operator": "Оператор",
+    "lastUpdatedAt": "Останнє оновлення",
+    "bundles": "Пакети",
+    "simDetails": "Деталі SIM-карти",
+    "status": "Статус",
+    "networkStatus": "Стан мережі",
+    "imsi": "IMSI",
+    "msisdn": "MSISDN",
+    "imei": "IMEI",
+    "iccid": "ICCID",
+    "createdAt": "Створено",
+    "createdBy": "Створено користувачем",
+    "updatedAt": "Оновлено",
+    "updatedBy": "Оновлено користувачем",
+    "externalReferenceId": "Зовнішній ідентифікатор",
+    "purchasedProductsHistory": "Історія придбаних продуктів",
+    "transactionOrders": "Замовлення транзакцій",
+    "statusEvent": "Подія статусу"
+  },
+  "transactionOrdersTable": {
+    "noTransactionOrdersFound": "Замовлення транзакцій не знайдено",
+    "noTransactionsMessage": "Клієнт ще не здійснював транзакцій.",
+    "type": "Тип",
+    "status": "Статус",
+    "productName": "Назва продукту",
+    "productPrice": "Ціна продукту",
+    "createdAt": "Створено",
+    "createdBy": "Створено користувачем",
+    "updatedAt": "Оновлено",
+    "updatedBy": "Оновлено користувачем",
+    "externalTransactionId": "Зовнішній ID",
+    "triggerType": "Тип тригера",
+    "loading": "Завантаження замовлень транзакцій..."
+  },
+  "order": {
+    "id": "ID",
+    "serialNumber": "Серійний номер",
+    "type": "Тип",
+    "description": "Опис",
+    "createdDate": "Дата створення",
+    "fromOwner": "Від клієнта",
+    "toOwner": "До клієнта",
+    "editDescription": "Редагувати опис"
+  },
+  "editOrderDescription": {
+    "title": "Редагувати опис"
+  },
+  "package": {
+    "id": "ID",
+    "name": "Назва",
+    "description": "Опис",
+    "providerName": "Назва постачальника",
+    "usages": "Використання",
+    "effectiveDate": "Дата початку дії",
+    "price": "Ціна",
+    "status": "Статус",
+    "currency": "Валюта",
+    "customers": "Клієнти",
+    "validity": "Термін дії",
+    "unitType": "Тип одиниці",
+    "details": "Деталі",
+    "edit": "Редагувати",
+    "changeStatus": "Змінити статус"
+  },
+  "changeStatusDialog": {
+    "changeStatus": "Змінити статус",
+    "status": "Статус"
+  },
+  "createProduct": {
+    "createProduct": "Створити продукт",
+    "providerBundle": "Пакет постачальника",
+    "products": "Продукти",
+    "productName": "Назва продукту",
+    "description": "Опис",
+    "price": "Ціна",
+    "currency": "Валюта",
+    "corporateProduct": "Корпоративний продукт",
+    "customers": "Клієнти",
+    "bundleInformation": "Інформація про пакет",
+    "bundleName": "Назва пакету",
+    "bundleDescription": "Опис пакету",
+    "usageValue": "Значення використання",
+    "type": "Тип",
+    "unitType": "Тип одиниці",
+    "addUsage": "Додати використання",
+    "validityPeriod": "Період дії",
+    "timeUnit": "Одиниця часу",
+    "flexible": "Гнучкий"
+  },
+  "editProduct": {
+    "editProduct": "Редагувати продукт",
+    "productName": "Назва продукту",
+    "description": "Опис",
+    "price": "Ціна",
+    "currency": "Валюта",
+    "corporateProduct": "Корпоративний продукт",
+    "customers": "Клієнти",
+    "cancel": "Скасувати",
+    "saveChanges": "Зберегти зміни"
+  },
+  "moveResource": {
+    "title": "Перемістити ресурс"
+  },
+  "setupResource": {
+    "title": "Налаштувати ресурс"
+  },
+  "uploadDialog": {
+    "title": "Завантажити причини",
+    "dropZoneMessage": "Перетягніть файл сюди або натисніть кнопку нижче для вибору файлу.",
+    "chooseFileButton": "Обрати файл",
+    "uploadSuccessMessage": "{{fileName}} успішно завантажено!",
+    "uploadErrorMessage": "Щось пішло не так. Спробуйте ще раз."
+  },
+  "inventory": {
+    "id": "ID",
+    "lpa": "LPA",
+    "server": "Сервер",
+    "code": "Код",
+    "oid": "OID",
+    "iccid": "ICCID",
+    "imei": "IMEI",
+    "imsi": "IMSI",
+    "customer": "Клієнт",
+    "msisdn": "MSISDN",
+    "status": "Статус",
+    "provider": "Ім'я",
+    "uploadResource": "Завантажити ресурс",
+    "moveResource": "Перемістити ресурс",
+    "movedSimsMessage": "{{movedSims}} SIM-карт переміщено",
+    "availableSimsMessage": "Доступно для переміщення SIM-карт: {{availableSims}}"
+  },
+  "editPaymentGateway": {
+    "setupPaymentGateway": "Налаштувати платіжний шлюз",
+    "active": "Активний",
+    "deactivated": "Відключено",
+    "primaryPaymentGatewayTooltip": "Основний платіжний шлюз, його не можна відключити",
+    "statusUpdated": "Статус успішно оновлено",
+    "configurationCreated": "Конфігурацію успішно створено",
+    "configurationUpdated": "Конфігурацію успішно оновлено",
+    "formInvalid": "Форма недійсна"
+  },
+  "settings": {
+    "paymentGateway": "Платіжний шлюз",
+    "whiteLabelConfiguration": "Конфігурація White Label"
+  },
+  "paymentGateway": {
+    "id": "ID",
+    "name": "Назва",
+    "isActive": "Активний",
+    "isPrimary": "Основний",
+    "paymentStrategy": "Стратегія оплати",
+    "createdDate": "Дата створення",
+    "hint": "У цьому розділі ви можете налаштувати всі доступні вам платіжні шлюзи.",
+    "setupNew": "Налаштувати новий платіжний шлюз",
+    "setup": "Налаштувати платіжний шлюз",
+    "adminHint": "Ця конфігурація доступна лише для користувачів, які не є адміністраторами."
+  },
+  "createUser": {
+    "title": "Створити користувача",
+    "email": "Email",
+    "emailPlaceholder": "Введіть email користувача",
+    "username": "Ім'я користувача",
+    "usernamePlaceholder": "Введіть ім'я користувача",
+    "firstName": "Ім'я",
+    "firstNamePlaceholder": "Введіть ім'я",
+    "lastName": "Прізвище",
+    "lastNamePlaceholder": "Введіть прізвище",
+    "accountId": "ID акаунту",
+    "accountIdPlaceholder": "Введіть ID акаунту",
+    "accountType": "Тип акаунту",
+    "accountTypePlaceholder": "Введіть тип акаунту"
+  },
+  "user": {
+    "username": "Ім'я користувача",
+    "accountId": "ID акаунту",
+    "accountType": "Тип акаунту",
+    "firstName": "Ім'я",
+    "lastName": "Прізвище",
+    "email": "Email",
+    "resetPassword": "Скинути пароль"
+  }
+}

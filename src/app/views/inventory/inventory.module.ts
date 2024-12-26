@@ -19,6 +19,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -46,7 +47,8 @@ import { MatMenuModule } from '@angular/material/menu';
 		MatTooltipModule,
 		MatCardModule,
 		MatIconModule,
-		MatMenuModule
+		MatMenuModule,
+		TranslateModule
 	]
 })
 export class InventoryModule { }
