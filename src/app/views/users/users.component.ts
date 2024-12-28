@@ -73,7 +73,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         if (user) {
           return this.usersDataService.createUser(user).pipe(
             tap(() =>
-              this.snackBar.open('Mail sent successfully', null, {
+              this.snackBar.open('User created successfully', null, {
                 panelClass: 'app-notification-success',
                 duration: 2000
               })
@@ -90,7 +90,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   private initFormControls(): void {
     this.filterForm = new FormGroup({
-      search: new FormControl(null)
+      searchQuery: new FormControl(null)
     });
   }
 
@@ -106,7 +106,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   private loadData(params: {
     page: number;
     size: number;
-    search?: string;
+    searchQuery?: string;
   } = { page: 0, size: 10 }): void {
     this.usersDataService.paginatedUsers(params, params.page, params.size)
       .pipe(takeUntil(this.unsubscribe$))

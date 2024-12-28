@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { FormConfig, FormGeneratorModule } from '../../../shared';
+import { AccountsDataService, AuthService, FormConfig, FormGeneratorModule } from '../../../shared';
 import { getCreateUserFormConfig } from './create-user.utils';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { debounceTime, Observable, of } from 'rxjs';
+import { UsersDataService } from '../users-data.service';
+import { catchError, map } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-create-user',
@@ -20,14 +23,22 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 	],
 	styleUrls: ['./create-user.component.scss']
 })
-export class CreateUserComponent {
+export class CreateUserComponent implements OnInit {
+	private accountsDataService = inject(AccountsDataService);
+	private usersDataService = inject(UsersDataService);
+	private translate = inject(TranslateService);
+	private dialogRef = inject(MatDialogRef<CreateUserComponent>);
+
 	formConfig: FormConfig;
 	form: FormGroup;
 	isFormValid: boolean;
 
-	constructor(public dialogRef: MatDialogRef<CreateUserComponent>,
-							private translate: TranslateService) {
-		this.formConfig = getCreateUserFormConfig(this.translate);
+	ngOnInit(): void {
+		this.formConfig = getCreateUserFormConfig(
+			this.translate,
+			this.accountsDataService.list(),
+			this.emailValidator.bind(this)
+		);
 	}
 
 	handleFormChanges(form: FormGroup): void {
@@ -41,5 +52,21 @@ export class CreateUserComponent {
 
 	submit(): void {
 		this.dialogRef.close(this.form.getRawValue());
+	}
+
+	emailValidator(control: FormControl): Observable<{ [key: string]: boolean } | null> {
+		if (!control.value) {
+			return of(null);
+		}
+
+		return this.usersDataService.verifyEmail(control.value).pipe(
+			debounceTime(300),
+			map((response: { isExist: boolean }) => {
+				return response.isExist ? {emailExists: true} : null;
+			}),
+			catchError((error) => {
+				return of(null);
+			})
+		);
 	}
 }

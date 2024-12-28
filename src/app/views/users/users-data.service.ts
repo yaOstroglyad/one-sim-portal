@@ -37,7 +37,7 @@ export class UsersDataService extends DataService<User> {
       }
     });
 
-    return this.http.get<any>('/api/v1/users/query/all/page', { params }).pipe(
+    return this.http.get<any>('/api/v1/users/query/all', { params }).pipe(
       catchError(() => {
         console.warn('error happened, presenting mocked data');
         return of({
@@ -50,6 +50,14 @@ export class UsersDataService extends DataService<User> {
   }
 
 	createUser(user: User): Observable<User> {
-		return this.http.post<User>('/api/v1/users', user);
+    console.log('user', user);
+		return this.http.post<User>(`/api/v1/users/command/create?accountId=${user.accountId}`, user);
 	}
+
+  public verifyEmail(email: string): Observable<{ isExist: boolean }> {
+    // return of({isExist: false})
+    return this.http.get<{ isExist: boolean }>(`/api/v1/users/query/verify-user`, {
+      params: { email }
+    });
+  }
 }

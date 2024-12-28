@@ -38,7 +38,7 @@ export class AuthService {
     //     this.permissions = permissions;
     //   }),
     //   catchError(() => {
-        const admins = ['admin', 'daniel@1-esim.com'];
+        const admins = ['admin'];
         const customers = ['anex@mail.com', 'sergey.tepkeev@anextour.com', 'daniel@1-esim.com', 'daniel-1esim', 'vasily@1-esim.com', 'vb@venturebot.fund'];
         const support = [];
         const loginResponse = this.$SessionStorageService.retrieve('loginResponse') || this.$LocalStorageService.retrieve('loginResponse');

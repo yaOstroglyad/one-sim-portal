@@ -4,7 +4,7 @@
             (onAddAction)="createUser()"
             (columnSelectionChange)="onColumnSelectionChanged($event)">
     <ng-container header-custom-inputs>
-        <input cFormControl formControlName="name" [type]="'text'" placeholder="Name">
+        <input cFormControl formControlName="searchQuery" [type]="'text'" placeholder="Search users">
         <button cButton
                 color="secondary"
                 [disabled]="filterForm.pristine"

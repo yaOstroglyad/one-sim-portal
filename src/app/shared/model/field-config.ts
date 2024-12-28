@@ -1,5 +1,5 @@
 // field-config.model.ts
-import { ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 export enum FieldType {
@@ -42,6 +42,7 @@ export interface FieldConfig {
 	//select
 	options?: Observable<Array<SelectOption>>;
 	validators?: ValidatorFn | ValidatorFn[];
+	asyncValidators?: AsyncValidatorFn | AsyncValidatorFn[];
 	displayOptions?: {
 		newLine?: boolean;
 	},
