@@ -3,10 +3,10 @@
         <li *ngFor="let breadcrumb of breadcrumbs; let last = last"
             [ngClass]="{ 'os-breadcrumb-item': true, 'active': last }">
             <ng-container *ngIf="!last; else lastBreadcrumb">
-                <span [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</span>
+                <span [routerLink]="breadcrumb.url">{{ breadcrumb.label | translate }}</span>
             </ng-container>
             <ng-template #lastBreadcrumb>
-                {{ breadcrumb.label }}
+                {{ breadcrumb.label | translate }}
             </ng-template>
         </li>
     </ul>

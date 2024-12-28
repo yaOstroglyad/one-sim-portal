@@ -38,6 +38,10 @@ $one-sim-portal-theme: mat.define-light-theme((
 $enable-ltr: true;
 $enable-rtl: true;
 
+html[dir="rtl"] {
+  @include mat.all-component-themes($one-sim-portal-theme);
+}
+
 // Import styles with default layout.
 @import "@coreui/coreui/scss/coreui";
 

@@ -55,6 +55,7 @@
   },
   "nav": {
     "customers": "Клієнти",
+    "customer-details": "Деталі клієнта",
     "providers": "Постачальники",
     "orders": "Замовлення",
     "products": "Продукти",
@@ -195,7 +196,8 @@
     "editDescription": "Редагувати опис"
   },
   "editOrderDescription": {
-    "title": "Редагувати опис"
+    "title": "Редагувати опис",
+    "orderDescriptionLabel": "Опис замовлення"
   },
   "package": {
     "id": "ID",

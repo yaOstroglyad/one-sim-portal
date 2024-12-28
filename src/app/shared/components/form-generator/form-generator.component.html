@@ -1,5 +1,5 @@
 <ng-container *ngIf="config">
-    <form [formGroup]="form"  fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="start start">
+    <form [formGroup]="form" [dir]="dir" fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="start start">
         <ng-container *ngFor="let field of config.fields">
                 <ng-container [ngSwitch]="field.type">
                     <ng-container *ngSwitchCase="FieldType.text" [ngTemplateOutlet]="textTemplate"

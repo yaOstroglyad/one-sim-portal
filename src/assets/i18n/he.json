@@ -55,6 +55,7 @@
   },
   "nav": {
     "customers": "לקוחות",
+    "customer-details": "פרטי לקוח",
     "providers": "ספקים",
     "orders": "הזמנות",
     "products": "מוצרים",
@@ -195,7 +196,8 @@
     "editDescription": "ערוך תיאור"
   },
   "editOrderDescription": {
-    "title": "ערוך תיאור"
+    "title": "ערוך תיאור",
+    "orderDescriptionLabel": "תיאור הזמנה"
   },
   "package": {
     "id": "מזהה",

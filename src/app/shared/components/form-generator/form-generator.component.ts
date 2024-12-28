@@ -9,7 +9,7 @@ import {
 	Output,
 	SimpleChanges
 } from '@angular/core';
-import { FieldConfig, FieldType, FormConfig } from '../../model/field-config';
+import { FieldConfig, FieldType, FormConfig } from '../../model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { createControl } from './form-generator.utils';
 import { isFunction } from 'rxjs/internal/util/isFunction';
@@ -27,8 +27,10 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 	@Input() config: FormConfig;
 	@Output() formChanges = new EventEmitter<FormGroup>();
 	form: FormGroup = new FormGroup({});
+	dir: 'ltr' | 'rtl';
 
 	constructor(private fb: FormBuilder) {
+		this.dir = document.documentElement.getAttribute('dir') as 'ltr' | 'rtl';
 	}
 
 	public ngOnInit(): void {

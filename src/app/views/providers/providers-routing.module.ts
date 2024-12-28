@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Providers',
+      title: 'nav.providers',
       permissions: [ADMIN_PERMISSION]
     },
     component: ProvidersComponent,

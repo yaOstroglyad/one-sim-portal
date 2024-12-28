@@ -1,8 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	inject,
+	OnDestroy,
+	OnInit,
+} from '@angular/core';
 import { navItems } from './_nav';
-import { TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { INavData } from '@coreui/angular';
-import { SessionStorageService } from 'ngx-webstorage';
 import { WhiteLabelService } from '../../shared/services/white-label.service';
 import { BrandFull } from '../../shared/model/brandFull';
 import { BrandNarrow } from '../../shared/model/brandNarrow';
@@ -18,7 +24,6 @@ import { AuthService } from '../../shared';
 export class DefaultLayoutComponent implements OnInit, OnDestroy {
 	authService = inject(AuthService);
 	translateService = inject(TranslateService);
-	$sessionStorage = inject(SessionStorageService);
 	whiteLabelService = inject(WhiteLabelService);
 	cdr = inject(ChangeDetectorRef);
 
@@ -39,6 +44,10 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
 			this.brandNarrow = this.whiteLabelService.updateBrandNarrow();
 			this.whiteLabelService.updateDocumentViewBasedConfig(config);
 			this.cdr.detectChanges();
+		});
+
+		this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+			this.filterAndTranslateNavItems();
 		});
 	}
 

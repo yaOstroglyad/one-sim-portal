@@ -7,7 +7,7 @@ const routes: Routes = [
 	{
 		path: '',
 		data: {
-			title: 'Users',
+			title: 'nav.users',
 			permissions: [ADMIN_PERMISSION]
 		},
 		component: UsersComponent,

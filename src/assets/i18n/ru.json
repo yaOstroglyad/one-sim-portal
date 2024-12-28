@@ -55,6 +55,7 @@
   },
   "nav": {
     "customers": "Клиенты",
+    "customer-details": "Детали клиента",
     "providers": "Поставщики",
     "orders": "Заказы",
     "products": "Продукты",
@@ -195,7 +196,8 @@
     "editDescription": "Редактировать описание"
   },
   "editOrderDescription": {
-    "title": "Редактировать описание"
+    "title": "Редактировать описание",
+    "orderDescriptionLabel": "Описание заказа"
   },
   "package": {
     "id": "ID",

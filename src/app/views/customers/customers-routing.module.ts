@@ -8,21 +8,21 @@ const routes: Routes = [
   {
     path: '',
     data: {
-      title: 'Customers'
+      title: 'nav.customers'
     },
     component: CustomersComponent
   },
   {
     path: 'customer-details/private/:id',
     data: {
-      title: 'Customer details'
+      title: 'nav.customer-details'
     },
     component: PrivateCustomerDetailsComponent
   },
   {
     path: 'customer-details/corporate',
     data: {
-      title: 'Customer details'
+      title: 'nav.customer-details'
     },
     component: CorporateCustomerDetailsComponent
   }

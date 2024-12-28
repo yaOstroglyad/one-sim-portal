@@ -55,6 +55,7 @@
   },
   "nav": {
     "customers": "Customers",
+    "customer-details": "Customer Details",
     "providers": "Providers",
     "orders": "Orders",
     "products": "Products",
@@ -195,7 +196,8 @@
     "editDescription": "Edit description"
   },
   "editOrderDescription": {
-    "title": "Edit description"
+    "title": "Edit description",
+    "orderDescriptionLabel": "Order description"
   },
   "package": {
     "id": "ID",

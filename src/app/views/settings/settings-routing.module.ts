@@ -7,7 +7,7 @@ const routes: Routes = [
 	{
 		path: '',
 		data: {
-			title: 'Settings',
+			title: 'nav.settings',
 			permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
 		},
 		component: SettingsComponent,

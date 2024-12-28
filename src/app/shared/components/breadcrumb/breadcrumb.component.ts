@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { CommonModule, NgClass, NgForOf, NgIf } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Breadcrumb {
   label: string;
@@ -18,14 +19,14 @@ interface Breadcrumb {
     NgClass,
     NgForOf,
     NgIf,
-    RouterLink
+    RouterLink,
+    TranslateModule
   ]
 })
 export class BreadcrumbComponent implements OnInit {
+  router = inject(Router);
+  activatedRoute = inject(ActivatedRoute);
   public breadcrumbs: Breadcrumb[] = [];
-
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
