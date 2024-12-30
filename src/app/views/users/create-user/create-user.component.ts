@@ -1,7 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { AccountsDataService, AuthService, FormConfig, FormGeneratorModule } from '../../../shared';
+import {
+	CustomersDataService, CustomerType,
+	FormConfig,
+	FormGeneratorModule
+} from '../../../shared';
 import { getCreateUserFormConfig } from './create-user.utils';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
@@ -24,7 +28,7 @@ import { catchError, map } from 'rxjs/operators';
 	styleUrls: ['./create-user.component.scss']
 })
 export class CreateUserComponent implements OnInit {
-	private accountsDataService = inject(AccountsDataService);
+	private customersDataService = inject(CustomersDataService);
 	private usersDataService = inject(UsersDataService);
 	private translate = inject(TranslateService);
 	private dialogRef = inject(MatDialogRef<CreateUserComponent>);
@@ -36,9 +40,19 @@ export class CreateUserComponent implements OnInit {
 	ngOnInit(): void {
 		this.formConfig = getCreateUserFormConfig(
 			this.translate,
-			this.accountsDataService.list(),
+			this.getCustomers(),
 			this.emailValidator.bind(this)
 		);
+	}
+
+	getCustomers() {
+		return this.customersDataService.list(CustomerType.Corporate).pipe(
+			map(customers => customers.map(c => ({
+					value: c.accountId,
+					displayValue: c.name
+				})
+			))
+		)
 	}
 
 	handleFormChanges(form: FormGroup): void {

@@ -11,6 +11,7 @@ export interface Customer {
   description: string,
   type: CustomerType
   status?: string;
+  accountId?: string;
   parentCustomer?: ParentCustomer;
   tags?: string[];
 }
