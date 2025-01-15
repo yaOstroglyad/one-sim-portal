@@ -1,10 +1,8 @@
-import { FieldType, FormConfig } from '../../../shared/model/field-config';
+import { FieldType, ProvidersDataService, FormConfig, Customer, CustomerType } from '../../../shared';
 import { Validators } from '@angular/forms';
 import { of } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { ProvidersDataService } from '../../../shared';
 import { map } from 'rxjs/operators';
-import { Customer, CustomerType } from '../../../shared/model/customer';
 
 const typeHintMessage = 'The SIM card is automatically attached to the subscriber, ' +
 	'who is created automatically at the moment of private customer creation.'
@@ -21,13 +19,23 @@ export function getCustomerCreateRequest(form: any) {
 			tags: form?.tags || [],
 			type: form?.type || ''
 		},
-		subscriberCommand: {
-			serviceProviderId: form.serviceProviderId || '',
-			externalId: form.externalId || ''
-		},
+		...getSubscriberCommand(form),
 		registrationEmail: form.registrationEmail
-	}
+	};
 }
+
+function getSubscriberCommand(form: any) {
+	if (form?.type === CustomerType.Private) {
+		return {
+			subscriberCommand: {
+				serviceProviderId: form.serviceProviderId || '',
+				externalId: form.externalId || ''
+			}
+		};
+	}
+	return {};
+}
+
 
 export function getEditCustomerFormConfig(
 	serviceProviderDataService: ProvidersDataService,
@@ -64,6 +72,8 @@ export function getEditCustomerFormConfig(
 					// Toggle field hints
 					formGeneratorComponent.toggleFieldHint('type', typeHint, typeClassName);
 					formGeneratorComponent.toggleFieldHint('registrationEmail', emailHint, emailClassName);
+
+					console.log('formGeneratorComponent.form.value', formGeneratorComponent.form.value)
 				}
 			},
 			{
