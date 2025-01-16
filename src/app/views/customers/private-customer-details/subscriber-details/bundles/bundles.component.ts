@@ -54,7 +54,7 @@ export class BundlesComponent implements OnInit {
 			.getPurchasedProducts({subscriberId: this.subscriber.id})
 			.pipe(
 				map((products: ProductPurchase[]) =>
-					products.filter(product => product.status === 'active')
+					products.filter(product => product.status === 'active' || product.status === 'paid')
 				),
 				map((activeProducts: ProductPurchase[]) => activeProducts.flatMap(product =>
 						product.usage.balance.map(balance => this.mapBalanceToUsageInfo(balance, product))
