@@ -83,6 +83,10 @@
     "cancel": "Cancel",
     "send": "Send"
   },
+  "add-subscriber-product": {
+    "title": "Add Subscriber Product",
+    "noProducts": "No products were found."
+  },
   "customer": {
     "id": "ID",
     "name": "Name",
@@ -97,6 +101,8 @@
     "edit": "Edit Customer",
     "create": "Create Customer",
     "private-customer-details": {
+      "add-product-action-tooltip": "Please select a subscriber to add product",
+      "add-product": "Add subscriber product",
       "refundTooltip": "Please select a subscriber to refund",
       "refund": "Refund",
       "qrCodeTooltip": "Please select a subscriber to present his QR code",

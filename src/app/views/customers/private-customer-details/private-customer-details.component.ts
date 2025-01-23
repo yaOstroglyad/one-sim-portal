@@ -14,10 +14,10 @@ import {
 	TransactionDataService,
 	PurchasedProductsDataService,
 	SubscriberDataService,
-  SimLocations,
-  EmptyStateComponent,
-  RefundProductComponent,
-  Subscriber
+	SimLocations,
+	EmptyStateComponent,
+	RefundProductComponent,
+	Subscriber, ADMIN_PERMISSION, AuthService
 } from '../../../shared';
 import { forkJoin, Observable, of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -34,6 +34,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ShowQrCodeDialogComponent } from './show-qr-code-dialog/show-qr-code-dialog.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { AddSubscriberProductComponent } from './add-subscriber-product/add-subscriber-product.component';
 
 @Component({
 	selector: 'app-private-customer-details',
@@ -73,6 +74,8 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	renderer = inject(Renderer2);
 	dialog = inject(MatDialog);
 	cdr = inject(ChangeDetectorRef);
+	authService = inject(AuthService);
+	isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	customerId: string;
 	subscribers: Subscriber[];
 	selectedSubscriber: Subscriber;
@@ -149,22 +152,22 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 
 	openRefund(subscriber: Subscriber): void {
 		const data = {id: subscriber.simId};
-		const uploadDialogRef = this.dialog.open(RefundProductComponent, {
+		const dialogRef = this.dialog.open(RefundProductComponent, {
 			width: '600px',
 			data
 		});
 
-		uploadDialogRef.afterClosed().subscribe(() => this.loadCustomerDetails());
+		dialogRef.afterClosed().subscribe(() => this.loadCustomerDetails());
 	}
 
 	public openShowQRCode(subscriber: Subscriber): void {
 		this.subscriberDataService.getSimDetails({ id: subscriber.simId }).subscribe(sim => {
-			const uploadDialogRef = this.dialog.open(ShowQrCodeDialogComponent, {
+			const dialogRef = this.dialog.open(ShowQrCodeDialogComponent, {
 				width: '350px',
 				data: sim.qrCode
 			});
 
-			uploadDialogRef.afterClosed().subscribe();
+			dialogRef.afterClosed().subscribe();
 		})
 	}
 
@@ -182,5 +185,15 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 		} else {
 			console.error('tabGroup is not defined');
 		}
+	}
+
+	public addProduct(subscriber: Subscriber) {
+		const data = {id: subscriber.id};
+		const dialogRef = this.dialog.open(AddSubscriberProductComponent, {
+			width: '600px',
+			data
+		});
+
+		dialogRef.afterClosed().subscribe(() => this.loadCustomerDetails());
 	}
 }

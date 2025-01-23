@@ -83,6 +83,10 @@
     "cancel": "Скасувати",
     "send": "Надіслати"
   },
+  "add-subscriber-product": {
+    "title": "Додати продукт підписки",
+    "noProducts": "Продукти не знайдено."
+  },
   "customer": {
     "id": "ID",
     "name": "Ім'я",
@@ -99,6 +103,8 @@
     "private-customer-details": {
       "refundTooltip": "Оберіть абонента для повернення",
       "refund": "Повернення",
+      "add-product": "Додати продукт підписки",
+      "add-product-action-tooltip": "Будь ласка, виберіть підписника для додавання продукту",
       "qrCodeTooltip": "Оберіть абонента для відображення його QR-коду",
       "showQRCode": "Показати QR-код",
       "overview": "Огляд",

@@ -27,3 +27,22 @@ export interface RefundableProduct {
   purchasedAt: number;
   status: "ACTIVE" | "INACTIVE" | "REFUNDED";
 }
+
+export interface AddSubscriberProduct {
+  subscriberId: string,
+  productId: string
+}
+
+export interface SubscriberProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  currency: string;
+  validity: {
+    period: number;
+    timeUnit: string;
+  };
+  purchaseLink: string;
+}
+

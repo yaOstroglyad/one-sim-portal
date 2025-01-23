@@ -83,6 +83,10 @@
     "cancel": "Отмена",
     "send": "Отправить"
   },
+  "add-subscriber-product": {
+    "title": "Добавить подписной продукт",
+    "noProducts": "Продукты не найдены."
+  },
   "customer": {
     "id": "ID",
     "name": "Имя",
@@ -99,6 +103,8 @@
     "private-customer-details": {
       "refundTooltip": "Пожалуйста, выберите подписчика для возврата",
       "refund": "Возврат",
+      "add-product": "Добавить подписной продукт",
+      "add-product-action-tooltip": "Пожалуйста, выберите подписчика для добавления продукта",
       "qrCodeTooltip": "Пожалуйста, выберите подписчика для отображения его QR-кода",
       "showQRCode": "Показать QR-код",
       "overview": "Обзор",

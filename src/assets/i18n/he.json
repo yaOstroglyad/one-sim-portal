@@ -83,6 +83,10 @@
     "cancel": "בטל",
     "send": "שלח"
   },
+  "add-subscriber-product": {
+    "title": "הוסף מוצר מנוי",
+    "noProducts": "לא נמצאו מוצרים."
+  },
   "customer": {
     "id": "מזהה",
     "name": "שם",
@@ -99,6 +103,8 @@
     "private-customer-details": {
       "refundTooltip": "בחר מנוי להחזר",
       "refund": "החזר",
+      "add-product": "הוסף מוצר למנוי",
+      "add-product-action-tooltip": "בחר מנוי להוספת מוצר",
       "qrCodeTooltip": "בחר מנוי להצגת קוד ה-QR שלו",
       "showQRCode": "הצג קוד QR",
       "overview": "סקירה כללית",

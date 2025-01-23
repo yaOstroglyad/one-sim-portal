@@ -8,13 +8,13 @@ export interface PgComponentConfig {
 }
 
 export interface PaymentStrategy {
-  "id"?: string,
-  "name": string,
-  "isActive"?: boolean,
-  "primary"?: boolean,
-  "paymentStrategy"?: string,
-	"paymentMethodParameters"?: PaymentMethodParameters,
-  "createdDate"?: string
+  id?: string,
+  name: string,
+  isActive?: boolean,
+  primary?: boolean,
+  paymentStrategy?: string,
+	paymentMethodParameters?: PaymentMethodParameters,
+  createdDate?: string
 }
 
 export interface PaymentMethodParameters {
