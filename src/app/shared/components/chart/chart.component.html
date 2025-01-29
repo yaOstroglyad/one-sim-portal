@@ -2,10 +2,16 @@
   <div class="label">
     <b class="product-name">{{chartData.productName}}</b><br/>
     <b class="current-usage">{{
-        'left ' + chartData.remaining +' '+ chartData.unitType + ' of'
-      }}</b><br/>
+            'data-chart.left' | translate:{
+                remaining: chartData.remaining | number: '1.2',
+                unitType: chartData.unitType
+            }
+        }}</b><br/>
     <div class="total-amount">{{
-        'usage ' + this.chartData.total + ' ' +this.chartData.unitType
+            'data-chart.usage-label' | translate: {
+                total: this.chartData.total | number: '1.2',
+                unitType: this.chartData.unitType
+            }
         }}
     </div>
     <div class="expired-date" *ngIf="expiredAt">

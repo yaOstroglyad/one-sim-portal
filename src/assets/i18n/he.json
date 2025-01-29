@@ -176,6 +176,11 @@
     "transactionOrders": "הזמנות עסקה",
     "statusEvent": "אירוע מצב"
   },
+  "data-chart": {
+    "left": "{{remaining}} {{unitType}} left",
+    "usage-label": "out of {{total}} {{unitType}}",
+    "expired-date": "Expired at {{date}}"
+  },
   "transactionOrdersTable": {
     "noTransactionOrdersFound": "לא נמצאו הזמנות עסקה",
     "noTransactionsMessage": "המנוי לא ביצע עסקאות עדיין.",

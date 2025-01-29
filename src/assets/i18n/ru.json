@@ -176,6 +176,11 @@
     "transactionOrders": "Транзакционные заказы",
     "statusEvent": "Событие статуса"
   },
+  "data-chart": {
+    "left": "{{remaining}} {{unitType}} left",
+    "usage-label": "out of {{total}} {{unitType}}",
+    "expired-date": "Expired at {{date}}"
+  },
   "transactionOrdersTable": {
     "noTransactionOrdersFound": "Транзакционные заказы не найдены",
     "noTransactionsMessage": "Клиент еще не совершал транзакций.",

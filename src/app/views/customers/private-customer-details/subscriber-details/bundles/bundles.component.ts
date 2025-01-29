@@ -12,6 +12,7 @@ import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
+import { convertUsage } from '../../../../../shared/utils/utils';
 
 interface ExtendedUsageInfo extends UsageInfo {
 	productName: string;
@@ -57,23 +58,16 @@ export class BundlesComponent implements OnInit {
 					products.filter(product => product.status === 'active' || product.status === 'paid')
 				),
 				map((activeProducts: ProductPurchase[]) => activeProducts.flatMap(product =>
-						product.usage.balance.map(balance => this.mapBalanceToUsageInfo(balance, product))
+						product.usage.balance.map(balance => this.convertUsageWithProductName(balance, product))
 					)
-
-
 				)
 			);
 	}
 
-	private mapBalanceToUsageInfo(balance: Balance, product: ProductPurchase): ExtendedUsageInfo {
-		const conversionFactor = balance.unitType === 'Gigabyte' as any ? 1024 * 1024 * 1024 : 1;
+	convertUsageWithProductName(balance: Balance, product: ProductPurchase): ExtendedUsageInfo {
 		return {
 			productName: product.productName,
-			type: balance.type,
-			total: Math.round(balance.total / conversionFactor * 100) / 100,
-			used: Math.round(balance.used / conversionFactor * 100) / 100,
-			remaining: Math.round(balance.remaining / conversionFactor * 100) / 100,
-			unitType: balance.unitType === 'Gigabyte' as any ? 'GB' : balance.unitType
+			...convertUsage(balance)
 		};
 	}
 }

@@ -5,6 +5,9 @@ import { RouterLink } from '@angular/router';
 import { AsyncPipe, CurrencyPipe, DatePipe, NgClass, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
+import { convertUsage } from '../../../../../shared/utils/utils';
+import { map } from 'rxjs/operators';
+import { log10 } from 'chart.js/helpers';
 
 @Component({
 	selector: 'app-purchased-products',
@@ -41,7 +44,17 @@ export class PurchasedProductsComponent implements OnInit {
 	];
 
 	ngOnInit(): void {
-		this.purchasedProductsView$ = this.purchasedProductsDataService.getPurchasedProducts({subscriberId: this.subscriber.id});
+		this.purchasedProductsView$ = this.purchasedProductsDataService.getPurchasedProducts({ subscriberId: this.subscriber.id }).pipe(
+			map((activeProducts: ProductPurchase[]) =>
+				activeProducts.map(product => ({
+					...product,
+					usage: {
+						...product.usage,
+						balance: product.usage.balance.map(balance => convertUsage(balance))
+					}
+				}))
+			)
+		);
 	}
 
 	getStatusClass(status: string): string {
@@ -53,11 +66,6 @@ export class PurchasedProductsComponent implements OnInit {
 			default:
 				return '';
 		}
-	}
-
-	public convertData(usage: any, key: string): number {
-		const conversionFactor = usage.balance[0].unitType === 'Gigabyte' as any ? 1024 * 1024 * 1024 : 1;
-		return Math.round((usage.balance[0]?.[key] || 0) / conversionFactor * 100) / 100;
 	}
 
 	public getUnitType(usage: any): string {

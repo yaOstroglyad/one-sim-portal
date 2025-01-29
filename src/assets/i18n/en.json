@@ -176,6 +176,11 @@
     "transactionOrders": "Transaction Orders",
     "statusEvent": "Status Event"
   },
+  "data-chart": {
+    "left": "{{remaining}} {{unitType}} left",
+    "usage-label": "out of {{total}} {{unitType}}",
+    "expired-date": "Expired at {{date}}"
+  },
   "transactionOrdersTable": {
     "noTransactionOrdersFound": "No transaction orders found",
     "noTransactionsMessage": "The customer hasn’t made any transactions yet.",

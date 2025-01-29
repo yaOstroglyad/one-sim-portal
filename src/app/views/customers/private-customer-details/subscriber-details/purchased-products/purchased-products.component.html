@@ -26,16 +26,16 @@
             </td>
         </ng-container>
 
-        <!-- Remaining Balance Column -->
-        <ng-container matColumnDef="remainingBalance">
-            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.remainingBalance' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ this.convertData(element.usage, 'remaining') + this.getUnitType(element.usage) }}</td>
-        </ng-container>
-
         <!-- Total Balance Column -->
         <ng-container matColumnDef="totalBalance">
             <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.totalBalance' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ convertData(element.usage, 'total') + this.getUnitType(element.usage) }}</td>
+            <td mat-cell *matCellDef="let element"> {{ element.usage.balance[0].total + this.getUnitType(element.usage) }}</td>
+        </ng-container>
+
+        <!-- Remaining Balance Column -->
+        <ng-container matColumnDef="remainingBalance">
+            <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.remainingBalance' | translate }}</th>
+            <td mat-cell *matCellDef="let element"> {{ element.usage.balance[0].remaining + this.getUnitType(element.usage) }}</td>
         </ng-container>
 
         <!-- Price Column -->

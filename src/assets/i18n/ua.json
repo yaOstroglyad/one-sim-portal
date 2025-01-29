@@ -176,6 +176,11 @@
     "transactionOrders": "Замовлення транзакцій",
     "statusEvent": "Подія статусу"
   },
+  "data-chart": {
+    "left": "{{remaining}} {{unitType}} left",
+    "usage-label": "out of {{total}} {{unitType}}",
+    "expired-date": "Expired at {{date}}"
+  },
   "transactionOrdersTable": {
     "noTransactionOrdersFound": "Замовлення транзакцій не знайдено",
     "noTransactionsMessage": "Клієнт ще не здійснював транзакцій.",
