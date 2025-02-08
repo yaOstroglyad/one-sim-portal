@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import {
+	CompaniesDataService,
 	CustomersDataService, CustomerType,
 	FormConfig,
 	FormGeneratorModule
@@ -28,7 +29,7 @@ import { catchError, map } from 'rxjs/operators';
 	styleUrls: ['./create-user.component.scss']
 })
 export class CreateUserComponent implements OnInit {
-	private customersDataService = inject(CustomersDataService);
+	private companiesDataService = inject(CompaniesDataService);
 	private usersDataService = inject(UsersDataService);
 	private translate = inject(TranslateService);
 	private dialogRef = inject(MatDialogRef<CreateUserComponent>);
@@ -40,14 +41,14 @@ export class CreateUserComponent implements OnInit {
 	ngOnInit(): void {
 		this.formConfig = getCreateUserFormConfig(
 			this.translate,
-			this.getCustomers(),
+			this.getCompanies(),
 			this.emailValidator.bind(this)
 		);
 	}
 
-	getCustomers() {
-		return this.customersDataService.list(CustomerType.Corporate).pipe(
-			map(customers => customers.map(c => ({
+	getCompanies() {
+		return this.companiesDataService.list().pipe(
+			map(companies => companies.map(c => ({
 					value: c.accountId,
 					displayValue: c.name
 				})

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DefaultLayoutComponent } from './default-layout.component';
+import { CompaniesComponent } from '../../views/companies/companies.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,19 @@ const routes: Routes = [
         loadChildren: () =>
             import('../../views/inventory/inventory.module').then((m) => m.InventoryModule)
       },
+      {
+        path: 'companies',
+        data: {
+          title: 'nav.companies'
+        },
+        loadComponent: () =>
+            import('../../views/companies/companies.component').then((m) => m.CompaniesComponent)
+      },
+      // {
+      //   path: 'companies',
+      //   loadChildren: () =>
+      //       import('../../views/companies/companies.module').then((m) => m.CompaniesModule)
+      // },
       {
         path: 'customers',
         loadChildren: () =>

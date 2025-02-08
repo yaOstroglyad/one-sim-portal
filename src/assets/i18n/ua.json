@@ -87,6 +87,16 @@
     "title": "Додати продукт підписки",
     "noProducts": "Продукти не знайдено."
   },
+  "company": {
+    "id": "ID",
+    "name": "Назва",
+    "tags": "Теги",
+    "status": "Статус",
+    "type": "Тип",
+    "description": "Опис",
+    "sendInviteEmail": "Надіслати запрошення на email",
+    "edit": "Редагувати компанію"
+  },
   "customer": {
     "id": "ID",
     "name": "Ім'я",
@@ -221,6 +231,7 @@
     "status": "Статус",
     "currency": "Валюта",
     "customers": "Клієнти",
+    "companies": "Компанії",
     "validity": "Термін дії",
     "unitType": "Тип одиниці",
     "details": "Деталі",
@@ -241,6 +252,7 @@
     "currency": "Валюта",
     "corporateProduct": "Корпоративний продукт",
     "customers": "Клієнти",
+    "companies": "Компанії",
     "bundleInformation": "Інформація про пакет",
     "bundleName": "Назва пакету",
     "bundleDescription": "Опис пакету",
@@ -260,6 +272,7 @@
     "currency": "Валюта",
     "corporateProduct": "Корпоративний продукт",
     "customers": "Клієнти",
+    "companies": "Компанії",
     "cancel": "Скасувати",
     "saveChanges": "Зберегти зміни"
   },

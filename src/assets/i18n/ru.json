@@ -87,6 +87,16 @@
     "title": "Добавить подписной продукт",
     "noProducts": "Продукты не найдены."
   },
+  "company": {
+    "id": "ID",
+    "name": "Название",
+    "tags": "Теги",
+    "status": "Статус",
+    "type": "Тип",
+    "description": "Описание",
+    "sendInviteEmail": "Отправить приглашение на email",
+    "edit": "Редактировать компанию"
+  },
   "customer": {
     "id": "ID",
     "name": "Имя",
@@ -221,6 +231,7 @@
     "status": "Статус",
     "currency": "Валюта",
     "customers": "Клиенты",
+    "companies": "Компании",
     "validity": "Срок действия",
     "unitType": "Тип единицы",
     "details": "Детали",
@@ -241,6 +252,7 @@
     "currency": "Валюта",
     "corporateProduct": "Корпоративный продукт",
     "customers": "Клиенты",
+    "companies": "Компании",
     "bundleInformation": "Информация о пакете",
     "bundleName": "Название пакета",
     "bundleDescription": "Описание пакета",
@@ -260,6 +272,7 @@
     "currency": "Валюта",
     "corporateProduct": "Корпоративный продукт",
     "customers": "Клиенты",
+    "companies": "Компании",
     "cancel": "Отмена",
     "saveChanges": "Сохранить изменения"
   },

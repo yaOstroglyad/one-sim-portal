@@ -2,9 +2,15 @@ import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION } from '../..
 
 export const navItems: any[] = [
 	{
+		name: 'nav.companies',
+		url: 'companies',
+		iconComponent: {name: 'cil-industry'},
+		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION]
+	},
+	{
 		name: 'nav.customers',
 		url: 'customers',
-		iconComponent: {name: 'cil-industry'},
+		iconComponent: {name: 'cil-group'},
 		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION]
 	},
 	{

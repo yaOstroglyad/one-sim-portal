@@ -47,11 +47,10 @@ export function getEditCustomerFormConfig(
 				type: FieldType.select,
 				name: 'type',
 				label: 'Type',
-				value: data.type,
+				value: CustomerType.Private,
 				validators: [Validators.required],
 				options: of([
-					{ value: CustomerType.Private, displayValue: CustomerType.Private },
-					{ value: CustomerType.Corporate, displayValue: CustomerType.Corporate }
+					{ value: CustomerType.Private, displayValue: CustomerType.Private }
 				]),
 				inputEvent: (event, formGeneratorComponent) => {
 					const isPrivate = event.value === CustomerType.Private;

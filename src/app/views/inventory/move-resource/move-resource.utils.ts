@@ -1,25 +1,24 @@
-import { FieldType, FormConfig } from '../../../shared/model/field-config';
 import { Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
-import { CustomersDataService, ProvidersDataService, OrdersDataService } from '../../../shared';
+import { ProvidersDataService, OrdersDataService, CompaniesDataService, FormConfig, FieldType } from '../../../shared';
 
 export function getMoveResourceFormConfig(
 	serviceProviderDataService: ProvidersDataService,
-	customersDataService: CustomersDataService,
+	companiesDataService: CompaniesDataService,
 	ordersDataService: OrdersDataService
 ): FormConfig {
 	return {
 		fields: [
 			{
 				type: FieldType.select,
-				name: 'customerId',
-				label: 'To Customer',
+				name: 'companyId',
+				label: 'To Company',
 				validators: [Validators.required],
-				options: customersDataService.list().pipe(
-					map(customers => customers.map(
-						customer => ({
-							value: customer.id,
-							displayValue: customer.name
+				options: companiesDataService.list().pipe(
+					map(companies => companies.map(
+						company => ({
+							value: company.id,
+							displayValue: company.name
 						})
 					))
 				)

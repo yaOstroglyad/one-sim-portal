@@ -87,6 +87,16 @@
     "title": "הוסף מוצר מנוי",
     "noProducts": "לא נמצאו מוצרים."
   },
+  "company": {
+    "id": "מזהה",
+    "name": "שם",
+    "tags": "תגים",
+    "status": "סטטוס",
+    "type": "סוג",
+    "description": "תיאור",
+    "sendInviteEmail": "שלח הזמנה בדוא\"ל",
+    "edit": "ערוך חברה"
+  },
   "customer": {
     "id": "מזהה",
     "name": "שם",
@@ -221,6 +231,7 @@
     "status": "מצב",
     "currency": "מטבע",
     "customers": "לקוחות",
+    "companies": "חברות",
     "validity": "תוקף",
     "unitType": "סוג יחידה",
     "details": "פרטים",
@@ -241,6 +252,7 @@
     "currency": "מטבע",
     "corporateProduct": "מוצר תאגידי",
     "customers": "לקוחות",
+    "companies": "Companies",
     "bundleInformation": "מידע חבילה",
     "bundleName": "שם החבילה",
     "bundleDescription": "תיאור החבילה",
@@ -260,6 +272,7 @@
     "currency": "מטבע",
     "corporateProduct": "מוצר תאגידי",
     "customers": "לקוחות",
+    "companies": "Companies",
     "cancel": "בטל",
     "saveChanges": "שמור שינויים"
   },

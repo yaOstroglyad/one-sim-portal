@@ -51,7 +51,7 @@ export class PaymentGatewayService {
   }
 
   getPaymentStrategyTypes(): Observable<string[]> {
-    return this.http.get<string[]>('/api/v1/customers/payment-strategies').pipe(
+    return this.http.get<string[]>('/api/v1/payment-method/payment-strategies').pipe(
       catchError(() => {
         console.warn('error happened, presenting mocked data');
         return of([])

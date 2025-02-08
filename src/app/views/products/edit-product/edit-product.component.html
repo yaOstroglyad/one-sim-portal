@@ -31,10 +31,10 @@
                 <mat-checkbox formControlName="isCorporate">{{ 'editProduct.corporateProduct' | translate }}</mat-checkbox>
 
                 <mat-form-field class="half-width">
-                    <mat-label>{{ 'editProduct.customers' | translate }}</mat-label>
-                    <mat-select formControlName="customers" multiple>
-                        <mat-option *ngFor="let customer of customers" [value]="customer.id">
-                            {{ customer.name }}
+                    <mat-label>{{ 'editProduct.companies' | translate }}</mat-label>
+                    <mat-select formControlName="companies" multiple>
+                        <mat-option *ngFor="let company of companies" [value]="company.id">
+                            {{ company.name }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>

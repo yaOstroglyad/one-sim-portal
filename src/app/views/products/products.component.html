@@ -53,10 +53,10 @@
     </td>
 </ng-template>
 
-<ng-template #customersTemplate let-data='context'>
-    <td *ngIf="data.customers && data.customers.length">
-        <span matTooltip="{{data.customers | itemNames:100:'name'}}" matTooltipPosition="above">
-            {{ data.customers | itemNames }}
+<ng-template #companiesTemplate let-data='context'>
+    <td *ngIf="data.companies && data.companies.length">
+        <span matTooltip="{{data.companies | itemNames:100:'name'}}" matTooltipPosition="above">
+            {{ data.companies | itemNames }}
         </span>
     </td>
 </ng-template>

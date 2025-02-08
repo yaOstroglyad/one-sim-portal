@@ -46,13 +46,13 @@ export class ProductsTableService extends TableConfigAbstractService<Package> {
 			});
 		}
 
-		if(!newConfig.columns.find(c => c.key === 'customers')) {
+		if(!newConfig.columns.find(c => c.key === 'companies')) {
 			newConfig.columns.push({
 				visible: true,
-				key: 'customers',
-				header: 'customers',
+				key: 'companies',
+				header: 'companies',
 				templateType: TemplateType.Custom,
-				customTemplate: () => parent.customersTemplate
+				customTemplate: () => parent.companiesTemplate
 			});
 		}
 

@@ -54,6 +54,7 @@
     "logout": "Logout"
   },
   "nav": {
+    "companies": "Companies",
     "customers": "Customers",
     "customer-details": "Customer Details",
     "providers": "Providers",
@@ -86,6 +87,16 @@
   "add-subscriber-product": {
     "title": "Add Subscriber Product",
     "noProducts": "No products were found."
+  },
+  "company": {
+    "id": "ID",
+    "name": "Name",
+    "tags": "Tags",
+    "status": "Status",
+    "type": "Type",
+    "description": "Description",
+    "sendInviteEmail": "Send invite email",
+    "edit": "Edit Company"
   },
   "customer": {
     "id": "ID",
@@ -221,6 +232,7 @@
     "status": "Status",
     "currency": "Currency",
     "customers": "Customers",
+    "companies": "Companies",
     "validity": "Validity",
     "unitType": "Unit Type",
     "details": "Details",
@@ -241,6 +253,7 @@
     "currency": "Currency",
     "corporateProduct": "Corporate Product",
     "customers": "Customers",
+    "companies": "Companies",
     "bundleInformation": "Bundle Information",
     "bundleName": "Bundle Name",
     "bundleDescription": "Bundle Description",
@@ -260,6 +273,7 @@
     "currency": "Currency",
     "corporateProduct": "Corporate Product",
     "customers": "Customers",
+    "companies": "Companies",
     "cancel": "Cancel",
     "saveChanges": "Save changes"
   },

@@ -1,7 +1,13 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ADMIN_PERMISSION, AuthService, CustomersDataService, ProviderBundlesDataService } from '../../../shared';
+import {
+	ADMIN_PERMISSION,
+	AuthService,
+	CompaniesDataService,
+	CustomersDataService,
+	ProviderBundlesDataService
+} from '../../../shared';
 import { CreateProductService } from './create-product.service';
 import { ProductsDataService } from '../products-data.service';
 import { Subscription } from 'rxjs';
@@ -14,7 +20,7 @@ import { Subscription } from 'rxjs';
 export class CreateProductComponent implements OnInit, OnDestroy {
 	form: FormGroup;
 	currencies = [];
-	customers: any[] = [];
+	companies: any[] = [];
 	allUsageTypes: any[] = [];
 	timeUnits: string[] = [];
 	providerBundles: any[] = [];
@@ -27,7 +33,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 		public dialogRef: MatDialogRef<CreateProductComponent>,
 		private providerBundlesDataService: ProviderBundlesDataService,
 		private productsDataService: ProductsDataService,
-		private customersDataService: CustomersDataService,
+		private companiesDataService: CompaniesDataService,
 		private createProductService: CreateProductService,
 		private authService: AuthService,
 		@Inject(MAT_DIALOG_DATA) public data: any
@@ -43,7 +49,7 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 				description: [''],
 				price: [0, Validators.required],
 				currency: ['', Validators.required],
-				customers: [],
+				companies: [],
 				isCorporate: [false]
 			}),
 			bundleCommand: this.fb.group({
@@ -93,8 +99,8 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 		);
 
 		this.subscriptions.push(
-			this.customersDataService.list().subscribe(customers => {
-				this.customers = customers;
+			this.companiesDataService.list().subscribe(companies => {
+				this.companies = companies;
 			})
 		);
 

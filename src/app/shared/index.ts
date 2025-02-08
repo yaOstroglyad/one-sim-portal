@@ -20,6 +20,7 @@ export * from './services/data.service';
 export * from './services/language.service';
 export * from './services/providers-data.service';
 export * from './services/customers-data.service';
+export * from './services/companies-data.service';
 export * from './services/accounts-data.service';
 export * from './services/orders-data.service';
 export * from './services/provider-bundles-data.service';

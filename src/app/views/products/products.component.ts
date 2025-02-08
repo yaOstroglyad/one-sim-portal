@@ -22,7 +22,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ProductsComponent implements OnInit, OnDestroy {
 	@ViewChild('usageTemplate') usageTemplate: TemplateRef<any>;
-	@ViewChild('customersTemplate') customersTemplate: TemplateRef<any>;
+	@ViewChild('companiesTemplate') companiesTemplate: TemplateRef<any>;
 	@ViewChild('validityTemplate') validityTemplate: TemplateRef<any>;
 	@ViewChild('statusTemplate') statusTemplate: TemplateRef<any>;
 

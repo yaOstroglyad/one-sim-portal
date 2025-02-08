@@ -1,7 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ADMIN_PERMISSION, AuthService, CustomersDataService, CustomerType } from '../../../shared';
+import {
+	ADMIN_PERMISSION,
+	AuthService,
+	CompaniesDataService,
+	CustomersDataService,
+	CustomerType
+} from '../../../shared';
 import { ProductsDataService } from '../products-data.service';
 
 @Component({
@@ -17,17 +23,17 @@ export class EditProductComponent implements OnInit {
 		price: new FormControl(null),
 		currency: new FormControl(null),
 		isCorporate: new FormControl(false),
-		customers: new FormControl([])
+		companies: new FormControl([])
 	});
 
 	currencies = [];
-	customers = [];
+	companies = [];
 	isAdmin: boolean;
 
 	constructor(
 		public dialogRef: MatDialogRef<EditProductComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
-		private customersDataService: CustomersDataService,
+		private companiesDataService: CompaniesDataService,
 		private productsDataService: ProductsDataService,
 		private authService: AuthService,
 	) {
@@ -36,7 +42,7 @@ export class EditProductComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.loadCurrencies();
-		this.loadCustomers();
+		this.loadCompanies();
 	}
 
 	private initializeFormData(data: any): void {
@@ -47,13 +53,13 @@ export class EditProductComponent implements OnInit {
 			price: data.price || '',
 			currency: data.currency || '',
 			isCorporate: data.isCorporate || false,
-			customers: data.customers.map(c => c.id) || []
+			companies: data.companies.map(c => c.id) || []
 		});
 	}
 
-	private loadCustomers(): void {
-		this.customersDataService.list(CustomerType.Corporate).subscribe(customers => {
-			this.customers = customers;
+	private loadCompanies(): void {
+		this.companiesDataService.list().subscribe(companies => {
+			this.companies = companies;
 			if (this.data) {
 				this.initializeFormData(this.data);
 			}
