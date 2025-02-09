@@ -14,6 +14,7 @@ export function getCompanyCreateRequest(form: any) {
 	}
 }
 
+
 export function getEditCompanyFormConfig(
 	data: Company
 ): FormConfig {
