@@ -13,7 +13,6 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
   ) {}
 
   private isAuthenticated(): Observable<boolean> {
-    return of(true);
     return this.auth.checkAndRefreshToken().pipe(
       map(isAuthenticated => {
         if (!isAuthenticated) {

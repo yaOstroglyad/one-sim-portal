@@ -5,7 +5,7 @@ export const navItems: any[] = [
 		name: 'nav.companies',
 		url: 'companies',
 		iconComponent: {name: 'cil-industry'},
-		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION]
+		permissions: [ADMIN_PERMISSION]
 	},
 	{
 		name: 'nav.customers',
