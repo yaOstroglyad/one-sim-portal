@@ -41,6 +41,13 @@ export function getEditCompanyFormConfig(
 			},
 			{
 				type: FieldType.text,
+				name: 'retailerDomain',
+				label: 'Retailer website domain name',
+				hintMessage: 'The products displayed on the website will be based on the domain name.',
+				value: data.retailerDomain
+			},
+			{
+				type: FieldType.text,
 				name: 'externalId',
 				label: 'External ID',
 				value: data.name

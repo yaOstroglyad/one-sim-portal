@@ -96,7 +96,8 @@
     "type": "Type",
     "description": "Description",
     "sendInviteEmail": "Send invite email",
-    "edit": "Edit Company"
+    "edit": "Edit Company",
+    "create": "Create Company"
   },
   "customer": {
     "id": "ID",

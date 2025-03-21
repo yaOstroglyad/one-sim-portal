@@ -62,6 +62,7 @@ export class CompaniesComponent implements OnInit, OnDestroy {
 		this.setupFilters();
 	}
 	public ngOnDestroy(): void {
+		this.dialog.closeAll();
 		this.unsubscribe$.next();
 		this.unsubscribe$.complete();
 	}
@@ -88,6 +89,8 @@ export class CompaniesComponent implements OnInit, OnDestroy {
 	}
 
 	public createCompany(): void {
+		this.dialog.closeAll();
+
 		const dialogRef = this.dialog.open(EditCompanyComponent, {
 			width: '650px',
 			data: {}
@@ -103,6 +106,8 @@ export class CompaniesComponent implements OnInit, OnDestroy {
 	}
 
 	public openSendEmail(item: any): void {
+		this.dialog.closeAll();
+
 		const dialogRef = this.dialog.open(SendInviteEmailComponent, {
 			width: '400px',
 			data: item

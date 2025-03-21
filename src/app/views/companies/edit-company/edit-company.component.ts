@@ -28,8 +28,7 @@ export class EditCompanyComponent implements OnInit, OnDestroy {
 	constructor(
 		public dialogRef: MatDialogRef<EditCompanyComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any
-	) {
-	}
+	) {}
 
 	ngOnInit(): void {
 		this.formConfig = getEditCompanyFormConfig(this.data);
