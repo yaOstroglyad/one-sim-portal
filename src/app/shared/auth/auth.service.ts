@@ -39,7 +39,18 @@ export class AuthService {
     //   }),
     //   catchError(() => {
         const admins = ['admin'];
-        const customers = ['anex@mail.com', 'sergey.tepkeev@anextour.com', 'daniel@1-esim.com', 'daniel-1esim', 'vasily@1-esim.com', 'vb@venturebot.fund', 'esimrb@anextour.com', 'daniel.goldberg.dg+4@gmail.com'];
+        const customers = [
+          'anex@mail.com',
+          'sergey.tepkeev@anextour.com',
+          'daniel@1-esim.com',
+          'daniel-1esim',
+          'vasily@1-esim.com',
+          'vb@venturebot.fund',
+          'esimrb@anextour.com',
+          'daniel.goldberg.dg+4@gmail.com',
+          'wecom@gmail.com',
+          'wecom'
+        ];
         const support = [];
         const loginResponse = this.$SessionStorageService.retrieve('loginResponse') || this.$LocalStorageService.retrieve('loginResponse');
         const loggedUser = this.jwtHelper.decodeToken(loginResponse.token);
