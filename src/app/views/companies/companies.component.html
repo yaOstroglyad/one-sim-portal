@@ -21,7 +21,7 @@
                (pageChange)="onPageChange($event)"></generic-table>
 
 <ng-template #menuTemplate let-item>
-    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
+    <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">

@@ -3,6 +3,7 @@ import { Validators } from '@angular/forms';
 import { of } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
+//TODO add type
 export function getCompanyCreateRequest(form: any) {
 	return {
 		id: form?.id || null,
@@ -10,10 +11,12 @@ export function getCompanyCreateRequest(form: any) {
 		externalId: form.externalId,
 		type: form?.type || '',
 		description: form.description,
+		retailerDomain: form.retailerDomain || '',
 		tags: form?.tags || [],
 	}
 }
 
+//TODO add validator for domain name
 export function getEditCompanyFormConfig(
 	data: Company
 ): FormConfig {
