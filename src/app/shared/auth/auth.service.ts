@@ -41,6 +41,7 @@ export class AuthService {
         const admins = ['admin'];
         const customers = [
           'anex@mail.com',
+          'welcome@intourist.com',
           'sergey.tepkeev@anextour.com',
           'daniel@1-esim.com',
           'daniel-1esim',
@@ -49,6 +50,7 @@ export class AuthService {
           'esimrb@anextour.com',
           'daniel.goldberg.dg+4@gmail.com',
           'wecom@gmail.com',
+          'intourist',
           'wecom'
         ];
         const support = [];
