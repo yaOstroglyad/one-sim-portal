@@ -50,7 +50,7 @@ export class AuthService {
           'esimrb@anextour.com',
           'daniel.goldberg.dg+4@gmail.com',
           'wecom@gmail.com',
-          'intourist',
+          'Intourist',
           'wecom'
         ];
         const support = [];
