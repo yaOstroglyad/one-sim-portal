@@ -1,20 +1,43 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { PaymentStrategy, PgComponentConfig } from '../../../../shared/model/payment-strategies';
+import { Component, Inject, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { PaymentGatewayService } from '../payment-gateway.service';
 import { map } from 'rxjs/operators';
-import { PaymentGatewayUtilsService } from '../payment-gateway.utils.service';
 import { Observable } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslateService } from '@ngx-translate/core';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PaymentStrategy, PgComponentConfig } from 'src/app/shared/model/payment-strategies';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormGeneratorModule } from 'src/app/shared/components/form-generator/form-generator.module';
+import { FormCheckComponent } from '@coreui/angular';
+import { FormCheckInputDirective } from '@coreui/angular';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { PaymentGatewayUtilsService } from '../payment-gateway.utils.service';
 
 @Component({
   selector: 'app-edit-payment-gateway',
   templateUrl: './edit-payment-gateway.component.html',
-  styleUrls: ['./edit-payment-gateway.component.scss']
+  styleUrls: ['./edit-payment-gateway.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    TranslateModule,
+    FormGeneratorModule,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    MatTooltipModule
+  ]
 })
-export class EditPaymentGatewayComponent implements OnInit {
+export class EditPaymentGatewayComponent implements OnInit, AfterViewInit {
   public componentConfig$: Observable<PgComponentConfig>;
   public form: FormGroup;
   public isActive: boolean = false;
@@ -29,20 +52,21 @@ export class EditPaymentGatewayComponent implements OnInit {
     private paymentGatewayService: PaymentGatewayService,
     private paymentGatewayUtilsService: PaymentGatewayUtilsService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private cdr: ChangeDetectorRef
   ) {
+    this.isActive = this.data?.isActive ?? false;
+    this.isPrimary = this.data?.primary ?? false;
+    this.strategyId = this.data?.id || null;
   }
 
   public ngOnInit(): void {
     this.componentConfig$ = this.paymentGatewayService.getFieldsByStrategyType(this.data.name).pipe(
       map(fields => {
         const paymentMethodParameters = this.data?.paymentMethodParameters || {};
-        this.isActive = this.data?.isActive;
-        this.isPrimary = this.data?.primary;
-        this.strategyId = this.data?.id || null;
         return {
           id: this.data?.id,
-          isActive: this.data?.isActive,
+          isActive: this.isActive,
           type: this.data.name,
           config: this.paymentGatewayUtilsService.generateForm(fields, paymentMethodParameters, this.data)
         };
@@ -50,11 +74,25 @@ export class EditPaymentGatewayComponent implements OnInit {
     );
   }
 
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
+  }
+
   public handleFormChanges(form: FormGroup): void {
+    if (!form) return;
+    
     this.form = form;
-    this.isPrimary = this.form.get('primary').value;
-    this.initialValues = !this.initialValues ? this.form.getRawValue() : null;
+    const primaryControl = this.form.get('primary');
+    if (primaryControl) {
+      this.isPrimary = primaryControl.value;
+    }
+    
+    if (!this.initialValues) {
+      this.initialValues = this.form.getRawValue();
+    }
+    
     this.isFormValid = form.valid;
+    this.cdr.detectChanges();
   }
 
   public updateStatus(): void {
@@ -67,13 +105,12 @@ export class EditPaymentGatewayComponent implements OnInit {
   }
 
   public submit(): void {
-    if (this.isFormValid && !this.isFormUnchanged()) {
-
-      const customerData = {
+    if (this.isFormValid && !this.isFormUnchanged() && this.form) {
+      const customerData: PaymentStrategy = {
         id: this.data.id,
         name: this.data.name,
         paymentStrategy: this.data?.paymentStrategy ?? this.data.name,
-        primary: this.form.get('primary').value,
+        primary: this.isPrimary,
         paymentMethodParameters: this.form.value
       };
 

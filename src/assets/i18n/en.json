@@ -62,7 +62,10 @@
     "products": "Products",
     "inventory": "Inventory",
     "users": "Users",
-    "settings": "Settings"
+    "settings": "Settings",
+    "paymentGateway": "Payment Gateway",
+    "viewConfiguration": "View Configuration",
+    "portal": "Portal"
   },
   "dynamicEntityDetails": {
     "title": "Entity Details"
@@ -134,7 +137,7 @@
       "totalUsedData": "Total Used Data",
       "activityTimeline": "Activity Timeline",
       "noActivities": "No activities",
-      "noActivitiesMessage": "The customer hasn’t performed any activities yet."
+      "noActivitiesMessage": "The customer hasn't performed any activities yet."
     },
     "showQrCodeDialog": {
       "title": "QR code view"
@@ -152,7 +155,7 @@
   },
   "purchasedProducts": {
     "noPurchasedProductsFound": "No purchased products history found",
-    "noPurchasesMessage": "The customer hasn’t made any purchases yet.",
+    "noPurchasesMessage": "The customer hasn't made any purchases yet.",
     "productName": "Product Name",
     "status": "Status",
     "remainingBalance": "Remaining Balance",
@@ -195,7 +198,7 @@
   },
   "transactionOrdersTable": {
     "noTransactionOrdersFound": "No transaction orders found",
-    "noTransactionsMessage": "The customer hasn’t made any transactions yet.",
+    "noTransactionsMessage": "The customer hasn't made any transactions yet.",
     "type": "Type",
     "status": "Status",
     "productName": "Product name",
@@ -326,14 +329,16 @@
   "paymentGateway": {
     "id": "ID",
     "name": "Name",
-    "isActive": "Is active",
+    "isActive": "Status",
     "isPrimary": "Is primary",
     "paymentStrategy": "Payment Strategy",
     "createdDate": "Created Date",
     "hint": "In this section, you can configure all the payment gateways available to you.",
     "setupNew": "Setup new payment-gateway",
-    "setup": "Setup payment gateway",
-    "adminHint": "This configuration is available to non-admin users only."
+    "setup": "Setup",
+    "adminHint": "This configuration is available to non-admin users only.",
+    "title": "Payment Gateway Settings",
+    "edit": "Edit"
   },
   "createUser": {
     "title": "Create User",
@@ -366,5 +371,8 @@
     "lastName": "Last Name",
     "email": "Email",
     "resetPassword": "Reset password"
+  },
+  "viewConfiguration": {
+    "title": "View Configuration"
   }
 }

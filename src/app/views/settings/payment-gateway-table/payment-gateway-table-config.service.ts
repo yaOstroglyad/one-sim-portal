@@ -1,10 +1,10 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TableConfig, TableConfigAbstractService, TemplateType } from 'src/app/shared';
-import { PaymentStrategy } from '../../../shared/model/payment-strategies';
+import { PaymentStrategy } from 'src/app/shared/model/payment-strategies';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class PaymentGatewayTableConfigService extends TableConfigAbstractService<any> {
 	isActiveFlagTemplate: TemplateRef<any>;
@@ -47,4 +47,4 @@ export class PaymentGatewayTableConfigService extends TableConfigAbstractService
 	public updateTableData(data: PaymentStrategy[]): void {
 		this.originalDataSubject.next(data);
 	}
-}
+} 

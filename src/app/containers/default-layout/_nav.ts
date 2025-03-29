@@ -45,8 +45,22 @@ export const navItems: any[] = [
 	},
 	{
 		name: 'nav.settings',
-		url: 'settings',
+		url: '/home/settings',
 		iconComponent: {name: 'cil-settings'},
-		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
+		children: [
+			{
+				name: 'nav.paymentGateway',
+				url: '/home/settings/payment-gateway'
+			},
+			{
+				name: 'nav.viewConfiguration',
+				children: [
+					{
+						name: 'nav.portal',
+						url: '/home/settings/view-configuration/portal'
+					}
+				]
+			}
+		]
 	}
 ];

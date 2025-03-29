@@ -1,11 +1,33 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+	providedIn: 'root'
+})
 export class LanguageService {
-	public $currentLanguage = new BehaviorSubject<string>('en');
+	private currentLang = new BehaviorSubject<string>('en');
+	currentLang$ = this.currentLang.asObservable();
 
-	setLanguage(language: string) {
-		this.$currentLanguage.next(language);
+	constructor(private translate: TranslateService) {
+		// Инициализация при создании сервиса
+		const savedLang = localStorage.getItem('language') || 'en';
+		this.translate.setDefaultLang('en');
+		this.translate.use(savedLang);
+		this.currentLang.next(savedLang);
+	}
+
+	setLanguage(lang: string) {
+		// Было:
+		// this.setLanguage(lang); // Вот тут происходит рекурсия!
+
+		// Должно быть:
+		localStorage.setItem('language', lang);
+		this.translate.use(lang);
+		this.currentLang.next(lang);
+	}
+
+	getCurrentLang(): string {
+		return this.currentLang.value;
 	}
 }
