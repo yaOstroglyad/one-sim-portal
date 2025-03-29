@@ -1,23 +1,26 @@
 <ng-container *ngIf="!isAdmin; else forAdmin">
-    <mat-hint class="hint mb-1">
-        <mat-icon fontIcon="info_outline"></mat-icon>
-        {{ 'paymentGateway.hint' | translate }}
-    </mat-hint>
+    <div class="d-flex justify-content-between align-items-center mb-3 mx-3">
+        <mat-hint class="hint mb-1">
+            <mat-icon fontIcon="info_outline"></mat-icon>
+            {{ 'paymentGateway.hint' | translate }}
+        </mat-hint>
 
-    <ng-container *ngIf="strategyTypes$ | async as strategies">
-        <div class="d-flex flex-end mb-1" *ngIf="strategies && strategies.length > 0">
-            <c-dropdown>
-                <button cButton cDropdownToggle color="secondary">
-                    {{ 'paymentGateway.setupNew' | translate }}
-                </button>
-                <ul cDropdownMenu>
-                    <li *ngFor="let strategy of strategies">
-                        <a cDropdownItem (click)="edit({ name: strategy })">{{ strategy }}</a>
-                    </li>
-                </ul>
-            </c-dropdown>
-        </div>
-    </ng-container>
+        <ng-container *ngIf="strategyTypes$ | async as strategies">
+            <div *ngIf="strategies && strategies.length > 0">
+                <c-dropdown>
+                    <button cButton cDropdownToggle color="secondary">
+                        {{ 'paymentGateway.setupNew' | translate }}
+                    </button>
+                    <ul cDropdownMenu>
+                        <li *ngFor="let strategy of strategies">
+                            <a cDropdownItem (click)="edit({ name: strategy })">{{ strategy }}</a>
+                        </li>
+                    </ul>
+                </c-dropdown>
+            </div>
+        </ng-container>
+    </div>
+
     <generic-table [config$]="tableConfig$"
                    [menu]="menuTemplate"
                    [data$]="dataList$"></generic-table>

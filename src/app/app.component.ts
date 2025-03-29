@@ -76,15 +76,13 @@ export class AppComponent implements OnInit, OnDestroy {
 	}
 
 	private subscribeToLanguageChanges(): void {
-		this.languageService.$currentLanguage
-			.pipe(takeUntil(this.unsubscribe$))
-			.subscribe(lang => this.setLanguage(lang));
+		this.languageService.currentLang$.subscribe(lang => {
+			console.log('Language changed to:', lang);
+		});
 	}
 
 	private setLanguage(lang: string): void {
-		this.translateService.use(lang);
 		this.languageService.setLanguage(lang);
-		this.updateHtmlLangAndDir(lang);
 	}
 
 	private updateHtmlLangAndDir(lang: string): void {

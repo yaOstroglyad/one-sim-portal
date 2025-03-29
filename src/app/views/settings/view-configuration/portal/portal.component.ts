@@ -6,12 +6,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-portal',
   template: `
-    <app-header class="os-header-sticky">
-      <h2>{{ 'portal.title' | translate }}</h2>
-    </app-header>
-    <div class="p-3">
-      <!-- Здесь будет контент -->
-    </div>
+    test
   `,
   standalone: true,
   imports: [

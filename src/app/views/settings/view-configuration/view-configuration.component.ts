@@ -1,25 +1,10 @@
 import { Component } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-import { CommonModule } from '@angular/common';
-import { HeaderModule } from 'src/app/shared';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-view-configuration',
-  template: `
-    <app-header class="os-header-sticky">
-      <h2>{{ 'viewConfiguration.title' | translate }}</h2>
-    </app-header>
-    <div class="p-3">
-      <!-- Здесь будет контент -->
-    </div>
-  `,
+  template: '<router-outlet></router-outlet>',
   standalone: true,
-  imports: [
-    CommonModule,
-    HeaderModule,
-    TranslateModule
-  ]
+  imports: [RouterModule]
 })
-export class ViewConfigurationComponent {
-  // Логика будет добавлена позже
-} 
+export class ViewConfigurationComponent {} 
