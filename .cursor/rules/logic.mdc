@@ -1,0 +1,59 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Project Overview
+This project is a portal for managing companies and their clients. It supports multi-level hierarchical logic, meaning:
+
+An admin creates companies under their account. Each company can register its own clients or sub-companies. These sub-companies can then repeat the same process endlessly, forming a recursive structure. The core product is the sale of eSIMs. 
+
+Currently, the main collaborators are tour operators, who:
+
+Define a list of products. Sell those products as part of their tour packages. Additionally, there’s a basic CRM module used by support staff to view and analyze client-related data.
+
+Modules Overview
+Company Management
+Create and edit companies at any level of the hierarchy.
+
+Customer Management
+Add, edit, and view detailed information about customers.
+
+Provider Integration
+Manage providers who supply eSIMs to the platform.
+
+Order Management
+
+Each transaction creates an order.
+
+When the product is resold downstream, a child order is created and linked to the parent.
+
+This creates a traceable order chain, enabling complete visibility into the order flow across all levels.
+
+Product Management
+
+Products are initially created as templates ("blueprints") by the admin.
+
+These templates are passed down the hierarchy.
+
+Companies at lower levels can customize products (rename, set markup prices, etc.).
+
+Inventory Management
+
+eSIM cards from providers are delivered as files.
+
+These files are uploaded via our API into the inventory module, importing the eSIMs into the system.
+
+The inventory is stored at the admin level and then distributed down.
+
+User Management
+Basic CRUD operations to create and manage platform users.
+
+Company Settings
+Currently limited to configuring payment methods, with more options planned.
+
+Technical Notes
+The UI is built primarily with Angular Material and generic-table components.
+
+Forms are dynamically created using a custom app-form-generator.
+

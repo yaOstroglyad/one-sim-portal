@@ -1,0 +1,56 @@
+<ng-container *ngIf="!isAdmin; else forAdmin">
+    <mat-hint class="hint mb-1">
+        <mat-icon fontIcon="info_outline"></mat-icon>
+        {{ 'viewConfiguration.hint' | translate }}
+    </mat-hint>
+
+    <generic-table [config$]="tableConfig$"
+                   [menu]="menuTemplate"
+                   [data$]="dataList$"></generic-table>
+
+    <ng-template #menuTemplate let-item>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="edit(item)">{{ 'viewConfiguration.setup' | translate }}</button>
+        </mat-menu>
+    </ng-template>
+
+    <ng-template #isActiveFlag let-data='context'>
+        <td>
+            <div class="badge-display">
+                <c-badge [class]="data?.isActive ? 'active-badge' : 'disabled-badge'"
+                         class="me-1"
+                         shape="rounded-pill">{{ data?.isActive }}
+                </c-badge>
+            </div>
+        </td>
+    </ng-template>
+</ng-container>
+
+<ng-template #forAdmin>
+    <generic-table [config$]="tableConfig$"
+                   [menu]="menuTemplate"
+                   [data$]="dataList$"></generic-table>
+
+    <ng-template #menuTemplate let-item>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="edit(item)">{{ 'viewConfiguration.edit' | translate }}</button>
+        </mat-menu>
+    </ng-template>
+
+    <ng-template #isActiveFlag let-data='context'>
+        <td>
+            <div class="badge-display">
+                <c-badge [class]="data?.isActive ? 'active-badge' : 'disabled-badge'"
+                         class="me-1"
+                         shape="rounded-pill">{{ data?.isActive }}
+                </c-badge>
+            </div>
+        </td>
+    </ng-template>
+</ng-template> 

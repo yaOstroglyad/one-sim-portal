@@ -1,0 +1,65 @@
+<ng-container *ngIf="!isAdmin; else forAdmin">
+    <div class="d-flex justify-content-between align-items-center mb-3 mx-3">
+        <mat-hint class="hint mb-1">
+            <mat-icon fontIcon="info_outline"></mat-icon>
+            {{ 'paymentGateway.hint' | translate }}
+        </mat-hint>
+
+        <ng-container *ngIf="strategyTypes$ | async as strategies">
+            <div *ngIf="strategies && strategies.length > 0">
+                <c-dropdown>
+                    <button cButton cDropdownToggle color="secondary">
+                        {{ 'paymentGateway.setupNew' | translate }}
+                    </button>
+                    <ul cDropdownMenu>
+                        <li *ngFor="let strategy of strategies">
+                            <a cDropdownItem (click)="edit({ name: strategy })">{{ strategy }}</a>
+                        </li>
+                    </ul>
+                </c-dropdown>
+            </div>
+        </ng-container>
+    </div>
+
+    <generic-table [config$]="tableConfig$"
+                   [menu]="menuTemplate"
+                   [data$]="dataList$"></generic-table>
+
+    <ng-template #menuTemplate let-item>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="edit(item)">{{ 'paymentGateway.setup' | translate }}</button>
+        </mat-menu>
+    </ng-template>
+
+    <ng-template #isActiveFlag let-data='context'>
+        <td>
+            <div class="badge-display">
+                <c-badge [class]="data?.isActive ? 'active-badge' : 'disabled-badge'"
+                         class="me-1"
+                         shape="rounded-pill">{{ data?.isActive }}
+                </c-badge>
+            </div>
+        </td>
+    </ng-template>
+
+    <ng-template #isPrimaryFlag let-data='context'>
+        <td>
+            <div class="badge-display">
+                <c-badge [class]="data?.primary ? 'primary-badge' : 'disabled-badge'"
+                         class="me-1"
+                         shape="rounded-pill">{{ data?.primary }}
+                </c-badge>
+            </div>
+        </td>
+    </ng-template>
+</ng-container>
+
+<ng-template #forAdmin>
+    <mat-hint class="hint">
+        <mat-icon fontIcon="info_outline"></mat-icon>
+        {{ 'paymentGateway.adminHint' | translate }}
+    </mat-hint>
+</ng-template>

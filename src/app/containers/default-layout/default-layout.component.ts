@@ -52,20 +52,23 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
 	}
 
 	private filterNavItems(items: any): INavData[] {
-  return items.filter(item => {
-    if (!item.permissions || item.permissions.length === 0) {
-      return true;
-    }
-    return item.permissions.some((permission: string) => this.authService.hasPermission(permission));
-  });
-}
+		return items.filter(item => {
+			if (!item.permissions || item.permissions.length === 0) {
+				return true;
+			}
+			return item.permissions.some((permission: string) => this.authService.hasPermission(permission));
+		});
+	}
 
 	private filterAndTranslateNavItems(): void {
-		const filteredNavItems = this.filterNavItems(navItems);
+		const translateItems = (items: any[]): any[] =>
+			items.map(({ name, children, ...rest }) => ({
+				name: name ? this.translateService.instant(name) : undefined,
+				children: Array.isArray(children) ? translateItems(children) : undefined,
+				...rest,
+			}));
 
-		this.translatedNavItems = filteredNavItems.map(item => ({
-			...item,
-			name: this.translateService.instant(item.name)
-		}));
+		const filteredItems = this.filterNavItems(navItems);
+		this.translatedNavItems = translateItems(filteredItems);
 	}
 }
