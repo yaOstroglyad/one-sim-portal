@@ -50,7 +50,8 @@ export const navItems: any[] = [
 		children: [
 			{
 				name: 'nav.paymentGateway',
-				url: '/home/settings/payment-gateway'
+				url: '/home/settings/payment-gateway',
+				permissions: [CUSTOMER_PERMISSION]
 			},
 			{
 				name: 'nav.viewConfiguration',
