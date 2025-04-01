@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { PortalPreviewComponent } from './portal-preview/portal-preview.component';
+import { ColorPickerComponent } from 'src/app/shared/components/color-picker/color-picker.component';
 
 @Component({
   selector: 'app-portal',
@@ -17,10 +18,11 @@ import { PortalPreviewComponent } from './portal-preview/portal-preview.componen
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    PortalPreviewComponent
+    PortalPreviewComponent,
+    ColorPickerComponent
   ]
 })
-export class PortalComponent implements OnInit {
+export class PortalComponent {
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
@@ -29,32 +31,6 @@ export class PortalComponent implements OnInit {
       secondaryColor: ['#fef6f0'],
       logoUrl: ['assets/img/brand/1esim-logo.png']
     });
-  }
-
-  ngOnInit() {
-    // Инициализация если нужна
-  }
-
-  onFileSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      // Создаем URL для превью
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.form.patchValue({
-          logoUrl: e.target.result
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  getFileName(): string {
-    const url = this.form.get('logoUrl')?.value;
-    if (url === 'assets/img/brand/1esim-logo.png') {
-      return 'No file chosen';
-    }
-    return url.split('/').pop() || 'Selected file';
   }
 
   save() {

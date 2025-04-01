@@ -13,28 +13,20 @@
   <div class="settings-section">
     <h2>Portal Settings</h2>
     <form [formGroup]="form" class="settings-form">
-      <mat-form-field appearance="outline">
-        <mat-label>Primary Color</mat-label>
-        <input matInput type="color" formControlName="primaryColor">
-      </mat-form-field>
+      <app-color-picker
+        label="Primary Color"
+        formControlName="primaryColor">
+      </app-color-picker>
+
+      <app-color-picker
+        label="Secondary Color"
+        formControlName="secondaryColor">
+      </app-color-picker>
 
       <mat-form-field appearance="outline">
-        <mat-label>Secondary Color</mat-label>
-        <input matInput type="color" formControlName="secondaryColor">
+        <mat-label>Logo URL</mat-label>
+        <input matInput type="text" formControlName="logoUrl" placeholder="Enter logo URL">
       </mat-form-field>
-
-      <div class="file-upload">
-        <label>Logo</label>
-        <input type="file" 
-               #fileInput
-               accept="image/*"
-               (change)="onFileSelected($event)"
-               style="display: none">
-        <button mat-stroked-button (click)="fileInput.click()">
-          Choose File
-        </button>
-        <span class="file-name">{{ getFileName() }}</span>
-      </div>
 
       <div class="form-actions">
         <button mat-raised-button color="primary" (click)="save()">
