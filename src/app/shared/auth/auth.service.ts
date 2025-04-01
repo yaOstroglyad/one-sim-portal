@@ -49,6 +49,8 @@ export class AuthService {
           'vb@venturebot.fund',
           'esimrb@anextour.com',
           'daniel.goldberg.dg+4@gmail.com',
+          'harriet-travels@1-esim.com',
+          'harriet-travels',
           'wecom@gmail.com',
           'Intourist',
           'wecom'
