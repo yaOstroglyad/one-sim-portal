@@ -4,10 +4,14 @@
   padding: 1rem;
   height: 100%;
 
+  [dir="rtl"] & {
+    flex-direction: row-reverse;
+  }
+
   .preview-section {
     flex: 2;
     min-width: 0;
-    background-color: #fff;
+    background-color: #f5f5f5;
     border-radius: 8px;
     padding: 1rem;
 
@@ -16,6 +20,10 @@
       align-items: center;
       gap: 0.5rem;
       margin-bottom: 1rem;
+
+      [dir="rtl"] & {
+        flex-direction: row-reverse;
+      }
 
       .mat-muted-text {
         color: rgba(0, 0, 0, 0.6);
@@ -40,6 +48,10 @@
       margin-top: 2rem;
       display: flex;
       justify-content: flex-end;
+
+      [dir="rtl"] & {
+        justify-content: flex-start;
+      }
 
       button {
         min-width: 120px;

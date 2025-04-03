@@ -7,4 +7,16 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   background: white;
-} 
+
+  text {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+}
+
+:host([dir="rtl"]) .retail-preview-svg {
+  direction: rtl;
+
+  text {
+    unicode-bidi: bidi-override;
+  }
+}
