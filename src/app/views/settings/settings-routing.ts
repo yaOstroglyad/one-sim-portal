@@ -26,5 +26,15 @@ export const SettingsRouting: Routes = [
       permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
     },
     canActivate: [permissionGuard]
+  },
+  {
+    path: 'view-configuration/retail',
+    loadComponent: () => import('./view-configuration/retail/retail.component')
+      .then(m => m.RetailComponent),
+    data: {
+      title: 'nav.retailViewConfiguration',
+      permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
+    },
+    canActivate: [permissionGuard]
   }
 ]; 

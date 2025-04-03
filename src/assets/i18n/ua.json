@@ -61,7 +61,12 @@
     "products": "Продукти",
     "inventory": "Інвентар",
     "users": "Користувачі",
-    "settings": "Налаштування"
+    "settings": "Налаштування",
+    "paymentGateway": "Платіжний шлюз",
+    "viewConfiguration": "Конфігурація відображення",
+    "portal": "Портал",
+    "portalViewConfiguration": "Налаштування відображення порталу",
+    "retailViewConfiguration": "Налаштування відображення роздрібного порталу"
   },
   "dynamicEntityDetails": {
     "title": "Деталі об'єкта"
@@ -377,6 +382,17 @@
       "faviconUrl": "URL фавікону",
       "faviconUrlPlaceholder": "Введіть URL фавікону",
       "faviconUrlHint": "Рекомендований розмір: 32x32 пікселі",
+      "saveButton": "Зберегти"
+    }
+  },
+  "retail": {
+    "preview": {
+      "title": "Попередній перегляд роздрібного порталу"
+    },
+    "settings": {
+      "title": "Налаштування роздрібного порталу",
+      "headlineText": "Текст заголовку",
+      "headlineTextPlaceholder": "Введіть текст заголовку",
       "saveButton": "Зберегти"
     }
   }

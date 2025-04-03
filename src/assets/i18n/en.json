@@ -66,7 +66,8 @@
     "paymentGateway": "Payment Gateway",
     "viewConfiguration": "View Configuration",
     "portal": "Portal",
-    "portalViewConfiguration": "Portal view configuration"
+    "portalViewConfiguration": "Portal view configuration",
+    "retailViewConfiguration": "Retail view configuration"
   },
   "dynamicEntityDetails": {
     "title": "Entity Details"
@@ -388,6 +389,17 @@
       "faviconUrl": "Favicon URL",
       "faviconUrlPlaceholder": "Enter favicon URL",
       "faviconUrlHint": "Recommended size: 32x32 pixels",
+      "saveButton": "Save"
+    }
+  },
+  "retail": {
+    "preview": {
+      "title": "Retail Preview"
+    },
+    "settings": {
+      "title": "Retail Settings",
+      "headlineText": "Headline Text",
+      "headlineTextPlaceholder": "Enter headline text",
       "saveButton": "Save"
     }
   }

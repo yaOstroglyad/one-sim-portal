@@ -58,6 +58,10 @@ export const navItems: any[] = [
 					{
 						name: 'nav.portal',
 						url: '/home/settings/view-configuration/portal'
+					},
+					{
+						name: 'nav.retail',
+						url: '/home/settings/view-configuration/retail'
 					}
 				]
 			}

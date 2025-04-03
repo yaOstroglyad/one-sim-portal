@@ -64,9 +64,10 @@
     "users": "משתמשים",
     "settings": "הגדרות",
     "paymentGateway": "שער תשלום",
-    "viewConfiguration": "הגדרות תצוגה",
+    "viewConfiguration": "תצורת תצוגה",
     "portal": "פורטל",
-    "portalViewConfiguration": "הגדרות תצוגת פורטל"
+    "portalViewConfiguration": "הגדרות תצוגת פורטל",
+    "retailViewConfiguration": "הגדרות תצוגת פורטל קמעונאי"
   },
   "dynamicEntityDetails": {
     "title": "פרטי ישות"
@@ -382,6 +383,17 @@
       "faviconUrl": "כתובת פאביקון",
       "faviconUrlPlaceholder": "הזן כתובת פאביקון",
       "faviconUrlHint": "גודל מומלץ: 32x32 פיקסלים",
+      "saveButton": "שמור"
+    }
+  },
+  "retail": {
+    "preview": {
+      "title": "תצוגה מקדימה של פורטל קמעונאי"
+    },
+    "settings": {
+      "title": "הגדרות פורטל קמעונאי",
+      "headlineText": "טקסט כותרת",
+      "headlineTextPlaceholder": "הזן טקסט כותרת",
       "saveButton": "שמור"
     }
   }

@@ -1,0 +1,71 @@
+.retail-container {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+  height: 100%;
+
+  .preview-section {
+    flex: 2;
+    min-width: 0;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+
+      .mat-muted-text {
+        color: rgba(0, 0, 0, 0.6);
+      }
+    }
+  }
+
+  .settings-section {
+    flex: 1;
+    max-width: 400px;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    h4 {
+      margin: 0 0 1rem;
+      font-weight: 500;
+    }
+
+    .form-actions {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: flex-end;
+
+      button {
+        min-width: 120px;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+
+        &[type="color"] {
+          height: 38px;
+          padding: 2px;
+        }
+      }
+    }
+  }
+} 

@@ -62,9 +62,11 @@
     "inventory": "Инвентарь",
     "users": "Пользователи",
     "settings": "Настройки",
-    "paymentGateway": "Платежные шлюзы",
-    "viewConfiguration": "Настройки отображения",
-    "portal": "Портал"
+    "paymentGateway": "Платежный шлюз",
+    "viewConfiguration": "Конфигурация отображения",
+    "portal": "Портал",
+    "portalViewConfiguration": "Настройка отображения портала",
+    "retailViewConfiguration": "Настройка отображения розничного портала"
   },
   "dynamicEntityDetails": {
     "title": "Детали объекта"
@@ -392,6 +394,17 @@
       "faviconUrl": "URL фавикона",
       "faviconUrlPlaceholder": "Введите URL фавикона",
       "faviconUrlHint": "Рекомендуемый размер: 32x32 пикселя",
+      "saveButton": "Сохранить"
+    }
+  },
+  "retail": {
+    "preview": {
+      "title": "Предпросмотр розничного портала"
+    },
+    "settings": {
+      "title": "Настройки розничного портала",
+      "headlineText": "Текст заголовка",
+      "headlineTextPlaceholder": "Введите текст заголовка",
       "saveButton": "Сохранить"
     }
   }

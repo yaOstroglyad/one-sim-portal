@@ -1,0 +1,32 @@
+<div class="retail-container">
+  <!-- Левая часть с превью -->
+  <div class="preview-section">
+    <div class="preview-header">
+      <span class="mat-muted-text">{{ 'retail.preview.title' | translate }}</span>
+    </div>
+    <app-retail-preview
+      [logoUrl]="formGenerator?.form?.get('logoUrl')?.value"
+      [buttonColor]="formGenerator?.form?.get('buttonColor')?.value"
+      [headlineText]="formGenerator?.form?.get('headlineText')?.value">
+    </app-retail-preview>
+  </div>
+
+  <!-- Правая часть с настройками -->
+  <div class="settings-section">
+    <h4>{{ 'retail.settings.title' | translate }}</h4>
+    <mat-divider></mat-divider>
+    <app-form-generator
+      [config]="formConfig"
+      (formChanges)="handleFormChanges($event)">
+    </app-form-generator>
+    
+    <div class="form-actions">
+      <button mat-raised-button 
+              color="primary" 
+              [disabled]="!isFormValid"
+              (click)="save()">
+        {{ 'retail.settings.saveButton' | translate }}
+      </button>
+    </div>
+  </div>
+</div> 
