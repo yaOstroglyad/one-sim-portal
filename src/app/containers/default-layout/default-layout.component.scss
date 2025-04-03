@@ -118,6 +118,25 @@
         margin-right: calc(var(--cui-sidebar-nav-link-padding-y) * -1.4);
       }
     }
+
+    .nav-group {
+      > .nav-group-items {
+        > .nav-item > .nav-link,
+        > .nav-group > .nav-link {
+          padding-right: 3rem !important;
+          padding-left: 1rem !important;
+        }
+
+        .nav-group {
+          > .nav-group-items {
+            > .nav-item > .nav-link {
+              padding-right: 4.5rem !important;
+              padding-left: 1rem !important;
+            }
+          }
+        }
+      }
+    }
   }
 
   ::ng-deep .sidebar-narrow-unfoldable {

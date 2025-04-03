@@ -15,6 +15,7 @@ export class LanguageService {
 		this.translate.setDefaultLang('en');
 		this.translate.use(savedLang);
 		this.currentLang.next(savedLang);
+		this.updateHtmlDir(savedLang);
 	}
 
 	setLanguage(lang: string) {
@@ -25,9 +26,15 @@ export class LanguageService {
 		localStorage.setItem('language', lang);
 		this.translate.use(lang);
 		this.currentLang.next(lang);
+		this.updateHtmlDir(lang);
 	}
 
 	getCurrentLang(): string {
 		return this.currentLang.value;
+	}
+
+	private updateHtmlDir(lang: string): void {
+		const htmlTag = document.documentElement;
+		htmlTag.setAttribute('dir', lang === 'he' ? 'rtl' : 'ltr');
 	}
 }

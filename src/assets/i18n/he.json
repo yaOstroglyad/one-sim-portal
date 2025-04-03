@@ -54,6 +54,7 @@
     "logout": "התנתק"
   },
   "nav": {
+    "companies": "חברות",
     "customers": "לקוחות",
     "customer-details": "פרטי לקוח",
     "providers": "ספקים",
@@ -61,7 +62,11 @@
     "products": "מוצרים",
     "inventory": "מלאי",
     "users": "משתמשים",
-    "settings": "הגדרות"
+    "settings": "הגדרות",
+    "paymentGateway": "שער תשלום",
+    "viewConfiguration": "הגדרות תצוגה",
+    "portal": "פורטל",
+    "portalViewConfiguration": "הגדרות תצוגת פורטל"
   },
   "dynamicEntityDetails": {
     "title": "פרטי ישות"

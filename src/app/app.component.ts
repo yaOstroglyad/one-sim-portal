@@ -28,12 +28,14 @@ export class AppComponent implements OnInit, OnDestroy {
 		private $sessionStorage: SessionStorageService,
 		private authService: AuthService,
 		private translateService: TranslateService
-	) {}
+	) {
+		this.iconSetService.icons = { ...iconSubset };
+	}
 
 	ngOnInit(): void {
 		this.initializeApp();
-		this.setupRouterEvents();
-		// this.subscribeToViewConfigChanges();
+		this.subscribeToRouterEvents();
+		this.subscribeToViewConfigChanges();
 		this.subscribeToLanguageChanges();
 	}
 
@@ -53,13 +55,15 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.whiteLabelService.initViewBasedOnCurrentUser();
 	}
 
-	private setupRouterEvents(): void {
+	private subscribeToRouterEvents(): void {
 		this.router.events
 			.pipe(
-				takeUntil(this.unsubscribe$),
-				filter(event => event instanceof NavigationEnd)
+				filter(event => event instanceof NavigationEnd),
+				takeUntil(this.unsubscribe$)
 			)
-			.subscribe();
+			.subscribe(() => {
+				window.scrollTo(0, 0);
+			});
 	}
 
 	private subscribeToViewConfigChanges(): void {
@@ -78,6 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
 	private subscribeToLanguageChanges(): void {
 		this.languageService.currentLang$.subscribe(lang => {
 			console.log('Language changed to:', lang);
+			this.updateHtmlLangAndDir(lang);
 		});
 	}
 
