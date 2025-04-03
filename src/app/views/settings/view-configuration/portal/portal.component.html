@@ -1,38 +1,33 @@
 <div class="portal-container">
   <!-- Левая часть с превью -->
   <div class="preview-section">
-    <h2>Portal Preview</h2>
+    <div class="preview-header">
+      <img *ngIf="formGenerator?.form?.get('faviconUrl')?.value" [src]="formGenerator?.form?.get('faviconUrl')?.value" alt="Favicon" class="favicon">
+      <span class="mat-muted-text">{{ 'portal.preview.title' | translate }}</span>
+    </div>
     <app-portal-preview
-      [primaryColor]="form.get('primaryColor')?.value"
-      [secondaryColor]="form.get('secondaryColor')?.value"
-      [logoUrl]="form.get('logoUrl')?.value">
+      [primaryColor]="formGenerator?.form?.get('primaryColor')?.value"
+      [secondaryColor]="formGenerator?.form?.get('secondaryColor')?.value"
+      [logoUrl]="formGenerator?.form?.get('logoUrl')?.value">
     </app-portal-preview>
   </div>
 
   <!-- Правая часть с настройками -->
   <div class="settings-section">
-    <h2>Portal Settings</h2>
-    <form [formGroup]="form" class="settings-form">
-      <app-color-picker
-        label="Primary Color"
-        formControlName="primaryColor">
-      </app-color-picker>
-
-      <app-color-picker
-        label="Secondary Color"
-        formControlName="secondaryColor">
-      </app-color-picker>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Logo URL</mat-label>
-        <input matInput type="text" formControlName="logoUrl" placeholder="Enter logo URL">
-      </mat-form-field>
-
-      <div class="form-actions">
-        <button mat-raised-button color="primary" (click)="save()">
-          Save Changes
-        </button>
-      </div>
-    </form>
+    <h4>{{ 'portal.settings.title' | translate }}</h4>
+    <mat-divider></mat-divider>
+    <app-form-generator
+      [config]="formConfig"
+      (formChanges)="handleFormChanges($event)">
+    </app-form-generator>
+    
+    <div class="form-actions">
+      <button mat-raised-button 
+              color="primary" 
+              [disabled]="!isFormValid"
+              (click)="save()">
+        {{ 'portal.settings.saveButton' | translate }}
+      </button>
+    </div>
   </div>
 </div>

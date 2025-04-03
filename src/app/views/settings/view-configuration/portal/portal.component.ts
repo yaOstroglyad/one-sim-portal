@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { FormGeneratorModule } from 'src/app/shared';
 import { PortalPreviewComponent } from './portal-preview/portal-preview.component';
-import { ColorPickerComponent } from 'src/app/shared/components/color-picker/color-picker.component';
+import { FormGeneratorComponent } from 'src/app/shared/components/form-generator/form-generator.component';
+import { getPortalFormConfig, getPortalSettingsRequest } from './portal.utils';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-portal',
@@ -14,28 +16,38 @@ import { ColorPickerComponent } from 'src/app/shared/components/color-picker/col
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
+    FormGeneratorModule,
     PortalPreviewComponent,
-    ColorPickerComponent
+    TranslateModule,
+    MatSnackBarModule,
+    MatButtonModule,
+    MatDividerModule
   ]
 })
-export class PortalComponent {
-  form: FormGroup;
+export class PortalComponent implements OnInit {
+  @ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;
+  
+  public formConfig = getPortalFormConfig();
+  public isFormValid = false;
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      primaryColor: ['#f89c2e'],
-      secondaryColor: ['#fef6f0'],
-      logoUrl: ['assets/img/brand/1esim-logo.png']
-    });
+  constructor(private snackBar: MatSnackBar) {}
+
+  ngOnInit(): void {
+    // Здесь можно загрузить текущие настройки портала, если они есть
   }
 
-  save() {
-    if (this.form.valid) {
-      console.log('Saving portal settings:', this.form.value);
+  handleFormChanges(form: any): void {
+    this.isFormValid = form.valid;
+  }
+
+  save(): void {
+    if (this.formGenerator.form.valid) {
+      const settings = getPortalSettingsRequest(this.formGenerator.form.value);
+      console.log('Saving portal settings:', settings);
+      // Здесь будет вызов сервиса для сохранения настроек
+      this.snackBar.open('Настройки сохранены успешно', 'Закрыть', {
+        duration: 3000
+      });
     }
   }
 } 

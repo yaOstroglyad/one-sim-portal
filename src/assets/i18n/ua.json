@@ -364,5 +364,20 @@
     "lastName": "Прізвище",
     "email": "Email",
     "resetPassword": "Скинути пароль"
+  },
+  "portal": {
+    "preview": {
+      "title": "Попередній перегляд порталу"
+    },
+    "settings": {
+      "title": "Налаштування порталу",
+      "primaryColor": "Основний колір",
+      "secondaryColor": "Додатковий колір",
+      "logoUrl": "URL логотипу",
+      "faviconUrl": "URL фавікону",
+      "faviconUrlPlaceholder": "Введіть URL фавікону",
+      "faviconUrlHint": "Рекомендований розмір: 32x32 пікселі",
+      "saveButton": "Зберегти"
+    }
   }
 }

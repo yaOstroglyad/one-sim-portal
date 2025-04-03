@@ -65,7 +65,8 @@
     "settings": "Settings",
     "paymentGateway": "Payment Gateway",
     "viewConfiguration": "View Configuration",
-    "portal": "Portal"
+    "portal": "Portal",
+    "portalViewConfiguration": "Portal view configuration"
   },
   "dynamicEntityDetails": {
     "title": "Entity Details"
@@ -374,5 +375,20 @@
   },
   "viewConfiguration": {
     "title": "View Configuration"
+  },
+  "portal": {
+    "preview": {
+      "title": "Portal Preview"
+    },
+    "settings": {
+      "title": "Portal Settings",
+      "primaryColor": "Primary Color",
+      "secondaryColor": "Secondary Color",
+      "logoUrl": "Logo URL",
+      "faviconUrl": "Favicon URL",
+      "faviconUrlPlaceholder": "Enter favicon URL",
+      "faviconUrlHint": "Recommended size: 32x32 pixels",
+      "saveButton": "Save"
+    }
   }
 }

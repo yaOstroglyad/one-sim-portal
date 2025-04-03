@@ -90,6 +90,12 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 		}
 	}
 
+	openColorPicker(fieldName: string): void {
+		const input = document.getElementById(fieldName) as HTMLInputElement;
+		if (input) {
+			input.click();
+		}
+	}
 
 	protected readonly FieldType = FieldType;
 }

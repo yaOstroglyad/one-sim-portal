@@ -364,5 +364,20 @@
     "lastName": "שם משפחה",
     "email": "אימייל",
     "resetPassword": "אפס סיסמה"
+  },
+  "portal": {
+    "preview": {
+      "title": "תצוגה מקדימה של הפורטל"
+    },
+    "settings": {
+      "title": "הגדרות פורטל",
+      "primaryColor": "צבע ראשי",
+      "secondaryColor": "צבע משני",
+      "logoUrl": "כתובת לוגו",
+      "faviconUrl": "כתובת פאביקון",
+      "faviconUrlPlaceholder": "הזן כתובת פאביקון",
+      "faviconUrlHint": "גודל מומלץ: 32x32 פיקסלים",
+      "saveButton": "שמור"
+    }
   }
 }

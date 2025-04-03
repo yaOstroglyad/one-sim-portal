@@ -13,6 +13,7 @@ export enum FieldType {
 	chips = 'chips',
 	checkbox = 'checkbox',
 	slide = 'slide',
+	color = 'color'
 }
 
 export interface BackendFieldConfig {

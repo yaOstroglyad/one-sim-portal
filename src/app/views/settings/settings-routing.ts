@@ -3,6 +3,11 @@ import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, permissionGuard } from 'src/app/
 
 export const SettingsRouting: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'payment-gateway'
+  },
+  {
     path: 'payment-gateway',
     loadComponent: () => import('./payment-gateway-table/payment-gateway-table.component')
       .then(m => m.PaymentGatewayTableComponent),
@@ -17,7 +22,7 @@ export const SettingsRouting: Routes = [
     loadComponent: () => import('./view-configuration/portal/portal.component')
       .then(m => m.PortalComponent),
     data: {
-      title: 'nav.portal',
+      title: 'nav.portalViewConfiguration',
       permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
     },
     canActivate: [permissionGuard]
