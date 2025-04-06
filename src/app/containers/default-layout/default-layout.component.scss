@@ -1,5 +1,7 @@
 @import "src/scss/variables";
 
+$indicator-svg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$primary-color-contrast}'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+
 :host {
   ng-scrollbar {
     --scrollbar-thumb-color: var(--cui-border-color, --os-color-light);
@@ -22,8 +24,8 @@
   }
 
   ::ng-deep .sidebar-nav {
-    --cui-sidebar-nav-group-indicator: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$primary-color-contrast}'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-    --cui-sidebar-nav-group-indicator-hover: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$primary-color-contrast}'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --cui-sidebar-nav-group-indicator: #{$indicator-svg};
+    --cui-sidebar-nav-group-indicator-hover: #{$indicator-svg};
 
     .nav-link {
       color: $primary-color-contrast;
@@ -51,28 +53,21 @@
         color: var(--os-color-primary-contrast);
       }
 
-      &.show {
-        > .nav-link::after {
-          color: $primary-color-contrast !important;
-          border-top-color: $primary-color-contrast !important;
-          border-color: $primary-color-contrast !important;
-          transform: rotate(180deg) !important;
-        }
-      }
-
       .nav-link::after {
         color: $primary-color-contrast !important;
         border-top-color: $primary-color-contrast !important;
         border-color: $primary-color-contrast !important;
       }
 
+      &.show > .nav-link::after {
+        transform: rotate(180deg) !important;
+      }
+
       .nav-group-items {
         .nav-group {
-          &.show {
-            > .nav-link::after {
-              border-top-color: $primary-color-contrast !important;
-              transform: rotate(180deg) !important;
-            }
+          &.show > .nav-link::after {
+            border-top-color: $primary-color-contrast !important;
+            transform: rotate(180deg) !important;
           }
 
           .nav-link {
@@ -83,26 +78,21 @@
             }
           }
         }
-      }
 
-      > .nav-group-items {
         > .nav-item > .nav-link,
         > .nav-group > .nav-link {
           padding-left: 3rem !important;
         }
 
-        .nav-group {
-          > .nav-group-items {
-            > .nav-item > .nav-link {
-              padding-left: 4.5rem !important;
-            }
-          }
+        .nav-group > .nav-group-items > .nav-item > .nav-link {
+          padding-left: 4.5rem !important;
         }
       }
     }
   }
 }
 
+// RTL-специфика
 :host-context([dir="rtl"]) {
   .sidebar-bg {
     border-left: 3px solid $primary-color-border;
@@ -127,31 +117,21 @@
           padding-left: 1rem !important;
         }
 
-        .nav-group {
-          > .nav-group-items {
-            > .nav-item > .nav-link {
-              padding-right: 4.5rem !important;
-              padding-left: 1rem !important;
-            }
-          }
+        .nav-group > .nav-group-items > .nav-item > .nav-link {
+          padding-right: 4.5rem !important;
+          padding-left: 1rem !important;
         }
       }
     }
   }
 
   ::ng-deep .sidebar-narrow-unfoldable {
-    .nav-icon {
-      + c-sidebar-nav-link-content {
-        display: none;
-      }
+    .nav-icon + c-sidebar-nav-link-content {
+      display: none;
     }
 
-    &:hover {
-      .nav-icon {
-        + c-sidebar-nav-link-content {
-          display: block;
-        }
-      }
+    &:hover .nav-icon + c-sidebar-nav-link-content {
+      display: block;
     }
   }
 }

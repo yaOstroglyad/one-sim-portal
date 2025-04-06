@@ -10,7 +10,6 @@ export class LanguageService {
 	currentLang$ = this.currentLang.asObservable();
 
 	constructor(private translate: TranslateService) {
-		// Инициализация при создании сервиса
 		const savedLang = localStorage.getItem('language') || 'en';
 		this.translate.setDefaultLang('en');
 		this.translate.use(savedLang);
@@ -19,18 +18,10 @@ export class LanguageService {
 	}
 
 	setLanguage(lang: string) {
-		// Было:
-		// this.setLanguage(lang); // Вот тут происходит рекурсия!
-
-		// Должно быть:
 		localStorage.setItem('language', lang);
 		this.translate.use(lang);
 		this.currentLang.next(lang);
 		this.updateHtmlDir(lang);
-	}
-
-	getCurrentLang(): string {
-		return this.currentLang.value;
 	}
 
 	private updateHtmlDir(lang: string): void {

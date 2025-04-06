@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DefaultLayoutComponent } from './default-layout.component';
-import { ADMIN_PERMISSION, CUSTOMER_PERMISSION } from 'src/app/shared/auth';
-import { permissionGuard } from 'src/app/shared';
 
 const routes: Routes = [
   {

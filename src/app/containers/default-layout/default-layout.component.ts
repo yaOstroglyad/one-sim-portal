@@ -51,24 +51,30 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private filterNavItems(items: any): INavData[] {
-		return items.filter(item => {
-			if (!item.permissions || item.permissions.length === 0) {
-				return true;
-			}
-			return item.permissions.some((permission: string) => this.authService.hasPermission(permission));
-		});
+	private filterAndTranslateNavItems(): void {
+		this.translatedNavItems = this.processNavItems(navItems);
 	}
 
-	private filterAndTranslateNavItems(): void {
-		const translateItems = (items: any[]): any[] =>
-			items.map(({ name, children, ...rest }) => ({
-				name: name ? this.translateService.instant(name) : undefined,
-				children: Array.isArray(children) ? translateItems(children) : undefined,
-				...rest,
-			}));
+	private processNavItems(items: any): INavData[] {
+		return items
+			.map(item => {
+				if (item.permissions && !item.permissions.some(p => this.authService.hasPermission(p))) {
+					return null;
+				}
 
-		const filteredItems = this.filterNavItems(navItems);
-		this.translatedNavItems = translateItems(filteredItems);
+				const newItem: INavData = {
+					...item,
+					name: item.name ? this.translateService.instant(item.name) : undefined,
+					children: item.children ? this.processNavItems(item.children) : undefined
+				};
+
+				// Удаляем пустой children массив
+				if (newItem.children?.length === 0) {
+					delete newItem.children;
+				}
+
+				return newItem;
+			})
+			.filter(Boolean); // удаляет null
 	}
 }
