@@ -5,13 +5,15 @@ export interface RetailSettings {
   logoUrl: string;
   buttonColor: string;
   headlineText: string;
+  faviconUrl: string;
 }
 
 export function getRetailSettingsRequest(form: any): RetailSettings {
   return {
     logoUrl: form.logoUrl,
     buttonColor: form.buttonColor,
-    headlineText: form.headlineText
+    headlineText: form.headlineText,
+    faviconUrl: form.faviconUrl
   };
 }
 
@@ -24,6 +26,16 @@ export function getRetailFormConfig(data?: RetailSettings): FormConfig {
         label: 'portal.settings.logoUrl',
         value: data?.logoUrl || 'assets/img/brand/1esim-logo.png',
         placeholder: 'portal.settings.logoUrlPlaceholder',
+        validators: [Validators.required],
+        className: 'form-field'
+      },
+      {
+        type: FieldType.text,
+        name: 'faviconUrl',
+        label: 'portal.settings.faviconUrl',
+        value: data?.faviconUrl || 'assets/img/brand/1esim-logo-small.png',
+        placeholder: 'portal.settings.faviconUrlPlaceholder',
+        hintMessage: 'portal.settings.faviconUrlHint',
         validators: [Validators.required],
         className: 'form-field'
       },

@@ -1,28 +1,41 @@
 .portal-container {
-  width: 100%;
-  height: 100%;
   display: flex;
-  gap: 2rem;
-  padding: 1.5rem;
+  gap: 24px;
+  padding: 24px;
+  height: 100%;
+
+  [dir="rtl"] & {
+    flex-direction: row-reverse;
+  }
 
   .preview-section {
-    flex: 2;
-    background: white;
+    flex: 1;
+    max-width: 50%;
+    background-color: #fff;
     border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     .preview-header {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 8px;
+      background: #eeeeee;
+      border-radius: 4px;
+
+      [dir="rtl"] & {
+        flex-direction: row-reverse;
+      }
+
+      .mat-muted-text {
+        color: rgba(0, 0, 0, 0.6);
+      }
 
       .favicon {
-        width: 24px;
-        height: 24px;
+        width: 16px;
+        height: 16px;
         object-fit: contain;
       }
     }
@@ -36,18 +49,57 @@
       flex: 1;
       display: block;
       height: calc(100% - 3rem);
+      overflow: hidden;
     }
   }
 
   .settings-section {
     flex: 1;
-    background: white;
+    max-width: 50%;
+    padding: 1rem;
+    background-color: white;
     border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     h4 {
-      color: #333;
+      margin: 0 0 1rem;
+      font-weight: 500;
+    }
+
+    .form-actions {
+      margin-top: 24px;
+      display: flex;
+      justify-content: flex-end;
+
+      [dir="rtl"] & {
+        justify-content: flex-start;
+      }
+
+      button {
+        min-width: 120px;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+
+        &[type="color"] {
+          height: 38px;
+          padding: 2px;
+        }
+      }
     }
   }
 }

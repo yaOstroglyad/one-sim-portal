@@ -29,8 +29,10 @@ export class RetailComponent implements OnInit {
   
   public formConfig = getRetailFormConfig();
   public isFormValid = false;
+  public dir: 'ltr' | 'rtl' = 'ltr';
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBar: MatSnackBar) {
+  }
 
   ngOnInit(): void {
     // Здесь можно загрузить текущие настройки retail, если они есть

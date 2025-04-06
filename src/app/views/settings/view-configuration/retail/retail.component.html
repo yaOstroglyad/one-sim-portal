@@ -2,12 +2,14 @@
   <!-- Левая часть с превью -->
   <div class="preview-section">
     <div class="preview-header">
+      <img *ngIf="formGenerator?.form?.get('faviconUrl')?.value" [src]="formGenerator?.form?.get('faviconUrl')?.value" alt="Favicon" class="favicon">
       <span class="mat-muted-text">{{ 'retail.preview.title' | translate }}</span>
     </div>
     <app-retail-preview
       [logoUrl]="formGenerator?.form?.get('logoUrl')?.value"
       [buttonColor]="formGenerator?.form?.get('buttonColor')?.value"
-      [headlineText]="formGenerator?.form?.get('headlineText')?.value">
+      [headlineText]="formGenerator?.form?.get('headlineText')?.value"
+      [dir]="dir">
     </app-retail-preview>
   </div>
 

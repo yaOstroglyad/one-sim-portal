@@ -15,7 +15,6 @@
   <!-- Правая часть с настройками -->
   <div class="settings-section">
     <h4>{{ 'portal.settings.title' | translate }}</h4>
-    <mat-divider></mat-divider>
     <app-form-generator
       [config]="formConfig"
       (formChanges)="handleFormChanges($event)">

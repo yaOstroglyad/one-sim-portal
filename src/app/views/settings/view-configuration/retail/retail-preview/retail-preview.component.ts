@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   host: {
-    '[attr.dir]': 'dir' // применяется на <app-retail-preview dir="rtl" />
+    '[attr.dir]': 'dir'
   }
 })
 export class RetailPreviewComponent implements OnInit {
