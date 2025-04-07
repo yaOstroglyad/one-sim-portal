@@ -380,10 +380,12 @@
       "title": "הגדרות פורטל",
       "primaryColor": "צבע ראשי",
       "secondaryColor": "צבע משני",
-      "logoUrl": "כתובת לוגו",
-      "faviconUrl": "כתובת פאביקון",
-      "faviconUrlPlaceholder": "הזן כתובת פאביקון",
+      "logoUrl": "כתובת URL של הלוגו",
+      "logoUrlPlaceholder": "הזן כתובת URL של הלוגו",
+      "faviconUrl": "כתובת URL של האייקון",
+      "faviconUrlPlaceholder": "הזן כתובת URL של האייקון",
       "faviconUrlHint": "גודל מומלץ: 32x32 פיקסלים",
+      "domains": "דומיינים",
       "saveButton": "שמור"
     }
   },
@@ -393,8 +395,16 @@
     },
     "settings": {
       "title": "הגדרות פורטל קמעונאי",
-      "headlineText": "טקסט כותרת",
+      "primaryColor": "צבע ראשי",
+      "secondaryColor": "צבע משני",
+      "headlineText": "כותרת",
       "headlineTextPlaceholder": "הזן טקסט כותרת",
+      "logoUrl": "כתובת URL של הלוגו",
+      "logoUrlPlaceholder": "הזן כתובת URL של הלוגו",
+      "faviconUrl": "כתובת URL של האייקון",
+      "faviconUrlPlaceholder": "הזן כתובת URL של האייקון",
+      "faviconUrlHint": "גודל מומלץ: 32x32 פיקסלים",
+      "domains": "דומיינים",
       "saveButton": "שמור"
     }
   }

@@ -37,7 +37,8 @@ export class ViewConfigurationService {
         : {
             // Конфигурация для retail
             logoUrl: 'assets/img/brand/1esim-logo.png',
-            buttonColor: '#f89c2e',
+            primaryColor: '#f89c2e',
+            secondaryColor: '#fef6f0',
             headlineText: 'Welcome to Our Retail Portal',
             faviconUrl: 'assets/img/brand/1esim-logo-small.png'
           }

@@ -11,6 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ViewConfigurationService } from '../view-configuration.service';
 import { Observable, map } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
+import { DomainsService } from 'src/app/shared/services/domains.service';
 
 @Component({
   selector: 'app-portal',
@@ -35,12 +36,13 @@ export class PortalComponent implements OnInit {
 
   constructor(
     private snackBar: MatSnackBar,
-    private viewConfigService: ViewConfigurationService
+    private viewConfigService: ViewConfigurationService,
+    private domainsService: DomainsService
   ) {}
 
   ngOnInit(): void {
     this.formConfig$ = this.viewConfigService.getViewConfigByApplicationType('portal').pipe(
-      map(config => getPortalFormConfig(config))
+      map(config => getPortalFormConfig(config, this.domainsService))
     );
   }
 

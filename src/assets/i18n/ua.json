@@ -380,9 +380,11 @@
       "primaryColor": "Основний колір",
       "secondaryColor": "Додатковий колір",
       "logoUrl": "URL логотипу",
+      "logoUrlPlaceholder": "Введіть URL логотипу",
       "faviconUrl": "URL фавікону",
       "faviconUrlPlaceholder": "Введіть URL фавікону",
       "faviconUrlHint": "Рекомендований розмір: 32x32 пікселі",
+      "domains": "Домени",
       "saveButton": "Зберегти"
     }
   },
@@ -392,8 +394,16 @@
     },
     "settings": {
       "title": "Налаштування роздрібного порталу",
-      "headlineText": "Текст заголовку",
-      "headlineTextPlaceholder": "Введіть текст заголовку",
+      "primaryColor": "Основний колір",
+      "secondaryColor": "Додатковий колір",
+      "headlineText": "Заголовок",
+      "headlineTextPlaceholder": "Введіть текст заголовка",
+      "logoUrl": "URL логотипу",
+      "logoUrlPlaceholder": "Введіть URL логотипу",
+      "faviconUrl": "URL фавікону",
+      "faviconUrlPlaceholder": "Введіть URL фавікону",
+      "faviconUrlHint": "Рекомендований розмір: 32x32 пікселі",
+      "domains": "Домени",
       "saveButton": "Зберегти"
     }
   }

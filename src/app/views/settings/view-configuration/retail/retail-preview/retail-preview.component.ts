@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class RetailPreviewComponent {
   @Input() logoUrl: string = 'assets/img/brand/1esim-logo.png';
-  @Input() buttonColor: string = '#f89c2e';
+  @Input() primaryColor: string = '#f89c2e';
+  @Input() secondaryColor: string = '#f89c2e';
   @Input() headlineText: string = 'Welcome to Our Retail Portal';
 }

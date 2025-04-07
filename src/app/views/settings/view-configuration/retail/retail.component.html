@@ -7,16 +7,14 @@
         <span class="preview-title">{{ 'retail.preview.title' | translate }}</span>
       </div>
       <app-retail-preview
-        [logoUrl]="formGenerator?.form?.get('logoUrl')?.value"
-        [buttonColor]="formGenerator?.form?.get('buttonColor')?.value"
-        [headlineText]="formGenerator?.form?.get('headlineText')?.value"
-        [dir]="dir">
+        [primaryColor]="formGenerator?.form?.get('primaryColor')?.value"
+        [secondaryColor]="formGenerator?.form?.get('secondaryColor')?.value"
+        [logoUrl]="formGenerator?.form?.get('logoUrl')?.value">
       </app-retail-preview>
     </div>
 
     <div class="settings-section">
       <h4>{{ 'retail.settings.title' | translate }}</h4>
-      <mat-divider></mat-divider>
       <app-form-generator
         [config]="formConfig"
         (formChanges)="handleFormChanges($event)">

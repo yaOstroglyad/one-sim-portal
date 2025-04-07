@@ -11,6 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ViewConfigurationService } from '../view-configuration.service';
 import { Observable, map } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
+import { DomainsService } from 'src/app/shared/services/domains.service';
 
 @Component({
   selector: 'app-retail',
@@ -32,16 +33,16 @@ export class RetailComponent implements OnInit {
 
   public formConfig$: Observable<FormConfig>;
   public isFormValid = false;
-  public dir: 'ltr' | 'rtl' = 'ltr';
 
   constructor(
     private snackBar: MatSnackBar,
-    private viewConfigService: ViewConfigurationService
+    private viewConfigService: ViewConfigurationService,
+    private domainsService: DomainsService
   ) {}
 
   ngOnInit(): void {
     this.formConfig$ = this.viewConfigService.getViewConfigByApplicationType('retail').pipe(
-      map(config => getRetailFormConfig(config))
+      map(config => getRetailFormConfig(config, this.domainsService))
     );
   }
 

@@ -386,15 +386,13 @@
     "settings": {
       "title": "Настройки портала",
       "primaryColor": "Основной цвет",
-      "primaryColorHint": "Этот цвет будет использоваться для основных элементов интерфейса",
       "secondaryColor": "Дополнительный цвет",
-      "secondaryColorHint": "Этот цвет будет использоваться для второстепенных элементов",
       "logoUrl": "URL логотипа",
       "logoUrlPlaceholder": "Введите URL логотипа",
-      "logoUrlHint": "Укажите путь к файлу логотипа",
       "faviconUrl": "URL фавикона",
       "faviconUrlPlaceholder": "Введите URL фавикона",
       "faviconUrlHint": "Рекомендуемый размер: 32x32 пикселя",
+      "domains": "Домены",
       "saveButton": "Сохранить"
     }
   },
@@ -404,8 +402,16 @@
     },
     "settings": {
       "title": "Настройки розничного портала",
-      "headlineText": "Текст заголовка",
+      "primaryColor": "Основной цвет",
+      "secondaryColor": "Дополнительный цвет",
+      "headlineText": "Заголовок",
       "headlineTextPlaceholder": "Введите текст заголовка",
+      "logoUrl": "URL логотипа",
+      "logoUrlPlaceholder": "Введите URL логотипа",
+      "faviconUrl": "URL фавикона",
+      "faviconUrlPlaceholder": "Введите URL фавикона",
+      "faviconUrlHint": "Рекомендуемый размер: 32x32 пикселя",
+      "domains": "Домены",
       "saveButton": "Сохранить"
     }
   }

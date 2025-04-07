@@ -116,7 +116,9 @@
         <ng-template #selectTemplate let-field>
             <mat-form-field appearance="outline" [attr.class]="'full-width ' + field.className">
                 <mat-label>{{ field.label | translate }}</mat-label>
-                <mat-select [formControlName]="field.name" (selectionChange)="onInputChange($event, field)">
+                <mat-select [formControlName]="field.name" 
+                          (selectionChange)="onInputChange($event, field)"
+                          [multiple]="field.multiple">
                     <mat-option *ngFor="let option of field.options | async" [value]="option.value">
                         {{ option.displayValue }}
                     </mat-option>

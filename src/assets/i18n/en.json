@@ -387,9 +387,11 @@
       "primaryColor": "Primary Color",
       "secondaryColor": "Secondary Color",
       "logoUrl": "Logo URL",
+      "logoUrlPlaceholder": "Enter logo URL",
       "faviconUrl": "Favicon URL",
       "faviconUrlPlaceholder": "Enter favicon URL",
       "faviconUrlHint": "Recommended size: 32x32 pixels",
+      "domains": "Domains",
       "saveButton": "Save"
     }
   },
@@ -399,8 +401,16 @@
     },
     "settings": {
       "title": "Retail Settings",
+      "primaryColor": "Primary Color",
+      "secondaryColor": "Secondary Color",
       "headlineText": "Headline Text",
       "headlineTextPlaceholder": "Enter headline text",
+      "logoUrl": "Logo URL",
+      "logoUrlPlaceholder": "Enter logo URL",
+      "faviconUrl": "Favicon URL",
+      "faviconUrlPlaceholder": "Enter favicon URL",
+      "faviconUrlHint": "Recommended size: 32x32 pixels",
+      "domains": "Domains",
       "saveButton": "Save"
     }
   }

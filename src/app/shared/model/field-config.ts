@@ -47,6 +47,7 @@ export interface FieldConfig {
 	displayOptions?: {
 		newLine?: boolean;
 	},
+	multiple?: boolean;
 
 	//chips
 	addOnBlur?: boolean;

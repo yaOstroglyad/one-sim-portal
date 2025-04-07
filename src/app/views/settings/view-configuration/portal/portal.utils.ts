@@ -1,11 +1,13 @@
 import { FieldType, FormConfig } from 'src/app/shared';
 import { ViewConfiguration } from '../view-configuration.service';
+import { DomainsService } from 'src/app/shared/services/domains.service';
 
 export interface PortalSettings {
   primaryColor: string;
   secondaryColor: string;
   logoUrl: string;
   faviconUrl: string;
+  domains: string[];
 }
 
 export function getPortalSettingsRequest(form: any): PortalSettings {
@@ -13,11 +15,12 @@ export function getPortalSettingsRequest(form: any): PortalSettings {
     primaryColor: form.primaryColor,
     secondaryColor: form.secondaryColor,
     logoUrl: form.logoUrl,
-    faviconUrl: form.faviconUrl
+    faviconUrl: form.faviconUrl,
+    domains: form.domains
   };
 }
 
-export function getPortalFormConfig(data?: ViewConfiguration): FormConfig {
+export function getPortalFormConfig(data?: ViewConfiguration, domainsService?: DomainsService): FormConfig {
   return {
     fields: [
       {
@@ -46,6 +49,14 @@ export function getPortalFormConfig(data?: ViewConfiguration): FormConfig {
         value: data?.viewConfig?.faviconUrl,
         placeholder: 'portal.settings.faviconUrlPlaceholder',
         hintMessage: 'portal.settings.faviconUrlHint'
+      },
+      {
+        type: FieldType.select,
+        name: 'domains',
+        label: 'portal.settings.domains',
+        value: data?.viewConfig?.domains || [],
+        multiple: true,
+        options: domainsService?.getAvailableDomains()
       }
     ]
   };
