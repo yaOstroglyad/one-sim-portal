@@ -1,0 +1,37 @@
+@import "../../../scss/custom";
+
+.Gigabyte-badge,
+.Byte-badge,
+.Kilobyte-badge,
+.Megabyte-badge {
+  background: #306fe1;
+}
+
+.Sms-badge {
+  background: #7130e1;
+}
+
+.Voice-badge, .Min-badge {
+  background: #2fadea;
+}
+
+.active-badge {
+  background: #55a961;
+}
+
+.inactive-badge {
+  background: #a7a943;
+}
+
+.suspended-badge {
+  background: #ff8484;
+}
+
+.terminated-badge {
+  background: #ff4c4c;
+}
+
+.badge-display {
+  display: flex;
+  justify-content: space-between;
+}

@@ -1,7 +1,7 @@
 <ng-container *ngIf="config$ | async as config">
     <c-card *ngIf="(data$ | async)?.length; else noData"
             [class.clickable]="isRowClickable"
-            class="mx-3">
+            class="mx-3 mb-3">
         <table cTable
                [responsive]="true">
             <thead>

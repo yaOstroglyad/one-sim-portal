@@ -15,7 +15,7 @@ th, td {
   overflow: hidden;
   text-overflow: ellipsis;
   align-content: center;
-  min-width: 60px;
+  min-width: 50px;
   max-width: 300px;
   padding: 8px 12px;
 }
@@ -24,16 +24,28 @@ c-pagination {
   padding-left: 18px;
 }
 
+:host-context([dir="rtl"]) c-pagination {
+  padding-left: 0;
+  padding-right: 18px;
+}
+
 .sticky-column {
+  background-color: $color-white;
   position: sticky;
   right: 0;
   z-index: 1;
+}
+
+:host-context([dir="rtl"]) .sticky-column {
+  right: auto;
+  left: 0;
 }
 
 .clickable table tr:hover {
   background-color: $color-light-tint;
   transition: background-color 0.3s ease;
   cursor: pointer;
+
   .sticky-column {
     background-color: $color-light-tint;
     transition: background-color 0.3s ease;

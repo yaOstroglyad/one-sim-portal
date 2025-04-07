@@ -7,6 +7,7 @@
   --os-color-primary: #f9a743;
   --os-color-primary-rgb: 249, 67, 143;
   --os-color-primary-contrast: #3a3a3a;
+  --os-color-primary-white: #ffffff;
   --os-color-primary-contrast-rgb: 255, 255, 255;
 
   /* primary color in format HSL */
@@ -115,6 +116,7 @@ $color-medium: #{var(--os-color-medium)};
 $color-medium-shade: #{var(--os-color-medium-shade)};
 $color-medium-tint: #{var(--os-color-medium-tint)};
 /**light var**/
+$color-white: #{var(--os-color-primary-white)};
 $color-light: #{var(--os-color-light)};
 $color-light-shade: #{var(--os-color-light-shade)};
 $color-light-tint: #{var(--os-color-light-tint)};

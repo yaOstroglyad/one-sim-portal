@@ -26,15 +26,13 @@ import { MatDividerModule } from '@angular/material/divider';
 })
 export class PortalComponent implements OnInit {
   @ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;
-  
+
   public formConfig = getPortalFormConfig();
   public isFormValid = false;
 
   constructor(private snackBar: MatSnackBar) {}
 
-  ngOnInit(): void {
-    // Здесь можно загрузить текущие настройки портала, если они есть
-  }
+  ngOnInit(): void {}
 
   handleFormChanges(form: any): void {
     this.isFormValid = form.valid;
@@ -50,4 +48,4 @@ export class PortalComponent implements OnInit {
       });
     }
   }
-} 
+}
