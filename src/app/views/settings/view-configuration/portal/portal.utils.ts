@@ -1,4 +1,5 @@
 import { FieldType, FormConfig } from 'src/app/shared';
+import { ViewConfiguration } from '../view-configuration.service';
 
 export interface PortalSettings {
   primaryColor: string;
@@ -16,36 +17,36 @@ export function getPortalSettingsRequest(form: any): PortalSettings {
   };
 }
 
-export function getPortalFormConfig(data?: PortalSettings): FormConfig {
+export function getPortalFormConfig(data?: ViewConfiguration): FormConfig {
   return {
     fields: [
       {
         type: FieldType.color,
         name: 'primaryColor',
         label: 'portal.settings.primaryColor',
-        value: data?.primaryColor || '#f89c2e'
+        value: data?.viewConfig?.primaryColor
       },
       {
         type: FieldType.color,
         name: 'secondaryColor',
         label: 'portal.settings.secondaryColor',
-        value: data?.secondaryColor || '#fef6f0'
+        value: data?.viewConfig?.secondaryColor
       },
       {
         type: FieldType.text,
         name: 'logoUrl',
         label: 'portal.settings.logoUrl',
-        value: data?.logoUrl || 'assets/img/brand/1esim-logo.png',
+        value: data?.viewConfig?.logoUrl,
         placeholder: 'portal.settings.logoUrlPlaceholder'
       },
       {
         type: FieldType.text,
         name: 'faviconUrl',
         label: 'portal.settings.faviconUrl',
-        value: data?.faviconUrl || 'assets/img/brand/1esim-logo-small.png',
+        value: data?.viewConfig?.faviconUrl,
         placeholder: 'portal.settings.faviconUrlPlaceholder',
         hintMessage: 'portal.settings.faviconUrlHint'
       }
     ]
   };
-} 
+}

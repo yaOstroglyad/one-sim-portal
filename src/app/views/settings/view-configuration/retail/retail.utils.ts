@@ -1,5 +1,6 @@
 import { FieldConfig, FieldType, FormConfig } from 'src/app/shared/model';
 import { Validators } from '@angular/forms';
+import { ViewConfiguration } from '../view-configuration.service';
 
 export interface RetailSettings {
   logoUrl: string;
@@ -17,14 +18,14 @@ export function getRetailSettingsRequest(form: any): RetailSettings {
   };
 }
 
-export function getRetailFormConfig(data?: RetailSettings): FormConfig {
+export function getRetailFormConfig(data?: ViewConfiguration): FormConfig {
   return {
     fields: [
       {
         type: FieldType.text,
         name: 'logoUrl',
         label: 'portal.settings.logoUrl',
-        value: data?.logoUrl || 'assets/img/brand/1esim-logo.png',
+        value: data?.viewConfig?.logoUrl,
         placeholder: 'portal.settings.logoUrlPlaceholder',
         validators: [Validators.required],
         className: 'form-field'
@@ -33,7 +34,7 @@ export function getRetailFormConfig(data?: RetailSettings): FormConfig {
         type: FieldType.text,
         name: 'faviconUrl',
         label: 'portal.settings.faviconUrl',
-        value: data?.faviconUrl || 'assets/img/brand/1esim-logo-small.png',
+        value: data?.viewConfig?.faviconUrl,
         placeholder: 'portal.settings.faviconUrlPlaceholder',
         hintMessage: 'portal.settings.faviconUrlHint',
         validators: [Validators.required],
@@ -43,7 +44,7 @@ export function getRetailFormConfig(data?: RetailSettings): FormConfig {
         type: FieldType.color,
         name: 'buttonColor',
         label: 'portal.settings.primaryColor',
-        value: data?.buttonColor || '#f89c2e',
+        value: data?.viewConfig?.buttonColor,
         validators: [Validators.required],
         className: 'form-field'
       },
@@ -51,11 +52,11 @@ export function getRetailFormConfig(data?: RetailSettings): FormConfig {
         type: FieldType.text,
         name: 'headlineText',
         label: 'retail.settings.headlineText',
-        value: data?.headlineText || 'Welcome to Our Retail Portal',
+        value: data?.viewConfig?.headlineText,
         placeholder: 'retail.settings.headlineTextPlaceholder',
         validators: [Validators.required],
         className: 'form-field'
       }
     ]
   };
-} 
+}

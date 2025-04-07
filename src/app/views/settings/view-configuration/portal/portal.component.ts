@@ -8,6 +8,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { ViewConfigurationService } from '../view-configuration.service';
+import { Observable, map } from 'rxjs';
+import { FormConfig } from 'src/app/shared';
 
 @Component({
   selector: 'app-portal',
@@ -27,12 +30,19 @@ import { MatDividerModule } from '@angular/material/divider';
 export class PortalComponent implements OnInit {
   @ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;
 
-  public formConfig = getPortalFormConfig();
+  public formConfig$: Observable<FormConfig>;
   public isFormValid = false;
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(
+    private snackBar: MatSnackBar,
+    private viewConfigService: ViewConfigurationService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.formConfig$ = this.viewConfigService.getViewConfigByApplicationType('portal').pipe(
+      map(config => getPortalFormConfig(config))
+    );
+  }
 
   handleFormChanges(form: any): void {
     this.isFormValid = form.valid;

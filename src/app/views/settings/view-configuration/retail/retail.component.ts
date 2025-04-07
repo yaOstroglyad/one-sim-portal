@@ -8,6 +8,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { ViewConfigurationService } from '../view-configuration.service';
+import { Observable, map } from 'rxjs';
+import { FormConfig } from 'src/app/shared';
 
 @Component({
   selector: 'app-retail',
@@ -26,16 +29,20 @@ import { MatDividerModule } from '@angular/material/divider';
 })
 export class RetailComponent implements OnInit {
   @ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;
-  
-  public formConfig = getRetailFormConfig();
+
+  public formConfig$: Observable<FormConfig>;
   public isFormValid = false;
   public dir: 'ltr' | 'rtl' = 'ltr';
 
-  constructor(private snackBar: MatSnackBar) {
-  }
+  constructor(
+    private snackBar: MatSnackBar,
+    private viewConfigService: ViewConfigurationService
+  ) {}
 
   ngOnInit(): void {
-    // Здесь можно загрузить текущие настройки retail, если они есть
+    this.formConfig$ = this.viewConfigService.getViewConfigByApplicationType('retail').pipe(
+      map(config => getRetailFormConfig(config))
+    );
   }
 
   handleFormChanges(form: any): void {
@@ -52,4 +59,4 @@ export class RetailComponent implements OnInit {
       });
     }
   }
-} 
+}
