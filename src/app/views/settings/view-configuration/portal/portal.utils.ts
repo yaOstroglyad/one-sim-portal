@@ -12,7 +12,7 @@ export interface PortalSettings {
 
 export function getPortalSettingsRequest(form: any): ViewConfiguration {
   return {
-    id: '', // ID будет установлен на бэкенде
+    id: form.id,
     applicationType: 'portal',
     domains: form.domains,
     viewConfig: {
@@ -27,6 +27,13 @@ export function getPortalSettingsRequest(form: any): ViewConfiguration {
 export function getPortalFormConfig(data?: ViewConfiguration, domainsService?: DomainsService): FormConfig {
   return {
     fields: [
+      {
+        type: FieldType.uuid,
+        name: 'id',
+        label: 'ID',
+        value: data.id || null,
+        invisible: true
+      },
       {
         type: FieldType.color,
         name: 'primaryColor',

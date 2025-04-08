@@ -1,29 +1,33 @@
 <ng-container *ngIf="config">
     <form [formGroup]="form" [dir]="dir" fxLayout="column" fxLayoutAlign="start start">
         <ng-container *ngFor="let field of config.fields">
-                <ng-container [ngSwitch]="field.type">
-                    <ng-container *ngSwitchCase="FieldType.text" [ngTemplateOutlet]="textTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.number" [ngTemplateOutlet]="numberTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.textarea" [ngTemplateOutlet]="textareaTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.password" [ngTemplateOutlet]="passwordTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.email" [ngTemplateOutlet]="email"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.datepicker" [ngTemplateOutlet]="datePickerTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.select" [ngTemplateOutlet]="selectTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.checkbox" [ngTemplateOutlet]="checkboxTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.slide" [ngTemplateOutlet]="slideTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.chips" [ngTemplateOutlet]="chipsTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.color" [ngTemplateOutlet]="colorTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                <ng-container *ngIf="!field.invisible">
+                    <ng-container [ngSwitch]="field.type">
+                        <ng-container *ngSwitchCase="FieldType.text" [ngTemplateOutlet]="textTemplate"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="FieldType.number" [ngTemplateOutlet]="numberTemplate"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="FieldType.textarea" [ngTemplateOutlet]="textareaTemplate"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="FieldType.password" [ngTemplateOutlet]="passwordTemplate"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="FieldType.email" [ngTemplateOutlet]="email"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="FieldType.datepicker" [ngTemplateOutlet]="datePickerTemplate"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="FieldType.select" [ngTemplateOutlet]="selectTemplate"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="FieldType.checkbox" [ngTemplateOutlet]="checkboxTemplate"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="FieldType.slide" [ngTemplateOutlet]="slideTemplate"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="FieldType.chips" [ngTemplateOutlet]="chipsTemplate"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="FieldType.color" [ngTemplateOutlet]="colorTemplate"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                        <ng-container *ngSwitchCase="FieldType.uuid" [ngTemplateOutlet]="uuidTemplate"
+                                      [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    </ng-container>
                 </ng-container>
         </ng-container>
 
@@ -176,6 +180,10 @@
                     {{ field.hintMessage | translate }}
                 </mat-hint>
             </div>
+        </ng-template>
+
+        <ng-template #uuidTemplate let-field>
+            <input type="hidden" [formControlName]="field.name">
         </ng-template>
 
     </form>

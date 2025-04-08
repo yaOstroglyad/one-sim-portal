@@ -44,6 +44,13 @@ export function getEditCustomerFormConfig(
 	return {
 		fields: [
 			{
+				type: FieldType.uuid,
+				name: 'id',
+				label: 'ID',
+				value: data.id,
+				invisible: true
+			},
+			{
 				type: FieldType.select,
 				name: 'type',
 				label: 'Type',

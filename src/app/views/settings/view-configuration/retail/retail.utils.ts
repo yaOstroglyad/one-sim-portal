@@ -13,7 +13,7 @@ export interface RetailSettings {
 
 export function getRetailSettingsRequest(form: any): ViewConfiguration {
   return {
-    id: '', // ID будет установлен на бэкенде
+    id: form.id,
     applicationType: 'retail',
     domains: form.domains,
     viewConfig: {
@@ -29,6 +29,13 @@ export function getRetailSettingsRequest(form: any): ViewConfiguration {
 export function getRetailFormConfig(data?: ViewConfiguration, domainsService?: DomainsService): FormConfig {
   return {
     fields: [
+      {
+        type: FieldType.uuid,
+        name: 'id',
+        label: 'ID',
+        value: data.id || null,
+        invisible: true
+      },
       {
         type: FieldType.color,
         name: 'primaryColor',
