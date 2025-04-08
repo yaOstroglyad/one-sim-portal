@@ -10,13 +10,17 @@ export interface PortalSettings {
   domains: string[];
 }
 
-export function getPortalSettingsRequest(form: any): PortalSettings {
+export function getPortalSettingsRequest(form: any): ViewConfiguration {
   return {
-    primaryColor: form.primaryColor,
-    secondaryColor: form.secondaryColor,
-    logoUrl: form.logoUrl,
-    faviconUrl: form.faviconUrl,
-    domains: form.domains
+    id: '', // ID будет установлен на бэкенде
+    applicationType: 'portal',
+    domains: form.domains,
+    viewConfig: {
+      primaryColor: form.primaryColor,
+      secondaryColor: form.secondaryColor,
+      logoUrl: form.logoUrl,
+      faviconUrl: form.faviconUrl
+    }
   };
 }
 

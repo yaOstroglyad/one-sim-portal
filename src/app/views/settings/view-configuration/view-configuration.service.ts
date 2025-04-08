@@ -44,4 +44,8 @@ export class ViewConfigurationService {
           }
     });
   }
+
+  save(config: ViewConfiguration): Observable<ViewConfiguration> {
+    return this.http.post<ViewConfiguration>(`${this.API_URL}/save`, config);
+  }
 }

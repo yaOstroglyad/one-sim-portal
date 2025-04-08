@@ -52,11 +52,19 @@ export class PortalComponent implements OnInit {
 
   save(): void {
     if (this.formGenerator.form.valid) {
-      const settings = getPortalSettingsRequest(this.formGenerator.form.value);
-      console.log('Saving portal settings:', settings);
-      // Здесь будет вызов сервиса для сохранения настроек
-      this.snackBar.open('Настройки сохранены успешно', 'Закрыть', {
-        duration: 3000
+      const payload = getPortalSettingsRequest(this.formGenerator.form.value);
+      this.viewConfigService.save(payload).subscribe({
+        next: () => {
+          this.snackBar.open('Настройки сохранены успешно', 'Закрыть', {
+            duration: 3000
+          });
+        },
+        error: (error) => {
+          console.error('Ошибка при сохранении настроек:', error);
+          this.snackBar.open('Ошибка при сохранении настроек', 'Закрыть', {
+            duration: 3000
+          });
+        }
       });
     }
   }

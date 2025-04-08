@@ -11,14 +11,18 @@ export interface RetailSettings {
   domains: string[];
 }
 
-export function getRetailSettingsRequest(form: any): RetailSettings {
+export function getRetailSettingsRequest(form: any): ViewConfiguration {
   return {
-    primaryColor: form.primaryColor,
-    secondaryColor: form.secondaryColor,
-    logoUrl: form.logoUrl,
-    faviconUrl: form.faviconUrl,
-    headlineText: form.headlineText,
-    domains: form.domains
+    id: '', // ID будет установлен на бэкенде
+    applicationType: 'retail',
+    domains: form.domains,
+    viewConfig: {
+      primaryColor: form.primaryColor,
+      secondaryColor: form.secondaryColor,
+      logoUrl: form.logoUrl,
+      faviconUrl: form.faviconUrl,
+      headlineText: form.headlineText
+    }
   };
 }
 
