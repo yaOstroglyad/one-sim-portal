@@ -53,6 +53,11 @@ export const navItems: any[] = [
 				url: '/home/settings/payment-gateway'
 			},
 			{
+				name: 'nav.domains',
+				url: '/home/settings/domains',
+				permissions: [ADMIN_PERMISSION]
+			},
+			{
 				name: 'nav.viewConfiguration',
 				children: [
 					{

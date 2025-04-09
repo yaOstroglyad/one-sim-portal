@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>{{ 'domains.create' | translate }}</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div class="form-group">
+      <label for="name">{{ 'domains.name' | translate }}</label>
+      <input id="name" type="text" formControlName="name" class="form-control">
+      <div class="error-message" *ngIf="form.get('name').touched && form.get('name').errors?.required">
+        {{ 'domains.nameRequired' | translate }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="applicationType">{{ 'domains.applicationType' | translate }}</label>
+      <input id="applicationType" type="text" formControlName="applicationType" class="form-control">
+      <div class="error-message" *ngIf="form.get('applicationType').touched && form.get('applicationType').errors?.required">
+        {{ 'domains.applicationTypeRequired' | translate }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="active">{{ 'domain.active' | translate }}</label>
+      <input id="active" type="checkbox" formControlName="active">
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">{{ 'common.cancel' | translate }}</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
+      {{ 'common.create' | translate }}
+    </button>
+  </mat-dialog-actions>
+</form> 

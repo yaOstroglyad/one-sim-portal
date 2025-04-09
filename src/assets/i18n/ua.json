@@ -54,20 +54,22 @@
     "logout": "Вийти"
   },
   "nav": {
+    "companies": "Компанії",
     "customers": "Клієнти",
     "customer-details": "Деталі клієнта",
-    "providers": "Постачальники",
+    "providers": "Провайдери",
     "orders": "Замовлення",
     "products": "Продукти",
     "inventory": "Інвентар",
     "users": "Користувачі",
     "settings": "Налаштування",
     "paymentGateway": "Платіжний шлюз",
-    "viewConfiguration": "Конфігурація відображення",
+    "viewConfiguration": "Конфігурація представлення",
     "portal": "Портал",
-    "portalViewConfiguration": "Налаштування відображення порталу",
-    "retail": "Роздрібний",
-    "retailViewConfiguration": "Налаштування відображення роздрібного порталу"
+    "portalViewConfiguration": "Portal view configuration",
+    "retail": "Роздріб",
+    "retailViewConfiguration": "Retail view configuration",
+    "domains": "Домени"
   },
   "dynamicEntityDetails": {
     "title": "Деталі об'єкта"
@@ -406,5 +408,21 @@
       "domains": "Домени",
       "saveButton": "Зберегти"
     }
+  },
+  "domains": {
+    "id": "ID",
+    "name": "Назва",
+    "description": "Опис",
+    "status": "Статус",
+    "createdDate": "Дата створення",
+    "edit": "Редагувати домен",
+    "create": "Створити домен",
+    "active": "Активний",
+    "inactive": "Неактивний",
+    "activate": "Активувати",
+    "deactivate": "Деактивувати",
+    "applicationType": "Тип додатку",
+    "nameRequired": "Назва обов'язкова",
+    "applicationTypeRequired": "Тип додатку обов'язковий"
   }
 }

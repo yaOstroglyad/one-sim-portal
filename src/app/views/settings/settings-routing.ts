@@ -18,6 +18,16 @@ export const SettingsRouting: Routes = [
     canActivate: [permissionGuard]
   },
   {
+    path: 'domains',
+    loadComponent: () => import('./domains/domains.component')
+      .then(m => m.DomainsComponent),
+    data: {
+      title: 'nav.domains',
+      permissions: [ADMIN_PERMISSION]
+    },
+    canActivate: [permissionGuard]
+  },
+  {
     path: 'view-configuration/portal',
     loadComponent: () => import('./view-configuration/portal/portal.component')
       .then(m => m.PortalComponent),

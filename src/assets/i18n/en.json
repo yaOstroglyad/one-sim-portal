@@ -68,7 +68,8 @@
     "portal": "Portal",
     "portalViewConfiguration": "Portal view configuration",
     "retail": "Retail",
-    "retailViewConfiguration": "Retail view configuration"
+    "retailViewConfiguration": "Retail view configuration",
+    "domains": "Domains"
   },
   "dynamicEntityDetails": {
     "title": "Entity Details"
@@ -413,5 +414,21 @@
       "domains": "Domains",
       "saveButton": "Save"
     }
+  },
+  "domains": {
+    "id": "ID",
+    "name": "Name",
+    "description": "Description",
+    "status": "Status",
+    "createdDate": "Created Date",
+    "edit": "Edit Domain",
+    "create": "Create Domain",
+    "active": "Active",
+    "inactive": "Inactive",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "applicationType": "Application Type",
+    "nameRequired": "Name is required",
+    "applicationTypeRequired": "Application Type is required"
   }
 }

@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>{{ 'domains.edit' | translate }}</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div class="form-group">
+      <label for="name">{{ 'domains.name' | translate }}</label>
+      <input id="name" type="text" formControlName="name" class="form-control">
+      <div class="error-message" *ngIf="form.get('name').touched && form.get('name').errors?.required">
+        {{ 'domains.nameRequired' | translate }}
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">{{ 'common.cancel' | translate }}</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
+      {{ 'common.save' | translate }}
+    </button>
+  </mat-dialog-actions>
+</form> 
