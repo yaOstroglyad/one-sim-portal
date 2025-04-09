@@ -68,7 +68,8 @@
     "portal": "פורטל",
     "portalViewConfiguration": "הגדרות תצוגת פורטל",
     "retail": "קמעונאי",
-    "retailViewConfiguration": "הגדרות תצוגת פורטל קמעונאי"
+    "retailViewConfiguration": "הגדרות תצוגת קמעונאי",
+    "domains": "דומיינים"
   },
   "dynamicEntityDetails": {
     "title": "פרטי ישות"
@@ -407,5 +408,21 @@
       "domains": "דומיינים",
       "saveButton": "שמור"
     }
+  },
+  "domains": {
+    "id": "מזהה",
+    "name": "שם",
+    "description": "תיאור",
+    "status": "סטטוס",
+    "createdDate": "תאריך יצירה",
+    "edit": "ערוך דומיין",
+    "create": "צור דומיין",
+    "active": "פעיל",
+    "inactive": "לא פעיל",
+    "activate": "הפעל",
+    "deactivate": "השבת",
+    "applicationType": "סוג יישום",
+    "nameRequired": "שם הוא שדה חובה",
+    "applicationTypeRequired": "סוג יישום הוא שדה חובה"
   }
 }

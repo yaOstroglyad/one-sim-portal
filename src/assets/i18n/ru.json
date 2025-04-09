@@ -423,6 +423,13 @@
     "status": "Статус",
     "createdDate": "Дата создания",
     "edit": "Редактировать домен",
-    "create": "Создать домен"
+    "create": "Создать домен",
+    "active": "Активный",
+    "inactive": "Неактивный",
+    "activate": "Активировать",
+    "deactivate": "Деактивировать",
+    "applicationType": "Тип приложения",
+    "nameRequired": "Название обязательно",
+    "applicationTypeRequired": "Тип приложения обязателен"
   }
 }

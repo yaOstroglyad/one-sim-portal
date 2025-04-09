@@ -66,9 +66,9 @@
     "paymentGateway": "Платіжний шлюз",
     "viewConfiguration": "Конфігурація представлення",
     "portal": "Портал",
-    "portalViewConfiguration": "Portal view configuration",
+    "portalViewConfiguration": "Конфігурація представлення порталу",
     "retail": "Роздріб",
-    "retailViewConfiguration": "Retail view configuration",
+    "retailViewConfiguration": "Конфігурація представлення роздрібу",
     "domains": "Домени"
   },
   "dynamicEntityDetails": {
