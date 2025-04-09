@@ -1,6 +1,5 @@
-import { FieldType, FormConfig } from 'src/app/shared';
+import { DomainsDataService, FieldType, FormConfig } from 'src/app/shared';
 import { ViewConfiguration } from '../view-configuration.service';
-import { DomainsService } from 'src/app/shared/services/domains.service';
 
 export interface RetailSettings {
   primaryColor: string;
@@ -26,7 +25,7 @@ export function getRetailSettingsRequest(form: any): ViewConfiguration {
   };
 }
 
-export function getRetailFormConfig(data?: ViewConfiguration, domainsService?: DomainsService): FormConfig {
+export function getRetailFormConfig(data?: ViewConfiguration, domainsService?: DomainsDataService): FormConfig {
   return {
     fields: [
       {

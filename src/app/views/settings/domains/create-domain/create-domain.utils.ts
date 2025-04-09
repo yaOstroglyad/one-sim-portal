@@ -1,6 +1,7 @@
 import { FieldType, FormConfig } from '../../../../shared';
 import { Validators } from '@angular/forms';
-import { Domain } from '../../../../shared/model/domain';
+import { DomainsDataService } from '../../../../shared/services/domains-data.service';
+import { map } from 'rxjs/operators';
 
 export function getDomainCreateRequest(form: any) {
   return {
@@ -11,35 +12,41 @@ export function getDomainCreateRequest(form: any) {
   };
 }
 
-export function getCreateDomainFormConfig(data: Domain): FormConfig {
+export function getCreateDomainFormConfig(domainsDataService: DomainsDataService): FormConfig {
   return {
     fields: [
       {
         type: FieldType.uuid,
         name: 'id',
         label: 'ID',
-        value: data?.id || null,
+        value: null,
         invisible: true
       },
       {
         type: FieldType.text,
         name: 'name',
         label: 'domains.name',
-        value: data?.name || '',
+        value: null,
         validators: [Validators.required]
       },
       {
-        type: FieldType.text,
+        type: FieldType.select,
         name: 'applicationType',
         label: 'domains.applicationType',
-        value: data?.applicationType || '',
-        validators: [Validators.required]
+        value: null,
+        validators: [Validators.required],
+        options: domainsDataService.getApplicationTypes().pipe(
+          map(types => types.map(type => ({
+            value: type,
+            displayValue: type
+          })))
+        )
       },
       {
         type: FieldType.checkbox,
         name: 'active',
         label: 'domains.active',
-        value: data?.active || false
+        value: false
       }
     ]
   };

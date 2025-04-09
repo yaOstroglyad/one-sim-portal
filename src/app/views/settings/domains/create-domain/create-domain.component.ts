@@ -1,13 +1,12 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { Domain } from '../../../../shared/model/domain';
+import { Component, OnInit } from '@angular/core';
+import { getDomainCreateRequest, getCreateDomainFormConfig } from './create-domain.utils';
 import { FormConfig, FormGeneratorModule } from '../../../../shared';
 import { DomainsDataService } from '../../../../shared/services/domains-data.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
-import { getCreateDomainFormConfig, getDomainCreateRequest } from './create-domain.utils';
 
 @Component({
 	selector: 'app-create-domain',
@@ -24,21 +23,17 @@ import { getCreateDomainFormConfig, getDomainCreateRequest } from './create-doma
 	]
 })
 export class CreateDomainComponent implements OnInit {
-	domain: Domain;
 	formConfig: FormConfig;
 	isFormValid = false;
 	formValue: any;
 
 	constructor(
 		private dialogRef: MatDialogRef<CreateDomainComponent>,
-		@Inject(MAT_DIALOG_DATA) public data: { domain?: Domain },
 		private domainsDataService: DomainsDataService
-	) {
-		this.domain = data?.domain;
-	}
+	) {}
 
 	ngOnInit() {
-		this.formConfig = getCreateDomainFormConfig(this.domain);
+		this.formConfig = getCreateDomainFormConfig(this.domainsDataService);
 	}
 
 	handleFormChanges(event: { valid: boolean, value: any }) {
@@ -56,7 +51,6 @@ export class CreateDomainComponent implements OnInit {
 		}
 
 		const request = getDomainCreateRequest(this.formValue);
-
 		this.domainsDataService.create(request).subscribe(() => {
 			this.dialogRef.close(true);
 		});

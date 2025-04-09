@@ -1,6 +1,5 @@
-import { FieldType, FormConfig } from 'src/app/shared';
+import { DomainsDataService, FieldType, FormConfig } from 'src/app/shared';
 import { ViewConfiguration } from '../view-configuration.service';
-import { DomainsService } from 'src/app/shared/services/domains.service';
 
 export interface PortalSettings {
   primaryColor: string;
@@ -24,7 +23,7 @@ export function getPortalSettingsRequest(form: any): ViewConfiguration {
   };
 }
 
-export function getPortalFormConfig(data?: ViewConfiguration, domainsService?: DomainsService): FormConfig {
+export function getPortalFormConfig(data?: ViewConfiguration, domainsService?: DomainsDataService): FormConfig {
   return {
     fields: [
       {

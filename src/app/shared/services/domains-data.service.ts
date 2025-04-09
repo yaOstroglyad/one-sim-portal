@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { DataService } from './data.service';
 import { Domain } from '../model/domain';
+import { SelectOption } from '../model';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -78,4 +80,23 @@ export class DomainsDataService extends DataService<Domain> {
       })
     );
   }
-} 
+
+  getApplicationTypes(): Observable<string[]> {
+    // Моковые данные для типов приложений
+    const mockTypes = ['admin-portal', 'retailer', 'self-care'];
+    return of(mockTypes);
+  }
+
+  getAvailableDomains(): Observable<SelectOption[]> {
+    // Предположим, что API возвращает массив строк доменов
+    const mockDomains = ['domain1.com', 'domain2.com', 'domain3.com', 'domain4.com'];
+
+    // Преобразуем массив строк в массив SelectOption
+    return of(mockDomains).pipe(
+      map(domains => domains.map(domain => ({
+        value: domain,
+        displayValue: domain
+      })))
+    );
+  }
+}

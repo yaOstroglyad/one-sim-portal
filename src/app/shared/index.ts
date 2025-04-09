@@ -27,6 +27,7 @@ export * from './services/provider-bundles-data.service';
 export * from './services/purchased-products-data.service';
 export * from './services/subscriber-data.service';
 export * from './services/transaction-data.service';
+export * from './services/domains-data.service';
 
 export * from './auth/permission.guard';
 export * from './auth/auth.service';

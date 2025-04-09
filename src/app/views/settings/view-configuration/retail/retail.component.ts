@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGeneratorModule } from 'src/app/shared';
+import { DomainsDataService, FormGeneratorModule } from 'src/app/shared';
 import { RetailPreviewComponent } from './retail-preview/retail-preview.component';
 import { FormGeneratorComponent } from 'src/app/shared/components/form-generator/form-generator.component';
 import { getRetailFormConfig, getRetailSettingsRequest } from './retail.utils';
@@ -11,7 +11,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ViewConfigurationService } from '../view-configuration.service';
 import { Observable, map } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
-import { DomainsService } from 'src/app/shared/services/domains.service';
 
 @Component({
   selector: 'app-retail',
@@ -37,7 +36,7 @@ export class RetailComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private viewConfigService: ViewConfigurationService,
-    private domainsService: DomainsService
+    private domainsService: DomainsDataService
   ) {}
 
   ngOnInit(): void {
