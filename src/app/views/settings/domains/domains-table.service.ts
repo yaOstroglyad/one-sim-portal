@@ -15,7 +15,7 @@ export class DomainsTableService extends TableConfigAbstractService<Domain> {
       serverSide: true,
       totalPages: 20
     },
-    translatePrefix: 'domain.',
+    translatePrefix: 'domains.',
     showCheckboxes: false,
     showEditButton: true,
     showAddButton: true,
@@ -43,4 +43,4 @@ export class DomainsTableService extends TableConfigAbstractService<Domain> {
   public updateTableData(data: Domain[]): void {
     this.originalDataSubject.next(data);
   }
-} 
+}

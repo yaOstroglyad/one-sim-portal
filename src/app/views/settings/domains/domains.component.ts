@@ -14,8 +14,8 @@ import { DomainsTableService } from './domains-table.service';
 import { DomainsDataService } from '../../../shared/services/domains-data.service';
 import { Domain } from '../../../shared/model/domain';
 import { GenericTableModule, HeaderModule, TableConfig } from '../../../shared';
-import { CreateDomainComponent } from './edit-domain/edit-domain.component';
 import { EditDomainNameComponent } from './edit-domain-name/edit-domain-name.component';
+import { CreateDomainComponent } from './create-domain/create-domain.component';
 
 @Component({
   selector: 'app-domains',
