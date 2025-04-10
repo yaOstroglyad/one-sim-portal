@@ -60,7 +60,6 @@ $indicator-svg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg
 
         &::after {
           color: $primary-color-contrast !important;
-          border-top-color: $primary-color-contrast !important;
           border-color: $primary-color-contrast !important;
         }
       }
@@ -111,26 +110,45 @@ $indicator-svg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg
   }
 
   ::ng-deep .sidebar-nav {
+    --cui-sidebar-nav-group-indicator: #{$indicator-svg} !important;
+    --cui-sidebar-nav-group-indicator-hover: #{$indicator-svg} !important;
+
     .nav-link {
       flex-direction: row-reverse;
+      justify-content: flex-start;
+      text-align: right;
 
       .nav-icon {
-        margin-left: 0.5rem;
-        margin-right: 0;
+        margin-left: 1rem;
+        margin-right: -15px;
       }
     }
 
     .nav-group {
-      .nav-link::after {
-        right: auto;
-        left: 1rem;
+      .nav-group-toggle {
+        position: relative;
+
+        &::after {
+          display: block !important;
+          flex: 0 12px;
+          height: 12px !important;
+          content: "" !important;
+          width: 12px !important;
+          right: auto !important;
+          left: 1rem !important;
+          position: absolute !important;
+        }
+      }
+
+      &.show > .nav-group-toggle::after {
+        transform: translateY(-50%) rotate(180deg) !important;
       }
 
       > .nav-group-items {
-        > .nav-item > .nav-link,
-        > .nav-group > .nav-link {
+        .nav-item > .nav-link,
+        .nav-group > .nav-link {
           padding-right: 3rem !important;
-          padding-left: 2rem !important;
+          padding-left: 3rem !important;
         }
 
         .nav-group {
