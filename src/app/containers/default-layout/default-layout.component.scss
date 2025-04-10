@@ -133,9 +133,17 @@ $indicator-svg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg
           padding-left: 2rem !important;
         }
 
-        .nav-group > .nav-group-items > .nav-item > .nav-link {
-          padding-right: 4.5rem !important;
-          padding-left: 2rem !important;
+        .nav-group {
+          > .nav-group-items {
+            > .nav-item > .nav-link {
+              padding-right: 4.5rem !important;
+              padding-left: 3rem !important;
+            }
+          }
+
+          &.show > .nav-group-toggle::after {
+            transform: translateY(-50%) rotate(180deg) !important;
+          }
         }
       }
     }
