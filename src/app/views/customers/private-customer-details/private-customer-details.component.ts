@@ -35,6 +35,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ShowQrCodeDialogComponent } from './show-qr-code-dialog/show-qr-code-dialog.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { AddSubscriberProductComponent } from './add-subscriber-product/add-subscriber-product.component';
+import { AddSubscriberComponent } from './add-subscriber/add-subscriber.component';
 
 @Component({
 	selector: 'app-private-customer-details',
@@ -195,5 +196,19 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed().subscribe(() => this.loadCustomerDetails());
+	}
+	
+	public addSubscriber() {
+		const data = {customerId: this.customerId};
+		const dialogRef = this.dialog.open(AddSubscriberComponent, {
+			width: '600px',
+			data
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.loadCustomerDetails();
+			}
+		});
 	}
 }

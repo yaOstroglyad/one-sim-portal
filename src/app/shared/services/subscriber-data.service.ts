@@ -5,11 +5,25 @@ import { SimInfo } from '../model';
 import { SubscriberStatusEvent } from '../model';
 import { SimLocations } from '../model';
 
+// Определяем интерфейс для создания подписчика
+export interface CreateSubscriberDto {
+	customerId: string;
+	serviceProviderId: string;
+	productId: string;
+	subscriberName: string;
+	email: string;
+}
+
 @Injectable({
 	providedIn: 'root'
 })
 export class SubscriberDataService {
 	http = inject(HttpClient);
+
+	// Метод для создания нового подписчика
+	createSubscriber(payload: CreateSubscriberDto): Observable<any> {
+		return this.http.post('/api/v1/subscribers/command/create', payload);
+	}
 
 	getSimDetails(params: {id: string}): Observable<SimInfo> {
 		return this.http.get<SimInfo>(`/api/v1/sims/query/sim/details`, { params }).pipe(

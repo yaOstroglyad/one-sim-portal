@@ -1,0 +1,36 @@
+.dialog-header {
+  margin: 0;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.dialog-content {
+  padding: 0 16px 16px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.dialog-footer {
+  padding: 8px 16px 16px;
+  justify-content: flex-end;
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+  margin-top: 16px;
+  
+  mat-icon {
+    margin-right: 8px;
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+}
+
+.mb-1 {
+  margin-bottom: 8px;
+} 

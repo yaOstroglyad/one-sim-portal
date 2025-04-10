@@ -140,7 +140,8 @@
       "totalUsedData": "Всего использовано данных",
       "activityTimeline": "Лента активности",
       "noActivities": "Нет активностей",
-      "noActivitiesMessage": "Клиент еще не выполнял активностей."
+      "noActivitiesMessage": "Клиент еще не выполнял активностей.",
+      "add-subscriber": "Добавить подписчика"
     },
     "showQrCodeDialog": {
       "title": "Просмотр QR-кода"
@@ -431,5 +432,21 @@
     "applicationType": "Тип приложения",
     "nameRequired": "Название обязательно",
     "applicationTypeRequired": "Тип приложения обязателен"
+  },
+  "add-subscriber": {
+    "title": "Добавить подписчика",
+    "provider": "Поставщик услуг",
+    "select-provider": "Выберите поставщика услуг",
+    "provider-required": "Поставщик услуг обязателен",
+    "product": "Продукт",
+    "select-product": "Выберите продукт",
+    "product-required": "Продукт обязателен",
+    "name": "Имя подписчика",
+    "enter-name": "Введите имя подписчика",
+    "name-required": "Имя подписчика обязательно",
+    "email": "Email",
+    "enter-email": "Введите email",
+    "email-required": "Email обязателен",
+    "email-invalid": "Неверный формат email"
   }
 }

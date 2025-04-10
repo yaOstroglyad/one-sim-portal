@@ -140,7 +140,8 @@
       "totalUsedData": "סה\"כ נתונים בשימוש",
       "activityTimeline": "ציר זמן פעילות",
       "noActivities": "אין פעילויות",
-      "noActivitiesMessage": "המנוי לא ביצע פעילויות עדיין."
+      "noActivitiesMessage": "המנוי לא ביצע פעילויות עדיין.",
+      "add-subscriber": "הוסף מנוי"
     },
     "showQrCodeDialog": {
       "title": "תצוגת קוד QR"
@@ -424,5 +425,21 @@
     "applicationType": "סוג יישום",
     "nameRequired": "שם הוא שדה חובה",
     "applicationTypeRequired": "סוג יישום הוא שדה חובה"
+  },
+  "add-subscriber": {
+    "title": "הוסף מנוי",
+    "provider": "ספק שירות",
+    "select-provider": "בחר ספק שירות",
+    "provider-required": "ספק שירות נדרש",
+    "product": "מוצר",
+    "select-product": "בחר מוצר",
+    "product-required": "מוצר נדרש",
+    "name": "שם מנוי",
+    "enter-name": "הזן שם מנוי",
+    "name-required": "שם מנוי נדרש",
+    "email": "אימייל",
+    "enter-email": "הזן אימייל",
+    "email-required": "אימייל נדרש",
+    "email-invalid": "פורמט אימייל לא תקין"
   }
 }

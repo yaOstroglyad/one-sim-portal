@@ -141,7 +141,8 @@
       "totalUsedData": "Total Used Data",
       "activityTimeline": "Activity Timeline",
       "noActivities": "No activities",
-      "noActivitiesMessage": "The customer hasn't performed any activities yet."
+      "noActivitiesMessage": "The customer hasn't performed any activities yet.",
+      "add-subscriber": "Add Subscriber"
     },
     "showQrCodeDialog": {
       "title": "QR code view"
@@ -430,5 +431,21 @@
     "applicationType": "Application Type",
     "nameRequired": "Name is required",
     "applicationTypeRequired": "Application Type is required"
+  },
+  "add-subscriber": {
+    "title": "Add Subscriber",
+    "provider": "Service Provider",
+    "select-provider": "Select a service provider",
+    "provider-required": "Service provider is required",
+    "product": "Product",
+    "select-product": "Select a product",
+    "product-required": "Product is required",
+    "name": "Subscriber Name",
+    "enter-name": "Enter subscriber name",
+    "name-required": "Subscriber name is required",
+    "email": "Email",
+    "enter-email": "Enter email",
+    "email-required": "Email is required",
+    "email-invalid": "Invalid email format"
   }
 }

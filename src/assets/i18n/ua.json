@@ -140,7 +140,8 @@
       "totalUsedData": "Загальний обсяг використаних даних",
       "activityTimeline": "Хронологія активності",
       "noActivities": "Немає активностей",
-      "noActivitiesMessage": "Клієнт ще не виконував жодної активності."
+      "noActivitiesMessage": "Клієнт ще не виконував жодної активності.",
+      "add-subscriber": "Додати підписника"
     },
     "showQrCodeDialog": {
       "title": "Перегляд QR-коду"
@@ -424,5 +425,21 @@
     "applicationType": "Тип додатку",
     "nameRequired": "Назва обов'язкова",
     "applicationTypeRequired": "Тип додатку обов'язковий"
+  },
+  "add-subscriber": {
+    "title": "Додати підписника",
+    "provider": "Постачальник послуг",
+    "select-provider": "Виберіть постачальника послуг",
+    "provider-required": "Постачальник послуг обов'язковий",
+    "product": "Продукт",
+    "select-product": "Виберіть продукт",
+    "product-required": "Продукт обов'язковий",
+    "name": "Ім'я підписника",
+    "enter-name": "Введіть ім'я підписника",
+    "name-required": "Ім'я підписника обов'язкове",
+    "email": "Email",
+    "enter-email": "Введіть email",
+    "email-required": "Email обов'язковий",
+    "email-invalid": "Невірний формат email"
   }
 }
