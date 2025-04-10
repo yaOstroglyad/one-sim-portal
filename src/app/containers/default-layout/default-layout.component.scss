@@ -30,6 +30,8 @@ $indicator-svg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg
     .nav-link {
       color: $primary-color-contrast;
       background: $white-87-opacity;
+      display: flex;
+      align-items: center;
 
       &:hover {
         background: $color-light-shade;
@@ -53,9 +55,18 @@ $indicator-svg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg
         color: var(--os-color-primary-contrast);
       }
 
+      .nav-link {
+        position: relative;
+
+        &::after {
+          color: $primary-color-contrast !important;
+          border-top-color: $primary-color-contrast !important;
+          border-color: $primary-color-contrast !important;
+        }
+      }
+
       .nav-link::after {
         color: $primary-color-contrast !important;
-        border-top-color: $primary-color-contrast !important;
         border-color: $primary-color-contrast !important;
       }
 
@@ -101,33 +112,40 @@ $indicator-svg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg
 
   ::ng-deep .sidebar-nav {
     .nav-link {
-      justify-content: right;
+      flex-direction: row-reverse;
 
       .nav-icon {
-        order: 1;
-        margin-right: calc(var(--cui-sidebar-nav-link-padding-y) * -1.4);
+        margin-left: 0.5rem;
+        margin-right: 0;
       }
     }
 
     .nav-group {
+      .nav-link::after {
+        right: auto;
+        left: 1rem;
+      }
+
       > .nav-group-items {
         > .nav-item > .nav-link,
         > .nav-group > .nav-link {
           padding-right: 3rem !important;
-          padding-left: 1rem !important;
+          padding-left: 2rem !important;
         }
 
         .nav-group > .nav-group-items > .nav-item > .nav-link {
           padding-right: 4.5rem !important;
-          padding-left: 1rem !important;
+          padding-left: 2rem !important;
         }
       }
     }
   }
 
   ::ng-deep .sidebar-narrow-unfoldable {
-    .nav-icon + c-sidebar-nav-link-content {
-      display: none;
+    &:not(:hover) {
+      .nav-icon + c-sidebar-nav-link-content {
+        display: none;
+      }
     }
 
     &:hover .nav-icon + c-sidebar-nav-link-content {
