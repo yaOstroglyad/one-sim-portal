@@ -441,5 +441,9 @@
     "enter-email": "הזן אימייל",
     "email-required": "אימייל נדרש",
     "email-invalid": "פורמט אימייל לא תקין"
+  },
+  "send-registration-email": {
+    "title": "שלח דוא\"ל רישום",
+    "submit": "שלח דוא\"ל"
   }
 }

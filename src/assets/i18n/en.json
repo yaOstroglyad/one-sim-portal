@@ -447,5 +447,9 @@
     "enter-email": "Enter email",
     "email-required": "Email is required",
     "email-invalid": "Invalid email format"
+  },
+  "send-registration-email": {
+    "title": "Send Registration Email",
+    "submit": "Send Email"
   }
 }

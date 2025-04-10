@@ -51,4 +51,15 @@ export class SubscriberDataService {
 			})
 		);
 	}
+
+	sendRegistrationEmail(subscriberId: string, email: string): Observable<any> {
+		return this.http.get(`/api/v1/subscribers/send-registration-email`, {
+			params: { subscriberId, email }
+		}).pipe(
+			catchError(() => {
+				console.warn('Error sending registration email');
+				return of(null);
+			})
+		);
+	}
 }

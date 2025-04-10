@@ -50,6 +50,19 @@
                     {{ 'customer.private-customer-details.showQRCode' | translate }}
                 </button>
             </div>
+            <div [matTooltipDisabled]="!!selectedSubscriber"
+                 class="c-pointer"
+                 matTooltip="{{ 'customer.private-customer-details.sendRegistrationEmailTooltip' | translate }}"
+                 matTooltipPosition="below"
+                 matTooltipClass="tooltip"
+                 (mouseenter)="!selectedSubscriber && highlightTab()"
+                 (mouseleave)="!selectedSubscriber && removeHighlightTab()">
+                <button mat-button
+                        [disabled]="!selectedSubscriber"
+                        (click)="sendRegistrationEmail(selectedSubscriber)">
+                    {{ 'customer.private-customer-details.sendRegistrationEmail' | translate }}
+                </button>
+            </div>
 <!--            <button mat-button>Unblock</button>-->
 <!--            <button mat-button color="warn">Block</button>-->
 <!--            <button mat-icon-button>-->

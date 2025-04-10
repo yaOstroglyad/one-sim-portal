@@ -441,5 +441,9 @@
     "enter-email": "Введіть email",
     "email-required": "Email обов'язковий",
     "email-invalid": "Невірний формат email"
+  },
+  "send-registration-email": {
+    "title": "Надіслати реєстраційний лист",
+    "submit": "Надіслати лист"
   }
 }

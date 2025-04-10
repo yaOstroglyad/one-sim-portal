@@ -448,5 +448,9 @@
     "enter-email": "Введите email",
     "email-required": "Email обязателен",
     "email-invalid": "Неверный формат email"
+  },
+  "send-registration-email": {
+    "title": "Отправить регистрационное письмо",
+    "submit": "Отправить письмо"
   }
 }

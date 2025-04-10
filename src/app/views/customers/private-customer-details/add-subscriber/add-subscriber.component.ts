@@ -4,16 +4,18 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { Observable } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
-import { FormConfig, FormGeneratorModule } from '../../../../shared';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { getAddSubscriberFormConfig } from './add-subscriber.utils';
-import { SubscriberDataService } from '../../../../shared/services/subscriber-data.service';
-import { ProvidersDataService } from '../../../../shared/services/providers-data.service';
-import { ProductsDataService } from '../../../../shared/services/products-data.service';
+import {
+  FormConfig,
+  FormGeneratorModule,
+  ProductsDataService,
+  ProvidersDataService,
+  SubscriberDataService
+} from '../../../../shared';
 
 @Component({
   selector: 'app-add-subscriber',
@@ -35,7 +37,7 @@ export class AddSubscriberComponent implements OnInit {
   subscriberDataService = inject(SubscriberDataService);
   providersDataService = inject(ProvidersDataService);
   productsDataService = inject(ProductsDataService);
-  
+
   formConfig: FormConfig;
   form: FormGroup;
   isFormValid: boolean;
@@ -50,7 +52,7 @@ export class AddSubscriberComponent implements OnInit {
   ngOnInit(): void {
     const providers$ = this.providersDataService.list();
     const products$ = this.productsDataService.list();
-    
+
     this.formConfig = getAddSubscriberFormConfig(providers$, products$);
     this.loading = false;
   }
@@ -67,7 +69,7 @@ export class AddSubscriberComponent implements OnInit {
   submit(): void {
     if (this.isFormValid) {
       this.loading = true;
-      
+
       const formValue = this.form.value;
       const payload = {
         customerId: this.data.customerId,
@@ -76,7 +78,7 @@ export class AddSubscriberComponent implements OnInit {
         subscriberName: formValue.subscriberName,
         email: formValue.email
       };
-      
+
       this.subscriberDataService.createSubscriber(payload).subscribe({
         next: (response) => {
           this.snackBar.open('Subscriber created successfully', null, {
@@ -100,4 +102,4 @@ export class AddSubscriberComponent implements OnInit {
       console.warn('Form is invalid. Cannot submit.');
     }
   }
-} 
+}

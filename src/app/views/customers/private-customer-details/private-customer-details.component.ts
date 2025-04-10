@@ -36,6 +36,7 @@ import { ShowQrCodeDialogComponent } from './show-qr-code-dialog/show-qr-code-di
 import { TranslateModule } from '@ngx-translate/core';
 import { AddSubscriberProductComponent } from './add-subscriber-product/add-subscriber-product.component';
 import { AddSubscriberComponent } from './add-subscriber/add-subscriber.component';
+import { SendRegistrationEmailComponent } from './send-registration-email/send-registration-email.component';
 
 @Component({
 	selector: 'app-private-customer-details',
@@ -197,7 +198,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 
 		dialogRef.afterClosed().subscribe(() => this.loadCustomerDetails());
 	}
-	
+
 	public addSubscriber() {
 		const data = {customerId: this.customerId};
 		const dialogRef = this.dialog.open(AddSubscriberComponent, {
@@ -210,5 +211,15 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 				this.loadCustomerDetails();
 			}
 		});
+	}
+
+	public sendRegistrationEmail(subscriber: Subscriber): void {
+		const data = { id: subscriber.id };
+		const dialogRef = this.dialog.open(SendRegistrationEmailComponent, {
+			width: '400px',
+			data
+		});
+
+		dialogRef.afterClosed().subscribe(() => this.loadCustomerDetails());
 	}
 }
