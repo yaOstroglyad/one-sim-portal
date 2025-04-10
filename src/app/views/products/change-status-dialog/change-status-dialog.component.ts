@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ProductsDataService } from '../products-data.service';
 import { StatusEnum } from '../../../shared/model/package';
+import { ProductsDataService } from '../../../shared';
 
 @Component({
   selector: 'app-change-status-dialog',

@@ -2,9 +2,8 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, TemplateRef, Vie
 import { Package, StatusEnum } from '../../shared/model/package';
 import { Observable, Subject, of } from 'rxjs';
 import { catchError, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
+import { HeaderConfig, ProductsDataService, TableConfig, TableFilterFieldType } from '../../shared';
 import { ProductsTableService } from './products-table.service';
-import { ProductsDataService } from './products-data.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditProductComponent } from './edit-product/edit-product.component';
 import { CreateProductComponent } from './create-product/create-product.component';

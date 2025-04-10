@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ProvidersDataService, FormConfig } from '../../../shared';
+import { ProvidersDataService, FormConfig, ProductsDataService } from '../../../shared';
 import { Subject } from 'rxjs';
 import { getCustomerCreateRequest, getEditCustomerFormConfig } from './edit-customer.utils';
 
@@ -19,12 +19,13 @@ export class EditCustomerComponent implements OnInit, OnDestroy {
 	constructor(
 		public dialogRef: MatDialogRef<EditCustomerComponent>,
 		private providersDataService: ProvidersDataService,
+		private productsDataService: ProductsDataService,
 		@Inject(MAT_DIALOG_DATA) public data: any
 	) {
 	}
 
 	ngOnInit(): void {
-		this.formConfig = getEditCustomerFormConfig(this.providersDataService, this.data);
+		this.formConfig = getEditCustomerFormConfig(this.providersDataService, this.productsDataService, this.data);
 	}
 
 	handleFormChanges(form: FormGroup): void {

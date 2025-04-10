@@ -1,4 +1,4 @@
-import { FieldType, ProvidersDataService, FormConfig, Customer, CustomerType } from '../../../shared';
+import { FieldType, ProvidersDataService, FormConfig, Customer, CustomerType, ProductsDataService } from '../../../shared';
 import { Validators } from '@angular/forms';
 import { of } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -13,32 +13,36 @@ export function getCustomerCreateRequest(form: any) {
 	return {
 		customerCommand: {
 			id: form?.id || null,
+			accountId: form?.accountId || null,
+			companyId: form?.companyId || null,
 			name: form.name,
 			description: form.description,
-			externalId: form.externalId || '',
+			externalId: form.externalId || null,
 			tags: form?.tags || [],
 			type: form?.type || ''
 		},
-		...getSubscriberCommand(form),
-		registrationEmail: form.registrationEmail
+		userCommand: form?.type === CustomerType.Private ? {
+			id: form?.userId || null,
+			loginName: form.loginName || '',
+			password: form.password || '',
+			email: form.email || null,
+			phone: form.phone || null,
+			firstName: form.firstName || '',
+			lastName: form.lastName || ''
+		} : null,
+		subscriberCommand: form?.type === CustomerType.Private ? {
+			serviceProviderId: form.serviceProviderId || '',
+			simId: form.simId || null,
+			externalId: form.subscriberExternalId || null
+		} : null,
+		productId: form.productId || null,
+		userProfileEmail: form.email || ''
 	};
 }
 
-function getSubscriberCommand(form: any) {
-	if (form?.type === CustomerType.Private) {
-		return {
-			subscriberCommand: {
-				serviceProviderId: form.serviceProviderId || '',
-				externalId: form.externalId || ''
-			}
-		};
-	}
-	return {};
-}
-
-
 export function getEditCustomerFormConfig(
 	serviceProviderDataService: ProvidersDataService,
+	productsDataService: ProductsDataService,
 	data: Customer
 ): FormConfig {
 	return {
@@ -59,28 +63,7 @@ export function getEditCustomerFormConfig(
 				options: of([
 					{ value: CustomerType.Private, displayValue: CustomerType.Private }
 				]),
-				inputEvent: (event, formGeneratorComponent) => {
-					const isPrivate = event.value === CustomerType.Private;
-
-					// Update validators for fields
-
-					formGeneratorComponent.updateFieldValidators('registrationEmail',
-						isPrivate ? [Validators.required, Validators.email] : [Validators.email]);
-					formGeneratorComponent.updateFieldValidators('serviceProviderId',
-						isPrivate ? [Validators.required] : []);
-
-					// Define hints and class names based on the customer type
-					const typeHint = isPrivate ? typeHintMessage : null;
-					const typeClassName = isPrivate ? 'height-100px' : null;
-					const emailHint = isPrivate ? emailHintMessage : null;
-					const emailClassName = isPrivate ? 'height-100px' : null;
-
-					// Toggle field hints
-					formGeneratorComponent.toggleFieldHint('type', typeHint, typeClassName);
-					formGeneratorComponent.toggleFieldHint('registrationEmail', emailHint, emailClassName);
-
-					console.log('formGeneratorComponent.form.value', formGeneratorComponent.form.value)
-				}
+				invisible: true
 			},
 			{
 				type: FieldType.text,
@@ -111,12 +94,6 @@ export function getEditCustomerFormConfig(
 				removable: true,
 			},
 			{
-				type: FieldType.email,
-				name: 'registrationEmail',
-				label: 'Registration email',
-				validators: [Validators.email]
-			},
-			{
 				type: FieldType.select,
 				name: 'serviceProviderId',
 				label: 'Service Provider',
@@ -134,6 +111,53 @@ export function getEditCustomerFormConfig(
 				type: FieldType.text,
 				name: 'subscriberExternalId',
 				label: 'Subscriber External ID'
+			},
+			{
+				type: FieldType.text,
+				name: 'loginName',
+				label: 'Login Name',
+				validators: [Validators.required]
+			},
+			{
+				type: FieldType.password,
+				name: 'password',
+				label: 'Password',
+				validators: [Validators.required]
+			},
+			{
+				type: FieldType.email,
+				name: 'email',
+				label: 'Email',
+				validators: [Validators.required, Validators.email],
+				hintMessage: emailHintMessage,
+				className: 'height-100px'
+			},
+			{
+				type: FieldType.text,
+				name: 'phone',
+				label: 'Phone'
+			},
+			{
+				type: FieldType.text,
+				name: 'firstName',
+				label: 'First Name'
+			},
+			{
+				type: FieldType.text,
+				name: 'lastName',
+				label: 'Last Name'
+			},
+			{
+				type: FieldType.select,
+				name: 'productId',
+				label: 'Product',
+				validators: [],
+				options: productsDataService.list().pipe(
+					map(products => products.map(product => ({
+						value: product.id,
+						displayValue: `${product.name}`
+					})))
+				)
 			}
 		]
 	};
