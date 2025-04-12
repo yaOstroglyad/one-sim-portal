@@ -2,7 +2,7 @@ import { Directive, HostListener, ElementRef, inject, Renderer2 } from '@angular
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Directive({
-  selector: '[appCopyToClipboard]',
+  selector: '[copyToClipboard]',
   standalone: true
 })
 export class CopyToClipboardDirective {
