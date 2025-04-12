@@ -141,7 +141,9 @@
       "activityTimeline": "ציר זמן פעילות",
       "noActivities": "אין פעילויות",
       "noActivitiesMessage": "המנוי לא ביצע פעילויות עדיין.",
-      "add-subscriber": "הוסף מנוי"
+      "add-subscriber": "הוסף מנוי",
+      "sendRegistrationEmail": "שלח דוא\"ל הרשמה",
+      "sendRegistrationEmailTooltip": "לחץ כדי לשלוח דוא\"ל הרשמה ללקוח"
     },
     "showQrCodeDialog": {
       "title": "תצוגת קוד QR"

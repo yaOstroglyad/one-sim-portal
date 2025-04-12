@@ -141,7 +141,9 @@
       "activityTimeline": "Лента активности",
       "noActivities": "Нет активностей",
       "noActivitiesMessage": "Клиент еще не выполнял активностей.",
-      "add-subscriber": "Добавить подписчика"
+      "add-subscriber": "Добавить подписчика",
+      "sendRegistrationEmail": "Отправить регистрационное письмо",
+      "sendRegistrationEmailTooltip": "Нажмите, чтобы отправить регистрационное письмо клиенту"
     },
     "showQrCodeDialog": {
       "title": "Просмотр QR-кода"

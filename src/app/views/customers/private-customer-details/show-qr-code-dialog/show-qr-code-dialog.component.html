@@ -1,6 +1,7 @@
 <h2 mat-dialog-title class="dialog-header">{{ 'customer.showQrCodeDialog.title' | translate }}</h2>
 <mat-dialog-content class="mat-typography dialog-content">
-    <app-qr-code [qrCodeValue]="data"></app-qr-code>
+    <app-qr-code [qrCodeValue]="data?.qrCode"></app-qr-code>
+    <p class="text-center">ICCID: <span appCopyToClipboard>{{ data?.iccid }}</span></p>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-footer" align="end">
     <button mat-button (click)="close()">{{ 'common.cancel' | translate }}</button>

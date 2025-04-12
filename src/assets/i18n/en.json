@@ -142,7 +142,9 @@
       "activityTimeline": "Activity Timeline",
       "noActivities": "No activities",
       "noActivitiesMessage": "The customer hasn't performed any activities yet.",
-      "add-subscriber": "Add Subscriber"
+      "add-subscriber": "Add Subscriber",
+      "sendRegistrationEmail": "Send Registration Email",
+      "sendRegistrationEmailTooltip": "Click to send a registration email to the customer"
     },
     "showQrCodeDialog": {
       "title": "QR code view"

@@ -164,9 +164,13 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 
 	public openShowQRCode(subscriber: Subscriber): void {
 		this.subscriberDataService.getSimDetails({ id: subscriber.simId }).subscribe(sim => {
+			console.log('sim', sim);
 			const dialogRef = this.dialog.open(ShowQrCodeDialogComponent, {
 				width: '350px',
-				data: sim.qrCode
+				data: {
+					qrCode: sim.qrCode,
+					iccid: sim.iccid
+				}
 			});
 
 			dialogRef.afterClosed().subscribe();
@@ -220,6 +224,10 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 			data
 		});
 
-		dialogRef.afterClosed().subscribe(() => this.loadCustomerDetails());
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.loadCustomerDetails();
+			}
+		});
 	}
 }
