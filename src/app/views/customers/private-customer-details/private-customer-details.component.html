@@ -63,11 +63,11 @@
                     {{ 'customer.private-customer-details.sendRegistrationEmail' | translate }}
                 </button>
             </div>
-<!--            <button mat-button>Unblock</button>-->
-<!--            <button mat-button color="warn">Block</button>-->
-<!--            <button mat-icon-button>-->
-<!--                <mat-icon>more_vert</mat-icon>-->
-<!--            </button>-->
+            <!--            <button mat-button>Unblock</button>-->
+            <!--            <button mat-button color="warn">Block</button>-->
+            <!--            <button mat-icon-button>-->
+            <!--                <mat-icon>more_vert</mat-icon>-->
+            <!--            </button>-->
         </div>
     </div>
 
@@ -85,10 +85,14 @@
                                 <mat-card-title>{{ 'customer.private-customer-details.location' | translate }}</mat-card-title>
                             </mat-card-header>
                             <mat-card-content *ngIf="simLocations">
-                                <p><strong>{{ 'customer.private-customer-details.imsi' | translate }}:</strong> {{ simLocations[0]?.imsi || 'N/A' }}</p>
-                                <p><strong>{{ 'customer.private-customer-details.state' | translate }}:</strong> {{ simLocations[0]?.state || 'N/A' }}</p>
-                                <p><strong>{{ 'customer.private-customer-details.country' | translate }}:</strong> {{ simLocations[0]?.country || 'N/A' }}</p>
-                                <p><strong>{{ 'customer.private-customer-details.operator' | translate }}:</strong> {{ simLocations[0]?.operator || 'N/A' }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.imsi' | translate }}
+                                    :</strong> {{ simLocations[0]?.imsi || 'N/A' }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.state' | translate }}
+                                    :</strong> {{ simLocations[0]?.state || 'N/A' }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.country' | translate }}
+                                    :</strong> {{ simLocations[0]?.country || 'N/A' }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.operator' | translate }}
+                                    :</strong> {{ simLocations[0]?.operator || 'N/A' }}</p>
                             </mat-card-content>
                         </mat-card>
 
@@ -97,9 +101,22 @@
                                 <mat-card-title>{{ 'customer.private-customer-details.otherDetails' | translate }}</mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
-                                <p><strong>{{ 'customer.private-customer-details.currencyCode' | translate }}: </strong>{{ currency.toUpperCase() }}</p>
-                                <p><strong>{{ 'customer.private-customer-details.status' | translate }}: </strong> {{ customerDetailsView.customer.status }}</p>
-                                <p><strong>{{ 'customer.private-customer-details.language' | translate }}: </strong>EN</p>
+                                <p><strong>{{ 'customer.private-customer-details.currencyCode' | translate }}
+                                    : </strong>{{ currency.toUpperCase() }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.status' | translate }}: </strong>
+                                    <c-badge
+                                            [color]="customerDetailsView.customer.status === 'active' ? 'success' : 'secondary'">
+                                        {{ customerDetailsView.customer.status }}
+                                    </c-badge>
+                                </p>
+                                <p>
+                                    <strong>{{ 'createUser.email' | translate }}: </strong>
+                                    <span appCopyToClipboard>
+                                        {{ customerDetailsView.userProfile.email }}
+                                    </span>
+                                </p>
+                                <p><strong>{{ 'customer.private-customer-details.language' | translate }}: </strong>EN
+                                </p>
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -110,8 +127,10 @@
                                 <mat-card-title>{{ 'customer.private-customer-details.financialSummary' | translate }}</mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
-                                <p><strong>{{ 'customer.private-customer-details.totalSpent' | translate }}:</strong> {{ totalSpent }} {{ currency.toUpperCase() }}</p>
-                                <p><strong>{{ 'customer.private-customer-details.totalUsedData' | translate }}:</strong> {{ totalUsedGB }} GB</p>
+                                <p><strong>{{ 'customer.private-customer-details.totalSpent' | translate }}
+                                    :</strong> {{ totalSpent }} {{ currency.toUpperCase() }}</p>
+                                <p><strong>{{ 'customer.private-customer-details.totalUsedData' | translate }}
+                                    :</strong> {{ totalUsedGB }} GB</p>
                             </mat-card-content>
                         </mat-card>
 

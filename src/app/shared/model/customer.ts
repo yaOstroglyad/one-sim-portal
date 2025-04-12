@@ -24,4 +24,5 @@ export interface ParentCustomer {
 export interface DataObject {
   customer: Customer;
   subscribers: Subscriber[];
+  userProfile: any
 }

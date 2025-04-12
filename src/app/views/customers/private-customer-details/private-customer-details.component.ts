@@ -37,6 +37,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AddSubscriberProductComponent } from './add-subscriber-product/add-subscriber-product.component';
 import { AddSubscriberComponent } from './add-subscriber/add-subscriber.component';
 import { SendRegistrationEmailComponent } from './send-registration-email/send-registration-email.component';
+import { BadgeComponent } from '@coreui/angular';
+import { CopyToClipboardDirective } from '../../../shared/directives/copy-to-clipboard.directive';
 
 @Component({
 	selector: 'app-private-customer-details',
@@ -54,12 +56,24 @@ import { SendRegistrationEmailComponent } from './send-registration-email/send-r
 		EmptyStateComponent,
 		SubscriberDetailsComponent,
 		MatTooltipModule,
-		TranslateModule
+		TranslateModule,
+		BadgeComponent,
+		CopyToClipboardDirective
 	],
 	standalone: true
 })
 export class PrivateCustomerDetailsComponent implements OnInit {
 	@ViewChild('tabGroup', { static: false, read: ElementRef }) tabGroup: ElementRef;
+
+	private route = inject(ActivatedRoute);
+	private customerDataService = inject(CustomersDataService);
+	private transactionDataService = inject(TransactionDataService);
+	private purchasedProductsDataService = inject(PurchasedProductsDataService);
+	private subscriberDataService = inject(SubscriberDataService);
+	private renderer = inject(Renderer2);
+	private dialog = inject(MatDialog);
+	private cdr = inject(ChangeDetectorRef);
+	private authService = inject(AuthService);
 
 	customerDetailsView$: Observable<DataObject>;
 	timelineEvents: TimelineEvent[] = [];
@@ -67,16 +81,6 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	totalUsedGB: number = 0;
 	currency: string = 'USD';
 	simLocations: SimLocations[];
-
-	route = inject(ActivatedRoute);
-	customerDataService = inject(CustomersDataService);
-	transactionDataService = inject(TransactionDataService);
-	purchasedProductsDataService = inject(PurchasedProductsDataService);
-	subscriberDataService = inject(SubscriberDataService);
-	renderer = inject(Renderer2);
-	dialog = inject(MatDialog);
-	cdr = inject(ChangeDetectorRef);
-	authService = inject(AuthService);
 	isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	customerId: string;
 	subscribers: Subscriber[];
@@ -93,6 +97,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 		this.customerDetailsView$
 			.pipe(
 				switchMap((customerDetails: DataObject) => {
+					console.log('customerDetails', customerDetails);
 					const subscriberId = customerDetails?.subscribers[0]?.id;
 					this.subscribers = customerDetails.subscribers;
 
