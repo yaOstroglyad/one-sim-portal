@@ -54,14 +54,22 @@
     "logout": "Вийти"
   },
   "nav": {
+    "companies": "Компанії",
     "customers": "Клієнти",
     "customer-details": "Деталі клієнта",
-    "providers": "Постачальники",
+    "providers": "Провайдери",
     "orders": "Замовлення",
     "products": "Продукти",
     "inventory": "Інвентар",
     "users": "Користувачі",
-    "settings": "Налаштування"
+    "settings": "Налаштування",
+    "paymentGateway": "Платіжний шлюз",
+    "viewConfiguration": "Конфігурація представлення",
+    "portal": "Портал",
+    "portalViewConfiguration": "Конфігурація представлення порталу",
+    "retail": "Роздріб",
+    "retailViewConfiguration": "Конфігурація представлення роздрібу",
+    "domains": "Домени"
   },
   "dynamicEntityDetails": {
     "title": "Деталі об'єкта"
@@ -132,7 +140,10 @@
       "totalUsedData": "Загальний обсяг використаних даних",
       "activityTimeline": "Хронологія активності",
       "noActivities": "Немає активностей",
-      "noActivitiesMessage": "Клієнт ще не виконував жодної активності."
+      "noActivitiesMessage": "Клієнт ще не виконував жодної активності.",
+      "add-subscriber": "Додати підписника",
+      "sendRegistrationEmail": "Надіслати реєстраційний лист",
+      "sendRegistrationEmailTooltip": "Натисніть, щоб надіслати реєстраційний лист клієнту"
     },
     "showQrCodeDialog": {
       "title": "Перегляд QR-коду"
@@ -364,5 +375,77 @@
     "lastName": "Прізвище",
     "email": "Email",
     "resetPassword": "Скинути пароль"
+  },
+  "portal": {
+    "preview": {
+      "title": "Попередній перегляд порталу"
+    },
+    "settings": {
+      "title": "Налаштування порталу",
+      "primaryColor": "Основний колір",
+      "secondaryColor": "Додатковий колір",
+      "logoUrl": "URL логотипу",
+      "logoUrlPlaceholder": "Введіть URL логотипу",
+      "faviconUrl": "URL фавікону",
+      "faviconUrlPlaceholder": "Введіть URL фавікону",
+      "faviconUrlHint": "Рекомендований розмір: 32x32 пікселі",
+      "domains": "Домени",
+      "saveButton": "Зберегти"
+    }
+  },
+  "retail": {
+    "preview": {
+      "title": "Попередній перегляд роздрібного порталу"
+    },
+    "settings": {
+      "title": "Налаштування роздрібного порталу",
+      "primaryColor": "Основний колір",
+      "secondaryColor": "Додатковий колір",
+      "headlineText": "Заголовок",
+      "headlineTextPlaceholder": "Введіть текст заголовка",
+      "logoUrl": "URL логотипу",
+      "logoUrlPlaceholder": "Введіть URL логотипу",
+      "faviconUrl": "URL фавікону",
+      "faviconUrlPlaceholder": "Введіть URL фавікону",
+      "faviconUrlHint": "Рекомендований розмір: 32x32 пікселі",
+      "domains": "Домени",
+      "saveButton": "Зберегти"
+    }
+  },
+  "domains": {
+    "id": "ID",
+    "name": "Назва",
+    "description": "Опис",
+    "status": "Статус",
+    "createdDate": "Дата створення",
+    "edit": "Редагувати домен",
+    "create": "Створити домен",
+    "active": "Активний",
+    "inactive": "Неактивний",
+    "activate": "Активувати",
+    "deactivate": "Деактивувати",
+    "applicationType": "Тип додатку",
+    "nameRequired": "Назва обов'язкова",
+    "applicationTypeRequired": "Тип додатку обов'язковий"
+  },
+  "add-subscriber": {
+    "title": "Додати підписника",
+    "provider": "Постачальник послуг",
+    "select-provider": "Виберіть постачальника послуг",
+    "provider-required": "Постачальник послуг обов'язковий",
+    "product": "Продукт",
+    "select-product": "Виберіть продукт",
+    "product-required": "Продукт обов'язковий",
+    "name": "Ім'я підписника",
+    "enter-name": "Введіть ім'я підписника",
+    "name-required": "Ім'я підписника обов'язкове",
+    "email": "Email",
+    "enter-email": "Введіть email",
+    "email-required": "Email обов'язковий",
+    "email-invalid": "Невірний формат email"
+  },
+  "send-registration-email": {
+    "title": "Надіслати реєстраційний лист",
+    "submit": "Надіслати лист"
   }
 }

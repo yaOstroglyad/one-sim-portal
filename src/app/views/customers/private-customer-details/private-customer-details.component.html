@@ -18,6 +18,12 @@
                     {{ 'customer.private-customer-details.add-product' | translate }}
                 </button>
             </div>
+            <div class="c-pointer highlight-tab">
+                <button mat-button
+                        (click)="addSubscriber()">
+                    {{ 'customer.private-customer-details.add-subscriber' | translate }}
+                </button>
+            </div>
             <div [matTooltipDisabled]="!!selectedSubscriber"
                  class="c-pointer highlight-tab"
                  matTooltip="{{ 'customer.private-customer-details.refundTooltip' | translate }}"
@@ -42,6 +48,19 @@
                         [disabled]="!selectedSubscriber"
                         (click)="openShowQRCode(selectedSubscriber)">
                     {{ 'customer.private-customer-details.showQRCode' | translate }}
+                </button>
+            </div>
+            <div [matTooltipDisabled]="!!selectedSubscriber"
+                 class="c-pointer"
+                 matTooltip="{{ 'customer.private-customer-details.sendRegistrationEmailTooltip' | translate }}"
+                 matTooltipPosition="below"
+                 matTooltipClass="tooltip"
+                 (mouseenter)="!selectedSubscriber && highlightTab()"
+                 (mouseleave)="!selectedSubscriber && removeHighlightTab()">
+                <button mat-button
+                        [disabled]="!selectedSubscriber"
+                        (click)="sendRegistrationEmail(selectedSubscriber)">
+                    {{ 'customer.private-customer-details.sendRegistrationEmail' | translate }}
                 </button>
             </div>
 <!--            <button mat-button>Unblock</button>-->

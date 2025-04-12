@@ -13,8 +13,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChipsInputComponent } from '../chips-input/chips-input.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FormCheckComponent, FormCheckInputDirective } from '@coreui/angular';
-
-
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
 	declarations: [
@@ -37,7 +36,8 @@ import { FormCheckComponent, FormCheckInputDirective } from '@coreui/angular';
 		ChipsInputComponent,
 		MatIconModule,
 		FormCheckComponent,
-		FormCheckInputDirective
+		FormCheckInputDirective,
+		TranslateModule
 	]
 })
 export class FormGeneratorModule { }

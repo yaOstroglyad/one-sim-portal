@@ -54,6 +54,7 @@
     "logout": "התנתק"
   },
   "nav": {
+    "companies": "חברות",
     "customers": "לקוחות",
     "customer-details": "פרטי לקוח",
     "providers": "ספקים",
@@ -61,7 +62,14 @@
     "products": "מוצרים",
     "inventory": "מלאי",
     "users": "משתמשים",
-    "settings": "הגדרות"
+    "settings": "הגדרות",
+    "paymentGateway": "שער תשלום",
+    "viewConfiguration": "תצורת תצוגה",
+    "portal": "פורטל",
+    "portalViewConfiguration": "הגדרות תצוגת פורטל",
+    "retail": "קמעונאי",
+    "retailViewConfiguration": "הגדרות תצוגת קמעונאי",
+    "domains": "דומיינים"
   },
   "dynamicEntityDetails": {
     "title": "פרטי ישות"
@@ -132,7 +140,10 @@
       "totalUsedData": "סה\"כ נתונים בשימוש",
       "activityTimeline": "ציר זמן פעילות",
       "noActivities": "אין פעילויות",
-      "noActivitiesMessage": "המנוי לא ביצע פעילויות עדיין."
+      "noActivitiesMessage": "המנוי לא ביצע פעילויות עדיין.",
+      "add-subscriber": "הוסף מנוי",
+      "sendRegistrationEmail": "שלח דוא\"ל הרשמה",
+      "sendRegistrationEmailTooltip": "לחץ כדי לשלוח דוא\"ל הרשמה ללקוח"
     },
     "showQrCodeDialog": {
       "title": "תצוגת קוד QR"
@@ -364,5 +375,77 @@
     "lastName": "שם משפחה",
     "email": "אימייל",
     "resetPassword": "אפס סיסמה"
+  },
+  "portal": {
+    "preview": {
+      "title": "תצוגה מקדימה של הפורטל"
+    },
+    "settings": {
+      "title": "הגדרות פורטל",
+      "primaryColor": "צבע ראשי",
+      "secondaryColor": "צבע משני",
+      "logoUrl": "כתובת URL של הלוגו",
+      "logoUrlPlaceholder": "הזן כתובת URL של הלוגו",
+      "faviconUrl": "כתובת URL של האייקון",
+      "faviconUrlPlaceholder": "הזן כתובת URL של האייקון",
+      "faviconUrlHint": "גודל מומלץ: 32x32 פיקסלים",
+      "domains": "דומיינים",
+      "saveButton": "שמור"
+    }
+  },
+  "retail": {
+    "preview": {
+      "title": "תצוגה מקדימה של פורטל קמעונאי"
+    },
+    "settings": {
+      "title": "הגדרות פורטל קמעונאי",
+      "primaryColor": "צבע ראשי",
+      "secondaryColor": "צבע משני",
+      "headlineText": "כותרת",
+      "headlineTextPlaceholder": "הזן טקסט כותרת",
+      "logoUrl": "כתובת URL של הלוגו",
+      "logoUrlPlaceholder": "הזן כתובת URL של הלוגו",
+      "faviconUrl": "כתובת URL של האייקון",
+      "faviconUrlPlaceholder": "הזן כתובת URL של האייקון",
+      "faviconUrlHint": "גודל מומלץ: 32x32 פיקסלים",
+      "domains": "דומיינים",
+      "saveButton": "שמור"
+    }
+  },
+  "domains": {
+    "id": "מזהה",
+    "name": "שם",
+    "description": "תיאור",
+    "status": "סטטוס",
+    "createdDate": "תאריך יצירה",
+    "edit": "ערוך דומיין",
+    "create": "צור דומיין",
+    "active": "פעיל",
+    "inactive": "לא פעיל",
+    "activate": "הפעל",
+    "deactivate": "השבת",
+    "applicationType": "סוג יישום",
+    "nameRequired": "שם הוא שדה חובה",
+    "applicationTypeRequired": "סוג יישום הוא שדה חובה"
+  },
+  "add-subscriber": {
+    "title": "הוסף מנוי",
+    "provider": "ספק שירות",
+    "select-provider": "בחר ספק שירות",
+    "provider-required": "ספק שירות נדרש",
+    "product": "מוצר",
+    "select-product": "בחר מוצר",
+    "product-required": "מוצר נדרש",
+    "name": "שם מנוי",
+    "enter-name": "הזן שם מנוי",
+    "name-required": "שם מנוי נדרש",
+    "email": "אימייל",
+    "enter-email": "הזן אימייל",
+    "email-required": "אימייל נדרש",
+    "email-invalid": "פורמט אימייל לא תקין"
+  },
+  "send-registration-email": {
+    "title": "שלח דוא\"ל רישום",
+    "submit": "שלח דוא\"ל"
   }
 }

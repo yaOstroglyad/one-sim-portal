@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  template: `<router-outlet></router-outlet>`,
+  standalone: true,
+  imports: [RouterModule]
 })
-export class SettingsComponent {
-
-}
+export class SettingsComponent {}

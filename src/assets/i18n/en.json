@@ -62,7 +62,14 @@
     "products": "Products",
     "inventory": "Inventory",
     "users": "Users",
-    "settings": "Settings"
+    "settings": "Settings",
+    "paymentGateway": "Payment Gateway",
+    "viewConfiguration": "View Configuration",
+    "portal": "Portal",
+    "portalViewConfiguration": "Portal view configuration",
+    "retail": "Retail",
+    "retailViewConfiguration": "Retail view configuration",
+    "domains": "Domains"
   },
   "dynamicEntityDetails": {
     "title": "Entity Details"
@@ -134,7 +141,10 @@
       "totalUsedData": "Total Used Data",
       "activityTimeline": "Activity Timeline",
       "noActivities": "No activities",
-      "noActivitiesMessage": "The customer hasn’t performed any activities yet."
+      "noActivitiesMessage": "The customer hasn't performed any activities yet.",
+      "add-subscriber": "Add Subscriber",
+      "sendRegistrationEmail": "Send Registration Email",
+      "sendRegistrationEmailTooltip": "Click to send a registration email to the customer"
     },
     "showQrCodeDialog": {
       "title": "QR code view"
@@ -152,7 +162,7 @@
   },
   "purchasedProducts": {
     "noPurchasedProductsFound": "No purchased products history found",
-    "noPurchasesMessage": "The customer hasn’t made any purchases yet.",
+    "noPurchasesMessage": "The customer hasn't made any purchases yet.",
     "productName": "Product Name",
     "status": "Status",
     "remainingBalance": "Remaining Balance",
@@ -195,7 +205,7 @@
   },
   "transactionOrdersTable": {
     "noTransactionOrdersFound": "No transaction orders found",
-    "noTransactionsMessage": "The customer hasn’t made any transactions yet.",
+    "noTransactionsMessage": "The customer hasn't made any transactions yet.",
     "type": "Type",
     "status": "Status",
     "productName": "Product name",
@@ -326,14 +336,16 @@
   "paymentGateway": {
     "id": "ID",
     "name": "Name",
-    "isActive": "Is active",
+    "isActive": "Status",
     "isPrimary": "Is primary",
     "paymentStrategy": "Payment Strategy",
     "createdDate": "Created Date",
     "hint": "In this section, you can configure all the payment gateways available to you.",
     "setupNew": "Setup new payment-gateway",
-    "setup": "Setup payment gateway",
-    "adminHint": "This configuration is available to non-admin users only."
+    "setup": "Setup",
+    "adminHint": "This configuration is available to non-admin users only.",
+    "title": "Payment Gateway Settings",
+    "edit": "Edit"
   },
   "createUser": {
     "title": "Create User",
@@ -366,5 +378,80 @@
     "lastName": "Last Name",
     "email": "Email",
     "resetPassword": "Reset password"
+  },
+  "viewConfiguration": {
+    "title": "View Configuration"
+  },
+  "portal": {
+    "preview": {
+      "title": "Portal Preview"
+    },
+    "settings": {
+      "title": "Portal Settings",
+      "primaryColor": "Primary Color",
+      "secondaryColor": "Secondary Color",
+      "logoUrl": "Logo URL",
+      "logoUrlPlaceholder": "Enter logo URL",
+      "faviconUrl": "Favicon URL",
+      "faviconUrlPlaceholder": "Enter favicon URL",
+      "faviconUrlHint": "Recommended size: 32x32 pixels",
+      "domains": "Domains",
+      "saveButton": "Save"
+    }
+  },
+  "retail": {
+    "preview": {
+      "title": "Retail Preview"
+    },
+    "settings": {
+      "title": "Retail Settings",
+      "primaryColor": "Primary Color",
+      "secondaryColor": "Secondary Color",
+      "headlineText": "Headline Text",
+      "headlineTextPlaceholder": "Enter headline text",
+      "logoUrl": "Logo URL",
+      "logoUrlPlaceholder": "Enter logo URL",
+      "faviconUrl": "Favicon URL",
+      "faviconUrlPlaceholder": "Enter favicon URL",
+      "faviconUrlHint": "Recommended size: 32x32 pixels",
+      "domains": "Domains",
+      "saveButton": "Save"
+    }
+  },
+  "domains": {
+    "id": "ID",
+    "name": "Name",
+    "description": "Description",
+    "status": "Status",
+    "createdDate": "Created Date",
+    "edit": "Edit Domain",
+    "create": "Create Domain",
+    "active": "Active",
+    "inactive": "Inactive",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "applicationType": "Application Type",
+    "nameRequired": "Name is required",
+    "applicationTypeRequired": "Application Type is required"
+  },
+  "add-subscriber": {
+    "title": "Add Subscriber",
+    "provider": "Service Provider",
+    "select-provider": "Select a service provider",
+    "provider-required": "Service provider is required",
+    "product": "Product",
+    "select-product": "Select a product",
+    "product-required": "Product is required",
+    "name": "Subscriber Name",
+    "enter-name": "Enter subscriber name",
+    "name-required": "Subscriber name is required",
+    "email": "Email",
+    "enter-email": "Enter email",
+    "email-required": "Email is required",
+    "email-invalid": "Invalid email format"
+  },
+  "send-registration-email": {
+    "title": "Send Registration Email",
+    "submit": "Send Email"
   }
 }

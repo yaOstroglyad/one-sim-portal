@@ -5,10 +5,8 @@ import {
 	ADMIN_PERMISSION,
 	AuthService,
 	CompaniesDataService,
-	CustomersDataService,
-	CustomerType
+	ProductsDataService
 } from '../../../shared';
-import { ProductsDataService } from '../products-data.service';
 
 @Component({
 	selector: 'app-edit-product',

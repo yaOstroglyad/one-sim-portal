@@ -1,8 +1,9 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { QrCodeComponent } from '../../../../shared';
+import { QrCodeComponent, SubscriberDataService } from '../../../../shared';
 import { TranslateModule } from '@ngx-translate/core';
+import { CopyToClipboardDirective } from '../../../../shared/directives/copy-to-clipboard.directive';
 
 @Component({
   selector: 'app-show-qr-code-dialog',
@@ -12,13 +13,14 @@ import { TranslateModule } from '@ngx-translate/core';
 		MatButtonModule,
 		MatDialogModule,
 		QrCodeComponent,
-		TranslateModule
+		TranslateModule,
+		CopyToClipboardDirective
 	],
   standalone: true
 })
 export class ShowQrCodeDialogComponent {
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: string,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ShowQrCodeDialogComponent>
   ) {}
 

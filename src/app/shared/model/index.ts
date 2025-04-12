@@ -14,3 +14,4 @@ export * from './user';
 export * from './field-config';
 export * from './header-config.interface';
 export * from './table-column-config.interface';
+export * from './payment-strategies';

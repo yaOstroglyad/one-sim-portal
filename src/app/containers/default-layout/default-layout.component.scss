@@ -1,5 +1,7 @@
 @import "src/scss/variables";
 
+$indicator-svg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$primary-color-contrast}'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+
 :host {
   ng-scrollbar {
     --scrollbar-thumb-color: var(--cui-border-color, --os-color-light);
@@ -22,11 +24,16 @@
   }
 
   ::ng-deep .sidebar-nav {
+    --cui-sidebar-nav-group-indicator: #{$indicator-svg};
+    --cui-sidebar-nav-group-indicator-hover: #{$indicator-svg};
+
     .nav-link {
       color: $primary-color-contrast;
+      background: $white-87-opacity;
+      display: flex;
+      align-items: center;
 
       &:hover {
-        color: $primary-color-contrast;
         background: $color-light-shade;
       }
 
@@ -42,9 +49,60 @@
         color: $primary-color-contrast;
       }
     }
+
+    .nav-group {
+      .nav-group-toggle {
+        color: var(--os-color-primary-contrast);
+      }
+
+      .nav-link {
+        position: relative;
+
+        &::after {
+          color: $primary-color-contrast !important;
+          border-color: $primary-color-contrast !important;
+        }
+      }
+
+      .nav-link::after {
+        color: $primary-color-contrast !important;
+        border-color: $primary-color-contrast !important;
+      }
+
+      &.show > .nav-link::after {
+        transform: rotate(180deg) !important;
+      }
+
+      .nav-group-items {
+        .nav-group {
+          &.show > .nav-link::after {
+            border-top-color: $primary-color-contrast !important;
+            transform: rotate(180deg) !important;
+          }
+
+          .nav-link {
+            background: $white-87-opacity;
+
+            &:hover {
+              background: $color-light-shade;
+            }
+          }
+        }
+
+        > .nav-item > .nav-link,
+        > .nav-group > .nav-link {
+          padding-left: 3rem !important;
+        }
+
+        .nav-group > .nav-group-items > .nav-item > .nav-link {
+          padding-left: 4.5rem !important;
+        }
+      }
+    }
   }
 }
 
+// RTL-специфика
 :host-context([dir="rtl"]) {
   .sidebar-bg {
     border-left: 3px solid $primary-color-border;
@@ -52,29 +110,72 @@
   }
 
   ::ng-deep .sidebar-nav {
+    --cui-sidebar-nav-group-indicator: #{$indicator-svg} !important;
+    --cui-sidebar-nav-group-indicator-hover: #{$indicator-svg} !important;
+
     .nav-link {
-      justify-content: right;
+      flex-direction: row-reverse;
+      justify-content: flex-start;
+      text-align: right;
 
       .nav-icon {
-        order: 1;
-        margin-right: calc(var(--cui-sidebar-nav-link-padding-y) * -1.4);
+        margin-left: 1rem;
+        margin-right: -15px;
+      }
+    }
+
+    .nav-group {
+      .nav-group-toggle {
+        position: relative;
+
+        &::after {
+          display: block !important;
+          flex: 0 12px;
+          height: 12px !important;
+          content: "" !important;
+          width: 12px !important;
+          right: auto !important;
+          left: 1rem !important;
+          position: absolute !important;
+        }
+      }
+
+      &.show > .nav-group-toggle::after {
+        transform: translateY(-50%) rotate(180deg) !important;
+      }
+
+      > .nav-group-items {
+        .nav-item > .nav-link,
+        .nav-group > .nav-link {
+          padding-right: 3rem !important;
+          padding-left: 3rem !important;
+        }
+
+        .nav-group {
+          > .nav-group-items {
+            > .nav-item > .nav-link {
+              padding-right: 4.5rem !important;
+              padding-left: 3rem !important;
+            }
+          }
+
+          &.show > .nav-group-toggle::after {
+            transform: translateY(-50%) rotate(180deg) !important;
+          }
+        }
       }
     }
   }
 
   ::ng-deep .sidebar-narrow-unfoldable {
-    .nav-icon {
-      + c-sidebar-nav-link-content {
+    &:not(:hover) {
+      .nav-icon + c-sidebar-nav-link-content {
         display: none;
       }
     }
 
-    &:hover {
-      .nav-icon {
-        + c-sidebar-nav-link-content {
-          display: block;
-        }
-      }
+    &:hover .nav-icon + c-sidebar-nav-link-content {
+      display: block;
     }
   }
 }

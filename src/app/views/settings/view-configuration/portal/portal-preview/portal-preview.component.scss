@@ -1,0 +1,9 @@
+@import 'src/scss/_view-configuration.scss';
+
+:host {
+  @extend .preview-component;
+}
+
+.portal-preview-svg {
+  @extend .preview-svg;
+}

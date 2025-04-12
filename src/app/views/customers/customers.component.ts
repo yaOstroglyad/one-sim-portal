@@ -4,10 +4,8 @@ import { Customer, CustomersDataService, CustomerType, TableConfig } from '../..
 import { CustomersTableService } from './customers-table.service';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 import { MatDialog } from '@angular/material/dialog';
-import { debounceTime, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Order } from '../../shared/model/order';
-import { ReSendInviteEmailComponent } from './re-send-invite-email/re-send-invite-email.component';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
@@ -79,29 +77,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
 				});
 			}
 		});
-	}
-
-	public openSendEmail(item: Order): void {
-		const dialogRef = this.dialog.open(ReSendInviteEmailComponent, {
-			width: '400px',
-			data: item
-		});
-
-		dialogRef.afterClosed().pipe(
-			takeUntil(this.unsubscribe$),
-			switchMap(email => {
-				if (email) {
-					return this.customersDataService.reSendInviteEmail(item.id, email).pipe(
-						tap(() =>
-							this.snackBar.open('Mail sent successfully', null, {
-								panelClass: 'app-notification-success',
-								duration: 2000
-							})
-						)
-					);
-				}
-			})
-		).subscribe();
 	}
 
 	public openCustomerDetails(customer: Customer): void {

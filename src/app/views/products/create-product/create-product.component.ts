@@ -5,11 +5,10 @@ import {
 	ADMIN_PERMISSION,
 	AuthService,
 	CompaniesDataService,
-	CustomersDataService,
+	ProductsDataService,
 	ProviderBundlesDataService
 } from '../../../shared';
 import { CreateProductService } from './create-product.service';
-import { ProductsDataService } from '../products-data.service';
 import { Subscription } from 'rxjs';
 
 @Component({

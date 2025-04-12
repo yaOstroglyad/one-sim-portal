@@ -1,0 +1,36 @@
+<ng-container *ngIf="formConfig$ | async as formConfig">
+    <div class="portal-container">
+        <!-- Левая часть с превью -->
+        <div class="preview-section">
+            <div class="preview-header">
+                <img *ngIf="formGenerator?.form?.get('faviconUrl')?.value"
+                     [src]="formGenerator?.form?.get('faviconUrl')?.value" alt="Favicon" class="favicon">
+                <span class="preview-title">{{ 'portal.preview.title' | translate }}</span>
+            </div>
+            <app-portal-preview
+                    [primaryColor]="formGenerator?.form?.get('primaryColor')?.value"
+                    [secondaryColor]="formGenerator?.form?.get('secondaryColor')?.value"
+                    [logoUrl]="formGenerator?.form?.get('logoUrl')?.value">
+            </app-portal-preview>
+        </div>
+
+        <!-- Правая часть с настройками -->
+        <div class="settings-section">
+            <h4>{{ 'portal.settings.title' | translate }}</h4>
+            <app-form-generator
+                    [config]="formConfig"
+                    (formChanges)="handleFormChanges($event)">
+            </app-form-generator>
+
+            <div class="form-actions">
+                <button mat-raised-button
+                        color="primary"
+                        [disabled]="!isFormValid"
+                        (click)="save()">
+                    {{ 'portal.settings.saveButton' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+</ng-container>

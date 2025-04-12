@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { AuthService } from '../auth';
+import { ADMIN_PERMISSION, AuthService } from '../auth';
 import { HasPermissionDirective } from './has-permission.directive';
 import { of } from 'rxjs';
 
@@ -11,7 +11,9 @@ import { of } from 'rxjs';
     <div *appHasPermission="['userAccess']">User Content</div>
   `
 })
-class TestComponent {}
+class TestComponent {
+  protected readonly ADMIN_PERMISSION = ADMIN_PERMISSION;
+}
 
 describe('HasPermissionDirective', () => {
   let fixture: ComponentFixture<TestComponent>;

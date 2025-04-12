@@ -54,14 +54,22 @@
     "logout": "Выйти"
   },
   "nav": {
+    "companies": "Компании",
     "customers": "Клиенты",
     "customer-details": "Детали клиента",
-    "providers": "Поставщики",
+    "providers": "Провайдеры",
     "orders": "Заказы",
     "products": "Продукты",
     "inventory": "Инвентарь",
     "users": "Пользователи",
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "paymentGateway": "Платежный шлюз",
+    "viewConfiguration": "Конфигурация представления",
+    "portal": "Портал",
+    "portalViewConfiguration": "Конфигурация представления портала",
+    "retail": "Розница",
+    "retailViewConfiguration": "Конфигурация представления розницы",
+    "domains": "Домены"
   },
   "dynamicEntityDetails": {
     "title": "Детали объекта"
@@ -132,7 +140,10 @@
       "totalUsedData": "Всего использовано данных",
       "activityTimeline": "Лента активности",
       "noActivities": "Нет активностей",
-      "noActivitiesMessage": "Клиент еще не выполнял активностей."
+      "noActivitiesMessage": "Клиент еще не выполнял активностей.",
+      "add-subscriber": "Добавить подписчика",
+      "sendRegistrationEmail": "Отправить регистрационное письмо",
+      "sendRegistrationEmailTooltip": "Нажмите, чтобы отправить регистрационное письмо клиенту"
     },
     "showQrCodeDialog": {
       "title": "Просмотр QR-кода"
@@ -331,7 +342,9 @@
     "hint": "В этом разделе вы можете настроить все доступные вам платежные шлюзы.",
     "setupNew": "Настроить новый платежный шлюз",
     "setup": "Настроить платежный шлюз",
-    "adminHint": "Эта конфигурация доступна только для пользователей, не являющихся администраторами."
+    "adminHint": "Эта конфигурация доступна только для пользователей, не являющихся администраторами.",
+    "title": "Настройки платежных шлюзов",
+    "edit": "Редактировать"
   },
   "createUser": {
     "title": "Создать пользователя",
@@ -364,5 +377,82 @@
     "lastName": "Фамилия",
     "email": "Email",
     "resetPassword": "Сбросить пароль"
+  },
+  "viewConfiguration": {
+    "title": "Настройки отображения",
+    "hint": "Настройте отображение для вашей компании"
+  },
+  "portal": {
+    "title": "Настройки портала",
+    "preview": {
+      "title": "Предпросмотр портала"
+    },
+    "settings": {
+      "title": "Настройки портала",
+      "primaryColor": "Основной цвет",
+      "secondaryColor": "Дополнительный цвет",
+      "logoUrl": "URL логотипа",
+      "logoUrlPlaceholder": "Введите URL логотипа",
+      "faviconUrl": "URL фавикона",
+      "faviconUrlPlaceholder": "Введите URL фавикона",
+      "faviconUrlHint": "Рекомендуемый размер: 32x32 пикселя",
+      "domains": "Домены",
+      "saveButton": "Сохранить"
+    }
+  },
+  "retail": {
+    "preview": {
+      "title": "Предпросмотр розничного портала"
+    },
+    "settings": {
+      "title": "Настройки розничного портала",
+      "primaryColor": "Основной цвет",
+      "secondaryColor": "Дополнительный цвет",
+      "headlineText": "Заголовок",
+      "headlineTextPlaceholder": "Введите текст заголовка",
+      "logoUrl": "URL логотипа",
+      "logoUrlPlaceholder": "Введите URL логотипа",
+      "faviconUrl": "URL фавикона",
+      "faviconUrlPlaceholder": "Введите URL фавикона",
+      "faviconUrlHint": "Рекомендуемый размер: 32x32 пикселя",
+      "domains": "Домены",
+      "saveButton": "Сохранить"
+    }
+  },
+  "domains": {
+    "id": "ID",
+    "name": "Название",
+    "description": "Описание",
+    "status": "Статус",
+    "createdDate": "Дата создания",
+    "edit": "Редактировать домен",
+    "create": "Создать домен",
+    "active": "Активный",
+    "inactive": "Неактивный",
+    "activate": "Активировать",
+    "deactivate": "Деактивировать",
+    "applicationType": "Тип приложения",
+    "nameRequired": "Название обязательно",
+    "applicationTypeRequired": "Тип приложения обязателен"
+  },
+  "add-subscriber": {
+    "title": "Добавить подписчика",
+    "provider": "Поставщик услуг",
+    "select-provider": "Выберите поставщика услуг",
+    "provider-required": "Поставщик услуг обязателен",
+    "product": "Продукт",
+    "select-product": "Выберите продукт",
+    "product-required": "Продукт обязателен",
+    "name": "Имя подписчика",
+    "enter-name": "Введите имя подписчика",
+    "name-required": "Имя подписчика обязательно",
+    "email": "Email",
+    "enter-email": "Введите email",
+    "email-required": "Email обязателен",
+    "email-invalid": "Неверный формат email"
+  },
+  "send-registration-email": {
+    "title": "Отправить регистрационное письмо",
+    "submit": "Отправить письмо"
   }
 }

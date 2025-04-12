@@ -1,0 +1,38 @@
+<app-header class="os-header-sticky"
+            [formGroup]="filterForm"
+            [tableConfig$]="tableConfig$"
+            (onAddAction)="createDomain()"
+            (columnSelectionChange)="onColumnSelectionChanged($event)">
+    <ng-container header-custom-inputs>
+        <input cFormControl formControlName="name" [type]="'text'" placeholder="{{ 'domains.name' | translate }}">
+        <button cButton
+                color="secondary"
+                [disabled]="filterForm.pristine"
+                (click)="resetForm()">
+            <svg cIcon name="cilReload"></svg>
+        </button>
+    </ng-container>
+</app-header>
+<generic-table [config$]="tableConfig$"
+               [menu]="menuTemplate"
+               [data$]="dataList$"
+               [isRowClickable]="true"
+               (pageChange)="onPageChange($event)"></generic-table>
+
+<ng-template #menuTemplate let-item>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="editDomainName(item)">{{ 'domains.edit' | translate }}</button>
+        <button mat-menu-item (click)="changeDomainState(item)">
+            {{ item.active ? ('domains.deactivate' | translate) : ('domains.activate' | translate) }}
+        </button>
+    </mat-menu>
+</ng-template>
+
+<ng-template #activeTemplate let-data='context'>
+    <c-badge [color]="data.active ? 'success' : 'danger'">
+        {{ data.active ? ('domains.active' | translate) : ('domains.inactive' | translate) }}
+    </c-badge>
+</ng-template>

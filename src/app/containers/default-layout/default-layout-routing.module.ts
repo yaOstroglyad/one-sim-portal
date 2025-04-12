@@ -5,13 +5,13 @@ import { DefaultLayoutComponent } from './default-layout.component';
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'customers'
-  },
-  {
-    path: '',
     component: DefaultLayoutComponent,
     children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'customers'
+      },
       {
         path: 'providers',
         loadChildren: () =>
@@ -52,8 +52,7 @@ const routes: Routes = [
       },
       {
         path: 'settings',
-        loadChildren: () =>
-            import('../../views/settings/settings.module').then((m) => m.SettingsModule)
+        loadChildren: () => import('../../views/settings/settings-routing').then(m => m.SettingsRouting)
       },
     ]
   }

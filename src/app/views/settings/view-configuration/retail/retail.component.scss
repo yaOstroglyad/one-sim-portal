@@ -1,0 +1,5 @@
+@import 'src/scss/_view-configuration.scss';
+
+.retail-container {
+  @extend .config-container;
+} 

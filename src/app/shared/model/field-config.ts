@@ -13,6 +13,8 @@ export enum FieldType {
 	chips = 'chips',
 	checkbox = 'checkbox',
 	slide = 'slide',
+	color = 'color',
+	uuid = 'uuid'
 }
 
 export interface BackendFieldConfig {
@@ -37,6 +39,7 @@ export interface FieldConfig {
 	hintMessage?: string;
 	value?: any;
 	disabled?: boolean;
+	invisible?: boolean;
 	inputEvent?: (event: any, formGenerator: any, field: FieldConfig) => any
 
 	//select
@@ -46,6 +49,7 @@ export interface FieldConfig {
 	displayOptions?: {
 		newLine?: boolean;
 	},
+	multiple?: boolean;
 
 	//chips
 	addOnBlur?: boolean;

@@ -14,7 +14,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { ChipsInputComponent } from '../../shared/components/chips-input/chips-input.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { ReSendInviteEmailComponent } from './re-send-invite-email/re-send-invite-email.component';
 import { IconDirective } from '@coreui/icons-angular';
 import { HasPermissionDirective } from '../../shared/directives/has-permission.directive';
 import { TranslateModule } from '@ngx-translate/core';
@@ -23,8 +22,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [
     CustomersComponent,
-		EditCustomerComponent,
-		ReSendInviteEmailComponent,
+		EditCustomerComponent
   ],
 	imports: [
 		CommonModule,

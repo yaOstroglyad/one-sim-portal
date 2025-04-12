@@ -35,6 +35,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ShowQrCodeDialogComponent } from './show-qr-code-dialog/show-qr-code-dialog.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { AddSubscriberProductComponent } from './add-subscriber-product/add-subscriber-product.component';
+import { AddSubscriberComponent } from './add-subscriber/add-subscriber.component';
+import { SendRegistrationEmailComponent } from './send-registration-email/send-registration-email.component';
 
 @Component({
 	selector: 'app-private-customer-details',
@@ -162,9 +164,13 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 
 	public openShowQRCode(subscriber: Subscriber): void {
 		this.subscriberDataService.getSimDetails({ id: subscriber.simId }).subscribe(sim => {
+			console.log('sim', sim);
 			const dialogRef = this.dialog.open(ShowQrCodeDialogComponent, {
 				width: '350px',
-				data: sim.qrCode
+				data: {
+					qrCode: sim.qrCode,
+					iccid: sim.iccid
+				}
 			});
 
 			dialogRef.afterClosed().subscribe();
@@ -195,5 +201,33 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed().subscribe(() => this.loadCustomerDetails());
+	}
+
+	public addSubscriber() {
+		const data = {customerId: this.customerId};
+		const dialogRef = this.dialog.open(AddSubscriberComponent, {
+			width: '600px',
+			data
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.loadCustomerDetails();
+			}
+		});
+	}
+
+	public sendRegistrationEmail(subscriber: Subscriber): void {
+		const data = { id: subscriber.id };
+		const dialogRef = this.dialog.open(SendRegistrationEmailComponent, {
+			width: '400px',
+			data
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.loadCustomerDetails();
+			}
+		});
 	}
 }
