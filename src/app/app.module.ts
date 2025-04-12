@@ -31,12 +31,6 @@ export function combinedInitializer(translate: TranslateService, authService: Au
   };
 }
 
-export class GlobalErrorHandler implements ErrorHandler {
-  handleError(error: any) {
-    console.error('An error occurred:', error);
-  }
-}
-
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -67,7 +61,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     },
     {
       provide: ErrorHandler,
-      useClass: GlobalErrorHandler
+      useClass: GlobalErrorHandlerService
     },
     {
       provide: APP_INITIALIZER,

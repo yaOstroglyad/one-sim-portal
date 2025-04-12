@@ -3,9 +3,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { Title } from '@angular/platform-browser';
-import { AuthService, LanguageService } from './shared';
+import { AuthService } from './shared';
 import { Subject } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
 import { WhiteLabelService } from './shared/services/white-label.service';
 import { takeUntil, filter } from 'rxjs/operators';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
@@ -23,11 +22,9 @@ export class AppComponent implements OnInit, OnDestroy {
 		private titleService: Title,
 		private iconSetService: IconSetService,
 		private whiteLabelService: WhiteLabelService,
-		private languageService: LanguageService,
 		private $localStorage: LocalStorageService,
 		private $sessionStorage: SessionStorageService,
 		private authService: AuthService,
-		private translateService: TranslateService
 	) {
 		this.iconSetService.icons = { ...iconSubset };
 	}
@@ -36,7 +33,6 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.initializeApp();
 		this.subscribeToRouterEvents();
 		this.subscribeToViewConfigChanges();
-		this.subscribeToLanguageChanges();
 	}
 
 	ngOnDestroy(): void {
@@ -77,22 +73,5 @@ export class AppComponent implements OnInit, OnDestroy {
 		// 		const language = this.$localStorage.retrieve('language') || config.language;
 		// 		this.setLanguage(language);
 		// 	});
-	}
-
-	private subscribeToLanguageChanges(): void {
-		this.languageService.currentLang$.subscribe(lang => {
-			console.log('Language changed to:', lang);
-			this.updateHtmlLangAndDir(lang);
-		});
-	}
-
-	private setLanguage(lang: string): void {
-		this.languageService.setLanguage(lang);
-	}
-
-	private updateHtmlLangAndDir(lang: string): void {
-		const htmlTag = document.documentElement;
-		htmlTag.setAttribute('lang', lang);
-		htmlTag.setAttribute('dir', lang === 'he' ? 'rtl' : 'ltr');
 	}
 }
