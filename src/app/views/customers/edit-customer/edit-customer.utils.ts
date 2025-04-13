@@ -13,26 +13,14 @@ export function getCustomerCreateRequest(form: any) {
 	return {
 		customerCommand: {
 			id: form?.id || null,
-			accountId: form?.accountId || null,
-			companyId: form?.companyId || null,
 			name: form.name,
 			description: form.description,
-			externalId: form.externalId || null,
+			externalId: form.externalId || '',
 			tags: form?.tags || [],
 			type: form?.type || ''
 		},
-		userCommand: form?.type === CustomerType.Private ? {
-			id: form?.userId || null,
-			loginName: form.loginName || '',
-			password: form.password || '',
-			email: form.email || null,
-			phone: form.phone || null,
-			firstName: form.firstName || '',
-			lastName: form.lastName || ''
-		} : null,
 		subscriberCommand: form?.type === CustomerType.Private ? {
 			serviceProviderId: form.serviceProviderId || '',
-			simId: form.simId || null,
 			externalId: form.subscriberExternalId || null
 		} : null,
 		productId: form.productId || null,
@@ -66,32 +54,19 @@ export function getEditCustomerFormConfig(
 				invisible: true
 			},
 			{
+				type: FieldType.email,
+				name: 'email',
+				label: 'Email',
+				validators: [Validators.required, Validators.email],
+				hintMessage: emailHintMessage,
+				className: 'height-100px'
+			},
+			{
 				type: FieldType.text,
 				name: 'name',
 				label: 'Customer Name',
 				value: data.name,
 				validators: [Validators.required]
-			},
-			{
-				type: FieldType.textarea,
-				name: 'description',
-				label: 'Description',
-				value: data.description,
-			},
-			{
-				type: FieldType.text,
-				name: 'externalId',
-				label: 'Customer External ID',
-			},
-			{
-				type: FieldType.chips,
-				name: 'tags',
-				label: 'Tags',
-				placeholder: 'Enter tags...',
-				addOnBlur: true,
-				separatorKeysCodes: [ENTER, COMMA],
-				selectable: true,
-				removable: true,
 			},
 			{
 				type: FieldType.select,
@@ -108,46 +83,6 @@ export function getEditCustomerFormConfig(
 				)
 			},
 			{
-				type: FieldType.text,
-				name: 'subscriberExternalId',
-				label: 'Subscriber External ID'
-			},
-			{
-				type: FieldType.text,
-				name: 'loginName',
-				label: 'Login Name',
-				validators: [Validators.required]
-			},
-			{
-				type: FieldType.password,
-				name: 'password',
-				label: 'Password',
-				validators: [Validators.required]
-			},
-			{
-				type: FieldType.email,
-				name: 'email',
-				label: 'Email',
-				validators: [Validators.required, Validators.email],
-				hintMessage: emailHintMessage,
-				className: 'height-100px'
-			},
-			{
-				type: FieldType.text,
-				name: 'phone',
-				label: 'Phone'
-			},
-			{
-				type: FieldType.text,
-				name: 'firstName',
-				label: 'First Name'
-			},
-			{
-				type: FieldType.text,
-				name: 'lastName',
-				label: 'Last Name'
-			},
-			{
 				type: FieldType.select,
 				name: 'productId',
 				label: 'Product',
@@ -158,6 +93,34 @@ export function getEditCustomerFormConfig(
 						displayValue: `${product.name}`
 					})))
 				)
+			},
+			{
+				type: FieldType.textarea,
+				name: 'description',
+				label: 'Description',
+				value: data.description,
+			},
+			{
+				type: FieldType.chips,
+				name: 'tags',
+				label: 'Tags',
+				placeholder: 'Enter tags...',
+				addOnBlur: true,
+				separatorKeysCodes: [ENTER, COMMA],
+				selectable: true,
+				removable: true,
+			},
+			{
+				type: FieldType.text,
+				name: 'subscriberExternalId',
+				label: 'Subscriber External ID',
+				invisible: true
+			},
+			{
+				type: FieldType.text,
+				name: 'externalId',
+				label: 'Customer External ID',
+				invisible: true
 			}
 		]
 	};

@@ -44,7 +44,7 @@ export class AddSubscriberComponent implements OnInit {
   loading = true;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { customerId: string },
+    @Inject(MAT_DIALOG_DATA) public data: { customerId: string, email: string },
     public dialogRef: MatDialogRef<AddSubscriberComponent>,
     private snackBar: MatSnackBar
   ) {}
@@ -53,7 +53,11 @@ export class AddSubscriberComponent implements OnInit {
     const providers$ = this.providersDataService.list();
     const products$ = this.productsDataService.list();
 
-    this.formConfig = getAddSubscriberFormConfig(providers$, products$);
+    this.formConfig = getAddSubscriberFormConfig(
+      providers$,
+      products$,
+      this.data.email
+    );
     this.loading = false;
   }
 
@@ -73,8 +77,8 @@ export class AddSubscriberComponent implements OnInit {
       const formValue = this.form.value;
       const payload = {
         customerId: this.data.customerId,
-        serviceProviderId: formValue.serviceProvider.id,
-        productId: formValue.product.id,
+        serviceProviderId: formValue.serviceProviderId,
+        productId: formValue.productId,
         subscriberName: formValue.subscriberName,
         email: formValue.email
       };

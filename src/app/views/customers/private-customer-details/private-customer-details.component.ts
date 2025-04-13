@@ -77,6 +77,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 
 	customerDetailsView$: Observable<DataObject>;
 	timelineEvents: TimelineEvent[] = [];
+	customerDetails: DataObject;
 	totalSpent: number = 0;
 	totalUsedGB: number = 0;
 	currency: string = 'USD';
@@ -97,8 +98,8 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 		this.customerDetailsView$
 			.pipe(
 				switchMap((customerDetails: DataObject) => {
-					console.log('customerDetails', customerDetails);
 					const subscriberId = customerDetails?.subscribers[0]?.id;
+					this.customerDetails = customerDetails;
 					this.subscribers = customerDetails.subscribers;
 
 					if (!subscriberId) {
@@ -209,7 +210,10 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	}
 
 	public addSubscriber() {
-		const data = {customerId: this.customerId};
+		const data = {
+			customerId: this.customerId,
+			email: this.customerDetails.userProfile.email
+		};
 		const dialogRef = this.dialog.open(AddSubscriberComponent, {
 			width: '600px',
 			data

@@ -7,13 +7,14 @@ import { Validators } from '@angular/forms';
 
 export function getAddSubscriberFormConfig(
   providers$: Observable<Provider[]>,
-  products$: Observable<Package[]>
+  products$: Observable<Package[]>,
+  email: string
 ): FormConfig {
   return {
     fields: [
       {
         type: FieldType.select,
-        name: 'serviceProvider',
+        name: 'serviceProviderId',
         label: 'add-subscriber.provider',
         validators: [Validators.required],
         options: providers$.pipe(map(providers => providers.map(provider => ({ value: provider.id, displayValue: provider.name })))),
@@ -21,7 +22,7 @@ export function getAddSubscriberFormConfig(
       },
       {
         type: FieldType.select,
-        name: 'product',
+        name: 'productId',
         label: 'add-subscriber.product',
         validators: [Validators.required],
         options: products$.pipe(map(products => products.map(product => ({ value: product.id, displayValue: product.name })))),
@@ -31,16 +32,18 @@ export function getAddSubscriberFormConfig(
         type: FieldType.text,
         name: 'subscriberName',
         label: 'add-subscriber.name',
-        validators: [Validators.required],
+        validators: [],
         placeholder: 'add-subscriber.enter-name'
       },
       {
         type: FieldType.email,
         name: 'email',
+        value: email,
         label: 'add-subscriber.email',
-        validators: [Validators.required, Validators.email],
-        placeholder: 'add-subscriber.enter-email'
+        validators: [],
+        placeholder: 'add-subscriber.enter-email',
+        hintMessage: 'Email will be sent to register the user.'
       }
     ]
   };
-} 
+}
