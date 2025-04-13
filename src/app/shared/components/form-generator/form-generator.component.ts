@@ -72,6 +72,17 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 		}
 	}
 
+	shouldFieldBeVisible(field: FieldConfig): boolean {
+		if (!field.dependsOn || field.dependsOn.length === 0) {
+			return true;
+		}
+
+		return field.dependsOn.every(dep => {
+			const control = this.form.get(dep);
+			return control && control.value !== undefined && control.value !== null && control.value !== '';
+		});
+	}
+
 	updateFieldValidators(fieldName: string, validators: any[]): void {
 		const control = this.form.get(fieldName);
 

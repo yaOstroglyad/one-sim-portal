@@ -24,6 +24,7 @@ export function getAddSubscriberFormConfig(
         type: FieldType.select,
         name: 'productId',
         label: 'add-subscriber.product',
+        dependsOn: ['serviceProviderId'],
         validators: [Validators.required],
         options: products$.pipe(map(products => products.map(product => ({ value: product.id, displayValue: product.name })))),
         placeholder: 'add-subscriber.select-product'

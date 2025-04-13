@@ -56,6 +56,8 @@ export interface FieldConfig {
 	selectable?: boolean;
 	removable?: boolean;
 	separatorKeysCodes?: Array<any>;
+
+	dependsOn?: string[];
 }
 
 export interface FormConfig {

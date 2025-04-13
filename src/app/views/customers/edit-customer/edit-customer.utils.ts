@@ -87,6 +87,7 @@ export function getEditCustomerFormConfig(
 				name: 'productId',
 				label: 'Product',
 				validators: [],
+				dependsOn: ['serviceProviderId'],
 				options: productsDataService.list().pipe(
 					map(products => products.map(product => ({
 						value: product.id,
