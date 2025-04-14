@@ -14,6 +14,7 @@ export * from './components/generic-table/generic-table.module';
 export * from './components/column-control/column-control.module'
 export * from './components/no-data/no-data.module'
 export * from './components/form-generator/form-generator.module'
+export * from './components/form-generator/form-generator.component'
 
 export * from './components/generic-table/table-config-abstract.service';
 export * from './services/data.service';

@@ -1,6 +1,7 @@
 // field-config.model.ts
 import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { FormGeneratorComponent } from '../components/form-generator/form-generator.component';
 
 export enum FieldType {
 	text = 'text',
@@ -40,7 +41,7 @@ export interface FieldConfig {
 	value?: any;
 	disabled?: boolean;
 	invisible?: boolean;
-	inputEvent?: (event: any, formGenerator: any, field: FieldConfig) => any
+	inputEvent?: (event: any, formGenerator: FormGeneratorComponent, field: FieldConfig) => any
 
 	//select
 	options?: Observable<SelectOption[]> | ((values: Record<string, any>) => Observable<SelectOption[]>);

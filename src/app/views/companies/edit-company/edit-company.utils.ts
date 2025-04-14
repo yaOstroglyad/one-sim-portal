@@ -37,10 +37,7 @@ export function getEditCompanyFormConfig(
 				validators: [Validators.required],
 				options: of([
 					{ value: CustomerType.Corporate, displayValue: CustomerType.Corporate }
-				]),
-				inputEvent: (event, formGeneratorComponent) => {
-					console.log('formGeneratorComponent.form.value', formGeneratorComponent.form.value)
-				}
+				])
 			},
 			{
 				type: FieldType.text,

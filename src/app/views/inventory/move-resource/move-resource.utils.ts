@@ -1,6 +1,14 @@
 import { Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
-import { ProvidersDataService, OrdersDataService, CompaniesDataService, FormConfig, FieldType } from '../../../shared';
+import {
+	FormGeneratorComponent,
+	ProvidersDataService,
+	OrdersDataService,
+	CompaniesDataService,
+	FormConfig,
+	FieldType,
+	FieldConfig
+} from '../../../shared';
 
 export function getMoveResourceFormConfig(
 	serviceProviderDataService: ProvidersDataService,
@@ -50,7 +58,7 @@ export function getMoveResourceFormConfig(
 						})
 					))
 				),
-				inputEvent: () => {
+				inputEvent: (event: any, formGenerator: FormGeneratorComponent, field: FieldConfig) => {
 					// add "setValue"
 					// formGenerator.get('orderDescription').setValue()
 				}
