@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { Package } from '../model/package';
 import { DataService } from '../../shared';
+import { map } from 'rxjs/operators';
+import { Pagination } from '../model/grid-configs';
 
 @Injectable({
 	providedIn: 'root'
@@ -32,15 +34,16 @@ export class ProductsDataService extends DataService<Package> {
 	}): Observable<Package[]> {
 		const queryParams: any = {
 			serviceProviderId: params.serviceProviderId,
-			...(params.customerId && {customerId: params.customerId}),
-			...(params.page != null && {page: params.page}),
-			...(params.size != null && {size: params.size}),
-			...(params.sort && params.sort.length > 0 && {sort: params.sort})
+			...(params.customerId && { customerId: params.customerId }),
+			page: params.page ?? 0,
+			size: params.size ?? 200,
+			...(params.sort?.length ? { sort: params.sort } : {})
 		};
 
-		return this.http.get<Package[]>('/api/v1/products/query/available', {
+		return this.http.get<Pagination<Package>>('/api/v1/products/query/available', {
 			params: queryParams
 		}).pipe(
+			map(e => e?.content),
 			catchError(() => {
 				console.warn('Error occurred, returning mocked data');
 				return of([]);

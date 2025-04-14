@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { DataService } from './data.service';
 import { Customer, CustomerType, DataObject } from '../model';
+import { Pagination } from '../model/grid-configs';
 
 @Injectable({
 	providedIn: 'root'
@@ -28,7 +29,10 @@ export class CustomersDataService extends DataService<Customer> {
 		);
 	}
 
-	paginatedCustomers(searchParams: any = {}, page: number = 0, size: number = 20, sort: string[] = []): Observable<any> {
+	paginatedCustomers(searchParams: any = {},
+										 page: number = 0,
+										 size: number = 20,
+										 sort: string[] = []): Observable<Pagination<Customer>> {
 		let params = new HttpParams()
 			.set('page', page.toString())
 			.set('size', size.toString());
@@ -43,7 +47,7 @@ export class CustomersDataService extends DataService<Customer> {
 			}
 		});
 
-		return this.http.get<any>('/api/v1/customers/query/all/page', { params }).pipe(
+		return this.http.get<any>('/api/v1/customers/query/all/page', {params}).pipe(
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
 				return of({
