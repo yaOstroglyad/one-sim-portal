@@ -51,12 +51,12 @@ export class AddSubscriberComponent implements OnInit {
 
   ngOnInit(): void {
     const providers$ = this.providersDataService.list();
-    const products$ = this.productsDataService.list();
 
     this.formConfig = getAddSubscriberFormConfig(
       providers$,
-      products$,
-      this.data.email
+      this.productsDataService,
+      this.data.email,
+      this.data.customerId
     );
     this.loading = false;
   }
