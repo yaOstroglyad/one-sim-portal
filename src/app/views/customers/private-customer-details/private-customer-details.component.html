@@ -4,8 +4,13 @@
             <h1>{{ customerDetailsView.customer.name }}</h1>
         </div>
         <div class="header-actions">
-            <div *ngIf="isAdmin"
-                 [matTooltipDisabled]="!!selectedSubscriber"
+            <div class="c-pointer highlight-tab">
+                <button mat-button
+                        (click)="addSubscriber()">
+                    {{ 'customer.private-customer-details.add-subscriber' | translate }}
+                </button>
+            </div>
+            <div [matTooltipDisabled]="!!selectedSubscriber"
                  class="c-pointer highlight-tab"
                  matTooltip="{{ 'customer.private-customer-details.add-product-action-tooltip' | translate }}"
                  matTooltipPosition="below"
@@ -16,12 +21,6 @@
                         [disabled]="!selectedSubscriber"
                         (click)="addProduct(selectedSubscriber)">
                     {{ 'customer.private-customer-details.add-product' | translate }}
-                </button>
-            </div>
-            <div class="c-pointer highlight-tab">
-                <button mat-button
-                        (click)="addSubscriber()">
-                    {{ 'customer.private-customer-details.add-subscriber' | translate }}
                 </button>
             </div>
             <div [matTooltipDisabled]="!!selectedSubscriber"
