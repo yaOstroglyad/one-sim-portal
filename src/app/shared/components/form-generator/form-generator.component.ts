@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { FieldConfig, FieldType, FormConfig } from '../../model';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { createControl } from './form-generator.utils';
+import { createControl, initDynamicOptionsForField, setupDisabledState } from './form-generator.utils';
 import { isFunction } from 'rxjs/internal/util/isFunction';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -35,11 +35,16 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 
 	public ngOnInit(): void {
 		this.form = this.createGroup(this.config);
+
+		setupDisabledState(this.form, this.config.fields);
+
 		this.form.valueChanges.pipe(
 			takeUntil(this.unsubscribe$))
 			.subscribe(() => {
 				this.formChanges.emit(this.form);
 			});
+
+		this.initDynamicOptions();
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -83,22 +88,10 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 		});
 	}
 
-	updateFieldValidators(fieldName: string, validators: any[]): void {
-		const control = this.form.get(fieldName);
-
-		if (control) {
-			control.clearValidators();
-			control.setValidators(validators);
-			control.updateValueAndValidity();
-		}
-	}
-
-	toggleFieldHint(fieldName: string, hintMessage: string | null, className?: string): void {
-		const fieldConfig = this.config.fields.find(field => field.name === fieldName);
-		if (fieldConfig) {
-			fieldConfig.hintMessage = hintMessage;
-			fieldConfig.className = className;
-		}
+	private initDynamicOptions(): void {
+		this.config.fields.forEach(field => {
+			initDynamicOptionsForField(field, this.form, this.unsubscribe$);
+		});
 	}
 
 	openColorPicker(fieldName: string): void {

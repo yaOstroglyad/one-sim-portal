@@ -36,8 +36,7 @@
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <input matInput
                        [formControlName]="field.name"
-                       [type]="field.type"
-                       [disabled]="field.disabled">
+                       [type]="field.type">
 
                 <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
                     <mat-icon fontIcon="info_outline"></mat-icon>
@@ -51,8 +50,7 @@
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <input matInput
                        [formControlName]="field.name"
-                       [type]="field.type"
-                       [disabled]="field.disabled">
+                       [type]="field.type">
 
                 <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
                     <mat-icon fontIcon="info_outline"></mat-icon>
@@ -64,8 +62,9 @@
         <ng-template #textareaTemplate let-field>
             <mat-form-field appearance="outline" [attr.class]="'full-width ' + field.className">
                 <mat-label>{{ field.label | translate }}</mat-label>
-                <textarea matInput [placeholder]="field.placeholder | translate" [formControlName]="field.name"
-                          [disabled]="field.disabled"></textarea>
+                <textarea matInput
+                          [formControlName]="field.name"
+                          [placeholder]="field.placeholder | translate"></textarea>
 
                 <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
                     <mat-icon fontIcon="info_outline"></mat-icon>
@@ -77,8 +76,9 @@
         <ng-template #passwordTemplate let-field>
             <mat-form-field appearance="outline" [attr.class]="'full-width ' + field.className">
                 <mat-label>{{ field.label | translate }}</mat-label>
-                <input matInput [formControlName]="field.name" [type]="field.type"
-                       [disabled]="field.disabled">
+                <input matInput
+                       [formControlName]="field.name"
+                       [type]="field.type">
                 <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
                     <mat-icon fontIcon="info_outline"></mat-icon>
                     {{ field.hintMessage | translate }}
@@ -93,7 +93,6 @@
                        [formControlName]="field.name"
                        [type]="field.type"
                        [placeholder]="field.placeholder | translate"
-                       [disabled]="field.disabled"
                        type="email">
 
                 <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
@@ -112,8 +111,9 @@
         <ng-template #datePickerTemplate let-field>
             <mat-form-field appearance="outline" [attr.class]="'full-width ' + field.className">
                 <mat-label>{{ field.label | translate }}</mat-label>
-                <input matInput [matDatepicker]="picker" [formControlName]="field.name"
-                       [disabled]="field.disabled">
+                <input matInput
+                       [matDatepicker]="picker"
+                       [formControlName]="field.name">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
 
@@ -132,8 +132,7 @@
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <mat-select [formControlName]="field.name"
                             (selectionChange)="onInputChange($event, field)"
-                            [multiple]="field.multiple"
-                            [disabled]="field.disabled">
+                            [multiple]="field.multiple">
                     <mat-option *ngFor="let option of field.options | async" [value]="option.value">
                         {{ option.displayValue }}
                     </mat-option>
@@ -148,8 +147,7 @@
         <ng-template #checkboxTemplate let-field>
             <mat-checkbox [attr.class]="'full-width ' + field.className"
                           [formControlName]="field.name"
-                          [color]="'primary'"
-                          [disabled]="field.disabled">
+                          [color]="'primary'">
                 {{ field.label | translate }}
             </mat-checkbox>
         </ng-template>
@@ -160,7 +158,6 @@
                 <div></div>
                 <c-form-check [switch]="true">
                     <input [formControlName]="field.name"
-                           [disabled]="field.disabled"
                            cFormCheckInput type="checkbox"/>
                 </c-form-check>
             </div>
@@ -175,8 +172,7 @@
                     [addOnBlur]="field.addOnBlur"
                     [separatorKeysCodes]="field.separatorKeysCodes"
                     [selectable]="field.selectable"
-                    [removable]="field.removable"
-                    [disabled]="field.disabled">
+                    [removable]="field.removable">
             </app-chips-input>
         </ng-template>
 
@@ -184,8 +180,9 @@
             <div class="color-picker-container">
                 <label>{{ field.label | translate }}</label>
                 <div class="color-picker-wrapper">
-                    <input type="color" [formControlName]="field.name" [id]="field.name"
-                           [disabled]="field.disabled">
+                    <input type="color"
+                           [formControlName]="field.name"
+                           [id]="field.name">
                     <div class="color-preview" [style.background-color]="form.get(field.name)?.value"
                          (click)="openColorPicker(field.name)"></div>
                     <span class="color-value">{{ form.get(field.name)?.value }}</span>

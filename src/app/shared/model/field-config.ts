@@ -43,12 +43,10 @@ export interface FieldConfig {
 	inputEvent?: (event: any, formGenerator: any, field: FieldConfig) => any
 
 	//select
-	options?: Observable<Array<SelectOption>>;
+	options?: Observable<SelectOption[]> | ((values: Record<string, any>) => Observable<SelectOption[]>);
+
 	validators?: ValidatorFn | ValidatorFn[];
 	asyncValidators?: AsyncValidatorFn | AsyncValidatorFn[];
-	displayOptions?: {
-		newLine?: boolean;
-	},
 	multiple?: boolean;
 
 	//chips
@@ -58,6 +56,7 @@ export interface FieldConfig {
 	separatorKeysCodes?: Array<any>;
 
 	dependsOn?: string[];
+	dependsOnValue?: string[];
 }
 
 export interface FormConfig {

@@ -18,10 +18,7 @@ export const RegistrationConfig: FormConfig = {
 				Validators.required,
 				Validators.email
 			],
-			disabled: false,
-			displayOptions: {
-				newLine: true
-			}
+			disabled: false
 		},
 		{
 			type: FieldType.password,
@@ -29,10 +26,7 @@ export const RegistrationConfig: FormConfig = {
 			label: 'register.passwordLabel',
 			value: '',
 			validators: [Validators.required, Validators.minLength(8)],
-			disabled: false,
-			displayOptions: {
-				newLine: true
-			}
+			disabled: false
 		},
 		{
 			type: FieldType.password,
@@ -40,10 +34,7 @@ export const RegistrationConfig: FormConfig = {
 			label: 'register.confirmPasswordLabel',
 			value: '',
 			validators: [Validators.required],
-			disabled: false,
-			displayOptions: {
-				newLine: true
-			}
+			disabled: false
 		}
 	],
 	formValidators: [passwordMatchValidator]

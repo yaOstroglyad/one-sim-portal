@@ -4,9 +4,6 @@ import { of } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { map } from 'rxjs/operators';
 
-const typeHintMessage = 'The SIM card is automatically attached to the subscriber, ' +
-	'who is created automatically at the moment of private customer creation.'
-
 const emailHintMessage = 'Email will be sent to register the user, hence this field is mandatory.'
 
 export function getCustomerCreateRequest(form: any) {
@@ -87,13 +84,21 @@ export function getEditCustomerFormConfig(
 				name: 'productId',
 				label: 'Product',
 				validators: [],
-				dependsOn: ['serviceProviderId'],
-				options: productsDataService.list().pipe(
-					map(products => products.map(product => ({
-						value: product.id,
-						displayValue: `${product.name}`
-					})))
-				)
+				dependsOnValue: ['serviceProviderId'],
+				disabled: true,
+				options: (values) => {
+					const { serviceProviderId } = values;
+					if (!serviceProviderId) return of([]);
+
+					return productsDataService.listFiltered({
+						serviceProviderId: serviceProviderId
+					}).pipe(
+						map(products => products.map(p => ({
+							value: p.id,
+							displayValue: p.name
+						})))
+					);
+				}
 			},
 			{
 				type: FieldType.textarea,
