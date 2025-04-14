@@ -4,69 +4,68 @@
             <h1>{{ customerDetailsView.customer.name }}</h1>
         </div>
         <div class="header-actions">
-            <div class="c-pointer highlight-tab">
-                <button mat-button
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button *ngIf="isAdmin"
+                        mat-menu-item
                         (click)="addSubscriber()">
-                    {{ 'customer.private-customer-details.add-subscriber' | translate }}
+                    <mat-icon>person_add</mat-icon>
+                    <span>{{ 'customer.private-customer-details.add-subscriber' | translate }}</span>
                 </button>
-            </div>
-            <div [matTooltipDisabled]="!!selectedSubscriber"
-                 class="c-pointer highlight-tab"
-                 matTooltip="{{ 'customer.private-customer-details.add-product-action-tooltip' | translate }}"
-                 matTooltipPosition="below"
-                 matTooltipClass="tooltip"
-                 (mouseenter)="!selectedSubscriber && highlightTab()"
-                 (mouseleave)="!selectedSubscriber && removeHighlightTab()">
-                <button mat-button
+                <button mat-menu-item
+                        *ngIf="isAdmin"
                         [disabled]="!selectedSubscriber"
-                        (click)="addProduct(selectedSubscriber)">
-                    {{ 'customer.private-customer-details.add-product' | translate }}
-                </button>
-            </div>
-            <div [matTooltipDisabled]="!!selectedSubscriber"
-                 class="c-pointer highlight-tab"
-                 matTooltip="{{ 'customer.private-customer-details.refundTooltip' | translate }}"
-                 matTooltipPosition="below"
-                 matTooltipClass="tooltip"
-                 (mouseenter)="!selectedSubscriber && highlightTab()"
-                 (mouseleave)="!selectedSubscriber && removeHighlightTab()">
-                <button mat-button
-                        [disabled]="!selectedSubscriber"
-                        (click)="openRefund(selectedSubscriber)">
-                    {{ 'customer.private-customer-details.refund' | translate }}
-                </button>
-            </div>
-            <div [matTooltipDisabled]="!!selectedSubscriber"
-                 class="c-pointer"
-                 matTooltip="{{ 'customer.private-customer-details.qrCodeTooltip' | translate }}"
-                 matTooltipPosition="below"
-                 matTooltipClass="tooltip"
-                 (mouseenter)="!selectedSubscriber && highlightTab()"
-                 (mouseleave)="!selectedSubscriber && removeHighlightTab()">
-                <button mat-button
-                        [disabled]="!selectedSubscriber"
-                        (click)="openShowQRCode(selectedSubscriber)">
-                    {{ 'customer.private-customer-details.showQRCode' | translate }}
-                </button>
-            </div>
-            <div [matTooltipDisabled]="!!selectedSubscriber"
-                 class="c-pointer"
-                 matTooltip="{{ 'customer.private-customer-details.sendRegistrationEmailTooltip' | translate }}"
-                 matTooltipPosition="below"
-                 matTooltipClass="tooltip"
-                 (mouseenter)="!selectedSubscriber && highlightTab()"
-                 (mouseleave)="!selectedSubscriber && removeHighlightTab()">
-                <button mat-button
-                        [disabled]="!selectedSubscriber"
+                        [matTooltipDisabled]="!!selectedSubscriber"
+                        matTooltip="{{ 'customer.private-customer-details.sendRegistrationEmailTooltip' | translate }}"
+                        matTooltipPosition="below"
+                        matTooltipClass="tooltip"
+                        (mouseenter)="!selectedSubscriber && highlightTab()"
+                        (mouseleave)="!selectedSubscriber && removeHighlightTab()"
                         (click)="sendRegistrationEmail(selectedSubscriber)">
-                    {{ 'customer.private-customer-details.sendRegistrationEmail' | translate }}
+                    <mat-icon>email</mat-icon>
+                    <span>{{ 'customer.private-customer-details.sendRegistrationEmail' | translate }}</span>
                 </button>
-            </div>
-            <!--            <button mat-button>Unblock</button>-->
-            <!--            <button mat-button color="warn">Block</button>-->
-            <!--            <button mat-icon-button>-->
-            <!--                <mat-icon>more_vert</mat-icon>-->
-            <!--            </button>-->
+                <button mat-menu-item
+                        *ngIf="isAdmin"
+                        [disabled]="!selectedSubscriber"
+                        [matTooltipDisabled]="!!selectedSubscriber"
+                        matTooltip="{{ 'customer.private-customer-details.add-product-action-tooltip' | translate }}"
+                        matTooltipPosition="below"
+                        matTooltipClass="tooltip"
+                        (mouseenter)="!selectedSubscriber && highlightTab()"
+                        (mouseleave)="!selectedSubscriber && removeHighlightTab()"
+                        (click)="addProduct(selectedSubscriber)">
+                    <mat-icon>add_shopping_cart</mat-icon>
+                    <span>{{ 'customer.private-customer-details.add-product' | translate }}</span>
+                </button>
+                <button mat-menu-item
+                        *ngIf="isAdmin"
+                        [disabled]="!selectedSubscriber"
+                        [matTooltipDisabled]="!!selectedSubscriber"
+                        matTooltip="{{ 'customer.private-customer-details.refundTooltip' | translate }}"
+                        matTooltipPosition="below"
+                        matTooltipClass="tooltip"
+                        (mouseenter)="!selectedSubscriber && highlightTab()"
+                        (mouseleave)="!selectedSubscriber && removeHighlightTab()"
+                        (click)="openRefund(selectedSubscriber)">
+                    <mat-icon>money_off</mat-icon>
+                    <span>{{ 'customer.private-customer-details.refund' | translate }}</span>
+                </button>
+                <button mat-menu-item
+                        [disabled]="!selectedSubscriber"
+                        [matTooltipDisabled]="!!selectedSubscriber"
+                        matTooltip="{{ 'customer.private-customer-details.qrCodeTooltip' | translate }}"
+                        matTooltipPosition="below"
+                        matTooltipClass="tooltip"
+                        (mouseenter)="!selectedSubscriber && highlightTab()"
+                        (mouseleave)="!selectedSubscriber && removeHighlightTab()"
+                        (click)="openShowQRCode(selectedSubscriber)">
+                    <mat-icon>qr_code</mat-icon>
+                    <span>{{ 'customer.private-customer-details.showQRCode' | translate }}</span>
+                </button>
+            </mat-menu>
         </div>
     </div>
 

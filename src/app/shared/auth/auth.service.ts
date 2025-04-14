@@ -38,7 +38,11 @@ export class AuthService {
     //     this.permissions = permissions;
     //   }),
     //   catchError(() => {
-        const admins = ['admin'];
+        const admins = [
+          'admin',
+          'daniel@1-esim.com',
+          'vasily@1-esim.com'
+        ];
         const customers = [
           'anex@mail.com',
           'welcome@intourist.com',
