@@ -5,7 +5,6 @@ import { SimInfo } from '../model';
 import { SubscriberStatusEvent } from '../model';
 import { SimLocations } from '../model';
 
-// Определяем интерфейс для создания подписчика
 export interface CreateSubscriberDto {
 	customerId: string;
 	serviceProviderId: string;
@@ -20,7 +19,6 @@ export interface CreateSubscriberDto {
 export class SubscriberDataService {
 	http = inject(HttpClient);
 
-	// Метод для создания нового подписчика
 	createSubscriber(payload: CreateSubscriberDto): Observable<any> {
 		return this.http.post('/api/v1/subscribers/command/create', payload);
 	}
