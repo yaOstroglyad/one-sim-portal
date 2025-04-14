@@ -41,7 +41,7 @@ export class AuthService {
         const admins = [
           'admin',
           'daniel@1-esim.com',
-          'vasily@1-esim.com'
+          'vb@venturebot.fund'
         ];
         const customers = [
           'anex@mail.com',
