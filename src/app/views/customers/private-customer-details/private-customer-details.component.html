@@ -104,13 +104,13 @@
                                 <p><strong>{{ 'customer.private-customer-details.status' | translate }}: </strong>
                                     <c-badge
                                             [color]="customerDetailsView.customer.status === 'active' ? 'success' : 'secondary'">
-                                        {{ customerDetailsView.customer.status }}
+                                        {{ customerDetailsView?.customer?.status || '-' }}
                                     </c-badge>
                                 </p>
                                 <p>
                                     <strong>{{ 'createUser.email' | translate }}: </strong>
                                     <span copyToClipboard>
-                                        {{ customerDetailsView.userProfile.email }}
+                                        {{ customerDetailsView?.userProfile?.email || '-' }}
                                     </span>
                                 </p>
                                 <p><strong>{{ 'customer.private-customer-details.language' | translate }}: </strong>EN
