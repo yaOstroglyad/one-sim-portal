@@ -15,7 +15,7 @@ export class AddSubscriberProductService {
 
 	constructor(public http: HttpClient) {}
 
-	list(id: any, params: { page?: number; size?: number; } = {page: 0, size: 100}): Observable<SelectOption[]> {
+	list(id: any, params: { page?: number; size?: number; } = {page: 0, size: 200}): Observable<SelectOption[]> {
 		return this.http.get<Pagination<SubscriberProduct>>(this.apiUrl + `/${id}`, { params }).pipe(
 			map((response: Pagination<SubscriberProduct>) => {
 				return response.content.map((product: SubscriberProduct) => ({
