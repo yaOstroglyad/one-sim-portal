@@ -89,7 +89,6 @@ export class AuthService {
   }
 
   hasPermission(permission: string): boolean {
-    console.log('this.permissions', this.permissions)
     return this.permissions.includes(permission);
   }
 
