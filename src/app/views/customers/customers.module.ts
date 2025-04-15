@@ -17,6 +17,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { IconDirective } from '@coreui/icons-angular';
 import { HasPermissionDirective } from '../../shared/directives/has-permission.directive';
 import { TranslateModule } from '@ngx-translate/core';
+import { CustomersTableService } from './customers-table.service';
 
 
 @NgModule({
@@ -46,6 +47,9 @@ import { TranslateModule } from '@ngx-translate/core';
 		ButtonDirective,
 		HasPermissionDirective,
 		TranslateModule
+	],
+	providers: [
+		CustomersTableService
 	]
 })
 export class CustomersModule { }

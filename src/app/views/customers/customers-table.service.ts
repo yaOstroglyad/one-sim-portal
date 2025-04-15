@@ -1,14 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ADMIN_PERMISSION, AuthService, TableConfig, TableConfigAbstractService } from 'src/app/shared';
+import {
+	AuthService,
+	SPECIAL_PERMISSION,
+	TableConfig,
+	TableConfigAbstractService
+} from 'src/app/shared';
 import { Customer } from '../../shared';
 
-@Injectable({
-	providedIn: 'root'
-})
+@Injectable()
 export class CustomersTableService extends TableConfigAbstractService<Customer> {
 	private authService = inject(AuthService);
-	private isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+	private isSpecial = this.authService.hasPermission(SPECIAL_PERMISSION);
 
 	public originalDataSubject = new BehaviorSubject<Customer[]>([]);
 	public dataList$: Observable<Customer[]> = this.originalDataSubject.asObservable();
@@ -21,7 +24,7 @@ export class CustomersTableService extends TableConfigAbstractService<Customer> 
 		translatePrefix: 'customer.',
 		showCheckboxes: false,
 		showEditButton: true,
-		showAddButton: this.isAdmin,
+		showAddButton: this.isSpecial,
 		showMenu: true,
 		columns: [
 			{visible: false, key: 'id', header: 'id'},

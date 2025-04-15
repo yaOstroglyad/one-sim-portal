@@ -17,7 +17,7 @@ import {
 	SimLocations,
 	EmptyStateComponent,
 	RefundProductComponent,
-	Subscriber, ADMIN_PERMISSION, AuthService
+	Subscriber, ADMIN_PERMISSION, AuthService, SPECIAL_PERMISSION
 } from '../../../shared';
 import { forkJoin, Observable, of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -84,7 +84,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	totalUsedGB: number = 0;
 	currency: string = 'USD';
 	simLocations: SimLocations[];
-	isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+	isSpecial = this.authService.hasPermission(SPECIAL_PERMISSION);
 	customerId: string;
 	subscribers: Subscriber[];
 	selectedSubscriber: Subscriber;
@@ -172,7 +172,6 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 
 	public openShowQRCode(subscriber: Subscriber): void {
 		this.subscriberDataService.getSimDetails({ id: subscriber.simId }).subscribe(sim => {
-			console.log('sim', sim);
 			const dialogRef = this.dialog.open(ShowQrCodeDialogComponent, {
 				width: '350px',
 				data: {

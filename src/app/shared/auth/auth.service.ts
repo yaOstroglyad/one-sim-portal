@@ -9,10 +9,12 @@ import { WhiteLabelService } from '../services/white-label.service';
 import { Router } from '@angular/router';
 
 export const ADMIN_PERMISSION = 'adminAccess';
+export const SPECIAL_PERMISSION = 'specialAccess';
 export const CUSTOMER_PERMISSION = 'customerAccess';
 export const SUPPORT_PERMISSION = 'supportAccess';
 //TODO mb Arrays will be removed later
 export const ARRAY_OF_ADMIN_PERMISSIONS = [ADMIN_PERMISSION];
+export const ARRAY_OF_SPECIAL_PERMISSIONS = [SPECIAL_PERMISSION];
 export const ARRAY_OF_CUSTOMER_PERMISSIONS = [CUSTOMER_PERMISSION];
 export const ARRAY_OF_SUPPORT_PERMISSIONS = [SUPPORT_PERMISSION];
 
@@ -39,15 +41,16 @@ export class AuthService {
     //   }),
     //   catchError(() => {
         const admins = [
-          'admin',
+          'admin'
+        ];
+        const special = [
           'daniel@1-esim.com',
-          'vb@venturebot.fund'
+          'vb@venturebot.fund',
         ];
         const customers = [
           'anex@mail.com',
           'welcome@intourist.com',
           'sergey.tepkeev@anextour.com',
-          'daniel@1-esim.com',
           'daniel-1esim',
           'vasily@1-esim.com',
           'vb@venturebot.fund',
@@ -66,6 +69,8 @@ export class AuthService {
         if (loggedUser) {
           if (admins.includes(loggedUser.preferred_username) || admins.includes(loggedUser.email)) {
             this.permissions = [...ARRAY_OF_ADMIN_PERMISSIONS];
+          } else if (special.includes(loggedUser.preferred_username) || special.includes(loggedUser.email)) {
+            this.permissions = [...ARRAY_OF_SPECIAL_PERMISSIONS, ...ARRAY_OF_CUSTOMER_PERMISSIONS];
           } else if (customers.includes(loggedUser.preferred_username) || customers.includes(loggedUser.email)) {
             this.permissions = [...ARRAY_OF_CUSTOMER_PERMISSIONS];
           } else if (support.includes(loggedUser.preferred_username) || support.includes(loggedUser.email)) {
@@ -84,6 +89,7 @@ export class AuthService {
   }
 
   hasPermission(permission: string): boolean {
+    console.log('this.permissions', this.permissions)
     return this.permissions.includes(permission);
   }
 
