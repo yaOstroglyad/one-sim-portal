@@ -85,6 +85,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	currency: string = 'USD';
 	simLocations: SimLocations[];
 	isSpecial = this.authService.hasPermission(SPECIAL_PERMISSION);
+	isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	customerId: string;
 	subscribers: Subscriber[];
 	selectedSubscriber: Subscriber;

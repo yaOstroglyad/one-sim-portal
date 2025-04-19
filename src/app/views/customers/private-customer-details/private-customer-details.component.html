@@ -8,14 +8,14 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button *ngIf="isSpecial"
+                <button *ngIf="isAdmin || isSpecial"
                         mat-menu-item
                         (click)="addSubscriber()">
                     <mat-icon>person_add</mat-icon>
                     <span>{{ 'customer.private-customer-details.add-subscriber' | translate }}</span>
                 </button>
                 <button mat-menu-item
-                        *ngIf="isSpecial"
+                        *ngIf="isAdmin || isSpecial"
                         [disabled]="!selectedSubscriber"
                         [matTooltipDisabled]="!!selectedSubscriber"
                         matTooltip="{{ 'customer.private-customer-details.sendRegistrationEmailTooltip' | translate }}"
@@ -28,7 +28,7 @@
                     <span>{{ 'customer.private-customer-details.sendRegistrationEmail' | translate }}</span>
                 </button>
                 <button mat-menu-item
-                        *ngIf="isSpecial"
+                        *ngIf="isAdmin || isSpecial"
                         [disabled]="!selectedSubscriber"
                         [matTooltipDisabled]="!!selectedSubscriber"
                         matTooltip="{{ 'customer.private-customer-details.add-product-action-tooltip' | translate }}"
@@ -41,7 +41,7 @@
                     <span>{{ 'customer.private-customer-details.add-product' | translate }}</span>
                 </button>
                 <button mat-menu-item
-                        *ngIf="isSpecial"
+                        *ngIf="isAdmin || isSpecial"
                         [disabled]="!selectedSubscriber"
                         [matTooltipDisabled]="!!selectedSubscriber"
                         matTooltip="{{ 'customer.private-customer-details.refundTooltip' | translate }}"
