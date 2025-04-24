@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>{{ 'domains.editOwner' | translate }}</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div class="form-group">
+      <label for="ownerAccountId">{{ 'domains.ownerAccount' | translate }}</label>
+      <mat-select id="ownerAccountId" formControlName="ownerAccountId" class="form-control">
+        <mat-option *ngFor="let account of ownerAccounts$ | async" [value]="account.id">
+          {{ account.name }}
+        </mat-option>
+      </mat-select>
+      <div class="error-message" *ngIf="form.get('ownerAccountId').touched && form.get('ownerAccountId').errors?.required">
+        {{ 'domains.ownerAccountRequired' | translate }}
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">{{ 'common.cancel' | translate }}</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
+      {{ 'common.save' | translate }}
+    </button>
+  </mat-dialog-actions>
+</form> 
