@@ -6,7 +6,18 @@ import { map, catchError } from 'rxjs/operators';
 export interface ViewConfiguration {
   id: string;
   applicationType: "admin portal" | "retailer" | "self care";
-  domains: string[];
+  viewConfig: any;
+  ownerAccountId?: string;
+}
+
+export interface ViewConfigCreateRequest {
+  ownerAccountId?: string;
+  applicationType: string;
+  viewConfig: any;
+}
+
+export interface ViewConfigUpdateRequest {
+  id: string;
   viewConfig: any;
 }
 
@@ -20,7 +31,7 @@ export class ViewConfigurationService {
 
   getViewConfigByApplicationType(type: "admin portal" | "retailer" | "self care"): Observable<ViewConfiguration> {
     const params = new HttpParams().set('type', type);
-    
+
     return this.http.get<ViewConfiguration>(`${this.API_URL}/query/data`, { params }).pipe(
       map(response => {
         if (!response) {
@@ -45,14 +56,32 @@ export class ViewConfigurationService {
   }
 
   save(config: ViewConfiguration): Observable<ViewConfiguration> {
-    return this.http.post<ViewConfiguration>(`${this.API_URL}/save`, config);
+    if (!config.id) {
+      return this.create({
+        ownerAccountId: config.ownerAccountId,
+        applicationType: config.applicationType,
+        viewConfig: config.viewConfig
+      });
+    } else {
+      return this.update({
+        id: config.id,
+        viewConfig: config.viewConfig
+      });
+    }
+  }
+
+  private create(request: ViewConfigCreateRequest): Observable<ViewConfiguration> {
+    return this.http.post<ViewConfiguration>(`${this.API_URL}/command/create`, request);
+  }
+
+  private update(request: ViewConfigUpdateRequest): Observable<ViewConfiguration> {
+    return this.http.patch<ViewConfiguration>(`${this.API_URL}/command/update`, request);
   }
 
   private getDefaultConfig(type: "admin portal" | "retailer" | "self care"): ViewConfiguration {
     return {
       id: null,
       applicationType: type,
-      domains: [],
       viewConfig: this.getDefaultViewConfig(type)
     };
   }

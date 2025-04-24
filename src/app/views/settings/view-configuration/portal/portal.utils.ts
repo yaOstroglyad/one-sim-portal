@@ -1,19 +1,12 @@
-import { DomainsDataService, FieldType, FormConfig } from 'src/app/shared';
+import { FieldType, FormConfig, SelectOption } from 'src/app/shared';
+import { map } from 'rxjs';
 import { ViewConfiguration } from '../view-configuration.service';
-
-export interface PortalSettings {
-  primaryColor: string;
-  secondaryColor: string;
-  logoUrl: string;
-  faviconUrl: string;
-  domains: string[];
-}
+import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
 
 export function getPortalSettingsRequest(form: any): ViewConfiguration {
-  return {
+  const request: ViewConfiguration = {
     id: form.id,
     applicationType: 'admin portal',
-    domains: form.domains,
     viewConfig: {
       primaryColor: form.primaryColor,
       secondaryColor: form.secondaryColor,
@@ -21,60 +14,86 @@ export function getPortalSettingsRequest(form: any): ViewConfiguration {
       faviconUrl: form.faviconUrl
     }
   };
+
+  // Добавляем ownerAccountId только если он присутствует в форме
+  if (form.ownerAccountId) {
+    request.ownerAccountId = form.ownerAccountId;
+  }
+
+  return request;
 }
 
-export function getPortalFormConfig(data?: ViewConfiguration, domainsService?: DomainsDataService): FormConfig {
+export function getPortalFormConfig(
+  data?: ViewConfiguration,
+  accountsService?: AccountsDataService,
+  isAdmin?: boolean
+): FormConfig {
   const safeData: ViewConfiguration = data || {
     id: null,
     applicationType: 'admin portal',
-    domains: [],
     viewConfig: {}
   };
 
+  // Формируем базовые поля формы
+  const formFields = [
+    {
+      type: FieldType.uuid,
+      name: 'id',
+      label: 'ID',
+      value: safeData.id || null,
+      invisible: true
+    },
+    {
+      type: FieldType.color,
+      name: 'primaryColor',
+      label: 'portal.settings.primaryColor',
+      value: safeData.viewConfig?.primaryColor
+    },
+    {
+      type: FieldType.color,
+      name: 'secondaryColor',
+      label: 'portal.settings.secondaryColor',
+      value: safeData.viewConfig?.secondaryColor
+    },
+    {
+      type: FieldType.text,
+      name: 'logoUrl',
+      label: 'portal.settings.logoUrl',
+      value: safeData.viewConfig?.logoUrl,
+      placeholder: 'portal.settings.logoUrlPlaceholder'
+    },
+    {
+      type: FieldType.text,
+      name: 'faviconUrl',
+      label: 'portal.settings.faviconUrl',
+      value: safeData.viewConfig?.faviconUrl,
+      placeholder: 'portal.settings.faviconUrlPlaceholder',
+      hintMessage: 'portal.settings.faviconUrlHint'
+    }
+  ];
+
+  // Если пользователь администратор и форма для создания (id == null), добавляем выбор аккаунта
+  if (isAdmin && !safeData.id && accountsService) {
+    const ownerAccountField = {
+      type: FieldType.select,
+      name: 'ownerAccountId',
+      label: 'portal.settings.ownerAccount',
+      value: null,
+      options: accountsService.ownerAccounts().pipe(
+        map(accounts => accounts.map(
+          account => ({
+            value: account.id,
+            displayValue: account.name || account.email || account.id
+          } as SelectOption)
+        ))
+      ),
+      multiple: false
+    };
+
+    formFields.splice(1, 0, ownerAccountField);
+  }
+
   return {
-    fields: [
-      {
-        type: FieldType.uuid,
-        name: 'id',
-        label: 'ID',
-        value: safeData.id || null,
-        invisible: true
-      },
-      {
-        type: FieldType.color,
-        name: 'primaryColor',
-        label: 'portal.settings.primaryColor',
-        value: safeData.viewConfig?.primaryColor
-      },
-      {
-        type: FieldType.color,
-        name: 'secondaryColor',
-        label: 'portal.settings.secondaryColor',
-        value: safeData.viewConfig?.secondaryColor
-      },
-      {
-        type: FieldType.text,
-        name: 'logoUrl',
-        label: 'portal.settings.logoUrl',
-        value: safeData.viewConfig?.logoUrl,
-        placeholder: 'portal.settings.logoUrlPlaceholder'
-      },
-      {
-        type: FieldType.text,
-        name: 'faviconUrl',
-        label: 'portal.settings.faviconUrl',
-        value: safeData.viewConfig?.faviconUrl,
-        placeholder: 'portal.settings.faviconUrlPlaceholder',
-        hintMessage: 'portal.settings.faviconUrlHint'
-      },
-      {
-        type: FieldType.select,
-        name: 'domains',
-        label: 'portal.settings.domains',
-        value: safeData.domains || [],
-        multiple: true,
-        options: domainsService?.getAvailableDomains()
-      }
-    ]
+    fields: formFields
   };
 }
