@@ -13,7 +13,7 @@ export interface RetailSettings {
 export function getRetailSettingsRequest(form: any): ViewConfiguration {
   return {
     id: form.id,
-    applicationType: 'retail',
+    applicationType: 'retailer',
     domains: form.domains,
     viewConfig: {
       primaryColor: form.primaryColor,
@@ -26,45 +26,52 @@ export function getRetailSettingsRequest(form: any): ViewConfiguration {
 }
 
 export function getRetailFormConfig(data?: ViewConfiguration, domainsService?: DomainsDataService): FormConfig {
+  const safeData: ViewConfiguration = data || { 
+    id: null, 
+    applicationType: 'retailer', 
+    domains: [], 
+    viewConfig: {} 
+  };
+
   return {
     fields: [
       {
         type: FieldType.uuid,
         name: 'id',
         label: 'ID',
-        value: data.id || null,
+        value: safeData.id || null,
         invisible: true
       },
       {
         type: FieldType.color,
         name: 'primaryColor',
         label: 'retail.settings.primaryColor',
-        value: data?.viewConfig?.primaryColor
+        value: safeData.viewConfig?.primaryColor
       },
       {
         type: FieldType.color,
         name: 'secondaryColor',
         label: 'retail.settings.secondaryColor',
-        value: data?.viewConfig?.secondaryColor
+        value: safeData.viewConfig?.secondaryColor
       },
       {
         type: FieldType.text,
         name: 'headlineText',
         label: 'retail.settings.headlineText',
-        value: data?.viewConfig?.headlineText
+        value: safeData.viewConfig?.headlineText
       },
       {
         type: FieldType.text,
         name: 'logoUrl',
         label: 'retail.settings.logoUrl',
-        value: data?.viewConfig?.logoUrl,
+        value: safeData.viewConfig?.logoUrl,
         placeholder: 'retail.settings.logoUrlPlaceholder'
       },
       {
         type: FieldType.text,
         name: 'faviconUrl',
         label: 'retail.settings.faviconUrl',
-        value: data?.viewConfig?.faviconUrl,
+        value: safeData.viewConfig?.faviconUrl,
         placeholder: 'retail.settings.faviconUrlPlaceholder',
         hintMessage: 'retail.settings.faviconUrlHint'
       },
@@ -72,7 +79,7 @@ export function getRetailFormConfig(data?: ViewConfiguration, domainsService?: D
         type: FieldType.select,
         name: 'domains',
         label: 'retail.settings.domains',
-        value: data?.viewConfig?.domains || [],
+        value: safeData.domains || [],
         multiple: true,
         options: domainsService?.getAvailableDomains()
       }

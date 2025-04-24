@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 export interface ViewConfiguration {
   id: string;
-  applicationType: 'portal' | 'retail';
+  applicationType: "admin portal" | "retailer" | "self care";
   domains: string[];
   viewConfig: any;
 }
@@ -13,39 +14,72 @@ export interface ViewConfiguration {
   providedIn: 'root'
 })
 export class ViewConfigurationService {
-  private readonly API_URL = `api/view-configuration`;
+  private readonly API_URL = `/api/v1/whitelabel/app-view-config`;
 
   constructor(private http: HttpClient) {}
 
-  getViewConfigByApplicationType(type: 'portal' | 'retail'): Observable<ViewConfiguration> {
-    // TODO: Заменить на реальный API-запрос
-    // return this.http.get<ViewConfiguration>(`${this.API_URL}/get-view-config-by-application-type/${type}`);
+  getViewConfigByApplicationType(type: "admin portal" | "retailer" | "self care"): Observable<ViewConfiguration> {
+    const params = new HttpParams().set('type', type);
+    
+    return this.http.get<ViewConfiguration>(`${this.API_URL}/query/data`, { params }).pipe(
+      map(response => {
+        if (!response) {
+          return this.getDefaultConfig(type);
+        }
 
-    // Мок данных
-    return of({
-      id: '123e4567-e89b-12d3-a456-426614174000',
-      applicationType: type,
-      domains: ['example.com', 'test.com'],
-      viewConfig: type === 'portal'
-        ? {
-            // Конфигурация для портала
-            primaryColor: '#f89c2e',
-            secondaryColor: '#fef6f0',
-            logoUrl: 'assets/img/brand/1esim-logo.png',
-            faviconUrl: 'assets/img/brand/1esim-logo-small.png',
-          }
-        : {
-            // Конфигурация для retail
-            logoUrl: 'assets/img/brand/1esim-logo.png',
-            primaryColor: '#f89c2e',
-            secondaryColor: '#fef6f0',
-            headlineText: 'Welcome to Our Retail Portal',
-            faviconUrl: 'assets/img/brand/1esim-logo-small.png'
-          }
-    });
+        // Если viewConfig пустой или отсутствует, добавляем дефолтные значения viewConfig
+        if (!response.viewConfig || Object.keys(response.viewConfig).length === 0) {
+          return {
+            ...response,
+            viewConfig: this.getDefaultViewConfig(type)
+          };
+        }
+
+        return response;
+      }),
+      catchError(error => {
+        console.warn('Error fetching view configuration:', error);
+        return of(this.getDefaultConfig(type));
+      })
+    );
   }
 
   save(config: ViewConfiguration): Observable<ViewConfiguration> {
     return this.http.post<ViewConfiguration>(`${this.API_URL}/save`, config);
+  }
+
+  private getDefaultConfig(type: "admin portal" | "retailer" | "self care"): ViewConfiguration {
+    return {
+      id: null,
+      applicationType: type,
+      domains: [],
+      viewConfig: this.getDefaultViewConfig(type)
+    };
+  }
+
+  private getDefaultViewConfig(type: "admin portal" | "retailer" | "self care"): any {
+    return type === "admin portal"
+      ? {
+          // Конфигурация для портала
+          primaryColor: '#f89c2e',
+          secondaryColor: '#fef6f0',
+          logoUrl: 'assets/img/brand/1esim-logo.png',
+          faviconUrl: 'assets/img/brand/1esim-logo-small.png',
+        }
+      : type === "retailer" ? {
+          // Конфигурация для retailer
+          logoUrl: 'assets/img/brand/1esim-logo.png',
+          primaryColor: '#f89c2e',
+          secondaryColor: '#fef6f0',
+          headlineText: 'Welcome to Our Retail Portal',
+          faviconUrl: 'assets/img/brand/1esim-logo-small.png'
+        } : {
+          // Конфигурация для self care
+          logoUrl: 'assets/img/brand/1esim-logo.png',
+          primaryColor: '#f89c2e',
+          secondaryColor: '#fef6f0',
+          headlineText: 'Welcome to Self Care Portal',
+          faviconUrl: 'assets/img/brand/1esim-logo-small.png'
+        };
   }
 }

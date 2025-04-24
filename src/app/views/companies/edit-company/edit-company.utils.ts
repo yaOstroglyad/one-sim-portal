@@ -11,7 +11,6 @@ export function getCompanyCreateRequest(form: any) {
 		externalId: form.externalId,
 		type: form?.type || '',
 		description: form.description,
-		retailerDomain: form.retailerDomain || '',
 		tags: form?.tags || [],
 	}
 }
@@ -45,13 +44,6 @@ export function getEditCompanyFormConfig(
 				label: 'Company Name',
 				value: data.name,
 				validators: [Validators.required]
-			},
-			{
-				type: FieldType.text,
-				name: 'retailerDomain',
-				label: 'Retailer website domain name',
-				hintMessage: 'The products displayed on the website will be based on the domain name.',
-				value: data.retailerDomain
 			},
 			{
 				type: FieldType.text,

@@ -9,7 +9,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { ViewConfigurationService } from '../view-configuration.service';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
 
 @Component({
@@ -40,8 +40,16 @@ export class RetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.formConfig$ = this.viewConfigService.getViewConfigByApplicationType('retail').pipe(
-      map(config => getRetailFormConfig(config, this.domainsService))
+    this.formConfig$ = this.viewConfigService.getViewConfigByApplicationType('retailer').pipe(
+      map(config => getRetailFormConfig(config, this.domainsService)),
+      catchError(error => {
+        console.error('Ошибка при получении конфигурации:', error);
+        this.snackBar.open('Ошибка при загрузке настроек. Используются дефолтные значения.', 'Закрыть', {
+          duration: 3000
+        });
+        // Возвращаем дефолтную конфигурацию формы
+        return of(getRetailFormConfig(null, this.domainsService));
+      })
     );
   }
 

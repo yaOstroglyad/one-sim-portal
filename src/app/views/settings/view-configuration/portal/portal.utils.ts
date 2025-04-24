@@ -12,7 +12,7 @@ export interface PortalSettings {
 export function getPortalSettingsRequest(form: any): ViewConfiguration {
   return {
     id: form.id,
-    applicationType: 'portal',
+    applicationType: 'admin portal',
     domains: form.domains,
     viewConfig: {
       primaryColor: form.primaryColor,
@@ -24,39 +24,46 @@ export function getPortalSettingsRequest(form: any): ViewConfiguration {
 }
 
 export function getPortalFormConfig(data?: ViewConfiguration, domainsService?: DomainsDataService): FormConfig {
+  const safeData: ViewConfiguration = data || {
+    id: null,
+    applicationType: 'admin portal',
+    domains: [],
+    viewConfig: {}
+  };
+
   return {
     fields: [
       {
         type: FieldType.uuid,
         name: 'id',
         label: 'ID',
-        value: data.id || null,
+        value: safeData.id || null,
         invisible: true
       },
       {
         type: FieldType.color,
         name: 'primaryColor',
         label: 'portal.settings.primaryColor',
-        value: data?.viewConfig?.primaryColor
+        value: safeData.viewConfig?.primaryColor
       },
       {
         type: FieldType.color,
         name: 'secondaryColor',
         label: 'portal.settings.secondaryColor',
-        value: data?.viewConfig?.secondaryColor
+        value: safeData.viewConfig?.secondaryColor
       },
       {
         type: FieldType.text,
         name: 'logoUrl',
         label: 'portal.settings.logoUrl',
-        value: data?.viewConfig?.logoUrl,
+        value: safeData.viewConfig?.logoUrl,
         placeholder: 'portal.settings.logoUrlPlaceholder'
       },
       {
         type: FieldType.text,
         name: 'faviconUrl',
         label: 'portal.settings.faviconUrl',
-        value: data?.viewConfig?.faviconUrl,
+        value: safeData.viewConfig?.faviconUrl,
         placeholder: 'portal.settings.faviconUrlPlaceholder',
         hintMessage: 'portal.settings.faviconUrlHint'
       },
@@ -64,7 +71,7 @@ export function getPortalFormConfig(data?: ViewConfiguration, domainsService?: D
         type: FieldType.select,
         name: 'domains',
         label: 'portal.settings.domains',
-        value: data?.viewConfig?.domains || [],
+        value: safeData.domains || [],
         multiple: true,
         options: domainsService?.getAvailableDomains()
       }
