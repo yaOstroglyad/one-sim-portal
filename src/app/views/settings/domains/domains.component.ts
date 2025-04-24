@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { BadgeComponent, ButtonDirective, FormControlDirective } from '@coreui/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { IconDirective } from '@coreui/icons-angular';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -15,6 +15,7 @@ import { DomainsDataService } from '../../../shared/services/domains-data.servic
 import { Domain } from '../../../shared/model/domain';
 import { GenericTableModule, HeaderModule, TableConfig } from '../../../shared';
 import { EditDomainNameComponent } from './edit-domain-name/edit-domain-name.component';
+import { EditDomainOwnerComponent } from './edit-domain-owner/edit-domain-owner.component';
 import { CreateDomainComponent } from './create-domain/create-domain.component';
 
 @Component({
@@ -56,7 +57,8 @@ export class DomainsComponent implements OnInit, OnDestroy {
     private tableService: DomainsTableService,
     private domainsDataService: DomainsDataService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translateService: TranslateService
   ) {
   }
 
@@ -64,6 +66,11 @@ export class DomainsComponent implements OnInit, OnDestroy {
     this.initFormControls();
     this.loadData();
     this.setupFilters();
+  }
+
+  public ngAfterViewInit(): void {
+    this.tableService.activeTemplate = this.activeTemplate;
+    this.cdr.detectChanges();
   }
 
   public ngOnDestroy(): void {
@@ -103,12 +110,10 @@ export class DomainsComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.domainsDataService.create(result).subscribe(() => {
-          this.loadData();
-          this.snackBar.open('Domain created successfully', null, {
-            panelClass: 'app-notification-success',
-            duration: 3000
-          });
+        this.loadData();
+        this.snackBar.open(this.translateService.instant('domains.domainCreatedSuccess'), null, {
+          panelClass: 'app-notification-success',
+          duration: 3000
         });
       }
     });
@@ -126,7 +131,28 @@ export class DomainsComponent implements OnInit, OnDestroy {
       if (result) {
         this.domainsDataService.updateDomainName(result).subscribe(() => {
           this.loadData();
-          this.snackBar.open('Domain name updated successfully', null, {
+          this.snackBar.open(this.translateService.instant('domains.domainNameUpdatedSuccess'), null, {
+            panelClass: 'app-notification-success',
+            duration: 3000
+          });
+        });
+      }
+    });
+  }
+
+  public editDomainOwner(domain: Domain): void {
+    this.dialog.closeAll();
+
+    const dialogRef = this.dialog.open(EditDomainOwnerComponent, {
+      width: '650px',
+      data: domain
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.domainsDataService.updateDomainOwner(result).subscribe(() => {
+          this.loadData();
+          this.snackBar.open(this.translateService.instant('domains.domainOwnerUpdatedSuccess'), null, {
             panelClass: 'app-notification-success',
             duration: 3000
           });
@@ -138,7 +164,8 @@ export class DomainsComponent implements OnInit, OnDestroy {
   public changeDomainState(domain: Domain): void {
     this.domainsDataService.changeDomainState(domain.id, !domain.active).subscribe(() => {
       this.loadData();
-      this.snackBar.open(`Domain ${domain.active ? 'deactivated' : 'activated'} successfully`, null, {
+      const state = domain.active ? 'deactivated' : 'activated';
+      this.snackBar.open(this.translateService.instant('domains.domainStateUpdatedSuccess', { state }), null, {
         panelClass: 'app-notification-success',
         duration: 3000
       });

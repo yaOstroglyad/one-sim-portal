@@ -7,6 +7,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
+import { AccountsDataService } from '../../../../shared/services/accounts-data.service';
+import { WhiteLabelDataService } from '../../../../shared/services/white-label-data.service';
 
 @Component({
 	selector: 'app-create-domain',
@@ -29,11 +31,17 @@ export class CreateDomainComponent implements OnInit {
 
 	constructor(
 		private dialogRef: MatDialogRef<CreateDomainComponent>,
-		private domainsDataService: DomainsDataService
+		private domainsDataService: DomainsDataService,
+		private accountsDataService: AccountsDataService,
+		private whiteLabelDataService: WhiteLabelDataService
 	) {}
 
 	ngOnInit() {
-		this.formConfig = getCreateDomainFormConfig(this.domainsDataService);
+		this.formConfig = getCreateDomainFormConfig(
+			this.domainsDataService,
+			this.accountsDataService,
+			this.whiteLabelDataService
+		);
 	}
 
 	handleFormChanges(event: { valid: boolean, value: any }) {

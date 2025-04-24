@@ -2,17 +2,23 @@ import { FieldType, FormConfig } from '../../../../shared';
 import { Validators } from '@angular/forms';
 import { DomainsDataService } from '../../../../shared/services/domains-data.service';
 import { map } from 'rxjs/operators';
+import { AccountsDataService } from '../../../../shared/services/accounts-data.service';
+import { WhiteLabelDataService } from '../../../../shared/services/white-label-data.service';
 
 export function getDomainCreateRequest(form: any) {
   return {
     id: form?.id || null,
     name: form.name,
-    applicationType: form.applicationType,
-    active: form.active || false
+    ownerAccountId: form.ownerAccountId,
+    applicationType: form.applicationType
   };
 }
 
-export function getCreateDomainFormConfig(domainsDataService: DomainsDataService): FormConfig {
+export function getCreateDomainFormConfig(
+  domainsDataService: DomainsDataService,
+  accountsDataService: AccountsDataService,
+  whiteLabelDataService: WhiteLabelDataService
+): FormConfig {
   return {
     fields: [
       {
@@ -31,22 +37,29 @@ export function getCreateDomainFormConfig(domainsDataService: DomainsDataService
       },
       {
         type: FieldType.select,
+        name: 'ownerAccountId',
+        label: 'domains.ownerAccount',
+        value: null,
+        validators: [Validators.required],
+        options: accountsDataService.ownerAccounts().pipe(
+          map(accounts => accounts.map(account => ({
+            value: account.id,
+            displayValue: account.name
+          })))
+        )
+      },
+      {
+        type: FieldType.select,
         name: 'applicationType',
         label: 'domains.applicationType',
         value: null,
         validators: [Validators.required],
-        options: domainsDataService.getApplicationTypes().pipe(
+        options: whiteLabelDataService.applicationTypes().pipe(
           map(types => types.map(type => ({
             value: type,
             displayValue: type
           })))
         )
-      },
-      {
-        type: FieldType.checkbox,
-        name: 'active',
-        label: 'domains.active',
-        value: false
       }
     ]
   };

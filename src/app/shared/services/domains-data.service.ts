@@ -10,10 +10,10 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class DomainsDataService extends DataService<Domain> {
-  private apiUrl = '/api/v1/domains/query/all';
+  private apiUrl = '/api/v1/whitelabel/domains/query/all';
 
   constructor(public http: HttpClient) {
-    super(http, '/api/v1/domains');
+    super(http, '/api/v1/whitelabel/domains');
   }
 
   list(): Observable<Domain[]> {
@@ -42,7 +42,7 @@ export class DomainsDataService extends DataService<Domain> {
       }
     });
 
-    return this.http.get<any>('/api/v1/domains/query/all/page', { params }).pipe(
+    return this.http.get<any>('/api/v1/whitelabel/domains/query/all/page', { params }).pipe(
       catchError(() => {
         console.warn('error happened, presenting mocked data');
         return of({
@@ -55,7 +55,7 @@ export class DomainsDataService extends DataService<Domain> {
   }
 
   create(domain: Domain): Observable<any> {
-    return this.http.post<any>(`/api/v1/domains/command/create`, domain).pipe(
+    return this.http.post<any>(`/api/v1/whitelabel/domains/command/create`, domain).pipe(
       catchError(() => {
         console.warn('error happened, presenting mocked data');
         return of([]);
@@ -64,7 +64,16 @@ export class DomainsDataService extends DataService<Domain> {
   }
 
   updateDomainName(domain: { id: string, name: string }): Observable<any> {
-    return this.http.patch<any>(`/api/v1/domains/command/update/name`, domain).pipe(
+    return this.http.patch<any>(`/api/v1/whitelabel/domains/command/update/name`, domain).pipe(
+      catchError(() => {
+        console.warn('error happened, presenting mocked data');
+        return of([]);
+      })
+    );
+  }
+
+  updateDomainOwner(domain: { id: string, ownerAccountId: string }): Observable<any> {
+    return this.http.patch<any>(`/api/v1/whitelabel/domains/command/update/owner`, domain).pipe(
       catchError(() => {
         console.warn('error happened, presenting mocked data');
         return of([]);
@@ -73,18 +82,12 @@ export class DomainsDataService extends DataService<Domain> {
   }
 
   changeDomainState(id: string, isActive: boolean): Observable<any> {
-    return this.http.patch<any>(`/api/v1/domains/command/change/state/${id}?isActive=${isActive}`, {}).pipe(
+    return this.http.patch<any>(`/api/v1/whitelabel/domains/command/change/state/${id}?isActive=${isActive}`, {}).pipe(
       catchError(() => {
         console.warn('error happened, presenting mocked data');
         return of([]);
       })
     );
-  }
-
-  getApplicationTypes(): Observable<string[]> {
-    // Моковые данные для типов приложений
-    const mockTypes = ['admin-portal', 'retailer', 'self-care'];
-    return of(mockTypes);
   }
 
   getAvailableDomains(): Observable<SelectOption[]> {

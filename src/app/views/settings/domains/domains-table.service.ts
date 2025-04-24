@@ -23,11 +23,12 @@ export class DomainsTableService extends TableConfigAbstractService<Domain> {
     columns: [
       {visible: false, key: 'id', header: 'id'},
       {visible: true, key: 'name', header: 'name'},
+      {visible: true, templateType: TemplateType.Text, key: 'owner.name', header: 'owner'},
       {visible: true, key: 'applicationType', header: 'applicationType'},
       {
         visible: true,
         key: 'active',
-        header: 'active',
+        header: 'status',
         templateType: TemplateType.Custom,
         customTemplate: () => this.activeTemplate
       }

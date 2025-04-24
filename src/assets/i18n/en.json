@@ -431,8 +431,16 @@
     "activate": "Activate",
     "deactivate": "Deactivate",
     "applicationType": "Application Type",
+    "ownerAccount": "Owner Account",
+    "owner": "Owner",
+    "editOwner": "Edit Owner",
     "nameRequired": "Name is required",
-    "applicationTypeRequired": "Application Type is required"
+    "applicationTypeRequired": "Application Type is required",
+    "ownerAccountRequired": "Owner Account is required",
+    "domainCreatedSuccess": "Domain created successfully",
+    "domainNameUpdatedSuccess": "Domain name updated successfully",
+    "domainOwnerUpdatedSuccess": "Domain owner updated successfully",
+    "domainStateUpdatedSuccess": "Domain {{state}} successfully"
   },
   "add-subscriber": {
     "title": "Add Subscriber",

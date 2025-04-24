@@ -425,8 +425,16 @@
     "activate": "Активувати",
     "deactivate": "Деактивувати",
     "applicationType": "Тип додатку",
+    "ownerAccount": "Акаунт власника",
+    "owner": "Власник",
+    "editOwner": "Редагувати власника",
     "nameRequired": "Назва обов'язкова",
-    "applicationTypeRequired": "Тип додатку обов'язковий"
+    "applicationTypeRequired": "Тип додатку обов'язковий",
+    "ownerAccountRequired": "Акаунт власника обов'язковий",
+    "domainCreatedSuccess": "Домен успішно створено",
+    "domainNameUpdatedSuccess": "Назву домену успішно оновлено",
+    "domainOwnerUpdatedSuccess": "Власника домену успішно оновлено",
+    "domainStateUpdatedSuccess": "Домен успішно {{state}}"
   },
   "add-subscriber": {
     "title": "Додати підписника",

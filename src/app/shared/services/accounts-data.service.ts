@@ -29,4 +29,13 @@ export class AccountsDataService extends DataService<any> {
 			})
 		);
 	}
+
+	ownerAccounts(): Observable<any[]> {
+		return this.http.get<any[]>('/api/v1/whitelabel/common/owner-accounts').pipe(
+			catchError(() => {
+				console.warn('error happened, presenting mocked data');
+				return of([])
+			})
+		);
+	}
 }

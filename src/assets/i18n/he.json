@@ -425,8 +425,16 @@
     "activate": "הפעל",
     "deactivate": "השבת",
     "applicationType": "סוג יישום",
+    "ownerAccount": "חשבון בעלים",
+    "owner": "בעלים",
+    "editOwner": "ערוך בעלים",
     "nameRequired": "שם הוא שדה חובה",
-    "applicationTypeRequired": "סוג יישום הוא שדה חובה"
+    "applicationTypeRequired": "סוג יישום הוא שדה חובה",
+    "ownerAccountRequired": "חשבון בעלים הוא שדה חובה",
+    "domainCreatedSuccess": "הדומיין נוצר בהצלחה",
+    "domainNameUpdatedSuccess": "שם הדומיין עודכן בהצלחה",
+    "domainOwnerUpdatedSuccess": "בעלי הדומיין עודכנו בהצלחה",
+    "domainStateUpdatedSuccess": "הדומיין {{state}} בהצלחה"
   },
   "add-subscriber": {
     "title": "הוסף מנוי",

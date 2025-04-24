@@ -25,14 +25,15 @@
     </button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="editDomainName(item)">{{ 'domains.edit' | translate }}</button>
+        <button mat-menu-item (click)="editDomainOwner(item)">{{ 'domains.editOwner' | translate }}</button>
         <button mat-menu-item (click)="changeDomainState(item)">
             {{ item.active ? ('domains.deactivate' | translate) : ('domains.activate' | translate) }}
         </button>
     </mat-menu>
 </ng-template>
 
-<ng-template #activeTemplate let-data='context'>
-    <c-badge [color]="data.active ? 'success' : 'danger'">
-        {{ data.active ? ('domains.active' | translate) : ('domains.inactive' | translate) }}
+<ng-template #activeTemplate let-item='context'>
+    <c-badge [color]="item.active === true ? 'success' : 'danger'">
+        {{ item.active === true ? ('domains.active' | translate) : ('domains.inactive' | translate) }}
     </c-badge>
 </ng-template>
