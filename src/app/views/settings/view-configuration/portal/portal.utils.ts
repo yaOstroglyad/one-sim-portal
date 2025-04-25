@@ -1,7 +1,9 @@
 import { FieldType, FormConfig, SelectOption } from 'src/app/shared';
-import { map } from 'rxjs';
-import { ViewConfiguration } from '../view-configuration.service';
+import { map, switchMap, of } from 'rxjs';
+import { ViewConfiguration, ViewConfigurationService } from '../view-configuration.service';
 import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
+import { HttpParams } from '@angular/common/http';
+import { Validators } from '@angular/forms';
 
 export function getPortalSettingsRequest(form: any): ViewConfiguration {
   const request: ViewConfiguration = {
@@ -26,7 +28,8 @@ export function getPortalSettingsRequest(form: any): ViewConfiguration {
 export function getPortalFormConfig(
   data?: ViewConfiguration,
   accountsService?: AccountsDataService,
-  isAdmin?: boolean
+  isAdmin?: boolean,
+  viewConfigService?: ViewConfigurationService
 ): FormConfig {
   const safeData: ViewConfiguration = data || {
     id: null,
@@ -79,6 +82,7 @@ export function getPortalFormConfig(
       name: 'ownerAccountId',
       label: 'domains.ownerAccount',
       value: null,
+      validators: [Validators.required],
       options: accountsService.ownerAccounts().pipe(
         map(accounts => accounts.map(
           account => ({
@@ -87,7 +91,28 @@ export function getPortalFormConfig(
           } as SelectOption)
         ))
       ),
-      multiple: false
+      multiple: false,
+      inputEvent: (event: any, formGenerator: any, field: any) => {
+        // Если сервис не передан или значение не выбрано, не выполняем запрос
+        if (!viewConfigService || !event || !event.value) {
+          return;
+        }
+
+        // Запрашиваем конфигурацию для выбранного аккаунта
+        viewConfigService.getViewConfigByApplicationType('admin portal', event.value)
+          .subscribe(accountConfig => {
+            if (accountConfig && accountConfig.viewConfig) {
+              // Обновляем значения полей формы на основе полученной конфигурации
+              const viewConfig = accountConfig.viewConfig;
+              formGenerator.form.patchValue({
+                primaryColor: viewConfig.primaryColor,
+                secondaryColor: viewConfig.secondaryColor,
+                logoUrl: viewConfig.logoUrl,
+                faviconUrl: viewConfig.faviconUrl
+              });
+            }
+          });
+      }
     };
 
     formFields.splice(1, 0, ownerAccountField);

@@ -68,7 +68,8 @@ export class RetailComponent implements OnInit {
         return getRetailFormConfig(
           config,
           this.accountsService,
-          this.isAdmin
+          this.isAdmin,
+          this.viewConfigService
         );
       }),
       tap(() => {
@@ -85,7 +86,8 @@ export class RetailComponent implements OnInit {
         return of(getRetailFormConfig(
           null,
           this.accountsService,
-          this.isAdmin
+          this.isAdmin,
+          this.viewConfigService
         ));
       })
     );

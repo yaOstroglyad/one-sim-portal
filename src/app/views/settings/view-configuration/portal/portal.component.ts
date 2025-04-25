@@ -68,7 +68,8 @@ export class PortalComponent implements OnInit {
         return getPortalFormConfig(
           config,
           this.accountsService,
-          this.isAdmin
+          this.isAdmin,
+          this.viewConfigService
         );
       }),
       tap(() => {
@@ -85,7 +86,8 @@ export class PortalComponent implements OnInit {
         return of(getPortalFormConfig(
           null,
           this.accountsService,
-          this.isAdmin
+          this.isAdmin,
+          this.viewConfigService
         ));
       })
     );
