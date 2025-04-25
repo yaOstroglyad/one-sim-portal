@@ -77,7 +77,7 @@ export function getPortalFormConfig(
     const ownerAccountField = {
       type: FieldType.select,
       name: 'ownerAccountId',
-      label: 'portal.settings.ownerAccount',
+      label: 'domains.ownerAccount',
       value: null,
       options: accountsService.ownerAccounts().pipe(
         map(accounts => accounts.map(

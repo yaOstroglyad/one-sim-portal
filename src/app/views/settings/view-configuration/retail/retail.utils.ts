@@ -84,7 +84,7 @@ export function getRetailFormConfig(
     const ownerAccountField = {
       type: FieldType.select,
       name: 'ownerAccountId',
-      label: 'retail.settings.ownerAccount',
+      label: 'domains.ownerAccount',
       value: null,
       options: accountsService.ownerAccounts().pipe(
         map(accounts => accounts.map(
