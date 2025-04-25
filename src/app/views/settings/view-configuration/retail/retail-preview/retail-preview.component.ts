@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ElementRef, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule]
 })
-export class RetailPreviewComponent {
+export class RetailPreviewComponent implements OnChanges, OnInit {
   @Input() primary: string = '#f9a743';
   @Input() primaryHover: string = '#eab308';
   @Input() borderNeutral: string = '0, 0%, 50%';
@@ -21,4 +21,22 @@ export class RetailPreviewComponent {
   @Input() logoUrl: string = 'assets/img/brand/1esim-logo.png';
   @Input() faviconUrl: string = 'assets/img/brand/1esim-logo-small.png';
   @Input() supportUrl: string = 'https://t.me/only_sim_bot';
+
+  constructor(private el: ElementRef) {}
+
+  ngOnInit(): void {
+    // Устанавливаем CSS-переменную при инициализации
+    this.updatePrimaryColorVariable();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Если изменился primary цвет, обновляем CSS-переменную
+    if (changes['primary']) {
+      this.updatePrimaryColorVariable();
+    }
+  }
+
+  private updatePrimaryColorVariable(): void {
+    this.el.nativeElement.style.setProperty('--retail-primary-color', this.primary);
+  }
 }

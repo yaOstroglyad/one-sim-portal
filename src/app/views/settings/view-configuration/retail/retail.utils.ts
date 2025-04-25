@@ -69,13 +69,15 @@ export function getRetailFormConfig(
       type: FieldType.text,
       name: 'border-neutral',
       label: 'retail.settings.borderNeutral',
-      value: safeData.viewConfig?.['border-neutral'] || '0, 0%, 50%'
+      value: safeData.viewConfig?.['border-neutral'] || '0, 0%, 50%',
+      invisible: true
     },
     {
-      type: FieldType.text,
+      type: FieldType.color,
       name: 'backdrop',
       label: 'retail.settings.backdrop',
-      value: safeData.viewConfig?.backdrop || '#272727cc'
+      value: safeData.viewConfig?.backdrop || '#272727cc',
+      invisible: true
     },
     {
       type: FieldType.text,
@@ -88,33 +90,36 @@ export function getRetailFormConfig(
       name: 'heroTitle',
       label: 'retail.settings.heroTitle',
       value: safeData.viewConfig?.heroTitle || "Connect Globally with <span class='text-primary'>OnlySim eSIM</span>",
-      maxLength: 200,
-      hintMessage: 'retail.settings.heroTitleHint'
+      maxLength: 100
     },
     {
-      type: FieldType.text,
+      type: FieldType.richText,
       name: 'heroSubTitle',
       label: 'retail.settings.heroSubTitle',
-      value: safeData.viewConfig?.heroSubTitle || "Stay connected worldwide with our reliable and affordable eSIM solutions."
+      value: safeData.viewConfig?.heroSubTitle || "Stay connected worldwide with our reliable and affordable eSIM solutions.",
+      maxLength: 100
     },
     {
       type: FieldType.number,
       name: 'logoWidth',
       label: 'retail.settings.logoWidth',
-      value: safeData.viewConfig?.logoWidth || 120
+      value: safeData.viewConfig?.logoWidth || 120,
+      invisible: true
     },
     {
       type: FieldType.number,
       name: 'logoHeight',
       label: 'retail.settings.logoHeight',
-      value: safeData.viewConfig?.logoHeight || 40
+      value: safeData.viewConfig?.logoHeight || 40,
+      invisible: true
     },
     {
       type: FieldType.text,
       name: 'logoUrl',
       label: 'retail.settings.logoUrl',
       value: safeData.viewConfig?.logoUrl || 'assets/img/brand/1esim-logo.png',
-      placeholder: 'retail.settings.logoUrlPlaceholder'
+      placeholder: 'retail.settings.logoUrlPlaceholder',
+      hintMessage: 'retail.settings.logoUrlHint'
     },
     {
       type: FieldType.text,

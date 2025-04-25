@@ -2,6 +2,12 @@
 
 :host {
   @extend .preview-component;
+  
+  ::ng-deep {
+    .text-primary {
+      color: var(--retail-primary-color) !important;
+    }
+  }
 }
 
 .retail-preview-svg {
