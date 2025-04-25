@@ -462,5 +462,22 @@
   "send-registration-email": {
     "title": "Отправить регистрационное письмо",
     "submit": "Отправить письмо"
+  },
+  "RICH_TEXT": {
+    "TOOLBAR": {
+      "BOLD": "Полужирный",
+      "ITALIC": "Курсив",
+      "UNDERLINE": "Подчеркнутый",
+      "PRIMARY_COLOR": "Основной цвет",
+      "INSERT_HTML": "Вставить HTML"
+    },
+    "INSERT_HTML": {
+      "TITLE": "Вставить HTML-код",
+      "PLACEHOLDER": "Введите HTML-код...",
+      "INSERT": "Вставить"
+    }
+  },
+  "COMMON": {
+    "CANCEL": "Отмена"
   }
 }

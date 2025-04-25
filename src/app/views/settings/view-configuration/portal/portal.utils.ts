@@ -1,8 +1,7 @@
 import { FieldType, FormConfig, SelectOption } from 'src/app/shared';
-import { map, switchMap, of } from 'rxjs';
+import { map } from 'rxjs';
 import { ViewConfiguration, ViewConfigurationService } from '../view-configuration.service';
 import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
-import { HttpParams } from '@angular/common/http';
 import { Validators } from '@angular/forms';
 
 export function getPortalSettingsRequest(form: any): ViewConfiguration {

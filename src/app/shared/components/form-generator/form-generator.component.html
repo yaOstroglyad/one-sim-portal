@@ -27,6 +27,8 @@
                                   [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
                     <ng-container *ngSwitchCase="FieldType.uuid" [ngTemplateOutlet]="uuidTemplate"
                                   [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+                    <ng-container *ngSwitchCase="FieldType.richText" [ngTemplateOutlet]="richTextTemplate"
+                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
                 </ng-container>
             </ng-container>
         </ng-container>
@@ -196,6 +198,21 @@
 
         <ng-template #uuidTemplate let-field>
             <input type="hidden" [formControlName]="field.name">
+        </ng-template>
+
+        <ng-template #richTextTemplate let-field>
+            <div [attr.class]="'full-width ' + field.className">
+                <app-rich-text-input
+                    [label]="field.label | translate"
+                    [placeholder]="field.placeholder | translate"
+                    [maxLength]="field.maxLength || 500"
+                    [formControlName]="field.name">
+                </app-rich-text-input>
+                <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
+                    <mat-icon fontIcon="info_outline"></mat-icon>
+                    {{ field.hintMessage | translate }}
+                </mat-hint>
+            </div>
         </ng-template>
 
     </form>

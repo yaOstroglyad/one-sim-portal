@@ -9,11 +9,18 @@ export function getRetailSettingsRequest(form: any): ViewConfiguration {
     id: form.id,
     applicationType: 'retailer',
     viewConfig: {
-      primaryColor: form.primaryColor,
-      secondaryColor: form.secondaryColor,
+      primary: form.primary,
+      'primary-hover': form['primary-hover'],
+      'border-neutral': form['border-neutral'],
+      backdrop: form.backdrop,
+      brandName: form.brandName,
+      heroTitle: form.heroTitle,
+      heroSubTitle: form.heroSubTitle,
+      logoWidth: form.logoWidth,
+      logoHeight: form.logoHeight,
       logoUrl: form.logoUrl,
       faviconUrl: form.faviconUrl,
-      headlineText: form.headlineText
+      supportUrl: form.supportUrl
     }
   };
 
@@ -48,36 +55,80 @@ export function getRetailFormConfig(
     },
     {
       type: FieldType.color,
-      name: 'primaryColor',
-      label: 'retail.settings.primaryColor',
-      value: safeData.viewConfig?.primaryColor
+      name: 'primary',
+      label: 'retail.settings.primary',
+      value: safeData.viewConfig?.primary || '#f9a743'
     },
     {
       type: FieldType.color,
-      name: 'secondaryColor',
-      label: 'retail.settings.secondaryColor',
-      value: safeData.viewConfig?.secondaryColor
+      name: 'primary-hover',
+      label: 'retail.settings.primaryHover',
+      value: safeData.viewConfig?.['primary-hover'] || '#eab308'
     },
     {
       type: FieldType.text,
-      name: 'headlineText',
-      label: 'retail.settings.headlineText',
-      value: safeData.viewConfig?.headlineText
+      name: 'border-neutral',
+      label: 'retail.settings.borderNeutral',
+      value: safeData.viewConfig?.['border-neutral'] || '0, 0%, 50%'
+    },
+    {
+      type: FieldType.text,
+      name: 'backdrop',
+      label: 'retail.settings.backdrop',
+      value: safeData.viewConfig?.backdrop || '#272727cc'
+    },
+    {
+      type: FieldType.text,
+      name: 'brandName',
+      label: 'retail.settings.brandName',
+      value: safeData.viewConfig?.brandName || 'OnlySim'
+    },
+    {
+      type: FieldType.richText,
+      name: 'heroTitle',
+      label: 'retail.settings.heroTitle',
+      value: safeData.viewConfig?.heroTitle || "Connect Globally with <span class='text-primary'>OnlySim eSIM</span>",
+      maxLength: 200,
+      hintMessage: 'retail.settings.heroTitleHint'
+    },
+    {
+      type: FieldType.text,
+      name: 'heroSubTitle',
+      label: 'retail.settings.heroSubTitle',
+      value: safeData.viewConfig?.heroSubTitle || "Stay connected worldwide with our reliable and affordable eSIM solutions."
+    },
+    {
+      type: FieldType.number,
+      name: 'logoWidth',
+      label: 'retail.settings.logoWidth',
+      value: safeData.viewConfig?.logoWidth || 120
+    },
+    {
+      type: FieldType.number,
+      name: 'logoHeight',
+      label: 'retail.settings.logoHeight',
+      value: safeData.viewConfig?.logoHeight || 40
     },
     {
       type: FieldType.text,
       name: 'logoUrl',
       label: 'retail.settings.logoUrl',
-      value: safeData.viewConfig?.logoUrl,
+      value: safeData.viewConfig?.logoUrl || 'assets/img/brand/1esim-logo.png',
       placeholder: 'retail.settings.logoUrlPlaceholder'
     },
     {
       type: FieldType.text,
       name: 'faviconUrl',
       label: 'retail.settings.faviconUrl',
-      value: safeData.viewConfig?.faviconUrl,
+      value: safeData.viewConfig?.faviconUrl || 'assets/img/brand/1esim-logo-small.png',
       placeholder: 'retail.settings.faviconUrlPlaceholder',
       hintMessage: 'retail.settings.faviconUrlHint'
+    },
+    {
+      type: FieldType.text,
+      name: 'supportUrl',
+      label: 'retail.settings.supportUrl',
+      value: safeData.viewConfig?.supportUrl || 'https://t.me/only_sim_bot'
     }
   ];
 
@@ -111,11 +162,18 @@ export function getRetailFormConfig(
               // Обновляем значения полей формы на основе полученной конфигурации
               const viewConfig = accountConfig.viewConfig;
               formGenerator.form.patchValue({
-                primaryColor: viewConfig.primaryColor,
-                secondaryColor: viewConfig.secondaryColor,
-                headlineText: viewConfig.headlineText,
+                primary: viewConfig.primary,
+                'primary-hover': viewConfig['primary-hover'],
+                'border-neutral': viewConfig['border-neutral'],
+                backdrop: viewConfig.backdrop,
+                brandName: viewConfig.brandName,
+                heroTitle: viewConfig.heroTitle,
+                heroSubTitle: viewConfig.heroSubTitle,
+                logoWidth: viewConfig.logoWidth,
+                logoHeight: viewConfig.logoHeight,
                 logoUrl: viewConfig.logoUrl,
-                faviconUrl: viewConfig.faviconUrl
+                faviconUrl: viewConfig.faviconUrl,
+                supportUrl: viewConfig.supportUrl
               });
             }
           });

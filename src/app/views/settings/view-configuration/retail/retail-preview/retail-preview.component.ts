@@ -9,8 +9,16 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule]
 })
 export class RetailPreviewComponent {
+  @Input() primary: string = '#f9a743';
+  @Input() primaryHover: string = '#eab308';
+  @Input() borderNeutral: string = '0, 0%, 50%';
+  @Input() backdrop: string = '#272727cc';
+  @Input() brandName: string = 'OnlySim';
+  @Input() heroTitle: string = "Connect Globally with <span class='text-primary'>OnlySim eSIM</span>";
+  @Input() heroSubTitle: string = "Stay connected worldwide with our reliable and affordable eSIM solutions.";
+  @Input() logoWidth: number = 120;
+  @Input() logoHeight: number = 40;
   @Input() logoUrl: string = 'assets/img/brand/1esim-logo.png';
-  @Input() primaryColor: string = '#f89c2e';
-  @Input() secondaryColor: string = '#f89c2e';
-  @Input() headlineText: string = 'Welcome to Our Retail Portal';
+  @Input() faviconUrl: string = 'assets/img/brand/1esim-logo-small.png';
+  @Input() supportUrl: string = 'https://t.me/only_sim_bot';
 }

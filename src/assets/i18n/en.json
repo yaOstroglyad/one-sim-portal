@@ -461,5 +461,22 @@
   "send-registration-email": {
     "title": "Send Registration Email",
     "submit": "Send Email"
+  },
+  "RICH_TEXT": {
+    "TOOLBAR": {
+      "BOLD": "Bold",
+      "ITALIC": "Italic",
+      "UNDERLINE": "Underline",
+      "PRIMARY_COLOR": "Primary Color",
+      "INSERT_HTML": "Insert HTML"
+    },
+    "INSERT_HTML": {
+      "TITLE": "Insert HTML Code",
+      "PLACEHOLDER": "Enter HTML code...",
+      "INSERT": "Insert"
+    }
+  },
+  "COMMON": {
+    "CANCEL": "Cancel"
   }
 }

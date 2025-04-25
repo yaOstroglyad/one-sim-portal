@@ -1,0 +1,38 @@
+<div class="rich-text-container">
+  <label class="rich-text-label">{{ label | translate }}</label>
+  
+  <div class="rich-text-toolbar">
+    <button type="button" class="toolbar-button" (click)="applyFormat('bold')" [disabled]="isDisabled" title="{{ 'RICH_TEXT.TOOLBAR.BOLD' | translate }}">
+      <i class="material-icons">format_bold</i>
+    </button>
+    <button type="button" class="toolbar-button" (click)="applyFormat('italic')" [disabled]="isDisabled" title="{{ 'RICH_TEXT.TOOLBAR.ITALIC' | translate }}">
+      <i class="material-icons">format_italic</i>
+    </button>
+    <button type="button" class="toolbar-button" (click)="applyFormat('underline')" [disabled]="isDisabled" title="{{ 'RICH_TEXT.TOOLBAR.UNDERLINE' | translate }}">
+      <i class="material-icons">format_underlined</i>
+    </button>
+    <button type="button" class="toolbar-button" (click)="applyFormat('primary')" [disabled]="isDisabled" title="{{ 'RICH_TEXT.TOOLBAR.PRIMARY_COLOR' | translate }}">
+      <i class="material-icons">format_color_text</i>
+    </button>
+    <button type="button" class="toolbar-button" (click)="openHtmlDialog()" [disabled]="isDisabled" title="{{ 'RICH_TEXT.TOOLBAR.INSERT_HTML' | translate }}">
+      <i class="material-icons">code</i>
+    </button>
+  </div>
+  
+  <div 
+    #editor
+    class="rich-text-editor"
+    contenteditable="true"
+    [attr.placeholder]="placeholder | translate"
+    [class.disabled]="isDisabled">
+  </div>
+  
+  <div class="rich-text-footer">
+    <span class="char-counter" [class.limit-reached]="charCount >= maxLength">
+      {{ charCount }} / {{ maxLength }}
+    </span>
+  </div>
+  
+  <!-- Используем компонент диалога HTML -->
+  <app-html-dialog (htmlInserted)="handleHtmlInserted($event)"></app-html-dialog>
+</div> 

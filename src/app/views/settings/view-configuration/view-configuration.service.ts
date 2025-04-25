@@ -114,11 +114,18 @@ export class ViewConfigurationService {
         }
       : type === "retailer" ? {
           // Конфигурация для retailer
+          primary: '#f9a743',
+          'primary-hover': '#eab308',
+          'border-neutral': '0, 0%, 50%',
+          backdrop: '#272727cc',
+          brandName: 'OnlySim',
+          heroTitle: "Connect Globally with <span class='text-primary'>OnlySim eSIM</span>",
+          heroSubTitle: "Stay connected worldwide with our reliable and affordable eSIM solutions.",
+          logoWidth: 120,
+          logoHeight: 40,
           logoUrl: 'assets/img/brand/1esim-logo.png',
-          primaryColor: '#f89c2e',
-          secondaryColor: '#fef6f0',
-          headlineText: 'Welcome to Our Retail Portal',
-          faviconUrl: 'assets/img/brand/1esim-logo-small.png'
+          faviconUrl: 'assets/img/brand/1esim-logo-small.png',
+          supportUrl: 'https://t.me/only_sim_bot'
         } : {
           // Конфигурация для self care
           logoUrl: 'assets/img/brand/1esim-logo.png',

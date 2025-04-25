@@ -7,10 +7,18 @@
         <span class="preview-title">{{ 'retail.preview.title' | translate }}</span>
       </div>
       <app-retail-preview
-              [headlineText]="formValues.headlineText"
-              [primaryColor]="formValues.primaryColor"
-              [secondaryColor]="formValues.secondaryColor"
-              [logoUrl]="formValues.logoUrl">
+              [primary]="formValues.primary"
+              [primaryHover]="formValues['primary-hover']"
+              [borderNeutral]="formValues['border-neutral']"
+              [backdrop]="formValues.backdrop"
+              [brandName]="formValues.brandName"
+              [heroTitle]="formValues.heroTitle"
+              [heroSubTitle]="formValues.heroSubTitle"
+              [logoWidth]="formValues.logoWidth"
+              [logoHeight]="formValues.logoHeight"
+              [logoUrl]="formValues.logoUrl"
+              [faviconUrl]="formValues.faviconUrl"
+              [supportUrl]="formValues.supportUrl">
       </app-retail-preview>
     </div>
 

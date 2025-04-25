@@ -15,7 +15,8 @@ export enum FieldType {
 	checkbox = 'checkbox',
 	slide = 'slide',
 	color = 'color',
-	uuid = 'uuid'
+	uuid = 'uuid',
+	richText = 'richText'
 }
 
 export interface BackendFieldConfig {
@@ -55,6 +56,9 @@ export interface FieldConfig {
 	selectable?: boolean;
 	removable?: boolean;
 	separatorKeysCodes?: Array<any>;
+
+	//richText
+	maxLength?: number;
 
 	dependsOn?: string[];
 	dependsOnValue?: string[];

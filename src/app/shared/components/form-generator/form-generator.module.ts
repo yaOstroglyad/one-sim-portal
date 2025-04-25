@@ -14,6 +14,7 @@ import { ChipsInputComponent } from '../chips-input/chips-input.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FormCheckComponent, FormCheckInputDirective } from '@coreui/angular';
 import { TranslateModule } from '@ngx-translate/core';
+import { RichTextInputComponent } from '../rich-text-input';
 
 @NgModule({
 	declarations: [
@@ -37,7 +38,8 @@ import { TranslateModule } from '@ngx-translate/core';
 		MatIconModule,
 		FormCheckComponent,
 		FormCheckInputDirective,
-		TranslateModule
+		TranslateModule,
+		RichTextInputComponent
 	]
 })
 export class FormGeneratorModule { }

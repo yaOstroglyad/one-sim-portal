@@ -1,0 +1,10 @@
+<dialog #htmlDialog class="html-dialog">
+  <div class="html-dialog-content">
+    <h3>{{ 'RICH_TEXT.INSERT_HTML.TITLE' | translate }}</h3>
+    <textarea #htmlInput rows="5" placeholder="{{ 'RICH_TEXT.INSERT_HTML.PLACEHOLDER' | translate }}"></textarea>
+    <div class="html-dialog-buttons">
+      <button type="button" (click)="cancelHtmlInsert()">{{ 'COMMON.CANCEL' | translate }}</button>
+      <button type="button" class="primary" (click)="insertHtml()">{{ 'RICH_TEXT.INSERT_HTML.INSERT' | translate }}</button>
+    </div>
+  </div>
+</dialog> 
