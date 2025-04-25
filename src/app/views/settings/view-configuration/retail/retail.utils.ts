@@ -119,7 +119,12 @@ export function getRetailFormConfig(
       label: 'retail.settings.logoUrl',
       value: safeData.viewConfig?.logoUrl || 'assets/img/brand/1esim-logo.png',
       placeholder: 'retail.settings.logoUrlPlaceholder',
-      hintMessage: 'retail.settings.logoUrlHint'
+      hintMessage: 'retail.settings.logoUrlHint',
+      inputEvent: (event: any, formGenerator: any, field: any) => {
+        if (event && event.target && event.target.value === '') {
+          formGenerator.form.get('logoUrl').setValue(null);
+        }
+      }
     },
     {
       type: FieldType.text,
@@ -154,6 +159,8 @@ export function getRetailFormConfig(
         ))
       ),
       multiple: false,
+      placeholder: null,
+      hintMessage: null,
       inputEvent: (event: any, formGenerator: any, field: any) => {
         // Если сервис не передан или значение не выбрано, не выполняем запрос
         if (!viewConfigService || !event || !event.value) {
