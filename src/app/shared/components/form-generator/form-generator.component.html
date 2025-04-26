@@ -34,7 +34,7 @@
         </ng-container>
 
         <ng-template #textTemplate let-field>
-            <mat-form-field appearance="outline" [attr.class]="'full-width ' + field.className">
+            <mat-form-field appearance="outline" [attr.class]="'w-100 ' + field.className">
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <input matInput
                        [formControlName]="field.name"
@@ -79,7 +79,7 @@
         </ng-template>
 
         <ng-template #passwordTemplate let-field>
-            <mat-form-field appearance="outline" [attr.class]="'full-width ' + field.className">
+            <mat-form-field appearance="outline" [attr.class]="'w-100 ' + field.className">
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <input matInput
                        [formControlName]="field.name"
@@ -93,7 +93,7 @@
         </ng-template>
 
         <ng-template #email let-field>
-            <mat-form-field appearance="outline" [attr.class]="'full-width ' + field.className">
+            <mat-form-field appearance="outline" [attr.class]="'w-100 ' + field.className">
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <input matInput
                        [formControlName]="field.name"
@@ -136,7 +136,7 @@
         </ng-template>
 
         <ng-template #selectTemplate let-field>
-            <mat-form-field appearance="outline" [attr.class]="'full-width ' + field.className">
+            <mat-form-field appearance="outline" [attr.class]="'w-100 ' + field.className">
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <mat-select [formControlName]="field.name"
                             (selectionChange)="onInputChange($event, field)"

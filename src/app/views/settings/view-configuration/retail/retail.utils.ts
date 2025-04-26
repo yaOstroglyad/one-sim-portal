@@ -159,8 +159,6 @@ export function getRetailFormConfig(
         ))
       ),
       multiple: false,
-      placeholder: null,
-      hintMessage: null,
       inputEvent: (event: any, formGenerator: any, field: any) => {
         // Если сервис не передан или значение не выбрано, не выполняем запрос
         if (!viewConfigService || !event || !event.value) {
@@ -192,7 +190,7 @@ export function getRetailFormConfig(
       }
     };
 
-    formFields.splice(1, 0, ownerAccountField);
+    formFields.splice(1, 0, ownerAccountField as any);
   }
 
   return {
