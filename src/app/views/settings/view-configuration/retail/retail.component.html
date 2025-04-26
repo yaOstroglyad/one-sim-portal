@@ -1,42 +1,46 @@
 <ng-container *ngIf="formConfig$ | async as formConfig">
-  <div class="retail-container">
-    <!-- Левая часть с превью -->
-    <div class="preview-section">
-      <div class="preview-header">
-        <img *ngIf="formValues?.faviconUrl" [src]="formValues.faviconUrl" alt="Favicon" class="favicon">
-        <span class="preview-title">{{ 'retail.preview.title' | translate }}</span>
-      </div>
-      <app-retail-preview
-              [primary]="formValues.primary"
-              [primaryHover]="formValues['primary-hover']"
-              [borderNeutral]="formValues['border-neutral']"
-              [backdrop]="formValues.backdrop"
-              [brandName]="formValues.brandName"
-              [heroTitle]="formValues.heroTitle"
-              [heroSubTitle]="formValues.heroSubTitle"
-              [logoWidth]="formValues.logoWidth"
-              [logoHeight]="formValues.logoHeight"
-              [logoUrl]="formValues.logoUrl || 'assets/img/brand/1esim-logo.png'"
-              [faviconUrl]="formValues.faviconUrl"
-              [supportUrl]="formValues.supportUrl">
-      </app-retail-preview>
-    </div>
+    <div class="retail-container">
+        <!-- Левая часть с превью -->
+        <div class="preview-section">
+            <div class="preview-header">
+                <img *ngIf="formValues?.faviconUrl" [src]="formValues.faviconUrl" alt="Favicon" class="favicon">
+                <span class="preview-title">{{ 'retail.preview.title' | translate }}</span>
+            </div>
+            <app-retail-preview
+                    [primary]="formValues.primary"
+                    [primaryHover]="formValues['primary-hover']"
+                    [borderNeutral]="formValues['border-neutral']"
+                    [backdrop]="formValues.backdrop"
+                    [brandName]="formValues.brandName"
+                    [heroTitle]="formValues.heroTitle"
+                    [heroSubTitle]="formValues.heroSubTitle"
+                    [logoWidth]="formValues.logoWidth"
+                    [logoHeight]="formValues.logoHeight"
+                    [logoUrl]="formValues.logoUrl || 'assets/img/brand/1esim-logo.png'"
+                    [faviconUrl]="formValues.faviconUrl"
+                    [supportUrl]="formValues.supportUrl">
+            </app-retail-preview>
+        </div>
 
-    <div class="settings-section">
-      <h4>{{ 'retail.settings.title' | translate }}</h4>
-      <app-form-generator
-        [config]="formConfig"
-        (formChanges)="handleFormChanges($event)">
-      </app-form-generator>
+        <div class="settings-section">
+            <h4 class="mb-1">{{ 'retail.settings.title' | translate }}</h4>
+            <mat-hint class="small">The settings will be applied to all domains of the corresponding application type
+                (retailer).
+            </mat-hint>
+            <mat-divider class="my-2"></mat-divider>
+            <app-form-generator
+                    [config]="formConfig"
+                    (formChanges)="handleFormChanges($event)">
+            </app-form-generator>
 
-      <div class="form-actions">
-        <button mat-raised-button
-                color="primary"
-                [disabled]="!isFormValid"
-                (click)="save()">
-          {{ 'retail.settings.saveButton' | translate }}
-        </button>
-      </div>
+            <div class="form-actions">
+                <button mat-raised-button
+                        color="primary"
+                        [disabled]="!isFormValid"
+                        (click)="save()">
+                    {{ 'retail.settings.saveButton' | translate }}
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </ng-container>

@@ -13,21 +13,23 @@ import { Observable, catchError, map, of } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
 import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
 import { tap } from 'rxjs/operators';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-portal',
   templateUrl: './portal.component.html',
   styleUrls: ['./portal.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    FormGeneratorModule,
-    PortalPreviewComponent,
-    TranslateModule,
-    MatSnackBarModule,
-    MatButtonModule,
-    MatDividerModule
-  ]
+	imports: [
+		CommonModule,
+		FormGeneratorModule,
+		PortalPreviewComponent,
+		TranslateModule,
+		MatSnackBarModule,
+		MatButtonModule,
+		MatDividerModule,
+		MatFormFieldModule
+	]
 })
 export class PortalComponent implements OnInit {
   @ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;

@@ -13,6 +13,7 @@ import { Observable, catchError, map, of } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
 import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
 import { tap } from 'rxjs/operators';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-retail',
@@ -26,7 +27,8 @@ import { tap } from 'rxjs/operators';
     TranslateModule,
     MatSnackBarModule,
     MatButtonModule,
-    MatDividerModule
+    MatDividerModule,
+    MatInputModule
   ]
 })
 export class RetailComponent implements OnInit {

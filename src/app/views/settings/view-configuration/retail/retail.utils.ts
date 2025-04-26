@@ -117,7 +117,7 @@ export function getRetailFormConfig(
       type: FieldType.text,
       name: 'logoUrl',
       label: 'retail.settings.logoUrl',
-      value: safeData.viewConfig?.logoUrl || 'assets/img/brand/1esim-logo.png',
+      value: safeData.viewConfig?.logoUrl || null,
       placeholder: 'retail.settings.logoUrlPlaceholder',
       hintMessage: 'retail.settings.logoUrlHint',
       inputEvent: (event: any, formGenerator: any, field: any) => {
