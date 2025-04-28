@@ -1,4 +1,4 @@
-import { FieldType, FormConfig, SelectOption } from 'src/app/shared';
+import { FieldType, FormConfig, FormGeneratorComponent, SelectOption, shadeColor } from 'src/app/shared';
 import { map } from 'rxjs';
 import { ViewConfiguration, ViewConfigurationService } from '../view-configuration.service';
 import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
@@ -57,11 +57,18 @@ export function getRetailFormConfig(
       type: FieldType.color,
       name: 'primary',
       label: 'retail.settings.primary',
-      value: safeData.viewConfig?.primary || '#f9a743'
+      value: safeData.viewConfig?.primary || '#f9a743',
+      inputEvent: (event: any, formGenerator: FormGeneratorComponent, field: any) => {
+        if (event) {
+          const lighterPrimary = shadeColor(event.target.value, 30);
+          formGenerator.form.get('primary-hover').setValue(lighterPrimary);
+        }
+      }
     },
     {
       type: FieldType.color,
       name: 'primary-hover',
+      invisible: true,
       label: 'retail.settings.primaryHover',
       value: safeData.viewConfig?.['primary-hover'] || '#eab308'
     },

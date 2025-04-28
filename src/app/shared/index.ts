@@ -37,3 +37,5 @@ export * from './auth/permission.guard';
 export * from './auth/auth.service';
 
 export * from './auth/index';
+
+export * from './utils/index';
