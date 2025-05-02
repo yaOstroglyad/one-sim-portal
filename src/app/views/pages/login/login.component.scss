@@ -12,76 +12,260 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(90deg, $primary-with-opacity-03, $primary-with-opacity-05);
   width: 100%;
-  height: 100%;
-  margin: 0;
+  background-color: #fafafa;
+  position: relative;
   overflow: hidden;
 }
 
-.login {
-  width: 320px;
-  padding: 156px 30px 30px;
+.login-content {
+  width: 100%;
+  max-width: 550px;
+  padding: 3.5rem;
+  z-index: 10;
+  position: relative;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  margin: 2rem;
 }
 
-.login__field {
-  padding: 20px 0;
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.logo {
+  width: auto;
+  height: 65px;
+}
+
+.login-title {
+  font-size: 3.5rem;
+  font-weight: 600;
+  margin-bottom: 3.5rem;
+  color: #212121;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  z-index: 15;
+}
+
+.form-field {
+  margin-bottom: 2.5rem;
   position: relative;
 }
 
-.login__icon {
-  position: absolute;
-  top: 30px;
-  color: $primary-color;
+.form-field label {
+  font-size: 1.125rem;
+  color: #212121;
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
 }
 
-.login__input {
-  border: none;
-  border-bottom: 2px solid var(--os-color-light-shade);
-  background: none;
-  padding: 10px 10px 10px 24px;
-  font-weight: 700;
-  width: 75%;
-  transition: .2s;
-}
-
-.login__input:active,
-.login__input:focus,
-.login__input:hover {
-  outline: none;
-  border-bottom-color: $primary-color-border;
-}
-
-.login__submit {
-  background: $color-dark-contrast;
-  font-size: 14px;
-  margin-top: 30px;
-  padding: 16px 20px;
-  border-radius: 26px;
-  border: 1px solid var(--os-color-light-shade);
-  text-transform: uppercase;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
+.form-input {
   width: 100%;
-  color: $primary-color-shade;
-  box-shadow: 0 2px 2px $primary-color;
-  cursor: pointer;
-  transition: .2s;
+  padding: 0.75rem 0;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  font-size: 1.25rem;
+  background: transparent;
+  transition: border-color 0.3s;
+  font-weight: 500;
+  color: #212121;
 }
 
-.login__submit:active,
-.login__submit:focus,
-.login__submit:hover {
-  border-color: $primary-color-border;
+.form-input::placeholder {
+  color: #9e9e9e;
+  opacity: 1;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+.form-input:focus {
   outline: none;
+  border-color: $primary-color;
 }
 
-.button__icon {
-  font-size: 24px;
-  margin-left: auto;
-  color: $primary-color;
+.login-button {
+  background-color: #1c1c1c;
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  padding: 1rem 3.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 3rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  width: auto;
+  align-self: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.01em;
+  position: relative;
+  z-index: 20;
 }
-.button__text {
-  color: $primary-color;
+
+.login-button:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+.background-waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* убираем обычный фон */
+  background-image: none;
+  /* сам цвет «заливки» волны: берём вашу переменную */
+  background-color: var(--os-color-primary);
+
+  /* стандартная маска */
+  mask-image: url('/assets/img/brand/login-bg-image-large.svg');
+  mask-repeat: no-repeat;
+  mask-position: bottom right;
+  mask-size: contain;
+
+  /* для Safari/WebKit */
+  -webkit-mask-image: url('/assets/img/brand/login-bg-image-large.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: bottom right;
+  -webkit-mask-size: contain;
+
+  opacity: 1;
+  z-index: 1;
+}
+
+.tagline {
+  margin-top: 2rem;
+  color: #555;
+  font-size: 0.9rem;
+  text-align: center;
+  max-width: 250px;
+  line-height: 1.4;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 15;
+}
+
+// Мобильная версия
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .login-content {
+    padding: 2rem 1.5rem;
+    box-shadow: none;
+    margin: 0;
+    border-radius: 0;
+    max-width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 15vh;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+  }
+
+  .login-container {
+    background-color: white;
+    overflow: hidden;
+  }
+
+  .background-waves {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    bottom: -150px;
+    /* задаём цвет обводки/заливки через вашу переменную */
+    background-color: var(--os-color-primary);
+    opacity: 0.7;
+    z-index: 11;
+
+    /* собственно маска из SVG */
+    mask-image: url('/assets/img/brand/login-bg-image-small.svg');
+    mask-repeat: no-repeat;
+    mask-position: bottom center;
+    mask-size: cover;
+
+    /* WebKit-префиксы для Safari */
+    -webkit-mask-image: url('/assets/img/brand/login-bg-image-small.svg');
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: bottom center;
+    -webkit-mask-size: cover;
+  }
+
+
+  .logo-container {
+    margin-bottom: 3rem;
+    position: absolute;
+    top: 2rem;
+    justify-content: flex-end;
+  }
+
+  .logo {
+    height: 50px;
+  }
+
+  .login-title {
+    font-size: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .form-field {
+    margin-bottom: 2rem;
+  }
+
+  .login-button {
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .mobile-only {
+    display: block;
+    margin-top: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-content {
+    padding: 1.5rem 1.25rem;
+    padding-top: 12vh;
+  }
+
+  .logo-container {
+    top: 1.5rem;
+  }
+
+  .logo {
+    height: 50px;
+  }
+
+  .login-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .form-input {
+    font-size: 1.125rem;
+  }
 }

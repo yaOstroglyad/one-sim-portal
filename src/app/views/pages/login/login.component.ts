@@ -23,8 +23,10 @@ export class LoginComponent implements OnInit {
 		rememberMe: new FormControl(true)
 	});
 
-	constructor(private loginService: LoginService,
-							private authService: AuthService) { }
+	constructor(
+		private loginService: LoginService,
+		private authService: AuthService
+	) { }
 
 	ngOnInit(): void {
 		this.authService.deleteLoginResponse();
