@@ -5,7 +5,6 @@ import { JwtHelperService } from './jwt-helper.service';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, map, takeUntil, tap } from 'rxjs/operators';
 import { LoginRequest, LoginResponse } from '../model';
-import { WhiteLabelService } from '../services/white-label.service';
 import { Router } from '@angular/router';
 
 export const ADMIN_PERMISSION = 'adminAccess';
@@ -23,7 +22,6 @@ export class AuthService {
 	private http = inject(HttpClient);
 	private router = inject(Router);
 	private jwtHelper = inject(JwtHelperService);
-	private whiteLabelService = inject(WhiteLabelService);
 	private $SessionStorageService = inject(SessionStorageService);
 	private $LocalStorageService = inject(LocalStorageService);
 
@@ -82,7 +80,6 @@ export class AuthService {
           this.permissions = [...ARRAY_OF_SUPPORT_PERMISSIONS];
         }
 
-        console.log('Error loading permissions, defaulting to:', this.permissions);
         return of([]);
     //   })
     // );
@@ -136,7 +133,6 @@ export class AuthService {
   }
 
   private handleAuthResponse(response: LoginResponse): void {
-    this.whiteLabelService.updateViewConfig(response.token);
     this.storeLoginResponse(response);
   }
 
@@ -179,7 +175,6 @@ export class AuthService {
             this.scheduleTokenRefresh(result);
           },
           error: (error) => {
-            console.error('Error during token update', error);
             if (error.status === 401) {
               this.clearAndLogout();
             }
@@ -187,7 +182,6 @@ export class AuthService {
         })
       ).subscribe();
     } else {
-      console.error('Invalid or missing refreshToken during update');
       this.clearAndLogout();
     }
   }

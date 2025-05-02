@@ -5,7 +5,6 @@ import { iconSubset } from './icons/icon-subset';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from './shared';
 import { Subject } from 'rxjs';
-import { WhiteLabelService } from './shared/services/white-label.service';
 import { takeUntil, filter } from 'rxjs/operators';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 
@@ -21,18 +20,16 @@ export class AppComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private titleService: Title,
 		private iconSetService: IconSetService,
-		private whiteLabelService: WhiteLabelService,
 		private $localStorage: LocalStorageService,
 		private $sessionStorage: SessionStorageService,
-		private authService: AuthService,
+		private authService: AuthService
 	) {
-		this.iconSetService.icons = { ...iconSubset };
+		this.iconSetService.icons = {...iconSubset};
 	}
 
 	ngOnInit(): void {
 		this.initializeApp();
 		this.subscribeToRouterEvents();
-		this.subscribeToViewConfigChanges();
 	}
 
 	ngOnDestroy(): void {
@@ -48,7 +45,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
 		this.titleService.setTitle(this.title);
 		this.iconSetService.icons = { ...iconSubset };
-		this.whiteLabelService.initViewBasedOnCurrentUser();
 	}
 
 	private subscribeToRouterEvents(): void {
@@ -60,18 +56,5 @@ export class AppComponent implements OnInit, OnDestroy {
 			.subscribe(() => {
 				window.scrollTo(0, 0);
 			});
-	}
-
-	private subscribeToViewConfigChanges(): void {
-		// this.whiteLabelService.$viewConfig
-		// 	.pipe(takeUntil(this.unsubscribe$))
-		// 	.subscribe((config: UserViewConfig) => {
-		// 		console.log('config', config);
-		// 		this.whiteLabelService.updateStoreDate(config);
-		// 		this.whiteLabelService.updateDocumentViewBasedConfig(config);
-		//
-		// 		const language = this.$localStorage.retrieve('language') || config.language;
-		// 		this.setLanguage(language);
-		// 	});
 	}
 }

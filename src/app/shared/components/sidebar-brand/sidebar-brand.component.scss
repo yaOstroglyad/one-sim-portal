@@ -1,0 +1,30 @@
+.sidebar-brand {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+
+  img {
+    display: block;
+    max-height: 100%;
+  }
+
+  .sidebar-brand-full {
+    margin-right: auto;
+  }
+
+  .sidebar-brand-narrow {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar-brand-full {
+      display: none;
+    }
+
+    .sidebar-brand-narrow {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+}

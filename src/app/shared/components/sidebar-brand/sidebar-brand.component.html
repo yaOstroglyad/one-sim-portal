@@ -1,0 +1,15 @@
+<a class="sidebar-brand d-none d-md-flex" routerLink="/">
+    <img
+            *ngIf="brandFull"
+            [src]="brandFull.src"
+            [height]="brandFull.height"
+            [alt]="brandFull.alt"
+            class="sidebar-brand-full" />
+
+    <img
+            *ngIf="brandNarrow"
+            [src]="brandNarrow.src"
+            [width]="brandNarrow.width"
+            [alt]="brandNarrow.alt"
+            class="sidebar-brand-narrow" />
+</a>

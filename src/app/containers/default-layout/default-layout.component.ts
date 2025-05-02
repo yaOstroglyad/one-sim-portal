@@ -9,46 +9,76 @@ import {
 import { navItems } from './_nav';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { INavData } from '@coreui/angular';
-import { WhiteLabelService } from '../../shared/services/white-label.service';
+import { VisualConfig, VisualService } from '../../shared';
 import { BrandFull } from '../../shared/model/brandFull';
 import { BrandNarrow } from '../../shared/model/brandNarrow';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil, BehaviorSubject, skip } from 'rxjs';
 import { AuthService } from '../../shared';
+import { log10 } from 'chart.js/helpers';
 
 @Component({
 	selector: 'app-default-layout',
 	templateUrl: './default-layout.component.html',
 	styleUrls: ['./default-layout.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DefaultLayoutComponent implements OnInit, OnDestroy {
 	authService = inject(AuthService);
 	translateService = inject(TranslateService);
-	whiteLabelService = inject(WhiteLabelService);
+	visualService = inject(VisualService);
 	cdr = inject(ChangeDetectorRef);
 
 	private unsubscribe$ = new Subject<void>();
 	public translatedNavItems: INavData[];
+	public brandFull$ = new BehaviorSubject<BrandFull | null>(null);
 	public brandFull: BrandFull;
 	public brandNarrow: BrandNarrow;
 
 	ngOnDestroy(): void {
+		this.brandFull$.complete();
 		this.unsubscribe$.next();
 		this.unsubscribe$.complete();
 	}
 
 	ngOnInit(): void {
 		this.filterAndTranslateNavItems();
-		this.whiteLabelService.$viewConfig.subscribe(config => {
-			this.brandFull = this.whiteLabelService.updateBrandFull();
-			this.brandNarrow = this.whiteLabelService.updateBrandNarrow();
-			this.whiteLabelService.updateDocumentViewBasedConfig(config);
-			this.cdr.detectChanges();
-		});
 
-		this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-			this.filterAndTranslateNavItems();
-		});
+		this.visualService.loadVisualConfig().subscribe();
+
+		this.visualService.getThemeConfig$()
+			.pipe(
+				skip(1),
+				takeUntil(this.unsubscribe$)
+			)
+			.subscribe(config => {
+				this.updateBranding(config);
+			});
+
+		this.translateService.onLangChange
+			.pipe(takeUntil(this.unsubscribe$))
+			.subscribe((event: LangChangeEvent) => {
+				this.filterAndTranslateNavItems();
+				this.cdr.markForCheck();
+			});
+	}
+
+	/**
+	 * Обновляет брендинг компонента на основе текущих значений в сервисе
+	 */
+	private updateBranding(config: VisualConfig): void {
+		this.brandFull = {
+			src: config.logoUrl,
+			height: config.height || 47,
+			alt: 'logo'
+		};
+
+		this.brandNarrow = {
+			src: config.faviconUrl,
+			width: 35,
+			alt: 'logo'
+		};
+
+		this.brandFull$.next({ ...this.brandFull });
 	}
 
 	private filterAndTranslateNavItems(): void {
@@ -68,13 +98,12 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
 					children: item.children ? this.processNavItems(item.children) : undefined
 				};
 
-				// Удаляем пустой children массив
 				if (newItem.children?.length === 0) {
 					delete newItem.children;
 				}
 
 				return newItem;
 			})
-			.filter(Boolean); // удаляет null
+			.filter(Boolean);
 	}
 }

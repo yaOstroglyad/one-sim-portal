@@ -2,17 +2,26 @@
            class="d-print-none sidebar sidebar-fixed sidebar-bg"
            id="sidebar"
            visible>
-    <c-sidebar-brand [brandFull]="brandFull"
-                     [brandNarrow]="brandNarrow"
-                     routerLink="."></c-sidebar-brand>
 
-    <ng-scrollbar pointerEventsMethod="scrollbar">
-        <c-sidebar-nav [navItems]="translatedNavItems"
-                       dropdownMode="path"></c-sidebar-nav>
-    </ng-scrollbar>
-    <c-sidebar-toggler *ngIf="!sidebar.narrow"
-                       toggle="unfoldable"
-                       cSidebarToggle="sidebar"></c-sidebar-toggler>
+    <ng-container *ngIf="!(brandFull$ | async); else loaded">
+        <app-sidebar-skeleton [itemsCount]="8"></app-sidebar-skeleton>
+    </ng-container>
+
+    <ng-template #loaded>
+        <c-sidebar-brand
+                [brandFull]="(brandFull$ | async)!"
+                [brandNarrow]="brandNarrow"
+                routerLink=".">
+        </c-sidebar-brand>
+
+        <ng-scrollbar pointerEventsMethod="scrollbar">
+            <c-sidebar-nav [navItems]="translatedNavItems"
+                           dropdownMode="path"></c-sidebar-nav>
+        </ng-scrollbar>
+        <c-sidebar-toggler *ngIf="!sidebar.narrow"
+                           toggle="unfoldable"
+                           cSidebarToggle="sidebar"></c-sidebar-toggler>
+    </ng-template>
 </c-sidebar>
 
 <div class="wrapper d-flex flex-column min-vh-100 bg-light dark:bg-transparent">

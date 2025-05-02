@@ -12,7 +12,8 @@ export function getPortalSettingsRequest(form: any): ViewConfiguration {
       primaryColor: form.primaryColor,
       secondaryColor: form.secondaryColor,
       logoUrl: form.logoUrl,
-      faviconUrl: form.faviconUrl
+      faviconUrl: form.faviconUrl,
+      height: form.height || 47
     }
   };
 
@@ -71,6 +72,15 @@ export function getPortalFormConfig(
       value: safeData.viewConfig?.faviconUrl,
       placeholder: 'portal.settings.faviconUrlPlaceholder',
       hintMessage: 'portal.settings.faviconUrlHint'
+    },
+    {
+      type: FieldType.number,
+      name: 'height',
+      label: 'portal.settings.logoHeight',
+      value: safeData.viewConfig?.height || 47,
+      placeholder: 'portal.settings.logoHeightPlaceholder',
+      min: 20,
+      max: 100
     }
   ];
 

@@ -25,6 +25,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { SidebarSkeletonComponent } from './sidebar-skeleton/sidebar-skeleton.component';
+import { SidebarBrandComponent } from '../../shared/components/sidebar-brand/sidebar-brand.component';
 
 @NgModule({
 	declarations: [
@@ -59,7 +61,9 @@ import { TranslateModule } from '@ngx-translate/core';
 		CardModule,
 		NgScrollbarModule,
 		BreadcrumbComponent,
-		TranslateModule
+		TranslateModule,
+		SidebarSkeletonComponent,
+		SidebarBrandComponent
 	]
 })
 export class DefaultLayoutModule {}

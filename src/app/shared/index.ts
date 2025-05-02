@@ -32,6 +32,7 @@ export * from './services/subscriber-data.service';
 export * from './services/transaction-data.service';
 export * from './services/domains-data.service';
 export * from './services/products-data.service';
+export * from './services/visual.service';
 
 export * from './auth/permission.guard';
 export * from './auth/auth.service';

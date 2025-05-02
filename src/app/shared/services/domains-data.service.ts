@@ -89,17 +89,4 @@ export class DomainsDataService extends DataService<Domain> {
       })
     );
   }
-
-  getAvailableDomains(): Observable<SelectOption[]> {
-    // Предположим, что API возвращает массив строк доменов
-    const mockDomains = ['domain1.com', 'domain2.com', 'domain3.com', 'domain4.com'];
-
-    // Преобразуем массив строк в массив SelectOption
-    return of(mockDomains).pipe(
-      map(domains => domains.map(domain => ({
-        value: domain,
-        displayValue: domain
-      })))
-    );
-  }
 }

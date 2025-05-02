@@ -1,0 +1,120 @@
+// Цвета для скелетона
+$skeleton-base-color: #e2e5e7;
+$skeleton-highlight-color: rgba(255, 255, 255, 0.5);
+
+// Базовые стили для скелетона
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: $skeleton-base-color;
+  border-radius: 4px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.2) 20%,
+      $skeleton-highlight-color 60%,
+      rgba(255, 255, 255, 0)
+    );
+    animation: shimmer 2s infinite;
+  }
+}
+
+// Анимация для эффекта "блеска"
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Стили для скелетона логотипа
+.brand-skeleton {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  height: 56px; // Стандартная высота для brandFull
+
+  &-logo {
+    width: 120px;
+    height: 35px;
+    @extend .skeleton;
+
+    // Адаптивные размеры для разных экранов
+    @media (max-width: 768px) {
+      width: 100px;
+      height: 30px;
+    }
+
+    @media (max-width: 576px) {
+      width: 80px;
+      height: 25px;
+    }
+  }
+}
+
+.sidebar-skeleton {
+  padding: 1rem;
+  min-height: calc(100vh - 100px); // Увеличиваем минимальную высоту скелетона
+
+  &-item {
+    height: 32px;
+    margin-bottom: 0.75rem;
+    @extend .skeleton;
+
+    // Разная ширина для визуального разнообразия
+    &:nth-child(1) {
+      width: 95%;
+      opacity: 0.9;
+    }
+
+    &:nth-child(2) {
+      width: 80%;
+      opacity: 0.8;
+    }
+
+    &:nth-child(3) {
+      width: 70%;
+      opacity: 0.7;
+    }
+
+    &:nth-child(4) {
+      width: 85%;
+      opacity: 0.75;
+    }
+
+    &:nth-child(5) {
+      width: 60%;
+      opacity: 0.65;
+    }
+
+    // Добавляем еще элементы для более полного заполнения
+    &:nth-child(6) {
+      width: 75%;
+      opacity: 0.7;
+    }
+
+    &:nth-child(7) {
+      width: 85%;
+      opacity: 0.8;
+    }
+
+    &:nth-child(8) {
+      width: 65%;
+      opacity: 0.75;
+    }
+
+    &:nth-child(n+9) {
+      // Для всех элементов после 8-го используем случайные значения
+      width: calc(60% + var(--random-width, 20%));
+      opacity: calc(0.6 + var(--random-opacity, 0.2));
+    }
+  }
+}
