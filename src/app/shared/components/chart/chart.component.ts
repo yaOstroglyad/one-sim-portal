@@ -4,13 +4,11 @@ import {
   ElementRef,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { LocalStorageService } from 'ngx-webstorage';
-import { UsageInfo } from '../../model';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -24,7 +22,7 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
   standalone: true,
 })
-export class ChartComponent implements AfterViewInit, OnInit, OnChanges {
+export class ChartComponent implements AfterViewInit, OnChanges {
   @ViewChild('doughnutChartCanvas') private doughnutChartCanvas: ElementRef;
 
   chart: any;
@@ -34,18 +32,15 @@ export class ChartComponent implements AfterViewInit, OnInit, OnChanges {
 
   private primaryColor: string;
 
-  constructor(private $LocalStorageService: LocalStorageService) {}
+  constructor(private $LocalStorageService: LocalStorageService) {
+    const viewConfig = this.$LocalStorageService.retrieve('viewConfig');
+    this.primaryColor = viewConfig.primaryColor || '#f89c2e';
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes.chartData) {
       this.renderChart();
     }
-  }
-
-  ngOnInit(): void {
-    const viewConfigString = this.$LocalStorageService.retrieve('viewConfig');
-    const viewConfig = viewConfigString ? JSON.parse(viewConfigString) : null;
-    this.primaryColor = viewConfig.primaryColor;
   }
 
   ngAfterViewInit() {

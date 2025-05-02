@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { hexRgb, rgbToHsl } from '../utils';
+import { LocalStorageService } from 'ngx-webstorage';
 
 export interface VisualConfig {
   primaryColor: string;
@@ -28,7 +29,10 @@ export class VisualService {
   private themeConfig$ = new BehaviorSubject<VisualConfig>(defaultVisualConfig);
   private apiUrl = '/api/v1/whitelabel/app-view-config/query/data?type=admin+portal';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private $localStorageService: LocalStorageService
+  ) {}
 
   /**
    * Загружает визуальные настройки с API
@@ -67,6 +71,8 @@ export class VisualService {
     if (config.faviconUrl) {
       this.updateFavicon(config.faviconUrl);
     }
+
+    this.$localStorageService.store('viewConfig', config);
 
     this.themeConfig$.next({...config});
   }
