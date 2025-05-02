@@ -43,7 +43,7 @@ export class AuthService {
         ];
         const special = [
           'daniel@1-esim.com',
-          'vb@venturebot.fund',
+          'vb@venturebot.fund'
         ];
         const customers = [
           'anex@mail.com',

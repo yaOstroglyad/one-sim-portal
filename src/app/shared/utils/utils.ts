@@ -20,19 +20,27 @@ export function convertUsage(balance: Balance): Balance {
 	const BYTES_IN_MB = 1024 * 1024;
 	const BYTES_IN_GB = 1024 * 1024 * 1024;
 
-	let newUsage = { ...balance };
+	// используем только сырые байты из API
+	const totalBytes     = balance.total;
+	const usedBytes      = balance.used;
+	const remainingBytes = totalBytes - usedBytes;
 
-	if (balance.total >= BYTES_IN_GB) {
+	const newUsage = { ...balance };
+
+	if (totalBytes >= BYTES_IN_GB) {
 		newUsage.unitType = "GB";
-		newUsage.total = Math.round((balance.total / BYTES_IN_GB) * 10) / 10;
-		newUsage.used = Math.round((balance.used / BYTES_IN_GB) * 10) / 10;
-		newUsage.remaining = Math.round((balance.remaining / BYTES_IN_GB) * 10) / 10;
-	} else if (balance.total >= BYTES_IN_MB) {
+		// toFixed всегда вернёт строку, но + перед ней приведёт к числу
+		newUsage.total     = +((totalBytes     / BYTES_IN_GB).toFixed(3));
+		newUsage.used      = +((usedBytes      / BYTES_IN_GB).toFixed(3));
+		newUsage.remaining = +((remainingBytes / BYTES_IN_GB).toFixed(3));
+	} else if (totalBytes >= BYTES_IN_MB) {
 		newUsage.unitType = "MB";
-		newUsage.total = Math.round((balance.total / BYTES_IN_MB) * 10) / 10;
-		newUsage.used = Math.round((balance.used / BYTES_IN_MB) * 10) / 10;
-		newUsage.remaining = Math.round((balance.remaining / BYTES_IN_MB) * 10) / 10;
+		newUsage.total     = +((totalBytes     / BYTES_IN_MB).toFixed(2));
+		newUsage.used      = +((usedBytes      / BYTES_IN_MB).toFixed(2));
+		newUsage.remaining = +((remainingBytes / BYTES_IN_MB).toFixed(2));
 	}
 
 	return newUsage;
 }
+
+

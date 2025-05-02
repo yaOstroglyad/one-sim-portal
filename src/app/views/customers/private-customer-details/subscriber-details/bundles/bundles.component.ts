@@ -5,14 +5,16 @@ import {
 	Subscriber,
 	PurchasedProductsDataService,
 	UsageInfo,
-	ChartComponent, Balance, EmptyStateComponent
+	ChartComponent,
+	Balance,
+	EmptyStateComponent,
+	convertUsage
 } from '../../../../../shared';
 import { MatCardModule } from '@angular/material/card';
 import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
-import { convertUsage } from '../../../../../shared/utils/utils';
 
 interface ExtendedUsageInfo extends UsageInfo {
 	productName: string;
