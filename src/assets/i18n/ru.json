@@ -396,6 +396,8 @@
       "faviconUrl": "URL фавикона",
       "faviconUrlPlaceholder": "Введите URL фавикона",
       "faviconUrlHint": "Рекомендуемый размер: 32x32 пикселя",
+      "logoHeight": "Высота логотипа",
+      "logoHeightPlaceholder": "Введите высоту логотипа",
       "domains": "Домены",
       "saveButton": "Сохранить"
     }

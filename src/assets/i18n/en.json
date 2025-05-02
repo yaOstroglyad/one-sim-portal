@@ -395,6 +395,8 @@
       "faviconUrl": "Favicon URL",
       "faviconUrlPlaceholder": "Enter favicon URL",
       "faviconUrlHint": "Recommended size: 32x32 pixels",
+      "logoHeight": "Logo Height",
+      "logoHeightPlaceholder": "Enter logo height",
       "domains": "Domains",
       "saveButton": "Save"
     }

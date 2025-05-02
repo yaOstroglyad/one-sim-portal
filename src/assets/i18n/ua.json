@@ -389,6 +389,8 @@
       "faviconUrl": "URL фавікону",
       "faviconUrlPlaceholder": "Введіть URL фавікону",
       "faviconUrlHint": "Рекомендований розмір: 32x32 пікселі",
+      "logoHeight": "Висота логотипу",
+      "logoHeightPlaceholder": "Введіть висоту логотипу",
       "domains": "Домени",
       "saveButton": "Зберегти"
     }

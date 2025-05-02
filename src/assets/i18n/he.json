@@ -389,6 +389,8 @@
       "faviconUrl": "כתובת URL של האייקון",
       "faviconUrlPlaceholder": "הזן כתובת URL של האייקון",
       "faviconUrlHint": "גודל מומלץ: 32x32 פיקסלים",
+      "logoHeight": "גובה הלוגו",
+      "logoHeightPlaceholder": "הזן את גובה הלוגו",
       "domains": "דומיינים",
       "saveButton": "שמור"
     }

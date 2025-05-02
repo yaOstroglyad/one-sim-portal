@@ -37,7 +37,6 @@ export function getPortalFormConfig(
     viewConfig: {}
   };
 
-  // Формируем базовые поля формы
   const formFields = [
     {
       type: FieldType.uuid,
