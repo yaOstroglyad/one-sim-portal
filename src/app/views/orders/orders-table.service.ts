@@ -28,8 +28,4 @@ export class OrdersTableService extends TableConfigAbstractService<Order> {
 	constructor() {
 		super();
 	}
-
-	public updateTableData(data: Order[]): void {
-		this.originalDataSubject.next(data);
-	}
 }

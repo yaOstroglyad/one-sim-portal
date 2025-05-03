@@ -28,10 +28,6 @@ export class ProductsTableService extends TableConfigAbstractService<Package> {
 		super();
 	}
 
-	public updateTableData(data: Package[]): void {
-		this.originalDataSubject.next(data);
-	}
-
 	public addCustomColumns(parent: any): void {
 		const currentConfig = this.tableConfigSubject.value;
 		const newConfig = { ...currentConfig, columns: [...currentConfig.columns] };

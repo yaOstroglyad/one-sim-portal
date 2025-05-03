@@ -125,13 +125,12 @@ export class ProductsComponent implements OnInit, OnDestroy {
 		this.productsDataService.list().pipe(
 			takeUntil(this.unsubscribe$),
 			tap(data => {
-				this.tableService.updateTableData(data);
 				this.tableService.addCustomColumns(this);
 				this.tableService.tableConfigSubject.next({
 					...this.tableService.tableConfigSubject.getValue(),
 					columns: [...this.tableService.tableConfigSubject.getValue().columns]
 				});
-				this.dataList$ = this.tableService.dataList$;
+				this.dataList$ = of(data);
 			}),
 			catchError(() => {
 				return of([]);

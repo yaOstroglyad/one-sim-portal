@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  TemplateRef,
+  AfterViewInit
+} from '@angular/core';
 import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -44,7 +53,7 @@ import { CreateDomainComponent } from './create-domain/create-domain.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DomainsComponent implements OnInit, OnDestroy {
+export class DomainsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('activeTemplate') activeTemplate: TemplateRef<any>;
 
   private unsubscribe$ = new Subject<void>();

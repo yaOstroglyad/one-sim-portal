@@ -40,8 +40,4 @@ export class DomainsTableService extends TableConfigAbstractService<Domain> {
   constructor() {
     super();
   }
-
-  public updateTableData(data: Domain[]): void {
-    this.originalDataSubject.next(data);
-  }
 }
