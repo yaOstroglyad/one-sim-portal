@@ -23,8 +23,11 @@ export class GenericTableComponent {
 	@Output() onRowClickEvent = new EventEmitter<any>;
 	@Output() toggleAction = new EventEmitter<any>;
 	@Output() pageChange = new EventEmitter<any>;
+	@Output() sortChange = new EventEmitter<any>;
+	@Output() addButtonClick = new EventEmitter<void>;
 
 	public selectedItems = new Set<any>();
+	public loading = false;
 
 	public changePage(newPage: number, isServerSide: boolean): void {
 		this.currentPage = newPage;
@@ -67,6 +70,47 @@ export class GenericTableComponent {
 	}
 
 	onRowClick(item: any): void {
-		this.onRowClickEvent.emit(item)
+		this.onRowClickEvent.emit(item);
+	}
+
+	// Обработка сортировки колонок
+	public onSortColumn(column: any): void {
+		// Проверяем, поддерживает ли колонка сортировку
+		if (!column.sortable) return;
+		
+		this.config$.pipe(take(1)).subscribe(config => {
+			// Сбросить сортировку для всех колонок
+			config.columns.forEach(col => {
+				if (col !== column) {
+					col.sortDirection = null;
+				}
+			});
+			
+			// Установить новое направление сортировки для выбранной колонки
+			if (!column.sortDirection || column.sortDirection === 'desc') {
+				column.sortDirection = 'asc';
+			} else {
+				column.sortDirection = 'desc';
+			}
+			
+			// Эмитить событие сортировки для обработки внешними компонентами
+			this.sortChange.emit({
+				column: column.key,
+				direction: column.sortDirection
+			});
+		});
+	}
+
+	public onAddButtonClick(): void {
+		this.addButtonClick.emit();
+	}
+
+	// Проверка для четных/нечетных строк
+	public isEven(index: number): boolean {
+		return index % 2 === 0;
+	}
+
+	public isOdd(index: number): boolean {
+		return index % 2 !== 0;
 	}
 }

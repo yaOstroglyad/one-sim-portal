@@ -7,6 +7,11 @@ export interface TableColumnConfig {
 	dateFormat?: string;
 	customTemplate?: () => TemplateRef<any>;
 	visible: boolean;
+	sortable?: boolean;
+	sortDirection?: 'asc' | 'desc' | null;
+	class?: string;
+	width?: string;
+	minWidth?: string;
 }
 
 export interface TableConfig {

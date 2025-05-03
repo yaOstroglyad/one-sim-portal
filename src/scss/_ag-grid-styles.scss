@@ -1,0 +1,441 @@
+/*
+  Глобальные стили для имитации ag-grid
+  Эти стили применяются ко всем компонентам с таблицами
+*/
+
+// Переменные для ag-grid-like таблицы
+:root {
+  --ag-header-height: 42px;
+  --ag-row-height: 36px;
+  --ag-header-foreground-color: rgba(0, 0, 0, 0.7);
+  --ag-header-background-color: #f8f8f8;
+  --ag-odd-row-background-color: #f9f9f9;
+  --ag-row-border-color: #e2e2e2;
+  --ag-cell-horizontal-border: #e2e2e2;
+  --ag-selected-row-background-color: rgba(var(--os-color-primary-rgb), 0.1);
+  --ag-row-hover-color: rgba(var(--os-color-primary-rgb), 0.05);
+  --ag-font-family: 'Montserrat', sans-serif;
+  --ag-row-even-background-color: #ffffff;
+  --ag-header-column-separator-color: #dde2eb;
+  --ag-border-color: #e2e2e2;
+  --ag-disable-color: rgba(0, 0, 0, 0.38);
+}
+
+// Общие стили для таблиц в ag-grid стиле
+.ag-grid-wrapper {
+  border: 1px solid var(--ag-border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  font-family: var(--ag-font-family);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+// Панель инструментов
+.ag-header-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--ag-border-color);
+  background-color: var(--ag-header-background-color);
+  width: 100%;
+}
+
+.ag-header-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.ag-grid-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--os-color-primary);
+  color: var(--os-color-primary-contrast);
+  border: none;
+  border-radius: 3px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--os-color-primary-shade);
+  }
+
+  &:active {
+    background-color: var(--os-color-primary-shade);
+    transform: translateY(1px);
+  }
+}
+
+.ag-grid-table-container {
+  width: 100%;
+  overflow-x: auto;
+  flex: 1 1 auto;
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ag-grid-table {
+  width: auto;
+  min-width: 100%;
+  table-layout: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+// Стили для заголовков
+.ag-header {
+  background-color: var(--ag-header-background-color);
+  border-bottom: 2px solid var(--ag-header-column-separator-color);
+}
+
+.ag-header-row {
+  height: var(--ag-header-height);
+}
+
+.ag-header-cell {
+  font-weight: 600;
+  color: var(--ag-header-foreground-color);
+  text-align: left;
+  user-select: none;
+  position: relative;
+  padding: 12px;
+  border-right: 1px solid var(--ag-header-column-separator-color);
+  transition: background-color 0.2s;
+}
+
+.ag-header-cell:last-child {
+  border-right: none;
+}
+
+.ag-header-cell-content {
+  display: flex;
+  align-items: center;
+}
+
+.ag-header-cell.sortable {
+  cursor: pointer;
+}
+
+.ag-header-cell.sortable:hover {
+  background-color: #e9e9e9;
+}
+
+// Иконки сортировки
+.sort-icon {
+  display: inline-block;
+  margin-left: 6px;
+  opacity: 0.6;
+}
+
+.ag-header-cell.sortable:hover .sort-icon {
+  opacity: 1;
+}
+
+// Стили для строк и ячеек
+.ag-row {
+  height: var(--ag-row-height);
+  transition: background-color 0.2s;
+}
+
+.ag-row-even {
+  background-color: var(--ag-row-even-background-color);
+}
+
+.ag-row-odd {
+  background-color: var(--ag-odd-row-background-color);
+}
+
+.ag-row:hover {
+  background-color: var(--ag-row-hover-color);
+}
+
+.ag-row.selected {
+  background-color: var(--ag-selected-row-background-color) !important;
+}
+
+.ag-cell {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--ag-row-border-color);
+  border-right: 1px solid var(--ag-cell-horizontal-border);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+  max-width: none;
+  align-items: center;
+  height: 100%;
+}
+
+.ag-cell:last-child {
+  border-right: none;
+}
+
+.ag-cell-content {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+// Специальные ячейки
+.ag-checkbox-cell, .ag-header-checkbox-cell {
+  text-align: center;
+}
+
+// Стили для действий
+.ag-action-icon {
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.6);
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--os-color-primary);
+  }
+}
+
+// Стили для пагинации
+.ag-pagination-panel {
+  background-color: var(--ag-header-background-color);
+  border-top: 1px solid var(--ag-row-border-color);
+  width: 100%;
+}
+
+.ag-grid-pagination {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 18px;
+}
+
+.ag-paging-button {
+  transition: all 0.2s;
+
+  &:not(.disabled):hover {
+    color: var(--os-color-primary);
+  }
+}
+
+.ag-paging-description {
+  margin: 0 12px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+// Липкие колонки
+.sticky-column {
+  position: sticky;
+  right: 0;
+  z-index: 1;
+  background-color: inherit;
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
+}
+
+:host-context([dir="rtl"]) .sticky-column {
+  right: auto;
+  left: 0;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+}
+
+// Чекбоксы в стиле ag-grid
+.ag-checkbox, .ag-header-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #d3d3d3;
+  border-radius: 2px;
+  background-color: white;
+  position: relative;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: all 0.2s;
+
+  &:checked {
+    background-color: var(--os-color-primary);
+    border-color: var(--os-color-primary);
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 2px;
+      width: 5px;
+      height: 9px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(var(--os-color-primary-rgb), 0.3);
+  }
+}
+
+// Состояние загрузки
+.ag-overlay-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.65);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.ag-overlay-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.ag-overlay-loading-center {
+  background-color: var(--ag-background-color, #fff);
+  border-radius: 5px;
+  padding: 16px 24px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ag-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ag-loading-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid transparent;
+  border-top-color: var(--os-color-primary);
+  border-left-color: var(--os-color-primary);
+  border-radius: 50%;
+  animation: ag-grid-spinner-rotate 0.8s infinite linear;
+}
+
+.ag-loading-text {
+  font-family: var(--ag-font-family);
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+@keyframes ag-grid-spinner-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Состояние пустого грида
+.ag-no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 1rem;
+}
+
+// Стили для состояния "нет данных"
+.ag-overlay-no-rows-wrapper {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.ag-overlay-no-rows-center {
+  background-color: var(--ag-background-color, #fff);
+  border-radius: 5px;
+  padding: 16px 24px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ag-overlay-no-rows-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  position: relative;
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 2px;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 9px;
+    left: 2px;
+  }
+
+  &:before {
+    transform: rotate(45deg);
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+}
+
+.ag-overlay-no-rows-text {
+  font-family: var(--ag-font-family);
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: 500;
+}
+
+// Настройка колонок для фиксированных ширин
+colgroup col {
+  visibility: visible !important;
+}
+
+// Ширина фиксированных колонок
+.min-w-3r, .actions-column {
+  width: 45px;
+  min-width: 45px;
+}
+
+// Responsive стили
+@media (max-width: 767px) {
+  .ag-grid-table {
+    table-layout: auto;
+  }
+
+  .ag-header-cell,
+  .ag-cell {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  .ag-row {
+    height: auto;
+  }
+
+  .ag-grid-pagination {
+    justify-content: center;
+    padding: 10px;
+  }
+}

@@ -1,97 +1,160 @@
 <ng-container *ngIf="config$ | async as config">
-    <c-card *ngIf="(data$ | async)?.length; else noData"
+    <ng-container *ngIf="data$ | async as dataItems; else loading">
+        <!-- Если данные пришли, проверяем их наличие -->
+        <div *ngIf="dataItems.length; else noData"
             [class.clickable]="isRowClickable"
-            class="mx-3 mb-3">
-        <table cTable
-               [responsive]="true">
-            <thead>
-            <tr>
-                <th *ngIf="config.showCheckboxes"
-                    class="min-w-3r text-center"
-                    scope="col">
-                    <input type="checkbox"
-                           class="c-pointer"
-                           [checked]="this.selectedItems.size"
-                           (change)="toggleAll($event)">
-                </th>
-                <ng-container *ngFor="let col of config.columns">
-                    <th *ngIf="col.visible"
-                        scope="col">
-                        {{ config?.translatePrefix + col.header | translate }}
-                    </th>
-                </ng-container>
-                <th scope="col"
-                    class="sticky-column"
-                    *ngIf="config.showEditButton && !config.showMenu"></th>
-                <th scope="col"
-                    class="sticky-column"
-                    *ngIf="config.showMenu"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let item of data$ | async"
-                (click)="isRowClickable && onRowClick(item)">
-                <td *ngIf="config.showCheckboxes"
-                    class="min-w-3r text-center">
-                    <input type="checkbox"
-                           class="c-pointer"
-                           [checked]="isSelected(item)"
-                           [value]="item"
-                           (click)="$event.stopPropagation()"
-                           (change)="toggleItemSelection(item, $event)">
-                </td>
-                <ng-container *ngFor="let col of config.columns">
-                    <td *ngIf="col.visible">
-                        <ng-container [ngSwitch]="col.templateType">
-                            <ng-container *ngSwitchCase="'text'">{{ item | displayValueByKey: col.key }}</ng-container>
-                            <ng-container *ngSwitchCase="'date'">{{ item[col.key] | date: col.dateFormat }}
-                            </ng-container>
-                            <ng-container *ngSwitchCase="'time'">{{ item[col.key] | formatTime }}</ng-container>
-                            <ng-container *ngSwitchCase="'custom'">
-                                <ng-container
-                                        *ngTemplateOutlet="col.customTemplate(); context: {context: item}"></ng-container>
-                            </ng-container>
-                            <ng-container *ngSwitchDefault>{{ item[col.key] }}</ng-container>
+            class="ag-grid-wrapper mx-3 mb-3">
+            <div class="ag-header-toolbar" *ngIf="config.showAddButton">
+                <div class="ag-header-buttons">
+                    <button *ngIf="config.showAddButton" class="ag-grid-button add-button" (click)="onAddButtonClick()">
+                        <svg cIcon name="cilPlus"></svg>
+                        {{ 'buttons.add' | translate }}
+                    </button>
+                    <ng-content select="[custom-toolbar]"></ng-content>
+                </div>
+            </div>
+            <div class="ag-grid-table-container">
+                <table cTable class="ag-grid-table">
+                    <colgroup>
+                        <col *ngIf="config.showCheckboxes" style="width: 3rem; min-width: 3rem;">
+                        <ng-container *ngFor="let col of config.columns">
+                            <col *ngIf="col.visible"
+                                 [style.width]="col.width || 'auto'"
+                                 [style.min-width]="col.minWidth || '50px'">
                         </ng-container>
-                    </td>
-                </ng-container>
-                <td *ngIf="config.showEditButton && !config.showMenu"
-                    (click)="$event.stopPropagation(); onEdit(item)"
-                    class="min-w-3r text-center c-pointer sticky-column">
-                    <svg cIcon
-                         name="cilPencil"></svg>
-                </td>
-                <td class="min-w-3r text-end c-pointer sticky-column" *ngIf="config.showMenu">
-                    <ng-container *ngTemplateOutlet="menu; context: { $implicit: item }"
-                                  (click)="$event.stopPropagation()"></ng-container>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <ng-container *ngIf="config.pagination?.enabled">
-            <c-pagination aria-label="Page navigation">
-                <li cPageItem
-                    class="c-pointer"
-                    (click)="!(currentPage === 0) && changePage(currentPage - 1, config.pagination?.serverSide)"
-                    [class.disabled]="currentPage === 0">
-                    <div cPageLink>{{ 'pagination.previous' | translate }}</div>
-                </li>
+                        <col *ngIf="config.showEditButton && !config.showMenu" style="width: 45px; min-width: 45px;">
+                        <col *ngIf="config.showMenu" style="width: 45px; min-width: 45px;">
+                    </colgroup>
+                    <thead class="ag-header">
+                    <tr class="ag-header-row">
+                        <th *ngIf="config.showCheckboxes"
+                            class="min-w-3r text-center ag-header-cell ag-header-checkbox-cell"
+                            scope="col">
+                            <input type="checkbox"
+                                   class="c-pointer ag-header-checkbox"
+                                   [checked]="this.selectedItems.size"
+                                   (change)="toggleAll($event)">
+                        </th>
+                        <ng-container *ngFor="let col of config.columns">
+                            <th *ngIf="col.visible"
+                                scope="col"
+                                class="ag-header-cell"
+                                [class.sortable]="col.sortable"
+                                (click)="col.sortable && onSortColumn(col)">
+                                <div class="ag-header-cell-content">
+                                    <span class="ag-header-cell-text">{{ config?.translatePrefix + col.header | translate }}</span>
+                                    <span *ngIf="col.sortable" class="sort-icon">
+                                        <svg cIcon name="cilArrowTop" size="sm" *ngIf="col.sortDirection === 'asc'"></svg>
+                                        <svg cIcon name="cilArrowBottom" size="sm" *ngIf="col.sortDirection === 'desc'"></svg>
+                                        <svg cIcon name="cilSwapVertical" size="sm" *ngIf="!col.sortDirection"></svg>
+                                    </span>
+                                </div>
+                            </th>
+                        </ng-container>
+                        <th scope="col"
+                            class="sticky-column actions-column ag-header-cell"
+                            *ngIf="config.showEditButton && !config.showMenu"></th>
+                        <th scope="col"
+                            class="sticky-column actions-column ag-header-cell"
+                            *ngIf="config.showMenu"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="ag-body">
+                    <tr *ngFor="let item of dataItems; let i = index"
+                        class="ag-row"
+                        [class.selected]="isSelected(item)"
+                        [class.ag-row-even]="isEven(i)"
+                        [class.ag-row-odd]="isOdd(i)"
+                        (click)="isRowClickable && onRowClick(item)">
+                        <td *ngIf="config.showCheckboxes"
+                            class="min-w-3r text-center ag-cell ag-checkbox-cell">
+                            <input type="checkbox"
+                                   class="c-pointer ag-checkbox"
+                                   [checked]="isSelected(item)"
+                                   [value]="item"
+                                   (click)="$event.stopPropagation()"
+                                   (change)="toggleItemSelection(item, $event)">
+                        </td>
+                        <ng-container *ngFor="let col of config.columns">
+                            <td *ngIf="col.visible"
+                                [ngClass]="[col.class || '', 'ag-cell']">
+                                <div class="ag-cell-content">
+                                    <ng-container [ngSwitch]="col.templateType">
+                                        <ng-container *ngSwitchCase="'text'">{{ item | displayValueByKey: col.key }}</ng-container>
+                                        <ng-container *ngSwitchCase="'date'">{{ item[col.key] | date: col.dateFormat }}</ng-container>
+                                        <ng-container *ngSwitchCase="'time'">{{ item[col.key] | formatTime }}</ng-container>
+                                        <ng-container *ngSwitchCase="'custom'">
+                                            <ng-container
+                                                    *ngTemplateOutlet="col.customTemplate(); context: {context: item}"></ng-container>
+                                        </ng-container>
+                                        <ng-container *ngSwitchDefault>{{ item[col.key] }}</ng-container>
+                                    </ng-container>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <td *ngIf="config.showEditButton && !config.showMenu"
+                            (click)="$event.stopPropagation(); onEdit(item)"
+                            class="min-w-3r text-center c-pointer sticky-column actions-column ag-cell">
+                            <svg cIcon name="cilPencil" class="ag-action-icon"></svg>
+                        </td>
+                        <td class="min-w-3r text-end c-pointer sticky-column actions-column ag-cell" *ngIf="config.showMenu">
+                            <ng-container *ngTemplateOutlet="menu; context: { $implicit: item }"
+                                        (click)="$event.stopPropagation()"></ng-container>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ng-container *ngIf="config.pagination?.enabled">
+                <div class="ag-pagination-panel">
+                    <c-pagination aria-label="Page navigation" class="ag-grid-pagination">
+                        <li cPageItem
+                            class="c-pointer ag-paging-button"
+                            (click)="!(currentPage === 0) && changePage(currentPage - 1, config.pagination?.serverSide)"
+                            [class.disabled]="currentPage === 0">
+                            <div cPageLink>{{ 'pagination.previous' | translate }}</div>
+                        </li>
 
-                <li cPageItem>
-                    <div cPageLink>{{ currentPage + 1 }} {{ 'pagination.of' | translate }} {{ config.pagination?.totalPages ?? totalPages }}</div>
-                </li>
+                        <li cPageItem class="ag-paging-description">
+                            <div cPageLink>{{ currentPage + 1 }} {{ 'pagination.of' | translate }} {{ config.pagination?.totalPages ?? totalPages }}</div>
+                        </li>
 
-                <li cPageItem
-                    class="c-pointer"
-                    (click)="!(currentPage + 1 === config.pagination?.totalPages) && changePage(currentPage + 1, config.pagination?.serverSide)"
-                    [class.disabled]="config.pagination?.totalPages ? currentPage + 1 === config.pagination?.totalPages : currentPage + 1 === totalPages">
-                    <div cPageLink>{{ 'pagination.next' | translate }}</div>
-                </li>
-            </c-pagination>
-        </ng-container>
-    </c-card>
+                        <li cPageItem
+                            class="c-pointer ag-paging-button"
+                            (click)="!(currentPage + 1 === config.pagination?.totalPages) && changePage(currentPage + 1, config.pagination?.serverSide)"
+                            [class.disabled]="config.pagination?.totalPages ? currentPage + 1 === config.pagination?.totalPages : currentPage + 1 === totalPages">
+                            <div cPageLink>{{ 'pagination.next' | translate }}</div>
+                        </li>
+                    </c-pagination>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
 </ng-container>
 
+<!-- Шаблон при отсутствии данных -->
 <ng-template #noData>
-    <no-data></no-data>
+    <div class="ag-grid-wrapper mx-3 mb-3">
+        <div class="ag-loading-container">
+            <div class="ag-overlay-loading-center">
+                <div class="ag-spinner">
+                    <span class="ag-overlay-no-rows-text">Нет данных для отображения</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Шаблон загрузки -->
+<ng-template #loading>
+    <div class="ag-grid-wrapper mx-3 mb-3">
+        <div class="ag-loading-container">
+            <div class="ag-overlay-loading-center">
+                <div class="ag-spinner">
+                    <span class="ag-loading-icon"></span>
+                    <span class="ag-loading-text">Загрузка данных...</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </ng-template>
