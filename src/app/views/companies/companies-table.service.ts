@@ -33,8 +33,4 @@ export class CompaniesTableService extends TableConfigAbstractService<Company> {
 	constructor() {
 		super();
 	}
-
-	public updateTableData(data: Company[]): void {
-		this.originalDataSubject.next(data);
-	}
 }
