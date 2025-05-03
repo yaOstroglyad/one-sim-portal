@@ -1,6 +1,16 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
-import { Observable, take } from 'rxjs';
-import { TableConfig } from '../../model/table-column-config.interface';
+import {
+	Component,
+	ChangeDetectionStrategy,
+	Input,
+	Output,
+	EventEmitter,
+	TemplateRef,
+	OnChanges,
+	SimpleChanges, ContentChild
+} from '@angular/core';
+import { Observable, combineLatest } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { TableColumnConfig, TableConfig } from '../../model';
 
 @Component({
 	selector: 'generic-table',
@@ -8,48 +18,64 @@ import { TableConfig } from '../../model/table-column-config.interface';
 	styleUrls: ['./generic-table.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GenericTableComponent {
+export class GenericTableComponent implements OnChanges {
+	@ContentChild('[custom-toolbar]', {read: TemplateRef})
+	public customToolbarTpl?: TemplateRef<any>;
+
+	@Input() config$!: Observable<TableConfig>;
+	@Input() data$!: Observable<any[]>;
+	@Input() menu!: TemplateRef<any>;
+	@Input() isRowClickable = false;
+
+	@Output() selectedItemsChange = new EventEmitter<any[]>();
+	@Output() onRowClickEvent = new EventEmitter<any>();
+	@Output() toggleAction = new EventEmitter<any>();
+	@Output() pageChange = new EventEmitter<{ page: number; size: number; isServerSide?: boolean }>();
+	@Output() sortChange = new EventEmitter<{ column: string; direction: 'asc' | 'desc' }>();
+
+	public viewModel$!: Observable<{ config: TableConfig; data: any[] }>;
 	public currentPage = 0;
 	public pageSize = 10;
-	//TODO need to be updated based on BE response
-	public totalPages: number = 20;
-
-	@Input() config$: Observable<TableConfig>;
-	@Input() data$: Observable<any[]>;
-	@Input() menu: TemplateRef<any>;
-	@Input() isRowClickable: boolean = false;
-
-	@Output() selectedItemsChange = new EventEmitter<any>;
-	@Output() onRowClickEvent = new EventEmitter<any>;
-	@Output() toggleAction = new EventEmitter<any>;
-	@Output() pageChange = new EventEmitter<any>;
-	@Output() sortChange = new EventEmitter<any>;
-	@Output() addButtonClick = new EventEmitter<void>;
-
+	public totalPages = 0;
 	public selectedItems = new Set<any>();
-	public loading = false;
 
-	public changePage(newPage: number, isServerSide: boolean): void {
-		this.currentPage = newPage;
-		this.pageChange.emit({ page: this.currentPage, size: this.pageSize, isServerSide });
-	}
-
-	public toggleAll(event: any): void {
-		if (event.target.checked) {
-			this.data$.pipe(
-				take(1)
-			).subscribe(data => {
-				data.forEach(item => this.selectedItems.add(item));
-				this.emitSelectedItems();
-			});
-		} else {
-			this.selectedItems.clear();
-			this.emitSelectedItems();
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes.config$ || changes.data$) {
+			this.createViewModel();
 		}
 	}
 
-	private emitSelectedItems(): void {
-		this.selectedItemsChange.emit(Array.from(this.selectedItems));
+	private createViewModel(): void {
+		this.viewModel$ = combineLatest([this.config$, this.data$]).pipe(
+			map(([config, data]) => {
+				this.setSortDirection(config.columns);
+
+				if (config.pagination?.totalPages != null) {
+					this.totalPages = config.pagination.totalPages;
+				}
+				return {config, data};
+			})
+		);
+	}
+
+	public trackById(_: number, item: any): any {
+		return item.id ?? _;
+	}
+
+	public changePage(newPage: number, isServerSide?: boolean): void {
+		this.currentPage = newPage;
+		this.pageChange.emit({page: this.currentPage, size: this.pageSize, isServerSide});
+	}
+
+	public toggleAll(event: any): void {
+		this.data$.pipe(take(1)).subscribe(data => {
+			if (event.target.checked) {
+				data.forEach(item => this.selectedItems.add(item));
+			} else {
+				this.selectedItems.clear();
+			}
+			this.selectedItemsChange.emit(Array.from(this.selectedItems));
+		});
 	}
 
 	public toggleItemSelection(item: any, event: any): void {
@@ -58,7 +84,7 @@ export class GenericTableComponent {
 		} else {
 			this.selectedItems.delete(item);
 		}
-		this.emitSelectedItems();
+		this.selectedItemsChange.emit(Array.from(this.selectedItems));
 	}
 
 	public isSelected(item: any): boolean {
@@ -69,48 +95,34 @@ export class GenericTableComponent {
 		this.toggleAction.emit(item);
 	}
 
-	onRowClick(item: any): void {
+	public onRowClick(item: any): void {
 		this.onRowClickEvent.emit(item);
 	}
 
-	// Обработка сортировки колонок
 	public onSortColumn(column: any): void {
-		// Проверяем, поддерживает ли колонка сортировку
 		if (!column.sortable) return;
-		
-		this.config$.pipe(take(1)).subscribe(config => {
-			// Сбросить сортировку для всех колонок
-			config.columns.forEach(col => {
-				if (col !== column) {
-					col.sortDirection = null;
-				}
+		this.config$.pipe(take(1)).subscribe(cfg => {
+			cfg.columns.forEach(col => {
+				if (col !== column) col.sortDirection = null;
 			});
-			
-			// Установить новое направление сортировки для выбранной колонки
-			if (!column.sortDirection || column.sortDirection === 'desc') {
-				column.sortDirection = 'asc';
-			} else {
-				column.sortDirection = 'desc';
-			}
-			
-			// Эмитить событие сортировки для обработки внешними компонентами
-			this.sortChange.emit({
-				column: column.key,
-				direction: column.sortDirection
-			});
+			column.sortDirection = column.sortDirection === 'asc' ? 'desc' : 'asc';
+			this.sortChange.emit({column: column.key, direction: column.sortDirection});
 		});
 	}
 
-	public onAddButtonClick(): void {
-		this.addButtonClick.emit();
+	public isEven(i: number): boolean {
+		return i % 2 === 0;
 	}
 
-	// Проверка для четных/нечетных строк
-	public isEven(index: number): boolean {
-		return index % 2 === 0;
+	public isOdd(i: number): boolean {
+		return !this.isEven(i);
 	}
 
-	public isOdd(index: number): boolean {
-		return index % 2 !== 0;
+	private setSortDirection(columns: TableColumnConfig[]) {
+		columns.forEach(column => {
+			if (column?.sortable && !column.sortDirection) {
+				column.sortDirection = 'asc';
+			}
+		})
 	}
 }

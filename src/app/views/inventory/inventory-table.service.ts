@@ -18,7 +18,7 @@ export class InventoryTableService extends TableConfigAbstractService<Resource> 
   translatePrefix: 'inventory.',
   showCheckboxes: false,
   showEditButton: false,
-  showMenu: true,
+  showMenu: false,
   columns: [
    {visible: true, key: 'iccid', header: 'iccid'},
    {visible: false, key: 'imei', header: 'imei'},
@@ -32,10 +32,6 @@ export class InventoryTableService extends TableConfigAbstractService<Resource> 
 
  constructor() {
   super();
- }
-
- public updateTableData(data: Resource[]): void {
-  this.originalDataSubject.next(data);
  }
 
  public updateConfigData(totalPages: number): void {
