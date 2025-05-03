@@ -26,6 +26,10 @@
   "shared": {
     "no-data": "No data"
   },
+  "table": {
+    "loading": "Loading data...",
+    "noData": "No data to display"
+  },
   "pagination": {
     "previous": "Previous",
     "next": "Next",

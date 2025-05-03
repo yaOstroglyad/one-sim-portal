@@ -26,6 +26,10 @@
   "shared": {
     "no-data": "אין נתונים"
   },
+  "table": {
+    "loading": "טוען נתונים...",
+    "noData": "אין נתונים להצגה"
+  },
   "pagination": {
     "previous": "הקודם",
     "next": "הבא",

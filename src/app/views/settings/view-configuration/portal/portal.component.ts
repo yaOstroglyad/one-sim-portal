@@ -115,7 +115,9 @@ export class PortalComponent implements OnInit {
             height: formValues.height
           };
 
-          this.visualService.applyVisualConfig(newConfig);
+          if(!this.isAdmin) {
+            this.visualService.applyVisualConfig(newConfig);
+          }
 
           this.snackBar.open('Настройки сохранены успешно', 'Закрыть', {
             duration: 3000

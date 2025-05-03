@@ -84,7 +84,7 @@ export function getPortalFormConfig(
   ];
 
   // Если пользователь администратор и форма для создания (id == null), добавляем выбор аккаунта
-  if (isAdmin && !safeData.id && accountsService) {
+  if (isAdmin && accountsService) {
     const ownerAccountField = {
       type: FieldType.select,
       name: 'ownerAccountId',
