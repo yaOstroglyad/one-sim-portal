@@ -57,6 +57,7 @@ export class AuthService {
           'harriet-travels@1-esim.com',
           'harriet-travels',
           'wecom@gmail.com',
+          'wecom-support',
           'Intourist',
           'wecom'
         ];

@@ -46,7 +46,6 @@ export const navItems: any[] = [
 	{
 		name: 'nav.settings',
 		url: '/home/settings',
-		permissions: [ADMIN_PERMISSION],
 		iconComponent: {name: 'cil-settings'},
 		children: [
 			{
@@ -55,10 +54,12 @@ export const navItems: any[] = [
 			},
 			{
 				name: 'nav.domains',
+				permissions: [ADMIN_PERMISSION],
 				url: '/home/settings/domains'
 			},
 			{
 				name: 'nav.viewConfiguration',
+				permissions: [ADMIN_PERMISSION],
 				children: [
 					{
 						name: 'nav.portal',
