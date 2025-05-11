@@ -113,6 +113,7 @@ export function getPortalFormConfig(
               // Обновляем значения полей формы на основе полученной конфигурации
               const viewConfig = accountConfig.viewConfig;
               formGenerator.form.patchValue({
+                id: accountConfig.id,
                 primaryColor: viewConfig.primaryColor,
                 secondaryColor: viewConfig.secondaryColor,
                 logoUrl: viewConfig.logoUrl,

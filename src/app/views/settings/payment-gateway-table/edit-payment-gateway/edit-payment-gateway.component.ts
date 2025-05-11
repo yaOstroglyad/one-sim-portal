@@ -80,17 +80,17 @@ export class EditPaymentGatewayComponent implements OnInit, AfterViewInit {
 
   public handleFormChanges(form: FormGroup): void {
     if (!form) return;
-    
+
     this.form = form;
     const primaryControl = this.form.get('primary');
     if (primaryControl) {
       this.isPrimary = primaryControl.value;
     }
-    
+
     if (!this.initialValues) {
       this.initialValues = this.form.getRawValue();
     }
-    
+
     this.isFormValid = form.valid;
     this.cdr.detectChanges();
   }
