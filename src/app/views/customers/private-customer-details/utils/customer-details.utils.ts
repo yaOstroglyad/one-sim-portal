@@ -16,7 +16,7 @@ export function getSubscriberByName(subscribers: Subscriber[], name: string): Su
 
 export function calculateFinancialSummary(purchasedProducts: any[]): FinancialSummary {
 	let totalSpent = 0;
-	let totalUsedGB = 0;
+	let totalUsedBytes = 0;
 	let currency = 'USD';
 
 	for (const product of purchasedProducts) {
@@ -27,14 +27,18 @@ export function calculateFinancialSummary(purchasedProducts: any[]): FinancialSu
 
 		if (product.usage?.balance) {
 			product.usage.balance.forEach((balance: Balance) => {
-				const conversionFactor = balance.unitType === 'Gigabyte' as any ? 1024 * 1024 * 1024 : 1;
-				totalUsedGB += Math.round((balance.used || 0) / conversionFactor * 100) / 100;
+				const conversionFactor = balance.unitType === 'Gigabyte' ? 1024 * 1024 * 1024 : 1;
+				totalUsedBytes += (balance.used || 0) / conversionFactor;
 			});
 		}
 	}
 
-	return {totalSpent, totalUsedGB, currency};
+	const totalUsedGB = Math.round(totalUsedBytes * 100) / 100;
+	totalSpent = Math.round(totalSpent * 100) / 100;
+
+	return { totalSpent, totalUsedGB, currency };
 }
+
 
 export function mapTransactionEvents(transactions: any[]): TimelineEvent[] {
 	return transactions.map(transaction => ({

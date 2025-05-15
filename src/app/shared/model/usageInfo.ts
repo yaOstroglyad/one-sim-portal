@@ -23,7 +23,7 @@ export interface UsageInfo {
 
 export namespace UsageInfo {
   export type UsageTypeEnum = 'data' | 'voice' | 'sms';
-  export type UnitTypeDataEnum = 'KB' | 'MB' | 'GB' | 'TB';
+  export type UnitTypeDataEnum = 'KB' | 'MB' | 'GB' | 'TB' | 'Gigabyte';
   export type UnitTypeAmountEnum = 'SMS' | 'Min';
   export const UsageTypeEnum = {
     data: 'data' as UsageTypeEnum,
