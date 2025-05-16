@@ -67,6 +67,7 @@
     "inventory": "Інвентар",
     "users": "Користувачі",
     "settings": "Налаштування",
+    "general": "Загальні",
     "paymentGateway": "Платіжний шлюз",
     "viewConfiguration": "Конфігурація представлення",
     "portal": "Портал",
@@ -334,7 +335,10 @@
   },
   "settings": {
     "paymentGateway": "Платіжний шлюз",
-    "whiteLabelConfiguration": "Конфігурація White Label"
+    "whiteLabelConfiguration": "Конфігурація White Label",
+    "general": {
+      "title": "Загальні налаштування"
+    }
   },
   "paymentGateway": {
     "id": "ID",

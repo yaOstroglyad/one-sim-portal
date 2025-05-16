@@ -67,6 +67,7 @@
     "inventory": "Инвентарь",
     "users": "Пользователи",
     "settings": "Настройки",
+    "general": "Общие",
     "paymentGateway": "Платежный шлюз",
     "viewConfiguration": "Конфигурация представления",
     "portal": "Портал",
@@ -334,7 +335,33 @@
   },
   "settings": {
     "paymentGateway": "Платежный шлюз",
-    "whiteLabelConfiguration": "Конфигурация White Label"
+    "whiteLabelConfiguration": "Конфигурация White Label",
+    "general": {
+      "title": "Общие настройки",
+      "logoUrl": "URL логотипа",
+      "logoUrlPlaceholder": "Введите URL логотипа",
+      "telegramBotLink": "Ссылка на Telegram бота",
+      "telegramBotLinkPlaceholder": "Введите ссылку на Telegram бота",
+      "whatsappSupportLink": "Ссылка на WhatsApp поддержку",
+      "whatsappSupportLinkPlaceholder": "Введите ссылку на WhatsApp поддержку",
+      "senderEmail": "Email отправителя",
+      "senderEmailPlaceholder": "Введите email отправителя",
+      "incomingEmail": "Email для входящих сообщений",
+      "incomingEmailPlaceholder": "Введите email для входящих сообщений",
+      "info": {
+        "title": "Информация о настройках",
+        "description": "Часть настроек будет использована в шаблоне welcome email для ваших клиентов:",
+        "senderEmail": "Email отправителя будет использован как основной email для коммуникации",
+        "logo": "Логотип будет отображаться в письме",
+        "supportLinks": "Ссылки на Telegram бота и WhatsApp поддержку будут добавлены в письмо для быстрого доступа к поддержке"
+      },
+      "messages": {
+        "loadError": "Ошибка при загрузке настроек. Используются дефолтные значения.",
+        "saveSuccess": "Настройки сохранены успешно",
+        "saveError": "Ошибка при сохранении настроек",
+        "close": "Закрыть"
+      }
+    }
   },
   "paymentGateway": {
     "id": "ID",
@@ -444,7 +471,8 @@
     "activate": "Активировать",
     "deactivate": "Деактивировать",
     "applicationType": "Тип приложения",
-    "ownerAccount": "Аккаунт владельца",
+    "ownerAccount": "Компания",
+    "selectOwnerAccount": "Выберите компанию",
     "owner": "Владелец",
     "editOwner": "Редактировать владельца",
     "nameRequired": "Имя обязательно",

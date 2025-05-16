@@ -5,7 +5,17 @@ export const SettingsRouting: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'payment-gateway'
+    redirectTo: 'general'
+  },
+  {
+    path: 'general',
+    loadComponent: () => import('./general/general-settings.component')
+      .then(m => m.GeneralSettingsComponent),
+    data: {
+      title: 'nav.general',
+      permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
+    },
+    canActivate: [permissionGuard]
   },
   {
     path: 'payment-gateway',
@@ -47,4 +57,4 @@ export const SettingsRouting: Routes = [
     },
     canActivate: [permissionGuard]
   }
-]; 
+];

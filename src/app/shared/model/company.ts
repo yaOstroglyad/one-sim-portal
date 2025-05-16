@@ -9,3 +9,13 @@ export interface Company {
   tags: string[];
   type: string;
 }
+
+export interface EditCompanySettings {
+  "id"?: string;
+  "accountId"?: string;
+  "logoUrl": string;
+  "telegramBotLink": string;
+  "whatsappSupportLink": string;
+  "senderEmail": string;
+  "incomingEmail": string;
+}

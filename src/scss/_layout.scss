@@ -7,6 +7,17 @@
   will-change: auto;
   @include transition(padding .15s);
 }
+
+.content-container {
+  margin: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  min-height: calc(var(--ag-row-height) * 3);
+  overflow: hidden;
+  position: relative;
+}
+
 .bg-primary {
   background-color: $primary-color !important;
   border-color: $primary-color;

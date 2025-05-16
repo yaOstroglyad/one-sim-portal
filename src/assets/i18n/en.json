@@ -67,6 +67,7 @@
     "inventory": "Inventory",
     "users": "Users",
     "settings": "Settings",
+    "general": "General",
     "paymentGateway": "Payment Gateway",
     "viewConfiguration": "View Configuration",
     "portal": "Portal",
@@ -335,7 +336,27 @@
   },
   "settings": {
     "paymentGateway": "Payment Gateway",
-    "whiteLabelConfiguration": "White Label Configuration"
+    "whiteLabelConfiguration": "White Label Configuration",
+    "general": {
+      "title": "General Settings",
+      "logoUrl": "Logo URL",
+      "logoUrlPlaceholder": "Enter logo URL",
+      "telegramBotLink": "Telegram Bot Link",
+      "telegramBotLinkPlaceholder": "Enter Telegram bot link",
+      "whatsappSupportLink": "WhatsApp Support Link",
+      "whatsappSupportLinkPlaceholder": "Enter WhatsApp support link",
+      "senderEmail": "Sender Email",
+      "senderEmailPlaceholder": "Enter sender email",
+      "incomingEmail": "Incoming Email",
+      "incomingEmailPlaceholder": "Enter incoming email",
+      "info": {
+        "title": "Settings Information",
+        "description": "Some settings will be used in the welcome email template for your clients:",
+        "senderEmail": "Sender email will be used as the main communication email",
+        "logo": "Logo will be displayed in the email",
+        "supportLinks": "Telegram bot and WhatsApp support links will be added to the email for quick support access"
+      }
+    }
   },
   "paymentGateway": {
     "id": "ID",
@@ -443,7 +464,7 @@
     "activate": "Activate",
     "deactivate": "Deactivate",
     "applicationType": "Application Type",
-    "ownerAccount": "Owner Account",
+    "ownerAccount": "Company",
     "owner": "Owner",
     "editOwner": "Edit Owner",
     "nameRequired": "Name is required",
@@ -452,7 +473,8 @@
     "domainCreatedSuccess": "Domain created successfully",
     "domainNameUpdatedSuccess": "Domain name updated successfully",
     "domainOwnerUpdatedSuccess": "Domain owner updated successfully",
-    "domainStateUpdatedSuccess": "Domain {{state}} successfully"
+    "domainStateUpdatedSuccess": "Domain {{state}} successfully",
+    "selectOwnerAccount": "Select company"
   },
   "add-subscriber": {
     "title": "Add Subscriber",

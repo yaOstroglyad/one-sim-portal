@@ -67,6 +67,7 @@
     "inventory": "מלאי",
     "users": "משתמשים",
     "settings": "הגדרות",
+    "general": "כללי",
     "paymentGateway": "שער תשלום",
     "viewConfiguration": "תצורת תצוגה",
     "portal": "פורטל",
@@ -334,7 +335,10 @@
   },
   "settings": {
     "paymentGateway": "שער תשלום",
-    "whiteLabelConfiguration": "הגדרת White Label"
+    "whiteLabelConfiguration": "הגדרת White Label",
+    "general": {
+      "title": "הגדרות כלליות"
+    }
   },
   "paymentGateway": {
     "id": "מזהה",

@@ -49,6 +49,10 @@ export const navItems: any[] = [
 		iconComponent: {name: 'cil-settings'},
 		children: [
 			{
+				name: 'nav.general',
+				url: '/home/settings/general',
+			},
+			{
 				name: 'nav.paymentGateway',
 				url: '/home/settings/payment-gateway'
 			},
