@@ -1,5 +1,5 @@
 import { FieldType, FormConfig, SelectOption } from 'src/app/shared';
-import { map, of } from 'rxjs';
+import { map } from 'rxjs';
 import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
 import { Validators } from '@angular/forms';
 import { WhiteLabelDataService } from 'src/app/shared/services/white-label-data.service';
