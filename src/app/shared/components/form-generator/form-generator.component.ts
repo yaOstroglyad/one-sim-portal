@@ -15,12 +15,50 @@ import { createControl, initDynamicOptionsForField, setupDisabledState } from '.
 import { isFunction } from 'rxjs/internal/util/isFunction';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ChipsInputComponent } from '../chips-input/chips-input.component';
+import { FormCheckComponent, FormCheckInputDirective } from '@coreui/angular';
+import { RichTextInputComponent } from '../rich-text-input';
 
 @Component({
 	selector: 'app-form-generator',
 	templateUrl: './form-generator.component.html',
 	styleUrls: ['./form-generator.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	standalone: true,
+	imports: [
+		CommonModule,
+		ReactiveFormsModule,
+		MatFormFieldModule,
+		MatInputModule,
+		MatSelectModule,
+		MatDatepickerModule,
+		MatCheckboxModule,
+		MatIconModule,
+		TranslateModule,
+		ColorPickerComponent,
+		MatButtonModule,
+		MatListModule,
+		MatNativeDateModule,
+		FlexLayoutModule,
+		ChipsInputComponent,
+		FormCheckComponent,
+		FormCheckInputDirective,
+		RichTextInputComponent
+	]
 })
 export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 	private unsubscribe$ = new Subject<void>();
@@ -92,13 +130,6 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 		this.config.fields.forEach(field => {
 			initDynamicOptionsForField(field, this.form, this.unsubscribe$);
 		});
-	}
-
-	openColorPicker(fieldName: string): void {
-		const input = document.getElementById(fieldName) as HTMLInputElement;
-		if (input) {
-			input.click();
-		}
 	}
 
 	protected readonly FieldType = FieldType;

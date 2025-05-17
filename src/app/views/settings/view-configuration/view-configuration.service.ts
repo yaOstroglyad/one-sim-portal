@@ -31,7 +31,7 @@ export class ViewConfigurationService {
 
   /**
    * Получить конфигурацию по типу приложения и опционально по ID аккаунта владельца
-   * 
+   *
    * @param type Тип приложения ('admin portal', 'retailer', 'self care')
    * @param ownerAccountId Опциональный ID аккаунта владельца
    *        - Если не передан или null/undefined, бэкенд будет использовать аккаунт из токена
@@ -39,11 +39,11 @@ export class ViewConfigurationService {
    *        - Используется в основном для администраторов, которые могут управлять другими аккаунтами
    */
   getViewConfigByApplicationType(
-    type: "admin portal" | "retailer" | "self care", 
+    type: "admin portal" | "retailer" | "self care",
     ownerAccountId?: string
   ): Observable<ViewConfiguration> {
     let params = new HttpParams().set('type', type);
-    
+
     // Добавляем ownerAccountId в параметры только если он передан
     if (ownerAccountId) {
       params = params.set('ownerAccountId', ownerAccountId);
@@ -73,6 +73,7 @@ export class ViewConfigurationService {
   }
 
   save(config: ViewConfiguration): Observable<ViewConfiguration> {
+    console.log('config', config);
     if (!config.id) {
       return this.create({
         ownerAccountId: config.ownerAccountId,

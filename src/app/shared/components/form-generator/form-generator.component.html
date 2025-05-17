@@ -187,22 +187,14 @@
         </ng-template>
 
         <ng-template #colorTemplate let-field>
-            <div class="color-picker-container">
-                <label>{{ field.label | translate }}</label>
-                <div class="color-picker-wrapper">
-                    <input type="color"
-                           [formControlName]="field.name"
-                           [id]="field.name"
-                           (input)="onInputChange($event, field)">
-                    <div class="color-preview" [style.background-color]="form.get(field.name)?.value"
-                         (click)="openColorPicker(field.name)"></div>
-                    <span class="color-value">{{ form.get(field.name)?.value }}</span>
-                </div>
-                <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
-                    <mat-icon fontIcon="info_outline"></mat-icon>
-                    {{ field.hintMessage | translate }}
-                </mat-hint>
-            </div>
+            <app-color-picker
+                [label]="field.label | translate"
+                [formControlName]="field.name">
+            </app-color-picker>
+            <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
+                <mat-icon fontIcon="info_outline"></mat-icon>
+                {{ field.hintMessage | translate }}
+            </mat-hint>
         </ng-template>
 
         <ng-template #uuidTemplate let-field>

@@ -179,6 +179,7 @@ export function getRetailFormConfig(
               // Обновляем значения полей формы на основе полученной конфигурации
               const viewConfig = accountConfig.viewConfig;
               formGenerator.form.patchValue({
+                id: accountConfig.id,
                 primary: viewConfig.primary,
                 'primary-hover': viewConfig['primary-hover'],
                 'border-neutral': viewConfig['border-neutral'],

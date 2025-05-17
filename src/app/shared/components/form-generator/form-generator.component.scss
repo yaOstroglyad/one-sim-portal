@@ -20,50 +20,6 @@ mat-icon {
   margin-right: 4px;
 }
 
-.color-picker-container {
-  margin-bottom: 1.5rem;
-  width: 100%;
-
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: rgba(0, 0, 0, 0.6);
-    font-size: 14px;
-  }
-
-  .color-picker-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    input[type="color"] {
-      width: 0;
-      height: 0;
-      visibility: hidden;
-      position: absolute;
-    }
-
-    .color-preview {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: 2px solid #ddd;
-      cursor: pointer;
-      transition: transform 0.2s;
-
-      &:hover {
-        transform: scale(1.05);
-      }
-    }
-
-    .color-value {
-      font-family: monospace;
-      color: rgba(0, 0, 0, 0.87);
-      font-size: 14px;
-    }
-  }
-}
-
 :host ::ng-deep {
   .mat-mdc-form-field-hint-wrapper {
     padding: 0;
