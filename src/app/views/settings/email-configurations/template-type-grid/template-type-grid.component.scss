@@ -1,0 +1,23 @@
+.template-type-grid-container {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  generic-table {
+    display: block;
+    margin-top: 20px;
+  }
+}
+
+:host ::ng-deep {
+  .mat-icon {
+    vertical-align: middle;
+  }
+}

@@ -83,9 +83,8 @@ export class GeneralSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.formConfig$ = this.whiteLabelService.companySettings().pipe(
       map(settings => {
-        const currentSettings = settings && settings.length > 0 ? settings[0] : null;
         return getGeneralSettingsFormConfig(
-          currentSettings,
+          settings,
           this.accountsService,
           this.isAdmin,
           this.whiteLabelService

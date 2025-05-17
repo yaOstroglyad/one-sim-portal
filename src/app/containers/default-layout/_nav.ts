@@ -74,6 +74,11 @@ export const navItems: any[] = [
 						url: '/home/settings/view-configuration/retail'
 					}
 				]
+			},
+			{
+				name: 'nav.emailConfigurations',
+				url: '/home/settings/email-configurations',
+				permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
 			}
 		]
 	}

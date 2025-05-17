@@ -1,18 +1,8 @@
-import { FieldType, FormConfig, SelectOption } from 'src/app/shared';
+import { EditCompanySettings, FieldType, FormConfig, SelectOption } from 'src/app/shared';
 import { map } from 'rxjs';
 import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
 import { Validators } from '@angular/forms';
 import { WhiteLabelDataService } from 'src/app/shared/services/white-label-data.service';
-
-export interface EditCompanySettings {
-  id?: string;
-  accountId?: string;
-  logoUrl: string;
-  telegramBotLink: string;
-  whatsappSupportLink: string;
-  senderEmail: string;
-  incomingEmail: string;
-}
 
 export function getCompanySettingsRequest(form: any): EditCompanySettings {
   const request: EditCompanySettings = {
@@ -119,8 +109,8 @@ export function getGeneralSettingsFormConfig(
 
         whiteLabelService.companySettings(event.value)
           .subscribe(settings => {
-            if (settings && settings.length > 0) {
-              const companySettings = settings[0];
+            if (settings) {
+              const companySettings = settings;
               formGenerator.form.patchValue({
                 id: companySettings.id,
                 logoUrl: companySettings.logoUrl,

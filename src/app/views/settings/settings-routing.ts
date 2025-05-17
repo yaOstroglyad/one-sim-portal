@@ -56,5 +56,15 @@ export const SettingsRouting: Routes = [
       permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
     },
     canActivate: [permissionGuard]
+  },
+  {
+    path: 'email-configurations',
+    loadComponent: () => import('./email-configurations/email-configurations.component')
+      .then(m => m.EmailConfigurationsComponent),
+    data: {
+      title: 'nav.emailConfigurations',
+      permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
+    },
+    canActivate: [permissionGuard]
   }
 ];

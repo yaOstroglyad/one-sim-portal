@@ -1,0 +1,35 @@
+<div class="d-flex justify-content-end align-items-center mb-3 mx-3">
+
+    <button mat-raised-button color="primary" (click)="createTemplate()">
+        <mat-icon>add</mat-icon>
+        {{ 'common.create' | translate }}
+    </button>
+</div>
+
+<generic-table
+  [config$]="tableConfig$"
+  [data$]="dataList$"
+  [menu]="menuTemplate">
+</generic-table>
+
+<ng-template #menuTemplate let-item>
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item
+                (click)="editTemplate(item)">{{ 'common.edit' | translate }}
+        </button>
+
+        <button mat-menu-item
+                (click)="setAsPrimary(item)" *ngIf="!item.primary">{{ 'common.setAsPrimary' | translate }}
+        </button>
+    </mat-menu>
+</ng-template>
+
+<ng-template #isPrimaryTemplate let-data="context">
+    <c-badge [class]="data?.primary ? 'primary-badge' : 'disabled-badge'"
+             class="me-1"
+             shape="rounded-pill">{{ data?.primary }}
+    </c-badge>
+</ng-template>

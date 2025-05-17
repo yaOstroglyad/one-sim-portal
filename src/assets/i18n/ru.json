@@ -36,6 +36,9 @@
     "of": "из"
   },
   "common": {
+    "create": "Create",
+    "edit": "Edit",
+    "setAsPrimary": "Set as primary",
     "cancel": "Отмена",
     "send": "Отправить",
     "save": "Сохранить",
@@ -74,7 +77,8 @@
     "portalViewConfiguration": "Конфигурация представления портала",
     "retail": "Розница",
     "retailViewConfiguration": "Конфигурация представления розницы",
-    "domains": "Домены"
+    "domains": "Домены",
+    "emailConfigurations": "Настройки Email"
   },
   "dynamicEntityDetails": {
     "title": "Детали объекта"
@@ -519,5 +523,21 @@
   },
   "COMMON": {
     "CANCEL": "Отмена"
+  },
+  "email": {
+    "configurations": {
+      "title": "Настройки Email",
+      "selectAccountFirst": "Пожалуйста, сначала выберите аккаунт"
+    },
+    "templates": "Шаблоны",
+    "template": {
+      "create": "Создать шаблон",
+      "edit": "Редактировать шаблон",
+      "setAsPrimary": "Сделать основным",
+      "templateId": "SendGrid ID шаблона",
+      "subject": "Тема письма",
+      "language": "Язык",
+      "selectLanguage": "Выберите язык"
+    }
   }
 }

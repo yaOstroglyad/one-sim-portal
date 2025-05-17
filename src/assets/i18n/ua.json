@@ -36,6 +36,9 @@
     "of": "з"
   },
   "common": {
+    "create": "Create",
+    "edit": "Edit",
+    "setAsPrimary": "Set as primary",
     "cancel": "Скасувати",
     "send": "Надіслати",
     "save": "Зберегти",
@@ -74,7 +77,8 @@
     "portalViewConfiguration": "Конфігурація представлення порталу",
     "retail": "Роздріб",
     "retailViewConfiguration": "Конфігурація представлення роздрібу",
-    "domains": "Домени"
+    "domains": "Домени",
+    "emailConfigurations": "Налаштування Email"
   },
   "dynamicEntityDetails": {
     "title": "Деталі об'єкта"
@@ -465,5 +469,21 @@
   "send-registration-email": {
     "title": "Надіслати реєстраційний лист",
     "submit": "Надіслати лист"
+  },
+  "email": {
+    "configurations": {
+      "title": "Налаштування Email",
+      "selectAccountFirst": "Будь ласка, спочатку виберіть обліковий запис"
+    },
+    "templates": "Шаблони",
+    "template": {
+      "create": "Створити шаблон",
+      "edit": "Редагувати шаблон",
+      "setAsPrimary": "Зробити основним",
+      "templateId": "SendGrid ID шаблону",
+      "subject": "Тема листа",
+      "language": "Мова",
+      "selectLanguage": "Виберіть мову"
+    }
   }
 }

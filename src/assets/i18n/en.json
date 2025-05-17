@@ -36,6 +36,9 @@
     "of": "of"
   },
   "common": {
+    "create": "Create",
+    "edit": "Edit",
+    "setAsPrimary": "Set as primary",
     "cancel": "Cancel",
     "send": "Send",
     "save": "Save",
@@ -74,7 +77,8 @@
     "portalViewConfiguration": "Portal view configuration",
     "retail": "Retail",
     "retailViewConfiguration": "Retail view configuration",
-    "domains": "Domains"
+    "domains": "Domains",
+    "emailConfigurations": "Email Configurations"
   },
   "dynamicEntityDetails": {
     "title": "Entity Details"
@@ -512,5 +516,21 @@
   },
   "COMMON": {
     "CANCEL": "Cancel"
+  },
+  "email": {
+    "configurations": {
+      "title": "Email Configurations",
+      "selectAccountFirst": "Please select an account first"
+    },
+    "templates": "Templates",
+    "template": {
+      "create": "Create Template",
+      "edit": "Edit Template",
+      "setAsPrimary": "Set as Primary",
+      "templateId": "SendGrid Template ID",
+      "subject": "Email Subject",
+      "language": "Language",
+      "selectLanguage": "Select language"
+    }
   }
 }

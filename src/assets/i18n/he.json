@@ -36,6 +36,9 @@
     "of": "מתוך"
   },
   "common": {
+    "create": "Create",
+    "edit": "Edit",
+    "setAsPrimary": "Set as primary",
     "cancel": "בטל",
     "send": "שלח",
     "save": "שמור",
@@ -74,7 +77,8 @@
     "portalViewConfiguration": "הגדרות תצוגת פורטל",
     "retail": "קמעונאי",
     "retailViewConfiguration": "הגדרות תצוגת קמעונאי",
-    "domains": "דומיינים"
+    "domains": "דומיינים",
+    "emailConfigurations": "הגדרות דואר אלקטרוני"
   },
   "dynamicEntityDetails": {
     "title": "פרטי ישות"
@@ -465,5 +469,21 @@
   "send-registration-email": {
     "title": "שלח דוא\"ל רישום",
     "submit": "שלח דוא\"ל"
+  },
+  "email": {
+    "configurations": {
+      "title": "הגדרות דואר אלקטרוני",
+      "selectAccountFirst": "אנא בחר חשבון תחילה"
+    },
+    "templates": "תבניות",
+    "template": {
+      "create": "צור תבנית",
+      "edit": "ערוך תבנית",
+      "setAsPrimary": "הגדר כראשי",
+      "templateId": "מזהה תבנית SendGrid",
+      "subject": "נושא המייל",
+      "language": "שפה",
+      "selectLanguage": "בחר שפה"
+    }
   }
 }
