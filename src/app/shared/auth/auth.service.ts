@@ -59,7 +59,9 @@ export class AuthService {
           'wecom@gmail.com',
           'wecom-support',
           'Intourist',
-          'wecom'
+          'wecom',
+          'seamless-travel-support',
+          'wander-world-travel-support',
         ];
         const support = [];
         const loginResponse = this.$SessionStorageService.retrieve('loginResponse') || this.$LocalStorageService.retrieve('loginResponse');
