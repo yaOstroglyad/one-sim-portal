@@ -1,0 +1,9 @@
+<div class="account-selector">
+    <app-form-generator *ngIf="accountSelectorConfig"
+        [config]="accountSelectorConfig">
+    </app-form-generator>
+    <div class="helper-text" *ngIf="!selectedAccountId">
+        <mat-icon color="primary">info</mat-icon>
+        {{ helperText | translate }}
+    </div>
+</div>

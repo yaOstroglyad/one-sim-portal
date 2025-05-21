@@ -13,7 +13,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EditPaymentGatewayComponent } from './edit-payment-gateway/edit-payment-gateway.component';
 import { PaymentStrategy } from 'src/app/shared/model/payment-strategies';
 import { GenericTableModule } from 'src/app/shared/components/generic-table/generic-table.module';
-import { ADMIN_PERMISSION, AuthService, TableConfig } from 'src/app/shared';
+import { ADMIN_PERMISSION, AuthService, TableConfig, Account } from 'src/app/shared';
+import { AccountSelectorComponent } from 'src/app/shared/components/account-selector/account-selector.component';
 
 @Component({
 	selector: 'app-payment-gateway-table',
@@ -31,7 +32,8 @@ import { ADMIN_PERMISSION, AuthService, TableConfig } from 'src/app/shared';
 		BadgeModule,
 		ButtonModule,
 		DropdownModule,
-		MatDialogModule
+		MatDialogModule,
+		AccountSelectorComponent
 	],
 	providers: [
 		PaymentGatewayTableConfigService,
@@ -46,6 +48,7 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 	public tableConfig$: BehaviorSubject<TableConfig>;
 	public dataList$: Observable<any[]>;
 	public strategyTypes$: Observable<string[]>;
+	public selectedAccount: Account | null = null;
 
 	constructor(
 		private cdr: ChangeDetectorRef,
@@ -66,7 +69,9 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 	}
 
 	ngOnInit(): void {
-		this.loadPaymentGateways();
+		if (!this.isAdmin) {
+			this.loadPaymentGateways();
+		}
 	}
 
 	ngAfterViewInit(): void {
@@ -82,8 +87,15 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 		this.unsubscribe$.complete();
 	}
 
-	private loadPaymentGateways(): void {
-		this.paymentGatewayService.list()
+	public onAccountSelected(account: Account): void {
+		this.selectedAccount = account;
+		if (!account.isAdmin) {
+			this.loadPaymentGateways(account.id);
+		}
+	}
+
+	private loadPaymentGateways(accountId?: string): void {
+		this.paymentGatewayService.list(accountId)
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe(data => {
 				this.tableService.updateTableData(data);
@@ -92,7 +104,7 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 			});
 
 		this.strategyTypes$ = combineLatest([
-			this.paymentGatewayService.list(),
+			this.paymentGatewayService.list(accountId),
 			this.paymentGatewayService.getPaymentStrategyTypes()
 		]).pipe(
 			switchMap(([metadata, types]) => {
@@ -107,14 +119,17 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 	public edit(item: PaymentStrategy): void {
 		const dialogRef = this.dialog.open(EditPaymentGatewayComponent, {
 			width: '650px',
-			data: item
+			data: {
+				...item,
+				accountId: this.selectedAccount?.id
+			}
 		});
 
 		dialogRef.afterClosed()
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe(() => {
 				setTimeout(() => {
-					this.loadPaymentGateways();
+					this.loadPaymentGateways(this.selectedAccount?.id);
 				}, 3000);
 			});
 	}

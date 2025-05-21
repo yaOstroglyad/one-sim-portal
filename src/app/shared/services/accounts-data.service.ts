@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { DataService } from './data.service';
+import { Account } from '../model/account.model';
 
 @Injectable({
 	providedIn: 'root'
@@ -14,7 +15,6 @@ export class AccountsDataService extends DataService<any> {
 	}
 
 	list(): Observable<any[]> {
-
 		return this.http.get<any[]>(this.apiUrl).pipe(
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
@@ -30,11 +30,11 @@ export class AccountsDataService extends DataService<any> {
 		);
 	}
 
-	ownerAccounts(): Observable<any[]> {
-		return this.http.get<any[]>('/api/v1/whitelabel/common/owner-accounts').pipe(
+	ownerAccounts(): Observable<Account[]> {
+		return this.http.get<Account[]>('/api/v1/whitelabel/common/owner-accounts').pipe(
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
-				return of([])
+				return of([]);
 			})
 		);
 	}

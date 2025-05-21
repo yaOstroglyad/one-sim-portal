@@ -15,6 +15,7 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthService, CustomHttpInterceptor } from './shared';
 import { GlobalErrorHandlerService } from './shared/auth/error-handler.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -38,6 +39,7 @@ export function combinedInitializer(translate: TranslateService, authService: Au
     BrowserAnimationsModule,
     PagesModule,
     AppRoutingModule,
+    MatSnackBarModule,
     NgxWebstorageModule.forRoot(),
     HttpClientModule,
     TranslateModule.forRoot({

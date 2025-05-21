@@ -11,3 +11,56 @@
 .disabled-badge {
   background: #909190;
 }
+
+.admin-account-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background-color: rgba(244, 67, 54, 0.1);
+  border-radius: 4px;
+  color: rgba(0, 0, 0, 0.87);
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.account-selector {
+  .helper-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    color: rgba(0, 0, 0, 0.6);
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.badge-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.active-badge {
+  background-color: #4caf50;
+  color: white;
+}
+
+.primary-badge {
+  background-color: #2196f3;
+  color: white;
+}
+
+.disabled-badge {
+  background-color: #9e9e9e;
+  color: white;
+}

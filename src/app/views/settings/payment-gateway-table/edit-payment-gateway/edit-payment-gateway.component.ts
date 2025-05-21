@@ -45,10 +45,11 @@ export class EditPaymentGatewayComponent implements OnInit, AfterViewInit {
   public strategyId: Partial<PaymentStrategy['id']> = null;
   public isFormValid: boolean = false;
   private initialValues: any;
+  private accountId: string | null = null;
 
   constructor(
     public dialogRef: MatDialogRef<EditPaymentGatewayComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PaymentStrategy,
+    @Inject(MAT_DIALOG_DATA) public data: PaymentStrategy & { accountId?: string },
     private paymentGatewayService: PaymentGatewayService,
     private paymentGatewayUtilsService: PaymentGatewayUtilsService,
     private snackBar: MatSnackBar,
@@ -58,6 +59,7 @@ export class EditPaymentGatewayComponent implements OnInit, AfterViewInit {
     this.isActive = this.data?.isActive ?? false;
     this.isPrimary = this.data?.primary ?? false;
     this.strategyId = this.data?.id || null;
+    this.accountId = this.data?.accountId || null;
   }
 
   public ngOnInit(): void {
@@ -115,7 +117,7 @@ export class EditPaymentGatewayComponent implements OnInit, AfterViewInit {
       };
 
       if (!this.data.id) {
-        this.paymentGatewayService.create(customerData).subscribe(() => this.notify(this.translate.instant('editPaymentGateway.configurationCreated')));
+        this.paymentGatewayService.create(customerData, this.accountId).subscribe(() => this.notify(this.translate.instant('editPaymentGateway.configurationCreated')));
       } else {
         this.paymentGatewayService.update(customerData).subscribe(() => this.notify(this.translate.instant('editPaymentGateway.configurationUpdated')));
       }

@@ -1,13 +1,10 @@
 <div class="container">
 
-  <div class="account-selector mx-3 mb-3" *ngIf="isAdmin">
-    <app-form-generator
-      [config]="accountSelectorConfig">
-    </app-form-generator>
-    <div class="helper-text" *ngIf="!selectedAccountId">
-      <mat-icon color="primary">info</mat-icon>
-      {{ 'email.configurations.selectAccountFirst' | translate }}
-    </div>
+  <div class="mx-3 mb-3" *ngIf="isAdmin">
+    <app-account-selector
+      [helperText]="'email.configurations.selectAccountFirst'"
+      (accountSelected)="onAccountSelected($event)">
+    </app-account-selector>
   </div>
 
   <div class="template-types-grid mx-3 mb-3">

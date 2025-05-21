@@ -83,6 +83,23 @@ export class CreateProductComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 
+		// Add subscription to product name and description changes
+		this.subscriptions.push(
+			this.form.get('productCommand.name').valueChanges.subscribe(value => {
+				if (this.form.get('bundleCommand').enabled) {
+					this.form.get('bundleCommand.name').setValue(value, { emitEvent: false });
+				}
+			})
+		);
+
+		this.subscriptions.push(
+			this.form.get('productCommand.description').valueChanges.subscribe(value => {
+				if (this.form.get('bundleCommand').enabled) {
+					this.form.get('bundleCommand.description').setValue(value, { emitEvent: false });
+				}
+			})
+		);
+
 		if(this.isAdmin) {
 			this.subscriptions.push(
 				this.providerBundlesDataService.list().subscribe(bundles => {

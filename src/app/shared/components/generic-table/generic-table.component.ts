@@ -40,7 +40,7 @@ export class GenericTableComponent implements OnChanges {
 	public selectedItems = new Set<any>();
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes.config$ || changes.data$) {
+		if ((changes.config$ || changes.data$) && this.config$ && this.data$) {
 			this.createViewModel();
 		}
 	}
