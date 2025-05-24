@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface ViewConfiguration {
   id: string;
@@ -39,41 +39,27 @@ export class ViewConfigurationService {
    *        - Используется в основном для администраторов, которые могут управлять другими аккаунтами
    */
   getViewConfigByApplicationType(
-    type: "admin portal" | "retailer" | "self care",
+    type: ViewConfiguration['applicationType'],
     ownerAccountId?: string
   ): Observable<ViewConfiguration> {
     let params = new HttpParams().set('type', type);
-
-    // Добавляем ownerAccountId в параметры только если он передан
     if (ownerAccountId) {
       params = params.set('ownerAccountId', ownerAccountId);
     }
 
-    return this.http.get<ViewConfiguration>(`${this.API_URL}/query/data`, { params }).pipe(
-      map(response => {
-        if (!response) {
-          return this.getDefaultConfig(type);
-        }
-
-        // Если viewConfig пустой или отсутствует, добавляем дефолтные значения viewConfig
-        if (!response.viewConfig || Object.keys(response.viewConfig).length === 0) {
-          return {
-            ...response,
-            viewConfig: this.getDefaultViewConfig(type)
-          };
-        }
-
-        return response;
-      }),
-      catchError(error => {
-        console.warn('Error fetching view configuration:', error);
-        return of(this.getDefaultConfig(type));
-      })
-    );
+    return this.http
+      .get<ViewConfiguration>(`${this.API_URL}/query/data`, { params })
+      .pipe(
+        map(response => {
+          if (!response || !response.viewConfig || Object.keys(response.viewConfig).length === 0) {
+            return this.getDefaultConfig(type);
+          }
+          return response;
+        }),
+      );
   }
 
   save(config: ViewConfiguration): Observable<ViewConfiguration> {
-    console.log('config', config);
     if (!config.id) {
       return this.create({
         ownerAccountId: config.ownerAccountId,
@@ -96,7 +82,7 @@ export class ViewConfigurationService {
     return this.http.patch<ViewConfiguration>(`${this.API_URL}/command/update`, request);
   }
 
-  private getDefaultConfig(type: "admin portal" | "retailer" | "self care"): ViewConfiguration {
+  public getDefaultConfig(type: ViewConfiguration['applicationType']): ViewConfiguration {
     return {
       id: null,
       applicationType: type,

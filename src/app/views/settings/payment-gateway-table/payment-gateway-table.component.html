@@ -59,12 +59,10 @@
 
 <ng-template #forAdmin>
     <div class="container">
-        <div class="mx-3 mb-3">
-            <app-account-selector
-                [helperText]="'paymentGateway.selectAccountFirst'"
-                (accountSelected)="onAccountSelected($event)">
-            </app-account-selector>
-        </div>
+        <app-account-selector
+            [helperText]="'paymentGateway.selectAccountFirst'"
+            (accountSelected)="onAccountSelected($event)">
+        </app-account-selector>
 
         <ng-container *ngIf="selectedAccount">
             <div *ngIf="selectedAccount.isAdmin" class="admin-account-message mx-3">

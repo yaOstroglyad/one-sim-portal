@@ -1,15 +1,39 @@
 .account-selector {
+  background: #fff;
+  border: 1px solid var(--ag-border-color);
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 24px;
+
   .helper-text {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-top: 8px;
-    color: rgba(0, 0, 0, 0.6);
-    
+    color: var(--ag-secondary-color, #666);
+    font-size: 14px;
+
     mat-icon {
       font-size: 18px;
       width: 18px;
       height: 18px;
     }
   }
-} 
+
+  mat-form-field {
+    margin-bottom: 8px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .account-selector {
+    max-width: 100%;
+    margin: 0 16px;
+    padding: 16px;
+  }
+}

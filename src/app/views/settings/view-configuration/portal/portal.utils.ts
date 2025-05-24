@@ -83,7 +83,6 @@ export function getPortalFormConfig(
     }
   ];
 
-  // Если пользователь администратор и форма для создания (id == null), добавляем выбор аккаунта
   if (isAdmin && accountsService) {
     const ownerAccountField = {
       type: FieldType.select,
@@ -101,16 +100,13 @@ export function getPortalFormConfig(
       ),
       multiple: false,
       inputEvent: (event: any, formGenerator: any, field: any) => {
-        // Если сервис не передан или значение не выбрано, не выполняем запрос
         if (!viewConfigService || !event || !event.value) {
           return;
         }
 
-        // Запрашиваем конфигурацию для выбранного аккаунта
         viewConfigService.getViewConfigByApplicationType('admin portal', event.value)
           .subscribe(accountConfig => {
             if (accountConfig && accountConfig.viewConfig) {
-              // Обновляем значения полей формы на основе полученной конфигурации
               const viewConfig = accountConfig.viewConfig;
               formGenerator.form.patchValue({
                 id: accountConfig.id,

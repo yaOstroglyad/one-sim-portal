@@ -1,32 +1,30 @@
 <div class="container">
 
-  <div class="mx-3 mb-3" *ngIf="isAdmin">
-    <app-account-selector
-      [helperText]="'email.configurations.selectAccountFirst'"
-      (accountSelected)="onAccountSelected($event)">
+    <app-account-selector *ngIf="isAdmin"
+                          [helperText]="'email.configurations.selectAccountFirst'"
+                          (accountSelected)="onAccountSelected($event)">
     </app-account-selector>
-  </div>
 
-  <div class="template-types-grid mx-3 mb-3">
-    <div class="template-type-card" *ngFor="let type of templateTypes$ | async">
-      <mat-card
-        (click)="selectTemplateType(type)"
-        [class.selected]="selectedTemplateType === type"
-        [class.disabled]="isAdmin && !selectedAccountId">
-        <mat-card-header>
-          <mat-card-title>{{ type | translate }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-icon>email</mat-icon>
-        </mat-card-content>
-      </mat-card>
+    <div class="template-types-grid mx-3 mb-3">
+        <div class="template-type-card" *ngFor="let type of templateTypes$ | async">
+            <mat-card
+                    (click)="selectTemplateType(type)"
+                    [class.selected]="selectedTemplateType === type"
+                    [class.disabled]="isAdmin && !selectedAccountId">
+                <mat-card-header>
+                    <mat-card-title>{{ type | translate }}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-icon>email</mat-icon>
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
-  </div>
 
-  <ng-container *ngIf="selectedTemplateType">
-    <app-template-type-grid
-      [type]="selectedTemplateType"
-      [ownerAccountId]="selectedAccountId">
-    </app-template-type-grid>
-  </ng-container>
+    <ng-container *ngIf="selectedTemplateType">
+        <app-template-type-grid
+                [type]="selectedTemplateType"
+                [ownerAccountId]="selectedAccountId">
+        </app-template-type-grid>
+    </ng-container>
 </div>

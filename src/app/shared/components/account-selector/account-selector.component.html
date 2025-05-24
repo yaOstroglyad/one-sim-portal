@@ -1,7 +1,13 @@
-<div class="account-selector">
-    <app-form-generator *ngIf="accountSelectorConfig"
-        [config]="accountSelectorConfig">
-    </app-form-generator>
+<div class="account-selector mb-3 mx-3">
+    <mat-form-field appearance="outline" class="w-100">
+        <mat-label>{{ 'domains.ownerAccount' | translate }}</mat-label>
+        <mat-select [formControl]="accountControl">
+            <mat-option *ngFor="let account of accounts" [value]="account.id">
+                {{ getAccountDisplayName(account) }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
     <div class="helper-text" *ngIf="!selectedAccountId">
         <mat-icon color="primary">info</mat-icon>
         {{ helperText | translate }}
