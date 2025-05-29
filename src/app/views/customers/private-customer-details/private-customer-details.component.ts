@@ -214,7 +214,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	public addSubscriber() {
 		const data = {
 			customerId: this.customerId,
-			email: this.customerDetails.userProfile.email
+			email: this.customerDetails?.userProfile?.email
 		};
 		const dialogRef = this.dialog.open(AddSubscriberComponent, {
 			width: '600px',
