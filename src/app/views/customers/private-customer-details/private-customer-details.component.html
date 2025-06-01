@@ -15,7 +15,6 @@
                     <span>{{ 'customer.private-customer-details.add-subscriber' | translate }}</span>
                 </button>
                 <button mat-menu-item
-                        *ngIf="isAdmin || isSpecial"
                         [disabled]="!selectedSubscriber"
                         [matTooltipDisabled]="!!selectedSubscriber"
                         matTooltip="{{ 'customer.private-customer-details.sendRegistrationEmailTooltip' | translate }}"
@@ -41,7 +40,6 @@
                     <span>{{ 'customer.private-customer-details.add-product' | translate }}</span>
                 </button>
                 <button mat-menu-item
-                        *ngIf="isAdmin || isSpecial"
                         [disabled]="!selectedSubscriber"
                         [matTooltipDisabled]="!!selectedSubscriber"
                         matTooltip="{{ 'customer.private-customer-details.refundTooltip' | translate }}"
