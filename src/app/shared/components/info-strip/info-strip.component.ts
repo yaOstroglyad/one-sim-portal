@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { ThemePalette } from '@angular/material/core';
 
 export type InfoStripType = 'primary' | 'warning' | 'alert';
 
@@ -15,4 +16,5 @@ export class InfoStripComponent {
   @Input() icon: string = 'info';
   @Input() text: string = '';
   @Input() type: InfoStripType = 'primary';
-} 
+  @Input() iconColor: ThemePalette = 'primary';
+}

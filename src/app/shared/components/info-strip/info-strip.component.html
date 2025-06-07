@@ -1,4 +1,4 @@
 <div class="info-strip" [ngClass]="'info-strip--' + type">
-  <mat-icon [color]="type === 'primary' ? 'primary' : ''">{{ icon }}</mat-icon>
+  <mat-icon [color]="iconColor">{{ icon }}</mat-icon>
   <span class="info-strip__text" [innerHTML]="text"></span>
-</div> 
+</div>
