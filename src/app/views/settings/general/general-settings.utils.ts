@@ -4,12 +4,15 @@ import { AccountsDataService } from 'src/app/shared/services/accounts-data.servi
 import { Validators } from '@angular/forms';
 import { WhiteLabelDataService } from 'src/app/shared/services/white-label-data.service';
 
+const DEFAULT_SERVICE_EMAIL = 'service@1-esim.com';
+
 export function getCompanySettingsRequest(form: any): EditCompanySettings {
   const request: EditCompanySettings = {
     logoUrl: form.logoUrl || '',
     telegramBotLink: form.telegramBotLink || '',
     whatsappSupportLink: form.whatsappSupportLink || '',
     senderEmail: form.senderEmail || '',
+    supportEmail: form.supportEmail || '',
     incomingEmail: form.incomingEmail || ''
   };
 
@@ -34,9 +37,12 @@ export function getGeneralSettingsFormConfig(
     logoUrl: '',
     telegramBotLink: '',
     whatsappSupportLink: '',
-    senderEmail: '',
+    senderEmail: DEFAULT_SERVICE_EMAIL,
+    supportEmail: DEFAULT_SERVICE_EMAIL,
     incomingEmail: ''
   };
+
+  console.log('safeData', safeData);
 
   const formFields = [
     {
@@ -73,8 +79,16 @@ export function getGeneralSettingsFormConfig(
       name: 'senderEmail',
       label: 'settings.general.senderEmail',
       value: safeData.senderEmail || '',
-      validators: [Validators.required, Validators.email],
+      invisible: true,
       placeholder: 'settings.general.senderEmailPlaceholder'
+    },
+    {
+      type: FieldType.text,
+      name: 'supportEmail',
+      label: 'Support Email',
+      value: safeData.supportEmail || '',
+      validators: [Validators.required, Validators.email],
+      placeholder: 'Set support email'
     },
     {
       type: FieldType.text,
@@ -116,7 +130,8 @@ export function getGeneralSettingsFormConfig(
                 logoUrl: companySettings.logoUrl,
                 telegramBotLink: companySettings.telegramBotLink,
                 whatsappSupportLink: companySettings.whatsappSupportLink,
-                senderEmail: companySettings.senderEmail,
+                senderEmail: companySettings.senderEmail || DEFAULT_SERVICE_EMAIL,
+                supportEmail: companySettings.supportEmail || DEFAULT_SERVICE_EMAIL,
                 incomingEmail: companySettings.incomingEmail
               });
             }

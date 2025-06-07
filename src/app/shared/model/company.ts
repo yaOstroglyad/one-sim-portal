@@ -17,5 +17,6 @@ export interface EditCompanySettings {
   "telegramBotLink": string;
   "whatsappSupportLink": string;
   "senderEmail": string;
+  "supportEmail": string;
   "incomingEmail": string;
 }
