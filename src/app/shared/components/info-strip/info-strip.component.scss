@@ -1,0 +1,50 @@
+.info-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  border-left: 4px solid;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  &__text {
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  // Primary type (default blue)
+  &--primary {
+    background-color: #e3f2fd;
+    border-left-color: #2196f3;
+    color: #1565c0;
+  }
+
+  // Warning type (orange/yellow)
+  &--warning {
+    background-color: #fff3e0;
+    border-left-color: #ff9800;
+    color: #ef6c00;
+
+    mat-icon {
+      color: #ff9800;
+    }
+  }
+
+  // Alert type (red)
+  &--alert {
+    background-color: #ffebee;
+    border-left-color: #f44336;
+    color: #c62828;
+
+    mat-icon {
+      color: #f44336;
+    }
+  }
+} 
