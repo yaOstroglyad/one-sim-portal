@@ -22,6 +22,154 @@ export function setupDisabledState(form: FormGroup, fields: FieldConfig[]): void
 	});
 }
 
+// ===== FORM FIELD CLASS UTILITIES =====
+
+/**
+ * Determines if a field has active hint or error content
+ */
+export function hasFieldHintOrError(field: FieldConfig, form: FormGroup): boolean {
+	const control = form?.get(field.name);
+
+	// Check for ACTIVE hint (defined and not empty)
+	const hasActiveHint = !!(field.hintMessage && field.hintMessage.trim());
+
+	// Check for ACTIVE error (exists, not empty, and field is touched/dirty)
+	const hasActiveError = !!(
+		control &&
+		control.errors &&
+		Object.keys(control.errors).length > 0 &&
+		(control.touched || control.dirty)
+	);
+
+	return hasActiveHint || hasActiveError;
+}
+
+/**
+ * Determines if field errors should be displayed
+ */
+export function shouldShowError(fieldName: string, form: FormGroup): boolean {
+	const control = form?.get(fieldName);
+	return !!(control && control.errors && (control.touched || control.dirty));
+}
+
+/**
+ * Generates complete CSS class string for form field wrapper
+ */
+export function getFormFieldClass(field: FieldConfig, form: FormGroup): string {
+	const baseClass = field.className || '';
+	const control = form?.get(field.name);
+
+	// Check for ACTIVE hint (defined, not empty, and trimmed)
+	const hasActiveHint = !!(field.hintMessage && field.hintMessage.trim());
+
+	// Check for ACTIVE error (exists, not empty, and field was interacted with)
+	const hasActiveError = !!(
+		control &&
+		control.errors &&
+		Object.keys(control.errors).length > 0 &&
+		(control.touched || control.dirty)
+	);
+
+	let classes = baseClass;
+
+	// Only add classes when content is actually present/active AND visible
+	if (hasActiveHint) {
+		classes += ' has-active-hint';
+	}
+
+	if (hasActiveError) {
+		classes += ' has-active-error';
+	}
+
+	if (hasActiveHint || hasActiveError) {
+		classes += ' has-active-subscript-content';
+	}
+
+	// Add dynamic spacing class
+	const spacingClass = getSpacingClass(field, form);
+	if (spacingClass) {
+		classes += ` ${spacingClass}`;
+	}
+
+	return classes.trim();
+}
+
+// ===== SPACING UTILITIES =====
+
+/**
+ * Determines appropriate spacing class for a field
+ */
+export function getSpacingClass(field: FieldConfig, form: FormGroup): string {
+	// If marginBottom is explicitly set, use it regardless of content
+	if (field.marginBottom !== undefined) {
+		if (field.marginBottom === 0) {
+			return 'mb-0';
+		}
+
+		// Handle string aliases
+		if (typeof field.marginBottom === 'string') {
+			const aliases = ['sm', 'md', 'lg', 'xl'];
+			if (aliases.includes(field.marginBottom)) {
+				return `mb-${field.marginBottom}`;
+			}
+		}
+
+		// Handle numeric values
+		if (typeof field.marginBottom === 'number') {
+			return convertToClassName(field.marginBottom);
+		}
+	}
+
+	// Smart default spacing based on content presence
+	return getSmartDefaultSpacing(field, form);
+}
+
+/**
+ * Determines smart default spacing based on field content
+ */
+export function getSmartDefaultSpacing(field: FieldConfig, form: FormGroup): string {
+	const control = form?.get(field.name);
+
+	// Check if there's any active content that provides visual separation
+	const hasActiveHint = !!(field.hintMessage && field.hintMessage.trim());
+	const hasActiveError = !!(
+		control &&
+		control.errors &&
+		Object.keys(control.errors).length > 0 &&
+		(control.touched || control.dirty)
+	);
+
+	// If there's active content (hint or error), use minimal spacing
+	if (hasActiveHint || hasActiveError) {
+		return 'mb-1'; // Small spacing when content provides separation
+	}
+
+	// No active content - use default spacing for visual separation between fields
+	return 'mb-1-5'; // Default spacing when no content
+}
+
+/**
+ * Converts numeric margin value to CSS class name
+ */
+export function convertToClassName(value: number): string {
+	// Convert decimal values to valid CSS class names
+	// 0.25 → mb-0-25, 1.5 → mb-1-5, 2 → mb-2, etc.
+
+	if (value === 0) return 'mb-0';
+
+	const integerPart = Math.floor(value);
+	const decimalPart = value - integerPart;
+
+	if (decimalPart === 0) {
+		// Whole number: 1 → mb-1, 2 → mb-2
+		return `mb-${integerPart}`;
+	}
+
+	// Decimal number: convert decimal to hyphen format
+	const decimalString = decimalPart.toString().replace('0.', '');
+	return `mb-${integerPart}-${decimalString}`;
+}
+
 /**
  * Включает контрол если для этого есть условия
  */

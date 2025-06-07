@@ -42,6 +42,8 @@ export interface FieldConfig {
 	value?: any;
 	disabled?: boolean;
 	invisible?: boolean;
+	hideRequiredMarker?: boolean;
+	marginBottom?: number | string; // Spacing in rem (e.g., 1, 1.5, 'sm', 'md', 'lg', 'xl')
 	inputEvent?: (event: any, formGenerator: FormGeneratorComponent, field: FieldConfig) => any
 
 	//select

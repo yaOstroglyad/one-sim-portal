@@ -22,3 +22,11 @@
 .grid-item {
   width: 100%;
 }
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: #666;
+}

@@ -33,110 +33,129 @@
             </ng-container>
         </ng-container>
 
+        <!-- Shared hint template -->
+        <ng-template #hintTemplate let-field>
+            <ng-container *ngIf="hasFieldHintOrError(field)">
+                <mat-hint *ngIf="field.hintMessage && field.hintMessage.trim()"
+                          [attr.class]="'hint ' + (field.hintClassName || '')">
+                    <mat-icon fontIcon="info_outline"></mat-icon>
+                    {{ field.hintMessage | translate }}
+                </mat-hint>
+            </ng-container>
+        </ng-template>
+
         <ng-template #textTemplate let-field>
-            <mat-form-field appearance="outline" [attr.class]="'w-100 ' + field.className">
+            <mat-form-field appearance="outline"
+                            [attr.class]="'w-100 ' + getFormFieldClass(field)"
+                            [hideRequiredMarker]="field.hideRequiredMarker ?? false">
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <input matInput
                        [formControlName]="field.name"
                        [type]="field.type"
                        (input)="onInputChange($event, field)">
 
-                <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
-                    <mat-icon fontIcon="info_outline"></mat-icon>
-                    {{ field.hintMessage | translate }}
-                </mat-hint>
+                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
             </mat-form-field>
         </ng-template>
 
         <ng-template #numberTemplate let-field>
-            <mat-form-field appearance="outline" [attr.class]="'full-width ' + field.className">
+            <mat-form-field appearance="outline"
+                            [attr.class]="'full-width ' + getFormFieldClass(field)"
+                            [hideRequiredMarker]="field.hideRequiredMarker ?? false">
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <input matInput
                        [formControlName]="field.name"
                        [type]="field.type"
                        (input)="onInputChange($event, field)">
 
-                <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
-                    <mat-icon fontIcon="info_outline"></mat-icon>
-                    {{ field.hintMessage | translate }}
-                </mat-hint>
+                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
             </mat-form-field>
         </ng-template>
 
         <ng-template #textareaTemplate let-field>
-            <mat-form-field appearance="outline" [attr.class]="'full-width ' + field.className">
+            <mat-form-field appearance="outline"
+                            [attr.class]="'full-width ' + getFormFieldClass(field)"
+                            [hideRequiredMarker]="field.hideRequiredMarker ?? false">
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <textarea matInput
                           [formControlName]="field.name"
                           [placeholder]="field.placeholder | translate"
                           (input)="onInputChange($event, field)"></textarea>
 
-                <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
-                    <mat-icon fontIcon="info_outline"></mat-icon>
-                    {{ field.hintMessage | translate }}
-                </mat-hint>
+                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
             </mat-form-field>
         </ng-template>
 
         <ng-template #passwordTemplate let-field>
-            <mat-form-field appearance="outline" [attr.class]="'w-100 ' + field.className">
+            <mat-form-field appearance="outline"
+                            [attr.class]="'w-100 ' + getFormFieldClass(field)"
+                            [hideRequiredMarker]="field.hideRequiredMarker ?? false">
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <input matInput
                        [formControlName]="field.name"
                        [type]="field.type"
                        (input)="onInputChange($event, field)">
-                <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
-                    <mat-icon fontIcon="info_outline"></mat-icon>
-                    {{ field.hintMessage | translate }}
-                </mat-hint>
+
+                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
             </mat-form-field>
         </ng-template>
 
-        <ng-template #email let-field>
-            <mat-form-field appearance="outline" [attr.class]="'w-100 ' + field.className">
-                <mat-label>{{ field.label | translate }}</mat-label>
-                <input matInput
-                       [formControlName]="field.name"
-                       [type]="field.type"
-                       [placeholder]="field.placeholder | translate"
-                       type="email"
-                       (input)="onInputChange($event, field)">
+                <ng-template #email let-field>
+            <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
+                <mat-form-field appearance="outline"
+                               class="w-100"
+                               [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+                    <mat-label>{{ field.label | translate }}</mat-label>
+                    <input matInput
+                           [formControlName]="field.name"
+                           [type]="field.type"
+                           [placeholder]="field.placeholder | translate"
+                           type="email"
+                           (input)="onInputChange($event, field)">
 
-                <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
-                    <mat-icon fontIcon="info_outline"></mat-icon>
-                    {{ field.hintMessage | translate }}
-                </mat-hint>
-                <mat-error *ngIf="form.controls[field.name].hasError('required')" class="error">
-                    Email is required
-                </mat-error>
-                <mat-error *ngIf="form.controls[field.name].hasError('email')" class="error">
-                    Please, enter email format
-                </mat-error>
-            </mat-form-field>
+                    <mat-error *ngIf="shouldShowError(field.name) && form.controls[field.name].hasError('required')"
+                               class="error">
+                        Email is required
+                    </mat-error>
+                    <mat-error *ngIf="shouldShowError(field.name) && form.controls[field.name].hasError('email')"
+                               class="error">
+                        Please, enter email format
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Custom hint outside mat-form-field -->
+                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+            </div>
         </ng-template>
 
-        <ng-template #datePickerTemplate let-field>
-            <mat-form-field appearance="outline" [attr.class]="'full-width ' + field.className">
-                <mat-label>{{ field.label | translate }}</mat-label>
-                <input matInput
-                       [matDatepicker]="picker"
-                       [formControlName]="field.name"
-                       (dateChange)="onInputChange($event, field)">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
+                <ng-template #datePickerTemplate let-field>
+            <div [attr.class]="getFormFieldClass(field)">
+                <mat-form-field appearance="outline"
+                               class="full-width"
+                               [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+                    <mat-label>{{ field.label | translate }}</mat-label>
+                    <input matInput
+                           [matDatepicker]="picker"
+                           [formControlName]="field.name"
+                           (dateChange)="onInputChange($event, field)">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
 
-                <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
-                    <mat-icon fontIcon="info_outline"></mat-icon>
-                    {{ field.hintMessage | translate }}
-                </mat-hint>
-                <mat-error *ngIf="form.controls[field.name].hasError('required')" class="error">
-                    The field is required
-                </mat-error>
-            </mat-form-field>
+                    <mat-error *ngIf="shouldShowError(field.name) && form.controls[field.name].hasError('required')"
+                               class="error">
+                        The field is required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Custom hint outside mat-form-field -->
+                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+            </div>
         </ng-template>
 
         <ng-template #selectTemplate let-field>
-            <mat-form-field appearance="outline" [attr.class]="'w-100 ' + field.className">
+            <mat-form-field appearance="outline"
+                            [attr.class]="'w-100 ' + getFormFieldClass(field)"
+                            [hideRequiredMarker]="field.hideRequiredMarker ?? false">
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <mat-select [formControlName]="field.name"
                             (selectionChange)="onInputChange($event, field)"
@@ -145,15 +164,13 @@
                         {{ option.displayValue }}
                     </mat-option>
                 </mat-select>
-                <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
-                    <mat-icon fontIcon="info_outline"></mat-icon>
-                    {{ field.hintMessage | translate }}
-                </mat-hint>
+
+                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
             </mat-form-field>
         </ng-template>
 
         <ng-template #checkboxTemplate let-field>
-            <mat-checkbox [attr.class]="'full-width ' + field.className"
+            <mat-checkbox [attr.class]="'full-width ' + getFormFieldClass(field)"
                           [formControlName]="field.name"
                           [color]="'primary'"
                           (change)="onInputChange($event, field)">
@@ -175,7 +192,7 @@
 
         <ng-template #chipsTemplate let-field>
             <app-chips-input
-                    [attr.class]="'full-width ' + field.className"
+                    [attr.class]="'full-width ' + getFormFieldClass(field)"
                     [label]="field.label | translate"
                     [placeholder]="field.placeholder | translate"
                     [formControlName]="field.name"
@@ -188,13 +205,11 @@
 
         <ng-template #colorTemplate let-field>
             <app-color-picker
-                [label]="field.label | translate"
-                [formControlName]="field.name">
+                    [label]="field.label | translate"
+                    [formControlName]="field.name">
             </app-color-picker>
-            <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
-                <mat-icon fontIcon="info_outline"></mat-icon>
-                {{ field.hintMessage | translate }}
-            </mat-hint>
+
+            <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
         </ng-template>
 
         <ng-template #uuidTemplate let-field>
@@ -202,17 +217,15 @@
         </ng-template>
 
         <ng-template #richTextTemplate let-field>
-            <div [attr.class]="'full-width ' + field.className">
+            <div [attr.class]="'full-width ' + getFormFieldClass(field)">
                 <app-rich-text-input
-                    [label]="field.label | translate"
-                    [placeholder]="field.placeholder | translate"
-                    [maxLength]="field.maxLength || 500"
-                    [formControlName]="field.name">
+                        [label]="field.label | translate"
+                        [placeholder]="field.placeholder | translate"
+                        [maxLength]="field.maxLength || 500"
+                        [formControlName]="field.name">
                 </app-rich-text-input>
-                <mat-hint *ngIf="field.hintMessage" [attr.class]="'hint ' + field.hintClassName">
-                    <mat-icon fontIcon="info_outline"></mat-icon>
-                    {{ field.hintMessage | translate }}
-                </mat-hint>
+
+                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
             </div>
         </ng-template>
 

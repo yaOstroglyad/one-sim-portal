@@ -468,7 +468,8 @@
   },
   "send-registration-email": {
     "title": "שלח דוא\"ל רישום",
-    "submit": "שלח דוא\"ל"
+    "submit": "שלח דוא\"ל",
+    "noActivePackages": "אין לך חבילות פעילות לשליחת דוא\"ל עם הוראות הפעלה"
   },
   "email": {
     "configurations": {

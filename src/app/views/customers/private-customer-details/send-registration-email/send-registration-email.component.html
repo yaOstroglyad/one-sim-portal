@@ -1,13 +1,23 @@
 <h2 mat-dialog-title class="dialog-header">{{ 'send-registration-email.title' | translate }}</h2>
 <mat-dialog-content class="mat-typography dialog-content">
 
-    <app-form-generator [config]="formConfig"
+    <div *ngIf="isLoadingProducts" class="loading-container">
+        <p>Loading...</p>
+    </div>
+
+    <app-info-strip *ngIf="!isLoadingProducts && !hasActiveProducts"
+                    [text]="'send-registration-email.noActivePackages' | translate">
+    </app-info-strip>
+
+    <app-form-generator *ngIf="!isLoadingProducts && hasActiveProducts" 
+                        [config]="formConfig"
                         (formChanges)="handleFormChanges($event)"></app-form-generator>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-footer" align="end">
 
     <button mat-button (click)="close()">{{ 'common.cancel' | translate }}</button>
-    <button mat-button
+    <button *ngIf="hasActiveProducts" 
+            mat-button
             color="primary"
             [disabled]="!isFormValid"
             (click)="submit()">{{ 'send-registration-email.submit' | translate }}

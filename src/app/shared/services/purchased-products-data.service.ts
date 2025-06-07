@@ -9,7 +9,7 @@ import { ProductPurchase } from '../model';
 export class PurchasedProductsDataService {
 	http = inject(HttpClient);
 
-	getPurchasedProducts(params: { subscriberId: string }): Observable<ProductPurchase[]> {
+	getPurchasedProducts(params: { subscriberId: string; isActive?: boolean }): Observable<ProductPurchase[]> {
 		return this.http.get<ProductPurchase[]>(`/api/v1/product-purchases/query/all`, { params }).pipe(
 			catchError(() => {
 				console.warn('Error occurred, presenting mocked data');

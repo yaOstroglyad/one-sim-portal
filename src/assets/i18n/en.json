@@ -500,7 +500,8 @@
   },
   "send-registration-email": {
     "title": "Send Registration Email",
-    "submit": "Send Email"
+    "submit": "Send Email",
+    "noActivePackages": "You don't have any active packages to send activation instructions email"
   },
   "RICH_TEXT": {
     "TOOLBAR": {

@@ -1,32 +1,54 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FieldType, FormConfig, FormGeneratorModule, SubscriberDataService } from '../../../../shared';
+import { FieldType, FormConfig, FormGeneratorModule, SubscriberDataService, PurchasedProductsDataService, InfoStripComponent } from '../../../../shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-send-registration-email',
   standalone: true,
   templateUrl: './send-registration-email.component.html',
   styleUrls: ['./send-registration-email.component.scss'],
-  imports: [FormGeneratorModule, MatDialogModule, TranslateModule, ReactiveFormsModule, MatButtonModule]
+  imports: [FormGeneratorModule, MatDialogModule, TranslateModule, ReactiveFormsModule, MatButtonModule, InfoStripComponent, CommonModule]
 })
 export class SendRegistrationEmailComponent implements OnInit {
   formConfig: FormConfig;
   form: FormGroup;
   isFormValid: boolean = false;
+  hasActiveProducts: boolean = false;
+  isLoadingProducts: boolean = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { id: string },
     public dialogRef: MatDialogRef<SendRegistrationEmailComponent>,
     private snackBar: MatSnackBar,
-    private subscriberDataService: SubscriberDataService
+    private subscriberDataService: SubscriberDataService,
+    private purchasedProductsDataService: PurchasedProductsDataService
   ) {}
 
   ngOnInit(): void {
-    this.formConfig = this.getFormConfig();
+    this.checkActiveProducts();
+  }
+
+  private checkActiveProducts(): void {
+    this.purchasedProductsDataService.getPurchasedProducts({ subscriberId: this.data.id, isActive: true }).subscribe({
+      next: (products) => {
+        this.hasActiveProducts = products && products.length > 0;
+        this.isLoadingProducts = false;
+        
+        if (this.hasActiveProducts) {
+          this.formConfig = this.getFormConfig();
+        }
+      },
+      error: () => {
+        this.hasActiveProducts = false;
+        this.isLoadingProducts = false;
+      }
+    });
   }
 
   getFormConfig(): FormConfig {
