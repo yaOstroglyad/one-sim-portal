@@ -62,6 +62,7 @@ export class AuthService {
           'wecom',
           'seamless-travel-support',
           'wander-world-travel-support',
+          'anneke.geldenhuys+1@optimavibe.co.za',
         ];
         const support = [];
         const loginResponse = this.$SessionStorageService.retrieve('loginResponse') || this.$LocalStorageService.retrieve('loginResponse');
