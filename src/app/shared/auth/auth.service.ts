@@ -63,6 +63,8 @@ export class AuthService {
           'seamless-travel-support',
           'wander-world-travel-support',
           'adysally@gmail.com',
+          'adysally+1@gmail.com',
+          'david+fantasticvacations@1-esim.com',
           'anneke.geldenhuys+1@optimavibe.co.za',
         ];
         const support = [];
