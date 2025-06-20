@@ -40,7 +40,9 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   
   // Form Controls
-  public filterForm: FormGroup;
+  public filterForm: FormGroup = new FormGroup({
+    iccid: new FormControl(null),
+  });
   
   // Table Configuration
   public tableConfig$: BehaviorSubject<TableConfig>;
@@ -59,7 +61,6 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.checkPermissions();
     this.initializeAccount();
-    this.initFormControls();
     this.initializeTable();
     this.setupFilters();
   }
@@ -89,11 +90,7 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initFormControls(): void {
-    this.filterForm = new FormGroup({
-      iccid: new FormControl(null),
-    });
-  }
+
 
   private setupFilters(): void {
     this.filterForm.valueChanges.pipe(
@@ -139,7 +136,7 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
   }
 
   public resetForm(): void {
-    this.filterForm.reset();
+    this.filterForm?.reset();
   }
 
   private loadData(params: {

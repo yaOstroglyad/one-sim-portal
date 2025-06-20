@@ -24,12 +24,14 @@ The `.context` directory contains organized information about features, implemen
 8. **Component Selectors**: Always check the actual component selector before using in templates. For example, `GenericTableComponent` uses selector `generic-table` (not `app-generic-table`). Verify selectors in component `@Component` decorator before usage.
 9. **Study Existing Examples**: Before using any existing component or service, always study real working examples in the codebase first. Check how other components use the same APIs, what properties they pass, and what methods they call. Never assume API structure - always verify with existing implementations.
 10. **Table Filters Pattern**: When asked to build a new table component using generic-table, always ask first: "Do you want to include filters following the standard pattern?" If yes, implement filters using the header-component (`app-header`) following the same pattern as in companies component with FormGroup, debounced valueChanges (700ms), content projection slots for custom inputs, and proper column selection integration. If no, build a simple table without filters.
-11. **Documentation Language**: All documentation in `.context` directory must be written in English only. No Russian, Ukrainian, Hebrew, or other languages are allowed in documentation files. This ensures consistency and accessibility for all developers.
+11. **Error Prevention Protocol**: Before starting ANY component development, MUST review the common errors documentation (`common-errors-and-solutions/`) to understand typical issues and their solutions. This prevents repeating known problems and ensures adherence to established safe patterns.
+12. **Documentation Language**: All documentation in `.context` directory must be written in English only. No Russian, Ukrainian, Hebrew, or other languages are allowed in documentation files. This ensures consistency and accessibility for all developers.
 
 ## Current Features
 
 - `account-selector-component/` - Specialized form control for administrative interfaces, providing consistent account selection experience across admin modules
 - `check-active-products-for-registration-email/` - Feature for validating active products before sending registration emails
+- `common-errors-and-solutions/` - Comprehensive knowledge base of frequent errors, their root causes, solutions, and prevention strategies to avoid common development pitfalls
 - `email-logs-component/` - View component for displaying email event logs with role-based access control and ICCID filtering capabilities (located in `src/app/views/email-logs/`)
 - `form-generator-hint-optimization/` - Optimization of form generator component to eliminate code duplication, visual space issues, and implement intelligent spacing
 - `generic-table-component/` - Comprehensive documentation of the main table component used throughout the application for displaying data with AG-Grid styling

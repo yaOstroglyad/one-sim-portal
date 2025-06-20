@@ -16,7 +16,7 @@
                placeholder="{{ 'email_logs.iccid_placeholder' | translate }}">
         <button cButton
                 color="secondary"
-                [disabled]="filterForm.pristine"
+                [disabled]="filterForm?.pristine"
                 (click)="resetForm()">
             <svg cIcon name="cilReload"></svg>
         </button>
