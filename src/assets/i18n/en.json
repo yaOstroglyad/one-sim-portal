@@ -66,6 +66,7 @@
     "customer-details": "Customer Details",
     "providers": "Providers",
     "orders": "Orders",
+    "emailLogs": "Email Logs",
     "products": "Products",
     "inventory": "Inventory",
     "users": "Users",
@@ -375,8 +376,7 @@
     "adminHint": "This configuration is available to non-admin users only.",
     "title": "Payment Gateway Settings",
     "edit": "Edit",
-    "adminAccountWarning": "Payment methods cannot be created for the administrator account. Please select a different account.",
-    "selectAccountFirst": "Please select an account to view payment methods"
+    "adminAccountWarning": "Payment methods cannot be created for the administrator account. Please select a different account."
   },
   "createUser": {
     "title": "Create User",
@@ -518,13 +518,13 @@
     }
   },
   "COMMON": {
-    "CANCEL": "Cancel"
+    "CANCEL": "Cancel",
+    "select_account_hint_message": "Please select an account first"
   },
   "email": {
-    "configurations": {
-      "title": "Email Configurations",
-      "selectAccountFirst": "Please select an account first"
-    },
+          "configurations": {
+        "title": "Email Configurations"
+      },
     "templates": "Templates",
     "template": {
       "create": "Create Template",
@@ -535,5 +535,19 @@
       "language": "Language",
       "selectLanguage": "Select language"
     }
+  },
+  "email_logs": {
+    "title": "Email Logs",
+    "filter_by_iccid": "Filter by ICCID",
+    "iccid_placeholder": "Enter ICCID to filter",
+    "sent_at": "Sent At",
+    "email_address": "Email Address",
+    "subject": "Subject",
+    "email_type": "Email Type",
+    "status": "Status",
+    "iccid": "ICCID",
+    "delivered_at": "Delivered At",
+    "opened_at": "Opened At",
+    "error_message": "Error Message"
   }
 }

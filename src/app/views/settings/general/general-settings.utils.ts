@@ -42,8 +42,6 @@ export function getGeneralSettingsFormConfig(
     incomingEmail: ''
   };
 
-  console.log('safeData', safeData);
-
   const formFields = [
     {
       type: FieldType.uuid,

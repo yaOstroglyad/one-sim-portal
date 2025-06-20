@@ -44,6 +44,7 @@
     "save": "Зберегти",
     "apply": "Застосувати",
     "submit": "Надіслати",
+    "select_account_hint_message": "Будь ласка, спочатку виберіть обліковий запис",
     "table": {
       "filterPlaceholder": "Фільтрувати дані таблиці"
     }
@@ -66,6 +67,7 @@
     "customer-details": "Деталі клієнта",
     "providers": "Провайдери",
     "orders": "Замовлення",
+    "emailLogs": "Логи Email",
     "products": "Продукти",
     "inventory": "Інвентар",
     "users": "Користувачі",
@@ -472,10 +474,9 @@
     "noActivePackages": "У вас немає активних пакетів для надсилання листа з інструкціями активації"
   },
   "email": {
-    "configurations": {
-      "title": "Налаштування Email",
-      "selectAccountFirst": "Будь ласка, спочатку виберіть обліковий запис"
-    },
+          "configurations": {
+        "title": "Налаштування Email"
+      },
     "templates": "Шаблони",
     "template": {
       "create": "Створити шаблон",
@@ -486,5 +487,19 @@
       "language": "Мова",
       "selectLanguage": "Виберіть мову"
     }
+  },
+  "email_logs": {
+    "title": "Логи Email",
+    "filter_by_iccid": "Фільтр по ICCID",
+    "iccid_placeholder": "Введіть ICCID для фільтрації",
+    "sent_at": "Відправлено",
+    "email_address": "Email адреса",
+    "subject": "Тема",
+    "email_type": "Тип email",
+    "status": "Статус",
+    "iccid": "ICCID",
+    "delivered_at": "Доставлено",
+    "opened_at": "Відкрито",
+    "error_message": "Повідомлення про помилку"
   }
 }

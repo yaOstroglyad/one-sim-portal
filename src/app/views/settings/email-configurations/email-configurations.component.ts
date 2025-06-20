@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Account, permissionGuard, WhiteLabelDataService } from '../../../shared';
+import { Account, WhiteLabelDataService } from '../../../shared';
 import { Observable } from 'rxjs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TemplateTypeGridComponent } from './template-type-grid/template-type-grid.component';

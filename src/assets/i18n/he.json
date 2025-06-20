@@ -44,6 +44,7 @@
     "save": "שמור",
     "apply": "החל",
     "submit": "שלח",
+    "select_account_hint_message": "אנא בחר חשבון תחילה",
     "table": {
       "filterPlaceholder": "סנן נתוני טבלה"
     }
@@ -66,6 +67,7 @@
     "customer-details": "פרטי לקוח",
     "providers": "ספקים",
     "orders": "הזמנות",
+    "emailLogs": "יומני דואר אלקטרוני",
     "products": "מוצרים",
     "inventory": "מלאי",
     "users": "משתמשים",
@@ -472,10 +474,9 @@
     "noActivePackages": "אין לך חבילות פעילות לשליחת דוא\"ל עם הוראות הפעלה"
   },
   "email": {
-    "configurations": {
-      "title": "הגדרות דואר אלקטרוני",
-      "selectAccountFirst": "אנא בחר חשבון תחילה"
-    },
+          "configurations": {
+        "title": "הגדרות דואר אלקטרוני"
+      },
     "templates": "תבניות",
     "template": {
       "create": "צור תבנית",
@@ -486,5 +487,19 @@
       "language": "שפה",
       "selectLanguage": "בחר שפה"
     }
+  },
+  "email_logs": {
+    "title": "יומני דואר אלקטרוני",
+    "filter_by_iccid": "סנן לפי ICCID",
+    "iccid_placeholder": "הזן ICCID לסינון",
+    "sent_at": "נשלח ב",
+    "email_address": "כתובת דואר אלקטרוני",
+    "subject": "נושא",
+    "email_type": "סוג דואר אלקטרוני",
+    "status": "מצב",
+    "iccid": "ICCID",
+    "delivered_at": "נמסר ב",
+    "opened_at": "נפתח ב",
+    "error_message": "הודעת שגיאה"
   }
 }

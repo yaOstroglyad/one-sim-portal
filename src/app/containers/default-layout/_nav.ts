@@ -26,6 +26,12 @@ export const navItems: any[] = [
 		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
 	},
 	{
+		name: 'nav.emailLogs',
+		url: 'email-logs',
+		iconComponent: {name: 'cil-envelope-closed'},
+		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
+	},
+	{
 		name: 'nav.products',
 		url: 'products',
 		iconComponent: {name: 'cil3d'},

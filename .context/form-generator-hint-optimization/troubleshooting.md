@@ -1,45 +1,45 @@
 # Troubleshooting Guide
 
-## 🚨 Критические проблемы и решения
+## 🚨 Critical Issues and Solutions
 
-### 1. Пустые контейнеры показывают `display: block`
+### 1. Empty containers showing `display: block`
 
-**Симптомы:**
-- Контейнер `mat-form-field-subscript-wrapper` виден в DOM с `display: block`
-- Нет видимого контента, но занимает место
-- Ненужные отступы под полями формы
+**Symptoms:**
+- Container `mat-form-field-subscript-wrapper` visible in DOM with `display: block`
+- No visible content but takes up space
+- Unnecessary margins under form fields
 
-**Причины:**
+**Causes:**
 ```html
-<!-- Angular Material создает пустые элементы -->
+<!-- Angular Material creates empty elements -->
 <div class="mat-mdc-form-field-subscript-wrapper">
-  <div class="mat-mdc-form-field-hint-wrapper"></div> <!-- Пустой но существует -->
+  <div class="mat-mdc-form-field-hint-wrapper"></div> <!-- Empty but exists -->
 </div>
 ```
 
-**✅ Решение:**
+**✅ Solution:**
 ```typescript
-// Строгая проверка активного состояния
+// Strict check for active state
 const hasActiveHint = !!(field.hintMessage && field.hintMessage.trim());
 const hasActiveError = !!(
   control && 
   control.errors && 
   Object.keys(control.errors).length > 0 &&
-  (control.touched || control.dirty) // БЕЗ control.invalid!
+  (control.touched || control.dirty) // WITHOUT control.invalid!
 );
 ```
 
-### 2. Ошибки отображаются для нетронутых required полей
+### 2. Errors showing for untouched required fields
 
-**Проблема:**
+**Problem:**
 ```typescript
-// ❌ НЕПРАВИЛЬНО - обязательные поля всегда invalid
+// ❌ WRONG - required fields are always invalid
 if (control.invalid) {
-  // Это true даже для нетронутых полей
+  // This is true even for untouched fields
 }
 ```
 
-**✅ Решение:**
+**✅ Solution:**
 ```typescript
 shouldShowError(fieldName: string): boolean {
   const control = this.form?.get(fieldName);
@@ -47,11 +47,11 @@ shouldShowError(fieldName: string): boolean {
 }
 ```
 
-### 3. Динамические обновления не работают с OnPush
+### 3. Dynamic updates not working with OnPush
 
-**Проблема:** Ошибки появляются/исчезают, но DOM не обновляется
+**Problem:** Errors appear/disappear but DOM doesn't update
 
-**✅ Решение:**
+**✅ Solution:**
 ```typescript
 private initHintStateTracking(): void {
   const statusChanges$ = this.config.fields.map(field => {
@@ -65,16 +65,16 @@ private initHintStateTracking(): void {
   merge(...statusChanges$).pipe(
     takeUntil(this.unsubscribe$)
   ).subscribe(() => {
-    this.cdr.markForCheck(); // Принудительное обновление
+    this.cdr.markForCheck(); // Force update
   });
 }
 ```
 
-### 4. Подсказки получают стили Material внутри mat-form-field
+### 4. Hints getting Material styles inside mat-form-field
 
-**Проблема:** Кастомные подсказки конфликтуют со стилями Angular Material
+**Problem:** Custom hints conflict with Angular Material styles
 
-**✅ Решение:** Вынести подсказки наружу:
+**✅ Solution:** Move hints outside:
 ```html
 <div [attr.class]="getFormFieldClass(field)">
   <mat-form-field>
@@ -86,9 +86,9 @@ private initHintStateTracking(): void {
 </div>
 ```
 
-## 🔍 Debug инструменты
+## 🔍 Debug Tools
 
-### Проверка состояния поля:
+### Field state check:
 ```typescript
 debugFieldState(fieldName: string) {
   const control = this.form?.get(fieldName);
@@ -106,30 +106,30 @@ debugFieldState(fieldName: string) {
 }
 ```
 
-### CSS debug (временно):
+### CSS debug (temporary):
 ```scss
 .mat-mdc-form-field-subscript-wrapper {
-  border: 1px solid red; // Визуальный индикатор
+  border: 1px solid red; // Visual indicator
 }
 
 .mat-mdc-form-field-subscript-wrapper:empty::after {
-  content: "EMPTY"; // Debug текст
+  content: "EMPTY"; // Debug text
   color: red;
 }
 ```
 
-## ✅ Быстрые проверки
+## ✅ Quick Checks
 
-1. **Поле без контента** → нет subscript контейнера в DOM
-2. **Пробелы в hintMessage** → должны игнорироваться 
-3. **Нетронутое required поле** → без ошибок и контейнеров
-4. **Тронутое невалидное поле** → контейнер с ошибкой появляется
-5. **Поле с подсказкой** → контейнер всегда виден
+1. **Field without content** → no subscript container in DOM
+2. **Spaces in hintMessage** → should be ignored 
+3. **Untouched required field** → no errors and containers
+4. **Touched invalid field** → container with error appears
+5. **Field with hint** → container always visible
 
-## 🎯 Профилактика
+## 🎯 Prevention
 
-- Всегда используйте `field.hintMessage?.trim()` для проверки подсказок
-- Не полагайтесь на `control.invalid` для проверки ошибок
-- Используйте `touched || dirty` для показа ошибок
-- Выносите кастомные подсказки за пределы `mat-form-field`
-- Тестируйте с `ChangeDetectionStrategy.OnPush` 
+- Always use `field.hintMessage?.trim()` to check hints
+- Don't rely on `control.invalid` for error checking
+- Use `touched || dirty` to show errors
+- Move custom hints outside `mat-form-field`
+- Test with `ChangeDetectionStrategy.OnPush` 

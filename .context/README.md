@@ -18,12 +18,24 @@ The `.context` directory contains organized information about features, implemen
 2. **Organization**: Each new feature gets its own dedicated folder
 3. **Documentation**: Include clear descriptions, examples, and relevant code snippets
 4. **Consistency**: Follow the established naming conventions and structure
+5. **Angular Components**: When creating Angular components, always use separate `.html` and `.scss` files instead of inline templates and styles. This improves maintainability, enables proper syntax highlighting, and follows Angular best practices.
+6. **Translation Keys**: All translation keys must be in lowercase with underscores (snake_case), e.g., `"email_logs"` instead of `"EMAIL_LOGS"`, `"user_settings"` instead of `"UserSettings"`
+7. **Angular Imports**: In standalone components, always import NgModules (not individual components) when the component is part of a module. Check if component is standalone before importing directly. Import syntax: `ComponentModule` for module-based components, `ComponentName` for standalone components only.
+8. **Component Selectors**: Always check the actual component selector before using in templates. For example, `GenericTableComponent` uses selector `generic-table` (not `app-generic-table`). Verify selectors in component `@Component` decorator before usage.
+9. **Study Existing Examples**: Before using any existing component or service, always study real working examples in the codebase first. Check how other components use the same APIs, what properties they pass, and what methods they call. Never assume API structure - always verify with existing implementations.
+10. **Table Filters Pattern**: When asked to build a new table component using generic-table, always ask first: "Do you want to include filters following the standard pattern?" If yes, implement filters using the header-component (`app-header`) following the same pattern as in companies component with FormGroup, debounced valueChanges (700ms), content projection slots for custom inputs, and proper column selection integration. If no, build a simple table without filters.
+11. **Documentation Language**: All documentation in `.context` directory must be written in English only. No Russian, Ukrainian, Hebrew, or other languages are allowed in documentation files. This ensures consistency and accessibility for all developers.
 
 ## Current Features
 
+- `account-selector-component/` - Specialized form control for administrative interfaces, providing consistent account selection experience across admin modules
 - `check-active-products-for-registration-email/` - Feature for validating active products before sending registration emails
-- `info-strip-component/` - Reusable component for displaying informational messages with configurable styling
+- `email-logs-component/` - View component for displaying email event logs with role-based access control and ICCID filtering capabilities (located in `src/app/views/email-logs/`)
 - `form-generator-hint-optimization/` - Optimization of form generator component to eliminate code duplication, visual space issues, and implement intelligent spacing
+- `generic-table-component/` - Comprehensive documentation of the main table component used throughout the application for displaying data with AG-Grid styling
+- `header-component/` - Reusable filter and action toolbar component for table views, providing standardized interface for filtering data, column selection, and entity management actions
+- `info-strip-component/` - Reusable component for displaying informational messages with configurable styling
+- `navigation-system/` - Complete documentation of the application's navigation architecture including routing, layout management, role-based access control, and UI components
 
 ## Usage
 

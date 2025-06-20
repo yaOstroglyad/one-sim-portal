@@ -1,0 +1,41 @@
+.email-logs-container {
+  padding: 20px;
+}
+
+.header-section {
+  margin-bottom: 20px;
+}
+
+.filters-section {
+  display: flex;
+  gap: 20px;
+  margin-top: 15px;
+  align-items: flex-end;
+}
+
+.account-selector {
+  min-width: 250px;
+}
+
+.iccid-filter {
+  min-width: 200px;
+}
+
+h2 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .filters-section {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .account-selector,
+  .iccid-filter {
+    min-width: auto;
+    width: 100%;
+  }
+} 

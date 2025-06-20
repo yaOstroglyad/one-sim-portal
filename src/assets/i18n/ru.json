@@ -66,6 +66,7 @@
     "customer-details": "Детали клиента",
     "providers": "Провайдеры",
     "orders": "Заказы",
+    "emailLogs": "Логи Email",
     "products": "Продукты",
     "inventory": "Инвентарь",
     "users": "Пользователи",
@@ -380,8 +381,7 @@
     "adminHint": "Эта конфигурация доступна только для пользователей, не являющихся администраторами.",
     "title": "Настройки платежных шлюзов",
     "edit": "Редактировать",
-    "adminAccountWarning": "Методы оплаты нельзя создать для администраторского аккаунта. Пожалуйста, выберите другой аккаунт.",
-    "selectAccountFirst": "Пожалуйста, выберите аккаунт для просмотра методов оплаты"
+    "adminAccountWarning": "Методы оплаты нельзя создать для администраторского аккаунта. Пожалуйста, выберите другой аккаунт."
   },
   "createUser": {
     "title": "Создать пользователя",
@@ -525,13 +525,13 @@
     }
   },
   "COMMON": {
-    "CANCEL": "Отмена"
+    "CANCEL": "Отмена",
+    "select_account_hint_message": "Пожалуйста, сначала выберите аккаунт"
   },
   "email": {
-    "configurations": {
-      "title": "Настройки Email",
-      "selectAccountFirst": "Пожалуйста, сначала выберите аккаунт"
-    },
+          "configurations": {
+        "title": "Настройки Email"
+      },
     "templates": "Шаблоны",
     "template": {
       "create": "Создать шаблон",
@@ -542,5 +542,19 @@
       "language": "Язык",
       "selectLanguage": "Выберите язык"
     }
+  },
+  "email_logs": {
+    "title": "Логи Email",
+    "filter_by_iccid": "Фильтр по ICCID",
+    "iccid_placeholder": "Введите ICCID для фильтрации",
+    "sent_at": "Отправлено",
+    "email_address": "Email адрес",
+    "subject": "Тема",
+    "email_type": "Тип email",
+    "status": "Статус",
+    "iccid": "ICCID",
+    "delivered_at": "Доставлено",
+    "opened_at": "Открыто",
+    "error_message": "Сообщение об ошибке"
   }
 }

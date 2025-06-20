@@ -46,6 +46,14 @@ const routes: Routes = [
             import('../../views/orders/orders.module').then((m) => m.OrdersModule)
       },
       {
+        path: 'email-logs',
+        data: {
+          title: 'nav.emailLogs'
+        },
+        loadComponent: () =>
+            import('../../views/email-logs/email-logs.component').then((m) => m.EmailLogsComponent)
+      },
+      {
         path: 'users',
         loadChildren: () =>
           import('../../views/users/users.module').then((m) => m.UsersModule)
