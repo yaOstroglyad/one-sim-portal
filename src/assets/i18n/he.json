@@ -492,14 +492,13 @@
     "title": "יומני דואר אלקטרוני",
     "filter_by_iccid": "סנן לפי ICCID",
     "iccid_placeholder": "הזן ICCID לסינון",
-    "sent_at": "נשלח ב",
+    "created_at": "נוצר ב",
     "email_address": "כתובת דואר אלקטרוני",
-    "subject": "נושא",
     "email_type": "סוג דואר אלקטרוני",
+    "event": "אירוע",
     "status": "מצב",
-    "iccid": "ICCID",
-    "delivered_at": "נמסר ב",
-    "opened_at": "נפתח ב",
-    "error_message": "הודעת שגיאה"
+    "iccids": "ICCIDים",
+    "message_id": "מזהה הודעה",
+    "metadata_status": "סטטוס מטא נתונים"
   }
 }

@@ -1,18 +1,19 @@
 export interface EmailLog {
   id: string;
   accountId: string;
-  iccid?: string;
-  emailAddress: string;
-  subject: string;
-  emailType: string;
-  status: EmailLogStatus;
-  sentAt: Date;
-  deliveredAt?: Date;
-  openedAt?: Date;
-  clickedAt?: Date;
-  errorMessage?: string;
-  templateId?: string;
-  templateName?: string;
+  senderAccountId: string;
+  iccids: string[];
+  email: string;
+  type: string;
+  event: string;
+  status: string;
+  createdAt: string;
+  messageId?: string;
+  initialId?: string;
+  metadata?: {
+    status: number;
+    response: string;
+  };
 }
 
 export enum EmailLogStatus {

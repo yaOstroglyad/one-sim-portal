@@ -540,14 +540,13 @@
     "title": "Email Logs",
     "filter_by_iccid": "Filter by ICCID",
     "iccid_placeholder": "Enter ICCID to filter",
-    "sent_at": "Sent At",
+    "created_at": "Created At",
     "email_address": "Email Address",
-    "subject": "Subject",
     "email_type": "Email Type",
+    "event": "Event",
     "status": "Status",
-    "iccid": "ICCID",
-    "delivered_at": "Delivered At",
-    "opened_at": "Opened At",
-    "error_message": "Error Message"
+    "iccids": "ICCIDs",
+    "message_id": "Message ID",
+    "metadata_status": "Metadata Status"
   }
 }

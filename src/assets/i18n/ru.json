@@ -547,14 +547,13 @@
     "title": "Логи Email",
     "filter_by_iccid": "Фильтр по ICCID",
     "iccid_placeholder": "Введите ICCID для фильтрации",
-    "sent_at": "Отправлено",
+    "created_at": "Создано",
     "email_address": "Email адрес",
-    "subject": "Тема",
     "email_type": "Тип email",
+    "event": "Событие",
     "status": "Статус",
-    "iccid": "ICCID",
-    "delivered_at": "Доставлено",
-    "opened_at": "Открыто",
-    "error_message": "Сообщение об ошибке"
+    "iccids": "ICCIDы",
+    "message_id": "ID сообщения",
+    "metadata_status": "Статус метаданных"
   }
 }

@@ -13,7 +13,7 @@ import {
 
 @Injectable()
 export class EmailLogsTableConfigService extends TableConfigAbstractService<EmailLog> {
-	protected translationPrefix = 'email_logs';
+	protected translationPrefix = 'email_logs.';
 
 	constructor(private http: HttpClient) {
 		super();
@@ -43,75 +43,61 @@ export class EmailLogsTableConfigService extends TableConfigAbstractService<Emai
 	private getTableColumns(): TableColumnConfig[] {
 		return [
 			{
-				key: 'sentAt',
-				header: `${this.translationPrefix}.sent_at`,
+				key: 'createdAt',
+				header: 'created_at',
 				sortable: true,
 				visible: true,
 				templateType: TemplateType.Date,
 				minWidth: '150px'
 			},
 			{
-				key: 'emailAddress',
-				header: `${this.translationPrefix}.email_address`,
+				key: 'email',
+				header: 'email_address',
 				sortable: true,
 				visible: true,
 				templateType: TemplateType.Text,
 				minWidth: '200px'
 			},
 			{
-				key: 'subject',
-				header: `${this.translationPrefix}.subject`,
+				key: 'type',
+				header: 'email_type',
 				sortable: true,
 				visible: true,
 				templateType: TemplateType.Text,
-				minWidth: '250px'
-			},
-			{
-				key: 'emailType',
-				header: `${this.translationPrefix}.email_type`,
-				sortable: true,
-				visible: true,
-				templateType: TemplateType.Text
+				minWidth: '150px'
 			},
 			{
 				key: 'status',
-				header: `${this.translationPrefix}.status`,
+				header: 'status',
 				sortable: true,
 				visible: true,
 				templateType: TemplateType.Text,
-				class: 'status-cell'
+				class: 'status-cell',
+				minWidth: '100px'
 			},
 			{
-				key: 'iccid',
-				header: `${this.translationPrefix}.iccid`,
+				key: 'iccids',
+				header: 'iccids',
 				sortable: true,
 				visible: true,
 				templateType: TemplateType.Text,
 				minWidth: '180px'
 			},
 			{
-				key: 'deliveredAt',
-				header: `${this.translationPrefix}.delivered_at`,
+				key: 'messageId',
+				header: 'message_id',
 				sortable: true,
 				visible: true,
-				templateType: TemplateType.Date,
+				templateType: TemplateType.Text,
 				minWidth: '150px'
 			},
 			{
-				key: 'openedAt',
-				header: `${this.translationPrefix}.opened_at`,
-				sortable: true,
-				visible: true,
-				templateType: TemplateType.Date,
-				minWidth: '150px'
-			},
-			{
-				key: 'errorMessage',
-				header: `${this.translationPrefix}.error_message`,
+				key: 'metadata',
+				header: 'metadata_status',
 				sortable: false,
 				visible: true,
 				templateType: TemplateType.Text,
-				minWidth: '200px'
+				minWidth: '120px'
 			}
 		];
 	}

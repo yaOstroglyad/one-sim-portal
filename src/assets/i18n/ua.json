@@ -492,14 +492,13 @@
     "title": "Логи Email",
     "filter_by_iccid": "Фільтр по ICCID",
     "iccid_placeholder": "Введіть ICCID для фільтрації",
-    "sent_at": "Відправлено",
+    "created_at": "Створено",
     "email_address": "Email адреса",
-    "subject": "Тема",
     "email_type": "Тип email",
+    "event": "Подія",
     "status": "Статус",
-    "iccid": "ICCID",
-    "delivered_at": "Доставлено",
-    "opened_at": "Відкрито",
-    "error_message": "Повідомлення про помилку"
+    "iccids": "ICCIDи",
+    "message_id": "ID повідомлення",
+    "metadata_status": "Статус метаданих"
   }
 }

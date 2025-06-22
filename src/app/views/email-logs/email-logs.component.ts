@@ -90,8 +90,6 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
   private setupFilters(): void {
     this.filterForm.valueChanges.pipe(
       debounceTime(700),
@@ -99,7 +97,6 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
     ).subscribe(() => {
       this.applyFilter();
     });
-
   }
 
   public onAccountSelected(account: Account): void {
@@ -160,9 +157,14 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response && response.content) {
+            // Transform data for display
+            const transformedData = this.transformDataForDisplay(response.content);
             this.tableConfigService.updateConfigData(response.totalPages);
             this.tableConfig$ = this.tableConfigService.getTableConfig();
-            this.dataList$ = of(response.content);
+            this.dataList$ = of(transformedData);
+            this.cdr.detectChanges();
+          } else {
+            this.dataList$ = of([]);
             this.cdr.detectChanges();
           }
         },
@@ -172,5 +174,19 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         }
       });
+  }
+
+  private transformDataForDisplay(data: EmailLog[]): any[] {
+    return data.map(item => ({
+      ...item,
+      // Transform iccids array to string for display
+      iccids: item.iccids && item.iccids.length > 0 
+        ? item.iccids.join(', ') 
+        : '-',
+      // Transform metadata object to status string
+      metadata: item.metadata 
+        ? `${item.metadata.status}` 
+        : '-'
+    }));
   }
 } 
