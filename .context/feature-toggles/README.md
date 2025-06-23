@@ -121,6 +121,7 @@ export class ExampleComponent {
 - `bulk-operations` - Массовые операции (включен)
 - `email-notifications` - Email уведомления (включен)
 - `test` - Тестовый флаг (включен)
+- `addSubscriberButtonToggle` - Видимость кнопки добавления подписчика (выключен)
 
 ### Изменение mock данных для тестирования
 
@@ -208,6 +209,41 @@ constructor(private featureToggleService: FeatureToggleService) {
   Массовая операция
 </button>
 ```
+
+## Реальный пример использования
+
+### Управление видимостью кнопки "Add Subscriber"
+
+В компоненте `PrivateCustomerDetailsComponent` используется feature toggle для управления видимостью кнопки добавления подписчика:
+
+```typescript
+// private-customer-details.component.ts
+import { isToggleActive } from '../../../shared/services/feature-toggle.token';
+
+export class PrivateCustomerDetailsComponent {
+  // Делаем функцию доступной в шаблоне
+  isToggleActive = isToggleActive;
+  
+  // Существующие проверки прав
+  isSpecial = this.authService.hasPermission(SPECIAL_PERMISSION);
+  isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+}
+```
+
+```html
+<!-- private-customer-details.component.html -->
+<!-- Кнопка показывается только если:
+     1. Пользователь имеет права admin или special
+     2. Feature toggle 'addSubscriberButtonToggle' включен -->
+<button *ngIf="(isAdmin || isSpecial) && isToggleActive('addSubscriberButtonToggle')"
+        mat-menu-item
+        (click)="addSubscriber()">
+    <mat-icon>person_add</mat-icon>
+    <span>{{ 'customer.private-customer-details.add-subscriber' | translate }}</span>
+</button>
+```
+
+В данном примере кнопка не будет отображаться, так как флаг `addSubscriberButtonToggle` выключен (enabled: false) в mock данных.
 
 ## Тестирование
 

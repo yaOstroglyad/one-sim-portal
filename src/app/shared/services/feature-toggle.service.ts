@@ -18,7 +18,8 @@ export class FeatureToggleService {
     { key: 'advanced-search', enabled: false, description: 'Advanced search functionality' },
     { key: 'bulk-operations', enabled: true, description: 'Bulk operations support' },
     { key: 'email-notifications', enabled: true, description: 'Email notification system' },
-    { key: 'test', enabled: true, description: 'Test feature toggle' }
+    { key: 'test', enabled: true, description: 'Test feature toggle' },
+    { key: 'addSubscriberButtonToggle', enabled: false, description: 'Add subscriber button visibility' }
   ];
 
   constructor(private http: HttpClient) {

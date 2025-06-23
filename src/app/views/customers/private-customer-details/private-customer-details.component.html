@@ -8,7 +8,7 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button *ngIf="isAdmin || isSpecial"
+                <button *ngIf="(isAdmin || isSpecial) && isToggleActive('addSubscriberButtonToggle')"
                         mat-menu-item
                         (click)="addSubscriber()">
                     <mat-icon>person_add</mat-icon>
