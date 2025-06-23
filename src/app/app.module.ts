@@ -16,6 +16,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthService, CustomHttpInterceptor } from './shared';
 import { GlobalErrorHandlerService } from './shared/auth/error-handler.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { FeatureToggleService } from './shared/services/feature-toggle.service';
+import { FEATURE_TOGGLES_SERVICE } from './shared/services/feature-toggle.token';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -72,7 +74,12 @@ export function combinedInitializer(translate: TranslateService, authService: Au
       multi: true
     },
     IconSetService,
-    Title
+    Title,
+    FeatureToggleService,
+    {
+      provide: FEATURE_TOGGLES_SERVICE,
+      useExisting: FeatureToggleService
+    }
   ],
   bootstrap: [AppComponent]
 })
