@@ -5,7 +5,7 @@ export type CardVariant = 'default' | 'elevated' | 'outlined' | 'interactive' | 
 export type CardSize = 'small' | 'medium' | 'large';
 
 @Component({
-  selector: 'app-card',
+  selector: 'os-card',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './card.component.html',

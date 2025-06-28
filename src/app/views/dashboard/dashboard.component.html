@@ -2,19 +2,19 @@
   <c-row>
     <c-col xs="12">
       <!-- Example using new reusable card component -->
-      <app-card 
+      <os-card 
         title="Dashboard" 
         subtitle="Analytics and insights for your eSIM portal"
         variant="elevated"
         size="large">
         <p>Welcome to the new Analytics Dashboard!</p>
         <p>This feature is protected by feature toggle: 'dashboard'</p>
-      </app-card>
+      </os-card>
 
       <!-- Example of different card variants -->
       <c-row class="mt-4">
         <c-col xs="12" md="4">
-          <app-card 
+          <os-card 
             title="Interactive Card"
             subtitle="Click me!"
             variant="interactive"
@@ -22,31 +22,31 @@
             size="medium"
             (click)="onCardClick('interactive')">
             <p>This card responds to interactions.</p>
-          </app-card>
+          </os-card>
         </c-col>
         
         <c-col xs="12" md="4">
-          <app-card 
+          <os-card 
             title="Notification Card"
             variant="notification"
             size="medium">
             <p>Important notification content here.</p>
-          </app-card>
+          </os-card>
         </c-col>
         
         <c-col xs="12" md="4">
-          <app-card 
+          <os-card 
             title="Selected Card"
             subtitle="Currently active"
             [selected]="true"
             size="medium">
             <p>This card is in selected state.</p>
-          </app-card>
+          </os-card>
         </c-col>
       </c-row>
 
       <!-- Example with actions -->
-      <app-card 
+      <os-card 
         title="Card with Actions"
         subtitle="Demonstrating header and footer actions"
         [showActions]="true"
@@ -63,7 +63,7 @@
           <button class="btn btn-sm btn-outline-secondary me-2">Cancel</button>
           <button class="btn btn-sm btn-primary">Save</button>
         </div>
-      </app-card>
+      </os-card>
     </c-col>
   </c-row>
 </c-container>
