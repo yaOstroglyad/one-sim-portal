@@ -3,7 +3,7 @@
   <div class="os-card__header" *ngIf="shouldShowHeader">
     <div class="os-card__header-content">
       <h3 class="os-card__title" *ngIf="title" [attr.title]="null">{{ title }}</h3>
-      <p class="os-card__subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+      <p class="os-card__subtitle" *ngIf="subtitle" [attr.title]="null">{{ subtitle }}</p>
     </div>
     <div class="os-card__header-actions" *ngIf="showActions">
       <ng-content select="[slot=header-actions]"></ng-content>

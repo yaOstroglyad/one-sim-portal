@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 
 export type CardVariant = 'default' | 'elevated' | 'outlined' | 'interactive' | 'notification';
 export type CardSize = 'small' | 'medium' | 'large';
@@ -15,6 +15,9 @@ export type CardSize = 'small' | 'medium' | 'large';
 export class CardComponent {
   @Input() title?: string;
   @Input() subtitle?: string;
+  
+  // Prevent title attribute from being set on host element
+  @HostBinding('attr.title') get hostTitle() { return null; }
   @Input() variant: CardVariant = 'default';
   @Input() size: CardSize = 'medium';
   @Input() interactive = false;
