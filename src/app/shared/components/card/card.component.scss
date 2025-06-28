@@ -216,35 +216,8 @@
   }
 }
 
-// Dark mode support (if implemented)
-@media (prefers-color-scheme: dark) {
-  .os-card {
-    background: var(--os-color-dark);
-    border-color: rgba(var(--os-color-white-rgb), 0.1);
-    
-    &__header {
-      background: rgba(var(--os-color-white-rgb), 0.05);
-      border-bottom-color: rgba(var(--os-color-white-rgb), 0.1);
-    }
-    
-    &__title {
-      color: var(--os-color-light);
-    }
-    
-    &__subtitle {
-      color: rgba(var(--os-color-white-rgb), 0.7);
-    }
-    
-    &__content {
-      color: var(--os-color-light);
-    }
-    
-    &__actions {
-      background: rgba(var(--os-color-white-rgb), 0.03);
-      border-top-color: rgba(var(--os-color-white-rgb), 0.1);
-    }
-  }
-}
+// Dark mode support removed - not implemented in this project yet
+// When dark mode is needed, add proper theme switching logic instead of prefers-color-scheme
 
 // Animation for loading state
 .os-card--loading {
