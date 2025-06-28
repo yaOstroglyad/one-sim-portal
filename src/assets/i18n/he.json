@@ -62,6 +62,7 @@
     "logout": "התנתק"
   },
   "nav": {
+    "dashboard": "לוח בקרה",
     "companies": "חברות",
     "customers": "לקוחות",
     "customer-details": "פרטי לקוח",

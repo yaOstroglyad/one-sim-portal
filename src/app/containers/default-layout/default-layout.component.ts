@@ -15,6 +15,7 @@ import { BrandNarrow } from '../../shared/model/brandNarrow';
 import { Subject, takeUntil, BehaviorSubject, skip } from 'rxjs';
 import { AuthService } from '../../shared';
 import { log10 } from 'chart.js/helpers';
+import { isToggleActive } from '../../shared/services/feature-toggle';
 
 @Component({
 	selector: 'app-default-layout',
@@ -89,6 +90,10 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
 		return items
 			.map(item => {
 				if (item.permissions && !item.permissions.some(p => this.authService.hasPermission(p))) {
+					return null;
+				}
+
+				if (item.featureToggle && !isToggleActive(item.featureToggle)) {
 					return null;
 				}
 

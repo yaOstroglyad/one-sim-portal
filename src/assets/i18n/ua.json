@@ -62,6 +62,7 @@
     "logout": "Вийти"
   },
   "nav": {
+    "dashboard": "Панель керування",
     "companies": "Компанії",
     "customers": "Клієнти",
     "customer-details": "Деталі клієнта",

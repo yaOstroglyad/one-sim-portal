@@ -61,6 +61,7 @@
     "logout": "Logout"
   },
   "nav": {
+    "dashboard": "Dashboard",
     "companies": "Companies",
     "customers": "Customers",
     "customer-details": "Customer Details",
