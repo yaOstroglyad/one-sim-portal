@@ -44,12 +44,12 @@
 // Card background utilities
 .os-card-bg {
   &--primary { background-color: var(--os-color-primary-opacity-05); }
-  &--success { background-color: rgba(45, 211, 111, 0.05); }
-  &--warning { background-color: rgba(255, 196, 9, 0.05); }
-  &--danger { background-color: rgba(235, 68, 90, 0.05); }
+  &--success { background-color: rgba(var(--os-color-success-rgb), 0.05); }
+  &--warning { background-color: rgba(var(--os-color-warning-rgb), 0.05); }
+  &--danger { background-color: rgba(var(--os-color-danger-rgb), 0.05); }
   &--light { background-color: var(--os-color-light); }
-  &--white { background-color: #ffffff; }
-  &--transparent { background-color: transparent; }
+  &--white { background-color: var(--os-color-white); }
+  &--transparent { background-color: var(--os-color-transparent); }
 }
 
 // Card state utilities

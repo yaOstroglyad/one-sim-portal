@@ -45,24 +45,24 @@
   /** success **/
   --os-color-success: #2dd36f;
   --os-color-success-rgb: 45, 211, 111;
-  --os-color-success-contrast: #ffffff;
-  --os-color-success-contrast-rgb: 255, 255, 255;
+  --os-color-success-contrast: var(--os-color-white);
+  --os-color-success-contrast-rgb: var(--os-color-white-rgb);
   --os-color-success-shade: #28ba62;
   --os-color-success-tint: #42d77d;
 
   /** warning **/
   --os-color-warning: #ffc409;
   --os-color-warning-rgb: 255, 196, 9;
-  --os-color-warning-contrast: #000000;
-  --os-color-warning-contrast-rgb: 0, 0, 0;
+  --os-color-warning-contrast: var(--os-color-black);
+  --os-color-warning-contrast-rgb: var(--os-color-black-rgb);
   --os-color-warning-shade: #e0ac08;
   --os-color-warning-tint: #ffca22;
 
   /** danger **/
   --os-color-danger: #eb445a;
   --os-color-danger-rgb: 235, 68, 90;
-  --os-color-danger-contrast: #ffffff;
-  --os-color-danger-contrast-rgb: 255, 255, 255;
+  --os-color-danger-contrast: var(--os-color-white);
+  --os-color-danger-contrast-rgb: var(--os-color-white-rgb);
   --os-color-danger-shade: #cf3c4f;
   --os-color-danger-tint: #ed576b;
 
@@ -89,6 +89,15 @@
   --os-color-light-contrast-rgb: 0, 0, 0;
   --os-color-light-shade: #d7d8da;
   --os-color-light-tint: #f5f6f9;
+
+  /** white and black **/
+  --os-color-white: #ffffff;
+  --os-color-white-rgb: 255, 255, 255;
+  --os-color-black: #000000;
+  --os-color-black-rgb: 0, 0, 0;
+  
+  /** transparent **/
+  --os-color-transparent: transparent;
 }
 
 $primary-font: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
@@ -116,12 +125,14 @@ $color-medium: #{var(--os-color-medium)};
 $color-medium-shade: #{var(--os-color-medium-shade)};
 $color-medium-tint: #{var(--os-color-medium-tint)};
 /**light var**/
-$color-white: #{var(--os-color-primary-white)};
+$color-white: #{var(--os-color-white)};
 $color-light: #{var(--os-color-light)};
 $color-light-shade: #{var(--os-color-light-shade)};
 $color-light-tint: #{var(--os-color-light-tint)};
 /**dark var**/
 $color-dark-contrast: #{var(--os-color-dark-contrast)};
+$color-black: #{var(--os-color-black)};
+$color-transparent: #{var(--os-color-transparent)};
 $black-87-opacity: rgba(0, 0, 0, 0.87);
 $white-87-opacity: rgba(255, 255, 255, 0.87);
 

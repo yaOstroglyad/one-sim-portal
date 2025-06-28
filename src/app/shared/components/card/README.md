@@ -17,28 +17,28 @@ A reusable standalone Angular component for creating consistent card layouts thr
 ### Basic Example
 
 ```html
-<app-card title="Basic Card" subtitle="Simple card example">
+<os-card title="Basic Card" subtitle="Simple card example">
   <p>Card content goes here</p>
-</app-card>
+</os-card>
 ```
 
 ### Interactive Card
 
 ```html
-<app-card 
+<os-card 
   title="Interactive Card"
   subtitle="Click me!"
   variant="interactive"
   [interactive]="true"
   (click)="handleCardClick()">
   <p>This card responds to user interactions</p>
-</app-card>
+</os-card>
 ```
 
 ### Card with Actions
 
 ```html
-<app-card 
+<os-card 
   title="Card with Actions"
   [showActions]="true">
   
@@ -55,7 +55,7 @@ A reusable standalone Angular component for creating consistent card layouts thr
     <button class="btn btn-sm btn-outline-secondary me-2">Cancel</button>
     <button class="btn btn-sm btn-primary">Save</button>
   </div>
-</app-card>
+</os-card>
 ```
 
 ## API Reference
@@ -144,7 +144,7 @@ You can extend the component's styling by:
 ### Dashboard Metrics Card
 
 ```html
-<app-card 
+<os-card 
   title="Total Users"
   subtitle="Active in last 30 days"
   variant="elevated"
@@ -153,13 +153,13 @@ You can extend the component's styling by:
     <h2 class="mb-0 me-3">1,247</h2>
     <span class="badge bg-success">+12%</span>
   </div>
-</app-card>
+</os-card>
 ```
 
 ### Settings Section Card
 
 ```html
-<app-card 
+<os-card 
   title="Account Settings"
   subtitle="Manage your account preferences"
   [showActions]="true"
@@ -178,19 +178,19 @@ You can extend the component's styling by:
     <button type="button" class="btn btn-outline-secondary me-2">Cancel</button>
     <button type="submit" class="btn btn-primary">Save Changes</button>
   </div>
-</app-card>
+</os-card>
 ```
 
 ### Notification Card
 
 ```html
-<app-card 
+<os-card 
   title="System Update"
   variant="notification"
   size="small">
   <p class="mb-2">A new system update is available.</p>
   <a href="#" class="btn btn-sm btn-primary">Update Now</a>
-</app-card>
+</os-card>
 ```
 
 ## Integration
