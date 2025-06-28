@@ -2,7 +2,7 @@
   <!-- Header Section -->
   <div class="os-card__header" *ngIf="shouldShowHeader">
     <div class="os-card__header-content">
-      <h3 class="os-card__title" *ngIf="title">{{ title }}</h3>
+      <h3 class="os-card__title" *ngIf="title" [attr.title]="null">{{ title }}</h3>
       <p class="os-card__subtitle" *ngIf="subtitle">{{ subtitle }}</p>
     </div>
     <div class="os-card__header-actions" *ngIf="showActions">
