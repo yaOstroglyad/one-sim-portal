@@ -40,7 +40,6 @@ import { SendRegistrationEmailComponent } from './send-registration-email/send-r
 import { BadgeComponent } from '@coreui/angular';
 import { CopyToClipboardDirective } from '../../../shared/directives/copy-to-clipboard.directive';
 import { MatMenuModule } from '@angular/material/menu';
-import { isToggleActive } from '../../../shared/services/feature-toggle.token';
 
 @Component({
 	selector: 'app-private-customer-details',
@@ -90,7 +89,6 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	customerId: string;
 	subscribers: Subscriber[];
 	selectedSubscriber: Subscriber;
-	isToggleActive = isToggleActive;
 
 	ngOnInit(): void {
 		this.customerId = this.route.snapshot.paramMap.get('id') || '';

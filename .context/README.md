@@ -33,6 +33,7 @@ The `.context` directory contains organized information about features, implemen
 - `check-active-products-for-registration-email/` - Feature for validating active products before sending registration emails
 - `common-errors-and-solutions/` - Comprehensive knowledge base of frequent errors, their root causes, solutions, and prevention strategies to avoid common development pitfalls
 - `email-logs-component/` - View component for displaying email event logs with role-based access control and ICCID filtering capabilities (located in `src/app/views/email-logs/`)
+- `feature-toggles/` - Feature toggle service implementation providing global access to feature flags without dependency injection, with static store and configuration-based approach
 - `form-generator-hint-optimization/` - Optimization of form generator component to eliminate code duplication, visual space issues, and implement intelligent spacing
 - `generic-table-component/` - Comprehensive documentation of the main table component used throughout the application for displaying data with AG-Grid styling
 - `header-component/` - Reusable filter and action toolbar component for table views, providing standardized interface for filtering data, column selection, and entity management actions

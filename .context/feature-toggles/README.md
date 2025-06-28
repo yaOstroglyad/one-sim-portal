@@ -1,92 +1,78 @@
 # Feature Toggle Service
 
-## Описание
+## Overview
 
-Feature Toggle Service предоставляет централизованный механизм управления функциональными флагами (feature toggles) в приложении. Сервис позволяет динамически включать и выключать функциональность без необходимости перезапуска приложения.
+Feature Toggle Service provides a centralized mechanism for managing feature flags in the application. The service allows dynamic enabling/disabling of functionality without requiring application restart.
 
-## Архитектура
+## Architecture
 
-### Основные компоненты
+### Core Components
 
-1. **FeatureToggleService** (`src/app/shared/services/feature-toggle.service.ts`)
-   - Основной сервис для работы с feature toggles
-   - Загружает и кеширует состояние флагов
-   - Автоматически обновляет флаги каждые 5 минут
-   - Предоставляет синхронный и асинхронный API
+1. **FeatureToggleService** (`src/app/shared/services/feature-toggle/feature-toggle.service.ts`)
+   - Main service for working with feature toggles
+   - Loads and caches toggle states
+   - Automatically refreshes toggles every 5 minutes
+   - Provides synchronous and asynchronous API
 
-2. **Интерфейсы** (`src/app/shared/model/feature-toggle.interface.ts`)
-   - `FeatureToggle` - модель флага
-   - `FeatureToggleResponse` - ответ от API
-   - `FeatureToggleService` - интерфейс сервиса
+2. **Configuration** (`src/app/shared/services/feature-toggle/feature-toggle.config.ts`)
+   - `FEATURE_TOGGLE_CONFIG` - centralized toggle configuration
+   - `getDefaultTogglesMap()` - converts config to Map
+   - `FEATURE_TOGGLES_API_URL` - API endpoint configuration
 
-3. **InjectionToken и хелперы** (`src/app/shared/services/feature-toggle.token.ts`)
-   - `FEATURE_TOGGLES_SERVICE` - токен для dependency injection
-   - `isToggleActive()` - функция для проверки флага без DI
-   - `isToggleActive$()` - реактивная версия
-   - `getFeatureToggles()` - получение списка всех флагов
+3. **Static Store** (`src/app/shared/services/feature-toggle/feature-toggle-store.ts`)
+   - `FeatureToggleStore` - static storage for global access
+   - `isToggleActive()` - global function to check toggle without DI
+   - `isToggleActive$()` - reactive version
+   - `getFeatureToggleKeys()` - get list of all toggle keys
 
-## Использование
+4. **Token & DI** (`src/app/shared/services/feature-toggle/feature-toggle.token.ts`)
+   - `FEATURE_TOGGLES_SERVICE` - injection token for DI
+   - Legacy helper functions (not recommended)
 
-### Способ 1: Через вспомогательные функции (рекомендуется)
+5. **Interfaces** (`src/app/shared/model/feature-toggle.interface.ts`)
+   - `FeatureToggle` - toggle model
+   - `FeatureToggleResponse` - API response model
+
+6. **Directive** (`src/app/shared/directives/feature-toggle.directive.ts`)
+   - `*featureToggle` - structural directive for templates
+
+7. **Index File** (`src/app/shared/services/feature-toggle/index.ts`)
+   - Exports all feature toggle related functionality
+   - Simplifies imports: `import { isToggleActive } from '@shared/services/feature-toggle'`
+
+## Usage
+
+### Method 1: Using Global Helper Functions (Recommended)
 
 ```typescript
 import { Component } from '@angular/core';
-import { isToggleActive, isToggleActive$ } from '@shared/services/feature-toggle.token';
+import { isToggleActive } from '@shared/services/feature-toggle';
 
 @Component({
   selector: 'app-example',
   template: `
-    <div *ngIf="showNewUI">
-      <!-- Новый UI -->
-    </div>
-    <div *ngIf="showBulkOperations$ | async">
-      <!-- Bulk operations -->
+    <div *ngIf="isToggleActive('new-ui')">
+      <!-- New UI -->
     </div>
   `
 })
 export class ExampleComponent {
-  showNewUI = isToggleActive('new-ui');
-  showBulkOperations$ = isToggleActive$('bulk-operations');
+  // Make global function available in template
+  isToggleActive = isToggleActive;
 
   onAction() {
     if (isToggleActive('advanced-search')) {
-      // Выполнить расширенный поиск
+      // Execute advanced search
     }
   }
 }
 ```
 
-### Способ 2: Через dependency injection
-
-```typescript
-import { Component, Inject } from '@angular/core';
-import { FEATURE_TOGGLES_SERVICE } from '@shared/services/feature-toggle.token';
-
-@Component({
-  selector: 'app-example',
-  template: `...`
-})
-export class ExampleComponent {
-  constructor(
-    @Inject(FEATURE_TOGGLES_SERVICE) private featureToggleService: any
-  ) {}
-
-  ngOnInit() {
-    const isEnabled = this.featureToggleService.isToggleActive('new-ui');
-    
-    // Подписка на изменения
-    this.featureToggleService.isToggleActive$('new-ui').subscribe(enabled => {
-      console.log('New UI enabled:', enabled);
-    });
-  }
-}
-```
-
-### Способ 3: Через сервис напрямую
+### Method 2: Using Dependency Injection
 
 ```typescript
 import { Component } from '@angular/core';
-import { FeatureToggleService } from '@shared/services/feature-toggle.service';
+import { FeatureToggleService } from '@shared/services/feature-toggle';
 
 @Component({
   selector: 'app-example',
@@ -96,58 +82,64 @@ export class ExampleComponent {
   constructor(private featureToggleService: FeatureToggleService) {}
 
   ngOnInit() {
-    // Синхронная проверка
-    if (this.featureToggleService.isToggleActive('test')) {
-      // Функция включена
-    }
-
-    // Асинхронная проверка
-    this.featureToggleService.isToggleActive$('test').subscribe(enabled => {
-      // Реагировать на изменения
+    const isEnabled = this.featureToggleService.isToggleActive('new-ui');
+    
+    // Subscribe to changes
+    this.featureToggleService.isToggleActive$('new-ui').subscribe(enabled => {
+      console.log('New UI enabled:', enabled);
     });
-
-    // Принудительное обновление
-    this.featureToggleService.refresh().subscribe();
   }
 }
 ```
 
-## Mock данные
+### Method 3: Using Directive in Templates
 
-В текущей реализации используются mock данные. Предустановленные флаги:
+```html
+<!-- Use directive in template -->
+<button *featureToggle="'bulk-operations'">
+  Bulk Delete
+</button>
 
-- `new-ui` - Новый дизайн интерфейса (включен)
-- `advanced-search` - Расширенный поиск (выключен)
-- `bulk-operations` - Массовые операции (включен)
-- `email-notifications` - Email уведомления (включен)
-- `test` - Тестовый флаг (включен)
-- `addSubscriberButtonToggle` - Видимость кнопки добавления подписчика (выключен)
+<!-- Or use with ngIf -->
+<button *ngIf="isToggleActive('bulk-operations')">
+  Bulk Delete  
+</button>
+```
 
-### Изменение mock данных для тестирования
+## Configuration
+
+Feature toggles are configured in `feature-toggle.config.ts`. Current toggles:
+
+- `new-ui` - New UI design (default: false)
+- `advanced-search` - Advanced search functionality (default: false)
+- `bulk-operations` - Bulk operations support (default: false)
+- `email-notifications` - Email notifications (default: false)
+- `test` - Test feature toggle (default: false)
+- `addSubscriberButtonToggle` - Add subscriber button visibility (default: true)
+
+### Changing Toggle Values for Testing
 
 ```typescript
-// Только для разработки!
+// Only available in mock mode!
 constructor(private featureToggleService: FeatureToggleService) {
-  // Включить флаг
+  // Enable toggle
   this.featureToggleService.setToggle('my-feature', true);
   
-  // Выключить флаг
+  // Disable toggle
   this.featureToggleService.setToggle('my-feature', false);
 }
 ```
 
-## Интеграция с бэкендом
+## Backend Integration
 
-Для подключения к реальному API необходимо:
+To switch from mock data to real API:
 
-1. Раскомментировать строку в методе `fetchFeatureToggles()`:
+1. In `feature-toggle.service.ts`, set `useMockData = false`:
    ```typescript
-   return this.http.get<FeatureToggleResponse>('/api/v1/feature-toggles');
+   private useMockData = false; // Switch to real API
    ```
 
-2. Закомментировать или удалить mock реализацию
-
-3. Убедиться, что бэкенд возвращает данные в формате:
+2. Ensure backend returns data in this format:
    ```json
    {
      "toggles": [
@@ -163,68 +155,75 @@ constructor(private featureToggleService: FeatureToggleService) {
    }
    ```
 
-## Производительность
+3. API endpoint is configured in `feature-toggle.config.ts`:
+   ```typescript
+   export const FEATURE_TOGGLES_API_URL = '/api/v1/feature-toggles';
+   ```
 
-- Флаги кешируются в памяти через `BehaviorSubject`
-- Автоматическое обновление каждые 5 минут
-- Синхронный доступ к закешированным данным
-- Минимальное влияние на производительность приложения
+## Performance
 
-## Рекомендации
+- Feature toggles are cached in memory via `BehaviorSubject`
+- Automatic refresh every 5 minutes
+- Synchronous access to cached data
+- Global static store for instant access without DI
+- Default values loaded immediately on app start
 
-1. **Именование флагов**: используйте kebab-case (например, `new-payment-flow`)
-2. **Группировка**: префиксы для связанных флагов (`payment-new-ui`, `payment-advanced-options`)
-3. **Документирование**: всегда добавляйте описание при создании нового флага
-4. **Очистка**: удаляйте неиспользуемые флаги из кода и базы данных
+## Best Practices
 
-## Примеры использования в шаблонах
+1. **Naming**: Use kebab-case (e.g., `new-payment-flow`)
+2. **Grouping**: Use prefixes for related toggles (`payment-new-ui`, `payment-advanced-options`)
+3. **Documentation**: Always add description in `feature-toggle.config.ts` when adding new toggle
+4. **Default Values**: Always use safe defaults (usually `false`) in configuration
+5. **Cleanup**: Remove unused toggles from both code and configuration
 
-### Условное отображение
+## Template Usage Examples
+
+### Conditional Display
 
 ```html
-<!-- Структурная директива -->
-<div *ngIf="isToggleActive('new-ui')">
-  Новый интерфейс
+<!-- Using directive -->
+<div *featureToggle="'new-ui'">
+  New Interface
 </div>
 
-<!-- С async pipe -->
-<div *ngIf="isToggleActive$('new-ui') | async">
-  Новый интерфейс (реактивный)
+<!-- Using ngIf with global function -->
+<div *ngIf="isToggleActive('new-ui')">
+  New Interface
 </div>
 ```
 
-### Условные классы
+### Conditional Classes
 
 ```html
 <div [class.new-design]="isToggleActive('new-ui')"
      [class.advanced]="isToggleActive('advanced-mode')">
-  Контент
+  Content
 </div>
 ```
 
-### Отключение элементов
+### Disabling Elements
 
 ```html
 <button [disabled]="!isToggleActive('bulk-operations')">
-  Массовая операция
+  Bulk Operation
 </button>
 ```
 
-## Реальный пример использования
+## Real-World Example
 
-### Управление видимостью кнопки "Add Subscriber"
+### Managing "Add Subscriber" Button Visibility
 
-В компоненте `PrivateCustomerDetailsComponent` используется feature toggle для управления видимостью кнопки добавления подписчика:
+In `PrivateCustomerDetailsComponent`, feature toggle is used to control the visibility of the add subscriber button:
 
 ```typescript
 // private-customer-details.component.ts
-import { isToggleActive } from '../../../shared/services/feature-toggle.token';
+import { isToggleActive } from '../../../shared/services/feature-toggle';
 
 export class PrivateCustomerDetailsComponent {
-  // Делаем функцию доступной в шаблоне
+  // Make global function available in template
   isToggleActive = isToggleActive;
   
-  // Существующие проверки прав
+  // Existing permission checks
   isSpecial = this.authService.hasPermission(SPECIAL_PERMISSION);
   isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 }
@@ -232,9 +231,9 @@ export class PrivateCustomerDetailsComponent {
 
 ```html
 <!-- private-customer-details.component.html -->
-<!-- Кнопка показывается только если:
-     1. Пользователь имеет права admin или special
-     2. Feature toggle 'addSubscriberButtonToggle' включен -->
+<!-- Button is shown only if:
+     1. User has admin or special permissions
+     2. Feature toggle 'addSubscriberButtonToggle' is enabled -->
 <button *ngIf="(isAdmin || isSpecial) && isToggleActive('addSubscriberButtonToggle')"
         mat-menu-item
         (click)="addSubscriber()">
@@ -243,11 +242,11 @@ export class PrivateCustomerDetailsComponent {
 </button>
 ```
 
-В данном примере кнопка не будет отображаться, так как флаг `addSubscriberButtonToggle` выключен (enabled: false) в mock данных.
+The button visibility is controlled by both user permissions AND the feature toggle.
 
-## Тестирование
+## Testing
 
-При написании тестов можно мокировать сервис:
+When writing tests, you can mock the service:
 
 ```typescript
 const mockFeatureToggleService = {

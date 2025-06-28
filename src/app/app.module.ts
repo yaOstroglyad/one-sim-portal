@@ -16,16 +16,17 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthService, CustomHttpInterceptor } from './shared';
 import { GlobalErrorHandlerService } from './shared/auth/error-handler.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { FeatureToggleService } from './shared/services/feature-toggle.service';
-import { FEATURE_TOGGLES_SERVICE } from './shared/services/feature-toggle.token';
+import { FeatureToggleService, FEATURE_TOGGLES_SERVICE } from './shared/services/feature-toggle';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-export function combinedInitializer(translate: TranslateService, authService: AuthService) {
+export function combinedInitializer(translate: TranslateService, authService: AuthService, featureToggleService: FeatureToggleService) {
   return async (): Promise<any> => {
     try {
+      // Initialize feature toggles first
+      await firstValueFrom(featureToggleService.refresh());
       await firstValueFrom(translate.use('en'));
       await firstValueFrom(authService.loadPermissions());
     } catch (error) {
@@ -70,7 +71,7 @@ export function combinedInitializer(translate: TranslateService, authService: Au
     {
       provide: APP_INITIALIZER,
       useFactory: combinedInitializer,
-      deps: [TranslateService, AuthService],
+      deps: [TranslateService, AuthService, FeatureToggleService],
       multi: true
     },
     IconSetService,

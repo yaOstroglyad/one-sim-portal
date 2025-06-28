@@ -1,6 +1,5 @@
 import { InjectionToken, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FeatureToggleService as IFeatureToggleService } from '../model/feature-toggle.interface';
 
 export const FEATURE_TOGGLES_SERVICE = new InjectionToken<{
   isToggleActive(key: string): boolean;
@@ -13,10 +12,10 @@ export const FEATURE_TOGGLES_SERVICE = new InjectionToken<{
  * Can be used directly in components without dependency injection
  * @param key The feature toggle key
  * @returns true if the toggle is active, false otherwise
- * 
+ *
  * @example
  * import { isToggleActive } from '@shared/services/feature-toggle.token';
- * 
+ *
  * if (isToggleActive('new-ui')) {
  *   // Show new UI
  * }
@@ -30,10 +29,10 @@ export function isToggleActive(key: string): boolean {
  * Helper function to observe a feature toggle state
  * @param key The feature toggle key
  * @returns Observable that emits the toggle state
- * 
+ *
  * @example
  * import { isToggleActive$ } from '@shared/services/feature-toggle.token';
- * 
+ *
  * isToggleActive$('new-ui').subscribe(enabled => {
  *   this.showNewUI = enabled;
  * });

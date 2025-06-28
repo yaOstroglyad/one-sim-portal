@@ -36,6 +36,9 @@ export * from './services/products-data.service';
 export * from './services/visual.service';
 export * from './services/white-label-data.service';
 
+export * from './services/feature-toggle';
+export * from './directives/feature-toggle.directive';
+
 export * from './auth/permission.guard';
 export * from './auth/auth.service';
 

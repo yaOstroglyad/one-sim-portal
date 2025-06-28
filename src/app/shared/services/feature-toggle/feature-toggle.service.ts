@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of, timer } from 'rxjs';
 import { map, catchError, tap, switchMap } from 'rxjs/operators';
-import { FeatureToggle, FeatureToggleResponse } from '../model/feature-toggle.interface';
+import { FeatureToggle, FeatureToggleResponse } from '../../model/feature-toggle.interface';
+import { FeatureToggleStore } from './feature-toggle-store';
+import { getDefaultTogglesMap, FEATURE_TOGGLES_API_URL } from './feature-toggle.config';
 
 @Injectable({
   providedIn: 'root'
@@ -11,21 +13,20 @@ export class FeatureToggleService {
   private togglesSubject = new BehaviorSubject<Map<string, boolean>>(new Map());
   private toggles$ = this.togglesSubject.asObservable();
   private _featureToggles = new Set<string>();
-  
-  // Mock data for development
-  private mockToggles: FeatureToggle[] = [
-    { key: 'new-ui', enabled: true, description: 'New UI design' },
-    { key: 'advanced-search', enabled: false, description: 'Advanced search functionality' },
-    { key: 'bulk-operations', enabled: true, description: 'Bulk operations support' },
-    { key: 'email-notifications', enabled: true, description: 'Email notification system' },
-    { key: 'test', enabled: true, description: 'Test feature toggle' },
-    { key: 'addSubscriberButtonToggle', enabled: false, description: 'Add subscriber button visibility' }
-  ];
+  private isInitialized = false;
+  private useMockData = true; // TODO: Set to false when API is ready
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private featureToggleStore: FeatureToggleStore
+  ) {
+    const defaultToggles = getDefaultTogglesMap();
+    this.togglesSubject.next(defaultToggles);
+    this.featureToggleStore.updateToggles(defaultToggles);
+
     this.loadFeatureToggles();
-    // Refresh toggles every 5 minutes
-    timer(0, 300000).pipe(
+
+    timer(300000, 300000).pipe(
       switchMap(() => this.fetchFeatureToggles())
     ).subscribe();
   }
@@ -35,29 +36,51 @@ export class FeatureToggleService {
   }
 
   private fetchFeatureToggles(): Observable<FeatureToggleResponse> {
-    // TODO: Replace with actual API endpoint when backend is ready
-    // return this.http.get<FeatureToggleResponse>('/api/v1/feature-toggles');
-    
-    // Mock implementation
-    return of({ 
-      toggles: this.mockToggles, 
-      timestamp: new Date() 
-    }).pipe(
+    if (this.useMockData) {
+      return this.fetchMockToggles();
+    }
+
+    return this.http.get<FeatureToggleResponse>(FEATURE_TOGGLES_API_URL).pipe(
       tap(response => {
         const toggleMap = new Map<string, boolean>();
         this._featureToggles.clear();
-        
+
         response.toggles.forEach(toggle => {
           toggleMap.set(toggle.key, toggle.enabled);
           this._featureToggles.add(toggle.key);
         });
-        
+
         this.togglesSubject.next(toggleMap);
+        this.featureToggleStore.updateToggles(toggleMap);
+        this.isInitialized = true;
       }),
       catchError(error => {
         console.error('Failed to fetch feature toggles:', error);
-        // Return empty response on error
+        this.isInitialized = true;
         return of({ toggles: [], timestamp: new Date() });
+      })
+    );
+  }
+
+  private fetchMockToggles(): Observable<FeatureToggleResponse> {
+    const mockToggles: FeatureToggle[] = Array.from(getDefaultTogglesMap().entries()).map(([key, enabled]) => ({
+      key,
+      enabled
+    }));
+
+    return of({ toggles: mockToggles, timestamp: new Date() }).pipe(
+      tap(response => {
+        const toggleMap = new Map<string, boolean>();
+        this._featureToggles.clear();
+
+        response.toggles.forEach(toggle => {
+          toggleMap.set(toggle.key, toggle.enabled);
+          this._featureToggles.add(toggle.key);
+        });
+
+        this.togglesSubject.next(toggleMap);
+        this.featureToggleStore.updateToggles(toggleMap);
+        this.isInitialized = true;
       })
     );
   }
@@ -91,6 +114,13 @@ export class FeatureToggleService {
   }
 
   /**
+   * Check if the service has been initialized with data from server
+   */
+  get initialized(): boolean {
+    return this.isInitialized;
+  }
+
+  /**
    * Force refresh of feature toggles from the server
    */
   refresh(): Observable<void> {
@@ -105,17 +135,15 @@ export class FeatureToggleService {
    * @param enabled The new state
    */
   setToggle(key: string, enabled: boolean): void {
+    if (!this.useMockData) {
+      console.warn('setToggle is only available in mock mode');
+      return;
+    }
+
     const currentToggles = new Map(this.togglesSubject.getValue());
     currentToggles.set(key, enabled);
     this._featureToggles.add(key);
     this.togglesSubject.next(currentToggles);
-    
-    // Update mock data
-    const existingToggle = this.mockToggles.find(t => t.key === key);
-    if (existingToggle) {
-      existingToggle.enabled = enabled;
-    } else {
-      this.mockToggles.push({ key, enabled });
-    }
+    this.featureToggleStore.updateToggles(currentToggles);
   }
 }
