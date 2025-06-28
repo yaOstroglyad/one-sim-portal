@@ -1,8 +1,17 @@
 <div [class]="tabsClasses.join(' ')">
   <!-- Tab Headers -->
   <div class="os-tabs__header" role="tablist">
+    <!-- Animated indicator for default and underline variants -->
+    <div 
+      *ngIf="showAnimatedIndicator"
+      class="os-tabs__indicator"
+      [style.width.px]="indicatorWidth"
+      [style.transform]="'translateX(' + indicatorPosition + 'px)'"
+      [style.transition]="'transform ' + animationDuration + 'ms cubic-bezier(0.35, 0, 0.25, 1)'"
+    ></div>
     <button
       *ngFor="let tab of availableTabs; let i = index; trackBy: trackByTab"
+      #tabButton
       class="os-tabs__tab"
       [class.os-tabs__tab--active]="isTabActive(i)"
       [class.os-tabs__tab--disabled]="isTabDisabled(i)"
@@ -56,32 +65,42 @@
 
   <!-- Tab Content -->
   <div class="os-tabs__content" role="tabpanel">
-    <!-- Content for template-based tabs -->
-    <ng-container *ngIf="!tabs && tabComponents">
-      <ng-container *ngFor="let tab of tabComponents.toArray(); let i = index">
+    <div class="os-tabs__content-viewport">
+      <div 
+        class="os-tabs__panels-wrapper" 
+        [class.os-tabs__panels-wrapper--slide]="animationType === 'slide'"
+        [class.os-tabs__panels-wrapper--fade]="animationType === 'fade'"
+        [style.transform]="animationType === 'slide' ? 'translateX(' + contentTransform + '%)' : 'none'"
+        [style.transition]="animationType === 'slide' ? 'transform ' + animationDuration + 'ms cubic-bezier(0.35, 0, 0.25, 1)' : 'none'">
+      <!-- Content for template-based tabs -->
+      <ng-container *ngIf="!tabs && tabComponents">
+        <ng-container *ngFor="let tab of tabComponents.toArray(); let i = index">
+          <div 
+            class="os-tabs__panel"
+            [class.os-tabs__panel--active]="isTabActive(i)"
+            [attr.aria-hidden]="!isTabActive(i)"
+            role="tabpanel">
+            <div class="os-tabs__panel-content" *ngIf="isTabActive(i) || !lazy">
+              <ng-container *ngTemplateOutlet="tab.content"></ng-container>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <!-- Content for data-driven tabs -->
+      <ng-container *ngIf="tabs">
         <div 
-          *ngIf="isTabActive(i) || !lazy"
+          *ngFor="let tab of tabs; let i = index"
           class="os-tabs__panel"
           [class.os-tabs__panel--active]="isTabActive(i)"
-          [class.os-tabs__panel--hidden]="!isTabActive(i)"
           [attr.aria-hidden]="!isTabActive(i)"
           role="tabpanel">
-          <ng-container *ngTemplateOutlet="tab.content"></ng-container>
+          <div class="os-tabs__panel-content">
+            <ng-content [select]="'[slot=tab-' + i + ']'"></ng-content>
+          </div>
         </div>
       </ng-container>
-    </ng-container>
-
-    <!-- Content for data-driven tabs -->
-    <ng-container *ngIf="tabs">
-      <div 
-        *ngFor="let tab of tabs; let i = index"
-        class="os-tabs__panel"
-        [class.os-tabs__panel--active]="isTabActive(i)"
-        [class.os-tabs__panel--hidden]="!isTabActive(i)"
-        [attr.aria-hidden]="!isTabActive(i)"
-        role="tabpanel">
-        <ng-content [select]="'[slot=tab-' + i + ']'"></ng-content>
       </div>
-    </ng-container>
+    </div>
   </div>
 </div>

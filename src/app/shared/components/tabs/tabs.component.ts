@@ -8,7 +8,11 @@ import {
   Output, 
   QueryList,
   AfterContentInit,
-  OnDestroy
+  OnDestroy,
+  ViewChildren,
+  ElementRef,
+  AfterViewInit,
+  ChangeDetectorRef
 } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { TabComponent } from './tab.component';
@@ -23,7 +27,7 @@ import { TooltipDirective } from '../tooltip';
   styleUrls: ['./tabs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TabsComponent implements AfterContentInit, OnDestroy {
+export class TabsComponent implements AfterContentInit, AfterViewInit, OnDestroy {
   @Input() activeTabIndex = 0;
   @Input() position: TabPosition = 'top';
   @Input() size: TabSize = 'medium';
@@ -32,14 +36,23 @@ export class TabsComponent implements AfterContentInit, OnDestroy {
   @Input() tabs?: TabConfig[]; // For dynamic tabs
   @Input() lazy = false; // Lazy load tab content
   @Input() animationDuration = 300;
+  @Input() animationType: 'slide' | 'fade' = 'slide';
 
   @Output() activeTabIndexChange = new EventEmitter<number>();
   @Output() tabChange = new EventEmitter<TabChangeEvent>();
   @Output() tabClose = new EventEmitter<TabCloseEvent>();
 
   @ContentChildren(TabComponent) tabComponents!: QueryList<TabComponent>;
+  @ViewChildren('tabButton', { read: ElementRef }) tabButtons?: QueryList<ElementRef>;
+
+  // Animation properties
+  indicatorWidth = 0;
+  indicatorPosition = 0;
+  contentTransform = 0;
 
   private destroy$ = new Subject<void>();
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   get tabsClasses(): string[] {
     const classes = ['os-tabs'];
@@ -62,6 +75,11 @@ export class TabsComponent implements AfterContentInit, OnDestroy {
     return this.tabComponents?.toArray() || [];
   }
 
+  get showAnimatedIndicator(): boolean {
+    return (this.variant === 'default' || this.variant === 'underline') && 
+           (this.position === 'top' || this.position === 'bottom');
+  }
+
   ngAfterContentInit(): void {
     if (this.tabComponents) {
       // Listen to changes in tab components
@@ -75,9 +93,42 @@ export class TabsComponent implements AfterContentInit, OnDestroy {
     }
   }
 
+  ngAfterViewInit(): void {
+    // Initialize indicator and content position after view is ready
+    setTimeout(() => {
+      this.updateIndicatorPosition();
+      this.updateContentPosition();
+    });
+
+    // Update indicator on tab button changes
+    if (this.tabButtons) {
+      this.tabButtons.changes
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          setTimeout(() => {
+            this.updateIndicatorPosition();
+          });
+        });
+    }
+
+    // Update indicator on window resize
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', this.handleResize);
+    }
+  }
+
+  private handleResize = () => {
+    this.updateIndicatorPosition();
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    
+    // Remove resize listener
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.handleResize);
+    }
   }
 
   selectTab(index: number): void {
@@ -100,6 +151,12 @@ export class TabsComponent implements AfterContentInit, OnDestroy {
       };
       this.tabChange.emit(event);
     }
+
+    // Update indicator position with animation
+    setTimeout(() => {
+      this.updateIndicatorPosition();
+      this.updateContentPosition();
+    });
   }
 
   closeTab(index: number, event: Event): void {
@@ -257,6 +314,43 @@ export class TabsComponent implements AfterContentInit, OnDestroy {
       return tab.id;
     }
     return (tab as TabComponent).id || index;
+  }
+
+  private updateIndicatorPosition(): void {
+    if (!this.showAnimatedIndicator || !this.tabButtons) {
+      return;
+    }
+
+    const activeButton = this.tabButtons.toArray()[this.activeTabIndex];
+    if (!activeButton) {
+      return;
+    }
+
+    const buttonElement = activeButton.nativeElement as HTMLElement;
+    const headerElement = buttonElement.parentElement;
+    
+    if (!headerElement) {
+      return;
+    }
+
+    // Calculate position relative to the header
+    const headerRect = headerElement.getBoundingClientRect();
+    const buttonRect = buttonElement.getBoundingClientRect();
+    
+    this.indicatorWidth = buttonRect.width;
+    this.indicatorPosition = buttonRect.left - headerRect.left;
+    
+    // Trigger change detection
+    this.cdr.markForCheck();
+  }
+
+  private updateContentPosition(): void {
+    // Only update transform for slide animation
+    if (this.animationType === 'slide') {
+      // Calculate transform percentage based on active tab index
+      this.contentTransform = -100 * this.activeTabIndex;
+    }
+    this.cdr.markForCheck();
   }
 
   private validateActiveTab(): void {

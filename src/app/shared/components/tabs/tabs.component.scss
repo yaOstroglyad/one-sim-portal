@@ -86,10 +86,6 @@
       min-width: 16px;
       height: 16px;
     }
-    
-    .os-tabs__content {
-      padding: 12px;
-    }
   }
 
   &--medium {
@@ -103,10 +99,6 @@
       font-size: 0.75rem;
       min-width: 18px;
       height: 18px;
-    }
-    
-    .os-tabs__content {
-      padding: 16px;
     }
   }
 
@@ -122,10 +114,6 @@
       min-width: 20px;
       height: 20px;
     }
-    
-    .os-tabs__content {
-      padding: 24px;
-    }
   }
 
   // Variant styles
@@ -137,16 +125,11 @@
     .os-tabs__tab {
       background-color: var(--os-color-transparent);
       border: none;
-      border-bottom: 2px solid var(--os-color-transparent);
       border-radius: 0;
       
       &--active {
-        border-bottom-color: var(--os-color-primary);
         color: var(--os-color-primary);
         background-color: var(--os-color-transparent);
-        border-left: none;
-        border-right: none;
-        border-top: none;
       }
       
       &:hover:not(&--disabled):not(&--active) {
@@ -189,17 +172,15 @@
     .os-tabs__tab {
       background-color: var(--os-color-transparent);
       border: none;
-      border-bottom: 2px solid var(--os-color-transparent);
       border-radius: 0;
       margin-bottom: -1px;
       
       &--active {
-        border-bottom-color: var(--os-color-primary);
         color: var(--os-color-primary);
       }
       
       &:hover:not(&--disabled):not(&--active) {
-        border-bottom-color: rgba(var(--os-color-primary-rgb), 0.3);
+        background-color: rgba(var(--os-color-primary-rgb), 0.05);
       }
     }
   }
@@ -255,9 +236,46 @@
     background-color: var(--os-color-transparent);
     overflow-x: auto;
     scrollbar-width: none;
+    position: relative;
     
     &::-webkit-scrollbar {
       display: none;
+    }
+  }
+
+  // Animated indicator
+  &__indicator {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--os-color-primary);
+    z-index: 2;
+    border-radius: 2px 2px 0 0;
+    
+    // For underline variant, make it more prominent
+    .os-tabs--underline & {
+      height: 3px;
+    }
+    
+    // Position on top for bottom tabs
+    .os-tabs--bottom & {
+      bottom: auto;
+      top: 0;
+      border-radius: 0 0 2px 2px;
+    }
+    
+    // Add box shadow for depth
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: inherit;
+      filter: blur(4px);
+      opacity: 0.4;
+      z-index: -1;
     }
   }
 
@@ -348,26 +366,111 @@
     flex: 1;
     background-color: var(--os-color-white);
     position: relative;
+    min-height: 0; // Fix for flexbox overflow
+  }
+  
+  // Content viewport - prevents overflow
+  &__content-viewport {
+    width: 100%;
+    height: 100%;
     overflow: hidden;
+    position: relative;
+  }
+
+  // Panels wrapper for sliding animation
+  &__panels-wrapper {
+    width: 100%;
+    height: 100%;
+    
+    &--slide {
+      display: flex;
+      will-change: transform;
+      flex-wrap: nowrap;
+      
+      .os-tabs__panel {
+        flex: 0 0 100%;
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        min-height: 0;
+        opacity: 1;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+    }
+    
+    &--fade {
+      position: relative;
+      
+      .os-tabs__panel {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        
+        &--active {
+          opacity: 1;
+          pointer-events: auto;
+          animation: fadeInUp 0.3s ease;
+        }
+      }
+    }
   }
 
   // Individual panel
   &__panel {
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
     position: relative;
-    transition: opacity 0.3s ease;
+  }
+  
+  // Panel content with proper padding
+  &__panel-content {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
     
-    &--active {
-      opacity: 1;
+    // Apply padding based on tab size
+    .os-tabs--small & {
+      padding: 12px;
     }
     
-    &--hidden {
-      opacity: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      pointer-events: none;
+    .os-tabs--medium & {
+      padding: 16px;
     }
+    
+    .os-tabs--large & {
+      padding: 24px;
+    }
+  }
+}
+
+// Fade in animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Fade in up animation
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
