@@ -1,0 +1,87 @@
+<div [class]="tabsClasses.join(' ')">
+  <!-- Tab Headers -->
+  <div class="os-tabs__header" role="tablist">
+    <button
+      *ngFor="let tab of availableTabs; let i = index; trackBy: trackByTab"
+      class="os-tabs__tab"
+      [class.os-tabs__tab--active]="isTabActive(i)"
+      [class.os-tabs__tab--disabled]="isTabDisabled(i)"
+      [attr.aria-selected]="isTabActive(i)"
+      [attr.aria-disabled]="isTabDisabled(i)"
+      [attr.tabindex]="isTabActive(i) ? 0 : -1"
+      [osTooltip]="getTooltipForTab(tab, i)"
+      [tooltipPosition]="getTooltipPosition()"
+      [tooltipVariant]="isTabDisabled(i) ? 'error' : 'default'"
+      [tooltipDelay]="300"
+      role="tab"
+      type="button"
+      (click)="selectTab(i)"
+      (keydown.arrowLeft)="navigateTab(i - 1, $any($event))"
+      (keydown.arrowRight)="navigateTab(i + 1, $any($event))"
+      (keydown.home)="navigateTab(0, $any($event))"
+      (keydown.end)="navigateTab(availableTabs.length - 1, $any($event))">
+      
+      <!-- Tab Icon -->
+      <span 
+        *ngIf="getTabIcon(tab)" 
+        class="os-tabs__tab-icon"
+        [attr.aria-hidden]="true">
+        {{ getTabIcon(tab) }}
+      </span>
+      
+      <!-- Tab Label -->
+      <span class="os-tabs__tab-label">
+        {{ getTabLabel(tab) }}
+      </span>
+      
+      <!-- Tab Badge -->
+      <span 
+        *ngIf="getTabBadge(tab)" 
+        class="os-tabs__tab-badge"
+        [attr.aria-label]="'Badge: ' + getTabBadge(tab)">
+        {{ getTabBadge(tab) }}
+      </span>
+      
+      <!-- Close Button -->
+      <button
+        *ngIf="isTabClosable(tab)"
+        class="os-tabs__tab-close"
+        type="button"
+        [attr.aria-label]="'Close ' + getTabLabel(tab)"
+        (click)="closeTab(i, $event)">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="os-tabs__content" role="tabpanel">
+    <!-- Content for template-based tabs -->
+    <ng-container *ngIf="!tabs && tabComponents">
+      <ng-container *ngFor="let tab of tabComponents.toArray(); let i = index">
+        <div 
+          *ngIf="isTabActive(i) || !lazy"
+          class="os-tabs__panel"
+          [class.os-tabs__panel--active]="isTabActive(i)"
+          [class.os-tabs__panel--hidden]="!isTabActive(i)"
+          [attr.aria-hidden]="!isTabActive(i)"
+          role="tabpanel">
+          <ng-container *ngTemplateOutlet="tab.content"></ng-container>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- Content for data-driven tabs -->
+    <ng-container *ngIf="tabs">
+      <div 
+        *ngFor="let tab of tabs; let i = index"
+        class="os-tabs__panel"
+        [class.os-tabs__panel--active]="isTabActive(i)"
+        [class.os-tabs__panel--hidden]="!isTabActive(i)"
+        [attr.aria-hidden]="!isTabActive(i)"
+        role="tabpanel">
+        <ng-content [select]="'[slot=tab-' + i + ']'"></ng-content>
+      </div>
+    </ng-container>
+  </div>
+</div>
