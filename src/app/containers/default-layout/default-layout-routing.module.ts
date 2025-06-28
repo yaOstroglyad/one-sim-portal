@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DefaultLayoutComponent } from './default-layout.component';
+import { FeatureToggleGuard } from '../../shared/auth/feature-toggle.guard';
 
 const routes: Routes = [
   {
@@ -61,6 +62,15 @@ const routes: Routes = [
       {
         path: 'settings',
         loadChildren: () => import('../../views/settings/settings-routing').then(m => m.SettingsRouting)
+      },
+      {
+        path: 'dashboard',
+        data: {
+          title: 'nav.dashboard',
+          featureToggle: 'dashboard'
+        },
+        canActivate: [FeatureToggleGuard],
+        loadChildren: () => import('../../views/dashboard/dashboard.module').then(m => m.DashboardModule)
       },
     ]
   }
