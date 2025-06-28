@@ -1,0 +1,22 @@
+<div [class]="cardClasses.join(' ')">
+  <!-- Header Section -->
+  <div class="os-card__header" *ngIf="shouldShowHeader">
+    <div class="os-card__header-content">
+      <h3 class="os-card__title" *ngIf="title">{{ title }}</h3>
+      <p class="os-card__subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+    </div>
+    <div class="os-card__header-actions" *ngIf="showActions">
+      <ng-content select="[slot=header-actions]"></ng-content>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="os-card__content">
+    <ng-content></ng-content>
+  </div>
+
+  <!-- Actions Section -->
+  <div class="os-card__actions" *ngIf="showActions">
+    <ng-content select="[slot=actions]"></ng-content>
+  </div>
+</div>

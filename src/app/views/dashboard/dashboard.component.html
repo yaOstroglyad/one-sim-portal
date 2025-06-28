@@ -1,15 +1,69 @@
 <c-container>
   <c-row>
     <c-col xs="12">
-      <c-card class="mb-4">
-        <c-card-header>
-          <strong>Dashboard</strong>
-        </c-card-header>
-        <c-card-body>
-          <p>Welcome to the new Analytics Dashboard!</p>
-          <p>This feature is protected by feature toggle: 'dashboard'</p>
-        </c-card-body>
-      </c-card>
+      <!-- Example using new reusable card component -->
+      <app-card 
+        title="Dashboard" 
+        subtitle="Analytics and insights for your eSIM portal"
+        variant="elevated"
+        size="large">
+        <p>Welcome to the new Analytics Dashboard!</p>
+        <p>This feature is protected by feature toggle: 'dashboard'</p>
+      </app-card>
+
+      <!-- Example of different card variants -->
+      <c-row class="mt-4">
+        <c-col xs="12" md="4">
+          <app-card 
+            title="Interactive Card"
+            subtitle="Click me!"
+            variant="interactive"
+            [interactive]="true"
+            size="medium"
+            (click)="onCardClick('interactive')">
+            <p>This card responds to interactions.</p>
+          </app-card>
+        </c-col>
+        
+        <c-col xs="12" md="4">
+          <app-card 
+            title="Notification Card"
+            variant="notification"
+            size="medium">
+            <p>Important notification content here.</p>
+          </app-card>
+        </c-col>
+        
+        <c-col xs="12" md="4">
+          <app-card 
+            title="Selected Card"
+            subtitle="Currently active"
+            [selected]="true"
+            size="medium">
+            <p>This card is in selected state.</p>
+          </app-card>
+        </c-col>
+      </c-row>
+
+      <!-- Example with actions -->
+      <app-card 
+        title="Card with Actions"
+        subtitle="Demonstrating header and footer actions"
+        [showActions]="true"
+        size="medium"
+        customClass="mt-4">
+        
+        <div slot="header-actions">
+          <button class="btn btn-sm btn-outline-primary">Settings</button>
+        </div>
+        
+        <p>This card demonstrates the use of content projection for actions in both header and footer areas.</p>
+        
+        <div slot="actions">
+          <button class="btn btn-sm btn-outline-secondary me-2">Cancel</button>
+          <button class="btn btn-sm btn-primary">Save</button>
+        </div>
+      </app-card>
     </c-col>
   </c-row>
 </c-container>

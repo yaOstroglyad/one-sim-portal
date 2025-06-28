@@ -12,4 +12,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onCardClick(cardType: string): void {
+    console.log(`${cardType} card clicked!`);
+  }
+
 }

@@ -1,0 +1,121 @@
+// Card Utilities - Reusable styles for card components
+@import "./variables";
+
+// Card spacing utilities
+.os-card-margin {
+  &--none { margin: 0; }
+  &--xs { margin: 8px; }
+  &--sm { margin: 12px; }
+  &--md { margin: 16px; }
+  &--lg { margin: 24px; }
+  &--xl { margin: 32px; }
+}
+
+.os-card-padding {
+  &--none { padding: 0; }
+  &--xs { padding: 8px; }
+  &--sm { padding: 12px; }
+  &--md { padding: 16px; }
+  &--lg { padding: 24px; }
+  &--xl { padding: 32px; }
+}
+
+// Card shadow utilities
+.os-card-shadow {
+  &--none { box-shadow: none; }
+  &--xs { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); }
+  &--sm { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+  &--md { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+  &--lg { box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); }
+  &--xl { box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15); }
+}
+
+// Card border utilities
+.os-card-border {
+  &--none { border: none; }
+  &--primary { border: 1px solid var(--os-color-primary); }
+  &--success { border: 1px solid var(--os-color-success); }
+  &--warning { border: 1px solid var(--os-color-warning); }
+  &--danger { border: 1px solid var(--os-color-danger); }
+  &--light { border: 1px solid var(--os-color-light-shade); }
+  &--medium { border: 1px solid var(--os-color-medium); }
+}
+
+// Card background utilities
+.os-card-bg {
+  &--primary { background-color: var(--os-color-primary-opacity-05); }
+  &--success { background-color: rgba(45, 211, 111, 0.05); }
+  &--warning { background-color: rgba(255, 196, 9, 0.05); }
+  &--danger { background-color: rgba(235, 68, 90, 0.05); }
+  &--light { background-color: var(--os-color-light); }
+  &--white { background-color: #ffffff; }
+  &--transparent { background-color: transparent; }
+}
+
+// Card state utilities
+.os-card-state {
+  &--loading {
+    position: relative;
+    overflow: hidden;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.6),
+        transparent
+      );
+      animation: shimmer 1.5s infinite;
+    }
+  }
+  
+  &--error {
+    border-color: var(--os-color-danger);
+    background-color: rgba(235, 68, 90, 0.02);
+  }
+  
+  &--success {
+    border-color: var(--os-color-success);
+    background-color: rgba(45, 211, 111, 0.02);
+  }
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+// Responsive card utilities
+@media (max-width: 768px) {
+  .os-card-responsive {
+    &--stack {
+      flex-direction: column;
+      
+      .os-card__content {
+        margin-bottom: 16px;
+      }
+    }
+    
+    &--hide-actions .os-card__actions {
+      display: none;
+    }
+    
+    &--compact {
+      padding: 12px;
+      
+      .os-card__title {
+        font-size: 1rem;
+      }
+      
+      .os-card__subtitle {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}

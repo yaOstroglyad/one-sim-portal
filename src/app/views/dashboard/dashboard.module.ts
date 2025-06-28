@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
+import { CardComponent } from '../../shared/components/card/card.component';
 
 import {
   AvatarModule,
@@ -29,14 +30,14 @@ import { IconModule } from '@coreui/icons-angular';
     NavModule,
     IconModule,
     TabsModule,
-    CommonModule,
     GridModule,
     ProgressModule,
     ButtonModule,
     FormModule,
     ButtonGroupModule,
     AvatarModule,
-    TableModule
+    TableModule,
+    CardComponent // Import standalone component
   ]
 })
 export class DashboardModule { }
