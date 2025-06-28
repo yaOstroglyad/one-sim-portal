@@ -66,7 +66,6 @@ const routes: Routes = [
       {
         path: 'dashboard',
         data: {
-          title: 'nav.dashboard',
           featureToggle: 'dashboard'
         },
         canActivate: [FeatureToggleGuard],

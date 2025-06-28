@@ -9,6 +9,7 @@ export * from './components/qr-code/qr-code.component'
 export * from './components/info-strip/info-strip.component'
 export * from './components/rich-text-input'
 export * from './components/html-dialog'
+export * from './components/card'
 
 export * from './components/table-initialization-error/table-initialization-error.module'
 export * from './components/header-component/header.module';
