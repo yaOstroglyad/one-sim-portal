@@ -72,8 +72,8 @@
         size="large"
         customClass="mt-4">
         
-        <h4>Basic Tabs (without tooltips for now)</h4>
-        <os-tabs [(activeTabIndex)]="basicTabIndex" (tabChange)="onTabChange($event)" class="mb-4">
+        <h4>Basic Tabs with Slide Animation</h4>
+        <os-tabs [(activeTabIndex)]="basicTabIndex" (tabChange)="onTabChange($event)" animationType="slide" class="mb-4">
           <os-tab label="Overview">
             <h5>Overview Content</h5>
             <p>This is the overview tab with basic content.</p>
@@ -95,8 +95,8 @@
           </os-tab>
         </os-tabs>
 
-        <h4>Pills Variant</h4>
-        <os-tabs variant="pills" size="medium" class="mb-4">
+        <h4>Pills Variant with Fade Animation</h4>
+        <os-tabs variant="pills" size="medium" animationType="fade" class="mb-4">
           <os-tab label="Analytics" icon="📊">
             <h5>Analytics Dashboard</h5>
             <p>View analytics and metrics data here.</p>
