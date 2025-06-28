@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 export type CardVariant = 'default' | 'elevated' | 'outlined' | 'interactive' | 'notification';
 export type CardSize = 'small' | 'medium' | 'large';
@@ -9,7 +9,8 @@ export type CardSize = 'small' | 'medium' | 'large';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss']
+  styleUrls: ['./card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardComponent {
   @Input() title?: string;

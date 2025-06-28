@@ -5,6 +5,7 @@ A reusable standalone Angular component for creating consistent card layouts thr
 ## Features
 
 - **Standalone Component**: Can be imported directly without additional modules
+- **OnPush Change Detection**: Optimized performance with `ChangeDetectionStrategy.OnPush`
 - **Multiple Variants**: Default, elevated, outlined, interactive, and notification styles  
 - **Flexible Sizing**: Small, medium, and large size options
 - **Content Projection**: Support for header actions and footer actions

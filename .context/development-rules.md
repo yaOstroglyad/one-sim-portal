@@ -70,9 +70,73 @@ This document outlines the mandatory rules and best practices for developing com
 
 **Rationale**: The `os-` prefix prevents naming conflicts with Angular's default `app-` prefix and provides clear identification of our custom components.
 
+### 3. **Standalone Components Must Use OnPush**
+**Rule**: All standalone components must use `ChangeDetectionStrategy.OnPush` for optimal performance.
+
+**❌ Wrong:**
+```typescript
+@Component({
+  selector: 'os-my-component',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './my-component.html',
+  styleUrls: ['./my-component.scss']
+  // Missing changeDetection strategy
+})
+```
+
+**✅ Correct:**
+```typescript
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+@Component({
+  selector: 'os-my-component',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './my-component.html',
+  styleUrls: ['./my-component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+```
+
+**Benefits**:
+- **Performance**: Reduces unnecessary change detection cycles
+- **Predictability**: Makes data flow more explicit
+- **Debugging**: Easier to track when and why components update
+- **Best Practice**: Follows Angular's recommended patterns for modern applications
+
+**Important Notes**:
+- When using OnPush, ensure all inputs are immutable or use proper change detection triggers
+- Use `async` pipe for observables in templates for automatic change detection
+- Manual change detection can be triggered with `ChangeDetectorRef.markForCheck()` if needed
+
+### 4. **No Automatic Dark Mode**
+**Rule**: Do not use `@media (prefers-color-scheme: dark)` unless dark mode is officially implemented.
+
+**❌ Wrong:**
+```scss
+@media (prefers-color-scheme: dark) {
+  .my-component {
+    background: #333;
+    color: #fff;
+  }
+}
+```
+
+**✅ Correct:**
+```scss
+// When dark mode is implemented, use controlled theme classes instead:
+.dark-theme .my-component {
+  background: var(--os-color-dark);
+  color: var(--os-color-light);
+}
+```
+
+**Rationale**: `prefers-color-scheme: dark` automatically applies when user has dark mode in OS settings, even if the application doesn't support it, causing inconsistent styling.
+
 ## 📋 Best Practices
 
-### 3. **CSS Class Naming Convention**
+### 5. **CSS Class Naming Convention**
 - Use `os-` prefix for all utility classes
 - Follow BEM methodology for component-specific classes
 - Use semantic naming
@@ -91,7 +155,7 @@ This document outlines the mandatory rules and best practices for developing com
 .os-card--interactive
 ```
 
-### 4. **SCSS Structure**
+### 6. **SCSS Structure**
 - Import variables at the top of component SCSS files
 - Use mixins for repeated patterns
 - Group related styles together
@@ -124,7 +188,7 @@ This document outlines the mandatory rules and best practices for developing com
 }
 ```
 
-### 5. **Responsive Design**
+### 7. **Responsive Design**
 - Use CSS Grid and Flexbox for layouts
 - Implement mobile-first approach
 - Use consistent breakpoints
@@ -140,7 +204,7 @@ This document outlines the mandatory rules and best practices for developing com
 }
 ```
 
-### 6. **Accessibility**
+### 8. **Accessibility**
 - Use semantic HTML elements
 - Provide proper ARIA labels
 - Ensure keyboard navigation
@@ -156,12 +220,15 @@ This document outlines the mandatory rules and best practices for developing com
 </os-card>
 ```
 
-### 7. **TypeScript Standards**
+### 9. **TypeScript Standards**
 - Use strict typing
 - Define interfaces for component inputs
 - Use enums for predefined values
+- Always use `ChangeDetectionStrategy.OnPush` for standalone components
 
 ```typescript
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
 export type CardVariant = 'default' | 'elevated' | 'outlined';
 export type CardSize = 'small' | 'medium' | 'large';
 
@@ -169,6 +236,16 @@ export interface CardConfig {
   variant?: CardVariant;
   size?: CardSize;
   interactive?: boolean;
+}
+
+@Component({
+  selector: 'os-my-component',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  // ...
+})
+export class MyComponent {
+  // Component logic
 }
 ```
 
@@ -184,6 +261,8 @@ export interface CardConfig {
 ### Code Review Checklist:
 - [ ] No hardcoded colors used
 - [ ] Component uses `os-` prefix
+- [ ] Standalone components use `ChangeDetectionStrategy.OnPush`
+- [ ] No `@media (prefers-color-scheme: dark)` used
 - [ ] Proper TypeScript typing
 - [ ] Responsive design implemented
 - [ ] Accessibility considerations included
@@ -212,10 +291,12 @@ $color-info: #{var(--os-color-info)};
 
 1. **Using hardcoded colors**: Always use CSS variables
 2. **Wrong component prefix**: Use `os-` not `app-`
-3. **Inconsistent naming**: Follow BEM methodology
-4. **Missing responsive design**: Always consider mobile
-5. **Poor accessibility**: Include ARIA labels and semantic HTML
-6. **Duplicate code**: Create reusable utilities instead
+3. **Missing OnPush**: Standalone components must use `ChangeDetectionStrategy.OnPush`
+4. **Using prefers-color-scheme**: Don't use automatic dark mode detection
+5. **Inconsistent naming**: Follow BEM methodology
+6. **Missing responsive design**: Always consider mobile
+7. **Poor accessibility**: Include ARIA labels and semantic HTML
+8. **Duplicate code**: Create reusable utilities instead
 
 ## 📚 Resources
 
