@@ -139,7 +139,7 @@ export class TooltipComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   private show(): void {
-    if (this.disabled || (!this.text.trim() && !this.hasAnyCustomContent())) return;
+    if (this.disabled || (!this.text?.trim() && !this.hasAnyCustomContent())) return;
 
     this.clearTimeouts();
     this.showTimeout = window.setTimeout(() => {

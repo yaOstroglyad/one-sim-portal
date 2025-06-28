@@ -67,7 +67,7 @@ export class TooltipDirective implements OnInit, OnDestroy {
   }
 
   private show(): void {
-    if (this.tooltipDisabled || (!this.tooltipText.trim() && !this.tooltipContent && !this.hasNgContent())) return;
+    if (this.tooltipDisabled || (!this.tooltipText?.trim() && !this.tooltipContent && !this.hasNgContent())) return;
 
     this.clearTimeouts();
     this.showTimeout = window.setTimeout(() => {
