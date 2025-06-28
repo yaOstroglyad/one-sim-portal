@@ -64,6 +64,162 @@
           <button class="btn btn-sm btn-primary">Save</button>
         </div>
       </os-card>
+
+      <!-- Tabs Component Examples -->
+      <os-card 
+        title="Tabs Component Examples"
+        subtitle="Demonstrating different tab variants and features"
+        size="large"
+        customClass="mt-4">
+        
+        <h4>Basic Tabs (without tooltips for now)</h4>
+        <os-tabs [(activeTabIndex)]="basicTabIndex" (tabChange)="onTabChange($event)" class="mb-4">
+          <os-tab label="Overview">
+            <h5>Overview Content</h5>
+            <p>This is the overview tab with basic content.</p>
+          </os-tab>
+          
+          <os-tab label="Details" badge="3">
+            <h5>Details Content</h5>
+            <p>This tab has a badge showing 3 items.</p>
+          </os-tab>
+          
+          <os-tab label="Settings" [disabled]="true">
+            <h5>Settings Content</h5>
+            <p>This tab is disabled and cannot be selected.</p>
+          </os-tab>
+          
+          <os-tab label="History" [closable]="true">
+            <h5>History Content</h5>
+            <p>This tab has a close button.</p>
+          </os-tab>
+        </os-tabs>
+
+        <h4>Pills Variant</h4>
+        <os-tabs variant="pills" size="medium" class="mb-4">
+          <os-tab label="Analytics" icon="📊">
+            <h5>Analytics Dashboard</h5>
+            <p>View analytics and metrics data here.</p>
+          </os-tab>
+          
+          <os-tab label="Messages" icon="💬" badge="12">
+            <h5>Message Center</h5>
+            <p>Check your recent messages and notifications.</p>
+          </os-tab>
+          
+          <os-tab label="Profile" icon="👤">
+            <h5>User Profile</h5>
+            <p>Manage your profile settings and preferences.</p>
+          </os-tab>
+        </os-tabs>
+
+        <h4>Card Variant</h4>
+        <os-tabs variant="card" size="large" class="mb-4">
+          <os-tab label="Dashboard">
+            <h5>Main Dashboard</h5>
+            <p>Your main dashboard with key metrics and quick actions.</p>
+            <ul>
+              <li>Total Users: 1,247</li>
+              <li>Active Sessions: 89</li>
+              <li>Revenue: $12,450</li>
+            </ul>
+          </os-tab>
+          
+          <os-tab label="Reports">
+            <h5>Reporting Center</h5>
+            <p>Generate and view detailed reports.</p>
+            <button class="btn btn-primary btn-sm">Generate Report</button>
+          </os-tab>
+          
+          <os-tab label="Admin Panel" [disabled]="true">
+            <h5>Admin Panel</h5>
+            <p>Administrative controls and system settings.</p>
+          </os-tab>
+          
+          <os-tab label="Exports">
+            <h5>Export Data</h5>
+            <p>Export your data in various formats.</p>
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-primary btn-sm">Export CSV</button>
+              <button class="btn btn-outline-primary btn-sm">Export PDF</button>
+            </div>
+          </os-tab>
+        </os-tabs>
+
+        <h4>Underline Variant</h4>
+        <os-tabs variant="underline" size="medium">
+          <os-tab label="Active Tab" icon="✅">
+            <h5>Active Content</h5>
+            <p>This tab is fully functional.</p>
+          </os-tab>
+          
+          <os-tab label="Maintenance" icon="🔧" [disabled]="true">
+            <h5>Maintenance Mode</h5>
+            <p>This content is not accessible during maintenance.</p>
+          </os-tab>
+          
+          <os-tab label="Premium Feature" icon="⭐" [disabled]="true">
+            <h5>Premium Content</h5>
+            <p>Exclusive features for premium users.</p>
+          </os-tab>
+          
+          <os-tab label="Notifications" icon="🔔" badge="5">
+            <h5>Notification Center</h5>
+            <p>Stay updated with important notifications and alerts.</p>
+            <ul>
+              <li>System update completed</li>
+              <li>New message from admin</li>
+              <li>Backup completed successfully</li>
+              <li>Security scan finished</li>
+              <li>Weekly report available</li>
+            </ul>
+          </os-tab>
+        </os-tabs>
+
+        <h4>Simple Tooltip Examples</h4>
+        <div class="d-flex gap-3 align-items-center mb-3">
+          <!-- Simple text tooltip -->
+          <button 
+            class="btn btn-primary"
+            osTooltip="This is a simple tooltip"
+            tooltipPosition="top">
+            Top Tooltip
+          </button>
+
+          <!-- Bottom tooltip -->
+          <button 
+            class="btn btn-success"
+            osTooltip="This tooltip appears at the bottom"
+            tooltipPosition="bottom">
+            Bottom Tooltip
+          </button>
+
+          <!-- Left tooltip -->
+          <button 
+            class="btn btn-warning"
+            osTooltip="This tooltip appears on the left"
+            tooltipPosition="left">
+            Left Tooltip
+          </button>
+
+          <!-- Right tooltip -->
+          <button 
+            class="btn btn-info"
+            osTooltip="This tooltip appears on the right"
+            tooltipPosition="right">
+            Right Tooltip
+          </button>
+
+          <!-- Error variant -->
+          <button 
+            class="btn btn-danger"
+            osTooltip="This is an error tooltip"
+            tooltipVariant="error"
+            tooltipPosition="top">
+            Error Tooltip
+          </button>
+        </div>
+      </os-card>
     </c-col>
   </c-row>
 </c-container>

@@ -1,0 +1,212 @@
+// Tab Utilities - Reusable styles for tab components
+@import "./variables";
+
+// Tab spacing utilities
+.os-tab-spacing {
+  &--none { gap: 0; }
+  &--xs { gap: 4px; }
+  &--sm { gap: 8px; }
+  &--md { gap: 12px; }
+  &--lg { gap: 16px; }
+  &--xl { gap: 24px; }
+}
+
+.os-tab-padding {
+  &--none { padding: 0; }
+  &--xs { padding: 4px 8px; }
+  &--sm { padding: 6px 12px; }
+  &--md { padding: 8px 16px; }
+  &--lg { padding: 12px 20px; }
+  &--xl { padding: 16px 24px; }
+}
+
+// Tab border utilities
+.os-tab-border {
+  &--none { border: none; }
+  &--primary { border: 1px solid var(--os-color-primary); }
+  &--light { border: 1px solid var(--os-color-light-shade); }
+  &--medium { border: 1px solid var(--os-color-medium); }
+  &--bottom { border-bottom: 2px solid var(--os-color-primary); }
+  &--top { border-top: 2px solid var(--os-color-primary); }
+  &--left { border-left: 2px solid var(--os-color-primary); }
+  &--right { border-right: 2px solid var(--os-color-primary); }
+}
+
+// Tab background utilities
+.os-tab-bg {
+  &--primary { background-color: var(--os-color-primary); }
+  &--primary-light { background-color: var(--os-color-primary-opacity-05); }
+  &--light { background-color: var(--os-color-light); }
+  &--white { background-color: var(--os-color-white); }
+  &--transparent { background-color: var(--os-color-transparent); }
+  &--hover { background-color: rgba(var(--os-color-primary-rgb), 0.1); }
+}
+
+// Tab state utilities
+.os-tab-state {
+  &--active {
+    background-color: var(--os-color-primary);
+    color: var(--os-color-white);
+    border-color: var(--os-color-primary);
+  }
+  
+  &--hover:hover:not(&--disabled) {
+    background-color: rgba(var(--os-color-primary-rgb), 0.1);
+    border-color: var(--os-color-primary-opacity);
+  }
+  
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+    color: var(--os-color-medium);
+  }
+  
+  &--focus:focus {
+    outline: 2px solid var(--os-color-primary-opacity-05);
+    outline-offset: 2px;
+  }
+}
+
+// Tab animation utilities
+.os-tab-animation {
+  &--smooth {
+    transition: all 0.3s ease;
+  }
+  
+  &--fast {
+    transition: all 0.15s ease;
+  }
+  
+  &--slow {
+    transition: all 0.5s ease;
+  }
+  
+  &--slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  &--fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// Tab badge utilities
+.os-tab-badge {
+  &--primary {
+    background-color: var(--os-color-primary);
+    color: var(--os-color-white);
+  }
+  
+  &--success {
+    background-color: var(--os-color-success);
+    color: var(--os-color-white);
+  }
+  
+  &--warning {
+    background-color: var(--os-color-warning);
+    color: var(--os-color-black);
+  }
+  
+  &--danger {
+    background-color: var(--os-color-danger);
+    color: var(--os-color-white);
+  }
+  
+  &--light {
+    background-color: var(--os-color-light);
+    color: var(--os-color-dark);
+  }
+  
+  &--round {
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  
+  &--pill {
+    border-radius: 12px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+  }
+}
+
+// Tab close button utilities
+.os-tab-close {
+  &--default {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--os-color-transparent);
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--os-color-medium);
+    font-size: 14px;
+    margin-left: 8px;
+    
+    &:hover {
+      background-color: rgba(var(--os-color-danger-rgb), 0.1);
+      color: var(--os-color-danger);
+    }
+  }
+}
+
+// Responsive tab utilities
+@media (max-width: 768px) {
+  .os-tab-responsive {
+    &--stack .os-tabs__header {
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    &--scroll .os-tabs__header {
+      overflow-x: auto;
+      scrollbar-width: thin;
+      
+      &::-webkit-scrollbar {
+        height: 2px;
+      }
+      
+      &::-webkit-scrollbar-track {
+        background: var(--os-color-light);
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background: var(--os-color-medium);
+        border-radius: 1px;
+      }
+    }
+    
+    &--compact .os-tabs__tab {
+      padding: 6px 8px;
+      font-size: 0.875rem;
+    }
+  }
+}

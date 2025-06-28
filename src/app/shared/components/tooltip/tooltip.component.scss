@@ -1,0 +1,209 @@
+@import "../../../../scss/variables";
+
+:host {
+  pointer-events: none;
+  z-index: 99999;
+  width: auto;
+  height: auto;
+}
+
+.os-tooltip-host {
+  position: relative;
+}
+
+.os-tooltip {
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: scale(0.95);
+  will-change: opacity, transform;
+  display: inline-block;
+
+  &--visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  // Position variants (arrows positioned based on tooltip position)
+  &--top {
+    .os-tooltip__arrow {
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-top-color: var(--tooltip-bg);
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+    }
+  }
+
+  &--bottom {
+    .os-tooltip__arrow {
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-color: var(--tooltip-bg);
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-top-color: transparent;
+    }
+  }
+
+  &--left {
+    .os-tooltip__arrow {
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left-color: var(--tooltip-bg);
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      border-right-color: transparent;
+    }
+  }
+
+  &--right {
+    .os-tooltip__arrow {
+      right: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      border-right-color: var(--tooltip-bg);
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+    }
+  }
+
+  // Variant styles with pastel colors
+  &--default {
+    --tooltip-bg: rgba(64, 73, 84, 0.95);
+    --tooltip-color: white;
+    --tooltip-border: rgba(255, 255, 255, 0.1);
+  }
+
+  &--error {
+    --tooltip-bg: rgba(248, 215, 218, 0.95);
+    --tooltip-color: #721c24;
+    --tooltip-border: rgba(220, 53, 69, 0.2);
+  }
+
+  &--warning {
+    --tooltip-bg: rgba(255, 243, 205, 0.95);
+    --tooltip-color: #664d03;
+    --tooltip-border: rgba(255, 193, 7, 0.2);
+  }
+
+  &--info {
+    --tooltip-bg: rgba(207, 244, 252, 0.95);
+    --tooltip-color: #055160;
+    --tooltip-border: rgba(13, 202, 240, 0.2);
+  }
+
+  &--success {
+    --tooltip-bg: rgba(212, 237, 218, 0.95);
+    --tooltip-color: #0f5132;
+    --tooltip-border: rgba(25, 135, 84, 0.2);
+  }
+
+  &__content {
+    background-color: var(--tooltip-bg);
+    color: var(--tooltip-color);
+    border: 1px solid var(--tooltip-border);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: center;
+    white-space: nowrap;
+    max-width: 300px;
+    word-wrap: break-word;
+    white-space: normal;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+
+    // Special styling for error variant
+    .os-tooltip--error & {
+      border-left: 3px solid #dc3545;
+    }
+
+    // Custom content styling
+    .os-tooltip--custom-content & {
+      padding: 12px 16px;
+      text-align: left;
+      white-space: normal;
+      max-width: 400px;
+
+      // Remove text centering for custom content
+      display: block;
+      
+      // Ensure custom content inherits tooltip styling
+      * {
+        color: inherit;
+        font-size: inherit;
+      }
+
+      // Style for buttons in custom content
+      .btn {
+        font-size: 0.8125rem;
+        padding: 4px 8px;
+        margin: 2px;
+      }
+
+      // Style for icons in custom content
+      .icon {
+        margin-right: 4px;
+        font-size: 1em;
+      }
+
+      // Style for lists in custom content
+      ul, ol {
+        margin: 4px 0;
+        padding-left: 16px;
+      }
+
+      li {
+        margin: 2px 0;
+      }
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .os-tooltip {
+    &__content {
+      max-width: 250px;
+      font-size: 0.8125rem;
+      padding: 6px 10px;
+    }
+
+    &__arrow {
+      border-width: 5px;
+    }
+
+    // Adjust positioning for mobile
+    &--top {
+      bottom: calc(100% + 6px);
+    }
+
+    &--bottom {
+      top: calc(100% + 6px);
+    }
+
+    &--left {
+      right: calc(100% + 6px);
+    }
+
+    &--right {
+      left: calc(100% + 6px);
+    }
+  }
+}
