@@ -132,6 +132,8 @@ A powerful and flexible standalone Angular tabs component for creating organized
 | `tabs` | `TabConfig[]` | `undefined` | Array of tab configurations for data-driven mode |
 | `lazy` | `boolean` | `false` | Enable lazy loading of tab content |
 | `animationDuration` | `number` | `300` | Animation duration in milliseconds |
+| `animationType` | `'slide' \| 'fade'` | `'slide'` | Type of content animation |
+| `activeColor` | `string` | `undefined` | Custom active color for button variant |
 
 ### TabsComponent Outputs
 
@@ -180,7 +182,7 @@ interface TabCloseEvent {
 
 type TabPosition = 'top' | 'bottom' | 'left' | 'right';
 type TabSize = 'small' | 'medium' | 'large';
-type TabVariant = 'default' | 'pills' | 'underline' | 'card';
+type TabVariant = 'default' | 'pills' | 'underline' | 'card' | 'button';
 ```
 
 ## Styling
@@ -197,6 +199,7 @@ type TabVariant = 'default' | 'pills' | 'underline' | 'card';
 - **Pills**: Rounded button-style tabs
 - **Underline**: Minimalist with bottom border indicator
 - **Card**: Card-style tabs that connect to content area
+- **Button**: Secondary style button tabs with customizable active color
 
 ### Position Options
 

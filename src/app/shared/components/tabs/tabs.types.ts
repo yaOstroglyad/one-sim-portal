@@ -22,4 +22,4 @@ export interface TabCloseEvent {
 
 export type TabPosition = 'top' | 'bottom' | 'left' | 'right';
 export type TabSize = 'small' | 'medium' | 'large';
-export type TabVariant = 'default' | 'pills' | 'underline' | 'card';
+export type TabVariant = 'default' | 'pills' | 'underline' | 'card' | 'button';

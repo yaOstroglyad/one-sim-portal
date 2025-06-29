@@ -1,4 +1,4 @@
-<div [class]="tabsClasses.join(' ')">
+<div [class]="tabsClasses.join(' ')" [style.--active-bg-color]="activeColor">
   <!-- Tab Headers -->
   <div class="os-tabs__header" role="tablist">
     <!-- Animated indicator for default and underline variants -->
@@ -44,12 +44,14 @@
       </span>
       
       <!-- Tab Badge -->
-      <span 
+      <os-badge 
         *ngIf="getTabBadge(tab)" 
-        class="os-tabs__tab-badge"
-        [attr.aria-label]="'Badge: ' + getTabBadge(tab)">
+        [variant]="getBadgeVariant()"
+        [size]="getBadgeSize()"
+        shape="pill"
+        [ariaLabel]="'Badge: ' + getTabBadge(tab)">
         {{ getTabBadge(tab) }}
-      </span>
+      </os-badge>
       
       <!-- Close Button -->
       <button

@@ -146,6 +146,52 @@
           </os-tab>
         </os-tabs>
 
+        <h4>Button Variant (Secondary Style)</h4>
+        <os-tabs variant="button" size="medium" animationType="fade" class="mb-4">
+          <os-tab label="Home" icon="🏠">
+            <h5>Home Dashboard</h5>
+            <p>Welcome to your home dashboard with quick access to main features.</p>
+          </os-tab>
+          
+          <os-tab label="Statistics" icon="📈" badge="New">
+            <h5>Statistics Overview</h5>
+            <p>View your performance metrics and analytics.</p>
+            <ul>
+              <li>Total Revenue: $45,320</li>
+              <li>Active Users: 2,451</li>
+              <li>Conversion Rate: 3.2%</li>
+            </ul>
+          </os-tab>
+          
+          <os-tab label="Settings" icon="⚙️">
+            <h5>Application Settings</h5>
+            <p>Configure your application preferences and options.</p>
+          </os-tab>
+          
+          <os-tab label="Help" icon="❓" [disabled]="true">
+            <h5>Help Center</h5>
+            <p>Get help and support for using the application.</p>
+          </os-tab>
+        </os-tabs>
+        
+        <h4>Button Variant with Custom Active Color</h4>
+        <os-tabs variant="button" size="medium" activeColor="#10b981" class="mb-4">
+          <os-tab label="Success" icon="✅">
+            <h5>Success State</h5>
+            <p>This tab group uses a custom green color for active state.</p>
+          </os-tab>
+          
+          <os-tab label="Warning" icon="⚠️" badge="3">
+            <h5>Warning State</h5>
+            <p>Check these warnings and take action.</p>
+          </os-tab>
+          
+          <os-tab label="Error" icon="❌">
+            <h5>Error State</h5>
+            <p>View and resolve any errors here.</p>
+          </os-tab>
+        </os-tabs>
+
         <h4>Underline Variant</h4>
         <os-tabs variant="underline" size="medium">
           <os-tab label="Active Tab" icon="✅">
@@ -175,6 +221,43 @@
             </ul>
           </os-tab>
         </os-tabs>
+
+        <h4>Badge Component Examples</h4>
+        <div class="d-flex gap-2 flex-wrap mb-4">
+          <os-badge variant="primary">Primary</os-badge>
+          <os-badge variant="secondary">Secondary</os-badge>
+          <os-badge variant="success">Success</os-badge>
+          <os-badge variant="danger">Danger</os-badge>
+          <os-badge variant="warning">Warning</os-badge>
+          <os-badge variant="info">Info</os-badge>
+          <os-badge variant="light">Light</os-badge>
+          <os-badge variant="dark">Dark</os-badge>
+        </div>
+        
+        <div class="d-flex gap-2 flex-wrap mb-4">
+          <os-badge variant="primary" [outline]="true">Outline Primary</os-badge>
+          <os-badge variant="success" [outline]="true">Outline Success</os-badge>
+          <os-badge variant="danger" [outline]="true">Outline Danger</os-badge>
+        </div>
+        
+        <div class="d-flex gap-2 align-items-center mb-4">
+          <os-badge size="small">Small</os-badge>
+          <os-badge size="medium">Medium</os-badge>
+          <os-badge size="large">Large</os-badge>
+        </div>
+        
+        <div class="d-flex gap-2 mb-4">
+          <os-badge shape="square">Square</os-badge>
+          <os-badge shape="rounded">Rounded</os-badge>
+          <os-badge shape="pill">Pill</os-badge>
+        </div>
+        
+        <div class="d-flex gap-2 align-items-center mb-4">
+          <span>Dot indicators:</span>
+          <os-badge class="os-badge-dot" variant="success" ariaLabel="Active"></os-badge>
+          <os-badge class="os-badge-dot" variant="danger" ariaLabel="Error"></os-badge>
+          <os-badge class="os-badge-dot" variant="warning" ariaLabel="Warning"></os-badge>
+        </div>
 
         <h4>Simple Tooltip Examples</h4>
         <div class="d-flex gap-3 align-items-center mb-3">

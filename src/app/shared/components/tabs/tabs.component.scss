@@ -1,6 +1,13 @@
 @import "../../../../scss/variables";
 
 .os-tabs {
+  // CSS Variables for consistency
+  --tab-transition: all 0.2s ease;
+  --tab-gap: 8px;
+  --tab-border-radius: 6px;
+  --tab-focus-outline: 2px solid var(--os-color-primary);
+  --tab-focus-offset: 2px;
+  
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -40,7 +47,6 @@
         background-color: var(--os-color-primary-opacity-05);
       }
       
-      // Tooltip positioning handled by TooltipComponent
     }
   }
 
@@ -68,8 +74,6 @@
         border-left: 3px solid var(--os-color-primary);
         background-color: var(--os-color-primary-opacity-05);
       }
-      
-      // Tooltip positioning handled by TooltipComponent
     }
   }
 
@@ -80,12 +84,6 @@
       font-size: 0.875rem;
       min-height: 32px;
     }
-    
-    .os-tabs__tab-badge {
-      font-size: 0.6875rem;
-      min-width: 16px;
-      height: 16px;
-    }
   }
 
   &--medium {
@@ -94,12 +92,6 @@
       font-size: 1rem;
       min-height: 40px;
     }
-    
-    .os-tabs__tab-badge {
-      font-size: 0.75rem;
-      min-width: 18px;
-      height: 18px;
-    }
   }
 
   &--large {
@@ -107,12 +99,6 @@
       padding: 12px 20px;
       font-size: 1.125rem;
       min-height: 48px;
-    }
-    
-    .os-tabs__tab-badge {
-      font-size: 0.875rem;
-      min-width: 20px;
-      height: 20px;
     }
   }
 
@@ -155,7 +141,13 @@
       &--active {
         background-color: var(--os-color-primary);
         color: var(--os-color-white);
-        border: none;
+        
+        // Override badge colors for active pills
+        .os-badge {
+          background-color: var(--os-color-white);
+          color: var(--os-color-primary);
+          border-color: var(--os-color-white);
+        }
       }
       
       &:hover:not(&--disabled):not(&--active) {
@@ -200,8 +192,7 @@
       
       &--active {
         background-color: var(--os-color-white);
-        border: 1px solid var(--os-color-light-shade);
-        border-bottom: none;
+        border-color: var(--os-color-light-shade);
         position: relative;
         z-index: 1;
         
@@ -226,6 +217,77 @@
       border-top: none;
       border-radius: 0 0 8px 8px;
       background-color: var(--os-color-white);
+    }
+  }
+
+  &--button {
+    .os-tabs__header {
+      border: none;
+      gap: var(--tab-gap);
+      padding: 4px 0;
+    }
+    
+    .os-tabs__tab {
+      background-color: transparent;
+      border: 2px solid var(--os-color-medium);
+      border-radius: 6px;
+      color: var(--os-color-dark);
+      transition: var(--tab-transition);
+      position: relative;
+      overflow: hidden;
+      
+      &--active {
+        background-color: var(--active-bg-color, var(--os-color-primary));
+        border-color: var(--active-bg-color, var(--os-color-primary));
+        color: var(--os-color-white);
+        font-weight: 600;
+        
+        .os-badge {
+          background-color: var(--os-color-white);
+          color: var(--active-bg-color, var(--os-color-primary));
+          border-color: var(--os-color-white);
+        }
+      }
+      
+      &:hover:not(&--disabled):not(&--active) {
+        background-color: rgba(var(--os-color-primary-rgb), 0.05);
+        border-color: var(--os-color-primary);
+        color: var(--os-color-primary);
+      }
+      
+      &--disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      
+      // Ripple effect on click
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.3s ease, height 0.3s ease;
+      }
+      
+      &:active::after {
+        width: 200%;
+        height: 200%;
+      }
+    }
+    
+    // Badge specific styles for button variant
+    .os-badge {
+      margin-left: 8px;
+    }
+    
+    // Hide indicator for button variant
+    .os-tabs__indicator {
+      display: none;
     }
   }
 
@@ -284,22 +346,27 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--tab-gap);
     background-color: var(--os-color-transparent);
     border: none;
     cursor: pointer;
     font-family: inherit;
     font-weight: 500;
     color: var(--os-color-dark);
-    transition: all 0.2s ease;
+    transition: var(--tab-transition);
     white-space: nowrap;
     position: relative;
     
     // Tooltip styles are now handled by TooltipComponent
     
     &:focus {
-      outline: none;
+      outline: var(--tab-focus-outline);
+      outline-offset: var(--tab-focus-offset);
       z-index: 1;
+    }
+    
+    &:focus:not(:focus-visible) {
+      outline: none;
     }
     
     &--disabled {
@@ -324,17 +391,6 @@
     line-height: 1.4;
   }
 
-  &__tab-badge {
-    background-color: var(--os-color-primary);
-    color: var(--os-color-white);
-    border-radius: 10px;
-    padding: 2px 6px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    line-height: 1;
-    min-width: 18px;
-    text-align: center;
-  }
 
   &__tab-close {
     width: 20px;
@@ -474,7 +530,6 @@
   }
 }
 
-// Tooltip styles are now inline with transitions
 
 // Responsive design
 @media (max-width: 768px) {
@@ -501,6 +556,19 @@
           border-bottom: 2px solid var(--os-color-primary);
           background-color: var(--os-color-transparent);
         }
+      }
+    }
+    
+    &--button {
+      .os-tabs__header {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .os-tabs__tab {
+        min-width: 100px;
+        flex: 1 1 auto;
+        max-width: 200px;
       }
     }
     

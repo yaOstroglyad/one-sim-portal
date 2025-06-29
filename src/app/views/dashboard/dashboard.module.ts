@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
+import { BadgeComponent } from '../../shared/components/badge';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { TabsComponent, TabComponent } from '../../shared/components/tabs';
 import { TooltipDirective, TooltipComponent } from '../../shared/components/tooltip';
@@ -39,6 +40,7 @@ import { IconModule } from '@coreui/icons-angular';
     ButtonGroupModule,
     AvatarModule,
     TableModule,
+    BadgeComponent, // Import standalone badge component
     CardComponent, // Import standalone component
     TabsComponent, // Import standalone tabs component
     TabComponent, // Import standalone tab component
