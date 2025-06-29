@@ -18,11 +18,12 @@ import { Subject, takeUntil } from 'rxjs';
 import { TabComponent } from './tab.component';
 import { TabConfig, TabChangeEvent, TabCloseEvent, TabPosition, TabSize, TabVariant } from './tabs.types';
 import { TooltipDirective } from '../tooltip';
+import { BadgeComponent } from '../badge';
 
 @Component({
   selector: 'os-tabs',
   standalone: true,
-  imports: [CommonModule, TooltipDirective],
+  imports: [CommonModule, TooltipDirective, BadgeComponent],
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -37,6 +38,7 @@ export class TabsComponent implements AfterContentInit, AfterViewInit, OnDestroy
   @Input() lazy = false; // Lazy load tab content
   @Input() animationDuration = 300;
   @Input() animationType: 'slide' | 'fade' = 'slide';
+  @Input() activeColor?: string; // Custom active color for button variant
 
   @Output() activeTabIndexChange = new EventEmitter<number>();
   @Output() tabChange = new EventEmitter<TabChangeEvent>();
@@ -314,6 +316,19 @@ export class TabsComponent implements AfterContentInit, AfterViewInit, OnDestroy
       return tab.id;
     }
     return (tab as TabComponent).id || index;
+  }
+
+  getBadgeVariant(): 'primary' | 'secondary' {
+    // For button variant in active state, use contrasting color
+    if (this.variant === 'button') {
+      return 'primary';
+    }
+    // For pills variant in active state, we'll handle it with CSS
+    return this.variant === 'pills' ? 'secondary' : 'primary';
+  }
+
+  getBadgeSize(): 'small' | 'medium' | 'large' {
+    return this.size;
   }
 
   private updateIndicatorPosition(): void {
