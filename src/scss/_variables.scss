@@ -66,6 +66,87 @@
   --os-color-danger-shade: #cf3c4f;
   --os-color-danger-tint: #ed576b;
 
+  /** info (Tailwind-inspired) **/
+  --os-color-info: #06b6d4;
+  --os-color-info-rgb: 6, 182, 212;
+  --os-color-info-contrast: var(--os-color-white);
+  --os-color-info-contrast-rgb: var(--os-color-white-rgb);
+  --os-color-info-shade: #0891b2;
+  --os-color-info-tint: #22d3ee;
+
+  /** Tailwind context colors **/
+  --os-color-red: #ef4444;
+  --os-color-red-shade: #dc2626; // red-600
+  --os-color-red-rgb: 239, 68, 68;
+  
+  --os-color-orange: #f97316;
+  --os-color-orange-shade: #ea580c; // orange-600
+  --os-color-orange-rgb: 249, 115, 22;
+  
+  --os-color-amber: #f59e0b;
+  --os-color-amber-shade: #d97706; // amber-600
+  --os-color-amber-rgb: 245, 158, 11;
+  
+  --os-color-yellow: #eab308;
+  --os-color-yellow-shade: #ca8a04; // yellow-600
+  --os-color-yellow-rgb: 234, 179, 8;
+  
+  --os-color-lime: #84cc16;
+  --os-color-lime-shade: #65a30d; // lime-600
+  --os-color-lime-rgb: 132, 204, 22;
+  
+  --os-color-green: #22c55e;
+  --os-color-green-shade: #16a34a; // green-600
+  --os-color-green-rgb: 34, 197, 94;
+  
+  --os-color-emerald: #10b981;
+  --os-color-emerald-shade: #059669; // emerald-600
+  --os-color-emerald-rgb: 16, 185, 129;
+  
+  --os-color-teal: #14b8a6;
+  --os-color-teal-shade: #0d9488; // teal-600
+  --os-color-teal-rgb: 20, 184, 166;
+  
+  --os-color-cyan: #06b6d4;
+  --os-color-cyan-shade: #0891b2; // cyan-600
+  --os-color-cyan-rgb: 6, 182, 212;
+  
+  --os-color-sky: #0ea5e9;
+  --os-color-sky-shade: #0284c7; // sky-600
+  --os-color-sky-rgb: 14, 165, 233;
+  
+  --os-color-blue: #3b82f6;
+  --os-color-blue-shade: #2563eb; // blue-600
+  --os-color-blue-rgb: 59, 130, 246;
+  
+  --os-color-indigo: #6366f1;
+  --os-color-indigo-shade: #4f46e5; // indigo-600
+  --os-color-indigo-rgb: 99, 102, 241;
+  
+  --os-color-violet: #8b5cf6;
+  --os-color-violet-shade: #7c3aed; // violet-600
+  --os-color-violet-rgb: 139, 92, 246;
+  
+  --os-color-purple: #a855f7;
+  --os-color-purple-shade: #9333ea; // purple-600
+  --os-color-purple-rgb: 168, 85, 247;
+  
+  --os-color-fuchsia: #d946ef;
+  --os-color-fuchsia-shade: #c026d3; // fuchsia-600
+  --os-color-fuchsia-rgb: 217, 70, 239;
+  
+  --os-color-pink: #ec4899;
+  --os-color-pink-shade: #db2777; // pink-600
+  --os-color-pink-rgb: 236, 72, 153;
+  
+  --os-color-rose: #f43f5e;
+  --os-color-rose-shade: #e11d48; // rose-600
+  --os-color-rose-rgb: 244, 63, 94;
+  
+  --os-color-zinc: #71717a;
+  --os-color-zinc-shade: #52525b; // zinc-600
+  --os-color-zinc-rgb: 113, 113, 122;
+
   /** dark **/
   --os-color-dark: #222428;
   --os-color-dark-rgb: 34, 36, 40;
@@ -120,6 +201,8 @@ $primary-shade: #{var(--os-color-primary-shade)};
 $color-danger: #{var(--os-color-danger)};
 /**success var**/
 $color-success: #{var(--os-color-success)};
+/**info var**/
+$color-info: #{var(--os-color-info)};
 /**medium var**/
 $color-medium: #{var(--os-color-medium)};
 $color-medium-shade: #{var(--os-color-medium-shade)};
@@ -135,6 +218,171 @@ $color-black: #{var(--os-color-black)};
 $color-transparent: #{var(--os-color-transparent)};
 $black-87-opacity: rgba(0, 0, 0, 0.87);
 $white-87-opacity: rgba(255, 255, 255, 0.87);
+
+// Global color map for reuse across components (buttons, badges, alerts, notifications, etc.)
+// Usage: @each $name, $colors in $os-colors { ... }
+// Available keys: bg, text, subtle-bg, rgb
+$os-colors: (
+  // Semantic colors (use project variables)
+  'primary': (
+    bg: var(--os-color-primary), 
+    text: var(--os-color-primary-shade), 
+    subtle-bg: hsla(var(--os-color-primary-h), var(--os-color-primary-s), var(--os-color-primary-l), 0.1),
+    rgb: var(--os-color-primary-rgb)
+  ),
+  'secondary': (
+    bg: var(--os-color-medium), 
+    text: var(--os-color-medium-shade), 
+    subtle-bg: rgba(var(--os-color-secondary-rgb), 0.1),
+    rgb: var(--os-color-secondary-rgb)
+  ),
+  'success': (
+    bg: var(--os-color-success), 
+    text: var(--os-color-success-shade), 
+    subtle-bg: rgba(var(--os-color-success-rgb), 0.1),
+    rgb: var(--os-color-success-rgb)
+  ),
+  'danger': (
+    bg: var(--os-color-danger), 
+    text: var(--os-color-danger-shade), 
+    subtle-bg: rgba(var(--os-color-danger-rgb), 0.1),
+    rgb: var(--os-color-danger-rgb)
+  ),
+  'warning': (
+    bg: var(--os-color-warning), 
+    text: var(--os-color-warning-shade), 
+    subtle-bg: rgba(var(--os-color-warning-rgb), 0.1),
+    rgb: var(--os-color-warning-rgb)
+  ),
+  'info': (
+    bg: var(--os-color-info), 
+    text: var(--os-color-info-shade), 
+    subtle-bg: rgba(var(--os-color-info-rgb), 0.1),
+    rgb: var(--os-color-info-rgb)
+  ),
+  'light': (
+    bg: var(--os-color-light), 
+    text: var(--os-color-medium), 
+    subtle-bg: rgba(var(--os-color-light-rgb), 0.6),
+    rgb: var(--os-color-light-rgb)
+  ),
+  'dark': (
+    bg: var(--os-color-dark), 
+    text: var(--os-color-dark-shade), 
+    subtle-bg: rgba(var(--os-color-dark-rgb), 0.1),
+    rgb: var(--os-color-dark-rgb)
+  ),
+  
+  // Tailwind context colors (all using CSS variables)
+  'red': (
+    bg: var(--os-color-red), 
+    text: var(--os-color-red-shade), 
+    subtle-bg: rgba(var(--os-color-red-rgb), 0.1),
+    rgb: var(--os-color-red-rgb)
+  ),
+  'orange': (
+    bg: var(--os-color-orange), 
+    text: var(--os-color-orange-shade), 
+    subtle-bg: rgba(var(--os-color-orange-rgb), 0.1),
+    rgb: var(--os-color-orange-rgb)
+  ),
+  'amber': (
+    bg: var(--os-color-amber), 
+    text: var(--os-color-amber-shade), 
+    subtle-bg: rgba(var(--os-color-amber-rgb), 0.1),
+    rgb: var(--os-color-amber-rgb)
+  ),
+  'yellow': (
+    bg: var(--os-color-yellow), 
+    text: var(--os-color-yellow-shade), 
+    subtle-bg: rgba(var(--os-color-yellow-rgb), 0.1),
+    rgb: var(--os-color-yellow-rgb)
+  ),
+  'lime': (
+    bg: var(--os-color-lime), 
+    text: var(--os-color-lime-shade), 
+    subtle-bg: rgba(var(--os-color-lime-rgb), 0.1),
+    rgb: var(--os-color-lime-rgb)
+  ),
+  'green': (
+    bg: var(--os-color-green), 
+    text: var(--os-color-green-shade), 
+    subtle-bg: rgba(var(--os-color-green-rgb), 0.1),
+    rgb: var(--os-color-green-rgb)
+  ),
+  'emerald': (
+    bg: var(--os-color-emerald), 
+    text: var(--os-color-emerald-shade), 
+    subtle-bg: rgba(var(--os-color-emerald-rgb), 0.1),
+    rgb: var(--os-color-emerald-rgb)
+  ),
+  'teal': (
+    bg: var(--os-color-teal), 
+    text: var(--os-color-teal-shade), 
+    subtle-bg: rgba(var(--os-color-teal-rgb), 0.1),
+    rgb: var(--os-color-teal-rgb)
+  ),
+  'cyan': (
+    bg: var(--os-color-cyan), 
+    text: var(--os-color-cyan-shade), 
+    subtle-bg: rgba(var(--os-color-cyan-rgb), 0.1),
+    rgb: var(--os-color-cyan-rgb)
+  ),
+  'sky': (
+    bg: var(--os-color-sky), 
+    text: var(--os-color-sky-shade), 
+    subtle-bg: rgba(var(--os-color-sky-rgb), 0.1),
+    rgb: var(--os-color-sky-rgb)
+  ),
+  'blue': (
+    bg: var(--os-color-blue), 
+    text: var(--os-color-blue-shade), 
+    subtle-bg: rgba(var(--os-color-blue-rgb), 0.1),
+    rgb: var(--os-color-blue-rgb)
+  ),
+  'indigo': (
+    bg: var(--os-color-indigo), 
+    text: var(--os-color-indigo-shade), 
+    subtle-bg: rgba(var(--os-color-indigo-rgb), 0.1),
+    rgb: var(--os-color-indigo-rgb)
+  ),
+  'violet': (
+    bg: var(--os-color-violet), 
+    text: var(--os-color-violet-shade), 
+    subtle-bg: rgba(var(--os-color-violet-rgb), 0.1),
+    rgb: var(--os-color-violet-rgb)
+  ),
+  'purple': (
+    bg: var(--os-color-purple), 
+    text: var(--os-color-purple-shade), 
+    subtle-bg: rgba(var(--os-color-purple-rgb), 0.1),
+    rgb: var(--os-color-purple-rgb)
+  ),
+  'fuchsia': (
+    bg: var(--os-color-fuchsia), 
+    text: var(--os-color-fuchsia-shade), 
+    subtle-bg: rgba(var(--os-color-fuchsia-rgb), 0.1),
+    rgb: var(--os-color-fuchsia-rgb)
+  ),
+  'pink': (
+    bg: var(--os-color-pink), 
+    text: var(--os-color-pink-shade), 
+    subtle-bg: rgba(var(--os-color-pink-rgb), 0.1),
+    rgb: var(--os-color-pink-rgb)
+  ),
+  'rose': (
+    bg: var(--os-color-rose), 
+    text: var(--os-color-rose-shade), 
+    subtle-bg: rgba(var(--os-color-rose-rgb), 0.1),
+    rgb: var(--os-color-rose-rgb)
+  ),
+  'zinc': (
+    bg: var(--os-color-zinc), 
+    text: var(--os-color-zinc-shade), 
+    subtle-bg: rgba(var(--os-color-zinc-rgb), 0.1),
+    rgb: var(--os-color-zinc-rgb)
+  )
+);
 
 $primary-palette: (
         50: hsl(var(--os-color-primary-h), var(--os-color-primary-s), 95%),
@@ -168,3 +416,44 @@ $primary-palette: (
                 A700: rgba(0, 0, 0, 0.87)
         )
 );
+
+// Universal mixins for color variants (can be used in any component)
+@mixin os-color-variant($prefix, $name, $bg, $text: null, $subtle-bg: null, $rgb: null) {
+  // Default solid background variant
+  &.#{$prefix}--#{$name} {
+    background-color: #{$bg};
+    border: none;
+  }
+  
+  // Outline variant (transparent background with colored border and text)
+  @if $text {
+    &.#{$prefix}--outline.#{$prefix}--#{$name} {
+      color: #{$text};
+      border: 1px solid #{$text};
+      background-color: transparent;
+    }
+  }
+  
+  // Subtle variant (low opacity background with colored text)
+  @if $subtle-bg and $text {
+    &.#{$prefix}--subtle.#{$prefix}--#{$name} {
+      background-color: #{$subtle-bg};
+      color: #{$text};
+      border: none;
+    }
+  }
+}
+
+// Generate all color variants for any component
+@mixin generate-os-colors($prefix) {
+  @each $name, $colors in $os-colors {
+    @include os-color-variant(
+      $prefix,
+      $name, 
+      map-get($colors, bg), 
+      map-get($colors, text), 
+      map-get($colors, subtle-bg),
+      map-get($colors, rgb)
+    );
+  }
+}

@@ -144,3 +144,95 @@ The application includes a multi-stage Dockerfile:
 - Nginx configuration in `default.conf`
 
 Production build command: `npm run build-prod`
+
+## UI/UX Design Guidelines
+
+### Visual Design Approach
+When creating new UI components, follow **Tailwind CSS design principles**:
+
+1. **Typography & Sizing**:
+   - Use Tailwind's font sizes: `text-xs` (0.75rem), `text-sm` (0.875rem), `text-base` (1rem)
+   - Consistent spacing with padding: `2px 8px`, `4px 12px`, `6px 16px`
+   - Heights: 20px, 24px, 32px for small, medium, large variants
+
+2. **Colors**:
+   - **Always use project CSS variables**: `var(--os-color-primary)`, `var(--os-color-success)`, etc.
+   - Follow Tailwind color palette principles but use existing project variables
+   
+   **Semantic colors:**
+   - Primary: `var(--os-color-primary)` (matches project branding)
+   - Secondary: `var(--os-color-secondary)` (blue accent)
+   - Success: `var(--os-color-success)` 
+   - Danger: `var(--os-color-danger)`
+   - Warning: `var(--os-color-warning)`
+   - Info: `var(--os-color-info)` (cyan-500: #06b6d4)
+   - Medium: `var(--os-color-medium)` (gray tones)
+   - Light: `var(--os-color-light)` with `var(--os-color-dark)` text
+   - Dark: `var(--os-color-dark)`
+   
+   **Tailwind context colors** (available for badges and other components):
+   - Each color includes: base (`--os-color-{name}`), shade (`--os-color-{name}-shade`), and RGB (`--os-color-{name}-rgb`)
+   - `var(--os-color-red)` (#ef4444), `var(--os-color-orange)` (#f97316), `var(--os-color-amber)` (#f59e0b)
+   - `var(--os-color-yellow)` (#eab308), `var(--os-color-lime)` (#84cc16), `var(--os-color-green)` (#22c55e)
+   - `var(--os-color-emerald)` (#10b981), `var(--os-color-teal)` (#14b8a6), `var(--os-color-cyan)` (#06b6d4)
+   - `var(--os-color-sky)` (#0ea5e9), `var(--os-color-blue)` (#3b82f6), `var(--os-color-indigo)` (#6366f1)
+   - `var(--os-color-violet)` (#8b5cf6), `var(--os-color-purple)` (#a855f7), `var(--os-color-fuchsia)` (#d946ef)
+   - `var(--os-color-pink)` (#ec4899), `var(--os-color-rose)` (#f43f5e), `var(--os-color-zinc)` (#71717a)
+   - **No hardcoded colors**: All values use CSS variables for consistency and theming support
+
+3. **Border Radius**:
+   - Small: `2px` (rounded-sm)
+   - Medium: `6px` (rounded-md)
+   - Full: `9999px` (rounded-full)
+
+4. **Text Contrast & Accessibility**:
+   - **Smart text color selection**: Automatically chooses light or dark text based on background brightness
+   - Light backgrounds (yellow, amber, lime, light) use dark text with color-specific optimizations
+   - Dark/saturated backgrounds use white text with subtle shadows for readability
+   - Text shadows: `0 1px 2px rgba(0,0,0,0.1)` for light text, `0 1px 2px rgba(255,255,255,0.1)` for dark text
+
+5. **Animations**:
+   - Quick transitions: `0.15s ease-in-out`
+   - Subtle hover effects: opacity changes, minimal transforms
+   - Focus states with subtle shadows: `0 0 0 3px rgba(59, 130, 246, 0.1)`
+
+6. **Variant Options**:
+   - **Default**: Solid background with smart text contrast
+   - **Outline**: Transparent background with colored border and text
+   - **Subtle**: Tailwind-style with 10% opacity background and darker color text (e.g., `bg-blue-500/10 text-blue-600`)
+
+7. **Component Structure**:
+   - Clean, minimal design without unnecessary borders
+   - Consistent spacing and typography
+   - Proper focus and accessibility states
+   - Responsive design considerations
+
+**Important**: All new components should follow this Tailwind-inspired design system for visual consistency across the application.
+
+## Global Color System
+
+### SCSS Color Map (`$os-colors`)
+A centralized color system is available in `src/scss/_variables.scss` for consistent theming across all components:
+
+```scss
+// Usage in any component:
+@import "../../../../scss/variables";
+
+:host {
+  // Generate all color variants automatically
+  @include generate-os-colors('my-component');
+  
+  // This creates:
+  // .my-component--primary, .my-component--blue, etc. (solid)
+  // .my-component--outline.my-component--primary (outline)
+  // .my-component--subtle.my-component--primary (subtle)
+}
+```
+
+**Available for**: badges, buttons, alerts, notifications, cards, and any component that needs color variants.
+
+**Benefits**: 
+- Single source of truth for colors
+- Automatic generation of solid, outline, and subtle variants
+- Full CSS variable support for theming
+- Easy to add new colors globally
