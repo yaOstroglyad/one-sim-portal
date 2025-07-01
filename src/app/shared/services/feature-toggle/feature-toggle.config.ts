@@ -49,7 +49,7 @@ export const FEATURE_TOGGLE_CONFIG: FeatureToggleConfig[] = [
   },
   {
     key: 'dashboard',
-    defaultValue: false,
+    defaultValue: true,
     description: 'Enable new analytics dashboard feature'
   }
 ];
