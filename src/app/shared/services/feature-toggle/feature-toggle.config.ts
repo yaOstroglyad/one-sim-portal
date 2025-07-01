@@ -44,12 +44,12 @@ export const FEATURE_TOGGLE_CONFIG: FeatureToggleConfig[] = [
   },
   {
     key: 'addSubscriberButtonToggle',
-    defaultValue: true,
+    defaultValue: false,
     description: 'Show/hide add subscriber button in customer details'
   },
   {
     key: 'dashboard',
-    defaultValue: true,
+    defaultValue: false,
     description: 'Enable new analytics dashboard feature'
   }
 ];
