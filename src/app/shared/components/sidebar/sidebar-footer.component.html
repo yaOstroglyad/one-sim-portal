@@ -1,0 +1,150 @@
+<!-- Sidebar Footer Container -->
+<div class="os-sidebar-footer__container">
+
+  <!-- Divider -->
+  <div 
+    *ngIf="config.showDivider && sidebarState !== 'collapsed'"
+    class="os-sidebar-footer__divider">
+  </div>
+
+  <!-- Footer Content -->
+  <div class="os-sidebar-footer__content">
+
+    <!-- User Info Section -->
+    <div 
+      *ngIf="config.userInfo && sidebarState !== 'collapsed'"
+      class="os-sidebar-footer__user-info"
+      [class.os-sidebar-footer__user-info--clickable]="config.userInfo.onClick"
+      (click)="onUserInfoClick()">
+      
+      <!-- User Avatar -->
+      <div class="os-sidebar-footer__user-avatar">
+        <img 
+          [src]="getUserAvatarUrl()" 
+          [alt]="config.userInfo.name + ' avatar'"
+          class="os-sidebar-footer__user-avatar-image"
+          loading="lazy">
+        
+        <!-- Status Indicator -->
+        <div 
+          *ngIf="config.userInfo.status"
+          class="os-sidebar-footer__user-status"
+          [ngClass]="getUserStatusClass(config.userInfo.status)"
+          [attr.title]="config.userInfo.status">
+        </div>
+      </div>
+
+      <!-- User Details -->
+      <div class="os-sidebar-footer__user-details">
+        <div class="os-sidebar-footer__user-name">
+          {{ config.userInfo.name }}
+        </div>
+        
+        <div 
+          *ngIf="config.userInfo.email"
+          class="os-sidebar-footer__user-email">
+          {{ config.userInfo.email }}
+        </div>
+        
+        <div 
+          *ngIf="config.userInfo.role"
+          class="os-sidebar-footer__user-role">
+          {{ config.userInfo.role }}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- User Info (Collapsed State) -->
+    <div 
+      *ngIf="config.userInfo && sidebarState === 'collapsed'"
+      class="os-sidebar-footer__user-info os-sidebar-footer__user-info--collapsed"
+      [attr.title]="config.userInfo.name"
+      (click)="onUserInfoClick()">
+      
+      <!-- User Avatar Only -->
+      <div class="os-sidebar-footer__user-avatar">
+        <img 
+          [src]="getUserAvatarUrl()" 
+          [alt]="config.userInfo.name + ' avatar'"
+          class="os-sidebar-footer__user-avatar-image"
+          loading="lazy">
+        
+        <!-- Status Indicator -->
+        <div 
+          *ngIf="config.userInfo.status"
+          class="os-sidebar-footer__user-status"
+          [ngClass]="getUserStatusClass(config.userInfo.status)">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Custom Content -->
+    <div 
+      *ngIf="config.content && sidebarState !== 'collapsed'"
+      class="os-sidebar-footer__custom-content"
+      [innerHTML]="config.content">
+    </div>
+
+    <!-- Actions -->
+    <div 
+      *ngIf="config.actions && config.actions.length > 0 && sidebarState !== 'collapsed'"
+      class="os-sidebar-footer__actions">
+      
+      <button
+        *ngFor="let action of config.actions; trackBy: trackByAction"
+        type="button"
+        class="os-sidebar-footer__action"
+        [class.os-sidebar-footer__action--disabled]="action.disabled"
+        [attr.aria-label]="action.label"
+        [attr.title]="action.tooltip || action.label"
+        [disabled]="action.disabled"
+        (click)="onActionClick(action, $event)">
+        
+        <!-- Action Icon -->
+        <i 
+          *ngIf="action.icon"
+          class="os-sidebar-footer__action-icon"
+          [class]="action.icon">
+        </i>
+
+        <!-- Action Label -->
+        <span class="os-sidebar-footer__action-label">
+          {{ action.label }}
+        </span>
+      </button>
+
+    </div>
+
+    <!-- Actions (Collapsed State) -->
+    <div 
+      *ngIf="config.actions && config.actions.length > 0 && sidebarState === 'collapsed'"
+      class="os-sidebar-footer__actions os-sidebar-footer__actions--collapsed">
+      
+      <button
+        *ngFor="let action of config.actions; trackBy: trackByAction"
+        type="button"
+        class="os-sidebar-footer__action os-sidebar-footer__action--collapsed"
+        [class.os-sidebar-footer__action--disabled]="action.disabled"
+        [attr.aria-label]="action.label"
+        [attr.title]="action.tooltip || action.label"
+        [disabled]="action.disabled"
+        (click)="onActionClick(action, $event)">
+        
+        <!-- Action Icon Only -->
+        <i 
+          *ngIf="action.icon"
+          class="os-sidebar-footer__action-icon"
+          [class]="action.icon">
+        </i>
+
+        <!-- Screen Reader Label -->
+        <span class="sr-only">{{ action.label }}</span>
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

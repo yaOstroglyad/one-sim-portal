@@ -1,0 +1,36 @@
+<!-- Sidebar Label Container -->
+<div 
+  [ngClass]="getContainerClasses()"
+  [attr.role]="type === 'section' ? 'heading' : null"
+  [attr.aria-level]="type === 'section' ? '3' : null"
+  [attr.aria-expanded]="collapsible ? expanded : null"
+  [attr.tabindex]="(onClick || collapsible) ? '0' : null"
+  (click)="onLabelClick()"
+  (keydown.enter)="onLabelClick()"
+  (keydown.space)="onLabelClick()">
+
+  <!-- Label Icon -->
+  <i 
+    *ngIf="icon"
+    class="os-sidebar-label__icon"
+    [class]="icon"
+    aria-hidden="true">
+  </i>
+
+  <!-- Label Text -->
+  <span [ngClass]="getLabelClasses()">
+    {{ text }}
+  </span>
+
+  <!-- Collapse Indicator -->
+  <i 
+    *ngIf="collapsible"
+    class="os-sidebar-label__collapse-indicator"
+    [class.os-sidebar-label__collapse-indicator--expanded]="expanded"
+    aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+      <path d="M3.5 5l3.5 3.5L10.5 5H3.5z"/>
+    </svg>
+  </i>
+
+</div>

@@ -1,0 +1,71 @@
+<!-- Sidebar Body Container -->
+<div class="os-sidebar-body__container">
+  
+  <!-- Content Area -->
+  <div 
+    class="os-sidebar-body__content"
+    [class.os-sidebar-body__content--scrollable]="scrollable">
+    
+    <!-- Empty State -->
+    <div 
+      *ngIf="isEmpty"
+      class="os-sidebar-body__empty">
+      <div class="os-sidebar-body__empty-icon">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor">
+          <path d="M6 10c0-2.21 1.79-4 4-4h28c2.21 0 4 1.79 4 4v28c0 2.21-1.79 4-4 4H10c-2.21 0-4-1.79-4-4V10zm4-2c-1.1 0-2 .9-2 2v28c0 1.1.9 2 2 2h28c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2H10z"/>
+          <path d="M16 16h16v2H16zm0 6h16v2H16zm0 6h12v2H16z"/>
+        </svg>
+      </div>
+      <p class="os-sidebar-body__empty-text">No navigation items</p>
+    </div>
+
+    <!-- Navigation Sections -->
+    <div 
+      *ngIf="!isEmpty"
+      class="os-sidebar-body__sections">
+      
+      <div
+        *ngFor="let section of sections; trackBy: trackBySection"
+        [ngClass]="getSectionClasses(section)"
+        [class.os-sidebar-body__section--visible]="isSectionVisible(section)">
+        
+        <!-- Section Component -->
+        <os-sidebar-section
+          [section]="section"
+          [currentRoute]="currentRoute"
+          [collapsed]="collapsed"
+          [sidebarState]="sidebarState"
+          [isMobile]="isMobile"
+          [showDividers]="showDividers"
+          [allowNestedExpansion]="allowNestedExpansion"
+          (itemClicked)="onItemClick($event)"
+          (sectionToggled)="onSectionToggle($event)">
+        </os-sidebar-section>
+        
+        <!-- Section Divider -->
+        <div 
+          *ngIf="showDividers && !section.divider && !collapsed"
+          class="os-sidebar-body__divider">
+        </div>
+        
+      </div>
+      
+    </div>
+    
+  </div>
+  
+  <!-- Scrollbar Track (custom scrollbar styling) -->
+  <div 
+    *ngIf="scrollable && !collapsed"
+    class="os-sidebar-body__scrollbar-track">
+  </div>
+  
+</div>
+
+<!-- Collapsed State Tooltip Container -->
+<div 
+  *ngIf="collapsed"
+  class="os-sidebar-body__tooltip-container"
+  role="tooltip"
+  aria-hidden="true">
+</div>

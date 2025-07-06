@@ -13,7 +13,16 @@
       "Bash(npm start)",
       "Bash(pkill:*)",
       "Bash(npm run build:*)",
-      "WebFetch(domain:localhost)"
+      "WebFetch(domain:localhost)",
+      "Bash(claude doctor)",
+      "Bash(echo $PWD)",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(ng build:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)",
+      "WebFetch(domain:catalyst.tailwindui.com)",
+      "Bash(npx tsc:*)"
     ],
     "deny": []
   }

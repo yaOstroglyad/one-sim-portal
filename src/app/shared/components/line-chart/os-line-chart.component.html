@@ -1,0 +1,14 @@
+<div class="os-line-chart" 
+     [style.width]="width" 
+     [style.height]="height">
+  <div class="os-line-chart__container">
+    <canvas #lineChartCanvas
+            class="os-line-chart__canvas"
+            [attr.aria-label]="'chart.lineChart' | translate"
+            role="img">
+      <p class="os-line-chart__fallback">
+        {{ 'chart.noDataAvailable' | translate }}
+      </p>
+    </canvas>
+  </div>
+</div>

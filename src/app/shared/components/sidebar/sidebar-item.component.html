@@ -1,0 +1,139 @@
+<!-- Sidebar Item Container -->
+<div class="os-sidebar-item__container">
+
+  <!-- Main Item Link -->
+  <a 
+    [ngClass]="getItemClasses()"
+    [routerLink]="item.routerLink"
+    [attr.href]="item.href"
+    [attr.target]="item.target"
+    [attr.rel]="isExternalLink ? 'noopener noreferrer' : null"
+    [attr.title]="collapsed ? item.label : (item.tooltip || null)"
+    [attr.aria-label]="item.label"
+    [attr.aria-current]="item.active ? 'page' : null"
+    [attr.aria-expanded]="hasChildren ? item.expanded : null"
+    [attr.aria-disabled]="item.disabled || null"
+    [attr.tabindex]="item.disabled ? '-1' : null"
+    (click)="onItemClick($event)">
+
+    <!-- Item Icon -->
+    <i 
+      *ngIf="item.icon"
+      [ngClass]="getIconClasses()"
+      aria-hidden="true">
+    </i>
+
+    <!-- Default Icon (if no icon specified and in collapsed state) -->
+    <i 
+      *ngIf="!item.icon && collapsed"
+      class="os-sidebar-item__icon os-sidebar-item__icon--default"
+      aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <circle cx="8" cy="8" r="2"/>
+      </svg>
+    </i>
+
+    <!-- Item Label -->
+    <span 
+      *ngIf="!collapsed"
+      class="os-sidebar-item__label">
+      {{ item.label }}
+    </span>
+
+    <!-- Badge -->
+    <span 
+      *ngIf="item.badge && !collapsed"
+      [ngClass]="getBadgeClasses()"
+      [attr.aria-label]="'Badge: ' + item.badge.text">
+      {{ item.badge.text }}
+    </span>
+
+    <!-- External Link Indicator -->
+    <i 
+      *ngIf="isExternalLink && !collapsed"
+      class="os-sidebar-item__external-icon"
+      aria-hidden="true">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <path d="M3.5 3c-.28 0-.5.22-.5.5s.22.5.5.5h3.293L2.146 8.646a.5.5 0 00.708.708L7.5 4.707V8c0 .28.22.5.5.5s.5-.22.5-.5V3.5a.5.5 0 00-.5-.5H3.5z"/>
+      </svg>
+    </i>
+
+    <!-- Expansion Indicator -->
+    <i 
+      *ngIf="hasChildren && !collapsed && allowNestedExpansion"
+      class="os-sidebar-item__expansion-icon"
+      [class.os-sidebar-item__expansion-icon--expanded]="item.expanded"
+      aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M4.5 6l3.5 3.5L11.5 6H4.5z"/>
+      </svg>
+    </i>
+
+  </a>
+
+  <!-- Nested Children -->
+  <div 
+    *ngIf="hasChildren && !collapsed && allowNestedExpansion"
+    [ngClass]="getChildrenClasses()"
+    [attr.aria-hidden]="!item.expanded">
+    
+    <div 
+      *ngFor="let child of item.children; trackBy: trackByChild"
+      class="os-sidebar-item__child-container">
+      
+      <os-sidebar-item
+        [item]="child"
+        [currentRoute]="currentRoute"
+        [collapsed]="false"
+        [sidebarState]="sidebarState"
+        [isMobile]="isMobile"
+        [allowNestedExpansion]="allowNestedExpansion"
+        [level]="level + 1"
+        (itemClicked)="onChildItemClick($event)"
+        class="os-sidebar-item__child">
+      </os-sidebar-item>
+      
+    </div>
+    
+  </div>
+
+</div>
+
+<!-- Collapsed State Tooltip Content -->
+<div 
+  *ngIf="collapsed"
+  class="os-sidebar-item__tooltip"
+  [attr.data-tooltip-content]="item.label"
+  role="tooltip"
+  aria-hidden="true">
+  
+  <!-- Tooltip Arrow -->
+  <div class="os-sidebar-item__tooltip-arrow"></div>
+  
+  <!-- Tooltip Content -->
+  <div class="os-sidebar-item__tooltip-content">
+    <div class="os-sidebar-item__tooltip-label">{{ item.label }}</div>
+    
+    <!-- Badge in Tooltip -->
+    <span 
+      *ngIf="item.badge"
+      [ngClass]="getBadgeClasses()"
+      class="os-sidebar-item__tooltip-badge">
+      {{ item.badge.text }}
+    </span>
+    
+    <!-- Children in Tooltip -->
+    <div 
+      *ngIf="hasChildren"
+      class="os-sidebar-item__tooltip-children">
+      <div 
+        *ngFor="let child of item.children; trackBy: trackByChild"
+        class="os-sidebar-item__tooltip-child"
+        [class.os-sidebar-item__tooltip-child--active]="child.active">
+        {{ child.label }}
+      </div>
+    </div>
+    
+  </div>
+  
+</div>

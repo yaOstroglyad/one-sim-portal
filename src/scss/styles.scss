@@ -1,26 +1,28 @@
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
+// ============================================== 
+// ONE SIM PORTAL - MAIN STYLES
+// SCSS Architecture v2.0 - Consolidated & Optimized
+// ==============================================
+
+// External dependencies
 @use '@angular/material' as mat;
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-@import "./variables";
 
-// Plus imports for other components in your app.
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
+// ==============================================
+// FOUNDATION LAYER (Order matters!)
+// ==============================================
+@import "./variables";          // 1. Variables & maps only
+@import "./mixins";             // 2. All mixins (depends on variables)
+@import "./utilities";          // 3. Utility classes (depends on variables)
+
+// ==============================================
+// ANGULAR MATERIAL THEME SETUP
+// ==============================================
 @include mat.core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
 $one-sim-portal-primary: mat.define-palette($primary-palette);
 $one-sim-portal-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
 $one-sim-portal-warn: mat.define-palette(mat.$red-palette);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
 $one-sim-portal-theme: mat.define-light-theme((
   color: (
     primary: $one-sim-portal-primary,
@@ -29,9 +31,6 @@ $one-sim-portal-theme: mat.define-light-theme((
   )
 ));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 @include mat.all-component-themes($one-sim-portal-theme);
 
 $enable-ltr: true;
@@ -41,23 +40,61 @@ html[dir="rtl"] {
   @include mat.all-component-themes($one-sim-portal-theme);
 }
 
-// Import styles with default layout.
+// ==============================================
+// VENDOR FRAMEWORKS
+// ==============================================
 @import "@coreui/coreui/scss/coreui";
-
-// Import Chart.js custom tooltips styles
 @import "@coreui/chartjs/scss/coreui-chartjs";
 
-@import "./layout";
-@import "./fixes";
-@import "./custom";
-@import "./ag-grid-styles";
-@import "./card-utilities";
-@import "./tab-utilities";
+// ==============================================
+// PROJECT LAYERS
+// ==============================================
+@import "./components";         // Shared component patterns
+@import "./layout";             // Layout & grid systems
+@import "./vendor-overrides";   // AG-Grid, Material, CoreUI customizations
+@import "./custom";             // Legacy custom styles (to be migrated)
 
+// ==============================================
+// GLOBAL BASE STYLES
+// ==============================================
 html, body {
   height: 100%;
+  font-family: $primary-font;
+  line-height: 1.5;
+  color: var(--os-color-dark);
+  background-color: var(--os-color-light);
 }
+
 body {
   margin: 0;
-  font-family: $primary-font;
+  padding: 0;
+  font-size: map-get($os-font-sizes, 'base');
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+// ==============================================
+// GLOBAL ANIMATIONS
+// ==============================================
+@include chart-animations;
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+.loading {
+  @include loading-state();
+}
+
+// ==============================================
+// DEPRECATED FILES (Remove after migration)
+// ==============================================
+// @import "./fixes";              // ❌ Migrated to vendor-overrides
+// @import "./ag-grid-styles";     // ❌ Migrated to vendor-overrides  
+// @import "./card-utilities";     // ❌ Migrated to utilities
+// @import "./tab-utilities";      // ❌ Migrated to utilities
+// @import "./chart-mixins";       // ❌ Migrated to mixins

@@ -1,0 +1,112 @@
+<!-- Sidebar Header Container -->
+<div 
+  class="os-sidebar-header__container"
+  [class.os-sidebar-header__container--clickable]="config.onClick"
+  (click)="onHeaderClick()">
+
+  <!-- Brand Section -->
+  <div class="os-sidebar-header__brand">
+    
+    <!-- Logo -->
+    <div 
+      *ngIf="config.logoUrl && sidebarState !== 'collapsed'"
+      class="os-sidebar-header__logo">
+      <img 
+        [src]="config.logoUrl" 
+        [alt]="config.logoAlt || 'Logo'"
+        class="os-sidebar-header__logo-image"
+        loading="lazy">
+    </div>
+
+    <!-- Logo (collapsed state) -->
+    <div 
+      *ngIf="config.logoUrl && sidebarState === 'collapsed'"
+      class="os-sidebar-header__logo os-sidebar-header__logo--collapsed">
+      <img 
+        [src]="config.logoUrl" 
+        [alt]="config.logoAlt || 'Logo'"
+        class="os-sidebar-header__logo-image"
+        loading="lazy">
+    </div>
+
+    <!-- Brand Text -->
+    <div 
+      *ngIf="(config.brandName || config.title) && sidebarState !== 'collapsed'"
+      class="os-sidebar-header__text">
+      
+      <!-- Brand Name -->
+      <h1 
+        *ngIf="config.brandName"
+        class="os-sidebar-header__brand-name">
+        {{ config.brandName }}
+      </h1>
+
+      <!-- Title -->
+      <h2 
+        *ngIf="config.title"
+        class="os-sidebar-header__title">
+        {{ config.title }}
+      </h2>
+
+      <!-- Subtitle -->
+      <p 
+        *ngIf="config.subtitle"
+        class="os-sidebar-header__subtitle">
+        {{ config.subtitle }}
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Actions Section -->
+  <div 
+    *ngIf="config.actions && config.actions.length > 0 && sidebarState !== 'collapsed'"
+    class="os-sidebar-header__actions">
+    
+    <button
+      *ngFor="let action of config.actions; trackBy: trackByAction"
+      type="button"
+      class="os-sidebar-header__action"
+      [class.os-sidebar-header__action--disabled]="action.disabled"
+      [attr.aria-label]="action.label"
+      [attr.title]="action.tooltip || action.label"
+      [disabled]="action.disabled"
+      (click)="onActionClick(action, $event)">
+      
+      <!-- Action Icon -->
+      <i 
+        *ngIf="action.icon"
+        class="os-sidebar-header__action-icon"
+        [class]="action.icon">
+      </i>
+
+      <!-- Action Label (for screen readers) -->
+      <span class="sr-only">{{ action.label }}</span>
+    </button>
+
+  </div>
+
+  <!-- Close Button -->
+  <button
+    *ngIf="config.showCloseButton && isMobile"
+    type="button"
+    class="os-sidebar-header__close"
+    aria-label="Close sidebar"
+    (click)="onCloseClick($event)">
+    
+    <i class="os-sidebar-header__close-icon">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+      </svg>
+    </i>
+    
+    <span class="sr-only">Close sidebar</span>
+  </button>
+
+</div>
+
+<!-- Header Divider -->
+<div 
+  *ngIf="sidebarState !== 'collapsed'"
+  class="os-sidebar-header__divider">
+</div>

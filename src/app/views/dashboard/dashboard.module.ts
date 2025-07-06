@@ -7,6 +7,8 @@ import { BadgeComponent } from '../../shared/components/badge';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { TabsComponent, TabComponent } from '../../shared/components/tabs';
 import { TooltipDirective, TooltipComponent } from '../../shared/components/tooltip';
+import { OsBarChartComponent } from '../../shared/components/bar-chart';
+import { OsLineChartComponent } from '../../shared/components/line-chart';
 
 import {
   AvatarModule,
@@ -45,7 +47,9 @@ import { IconModule } from '@coreui/icons-angular';
     TabsComponent, // Import standalone tabs component
     TabComponent, // Import standalone tab component
     TooltipDirective, // Import standalone tooltip directive
-    TooltipComponent // Import standalone tooltip component
+    TooltipComponent, // Import standalone tooltip component
+    OsBarChartComponent, // Import standalone bar chart component
+    OsLineChartComponent // Import standalone line chart component
   ]
 })
 export class DashboardModule { }
