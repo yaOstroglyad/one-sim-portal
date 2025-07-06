@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
+import { BadgeVariant } from '../badge/badge.component';
 
-export type CardVariant = 'default' | 'elevated' | 'outlined' | 'interactive' | 'notification';
+// Tailwind-inspired card variants
+export type CardVariant = 'default' | 'elevated' | 'outlined' | 'ghost' | 'gradient' | 'glassmorphism';
 export type CardSize = 'small' | 'medium' | 'large';
+export type CardRadius = 'none' | 'small' | 'medium' | 'large' | 'xl';
 
 @Component({
   selector: 'os-card',
@@ -20,11 +23,16 @@ export class CardComponent {
   @HostBinding('attr.title') get hostTitle() { return null; }
   @Input() variant: CardVariant = 'default';
   @Input() size: CardSize = 'medium';
+  @Input() radius: CardRadius = 'medium';
   @Input() interactive = false;
   @Input() selected = false;
   @Input() disabled = false;
+  @Input() loading = false;
   @Input() showHeader = true;
   @Input() showActions = false;
+  @Input() noPadding = false;
+  @Input() borderColor?: BadgeVariant; // Use same color system as badges
+  @Input() shadowColor?: BadgeVariant; // Custom shadow color
   @Input() customClass?: string;
 
   get cardClasses(): string[] {
@@ -32,6 +40,7 @@ export class CardComponent {
     
     classes.push(`os-card--${this.variant}`);
     classes.push(`os-card--${this.size}`);
+    classes.push(`os-card--radius-${this.radius}`);
     
     if (this.interactive) {
       classes.push('os-card--interactive');
@@ -43,6 +52,22 @@ export class CardComponent {
     
     if (this.disabled) {
       classes.push('os-card--disabled');
+    }
+    
+    if (this.loading) {
+      classes.push('os-card--loading');
+    }
+    
+    if (this.noPadding) {
+      classes.push('os-card--no-padding');
+    }
+    
+    if (this.borderColor) {
+      classes.push(`os-card--border-${this.borderColor}`);
+    }
+    
+    if (this.shadowColor) {
+      classes.push(`os-card--shadow-${this.shadowColor}`);
     }
     
     if (this.customClass) {

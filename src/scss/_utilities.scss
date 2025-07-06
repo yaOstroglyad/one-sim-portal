@@ -1,0 +1,382 @@
+// ============================================== 
+// UTILITY CLASSES - All project utility classes
+// Import foundation (variables and maps)
+// ==============================================
+
+@import "variables";
+
+// ============================================== 
+// LAYOUT UTILITIES
+// ==============================================
+
+// Text alignment
+.text-center {
+  text-align: center;
+}
+
+// Display utilities
+.d-flex {
+  display: flex;
+}
+
+.display-flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+// Width utilities
+.full-width {
+  width: 100%;
+}
+
+// Cursor utilities
+.c-pointer {
+  cursor: pointer;
+}
+
+// Position utilities
+.os-header-sticky {
+  position: sticky;
+  top: 64px;
+  z-index: 2;
+}
+
+// ============================================== 
+// SPACING UTILITIES
+// ==============================================
+
+// Margin utilities (using spacing scale)
+.mr-1 {
+  margin-right: map-get($os-spacing, '2'); // 8px
+}
+
+.mb-1 {
+  margin-bottom: map-get($os-spacing, '2'); // 8px
+}
+
+// Generate all margin utilities
+@each $size, $value in $os-spacing {
+  .m-#{$size} { margin: $value; }
+  .mt-#{$size} { margin-top: $value; }
+  .mr-#{$size} { margin-right: $value; }
+  .mb-#{$size} { margin-bottom: $value; }
+  .ml-#{$size} { margin-left: $value; }
+  .mx-#{$size} { margin-left: $value; margin-right: $value; }
+  .my-#{$size} { margin-top: $value; margin-bottom: $value; }
+}
+
+// Generate all padding utilities
+@each $size, $value in $os-spacing {
+  .p-#{$size} { padding: $value; }
+  .pt-#{$size} { padding-top: $value; }
+  .pr-#{$size} { padding-right: $value; }
+  .pb-#{$size} { padding-bottom: $value; }
+  .pl-#{$size} { padding-left: $value; }
+  .px-#{$size} { padding-left: $value; padding-right: $value; }
+  .py-#{$size} { padding-top: $value; padding-bottom: $value; }
+}
+
+// Typography scale
+$font-sizes: (
+  'xs': 0.75rem,    // 12px
+  'sm': 0.875rem,   // 14px
+  'base': 1rem,     // 16px
+  'lg': 1.125rem,   // 18px
+  'xl': 1.25rem,    // 20px
+  '2xl': 1.5rem,    // 24px
+  '3xl': 1.875rem,  // 30px
+  '4xl': 2.25rem,   // 36px
+  '5xl': 3rem       // 48px
+) !default;
+
+// ==============================================
+// UTILITY CLASS GENERATORS
+// ==============================================
+
+// Generate spacing utilities (margin, padding)
+@each $name, $value in $os-spacing {
+  // Margin utilities
+  .m-#{$name} { margin: $value !important; }
+  .mt-#{$name} { margin-top: $value !important; }
+  .mr-#{$name} { margin-right: $value !important; }
+  .mb-#{$name} { margin-bottom: $value !important; }
+  .ml-#{$name} { margin-left: $value !important; }
+  .mx-#{$name} { 
+    margin-left: $value !important; 
+    margin-right: $value !important; 
+  }
+  .my-#{$name} { 
+    margin-top: $value !important; 
+    margin-bottom: $value !important; 
+  }
+
+  // Padding utilities
+  .p-#{$name} { padding: $value !important; }
+  .pt-#{$name} { padding-top: $value !important; }
+  .pr-#{$name} { padding-right: $value !important; }
+  .pb-#{$name} { padding-bottom: $value !important; }
+  .pl-#{$name} { padding-left: $value !important; }
+  .px-#{$name} { 
+    padding-left: $value !important; 
+    padding-right: $value !important; 
+  }
+  .py-#{$name} { 
+    padding-top: $value !important; 
+    padding-bottom: $value !important; 
+  }
+}
+
+// Additional common spacing utilities
+.m-0\.5 { margin: 0.125rem !important; }
+.p-0\.5 { padding: 0.125rem !important; }
+
+// Generate shadow utilities
+@each $name, $value in $os-shadows {
+  .shadow-#{$name} { 
+    box-shadow: $value !important; 
+  }
+}
+
+// Generate border radius utilities
+@each $name, $value in $os-border-radius {
+  .rounded-#{$name} { 
+    border-radius: $value !important; 
+  }
+}
+
+// Generate typography utilities
+@each $name, $value in $os-font-sizes {
+  .text-#{$name} { 
+    font-size: $value !important; 
+  }
+}
+
+// ==============================================
+// COMPONENT SPACING UTILITIES (consolidated from card/tab utilities)
+// ==============================================
+
+// Generic component spacing (replaces card-utilities, tab-utilities)
+.os-spacing {
+  &--none { gap: 0; padding: 0; margin: 0; }
+  &--xs { gap: map-get($os-spacing, '1'); padding: map-get($os-spacing, '1'); }
+  &--sm { gap: map-get($os-spacing, '2'); padding: map-get($os-spacing, '2'); }
+  &--md { gap: map-get($os-spacing, '3'); padding: map-get($os-spacing, '3'); }
+  &--lg { gap: map-get($os-spacing, '4'); padding: map-get($os-spacing, '4'); }
+  &--xl { gap: map-get($os-spacing, '5'); padding: map-get($os-spacing, '5'); }
+}
+
+// Component margin utilities
+.os-margin {
+  &--none { margin: 0; }
+  &--xs { margin: map-get($os-spacing, '2'); }
+  &--sm { margin: map-get($os-spacing, '3'); }
+  &--md { margin: map-get($os-spacing, '4'); }
+  &--lg { margin: map-get($os-spacing, '6'); }
+  &--xl { margin: map-get($os-spacing, '8'); }
+}
+
+// Component padding utilities  
+.os-padding {
+  &--none { padding: 0; }
+  &--xs { padding: map-get($os-spacing, '2'); }
+  &--sm { padding: map-get($os-spacing, '3'); }
+  &--md { padding: map-get($os-spacing, '4'); }
+  &--lg { padding: map-get($os-spacing, '6'); }
+  &--xl { padding: map-get($os-spacing, '8'); }
+}
+
+// Component shadow utilities
+.os-shadow {
+  &--none { box-shadow: none; }
+  &--xs { box-shadow: map-get($os-shadows, 'sm'); }
+  &--sm { box-shadow: map-get($os-shadows, 'default'); }
+  &--md { box-shadow: map-get($os-shadows, 'md'); }
+  &--lg { box-shadow: map-get($os-shadows, 'lg'); }
+  &--xl { box-shadow: map-get($os-shadows, 'xl'); }
+}
+
+// ==============================================
+// FLEXBOX UTILITIES
+// ==============================================
+
+.d-flex { display: flex !important; }
+.d-inline-flex { display: inline-flex !important; }
+.flex-row { flex-direction: row !important; }
+.flex-column { flex-direction: column !important; }
+.flex-wrap { flex-wrap: wrap !important; }
+.flex-nowrap { flex-wrap: nowrap !important; }
+
+// Justify content
+.justify-start { justify-content: flex-start !important; }
+.justify-center { justify-content: center !important; }
+.justify-end { justify-content: flex-end !important; }
+.justify-between { justify-content: space-between !important; }
+.justify-around { justify-content: space-around !important; }
+
+// Align items
+.align-start { align-items: flex-start !important; }
+.align-center { align-items: center !important; }
+.align-end { align-items: flex-end !important; }
+.align-stretch { align-items: stretch !important; }
+
+// Common flex combinations
+.flex-center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.flex-between {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+// ==============================================
+// TEXT UTILITIES
+// ==============================================
+
+.text-left { text-align: left !important; }
+.text-center { text-align: center !important; }
+.text-right { text-align: right !important; }
+.text-justify { text-align: justify !important; }
+
+.text-lowercase { text-transform: lowercase !important; }
+.text-uppercase { text-transform: uppercase !important; }
+.text-capitalize { text-transform: capitalize !important; }
+
+.font-normal { font-weight: 400 !important; }
+.font-medium { font-weight: 500 !important; }
+.font-semibold { font-weight: 600 !important; }
+.font-bold { font-weight: 700 !important; }
+
+.text-truncate {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+// ==============================================
+// DISPLAY UTILITIES
+// ==============================================
+
+.d-none { display: none !important; }
+.d-block { display: block !important; }
+.d-inline { display: inline !important; }
+.d-inline-block { display: inline-block !important; }
+
+// Visibility
+.visible { visibility: visible !important; }
+.invisible { visibility: hidden !important; }
+
+// ==============================================
+// POSITION UTILITIES
+// ==============================================
+
+.position-static { position: static !important; }
+.position-relative { position: relative !important; }
+.position-absolute { position: absolute !important; }
+.position-fixed { position: fixed !important; }
+.position-sticky { position: sticky !important; }
+
+// ==============================================
+// BORDER UTILITIES
+// ==============================================
+
+.border { border: 1px solid var(--os-color-medium) !important; }
+.border-0 { border: 0 !important; }
+.border-top { border-top: 1px solid var(--os-color-medium) !important; }
+.border-right { border-right: 1px solid var(--os-color-medium) !important; }
+.border-bottom { border-bottom: 1px solid var(--os-color-medium) !important; }
+.border-left { border-left: 1px solid var(--os-color-medium) !important; }
+
+// Border styles
+.border-solid { border-style: solid !important; }
+.border-dashed { border-style: dashed !important; }
+.border-dotted { border-style: dotted !important; }
+
+// ==============================================
+// CURSOR UTILITIES
+// ==============================================
+
+.cursor-auto { cursor: auto !important; }
+.cursor-pointer { cursor: pointer !important; }
+.cursor-not-allowed { cursor: not-allowed !important; }
+.cursor-grab { cursor: grab !important; }
+.cursor-grabbing { cursor: grabbing !important; }
+
+// Legacy alias
+.c-pointer { cursor: pointer !important; }
+
+// ==============================================
+// OVERFLOW UTILITIES
+// ==============================================
+
+.overflow-auto { overflow: auto !important; }
+.overflow-hidden { overflow: hidden !important; }
+.overflow-visible { overflow: visible !important; }
+.overflow-scroll { overflow: scroll !important; }
+
+.overflow-x-auto { overflow-x: auto !important; }
+.overflow-x-hidden { overflow-x: hidden !important; }
+.overflow-y-auto { overflow-y: auto !important; }
+.overflow-y-hidden { overflow-y: hidden !important; }
+
+// ==============================================
+// WIDTH & HEIGHT UTILITIES
+// ==============================================
+
+.w-auto { width: auto !important; }
+.w-full { width: 100% !important; }
+.w-screen { width: 100vw !important; }
+
+.h-auto { height: auto !important; }
+.h-full { height: 100% !important; }
+.h-screen { height: 100vh !important; }
+
+// Min/Max dimensions
+.min-h-0 { min-height: 0 !important; }
+.min-h-full { min-height: 100% !important; }
+.min-h-screen { min-height: 100vh !important; }
+
+// ==============================================
+// OPACITY UTILITIES
+// ==============================================
+
+.opacity-0 { opacity: 0 !important; }
+.opacity-25 { opacity: 0.25 !important; }
+.opacity-50 { opacity: 0.5 !important; }
+.opacity-75 { opacity: 0.75 !important; }
+.opacity-100 { opacity: 1 !important; }
+
+// ==============================================
+// Z-INDEX UTILITIES
+// ==============================================
+
+.z-0 { z-index: 0 !important; }
+.z-10 { z-index: 10 !important; }
+.z-20 { z-index: 20 !important; }
+.z-30 { z-index: 30 !important; }
+.z-40 { z-index: 40 !important; }
+.z-50 { z-index: 50 !important; }
+
+// ==============================================
+// LEGACY UTILITIES (for backward compatibility)
+// ==============================================
+
+// Legacy spacing classes (to be migrated)
+.display-flex-space-between {
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+// Legacy margin classes
+.mr-1 { margin-right: map-get($os-spacing, '1') !important; }
+.mb-1 { margin-bottom: map-get($os-spacing, '1') !important; }
+.mr-2 { margin-right: map-get($os-spacing, '2') !important; }
+.mb-2 { margin-bottom: map-get($os-spacing, '2') !important; }

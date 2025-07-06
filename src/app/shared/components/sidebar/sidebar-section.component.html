@@ -1,0 +1,117 @@
+<!-- Sidebar Section Container -->
+<div 
+  *ngIf="hasPermissionsToShow && !isEmpty"
+  class="os-sidebar-section__container">
+
+  <!-- Section Divider (if this is a divider section) -->
+  <div 
+    *ngIf="section.divider && showDividers && !collapsed"
+    class="os-sidebar-section__divider-container">
+    
+    <!-- Divider Line -->
+    <div class="os-sidebar-section__divider-line"></div>
+    
+    <!-- Divider Label -->
+    <os-sidebar-label
+      *ngIf="section.title"
+      [text]="section.title"
+      [type]="'divider'"
+      [icon]="section.icon"
+      class="os-sidebar-section__divider-label">
+    </os-sidebar-label>
+    
+  </div>
+
+  <!-- Section Header (for regular sections with titles) -->
+  <div 
+    *ngIf="section.title && !section.divider && !collapsed"
+    [ngClass]="getSectionHeaderClass()"
+    [attr.aria-expanded]="section.collapsible ? section.expanded : null"
+    [attr.aria-controls]="section.collapsible ? 'section-' + section.id + '-items' : null"
+    (click)="onSectionHeaderClick()">
+    
+    <!-- Section Icon -->
+    <i 
+      *ngIf="section.icon"
+      class="os-sidebar-section__header-icon"
+      [class]="section.icon">
+    </i>
+
+    <!-- Section Title -->
+    <os-sidebar-label
+      [text]="section.title"
+      [type]="'section'"
+      [collapsible]="section.collapsible"
+      [expanded]="section.expanded"
+      class="os-sidebar-section__header-label">
+    </os-sidebar-label>
+
+    <!-- Collapse Indicator -->
+    <div 
+      *ngIf="section.collapsible"
+      class="os-sidebar-section__collapse-indicator"
+      [class.os-sidebar-section__collapse-indicator--expanded]="section.expanded">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M4.5 6l3.5 3.5L11.5 6H4.5z"/>
+      </svg>
+    </div>
+
+  </div>
+
+  <!-- Section Items -->
+  <div 
+    [ngClass]="getSectionItemsClass()"
+    [id]="section.collapsible ? 'section-' + section.id + '-items' : null"
+    [attr.aria-hidden]="section.collapsible ? !section.expanded : null">
+    
+    <!-- Navigation Items -->
+    <div 
+      *ngFor="let item of section.items; trackBy: trackByItem"
+      class="os-sidebar-section__item-container">
+      
+      <os-sidebar-item
+        [item]="item"
+        [currentRoute]="currentRoute"
+        [collapsed]="collapsed"
+        [sidebarState]="sidebarState"
+        [isMobile]="isMobile"
+        [allowNestedExpansion]="allowNestedExpansion"
+        (itemClicked)="onItemClick($event)"
+        class="os-sidebar-section__item">
+      </os-sidebar-item>
+      
+    </div>
+    
+  </div>
+
+  <!-- Section Footer Spacing -->
+  <div 
+    *ngIf="!collapsed && showDividers"
+    class="os-sidebar-section__footer-spacing">
+  </div>
+
+</div>
+
+<!-- Collapsed State Tooltip Triggers -->
+<div 
+  *ngIf="collapsed && section.items.length > 0"
+  class="os-sidebar-section__collapsed-items">
+  
+  <div 
+    *ngFor="let item of section.items; trackBy: trackByItem"
+    class="os-sidebar-section__collapsed-item">
+    
+    <os-sidebar-item
+      [item]="item"
+      [currentRoute]="currentRoute"
+      [collapsed]="true"
+      [sidebarState]="sidebarState"
+      [isMobile]="isMobile"
+      [allowNestedExpansion]="false"
+      (itemClicked)="onItemClick($event)"
+      class="os-sidebar-section__item">
+    </os-sidebar-item>
+    
+  </div>
+  
+</div>

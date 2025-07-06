@@ -1,0 +1,14 @@
+<div class="os-bar-chart" 
+     [style.width]="width" 
+     [style.height]="height">
+  <div class="os-bar-chart__container">
+    <canvas #barChartCanvas
+            class="os-bar-chart__canvas"
+            [attr.aria-label]="'chart.barChart' | translate"
+            role="img">
+      <p class="os-bar-chart__fallback">
+        {{ 'chart.noDataAvailable' | translate }}
+      </p>
+    </canvas>
+  </div>
+</div>

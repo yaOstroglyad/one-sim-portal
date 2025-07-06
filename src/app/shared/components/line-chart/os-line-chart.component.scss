@@ -1,0 +1,30 @@
+// Line Chart Component Styles - Using New SCSS Architecture
+@import "../../../../scss/variables";
+@import "../../../../scss/mixins";
+
+.os-line-chart {
+  @include chart-complete('os-line-chart', '📈');
+  
+  // Smooth line variant
+  &--smooth {
+    .os-line-chart__container {
+      @include chart-indicator('top-right', '🌊');
+    }
+  }
+  
+  // Sharp line variant  
+  &--sharp {
+    .os-line-chart__container {
+      @include chart-indicator('top-right', '⚡');
+    }
+  }
+}
+
+// Chart.js canvas styling overrides
+@include chart-canvas('os-line-chart');
+
+// Responsive breakpoints
+@include chart-responsive('os-line-chart');
+
+// Accessibility support
+@include chart-accessibility('os-line-chart');

@@ -82,6 +82,37 @@ The application follows Angular's modular architecture with lazy-loaded feature 
 - Strict null checks are DISABLED (`strictNullChecks: false`)
 - Be cautious with null/undefined handling
 
+### Global Design System (Tailwind-inspired)
+The project uses a Tailwind-inspired design system with reusable utilities:
+
+1. **Color System** (`src/scss/_variables.scss`):
+   - Global `$os-colors` map with 26 colors (semantic + Tailwind colors)
+   - Each color includes: bg, text, subtle-bg, and rgb values
+   - Universal mixins: `generate-os-colors()` for component variants
+
+2. **Utilities** (`src/scss/_utilities.scss`):
+   - Border radius scale: none, small, medium, large, xl, 2xl, 3xl, full
+   - Shadow utilities: sm, default, md, lg, xl, 2xl, inner
+   - Spacing scale: 0 to 24 (Tailwind-inspired)
+   - Typography scale: xs to 5xl
+   - Mixins: glassmorphism, elevation, interactive-states, disabled-state, loading-state, truncate
+
+3. **Color Mixins** (`src/scss/_color-mixins.scss`):
+   - `generate-border-colors()` - Creates border color classes
+   - `generate-shadow-colors()` - Creates colored shadow classes
+
+4. **Component Architecture**:
+   - Badge component: Supports all 26 colors with smart text contrast
+   - Card component: 6 variants (default, elevated, outlined, ghost, gradient, glassmorphism)
+   - Both use the global color system and utilities
+
+5. **Usage Pattern**:
+   ```scss
+   @import "../../../../scss/variables";
+   @import "../../../../scss/utilities"; 
+   @import "../../../../scss/color-mixins";
+   ```
+
 ### Routing
 - Uses `HashLocationStrategy` - all routes have `#` prefix
 - Main layout loaded at `/home` route

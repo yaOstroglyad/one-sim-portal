@@ -1,0 +1,1 @@
+export * from './os-bar-chart.component';

@@ -1,0 +1,16 @@
+// Bar Chart Component Styles - Using New SCSS Architecture
+@import "../../../../scss/variables";
+@import "../../../../scss/mixins";
+
+.os-bar-chart {
+  @include chart-complete('os-bar-chart', '📊');
+}
+
+// Chart.js canvas styling overrides
+@include chart-canvas('os-bar-chart');
+
+// Responsive breakpoints
+@include chart-responsive('os-bar-chart');
+
+// Accessibility support
+@include chart-accessibility('os-bar-chart');

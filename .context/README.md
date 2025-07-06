@@ -26,6 +26,9 @@ The `.context` directory contains organized information about features, implemen
 10. **Table Filters Pattern**: When asked to build a new table component using generic-table, always ask first: "Do you want to include filters following the standard pattern?" If yes, implement filters using the header-component (`app-header`) following the same pattern as in companies component with FormGroup, debounced valueChanges (700ms), content projection slots for custom inputs, and proper column selection integration. If no, build a simple table without filters.
 11. **Error Prevention Protocol**: Before starting ANY component development, MUST review the common errors documentation (`common-errors-and-solutions/`) to understand typical issues and their solutions. This prevents repeating known problems and ensures adherence to established safe patterns.
 12. **Documentation Language**: All documentation in `.context` directory must be written in English only. No Russian, Ukrainian, Hebrew, or other languages are allowed in documentation files. This ensures consistency and accessibility for all developers.
+13. **Adding New Rules**: When a new rule is requested, always add it to the appropriate file in the `.context` directory for future reference and consistency.
+14. **Development Server Testing**: When checking if changes work, do NOT restart the development server - it's already running. Check for errors by visiting http://localhost:4200 to see runtime errors in the browser console and network tab. The server will automatically reload changes.
+15. **Build Verification**: For checking compilation and build errors without restarting the server, use `ng build` or `npm run build` commands. These will show TypeScript errors, missing imports, and other build issues quickly.
 
 ## Current Features
 

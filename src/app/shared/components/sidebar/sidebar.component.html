@@ -1,0 +1,179 @@
+<!-- Main Sidebar Container -->
+<aside 
+  #sidebarContainer
+  class="os-sidebar__container"
+  [class.os-sidebar__container--open]="currentState === 'open'"
+  [class.os-sidebar__container--closed]="currentState === 'closed'"
+  [class.os-sidebar__container--collapsed]="currentState === 'collapsed'"
+  [class.os-sidebar__container--mobile]="isMobile"
+  [class.os-sidebar__container--tablet]="isTablet">
+
+  <!-- Sidebar Header -->
+  <div *ngIf="data.header" class="os-sidebar__header">
+    <div class="os-sidebar__header-content">
+      <img 
+        *ngIf="data.header.logoUrl" 
+        [src]="data.header.logoUrl" 
+        [alt]="data.header.title || 'Logo'"
+        class="os-sidebar__logo">
+      
+      <h2 *ngIf="data.header.title && (data.header.showTitle !== false)" class="os-sidebar__title">
+        {{ data.header.title }}
+      </h2>
+    </div>
+    
+    <button 
+      *ngIf="isMobile"
+      type="button"
+      class="os-sidebar__close"
+      (click)="close()"
+      aria-label="Close sidebar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Sidebar Body -->
+  <nav class="os-sidebar__body" role="navigation" aria-label="Main navigation">
+    <div *ngFor="let section of data.sections; trackBy: trackBySection" class="os-sidebar__section">
+      <!-- Section Title -->
+      <h3 *ngIf="section.title" class="os-sidebar__section-title">
+        {{ section.title }}
+      </h3>
+      
+      <!-- Section Items -->
+      <ul class="os-sidebar__items">
+        <li *ngFor="let item of section.items; trackBy: trackByItem" class="os-sidebar__item">
+          <!-- Simple Link -->
+          <a 
+            *ngIf="item.routerLink && !item.children; else buttonTemplate"
+            [routerLink]="item.routerLink"
+            class="os-sidebar__link"
+            [class.os-sidebar__link--active]="item.active"
+            [class.os-sidebar__link--disabled]="item.disabled"
+            (click)="onItemClick(item)">
+            
+            <i *ngIf="item.icon" class="os-sidebar__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <!-- Simple icon placeholder -->
+                <circle cx="12" cy="12" r="2"/>
+              </svg>
+            </i>
+            
+            <span class="os-sidebar__label">{{ item.label }}</span>
+            
+            <span *ngIf="item.badge" class="os-sidebar__badge" [attr.data-variant]="item.badge?.variant || 'primary'">
+              {{ item.badge.text }}
+            </span>
+          </a>
+          
+          <!-- Button Template for items with children or custom actions -->
+          <ng-template #buttonTemplate>
+            <button 
+              type="button"
+              class="os-sidebar__button"
+              [class.os-sidebar__button--active]="item.active"
+              [class.os-sidebar__button--disabled]="item.disabled"
+              [class.os-sidebar__button--expanded]="item.expanded"
+              [disabled]="item.disabled"
+              (click)="onItemClick(item)">
+              
+              <i *ngIf="item.icon" class="os-sidebar__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <!-- Simple icon placeholder -->
+                  <circle cx="12" cy="12" r="2"/>
+                </svg>
+              </i>
+              
+              <span class="os-sidebar__label">{{ item.label }}</span>
+              
+              <span *ngIf="item.badge" class="os-sidebar__badge" [attr.data-variant]="item.badge?.variant || 'primary'">
+                {{ item.badge.text }}
+              </span>
+              
+              <i *ngIf="item.children" class="os-sidebar__expand">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M4.5 12.5L9 8l-4.5-4.5L6 2l6 6-6 6-1.5-1.5z"/>
+                </svg>
+              </i>
+            </button>
+            
+            <!-- Child Items -->
+            <ul *ngIf="item.children && item.expanded" class="os-sidebar__subitems">
+              <li *ngFor="let child of item.children; trackBy: trackByItem" class="os-sidebar__subitem">
+                <a 
+                  [routerLink]="child.routerLink"
+                  class="os-sidebar__sublink"
+                  [class.os-sidebar__sublink--active]="child.active"
+                  [class.os-sidebar__sublink--disabled]="child.disabled"
+                  (click)="onItemClick(child)">
+                  {{ child.label }}
+                </a>
+              </li>
+            </ul>
+          </ng-template>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Sidebar Footer -->
+  <div *ngIf="data.footer" class="os-sidebar__footer">
+    <!-- Footer Content (projected content) -->
+    <ng-content select="[slot=footer]"></ng-content>
+    
+    <!-- Footer Actions -->
+    <div *ngIf="data.footer.actions" class="os-sidebar__actions">
+      <button 
+        *ngFor="let action of data.footer.actions"
+        type="button"
+        class="os-sidebar__action"
+        [disabled]="action.disabled"
+        (click)="action.onClick && action.onClick()">
+        
+        <i *ngIf="action.icon" class="os-sidebar__action-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <!-- Simple icon placeholder -->
+            <circle cx="12" cy="12" r="2"/>
+          </svg>
+        </i>
+        
+        {{ action.label }}
+      </button>
+    </div>
+  </div>
+
+</aside>
+
+<!-- Mobile Backdrop -->
+<div 
+  #backdrop
+  *ngIf="isMobile && currentState === 'open' && config.showBackdrop"
+  class="os-sidebar__backdrop"
+  [style.opacity]="config.backdropOpacity"
+  (click)="onBackdropClick()"
+  aria-hidden="true">
+</div>
+
+<!-- Collapse Toggle Button (for desktop) -->
+<button 
+  *ngIf="!isMobile && config.variant !== 'minimal'"
+  class="os-sidebar__toggle"
+  type="button"
+  [attr.aria-label]="currentState === 'collapsed' ? 'Expand sidebar' : 'Collapse sidebar'"
+  [attr.aria-expanded]="currentState !== 'collapsed'"
+  (click)="currentState === 'collapsed' ? expand() : collapse()">
+  
+  <i 
+    class="os-sidebar__toggle-icon"
+    [class.os-sidebar__toggle-icon--collapsed]="currentState === 'collapsed'">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M4.5 12.5L9 8l-4.5-4.5L6 2l6 6-6 6-1.5-1.5z"/>
+    </svg>
+  </i>
+  
+  <span class="sr-only">
+    {{ currentState === 'collapsed' ? 'Expand sidebar' : 'Collapse sidebar' }}
+  </span>
+</button>

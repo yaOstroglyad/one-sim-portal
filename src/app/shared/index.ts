@@ -3,6 +3,8 @@ export * from './model/index';
 export * from './components/confirmation-dialog/confirmation-dialog.component'
 export * from './components/timeline/timeline.component'
 export * from './components/chart/chart.component'
+export * from './components/bar-chart'
+export * from './components/line-chart'
 export * from './components/refund-product/refund-product.component'
 export * from './components/empty-state/empty-state.component'
 export * from './components/qr-code/qr-code.component'
@@ -13,6 +15,7 @@ export * from './components/badge'
 export * from './components/card'
 export * from './components/tabs'
 export * from './components/tooltip'
+export * from './components/sidebar'
 
 export * from './components/table-initialization-error/table-initialization-error.module'
 export * from './components/header-component/header.module';
