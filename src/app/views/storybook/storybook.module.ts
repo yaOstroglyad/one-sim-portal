@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { DashboardRoutingModule } from './dashboard-routing.module';
-import { DashboardComponent } from './dashboard.component';
+import { StorybookRoutingModule } from './storybook-routing.module';
+import { StorybookComponent } from './storybook.component';
 import { BadgeComponent } from '../../shared/components/badge';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { TabsComponent, TabComponent } from '../../shared/components/tabs';
@@ -26,11 +26,11 @@ import { IconModule } from '@coreui/icons-angular';
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    StorybookComponent
   ],
   imports: [
     CommonModule,
-    DashboardRoutingModule,
+    StorybookRoutingModule,
     CardModule,
     NavModule,
     IconModule,
@@ -52,4 +52,4 @@ import { IconModule } from '@coreui/icons-angular';
     OsLineChartComponent // Import standalone line chart component
   ]
 })
-export class DashboardModule { }
+export class StorybookModule { }

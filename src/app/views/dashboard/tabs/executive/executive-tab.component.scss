@@ -1,0 +1,115 @@
+@import "../../../../../scss/variables";
+@import "../../../../../scss/utilities";
+@import "../../../../../scss/mixins";
+
+.executive-tab {
+  .executive-content {
+    @include dashboard-content();
+
+    .kpi-row {
+      @include dashboard-kpi-grid(4);
+    }
+
+    .revenue-row {
+      .revenue-card {
+        .card-header {
+          @include dashboard-card-header();
+          
+          .revenue-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--os-color-primary);
+            margin-top: 0.5rem;
+          }
+        }
+        
+        .revenue-breakdown {
+          @include dashboard-breakdown-items();
+        }
+      }
+    }
+
+    .charts-row {
+      @include dashboard-demographics-row();
+      
+      .chart-card {
+        .card-header {
+          @include dashboard-card-header();
+        }
+        
+        .chart-container {
+          @include dashboard-chart-container(250px);
+        }
+      }
+    }
+
+    .inventory-row {
+      .inventory-card {
+        .card-header {
+          @include dashboard-card-header();
+          
+          .total-esims {
+            font-size: 0.875rem;
+            color: var(--os-color-medium);
+            font-weight: 500;
+          }
+        }
+        
+        .inventory-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1rem;
+          
+          .inventory-item {
+            padding: 1rem;
+            border-radius: map-get($os-border-radius, 'medium');
+            border: 2px solid var(--os-color-light);
+            background-color: var(--os-color-light-subtle-bg);
+            transition: all 0.2s ease;
+            
+            &:hover {
+              transform: translateY(-2px);
+              @include elevation(2);
+            }
+            
+            &.status-healthy {
+              border-color: var(--os-color-success);
+              background-color: var(--os-color-success-subtle-bg);
+            }
+            
+            &.status-warning {
+              border-color: var(--os-color-warning);
+              background-color: var(--os-color-warning-subtle-bg);
+            }
+            
+            &.status-critical {
+              border-color: var(--os-color-danger);
+              background-color: var(--os-color-danger-subtle-bg);
+            }
+            
+            .item-label {
+              font-size: 0.875rem;
+              color: var(--os-color-medium);
+              font-weight: 500;
+              margin-bottom: 0.5rem;
+            }
+            
+            .item-value {
+              font-size: 1.5rem;
+              font-weight: 700;
+              color: var(--os-color-dark);
+              margin-bottom: 0.25rem;
+            }
+            
+            .item-percentage {
+              font-size: 0.8125rem;
+              color: var(--os-color-medium);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  @include dashboard-dark-theme();
+}

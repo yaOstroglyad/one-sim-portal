@@ -1,0 +1,11 @@
+<div class="loading-container" [class.fullscreen]="fullScreen" *ngIf="status.state === 'loading'">
+  <div class="loading-content">
+    <div class="spinner-container">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="loading-message">
+      <h3>{{ message || status.message || ('dashboard.loading.fetchingData' | translate) }}</h3>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="metric-card" [class]="'metric-card--' + (metric.color || 'default')">
+  <div class="metric-header">
+    <h3 class="metric-title">{{ metric.title | translate }}</h3>
+    <i *ngIf="metric.icon" [class]="metric.icon" class="metric-icon"></i>
+  </div>
+  
+  <div class="metric-body">
+    <div class="metric-value">
+      {{ metric.value }}
+      <span *ngIf="metric.unit" class="metric-unit">{{ metric.unit }}</span>
+    </div>
+    
+    <div *ngIf="metric.change" class="metric-change" [class]="trendClass">
+      <i [class]="'icon-' + trendIcon"></i>
+      <span class="change-value">{{ metric.change.value > 0 ? '+' : '' }}{{ metric.change.value }}</span>
+      <span class="change-percentage">({{ metric.change.percentage > 0 ? '+' : '' }}{{ metric.change.percentage }}%)</span>
+    </div>
+  </div>
+  
+  <div *ngIf="metric.loading" class="metric-loading">
+    <div class="loading-spinner"></div>
+  </div>
+  
+  <div *ngIf="metric.error" class="metric-error">
+    <span>{{ metric.error }}</span>
+  </div>
+</div>

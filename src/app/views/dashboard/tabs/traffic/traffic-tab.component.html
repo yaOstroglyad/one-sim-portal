@@ -1,0 +1,108 @@
+<div class="traffic-tab">
+  <!-- Loading State -->
+  <app-loading-indicator 
+    *ngIf="loading" 
+    [status]="{ state: 'loading', message: 'Fetching traffic data...' }">
+  </app-loading-indicator>
+
+  <!-- Error State -->
+  <app-error-display 
+    *ngIf="error && !loading" 
+    [error]="error" 
+    (retry)="loadData()">
+  </app-error-display>
+
+  <!-- Data Content -->
+  <div *ngIf="data && !loading && !error" class="traffic-content">
+    
+    <!-- KPI Metrics Row -->
+    <div class="kpi-row">
+      <app-metric-card 
+        *ngFor="let metric of data?.kpiMetrics; trackBy: trackByMetricId" 
+        [metric]="metric">
+      </app-metric-card>
+    </div>
+
+    <!-- Traffic by Country -->
+    <div class="traffic-by-country-row">
+      <os-card class="traffic-by-country-card" variant="default">
+        <div class="card-header">
+          <h3>{{ 'dashboard.traffic.byCountry' | translate }}</h3>
+        </div>
+        <div class="chart-container" *ngIf="!data?.trafficByCountry.loading; else loadingTemplate">
+          <os-bar-chart 
+            *ngIf="data?.trafficByCountry.chartConfig"
+            [data]="$any(data.trafficByCountry.chartConfig.data)"
+            [options]="data.trafficByCountry.chartConfig.options || {}">
+          </os-bar-chart>
+        </div>
+      </os-card>
+    </div>
+
+    <!-- Charts Row: Traffic Shares & Active Users -->
+    <div class="charts-row">
+      <!-- Traffic Shares (Pie Chart) -->
+      <os-card class="traffic-shares-card" variant="default">
+        <div class="card-header">
+          <h3>{{ 'dashboard.traffic.shares' | translate }}</h3>
+        </div>
+        <div class="chart-container" *ngIf="!data?.trafficShares.loading; else loadingTemplate">
+          <os-line-chart 
+            *ngIf="data?.trafficShares.chartConfig"
+            [data]="$any(data.trafficShares.chartConfig.data)"
+            [options]="data.trafficShares.chartConfig.options || {}">
+          </os-line-chart>
+        </div>
+      </os-card>
+
+      <!-- Active Users by Country -->
+      <os-card class="active-users-card" variant="default">
+        <div class="card-header">
+          <h3>{{ 'dashboard.traffic.activeUsers' | translate }}</h3>
+        </div>
+        <div class="chart-container" *ngIf="!data?.activeUsersByCountry.loading; else loadingTemplate">
+          <os-bar-chart 
+            *ngIf="data?.activeUsersByCountry.chartConfig"
+            [data]="$any(data.activeUsersByCountry.chartConfig.data)"
+            [options]="data.activeUsersByCountry.chartConfig.options || {}">
+          </os-bar-chart>
+        </div>
+      </os-card>
+    </div>
+
+    <!-- Average Traffic KPI -->
+    <div class="average-traffic-row">
+      <os-card class="average-traffic-card" variant="default">
+        <div class="card-header">
+          <h3>{{ 'dashboard.traffic.averageTraffic' | translate }}</h3>
+          <div class="traffic-summary" *ngIf="data?.averageTraffic.data">
+            <div class="metric">
+              <span class="label">{{ 'dashboard.traffic.avgPerUser' | translate }}</span>
+              <span class="value">{{ data.averageTraffic.data.averageTrafficGB }} GB</span>
+            </div>
+            <div class="metric">
+              <span class="label">{{ 'dashboard.traffic.totalTraffic' | translate }}</span>
+              <span class="value">{{ data.averageTraffic.data.totalTrafficGB }} GB</span>
+            </div>
+            <div class="metric">
+              <span class="label">{{ 'dashboard.traffic.activeCountries' | translate }}</span>
+              <span class="value">{{ data.averageTraffic.data.activeCountries }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="traffic-details" *ngIf="data?.averageTraffic.data">
+          <div class="detail-item">
+            <span class="detail-label">{{ 'dashboard.traffic.topCountry' | translate }}:</span>
+            <span class="detail-value">{{ data.averageTraffic.data.topCountry }}</span>
+          </div>
+        </div>
+      </os-card>
+    </div>
+
+  </div>
+
+  <!-- Loading Template -->
+  <ng-template #loadingTemplate>
+    <app-loading-indicator></app-loading-indicator>
+  </ng-template>
+</div>

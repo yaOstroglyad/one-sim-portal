@@ -1,0 +1,1051 @@
+// ============================================== 
+// SCSS MIXINS - All project mixins consolidated
+// Import foundation (variables and maps)
+// ==============================================
+
+@import "variables";
+
+// ============================================== 
+// COLOR SYSTEM MIXINS
+// Universal mixins for color variants (can be used in any component)
+// ==============================================
+
+@mixin os-color-variant($prefix, $name, $bg, $text: null, $subtle-bg: null, $rgb: null) {
+  // Default solid background variant
+  &.#{$prefix}--#{$name} {
+    background-color: #{$bg};
+    border: none;
+  }
+  
+  // Outline variant (transparent background with colored border and text)
+  @if $text {
+    &.#{$prefix}--outline.#{$prefix}--#{$name} {
+      color: #{$text};
+      border: 1px solid #{$text};
+      background-color: transparent;
+    }
+  }
+  
+  // Subtle variant (low opacity background with colored text)
+  @if $subtle-bg and $text {
+    &.#{$prefix}--subtle.#{$prefix}--#{$name} {
+      background-color: #{$subtle-bg};
+      color: #{$text};
+      border: none;
+    }
+  }
+}
+
+// Generate all color variants for any component
+@mixin generate-os-colors($prefix) {
+  @each $name, $colors in $os-colors {
+    @include os-color-variant(
+      $prefix,
+      $name, 
+      map-get($colors, bg), 
+      map-get($colors, text), 
+      map-get($colors, subtle-bg),
+      map-get($colors, rgb)
+    );
+  }
+}
+
+// ============================================== 
+// ADDITIONAL COLOR MIXINS
+// Generate color variants for borders and shadows
+// ==============================================
+
+// Generate border color variants
+@mixin generate-border-colors($component-prefix: 'border') {
+  @each $color-name, $color-map in $os-colors {
+    &.#{$component-prefix}-#{$color-name} {
+      border-color: map-get($color-map, 'bg') !important;
+    }
+  }
+}
+
+// Generate colored shadow variants
+@mixin generate-shadow-colors($component-prefix: 'shadow') {
+  @each $color-name, $color-map in $os-colors {
+    &.#{$component-prefix}-#{$color-name} {
+      box-shadow: 0 4px 6px rgba(#{map-get($color-map, 'rgb')}, 0.15) !important;
+    }
+  }
+}
+
+// ==============================================
+// COMPONENT PATTERN MIXINS  
+// ==============================================
+
+// Common component base styles
+@mixin component-base($component-name) {
+  position: relative;
+  box-sizing: border-box;
+  font-family: $primary-font;
+}
+
+// Interactive states (hover, focus, active)
+@mixin interactive-states($hover-scale: 1.02, $transition: 0.15s ease-in-out) {
+  transition: all $transition;
+  cursor: pointer;
+  
+  &:hover {
+    transform: scale($hover-scale);
+    opacity: 0.9;
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--os-color-primary-rgb), 0.1);
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Disabled state
+@mixin disabled-state() {
+  &:disabled,
+  &.disabled,
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+    
+    &:hover {
+      transform: none;
+      opacity: 0.6;
+    }
+  }
+}
+
+// Loading state with shimmer
+@mixin loading-state($shimmer-color: var(--os-color-medium-subtle-bg)) {
+  &.loading,
+  &--loading {
+    position: relative;
+    overflow: hidden;
+    pointer-events: none;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        $shimmer-color,
+        transparent
+      );
+      animation: shimmer 2s infinite;
+      z-index: 1;
+    }
+  }
+}
+
+// Truncate text with ellipsis
+@mixin truncate($max-width: 100%) {
+  max-width: $max-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Glassmorphism effect
+@mixin glassmorphism($opacity: 0.8, $blur: 10px) {
+  background: rgba(255, 255, 255, $opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// ==============================================
+// SPACING & LAYOUT MIXINS
+// ==============================================
+
+// Dynamic spacing mixin
+@mixin spacing($property, $size) {
+  #{$property}: map-get($os-spacing, $size);
+}
+
+// Responsive spacing
+@mixin responsive-spacing($property: 'padding', $base-size: '4', $mobile-size: '2') {
+  #{$property}: map-get($os-spacing, $base-size);
+  
+  @media (max-width: 768px) {
+    #{$property}: map-get($os-spacing, $mobile-size);
+  }
+}
+
+// Flexbox utilities
+@mixin flex-center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between() {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// ==============================================
+// CHART COMPONENT MIXINS (from _chart-mixins.scss)
+// ==============================================
+
+// Base chart structure - foundational layout and styling
+@mixin chart-base($component-name) {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  
+  &__container {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--os-color-light);
+    border: 1px solid var(--os-color-medium-subtle-bg);
+    border-radius: map-get($os-border-radius, 'medium');
+    padding: map-get($os-spacing, '4');
+    transition: all 0.15s ease-in-out;
+    
+    &:hover {
+      border-color: var(--os-color-medium);
+      box-shadow: map-get($os-shadows, 'sm');
+    }
+  }
+  
+  &__canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  &__fallback {
+    display: none;
+    margin: 0;
+    padding: map-get($os-spacing, '4');
+    text-align: center;
+    color: var(--os-color-medium-text);
+    font-size: map-get($os-font-sizes, 'sm');
+    font-style: italic;
+    
+    .#{$component-name}__canvas:not([role="img"]) + & {
+      display: block;
+    }
+  }
+}
+
+// Chart variant modifiers - responsive and theme support
+@mixin chart-variants($component-name) {
+  // Responsive behavior
+  &--responsive {
+    width: 100%;
+    height: auto;
+    
+    .#{$component-name}__container {
+      aspect-ratio: 16/9;
+      min-height: 300px;
+    }
+  }
+  
+  // Theme variants
+  &--dark {
+    .#{$component-name}__container {
+      background-color: var(--os-color-dark);
+      border-color: var(--os-color-medium);
+    }
+    
+    .#{$component-name}__fallback {
+      color: var(--os-color-light-text);
+    }
+  }
+}
+
+// Size variants - small, medium, large, xl
+@mixin chart-sizes($component-name) {
+  &--small {
+    min-height: 150px;
+    
+    .#{$component-name}__container {
+      min-height: 150px;
+      padding: map-get($os-spacing, '2');
+    }
+  }
+  
+  &--medium {
+    min-height: 300px;
+    
+    .#{$component-name}__container {
+      min-height: 300px;
+      padding: map-get($os-spacing, '3');
+    }
+  }
+  
+  &--large {
+    min-height: 400px;
+    
+    .#{$component-name}__container {
+      min-height: 400px;
+      padding: map-get($os-spacing, '4');
+    }
+  }
+  
+  &--xl {
+    min-height: 500px;
+    
+    .#{$component-name}__container {
+      min-height: 500px;
+      padding: map-get($os-spacing, '5');
+    }
+  }
+}
+
+// Chart states - loading, error, no-data
+@mixin chart-states($component-name, $no-data-icon: "📊") {
+  // Loading state with shimmer animation
+  &--loading {
+    .#{$component-name}__container {
+      background: linear-gradient(
+        90deg,
+        var(--os-color-light) 0%,
+        var(--os-color-medium-subtle-bg) 50%,
+        var(--os-color-light) 100%
+      );
+      background-size: 200% 100%;
+      animation: chart-loading-shimmer 2s infinite;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 24px;
+        height: 24px;
+        border: 2px solid var(--os-color-medium-subtle-bg);
+        border-top: 2px solid var(--os-color-primary);
+        border-radius: 50%;
+        animation: chart-loading-spin 1s linear infinite;
+      }
+    }
+    
+    .#{$component-name}__canvas {
+      opacity: 0.3;
+    }
+  }
+  
+  // Error state
+  &--error {
+    .#{$component-name}__container {
+      background-color: var(--os-color-danger-subtle-bg);
+      border-color: var(--os-color-danger);
+      color: var(--os-color-danger-text);
+    }
+    
+    .#{$component-name}__fallback {
+      display: block;
+      color: var(--os-color-danger-text);
+      
+      &::before {
+        content: "⚠️ ";
+        margin-right: map-get($os-spacing, '1');
+      }
+    }
+  }
+  
+  // No data state
+  &--no-data {
+    .#{$component-name}__container {
+      background-color: var(--os-color-medium-subtle-bg);
+      border-style: dashed;
+      border-color: var(--os-color-medium);
+    }
+    
+    .#{$component-name}__fallback {
+      display: block;
+      
+      &::before {
+        content: "#{$no-data-icon} ";
+        margin-right: map-get($os-spacing, '1');
+      }
+    }
+  }
+}
+
+// Canvas styling overrides for Chart.js
+@mixin chart-canvas($component-name) {
+  canvas.#{$component-name}__canvas {
+    // Ensure proper font rendering
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    
+    // Improve text rendering
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+// Chart indicator mixin for special variants (like smooth/sharp for line charts)
+@mixin chart-indicator($position: 'top-right', $icon: '🎯') {
+  &::after {
+    content: '#{$icon}';
+    position: absolute;
+    @if $position == 'top-right' {
+      top: 8px;
+      right: 8px;
+    } @else if $position == 'top-left' {
+      top: 8px;
+      left: 8px;
+    } @else if $position == 'bottom-right' {
+      bottom: 8px;
+      right: 8px;
+    } @else if $position == 'bottom-left' {
+      bottom: 8px;
+      left: 8px;
+    }
+    font-size: 12px;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+// Complete chart styling - combines all mixins for easy use
+@mixin chart-complete($component-name, $no-data-icon: "📊") {
+  @include chart-base($component-name);
+  @include chart-variants($component-name);
+  @include chart-sizes($component-name);
+  @include chart-states($component-name, $no-data-icon);
+}
+
+// ==============================================
+// RESPONSIVE & ACCESSIBILITY MIXINS
+// ==============================================
+
+// Responsive breakpoints
+@mixin mobile {
+  @media (max-width: 480px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
+// Chart responsive helper
+@mixin chart-responsive($component-name) {
+  @include tablet {
+    .#{$component-name} {
+      &__container {
+        padding: map-get($os-spacing, '2');
+      }
+      
+      &--responsive {
+        .#{$component-name}__container {
+          aspect-ratio: 4/3;
+          min-height: 250px;
+        }
+      }
+    }
+  }
+  
+  @include mobile {
+    .#{$component-name} {
+      &__container {
+        padding: map-get($os-spacing, '1');
+      }
+      
+      &--responsive {
+        .#{$component-name}__container {
+          aspect-ratio: 1/1;
+          min-height: 200px;
+        }
+      }
+    }
+  }
+}
+
+// Accessibility support
+@mixin chart-accessibility($component-name) {
+  // Print styles
+  @media print {
+    .#{$component-name} {
+      &__container {
+        box-shadow: none;
+        border: 1px solid #000;
+      }
+      
+      &__canvas {
+        color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  }
+  
+  // High contrast mode
+  @media (prefers-contrast: high) {
+    .#{$component-name} {
+      &__container {
+        border-width: 2px;
+        border-color: currentColor;
+      }
+      
+      &__fallback {
+        font-weight: 600;
+      }
+    }
+  }
+  
+  // Reduced motion preferences
+  @media (prefers-reduced-motion: reduce) {
+    .#{$component-name} {
+      &__container {
+        transition: none;
+      }
+      
+      &--loading {
+        .#{$component-name}__container {
+          animation: none;
+          
+          &::before {
+            animation: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+// ==============================================
+// ANIMATION MIXINS & KEYFRAMES
+// ==============================================
+
+// Shared animations for all chart components
+@mixin chart-animations {
+  @keyframes chart-loading-shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  
+  @keyframes chart-loading-spin {
+    0% {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+}
+
+// Common animations
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Animation utility mixin
+@mixin animate($name, $duration: 0.3s, $timing: ease-in-out, $delay: 0s) {
+  animation: $name $duration $timing $delay;
+}
+
+// ============================================== 
+// ELEVATION SYSTEM MIXIN (Material Design inspired)
+// ==============================================
+
+@mixin elevation($level: 1) {
+  @if $level == 0 {
+    box-shadow: none;
+  } @else if $level == 1 {
+    box-shadow: map-get($os-shadows, 'sm');
+  } @else if $level == 2 {
+    box-shadow: map-get($os-shadows, 'default');
+  } @else if $level == 3 {
+    box-shadow: map-get($os-shadows, 'md');
+  } @else if $level == 4 {
+    box-shadow: map-get($os-shadows, 'lg');
+  } @else if $level == 5 {
+    box-shadow: map-get($os-shadows, 'xl');
+  } @else {
+    box-shadow: map-get($os-shadows, '2xl');
+  }
+}
+
+// ============================================== 
+// SPACING MIXIN HELPERS
+// ==============================================
+
+@mixin spacing($property, $size) {
+  #{$property}: map-get($os-spacing, $size);
+}
+
+@mixin padding($size) {
+  padding: map-get($os-spacing, $size);
+}
+
+@mixin margin($size) {
+  margin: map-get($os-spacing, $size);
+}
+
+// ============================================== 
+// GRADIENT MIXINS
+// ==============================================
+
+@mixin gradient-bg($color1, $color2, $direction: to bottom) {
+  background: linear-gradient($direction, $color1, $color2);
+}
+
+@mixin glassmorphism($blur: 10px, $opacity: 0.25) {
+  background: rgba(255, 255, 255, $opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// ============================================== 
+// TEXT MIXINS
+// ==============================================
+
+@mixin truncate($max-width: 100%) {
+  max-width: $max-width;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ============================================== 
+// DASHBOARD COMPONENT MIXINS
+// IMPORTANT: Never duplicate styles - always reuse these mixins
+// ==============================================
+
+// Dashboard card header with consistent styling (inspired by subscribers design)
+@mixin dashboard-card-header() {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--os-color-dark);
+  }
+}
+
+// Dashboard chart container with consistent sizing
+@mixin dashboard-chart-container($height: 300px) {
+  height: $height;
+  
+  // Ensure proper chart display
+  .chart-wrapper {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+// Dashboard KPI grid layout (responsive)
+@mixin dashboard-kpi-grid($columns: 4) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Dashboard chart legend (for multi-series charts)
+@mixin dashboard-chart-legend() {
+  .chart-legend {
+    display: flex;
+    gap: 1rem;
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--os-color-medium);
+
+      .legend-color {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+
+        &.new {
+          background-color: var(--os-color-success);
+        }
+
+        &.active {
+          background-color: var(--os-color-primary);
+        }
+
+        &.churned {
+          background-color: var(--os-color-danger);
+        }
+      }
+    }
+  }
+}
+
+// Dashboard demographics row (two columns)
+@mixin dashboard-demographics-row() {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Dashboard metric summary (for retention, churn rates)
+@mixin dashboard-metric-summary() {
+  display: flex;
+  gap: 2rem;
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .label {
+      font-size: 0.75rem;
+      color: var(--os-color-medium);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--os-color-success);
+
+      &.negative {
+        color: var(--os-color-danger);
+      }
+    }
+  }
+}
+
+// Dashboard reason bars (for churn analysis)
+@mixin dashboard-reason-bars() {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .reason-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .reason-label {
+      min-width: 120px;
+      font-size: 0.875rem;
+      color: var(--os-color-dark);
+      font-weight: 500;
+    }
+
+    .reason-bar {
+      flex: 1;
+      height: 8px;
+      background-color: var(--os-color-light);
+      border-radius: 4px;
+      overflow: hidden;
+
+      .reason-fill {
+        height: 100%;
+        background-color: var(--os-color-danger);
+        transition: width 0.3s ease;
+      }
+    }
+
+    .reason-value {
+      min-width: 40px;
+      font-size: 0.875rem;
+      color: var(--os-color-medium);
+      text-align: right;
+    }
+  }
+}
+
+// Dashboard breakdown items (for revenue, financial summaries)
+@mixin dashboard-breakdown-items() {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  
+  .breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--os-color-light);
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .label {
+      font-size: 0.875rem;
+      color: var(--os-color-medium);
+      font-weight: 500;
+    }
+    
+    .value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--os-color-dark);
+      
+      &.negative {
+        color: var(--os-color-danger);
+      }
+    }
+  }
+}
+
+// Dashboard table styling (for finance tables)
+@mixin dashboard-table() {
+  .table-container {
+    .table-responsive {
+      overflow-x: auto;
+      
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+        
+        th {
+          background-color: var(--os-color-light-subtle-bg);
+          color: var(--os-color-dark);
+          font-weight: 600;
+          padding: 0.75rem;
+          text-align: left;
+          border-bottom: 2px solid var(--os-color-light);
+          font-size: 0.8125rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+        
+        td {
+          padding: 0.75rem;
+          border-bottom: 1px solid var(--os-color-light);
+          vertical-align: middle;
+          
+          &.name-cell {
+            font-weight: 500;
+            color: var(--os-color-dark);
+          }
+          
+          &.amount-cell {
+            font-weight: 600;
+            color: var(--os-color-success);
+          }
+          
+          &.quantity-cell {
+            text-align: center;
+            font-weight: 500;
+          }
+          
+          &.date-cell {
+            color: var(--os-color-medium);
+            font-size: 0.8125rem;
+          }
+          
+          .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: map-get($os-border-radius, 'small');
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            
+            &.status-pending {
+              background-color: var(--os-color-warning-subtle-bg);
+              color: var(--os-color-warning-text);
+            }
+            
+            &.status-overdue {
+              background-color: var(--os-color-danger-subtle-bg);
+              color: var(--os-color-danger-text);
+            }
+            
+            &.status-paid,
+            &.status-invoiced {
+              background-color: var(--os-color-success-subtle-bg);
+              color: var(--os-color-success-text);
+            }
+          }
+        }
+        
+        tbody tr {
+          transition: background-color 0.15s ease;
+          
+          &:hover {
+            background-color: var(--os-color-light-subtle-bg);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dashboard detail items (for traffic details, financial details)
+@mixin dashboard-detail-items() {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--os-color-light);
+  
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .detail-label {
+      font-size: 0.875rem;
+      color: var(--os-color-medium);
+      font-weight: 500;
+    }
+    
+    .detail-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--os-color-dark);
+    }
+  }
+}
+
+// Dashboard content container (consistent across all tabs)
+@mixin dashboard-content() {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// Dashboard dark theme support
+@mixin dashboard-dark-theme() {
+  :host-context(.dark-theme) & {
+    .card-header h3 {
+      color: #ffffff;
+    }
+    
+    .chart-legend .legend-item {
+      color: #9ca3af;
+    }
+    
+    .metric {
+      .label {
+        color: #9ca3af;
+      }
+      
+      .value {
+        color: #10b981;
+        
+        &.negative {
+          color: #ef4444;
+        }
+      }
+    }
+    
+    .reason-item {
+      .reason-label {
+        color: #ffffff;
+      }
+      
+      .reason-bar {
+        background-color: #374151;
+      }
+      
+      .reason-value {
+        color: #9ca3af;
+      }
+    }
+    
+    .breakdown-item {
+      border-color: #374151;
+      
+      .label {
+        color: #9ca3af;
+      }
+      
+      .value {
+        color: #ffffff;
+        
+        &.negative {
+          color: #ef4444;
+        }
+      }
+    }
+    
+    .detail-item {
+      border-color: #374151;
+      
+      .detail-label {
+        color: #9ca3af;
+      }
+      
+      .detail-value {
+        color: #ffffff;
+      }
+    }
+  }
+}

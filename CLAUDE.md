@@ -77,6 +77,23 @@ The application follows Angular's modular architecture with lazy-loaded feature 
 
 ## Important Technical Details
 
+### Component Architecture Rules
+1. **Standalone Components ONLY**: All new components MUST be standalone (Angular 14+ pattern)
+   - Use `standalone: true` in component decorator
+   - Import dependencies explicitly in `imports` array
+   - NO module-based components
+
+2. **Template Separation**: If HTML template contains more than one logical block, MUST extract to separate `.html` file
+   - Simple components with single logical block can use inline templates
+   - Complex components with multiple sections MUST use `templateUrl`
+   - Example: Dashboard tabs, forms with multiple sections, lists with headers/footers
+
+3. **SCSS Reusability**: ALWAYS check for existing SCSS before creating new classes
+   - Review existing mixins in `src/scss/_mixins.scss`
+   - Check global utilities in `src/scss/_utilities.scss`
+   - Use dashboard mixins in `src/scss/_mixins.scss` for dashboard-specific styles
+   - Create new SCSS only when existing patterns don't apply
+
 ### TypeScript Configuration
 - Target: ES2022
 - Strict null checks are DISABLED (`strictNullChecks: false`)
@@ -158,6 +175,36 @@ if (this.authService.hasPermission('PERMISSION_NAME')) {
   // Show/enable feature
 }
 ```
+
+## SCSS Architecture Rules
+
+### CRITICAL: Never Duplicate SCSS Styles
+**ALWAYS reuse existing mixins and utilities instead of duplicating code.**
+**See complete architecture rules in `.context/SCSS_ARCHITECTURE.md`**
+
+#### Quick Reference - Dashboard Components
+Use mixins from `src/scss/_mixins.scss`:
+- `@include dashboard-card-header()` - Consistent card headers (1.25rem title, proper spacing)
+- `@include dashboard-chart-container($height)` - Chart containers with proper sizing
+- `@include dashboard-kpi-grid($columns)` - Responsive KPI card grids
+- `@include dashboard-chart-legend()` - Chart legends with colored dots
+- `@include dashboard-demographics-row()` - Two-column responsive layout
+- `@include dashboard-metric-summary()` - Metric displays (retention, churn rates)
+- `@include dashboard-reason-bars()` - Horizontal bar charts for analysis
+- `@include dashboard-dark-theme()` - Consistent dark theme support
+
+#### Chart Components
+- `@include chart-complete($component-name, $icon)` - Full chart styling
+- Never duplicate canvas overflow fixes - use existing mixins
+
+#### Import Order in Components
+```scss
+@import "../../../../scss/variables";  // Always first
+@import "../../../../scss/mixins";     // Always second
+@import "../../../../scss/utilities";  // Only if using utility maps
+```
+
+**Before writing new styles, check if existing mixins can be used or extended.**
 
 ## Known Issues & Limitations
 

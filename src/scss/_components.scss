@@ -1,0 +1,184 @@
+// ============================================== 
+// SHARED COMPONENT PATTERNS
+// Components patterns used across the application
+// ==============================================
+
+@import "variables";
+@import "mixins";
+
+// ============================================== 
+// SCREEN COMPONENT PATTERN
+// Used for mobile device mockups
+// ==============================================
+
+.screen {
+  background: linear-gradient(90deg, var(--os-color-primary), var(--os-color-primary-opacity-05));
+  position: relative;
+  height: 600px;
+  width: 360px;
+  box-shadow: 0 0 24px var(--os-color-primary);
+  border-radius: map-get($os-border-radius, 'large');
+  overflow: hidden;
+}
+
+.screen__content {
+  z-index: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.screen__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+// ============================================== 
+// LOADING STATES
+// Global loading component patterns
+// ==============================================
+
+.loading-wrapper {
+  @include loading-state();
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--os-color-light);
+  border-top: 4px solid var(--os-color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// ============================================== 
+// FORM COMPONENT PATTERNS
+// Reusable form patterns
+// ==============================================
+
+.form-group {
+  margin-bottom: map-get($os-spacing, '4');
+}
+
+.form-group--compact {
+  margin-bottom: map-get($os-spacing, '2');
+}
+
+.form-label {
+  display: block;
+  margin-bottom: map-get($os-spacing, '1');
+  font-weight: 500;
+  color: var(--os-color-dark);
+  font-size: map-get($os-font-sizes, 'sm');
+}
+
+.form-control {
+  width: 100%;
+  padding: map-get($os-spacing, '3') map-get($os-spacing, '4');
+  border: 1px solid var(--os-color-medium);
+  border-radius: map-get($os-border-radius, 'medium');
+  font-size: map-get($os-font-sizes, 'base');
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--os-color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--os-color-primary-rgb), 0.1);
+  }
+  
+  &:disabled {
+    background-color: var(--os-color-light);
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// ============================================== 
+// DIALOG/MODAL PATTERNS
+// Reusable dialog patterns
+// ==============================================
+
+.dialog-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-container {
+  background: var(--os-color-white);
+  border-radius: map-get($os-border-radius, 'large');
+  box-shadow: map-get($os-shadows, 'xl');
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: dialogSlideIn 0.3s ease-out;
+}
+
+@keyframes dialogSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dialog-header {
+  padding: map-get($os-spacing, '6') map-get($os-spacing, '6') map-get($os-spacing, '4');
+  border-bottom: 1px solid var(--os-color-medium);
+}
+
+.dialog-title {
+  font-size: map-get($os-font-sizes, 'lg');
+  font-weight: 600;
+  color: var(--os-color-dark);
+  margin: 0;
+}
+
+.dialog-content {
+  padding: map-get($os-spacing, '6');
+}
+
+.dialog-footer {
+  padding: map-get($os-spacing, '4') map-get($os-spacing, '6') map-get($os-spacing, '6');
+  border-top: 1px solid var(--os-color-medium);
+  display: flex;
+  justify-content: flex-end;
+  gap: map-get($os-spacing, '3');
+}

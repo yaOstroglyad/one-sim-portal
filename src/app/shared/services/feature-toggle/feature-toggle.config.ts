@@ -51,6 +51,11 @@ export const FEATURE_TOGGLE_CONFIG: FeatureToggleConfig[] = [
     key: 'dashboard',
     defaultValue: true,
     description: 'Enable new analytics dashboard feature'
+  },
+  {
+    key: 'storybook',
+    defaultValue: true,
+    description: 'Enable storybook component library access'
   }
 ];
 

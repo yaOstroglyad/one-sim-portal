@@ -66,10 +66,20 @@ const routes: Routes = [
       {
         path: 'dashboard',
         data: {
+          title: 'Dashboard',
           featureToggle: 'dashboard'
         },
         canActivate: [FeatureToggleGuard],
-        loadChildren: () => import('../../views/dashboard/dashboard.module').then(m => m.DashboardModule)
+        loadComponent: () => import('../../views/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+      {
+        path: 'storybook',
+        data: {
+          title: 'Storybook',
+          featureToggle: 'storybook'
+        },
+        canActivate: [FeatureToggleGuard],
+        loadChildren: () => import('../../views/storybook/storybook.module').then(m => m.StorybookModule)
       },
     ]
   }
