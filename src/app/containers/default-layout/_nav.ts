@@ -94,5 +94,12 @@ export const navItems: any[] = [
 				permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
 			}
 		]
+	},
+	{
+		name: 'Storybook',
+		url: 'storybook',
+		iconComponent: {name: 'cil-library'},
+		permissions: [ADMIN_PERMISSION],
+		featureToggle: 'storybook'
 	}
 ];

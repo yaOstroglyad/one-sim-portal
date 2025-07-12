@@ -1,9 +1,14 @@
-// Line Chart Component Styles - Using New SCSS Architecture
+// Line Chart Component Styles - Using Chart Mixins Architecture
 @import "../../../../scss/variables";
 @import "../../../../scss/mixins";
 
 .os-line-chart {
   @include chart-complete('os-line-chart', '📈');
+  
+  // Fix canvas overflow issue using existing architecture
+  &__container {
+    overflow: hidden; // Prevent canvas from overflowing card boundaries
+  }
   
   // Smooth line variant
   &--smooth {

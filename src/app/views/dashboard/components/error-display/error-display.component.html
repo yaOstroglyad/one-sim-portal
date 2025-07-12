@@ -1,0 +1,32 @@
+<div class="error-container" [class.inline]="inline" [class]="'error-' + errorType">
+  <div class="error-content">
+    <div class="error-icon">
+      <i [class]="errorIcon"></i>
+    </div>
+    
+    <div class="error-message">
+      <h3 class="error-title">
+        {{ error.message || ('dashboard.errors.unexpected' | translate) }}
+      </h3>
+      
+      <p *ngIf="error.details" class="error-details">
+        {{ error.details }}
+      </p>
+      
+      <p *ngIf="error.code === '503'" class="error-hint">
+        {{ 'dashboard.loading.waitingClickhouse' | translate }}
+      </p>
+      
+      <p *ngIf="error.code === '404'" class="error-hint">
+        {{ 'dashboard.errors.noData' | translate }}
+      </p>
+    </div>
+    
+    <div *ngIf="showRetry" class="error-actions">
+      <button class="retry-button" (click)="onRetry()">
+        <i class="icon-refresh"></i>
+        {{ 'dashboard.errors.retry' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

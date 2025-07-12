@@ -1,9 +1,14 @@
-// Bar Chart Component Styles - Using New SCSS Architecture
+// Bar Chart Component Styles - Using Chart Mixins Architecture
 @import "../../../../scss/variables";
 @import "../../../../scss/mixins";
 
 .os-bar-chart {
   @include chart-complete('os-bar-chart', '📊');
+  
+  // Fix canvas overflow issue using existing architecture
+  &__container {
+    overflow: hidden; // Prevent canvas from overflowing card boundaries
+  }
 }
 
 // Chart.js canvas styling overrides

@@ -1,0 +1,114 @@
+@import "../../../../../scss/variables";
+@import "../../../../../scss/utilities";
+@import "../../../../../scss/mixins";
+
+.subscribers-tab {
+  .subscribers-content {
+    @include dashboard-content();
+
+    .kpi-row {
+      @include dashboard-kpi-grid(4);
+    }
+
+    .growth-row {
+      .growth-card {
+        .card-header {
+          @include dashboard-card-header();
+          @include dashboard-chart-legend();
+        }
+
+        .chart-container {
+          @include dashboard-chart-container(300px);
+        }
+      }
+    }
+
+    .demographics-row {
+      @include dashboard-demographics-row();
+
+      .demographics-card,
+      .lifecycle-card {
+        .card-header {
+          @include dashboard-card-header();
+        }
+
+        .chart-container {
+          @include dashboard-chart-container(250px);
+        }
+      }
+    }
+
+    .retention-row {
+      .retention-card {
+        .card-header {
+          @include dashboard-card-header();
+          
+          // Unique exception: retention has specific metric structure
+          .retention-summary {
+            display: flex;
+            gap: 2rem;
+
+            .retention-metric {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+
+              .label {
+                font-size: 0.75rem;
+                color: var(--os-color-medium);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+              }
+
+              .value {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--os-color-success);
+              }
+            }
+          }
+        }
+
+        .chart-container {
+          @include dashboard-chart-container(250px);
+        }
+      }
+    }
+
+    .churn-row {
+      .churn-card {
+        .card-header {
+          @include dashboard-card-header();
+          
+          .churn-rate {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .label {
+              font-size: 0.75rem;
+              color: var(--os-color-medium);
+              text-transform: uppercase;
+              letter-spacing: 0.05em;
+            }
+
+            .value {
+              font-size: 1.5rem;
+              font-weight: 700;
+
+              &.negative {
+                color: var(--os-color-danger);
+              }
+            }
+          }
+        }
+
+        .churn-reasons {
+          @include dashboard-reason-bars();
+        }
+      }
+    }
+  }
+  
+  @include dashboard-dark-theme();
+}

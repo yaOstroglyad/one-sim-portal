@@ -1,614 +1,91 @@
-<c-container>
-  <c-row>
-    <c-col xs="12">
-      <!-- Dashboard Analytics Charts -->
-      <h3 class="mb-4">Dashboard Analytics</h3>
+<div class="dashboard-container" [class.dark-theme]="isDarkTheme">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header">
+    <div class="header-left">
+      <h1 class="dashboard-title">{{ 'dashboard.title' | translate }}</h1>
+      <p class="dashboard-subtitle">{{ 'dashboard.subtitle' | translate }}</p>
+    </div>
+    
+    <div class="header-right">
+      <!-- Period Selector -->
+      <div class="period-selector">
+        <button 
+          *ngFor="let preset of periodPresets" 
+          class="period-btn"
+          [class.active]="selectedPeriod === preset.value"
+          (click)="onPeriodChange(preset.value)">
+          {{ preset.label | translate }}
+        </button>
+      </div>
       
-      <!-- Analytics Charts Row -->
-      <c-row class="mb-5">
-        <!-- Monthly Sales Chart -->
-        <c-col xs="12" lg="6" class="mb-4">
-          <os-card 
-            title="Monthly Sales Overview" 
-            subtitle="Revenue trends for the past 6 months"
-            variant="elevated"
-            size="large">
-            <os-bar-chart 
-              [data]="salesChartData" 
-              [options]="salesChartOptions"
-              [height]="350"
-              [width]="'100%'">
-            </os-bar-chart>
-          </os-card>
-        </c-col>
-        
-        <!-- User Growth Chart -->
-        <c-col xs="12" lg="6" class="mb-4">
-          <os-card 
-            title="User Growth Analytics" 
-            subtitle="Quarterly user acquisition and retention"
-            variant="elevated"
-            size="large">
-            <os-bar-chart 
-              [data]="userGrowthData" 
-              [options]="userGrowthOptions"
-              [height]="350"
-              [width]="'100%'">
-            </os-bar-chart>
-          </os-card>
-        </c-col>
-      </c-row>
-      
-      <!-- Revenue by Product Chart -->
-      <c-row class="mb-5">
-        <c-col xs="12">
-          <os-card 
-            title="Revenue by Product Category" 
-            subtitle="Performance comparison across different product lines"
-            variant="elevated"
-            size="large">
-            <os-bar-chart 
-              [data]="revenueByProductData" 
-              [options]="revenueByProductOptions"
-              chartType="horizontalBar"
-              [height]="400"
-              [width]="'100%'">
-            </os-bar-chart>
-          </os-card>
-        </c-col>
-      </c-row>
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="btn-icon" (click)="refreshData()" title="{{ 'dashboard.actions.refresh' | translate }}">
+          <c-icon name="cilReload"></c-icon>
+        </button>
+        <button class="btn-icon" (click)="exportData()" title="{{ 'dashboard.actions.export' | translate }}">
+          <c-icon name="cilCloudDownload"></c-icon>
+        </button>
+      </div>
+    </div>
+  </div>
 
-      <!-- Line Charts Section -->
-      <c-row class="mb-5">
-        <!-- Traffic Trends Chart -->
-        <c-col xs="12" lg="6" class="mb-4">
-          <os-card 
-            title="Traffic Trends (24h)" 
-            subtitle="Real-time traffic and API request monitoring"
-            variant="elevated"
-            size="large">
-            <os-line-chart 
-              [data]="trafficTrendData" 
-              [options]="trafficTrendOptions"
-              [height]="350"
-              [width]="'100%'"
-              [smooth]="true">
-            </os-line-chart>
-          </os-card>
-        </c-col>
-        
-        <!-- Performance Metrics Chart -->
-        <c-col xs="12" lg="6" class="mb-4">
-          <os-card 
-            title="Performance Metrics" 
-            subtitle="System response time and uptime tracking"
-            variant="elevated"
-            size="large">
-            <os-line-chart 
-              [data]="performanceData" 
-              [options]="performanceOptions"
-              [height]="350"
-              [width]="'100%'"
-              [smooth]="true">
-            </os-line-chart>
-          </os-card>
-        </c-col>
-      </c-row>
+  <!-- Custom Date Picker (shown when custom period selected) -->
+  <div class="custom-date-picker" *ngIf="showCustomDatePicker">
+    <div class="date-inputs">
+      <input 
+        type="date" 
+        [(ngModel)]="customDateRange.start" 
+        placeholder="{{ 'dashboard.periods.startDate' | translate }}"
+        class="date-input">
+      <span class="date-separator">-</span>
+      <input 
+        type="date" 
+        [(ngModel)]="customDateRange.end" 
+        placeholder="{{ 'dashboard.periods.endDate' | translate }}"
+        class="date-input">
+      <button 
+        class="btn-primary" 
+        (click)="applyCustomDateRange()"
+        [disabled]="!customDateRange.start || !customDateRange.end">
+        {{ 'dashboard.actions.apply' | translate }}
+      </button>
+      <button 
+        class="btn-secondary" 
+        (click)="showCustomDatePicker = false">
+        {{ 'dashboard.actions.cancel' | translate }}
+      </button>
+    </div>
+  </div>
 
-      <!-- Tailwind-inspired Card Examples -->
-      <h3 class="mb-4">Tailwind-inspired Card Component</h3>
-      
-      <!-- Card Variants -->
-      <h4 class="mb-3">Card Variants</h4>
-      <c-row class="mb-4">
-        <c-col xs="12" md="6" lg="4" class="mb-3">
-          <os-card 
-            title="Default Card" 
-            subtitle="Standard card with subtle shadow"
-            variant="default"
-            size="medium">
-            <p>This is the default card variant with a light border and subtle shadow.</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="12" md="6" lg="4" class="mb-3">
-          <os-card 
-            title="Elevated Card"
-            subtitle="Material Design inspired elevation"
-            variant="elevated"
-            size="medium">
-            <p>Elevated cards have more prominent shadows and no borders.</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="12" md="6" lg="4" class="mb-3">
-          <os-card 
-            title="Outlined Card"
-            subtitle="Emphasis on borders"
-            variant="outlined"
-            size="medium">
-            <p>Outlined cards use a stronger border with no shadow.</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="12" md="6" lg="4" class="mb-3">
-          <os-card 
-            title="Ghost Card"
-            subtitle="Minimal styling"
-            variant="ghost"
-            size="medium">
-            <p>Ghost cards have no border or background until hovered.</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="12" md="6" lg="4" class="mb-3">
-          <os-card 
-            title="Gradient Card"
-            subtitle="Subtle gradient background"
-            variant="gradient"
-            size="medium">
-            <p>Gradient cards use a subtle color transition.</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="12" md="6" lg="4" class="mb-3">
-          <os-card 
-            title="Glassmorphism"
-            subtitle="Modern frosted glass effect"
-            variant="glassmorphism"
-            size="medium">
-            <p>Glassmorphism cards have a translucent, blurred background.</p>
-          </os-card>
-        </c-col>
-      </c-row>
+  <!-- Tab Navigation -->
+  <div class="dashboard-tabs">
+    <button 
+      *ngFor="let tab of tabs"
+      class="tab-button"
+      [class.active]="activeTab === tab.id"
+      (click)="onTabChange(tab.id)">
+      <c-icon [name]="tab.icon"></c-icon>
+      <span>{{ tab.label | translate }}</span>
+    </button>
+  </div>
 
-      <!-- Border Radius Options -->
-      <h4 class="mb-3">Border Radius Options</h4>
-      <c-row class="mb-4">
-        <c-col xs="6" md="3" class="mb-3">
-          <os-card 
-            title="No Radius"
-            variant="outlined"
-            radius="none"
-            size="small">
-            <p>Sharp corners</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="6" md="3" class="mb-3">
-          <os-card 
-            title="Small Radius"
-            variant="outlined"
-            radius="small"
-            size="small">
-            <p>2px radius</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="6" md="3" class="mb-3">
-          <os-card 
-            title="Large Radius"
-            variant="outlined"
-            radius="large"
-            size="small">
-            <p>8px radius</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="6" md="3" class="mb-3">
-          <os-card 
-            title="XL Radius"
-            variant="outlined"
-            radius="xl"
-            size="small">
-            <p>12px radius</p>
-          </os-card>
-        </c-col>
-      </c-row>
-
-      <!-- Interactive States -->
-      <h4 class="mb-3">Interactive & State Examples</h4>
-      <c-row class="mb-4">
-        <c-col xs="12" md="4" class="mb-3">
-          <os-card 
-            title="Interactive Card"
-            subtitle="Click or hover me!"
-            variant="elevated"
-            [interactive]="true"
-            size="medium"
-            (click)="onCardClick('interactive')">
-            <p>This card lifts on hover and responds to clicks.</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="12" md="4" class="mb-3">
-          <os-card 
-            title="Selected State"
-            subtitle="Currently active"
-            variant="default"
-            [selected]="true"
-            size="medium">
-            <p>Selected cards have a primary color border and glow.</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="12" md="4" class="mb-3">
-          <os-card 
-            title="Loading State"
-            subtitle="Fetching data..."
-            variant="default"
-            [loading]="true"
-            size="medium">
-            <p>Loading cards show a shimmer animation.</p>
-          </os-card>
-        </c-col>
-      </c-row>
-
-      <!-- Color Borders & Shadows -->
-      <h4 class="mb-3">Colored Borders & Shadows</h4>
-      <c-row class="mb-4">
-        <c-col xs="12" md="4" class="mb-3">
-          <os-card 
-            title="Success Border"
-            subtitle="Green themed card"
-            variant="outlined"
-            borderColor="success"
-            size="medium">
-            <p>Cards can use any color from the global color system for borders.</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="12" md="4" class="mb-3">
-          <os-card 
-            title="Blue Shadow"
-            subtitle="Custom shadow color"
-            variant="elevated"
-            shadowColor="blue"
-            size="medium">
-            <p>Shadow colors can match your brand or theme.</p>
-          </os-card>
-        </c-col>
-        
-        <c-col xs="12" md="4" class="mb-3">
-          <os-card 
-            title="Rose Theme"
-            subtitle="Border and shadow"
-            variant="elevated"
-            borderColor="rose"
-            shadowColor="rose"
-            size="medium">
-            <p>Combine border and shadow colors for themed cards.</p>
-          </os-card>
-        </c-col>
-      </c-row>
-
-      <!-- Card with Actions -->
-      <h4 class="mb-3">Cards with Actions</h4>
-      <os-card 
-        title="Complete Example"
-        subtitle="Demonstrating all features"
-        variant="elevated"
-        [showActions]="true"
-        [interactive]="true"
-        borderColor="primary"
-        size="large"
-        radius="large"
-        customClass="mb-4">
-        
-        <div slot="header-actions">
-          <os-badge variant="info" [subtle]="true">New</os-badge>
-          <button class="btn btn-sm btn-ghost">
-            <i class="fa fa-ellipsis-v"></i>
-          </button>
-        </div>
-        
-        <p>This card demonstrates multiple features working together:</p>
-        <ul>
-          <li>Elevated variant with custom border color</li>
-          <li>Interactive state for hover effects</li>
-          <li>Header actions with badge and menu button</li>
-          <li>Footer actions for primary operations</li>
-          <li>Large size with extra padding</li>
-          <li>Large border radius for modern look</li>
-        </ul>
-        
-        <div slot="actions">
-          <button class="btn btn-sm btn-outline-secondary me-2">Learn More</button>
-          <button class="btn btn-sm btn-primary">Get Started</button>
-        </div>
-      </os-card>
-
-      <!-- No Padding Example -->
-      <os-card 
-        title="Image Card"
-        subtitle="Using noPadding for edge-to-edge content"
-        variant="elevated"
-        [noPadding]="true"
-        size="medium"
-        customClass="mb-4">
-        
-        <div style="background: linear-gradient(135deg, var(--os-color-primary), var(--os-color-primary-shade)); height: 200px; display: flex; align-items: center; justify-content: center; color: white;">
-          <h3>Full Width Content</h3>
-        </div>
-      </os-card>
-
-      <!-- Tabs Component Examples -->
-      <os-card 
-        title="Tabs Component Examples"
-        subtitle="Demonstrating different tab variants and features"
-        size="large"
-        customClass="mt-4">
-        
-        <h4>Basic Tabs with Slide Animation</h4>
-        <os-tabs [(activeTabIndex)]="basicTabIndex" (tabChange)="onTabChange($event)" animationType="slide" class="mb-4">
-          <os-tab label="Overview">
-            <h5>Overview Content</h5>
-            <p>This is the overview tab with basic content.</p>
-          </os-tab>
-          
-          <os-tab label="Details" badge="3">
-            <h5>Details Content</h5>
-            <p>This tab has a badge showing 3 items.</p>
-          </os-tab>
-          
-          <os-tab label="Settings" [disabled]="true">
-            <h5>Settings Content</h5>
-            <p>This tab is disabled and cannot be selected.</p>
-          </os-tab>
-          
-          <os-tab label="History" [closable]="true">
-            <h5>History Content</h5>
-            <p>This tab has a close button.</p>
-          </os-tab>
-        </os-tabs>
-
-        <h4>Pills Variant with Fade Animation</h4>
-        <os-tabs variant="pills" size="medium" animationType="fade" class="mb-4">
-          <os-tab label="Analytics" icon="📊">
-            <h5>Analytics Dashboard</h5>
-            <p>View analytics and metrics data here.</p>
-          </os-tab>
-          
-          <os-tab label="Messages" icon="💬" badge="12">
-            <h5>Message Center</h5>
-            <p>Check your recent messages and notifications.</p>
-          </os-tab>
-          
-          <os-tab label="Profile" icon="👤">
-            <h5>User Profile</h5>
-            <p>Manage your profile settings and preferences.</p>
-          </os-tab>
-        </os-tabs>
-
-        <h4>Card Variant</h4>
-        <os-tabs variant="card" size="large" class="mb-4">
-          <os-tab label="Dashboard">
-            <h5>Main Dashboard</h5>
-            <p>Your main dashboard with key metrics and quick actions.</p>
-            <ul>
-              <li>Total Users: 1,247</li>
-              <li>Active Sessions: 89</li>
-              <li>Revenue: $12,450</li>
-            </ul>
-          </os-tab>
-          
-          <os-tab label="Reports">
-            <h5>Reporting Center</h5>
-            <p>Generate and view detailed reports.</p>
-            <button class="btn btn-primary btn-sm">Generate Report</button>
-          </os-tab>
-          
-          <os-tab label="Admin Panel" [disabled]="true">
-            <h5>Admin Panel</h5>
-            <p>Administrative controls and system settings.</p>
-          </os-tab>
-          
-          <os-tab label="Exports">
-            <h5>Export Data</h5>
-            <p>Export your data in various formats.</p>
-            <div class="d-flex gap-2">
-              <button class="btn btn-outline-primary btn-sm">Export CSV</button>
-              <button class="btn btn-outline-primary btn-sm">Export PDF</button>
-            </div>
-          </os-tab>
-        </os-tabs>
-
-        <h4>Button Variant (Secondary Style)</h4>
-        <os-tabs variant="button" size="medium" animationType="fade" class="mb-4">
-          <os-tab label="Home" icon="🏠">
-            <h5>Home Dashboard</h5>
-            <p>Welcome to your home dashboard with quick access to main features.</p>
-          </os-tab>
-          
-          <os-tab label="Statistics" icon="📈" badge="New">
-            <h5>Statistics Overview</h5>
-            <p>View your performance metrics and analytics.</p>
-            <ul>
-              <li>Total Revenue: $45,320</li>
-              <li>Active Users: 2,451</li>
-              <li>Conversion Rate: 3.2%</li>
-            </ul>
-          </os-tab>
-          
-          <os-tab label="Settings" icon="⚙️">
-            <h5>Application Settings</h5>
-            <p>Configure your application preferences and options.</p>
-          </os-tab>
-          
-          <os-tab label="Help" icon="❓" [disabled]="true">
-            <h5>Help Center</h5>
-            <p>Get help and support for using the application.</p>
-          </os-tab>
-        </os-tabs>
-        
-        <h4>Button Variant with Custom Active Color</h4>
-        <os-tabs variant="button" size="medium" activeColor="#10b981" class="mb-4">
-          <os-tab label="Success" icon="✅">
-            <h5>Success State</h5>
-            <p>This tab group uses a custom green color for active state.</p>
-          </os-tab>
-          
-          <os-tab label="Warning" icon="⚠️" badge="3">
-            <h5>Warning State</h5>
-            <p>Check these warnings and take action.</p>
-          </os-tab>
-          
-          <os-tab label="Error" icon="❌">
-            <h5>Error State</h5>
-            <p>View and resolve any errors here.</p>
-          </os-tab>
-        </os-tabs>
-
-        <h4>Underline Variant</h4>
-        <os-tabs variant="underline" size="medium">
-          <os-tab label="Active Tab" icon="✅">
-            <h5>Active Content</h5>
-            <p>This tab is fully functional.</p>
-          </os-tab>
-          
-          <os-tab label="Maintenance" icon="🔧" [disabled]="true">
-            <h5>Maintenance Mode</h5>
-            <p>This content is not accessible during maintenance.</p>
-          </os-tab>
-          
-          <os-tab label="Premium Feature" icon="⭐" [disabled]="true">
-            <h5>Premium Content</h5>
-            <p>Exclusive features for premium users.</p>
-          </os-tab>
-          
-          <os-tab label="Notifications" icon="🔔" badge="5">
-            <h5>Notification Center</h5>
-            <p>Stay updated with important notifications and alerts.</p>
-            <ul>
-              <li>System update completed</li>
-              <li>New message from admin</li>
-              <li>Backup completed successfully</li>
-              <li>Security scan finished</li>
-              <li>Weekly report available</li>
-            </ul>
-          </os-tab>
-        </os-tabs>
-
-        <h4>Badge Component Examples</h4>
-        <div class="d-flex gap-2 flex-wrap mb-4">
-          <os-badge variant="primary">Primary</os-badge>
-          <os-badge variant="secondary">Secondary</os-badge>
-          <os-badge variant="success">Success</os-badge>
-          <os-badge variant="danger">Danger</os-badge>
-          <os-badge variant="warning">Warning</os-badge>
-          <os-badge variant="info">Info</os-badge>
-          <os-badge variant="light">Light</os-badge>
-          <os-badge variant="dark">Dark</os-badge>
-        </div>
-        
-        <h5>Tailwind Context Colors (Smart Text Contrast)</h5>
-        <div class="d-flex gap-2 flex-wrap mb-4">
-          <os-badge variant="red">Red</os-badge>
-          <os-badge variant="orange">Orange</os-badge>
-          <os-badge variant="amber">Amber (Dark Text)</os-badge>
-          <os-badge variant="yellow">Yellow (Dark Text)</os-badge>
-          <os-badge variant="lime">Lime (Dark Text)</os-badge>
-          <os-badge variant="green">Green</os-badge>
-          <os-badge variant="emerald">Emerald</os-badge>
-          <os-badge variant="teal">Teal</os-badge>
-          <os-badge variant="cyan">Cyan</os-badge>
-          <os-badge variant="sky">Sky</os-badge>
-          <os-badge variant="blue">Blue</os-badge>
-          <os-badge variant="indigo">Indigo</os-badge>
-          <os-badge variant="violet">Violet</os-badge>
-          <os-badge variant="purple">Purple</os-badge>
-          <os-badge variant="fuchsia">Fuchsia</os-badge>
-          <os-badge variant="pink">Pink</os-badge>
-          <os-badge variant="rose">Rose</os-badge>
-          <os-badge variant="zinc">Zinc</os-badge>
-        </div>
-        
-        <div class="d-flex gap-2 flex-wrap mb-4">
-          <os-badge variant="primary" [outline]="true">Outline Primary</os-badge>
-          <os-badge variant="success" [outline]="true">Outline Success</os-badge>
-          <os-badge variant="danger" [outline]="true">Outline Danger</os-badge>
-          <os-badge variant="blue" [outline]="true">Outline Blue</os-badge>
-          <os-badge variant="purple" [outline]="true">Outline Purple</os-badge>
-          <os-badge variant="pink" [outline]="true">Outline Pink</os-badge>
-        </div>
-        
-        <h5>Subtle Variant (Tailwind-style)</h5>
-        <div class="d-flex gap-2 flex-wrap mb-4">
-          <os-badge variant="primary" [subtle]="true">Subtle Primary</os-badge>
-          <os-badge variant="success" [subtle]="true">Subtle Success</os-badge>
-          <os-badge variant="danger" [subtle]="true">Subtle Danger</os-badge>
-          <os-badge variant="warning" [subtle]="true">Subtle Warning</os-badge>
-          <os-badge variant="info" [subtle]="true">Subtle Info</os-badge>
-          <os-badge variant="blue" [subtle]="true">Subtle Blue</os-badge>
-          <os-badge variant="emerald" [subtle]="true">Subtle Emerald</os-badge>
-          <os-badge variant="purple" [subtle]="true">Subtle Purple</os-badge>
-          <os-badge variant="pink" [subtle]="true">Subtle Pink</os-badge>
-          <os-badge variant="amber" [subtle]="true">Subtle Amber</os-badge>
-        </div>
-        
-        <div class="d-flex gap-2 align-items-center mb-4">
-          <os-badge size="small">Small</os-badge>
-          <os-badge size="medium">Medium</os-badge>
-          <os-badge size="large">Large</os-badge>
-        </div>
-        
-        <div class="d-flex gap-2 mb-4">
-          <os-badge shape="square">Square</os-badge>
-          <os-badge shape="rounded">Rounded</os-badge>
-          <os-badge shape="pill">Pill</os-badge>
-        </div>
-        
-        <div class="d-flex gap-2 align-items-center mb-4">
-          <span>Dot indicators:</span>
-          <os-badge class="os-badge-dot" variant="success" ariaLabel="Active"></os-badge>
-          <os-badge class="os-badge-dot" variant="danger" ariaLabel="Error"></os-badge>
-          <os-badge class="os-badge-dot" variant="warning" ariaLabel="Warning"></os-badge>
-        </div>
-
-        <h4>Simple Tooltip Examples</h4>
-        <div class="d-flex gap-3 align-items-center mb-3">
-          <!-- Simple text tooltip -->
-          <button 
-            class="btn btn-primary"
-            osTooltip="This is a simple tooltip"
-            tooltipPosition="top">
-            Top Tooltip
-          </button>
-
-          <!-- Bottom tooltip -->
-          <button 
-            class="btn btn-success"
-            osTooltip="This tooltip appears at the bottom"
-            tooltipPosition="bottom">
-            Bottom Tooltip
-          </button>
-
-          <!-- Left tooltip -->
-          <button 
-            class="btn btn-warning"
-            osTooltip="This tooltip appears on the left"
-            tooltipPosition="left">
-            Left Tooltip
-          </button>
-
-          <!-- Right tooltip -->
-          <button 
-            class="btn btn-info"
-            osTooltip="This tooltip appears on the right"
-            tooltipPosition="right">
-            Right Tooltip
-          </button>
-
-          <!-- Error variant -->
-          <button 
-            class="btn btn-danger"
-            osTooltip="This is an error tooltip"
-            tooltipVariant="error"
-            tooltipPosition="top">
-            Error Tooltip
-          </button>
-        </div>
-      </os-card>
-    </c-col>
-  </c-row>
-</c-container>
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <div class="tab-pane" [class.active]="activeTab === 'executive'">
+      <app-executive-tab *ngIf="activeTab === 'executive'"></app-executive-tab>
+    </div>
+    
+    <div class="tab-pane" [class.active]="activeTab === 'subscribers'">
+      <app-subscribers-tab *ngIf="activeTab === 'subscribers'"></app-subscribers-tab>
+    </div>
+    
+    <div class="tab-pane" [class.active]="activeTab === 'traffic'">
+      <app-traffic-tab *ngIf="activeTab === 'traffic'"></app-traffic-tab>
+    </div>
+    
+    <div class="tab-pane" [class.active]="activeTab === 'finance'">
+      <app-finance-tab *ngIf="activeTab === 'finance'"></app-finance-tab>
+    </div>
+  </div>
+</div>

@@ -22,7 +22,9 @@
       "Bash(mv:*)",
       "Bash(rm:*)",
       "WebFetch(domain:catalyst.tailwindui.com)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(jq:*)",
+      "Bash(sed:*)"
     ],
     "deny": []
   }

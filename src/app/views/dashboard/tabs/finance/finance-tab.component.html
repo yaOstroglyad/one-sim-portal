@@ -1,0 +1,159 @@
+<div class="finance-tab">
+  <!-- Loading State -->
+  <app-loading-indicator 
+    *ngIf="loading" 
+    [status]="{ state: 'loading', message: 'Fetching finance data...' }">
+  </app-loading-indicator>
+
+  <!-- Error State -->
+  <app-error-display 
+    *ngIf="error && !loading" 
+    [error]="error" 
+    (retry)="loadData()">
+  </app-error-display>
+
+  <!-- Data Content -->
+  <div *ngIf="data && !loading && !error" class="finance-content">
+    
+    <!-- KPI Metrics Row -->
+    <div class="kpi-row">
+      <app-metric-card 
+        *ngFor="let metric of data?.kpiMetrics" 
+        [metric]="metric">
+      </app-metric-card>
+    </div>
+
+    <!-- Charts Row: Margin by Month & Revenue -->
+    <div class="charts-row">
+      <!-- Margin by Month -->
+      <os-card class="margin-card" variant="default">
+        <div class="card-header">
+          <h3>{{ 'dashboard.finance.marginByMonth' | translate }}</h3>
+        </div>
+        <div class="chart-container" *ngIf="!data?.marginByMonth.loading; else loadingTemplate">
+          <os-line-chart 
+            *ngIf="data?.marginByMonth.chartConfig"
+            [data]="$any(data.marginByMonth.chartConfig.data)"
+            [options]="data.marginByMonth.chartConfig.options || {}">
+          </os-line-chart>
+        </div>
+      </os-card>
+
+      <!-- Revenue -->
+      <os-card class="revenue-card" variant="default">
+        <div class="card-header">
+          <h3>{{ 'dashboard.finance.revenue' | translate }}</h3>
+        </div>
+        <div class="chart-container" *ngIf="!data?.revenue.loading; else loadingTemplate">
+          <os-line-chart 
+            *ngIf="data?.revenue.chartConfig"
+            [data]="$any(data.revenue.chartConfig.data)"
+            [options]="data.revenue.chartConfig.options || {}">
+          </os-line-chart>
+        </div>
+      </os-card>
+    </div>
+
+    <!-- Top Performance Row: Countries & Bundles -->
+    <div class="performance-row">
+      <!-- Top 10 Countries -->
+      <os-card class="top-countries-card" variant="default">
+        <div class="card-header">
+          <h3>{{ 'dashboard.finance.topCountries' | translate }}</h3>
+        </div>
+        <div class="chart-container" *ngIf="!data?.topCountries.loading; else loadingTemplate">
+          <os-bar-chart 
+            *ngIf="data?.topCountries.chartConfig"
+            [data]="$any(data.topCountries.chartConfig.data)"
+            [options]="data.topCountries.chartConfig.options || {}">
+          </os-bar-chart>
+        </div>
+      </os-card>
+
+      <!-- Top 10 Bundles -->
+      <os-card class="top-bundles-card" variant="default">
+        <div class="card-header">
+          <h3>{{ 'dashboard.finance.topBundles' | translate }}</h3>
+        </div>
+        <div class="chart-container" *ngIf="!data?.topBundles.loading; else loadingTemplate">
+          <os-bar-chart 
+            *ngIf="data?.topBundles.chartConfig"
+            [data]="$any(data.topBundles.chartConfig.data)"
+            [options]="data.topBundles.chartConfig.options || {}">
+          </os-bar-chart>
+        </div>
+      </os-card>
+    </div>
+
+    <!-- Tables Row: Invoices & Bundle Purchases -->
+    <div class="tables-row">
+      <!-- Balance for Invoice -->
+      <os-card class="balance-invoice-card" variant="default">
+        <div class="card-header">
+          <h3>{{ 'dashboard.finance.balanceForInvoice' | translate }}</h3>
+        </div>
+        <div class="table-container" *ngIf="!data?.balanceForInvoice.loading; else loadingTemplate">
+          <div class="table-responsive">
+            <table class="finance-table">
+              <thead>
+                <tr>
+                  <th>{{ 'dashboard.finance.company' | translate }}</th>
+                  <th>{{ 'dashboard.finance.amount' | translate }}</th>
+                  <th>{{ 'dashboard.finance.dueDate' | translate }}</th>
+                  <th>{{ 'dashboard.finance.status' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of data?.balanceForInvoice.data">
+                  <td class="company-name">{{ item.company }}</td>
+                  <td class="amount">${{ item.amount | number:'1.0-0' }}</td>
+                  <td class="due-date">{{ item.dueDate }}</td>
+                  <td class="status">
+                    <span class="status-badge" [ngClass]="'status-' + item.status">
+                      {{ item.status }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </os-card>
+
+      <!-- Bundle Purchases to be Invoiced -->
+      <os-card class="bundle-purchases-card" variant="default">
+        <div class="card-header">
+          <h3>{{ 'dashboard.finance.bundlePurchases' | translate }}</h3>
+        </div>
+        <div class="table-container" *ngIf="!data?.bundlePurchases.loading; else loadingTemplate">
+          <div class="table-responsive">
+            <table class="finance-table">
+              <thead>
+                <tr>
+                  <th>{{ 'dashboard.finance.bundle' | translate }}</th>
+                  <th>{{ 'dashboard.finance.quantity' | translate }}</th>
+                  <th>{{ 'dashboard.finance.customer' | translate }}</th>
+                  <th>{{ 'dashboard.finance.total' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of data?.bundlePurchases.data">
+                  <td class="bundle-name">{{ item.bundle }}</td>
+                  <td class="quantity">{{ item.quantity }}</td>
+                  <td class="customer-name">{{ item.customer }}</td>
+                  <td class="total">${{ item.total | number:'1.0-0' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </os-card>
+    </div>
+
+  </div>
+
+  <!-- Loading Template -->
+  <ng-template #loadingTemplate>
+    <app-loading-indicator></app-loading-indicator>
+  </ng-template>
+</div>

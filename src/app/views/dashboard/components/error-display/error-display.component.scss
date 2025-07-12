@@ -1,0 +1,143 @@
+@import "../../../../../scss/variables";
+@import "../../../../../scss/utilities";
+@import "../../../../../scss/mixins";
+
+.error-container {
+  @extend .flex-center;
+  @extend .text-center;
+  padding: map-get($os-spacing, '12') map-get($os-spacing, '8'); // 3rem 2rem
+  background-color: var(--os-color-light);
+  border-radius: map-get($os-border-radius, 'medium'); // 8px
+  border: 2px dashed var(--os-color-medium);
+  
+  &.inline {
+    padding: map-get($os-spacing, '6'); // 1.5rem
+    border: 1px solid rgba(var(--os-color-danger-rgb), 0.2);
+    background-color: rgba(var(--os-color-danger-rgb), 0.05);
+  }
+  
+  // Error type variants using project colors
+  &.error-not-found {
+    border-color: var(--os-color-warning);
+    background-color: rgba(var(--os-color-warning-rgb), 0.05);
+    
+    .error-icon i {
+      color: var(--os-color-warning);
+    }
+  }
+  
+  &.error-unauthorized {
+    border-color: var(--os-color-danger);
+    background-color: rgba(var(--os-color-danger-rgb), 0.05);
+    
+    .error-icon i {
+      color: var(--os-color-danger);
+    }
+  }
+  
+  &.error-service-unavailable {
+    border-color: var(--os-color-info);
+    background-color: rgba(var(--os-color-info-rgb), 0.05);
+    
+    .error-icon i {
+      color: var(--os-color-info);
+    }
+  }
+  
+  &.error-generic {
+    border-color: var(--os-color-danger);
+    background-color: rgba(var(--os-color-danger-rgb), 0.05);
+    
+    .error-icon i {
+      color: var(--os-color-danger);
+    }
+  }
+}
+
+.error-content {
+  max-width: 400px;
+}
+
+.error-icon {
+  @extend .mb-4; // 1rem
+  
+  i {
+    font-size: map-get($os-font-sizes, '3xl'); // 3rem
+    color: var(--os-color-medium);
+  }
+}
+
+.error-message {
+  @extend .mb-6; // 1.5rem
+}
+
+.error-title {
+  @extend .text-xl; // 1.25rem
+  @extend .font-semibold;
+  color: var(--os-color-dark);
+  margin: 0 0 map-get($os-spacing, '2') 0; // 0.5rem
+}
+
+.error-details {
+  @extend .text-sm; // 0.875rem
+  color: var(--os-color-medium);
+  margin: 0 0 map-get($os-spacing, '2') 0; // 0.5rem
+  line-height: 1.5;
+}
+
+.error-hint {
+  font-size: 0.8125rem; // No exact match, keeping custom
+  color: var(--os-color-medium);
+  @extend .m-0;
+  font-style: italic;
+}
+
+.error-actions {
+  @extend .flex-center;
+  gap: map-get($os-spacing, '4'); // 1rem
+}
+
+.retry-button {
+  @extend .flex-center;
+  gap: map-get($os-spacing, '2'); // 0.5rem
+  padding: map-get($os-spacing, '3') map-get($os-spacing, '6'); // 0.75rem 1.5rem
+  background-color: var(--os-color-primary);
+  color: var(--os-color-light);
+  border: none;
+  @extend .rounded-medium;
+  @extend .text-sm;
+  @extend .font-medium;
+  @extend .cursor-pointer;
+  @include interactive-states();
+  
+  i {
+    font-size: map-get($os-font-sizes, 'base'); // 1rem
+  }
+}
+
+// Dark theme support
+:host-context(.dark-theme) {
+  .error-container {
+    background-color: var(--os-color-dark);
+    border-color: var(--os-color-zinc);
+    color: var(--os-color-light);
+    
+    .error-title {
+      color: var(--os-color-light);
+    }
+    
+    .error-details,
+    .error-hint {
+      color: var(--os-color-medium);
+    }
+    
+    .retry-button {
+      background-color: var(--os-color-zinc);
+      color: var(--os-color-light);
+      
+      &:hover {
+        background-color: var(--os-color-medium);
+      }
+    }
+  }
+}

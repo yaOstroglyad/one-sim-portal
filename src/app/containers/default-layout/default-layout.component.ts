@@ -14,7 +14,6 @@ import { BrandFull } from '../../shared/model/brandFull';
 import { BrandNarrow } from '../../shared/model/brandNarrow';
 import { Subject, takeUntil, BehaviorSubject, skip } from 'rxjs';
 import { AuthService } from '../../shared';
-import { log10 } from 'chart.js/helpers';
 import { isToggleActive } from '../../shared/services/feature-toggle';
 
 @Component({

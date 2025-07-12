@@ -1,0 +1,82 @@
+@import "../../../../../scss/variables";
+@import "../../../../../scss/utilities";
+@import "../../../../../scss/mixins";
+
+.finance-tab {
+  .finance-content {
+    @include dashboard-content();
+
+    .kpi-row {
+      @include dashboard-kpi-grid(3);
+    }
+
+    .charts-row {
+      @include dashboard-demographics-row();
+      
+      .margin-card,
+      .revenue-card {
+        .card-header {
+          @include dashboard-card-header();
+        }
+        
+        .chart-container {
+          @include dashboard-chart-container(250px);
+        }
+      }
+    }
+
+    .performance-row {
+      @include dashboard-demographics-row();
+      
+      .top-countries-card,
+      .top-bundles-card {
+        .card-header {
+          @include dashboard-card-header();
+        }
+        
+        .chart-container {
+          @include dashboard-chart-container(300px);
+        }
+      }
+    }
+
+    .tables-row {
+      @include dashboard-demographics-row();
+      
+      .balance-invoice-card,
+      .bundle-purchases-card {
+        .card-header {
+          @include dashboard-card-header();
+        }
+        
+        @include dashboard-table();
+        
+        // Specific class mappings for finance table
+        .finance-table {
+          td {
+            &.company-name,
+            &.customer-name,
+            &.bundle-name {
+              @extend .name-cell;
+            }
+            
+            &.amount,
+            &.total {
+              @extend .amount-cell;
+            }
+            
+            &.quantity {
+              @extend .quantity-cell;
+            }
+            
+            &.due-date {
+              @extend .date-cell;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  @include dashboard-dark-theme();
+}

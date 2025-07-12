@@ -549,5 +549,88 @@
     "iccids": "ICCIDs",
     "message_id": "Message ID",
     "metadata_status": "Metadata Status"
+  },
+  "dashboard": {
+    "title": "Analytics Dashboard",
+    "subtitle": "Real-time insights into your eSIM business performance",
+    "tabs": {
+      "executive": "Executive",
+      "subscribers": "Subscribers",
+      "traffic": "Traffic",
+      "finance": "Finance"
+    },
+    "periods": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "last7days": "Last 7 Days",
+      "last30days": "Last 30 Days",
+      "lastMonth": "Last Month",
+      "custom": "Custom",
+      "startDate": "Start Date",
+      "endDate": "End Date"
+    },
+    "actions": {
+      "refresh": "Refresh Data",
+      "export": "Export",
+      "apply": "Apply",
+      "cancel": "Cancel"
+    },
+    "loading": {
+      "fetchingData": "Fetching analytics data...",
+      "waitingClickhouse": "Waiting on ClickHouse Connect...",
+      "processing": "Processing data..."
+    },
+    "errors": {
+      "unexpected": "Unexpected error occurred",
+      "noData": "No data available for selected period",
+      "retry": "Retry"
+    },
+    "metrics": {
+      "totalRevenue": "Total Revenue",
+      "newSubscribers": "New Subscribers",
+      "activeSubscribers": "Active Subscribers",
+      "churnRate": "Churn Rate",
+      "totalTraffic": "Total Traffic",
+      "activeCountries": "Active Countries",
+      "avgTrafficPerUser": "Avg Traffic/User",
+      "avgMargin": "Avg Margin",
+      "pendingInvoices": "Pending Invoices",
+      "arpu": "ARPU",
+      "customerLtv": "Customer LTV",
+      "cac": "CAC"
+    },
+    "subscribers": {
+      "growth": "Subscriber Growth",
+      "demographics": "Demographics",
+      "lifecycle": "Lifecycle",
+      "retention": "Retention Analysis",
+      "churn": "Churn Analysis"
+    },
+    "traffic": {
+      "byCountry": "Traffic by Country",
+      "shares": "Traffic Shares",
+      "activeUsers": "Active Users by Country",
+      "averageTraffic": "Average Traffic",
+      "avgPerUser": "Avg per User",
+      "totalTraffic": "Total Traffic",
+      "activeCountries": "Active Countries",
+      "topCountry": "Top Country"
+    },
+    "finance": {
+      "marginByMonth": "Margin by Month",
+      "revenue": "Revenue Trend",
+      "topCountries": "Top 10 Countries by Revenue",
+      "topBundles": "Top 10 Bundles by Revenue",
+      "balanceForInvoice": "Balance for Invoice",
+      "bundlePurchases": "Bundle Purchases to be Invoiced",
+      "company": "Company",
+      "amount": "Amount",
+      "dueDate": "Due Date",
+      "status": "Status",
+      "bundle": "Bundle",
+      "quantity": "Quantity",
+      "customer": "Customer",
+      "total": "Total"
+    }
   }
 }

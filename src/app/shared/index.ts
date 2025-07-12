@@ -16,6 +16,7 @@ export * from './components/card'
 export * from './components/tabs'
 export * from './components/tooltip'
 export * from './components/sidebar'
+export * from './components/debug-display'
 
 export * from './components/table-initialization-error/table-initialization-error.module'
 export * from './components/header-component/header.module';

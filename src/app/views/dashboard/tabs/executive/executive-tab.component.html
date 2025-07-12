@@ -1,0 +1,101 @@
+<div class="executive-tab">
+  <!-- Loading State -->
+  <app-loading-indicator 
+    *ngIf="loading" 
+    [status]="{ state: 'loading', message: 'Fetching executive data...' }">
+  </app-loading-indicator>
+
+  <!-- Error State -->
+  <app-error-display 
+    *ngIf="error && !loading" 
+    [error]="error" 
+    (retry)="onRetry()">
+  </app-error-display>
+
+  <!-- Data Content -->
+  <div *ngIf="data && !loading && !error" class="executive-content">
+    
+    <!-- KPI Cards Row -->
+    <div class="kpi-row">
+      <app-metric-card 
+        *ngFor="let card of data.macroKPI.cards" 
+        [metric]="card">
+      </app-metric-card>
+    </div>
+
+    <!-- Revenue Row (Full Width) -->
+    <div class="revenue-row">
+      <os-card class="revenue-card" variant="default">
+        <div class="card-header">
+          <h3>Total Revenue</h3>
+          <div class="revenue-amount">
+            {{ data.revenue.total | currency:data.revenue.currency }}
+          </div>
+        </div>
+        <div class="revenue-breakdown">
+          <div class="breakdown-item">
+            <span class="label">New</span>
+            <span class="value">{{ data.revenue.breakdown.new | currency:data.revenue.currency }}</span>
+          </div>
+          <div class="breakdown-item">
+            <span class="label">Recurring</span>
+            <span class="value">{{ data.revenue.breakdown.recurring | currency:data.revenue.currency }}</span>
+          </div>
+          <div class="breakdown-item">
+            <span class="label">Churn</span>
+            <span class="value negative">{{ data.revenue.breakdown.churn | currency:data.revenue.currency }}</span>
+          </div>
+        </div>
+      </os-card>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-row">
+      <!-- Subscribers by Bundle Chart -->
+      <os-card class="chart-card" variant="default">
+        <div class="card-header">
+          <h3>Subscribers by Bundle</h3>
+        </div>
+        <div class="chart-container">
+          <os-bar-chart 
+            [data]="$any(data.subscribersByBundle.chartConfig?.data) || {labels: [], datasets: []}"
+            [options]="data.subscribersByBundle.chartConfig?.options || {}">
+          </os-bar-chart>
+        </div>
+      </os-card>
+
+      <!-- Revenue by Bundle Chart -->
+      <os-card class="chart-card" variant="default">
+        <div class="card-header">
+          <h3>Revenue by Bundle</h3>
+        </div>
+        <div class="chart-container">
+          <os-bar-chart 
+            [data]="$any(data.revenueByBundle.chartConfig?.data) || {labels: [], datasets: []}"
+            [options]="data.revenueByBundle.chartConfig?.options || {}">
+          </os-bar-chart>
+        </div>
+      </os-card>
+    </div>
+
+    <!-- Inventory Status -->
+    <div class="inventory-row">
+      <os-card class="inventory-card" variant="default">
+        <div class="card-header">
+          <h3>Inventory Status</h3>
+          <div class="total-esims">{{ data.inventoryStatus.totalESIMs | number }} Total eSIMs</div>
+        </div>
+        <div class="inventory-grid">
+          <div 
+            *ngFor="let item of data.inventoryStatus.breakdown" 
+            class="inventory-item"
+            [class]="'status-' + item.status">
+            <div class="item-label">{{ item.label }}</div>
+            <div class="item-value">{{ item.value | number }}</div>
+            <div class="item-percentage">{{ item.percentage }}%</div>
+          </div>
+        </div>
+      </os-card>
+    </div>
+  </div>
+</div>
