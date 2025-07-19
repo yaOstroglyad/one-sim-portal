@@ -124,17 +124,20 @@ $indicator-svg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg
       .nav-icon {
         margin-left: 1rem;
         margin-right: -15px;
-        order: 2;
-      }
-      
-      c-sidebar-nav-link-content {
-        order: 1;
       }
     }
 
     .nav-group {
       .nav-group-toggle {
         position: relative;
+        flex-direction: row-reverse;
+        justify-content: flex-start;
+        text-align: right;
+
+        .nav-icon {
+          margin-left: 1rem;
+          margin-right: -15px;
+        }
 
         &::after {
           display: block !important;
@@ -178,12 +181,12 @@ $indicator-svg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg
   ::ng-deep .sidebar-narrow-unfoldable {
     &:not(:hover) {
       .nav-icon + c-sidebar-nav-link-content {
-        display: none !important;
+        display: none;
       }
     }
 
     &:hover .nav-icon + c-sidebar-nav-link-content {
-      display: block !important;
+      display: block;
     }
   }
 }

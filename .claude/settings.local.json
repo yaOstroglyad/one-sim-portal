@@ -24,7 +24,8 @@
       "WebFetch(domain:catalyst.tailwindui.com)",
       "Bash(npx tsc:*)",
       "Bash(jq:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   }
