@@ -1,0 +1,92 @@
+<div class="ag-pagination">
+  <div class="ag-pagination-panel">
+    <!-- Page size selector -->
+    <div *ngIf="config.showPageSizeSelector" class="ag-pagination-page-size">
+      <span class="ag-pagination-label">{{ 'pagination.pageSize' | translate }}:</span>
+      <select 
+        class="ag-pagination-select"
+        [value]="config.pageSize"
+        (change)="onSelectChange($event)">
+        <option *ngFor="let size of config.pageSizeOptions" [value]="size">{{ size }}</option>
+      </select>
+    </div>
+    
+    <!-- Records range info (like ag-grid: "1 to 10 of 20") -->
+    <div *ngIf="config.totalItems !== undefined" class="ag-pagination-range">
+      <span>{{ startRecord }} {{ 'pagination.to' | translate }} {{ endRecord }} {{ 'pagination.of' | translate }} {{ config.totalItems }}</span>
+    </div>
+    
+    <!-- Navigation controls -->
+    <div class="ag-pagination-controls" [class.rtl]="isRtl">
+      <!-- First page button -->
+      <button 
+        *ngIf="config.showFirstLast"
+        type="button"
+        class="ag-pagination-button"
+        [class.disabled]="isFirstPage"
+        [disabled]="isFirstPage"
+        (click)="goToFirst()"
+        [attr.aria-label]="'pagination.first' | translate">
+        <svg cIcon [name]="navigationIcons.first" size="sm"></svg>
+      </button>
+      
+      <!-- Previous page button -->
+      <button 
+        type="button"
+        class="ag-pagination-button"
+        [class.disabled]="isFirstPage"
+        [disabled]="isFirstPage"
+        (click)="goToPrevious()"
+        [attr.aria-label]="'pagination.previous' | translate">
+        <svg cIcon [name]="navigationIcons.previous" size="sm"></svg>
+      </button>
+      
+      <!-- Page numbers -->
+      <div class="ag-pagination-numbers" *ngIf="config.showPageNumbers">
+        <!-- Start ellipsis -->
+        <span *ngIf="showStartEllipsis" class="ag-pagination-ellipsis">...</span>
+        
+        <!-- Page number buttons -->
+        <button
+          *ngFor="let pageNum of displayPageNumbers"
+          type="button"
+          class="ag-pagination-number"
+          [class.active]="pageNum === currentPage"
+          (click)="onPageChange(pageNum)">
+          {{ pageNum + 1 }}
+        </button>
+        
+        <!-- End ellipsis -->
+        <span *ngIf="showEndEllipsis" class="ag-pagination-ellipsis">...</span>
+      </div>
+      
+      <!-- Page info (when not showing page numbers) -->
+      <div class="ag-pagination-info" *ngIf="!config.showPageNumbers">
+        <span>{{ currentPage + 1 }} {{ 'pagination.of' | translate }} {{ totalPages }}</span>
+      </div>
+      
+      <!-- Next page button -->
+      <button 
+        type="button"
+        class="ag-pagination-button"
+        [class.disabled]="isLastPage"
+        [disabled]="isLastPage"
+        (click)="goToNext()"
+        [attr.aria-label]="'pagination.next' | translate">
+        <svg cIcon [name]="navigationIcons.next" size="sm"></svg>
+      </button>
+      
+      <!-- Last page button -->
+      <button 
+        *ngIf="config.showFirstLast"
+        type="button"
+        class="ag-pagination-button"
+        [class.disabled]="isLastPage"
+        [disabled]="isLastPage"
+        (click)="goToLast()"
+        [attr.aria-label]="'pagination.last' | translate">
+        <svg cIcon [name]="navigationIcons.last" size="sm"></svg>
+      </button>
+    </div>
+  </div>
+</div>

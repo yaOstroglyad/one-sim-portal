@@ -27,13 +27,13 @@ export class EmailLogsTableConfigService extends TableConfigAbstractService<Emai
 			showCheckboxes: false,
 			showEditButton: false,
 			showAddButton: false,
-			showMenu: true,
+			showMenu: false,
 			pagination: {
 				enabled: true,
 				serverSide: true,
 				page: 0,
 				totalPages: 20,
-				size: 20
+				size: 10
 			}
 		};
 
@@ -105,7 +105,7 @@ export class EmailLogsTableConfigService extends TableConfigAbstractService<Emai
 	loadData(params: EmailLogFilterParams): Observable<EmailLogResponse> {
 		let httpParams = new HttpParams()
 			.set('page', (params.page || 0).toString())
-			.set('size', (params.size || 20).toString());
+			.set('size', (params.size || 10).toString());
 
 		if (params.iccid) {
 			httpParams = httpParams.set('iccid', params.iccid);

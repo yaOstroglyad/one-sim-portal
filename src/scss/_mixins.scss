@@ -1049,3 +1049,169 @@
     }
   }
 }
+
+// ==============================================
+// AG-GRID COMPONENT MIXINS
+// Reusable mixins for ag-grid style components
+// ==============================================
+
+// Base ag-grid button styles
+@mixin ag-grid-button($size: 26px) {
+  @extend .d-flex;
+  @extend .align-center;
+  @extend .justify-center;
+  width: $size;
+  height: $size;
+  padding: 0;
+  border: none;
+  @extend .rounded-small;
+  @extend .cursor-pointer;
+  background-color: $ag-grid-button-bg;
+  color: #666;
+  transition: background-color 0.15s ease;
+  
+  svg {
+    width: $size * 0.46; // proportional icon size
+    height: $size * 0.46;
+    fill: currentColor;
+    stroke: none;
+  }
+  
+  &:hover:not(.disabled) {
+    background-color: $ag-grid-button-hover;
+    color: #333;
+  }
+  
+  &:active:not(.disabled) {
+    background-color: $ag-grid-button-active;
+  }
+  
+  &.disabled {
+    @extend .cursor-not-allowed;
+    @extend .opacity-50;
+    background-color: $ag-grid-button-bg;
+    color: $ag-grid-button-disabled;
+    
+    &:hover {
+      background-color: $ag-grid-button-bg;
+      color: $ag-grid-button-disabled;
+    }
+  }
+}
+
+// AG-Grid focus state
+@mixin ag-grid-focus() {
+  &:focus {
+    outline: none;
+    box-shadow: $ag-grid-focus-shadow;
+  }
+}
+
+// AG-Grid text styling
+@mixin ag-grid-text() {
+  font-size: 14px;
+  color: $ag-grid-text-color;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+// AG-Grid select styling
+@mixin ag-grid-select() {
+  @include ag-grid-text();
+  padding: 4px 8px;
+  border: 1px solid $ag-grid-border-color;
+  @extend .rounded-small;
+  background-color: var(--os-color-white);
+  @extend .cursor-pointer;
+  min-width: 60px;
+  
+  @include ag-grid-focus();
+  
+  &:hover {
+    border-color: $ag-grid-select-hover-border;
+  }
+  
+  &:focus {
+    border-color: $ag-grid-focus-color;
+  }
+}
+
+// AG-Grid dark theme mixin
+@mixin ag-grid-dark-theme() {
+  :host-context(.dark-theme) & {
+    border-top-color: $ag-grid-dark-border;
+    
+    .ag-pagination-label,
+    .ag-pagination-info,
+    .ag-pagination-range,
+    .ag-pagination-ellipsis {
+      color: $ag-grid-dark-text;
+    }
+    
+    .ag-pagination-select {
+      background-color: $ag-grid-dark-bg;
+      border-color: $ag-grid-dark-button-bg;
+      color: $ag-grid-dark-text;
+      
+      &:hover {
+        border-color: $ag-grid-dark-border-hover;
+      }
+      
+      &:focus {
+        border-color: $ag-grid-focus-color;
+      }
+    }
+    
+    .ag-pagination-button {
+      background-color: $ag-grid-dark-button-bg;
+      color: $ag-grid-dark-text;
+      
+      &:hover:not(.disabled) {
+        background-color: $ag-grid-dark-button-hover;
+      }
+      
+      &.disabled {
+        background-color: $ag-grid-dark-button-bg;
+      }
+    }
+    
+    .ag-pagination-number {
+      color: $ag-grid-dark-text;
+      
+      &:hover {
+        background-color: $ag-grid-dark-button-bg;
+      }
+      
+      &.active {
+        background-color: $ag-grid-focus-color;
+        color: var(--os-color-white);
+      }
+    }
+  }
+}
+
+// AG-Grid RTL support mixin
+@mixin ag-grid-rtl() {
+  [dir="rtl"] & {
+    .ag-pagination-panel {
+      justify-content: flex-start;
+      
+      @media (max-width: 768px) {
+        justify-content: space-between;
+      }
+    }
+    
+    .ag-pagination-controls {
+      flex-direction: row-reverse;
+    }
+    
+    .ag-pagination-page-size {
+      flex-direction: row-reverse;
+      
+      .ag-pagination-label {
+        margin-left: map-get($os-spacing, '2');
+        margin-right: 0;
+      }
+    }
+  }
+}

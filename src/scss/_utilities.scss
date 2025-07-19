@@ -380,3 +380,14 @@ $font-sizes: (
 .mb-1 { margin-bottom: map-get($os-spacing, '1') !important; }
 .mr-2 { margin-right: map-get($os-spacing, '2') !important; }
 .mb-2 { margin-bottom: map-get($os-spacing, '2') !important; }
+
+// ==============================================
+// AG-GRID UTILITY CLASSES
+// ==============================================
+
+.ag-grid-text {
+  font-size: 14px !important;
+  color: #54595e !important;
+  font-weight: normal !important;
+  white-space: nowrap !important;
+}

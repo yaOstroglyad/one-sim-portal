@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { TableColumnConfig, TableConfig } from '../../model';
+import { TableColumnConfig, TableConfig } from '../../model/table-column-config.interface';
 
 @Component({
 	selector: 'generic-table',
@@ -65,6 +65,15 @@ export class GenericTableComponent implements OnChanges {
 	public changePage(newPage: number, isServerSide?: boolean): void {
 		this.currentPage = newPage;
 		this.pageChange.emit({page: this.currentPage, size: this.pageSize, isServerSide});
+	}
+
+	public onPageSizeChange(newSize: number): void {
+		this.pageSize = newSize;
+		this.currentPage = 0; // Reset to first page when page size changes
+		this.config$.pipe(take(1)).subscribe(config => {
+			const isServerSide = config.pagination?.serverSide;
+			this.pageChange.emit({page: this.currentPage, size: this.pageSize, isServerSide});
+		});
 	}
 
 	public toggleAll(event: any): void {

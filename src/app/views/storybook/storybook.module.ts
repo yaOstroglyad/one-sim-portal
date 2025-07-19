@@ -9,6 +9,7 @@ import { TabsComponent, TabComponent } from '../../shared/components/tabs';
 import { TooltipDirective, TooltipComponent } from '../../shared/components/tooltip';
 import { OsBarChartComponent } from '../../shared/components/bar-chart';
 import { OsLineChartComponent } from '../../shared/components/line-chart';
+import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 
 import {
   AvatarModule,
@@ -23,6 +24,7 @@ import {
   TabsModule
 } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,7 @@ import { IconModule } from '@coreui/icons-angular';
     ButtonGroupModule,
     AvatarModule,
     TableModule,
+    TranslateModule,
     BadgeComponent, // Import standalone badge component
     CardComponent, // Import standalone component
     TabsComponent, // Import standalone tabs component
@@ -49,7 +52,8 @@ import { IconModule } from '@coreui/icons-angular';
     TooltipDirective, // Import standalone tooltip directive
     TooltipComponent, // Import standalone tooltip component
     OsBarChartComponent, // Import standalone bar chart component
-    OsLineChartComponent // Import standalone line chart component
+    OsLineChartComponent, // Import standalone line chart component
+    PaginationComponent // Import standalone pagination component
   ]
 })
 export class StorybookModule { }

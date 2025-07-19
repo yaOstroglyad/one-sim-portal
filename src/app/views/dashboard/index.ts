@@ -4,7 +4,6 @@ export { DashboardDataService } from './services/dashboard-data.service';
 export { MockDataService } from './services/mock-data.service';
 
 // Dashboard components
-export { MetricCardComponent } from './components/metric-card/metric-card.component';
 export { LoadingIndicatorComponent } from './components/loading-indicator/loading-indicator.component';
 export { ErrorDisplayComponent } from './components/error-display/error-display.component';
 

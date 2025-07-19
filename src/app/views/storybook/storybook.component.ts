@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TabChangeEvent } from '../../shared/components/tabs/tabs.types';
 import { BarChartData, BarChartOptions } from '../../shared/components/bar-chart';
 import { LineChartData, LineChartOptions } from '../../shared/components/line-chart';
+import { PaginationConfig } from '../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-storybook',
@@ -289,6 +290,40 @@ export class StorybookComponent implements OnInit {
     }
   };
 
+  // Pagination examples configurations
+  simpleConfig: PaginationConfig = {
+    currentPage: 0,
+    totalPages: 5,
+    pageSize: 10,
+    showPageSizeSelector: false,
+    showFirstLast: true,
+    showPageNumbers: false
+  };
+
+  fullFeaturedConfig: PaginationConfig = {
+    currentPage: 2,
+    totalPages: 20,
+    pageSize: 10,
+    totalItems: 195,
+    showPageSizeSelector: true,
+    pageSizeOptions: [5, 10, 25, 50, 100],
+    showFirstLast: true,
+    showPageNumbers: true,
+    maxPageNumbers: 7
+  };
+
+  compactConfig: PaginationConfig = {
+    currentPage: 5,
+    totalPages: 12,
+    pageSize: 25,
+    totalItems: 287,
+    showPageSizeSelector: true,
+    pageSizeOptions: [10, 25, 50],
+    showFirstLast: false,
+    showPageNumbers: true,
+    maxPageNumbers: 3
+  };
+
   constructor() { }
 
   ngOnInit(): void {
@@ -301,6 +336,23 @@ export class StorybookComponent implements OnInit {
   onTabChange(event: TabChangeEvent): void {
     console.log('Tab changed:', event);
     this.basicTabIndex = event.index;
+  }
+
+  // Pagination event handlers
+  onPageChange(config: PaginationConfig, page: number): void {
+    console.log(`Page changed to: ${page + 1} for config:`, config);
+    config.currentPage = page;
+  }
+
+  onPageSizeChange(config: PaginationConfig, pageSize: number): void {
+    console.log(`Page size changed to: ${pageSize} for config:`, config);
+    config.pageSize = pageSize;
+    config.currentPage = 0; // Reset to first page when page size changes
+    
+    // Recalculate total pages if totalItems is available
+    if (config.totalItems) {
+      config.totalPages = Math.ceil(config.totalItems / pageSize);
+    }
   }
 
 }
