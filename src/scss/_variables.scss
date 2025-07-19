@@ -477,3 +477,29 @@ $os-font-sizes: (
   '4xl': 2.25rem,
   '5xl': 3rem
 ) !default;
+
+// ============================================== 
+// AG-GRID STYLE VARIABLES
+// Consistent colors and values for ag-grid components
+// ==============================================
+
+// AG-Grid colors
+$ag-grid-text-color: #54595e !default;
+$ag-grid-border-color: #d4dae4 !default;
+$ag-grid-focus-color: #0084ff !default;
+$ag-grid-button-bg: #f8f9fa !default;
+$ag-grid-button-hover: #e9ecef !default;
+$ag-grid-button-active: #dee2e6 !default;
+$ag-grid-button-disabled: #ccc !default;
+$ag-grid-select-hover-border: #bbb !default;
+
+// AG-Grid dark theme colors
+$ag-grid-dark-border: #3a3a3a !default;
+$ag-grid-dark-text: #ccc !default;
+$ag-grid-dark-bg: #2a2a2a !default;
+$ag-grid-dark-button-bg: #3a3a3a !default;
+$ag-grid-dark-button-hover: #4a4a4a !default;
+$ag-grid-dark-border-hover: #666 !default;
+
+// AG-Grid focus shadow
+$ag-grid-focus-shadow: 0 0 0 1px rgba(0, 132, 255, 0.3) !default;

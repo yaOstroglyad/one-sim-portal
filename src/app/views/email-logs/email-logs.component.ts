@@ -38,20 +38,20 @@ import { IconDirective } from '@coreui/icons-angular';
 })
 export class EmailLogsComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
-  
+
   // Form Controls
   public filterForm: FormGroup = new FormGroup({
     iccid: new FormControl(null),
   });
-  
+
   // Table Configuration
   public tableConfig$: BehaviorSubject<TableConfig>;
   public dataList$: Observable<EmailLog[]>;
-  
+
   // Permission check
   isAdmin = false;
   selectedAccountId: string | null = null;
-  
+
   constructor(
     private tableConfigService: EmailLogsTableConfigService,
     private authService: AuthService,
@@ -109,7 +109,7 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
 
     const params = {
       page: 0,
-      size: 20,
+      size: 10,
       accountId: this.selectedAccountId,
       ...this.filterForm.getRawValue()
     };
@@ -145,9 +145,9 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
     const loadParams: EmailLogFilterParams = {
       accountId: params.accountId,
       page: params.page || 0,
-      size: params.size || 20
+      size: params.size || 10
     };
-    
+
     if (params.iccid?.trim()) {
       loadParams.iccid = params.iccid.trim();
     }
@@ -180,13 +180,13 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
     return data.map(item => ({
       ...item,
       // Transform iccids array to string for display
-      iccids: item.iccids && item.iccids.length > 0 
-        ? item.iccids.join(', ') 
+      iccids: item.iccids && item.iccids.length > 0
+        ? item.iccids.join(', ')
         : '-',
       // Transform metadata object to status string
-      metadata: item.metadata 
-        ? `${item.metadata.status}` 
+      metadata: item.metadata
+        ? `${item.metadata.status}`
         : '-'
     }));
   }
-} 
+}

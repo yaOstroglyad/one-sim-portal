@@ -11,8 +11,8 @@
 
 /* AG-Grid CSS Variables */
 :root {
-  --ag-header-height: 50px;
-  --ag-row-height: 32px;
+  --ag-header-height: 48px;
+  --ag-row-height: 48px;
   --ag-header-foreground-color: rgba(0, 0, 0, 0.7);
   --ag-header-background-color: #f8f8f8;
   --ag-odd-row-background-color: #f9f9f9;
@@ -35,7 +35,7 @@
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  min-height: calc(var(--ag-row-height) * 3);
+  min-height: calc(var(--ag-row-height) * 10);
   overflow: hidden;
   position: relative;
 }
@@ -494,26 +494,26 @@ colgroup col {
   .nav-link {
     border-radius: map-get($os-border-radius, 'small');
     transition: all 0.15s ease-in-out;
-    
+
     &:hover {
       background: var(--os-color-primary-subtle-bg);
     }
-    
+
     &.active {
       background: var(--os-color-primary-subtle-bg);
       color: var(--os-color-primary);
-      
+
       .nav-icon {
         color: var(--os-color-primary);
       }
     }
   }
-  
+
   .nav-group {
     .nav-group-toggle {
       border-radius: map-get($os-border-radius, 'small');
       transition: all 0.15s ease-in-out;
-      
+
       &:hover {
         background: var(--os-color-primary-subtle-bg);
       }
@@ -748,6 +748,18 @@ colgroup col {
   margin: 0 !important;
   min-width: unset !important;
   line-height: 1 !important;
+}
+
+// ==============================================
+// GLOBAL MATERIAL MENU BUTTON OVERRIDES
+// Custom sizing for mat-menu icon buttons
+// ==============================================
+
+.mat-mdc-icon-button.mat-mdc-button-base {
+  --mdc-icon-button-state-layer-size: 39px;
+  width: var(--mdc-icon-button-state-layer-size);
+  height: var(--mdc-icon-button-state-layer-size);
+  padding: 6px;
 }
 
 // Material icons inside table buttons

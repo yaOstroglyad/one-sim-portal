@@ -5,7 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@coreui/icons-angular';
 
 import { CardComponent } from '../../../../shared/components/card/card.component';
-import { MetricCardComponent } from '../../components/metric-card/metric-card.component';
+import { MetricCardComponent } from '../../../../shared/components/card';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
 import { OsBarChartComponent } from '../../../../shared/components/bar-chart/os-bar-chart.component';

@@ -608,6 +608,90 @@
             Error Tooltip
           </button>
         </div>
+
+        <!-- AG-Grid Style Pagination Examples -->
+        <h4 class="mb-3">AG-Grid Style Pagination Examples</h4>
+        
+        <!-- Simple Pagination -->
+        <h5 class="mb-2">Simple Pagination (No Page Numbers)</h5>
+        <os-card variant="outlined" size="medium" customClass="mb-4">
+          <div class="mb-3">
+            <strong>Configuration:</strong> Basic navigation with first/last buttons, no page size selector
+          </div>
+          <app-pagination 
+            [config]="simpleConfig"
+            (pageChange)="onPageChange(simpleConfig, $event)"
+            (pageSizeChange)="onPageSizeChange(simpleConfig, $event)">
+          </app-pagination>
+        </os-card>
+
+        <!-- Full Featured Pagination -->
+        <h5 class="mb-2">Full Featured Pagination</h5>
+        <os-card variant="outlined" size="medium" customClass="mb-4">
+          <div class="mb-3">
+            <strong>Configuration:</strong> All features enabled - page size selector, page numbers, records range, first/last buttons
+            <br><small>Current: Page {{ fullFeaturedConfig.currentPage + 1 }} of {{ fullFeaturedConfig.totalPages }}, showing {{ fullFeaturedConfig.pageSize }} items per page</small>
+          </div>
+          <app-pagination 
+            [config]="fullFeaturedConfig"
+            (pageChange)="onPageChange(fullFeaturedConfig, $event)"
+            (pageSizeChange)="onPageSizeChange(fullFeaturedConfig, $event)">
+          </app-pagination>
+        </os-card>
+
+        <!-- Compact Pagination -->
+        <h5 class="mb-2">Compact Pagination</h5>
+        <os-card variant="outlined" size="medium" customClass="mb-4">
+          <div class="mb-3">
+            <strong>Configuration:</strong> No first/last buttons, limited page numbers (3), page size selector enabled
+            <br><small>Ideal for mobile or sidebar layouts</small>
+          </div>
+          <app-pagination 
+            [config]="compactConfig"
+            (pageChange)="onPageChange(compactConfig, $event)"
+            (pageSizeChange)="onPageSizeChange(compactConfig, $event)">
+          </app-pagination>
+        </os-card>
+
+        <!-- RTL Support Demo -->
+        <h5 class="mb-2">RTL Support Demo</h5>
+        <os-card variant="outlined" size="medium" customClass="mb-4">
+          <div class="mb-3">
+            <strong>RTL Support:</strong> Icons automatically invert for Right-to-Left layouts
+            <br><small>Change document direction to see RTL behavior: <code>document.documentElement.dir = 'rtl'</code></small>
+          </div>
+          <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-sm btn-outline-primary" onclick="document.documentElement.dir = 'ltr'">
+              Set LTR
+            </button>
+            <button class="btn btn-sm btn-outline-primary" onclick="document.documentElement.dir = 'rtl'">
+              Set RTL
+            </button>
+          </div>
+          <app-pagination 
+            [config]="fullFeaturedConfig"
+            (pageChange)="onPageChange(fullFeaturedConfig, $event)"
+            (pageSizeChange)="onPageSizeChange(fullFeaturedConfig, $event)">
+          </app-pagination>
+        </os-card>
+
+        <!-- Feature Overview -->
+        <h5 class="mb-2">Features Overview</h5>
+        <os-card variant="elevated" size="medium" customClass="mb-4">
+          <h6>AG-Grid Pagination Component Features:</h6>
+          <ul class="mb-0">
+            <li><strong>Page Size Selector:</strong> Dropdown to change items per page (5, 10, 25, 50, 100)</li>
+            <li><strong>Records Range:</strong> Shows "1 to 10 of 195" style information</li>
+            <li><strong>Navigation Buttons:</strong> First, Previous, Next, Last with proper disabled states</li>
+            <li><strong>Page Numbers:</strong> Configurable page number display with ellipsis</li>
+            <li><strong>RTL Support:</strong> Automatic icon inversion and layout adjustment</li>
+            <li><strong>Responsive Design:</strong> Mobile-friendly layout adjustments</li>
+            <li><strong>Accessibility:</strong> ARIA labels and keyboard navigation support</li>
+            <li><strong>Styling:</strong> Matches AG-Grid's visual design exactly</li>
+            <li><strong>Dark Theme:</strong> Automatic dark theme support</li>
+            <li><strong>Reusable:</strong> Can be used in any table or data display component</li>
+          </ul>
+        </os-card>
       </os-card>
     </c-col>
   </c-row>

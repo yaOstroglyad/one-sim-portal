@@ -24,9 +24,12 @@ export interface TableConfig {
 	pagination?: {
 		enabled: boolean;
 		serverSide: boolean;
-		page?: number,
-		totalPages?: number,
-		size?: number
+		page?: number;
+		totalPages?: number;
+		totalItems?: number;
+		size?: number;
+		showPageSizeSelector?: boolean;
+		pageSizeOptions?: number[];
 	};
 }
 

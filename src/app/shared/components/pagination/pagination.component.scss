@@ -1,0 +1,110 @@
+@import "../../../../scss/variables";
+@import "../../../../scss/utilities";
+@import "../../../../scss/mixins";
+
+// ==============================================
+// AG-GRID STYLE PAGINATION COMPONENT
+// Optimized using global mixins and variables
+// ==============================================
+
+.ag-pagination {
+  @extend .w-full;
+
+  .ag-pagination-panel {
+    @extend .d-flex;
+    @extend .align-center;
+    @extend .justify-end; // ag-grid выравнивает всё справа
+    gap: map-get($os-spacing, '4'); // 16px между элементами
+    padding: map-get($os-spacing, '3') map-get($os-spacing, '4'); // 12px vertical, 16px horizontal
+    border-top: 1px solid var(--os-color-light);
+    min-height: 44px; // минимальная высота для соответствия ag-grid
+
+    // Responsive behavior
+    @media (max-width: 768px) {
+      justify-content: space-between;
+      gap: map-get($os-spacing, '2'); // 8px
+    }
+  }
+}
+
+// Page size selector
+.ag-pagination-page-size {
+  @extend .d-flex;
+  @extend .align-center;
+  gap: map-get($os-spacing, '2'); // 8px
+
+  .ag-pagination-label {
+    @include ag-grid-text();
+  }
+
+  .ag-pagination-select {
+    @include ag-grid-select();
+  }
+}
+
+// Navigation controls container
+.ag-pagination-controls {
+  @extend .d-flex;
+  @extend .align-center;
+  gap: map-get($os-spacing, '2'); // 8px между кнопками
+}
+
+// Navigation buttons using optimized mixin
+.ag-pagination-button {
+  @include ag-grid-button(26px);
+  @include ag-grid-focus();
+}
+
+// Records range info - using utility class
+.ag-pagination-range {
+  @extend .ag-grid-text;
+}
+
+// Page info
+.ag-pagination-info {
+  @extend .px-3;
+  @extend .ag-grid-text;
+}
+
+// Page numbers container
+.ag-pagination-numbers {
+  @extend .d-flex;
+  @extend .align-center;
+  gap: 4px;
+}
+
+// Page number buttons - similar to navigation but transparent background
+.ag-pagination-number {
+  @include ag-grid-button(26px);
+  @include ag-grid-focus();
+  background-color: transparent;
+  color: $ag-grid-text-color;
+
+  &:hover {
+    background-color: $ag-grid-button-bg;
+  }
+
+  &.active {
+    background-color: $ag-grid-focus-color;
+    color: var(--os-color-white);
+
+    &:hover {
+      background-color: #0066cc;
+    }
+  }
+}
+
+// Ellipsis
+.ag-pagination-ellipsis {
+  @extend .ag-grid-text;
+  padding: 0 8px;
+}
+
+// Dark theme and RTL support using optimized mixins
+.ag-pagination {
+  @include ag-grid-rtl();
+}
+
+.ag-pagination-panel {
+  @include ag-grid-dark-theme();
+}

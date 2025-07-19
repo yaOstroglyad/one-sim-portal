@@ -6,8 +6,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ExecutiveTabData, DashboardResponse } from '../../models/dashboard.types';
 import { DashboardDataService } from '../../services/dashboard-data.service';
 
-// Import dashboard components
-import { MetricCardComponent } from '../../components/metric-card/metric-card.component';
+// Import shared components  
+import { MetricCardComponent } from '../../../../shared/components/card';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
 

@@ -17,13 +17,12 @@ export * from './components/tabs'
 export * from './components/tooltip'
 export * from './components/sidebar'
 export * from './components/debug-display'
+export * from './components/pagination'
 
-export * from './components/table-initialization-error/table-initialization-error.module'
 export * from './components/header-component/header.module';
 export * from './pipes/format-time/format-time.module';
 export * from './components/generic-table/generic-table.module';
 export * from './components/column-control/column-control.module'
-export * from './components/no-data/no-data.module'
 export * from './components/form-generator/form-generator.module'
 export * from './components/form-generator/form-generator.component'
 

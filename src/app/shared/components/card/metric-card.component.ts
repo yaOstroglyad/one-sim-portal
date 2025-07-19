@@ -1,7 +1,29 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { MetricCard } from '../../models/dashboard.types';
+
+// Metric card interface (copied from dashboard types)
+export interface MetricCard {
+  id: string;
+  title: string;
+  value: number | string;
+  format?: 'number' | 'currency' | 'percentage' | 'bytes';
+  unit?: string;
+  trend?: {
+    direction: 'up' | 'down' | 'stable';
+    percentage: number;
+    label?: string;
+  };
+  change?: {
+    value: number;
+    percentage: number;
+    trend: 'up' | 'down' | 'stable';
+  };
+  icon?: string;
+  color?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info';
+  loading?: boolean;
+  error?: string;
+}
 
 @Component({
   selector: 'app-metric-card',

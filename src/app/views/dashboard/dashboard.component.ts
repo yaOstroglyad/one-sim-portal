@@ -15,8 +15,8 @@ import { BadgeComponent } from '../../shared/components/badge';
 import { OsBarChartComponent } from '../../shared/components/bar-chart';
 import { OsLineChartComponent } from '../../shared/components/line-chart';
 
-// Import dashboard-specific components
-import { MetricCardComponent } from './components/metric-card/metric-card.component';
+// Import shared components
+import { MetricCardComponent } from '../../shared/components/card';
 import { LoadingIndicatorComponent } from './components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from './components/error-display/error-display.component';
 import { ExecutiveTabComponent } from './tabs/executive/executive-tab.component';

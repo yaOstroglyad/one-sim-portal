@@ -120,28 +120,20 @@
 
         <!-- Пагинация -->
         <ng-container *ngIf="vm.config.pagination?.enabled">
-            <div class="ag-pagination-panel">
-                <c-pagination aria-label="Page navigation" class="ag-grid-pagination">
-                    <li cPageItem
-                        class="c-pointer ag-paging-button"
-                        (click)="changePage(currentPage-1, vm.config.pagination?.serverSide)"
-                        [class.disabled]="currentPage === 0">
-                        <div cPageLink>{{ 'pagination.previous' | translate }}</div>
-                    </li>
-                    <li cPageItem class="ag-paging-description">
-                        <div cPageLink>
-                            {{ currentPage + 1 }} {{ 'pagination.of' | translate }}
-                            {{ vm.config.pagination?.totalPages ?? totalPages }}
-                        </div>
-                    </li>
-                    <li cPageItem
-                        class="c-pointer ag-paging-button"
-                        (click)="changePage(currentPage+1, vm.config.pagination?.serverSide)"
-                        [class.disabled]="(vm.config.pagination?.totalPages ?? totalPages) <= currentPage+1">
-                        <div cPageLink>{{ 'pagination.next' | translate }}</div>
-                    </li>
-                </c-pagination>
-            </div>
+            <app-pagination
+                [config]="{
+                    currentPage: currentPage,
+                    totalPages: vm.config.pagination?.totalPages || totalPages,
+                    pageSize: pageSize,
+                    totalItems: vm.config.pagination?.totalItems,
+                    showPageSizeSelector: vm.config.pagination?.showPageSizeSelector || false,
+                    pageSizeOptions: vm.config.pagination?.pageSizeOptions || [10, 25, 50, 100],
+                    showFirstLast: false,
+                    showPageNumbers: false
+                }"
+                (pageChange)="changePage($event, vm.config.pagination?.serverSide)"
+                (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
         </ng-container>
     </div>
 </ng-container>
