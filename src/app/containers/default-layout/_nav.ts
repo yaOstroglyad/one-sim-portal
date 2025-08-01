@@ -57,6 +57,13 @@ export const navItems: any[] = [
 		permissions: [ADMIN_PERMISSION]
 	},
 	{
+		name: 'nav.productconstructor',
+		url: 'product-constructor',
+		iconComponent: {name: 'cil-layers'},
+		permissions: [ADMIN_PERMISSION],
+		featureToggle: 'productConstructor'
+	},
+	{
 		name: 'nav.settings',
 		url: '/home/settings',
 		iconComponent: {name: 'cil-settings'},

@@ -1,11 +1,42 @@
-import { FormControl, FormGroup } from '@angular/forms';
-import { FieldConfig } from '../../model';
+import { FormControl, FormGroup, FormArray, FormBuilder, AbstractControl } from '@angular/forms';
+import { FieldConfig, FieldType } from '../../model';
 import { combineLatest, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-export function createControl(field: FieldConfig): FormControl {
+export function createControl(field: FieldConfig): AbstractControl {
+	if (field.type === FieldType.formArray) {
+		const fb = new FormBuilder();
+		const array = fb.array([] as AbstractControl[], field.validators);
+		
+		// Initialize with default items
+		if (field.value && Array.isArray(field.value)) {
+			field.value.forEach((item: any) => {
+				const itemGroup = createArrayItemGroup(field.arrayConfig!, item, fb);
+				array.push(itemGroup);
+			});
+		} else if (field.arrayConfig?.minItems) {
+			// Add minimum required items
+			for (let i = 0; i < field.arrayConfig.minItems; i++) {
+				const itemGroup = createArrayItemGroup(field.arrayConfig, field.arrayConfig.defaultItem || {}, fb);
+				array.push(itemGroup);
+			}
+		}
+		
+		return array;
+	}
+	
 	const { value, disabled, validators, asyncValidators } = field;
 	return new FormControl({ value, disabled }, validators, asyncValidators);
+}
+
+function createArrayItemGroup(config: any, itemValue: any, fb: FormBuilder): FormGroup {
+	const groupControls = config.itemConfig.fields.reduce((controls: any, field: FieldConfig) => {
+		const fieldValue = itemValue[field.name] ?? field.value;
+		controls[field.name] = new FormControl(fieldValue, field.validators);
+		return controls;
+	}, {});
+
+	return fb.group(groupControls);
 }
 
 /**

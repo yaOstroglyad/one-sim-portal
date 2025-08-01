@@ -1,0 +1,103 @@
+<div class="upload-container">
+  <div class="drop-zone" 
+       [class.disabled]="disabled"
+       [class.has-file]="state.file"
+       [class.uploading]="state.isUploading"
+       [class.success]="state.uploadSuccess"
+       [class.error]="state.uploadError"
+       (dragover)="onDragOver($event)"
+       (dragleave)="onDragLeave($event)"
+       (drop)="onFileDropped($event)"
+       (click)="!disabled && !state.file && onChooseFile()">
+    <div class="drop-zone-content">
+      <div class="drop-zone-icon">
+        <ng-container *ngIf="!state.isUploading && !state.uploadSuccess && !state.uploadError">
+          <svg cIcon name="cilFolder" width="48" height="48"></svg>
+        </ng-container>
+        <ng-container *ngIf="state.isUploading">
+          <svg cIcon name="cilDataTransferUp" width="48" height="48" class="uploading-icon"></svg>
+        </ng-container>
+        <ng-container *ngIf="state.uploadSuccess">
+          <svg cIcon name="cilCheckCircle" width="48" height="48" class="success-icon"></svg>
+        </ng-container>
+        <ng-container *ngIf="state.uploadError">
+          <svg cIcon name="cilWarning" width="48" height="48" class="error-icon"></svg>
+        </ng-container>
+      </div>
+      <div class="drop-zone-text">
+        <!-- Default state -->
+        <ng-container *ngIf="!state.file && !state.isUploading && !state.uploadSuccess && !state.uploadError">
+          <strong>{{ config.dropZoneText | translate }}</strong>
+          <br>
+          <small>{{ config.supportedFormatsText | translate }}</small>
+        </ng-container>
+        
+        <!-- File selected -->
+        <ng-container *ngIf="state.file && !state.isUploading && !state.uploadSuccess && !state.uploadError">
+          <strong>{{ state.file.name }}</strong>
+          <br>
+          <small>{{ state.file.size | number }} bytes</small>
+        </ng-container>
+        
+        <!-- Uploading -->
+        <ng-container *ngIf="state.isUploading">
+          <strong>{{ 'fileUpload.uploading' | translate }}</strong>
+          <br>
+          <small>{{ state.file?.name }}</small>
+        </ng-container>
+        
+        <!-- Success -->
+        <ng-container *ngIf="state.uploadSuccess">
+          <strong>{{ 'fileUpload.uploadSuccess' | translate }}</strong>
+          <br>
+          <small>{{ state.file?.name }}</small>
+        </ng-container>
+        
+        <!-- Error -->
+        <ng-container *ngIf="state.uploadError">
+          <strong>{{ state.errorMessage || ('fileUpload.uploadError' | translate) }}</strong>
+          <br>
+          <small>{{ 'fileUpload.tryAgain' | translate }}</small>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" 
+         [id]="'file-input-' + componentId"
+         style="display: none;" 
+         [accept]="acceptedFormatsString"
+         [disabled]="disabled"
+         (change)="onFileSelected($event)">
+  
+  <!-- Choose File Button -->
+  <button type="button" 
+          mat-outlined-button 
+          class="choose-file-btn" 
+          *ngIf="shouldShowChooseButton"
+          [disabled]="disabled"
+          (click)="onChooseFile()">
+    {{ config.chooseFileButtonText | translate }}
+  </button>
+
+  <!-- Upload Button -->
+  <button type="button" 
+          mat-raised-button 
+          color="primary"
+          class="upload-btn"
+          *ngIf="shouldShowUploadButton"
+          [disabled]="!state.file || disabled"
+          (click)="onUpload()">
+    {{ config.uploadButtonText | translate }}
+  </button>
+
+  <!-- Clear/Retry Button -->
+  <button type="button" 
+          mat-button 
+          class="clear-btn"
+          *ngIf="(state.file && !state.isUploading) || state.uploadError"
+          [disabled]="disabled"
+          (click)="onClearFile()">
+    {{ state.uploadError ? ('common.retry' | translate) : ('common.clear' | translate) }}
+  </button>
+</div>

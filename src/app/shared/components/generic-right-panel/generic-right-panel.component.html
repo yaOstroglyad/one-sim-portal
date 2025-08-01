@@ -1,0 +1,63 @@
+<!-- Panel Backdrop -->
+<div class="panel-backdrop" *ngIf="isOpen && showOverlay" (click)="onOverlayClick($event)"></div>
+
+<!-- Right Panel -->
+<div 
+  #panel
+  class="right-panel" 
+  [class.open]="isOpen"
+  [class.resizing]="isResizing"
+  [class.expanded]="isExpanded"
+  [style.top.px]="topOffset"
+  [style.height]="'calc(100% - ' + topOffset + 'px)'"
+  (click)="$event.stopPropagation()">
+  
+  <!-- Resize Handle -->
+  <div 
+    #resizeHandle
+    *ngIf="resizable"
+    class="resize-handle"
+    (mousedown)="onResizeStart($event)"
+    title="Drag to resize">
+    <div class="resize-grip">
+      <div class="grip-line"></div>
+      <div class="grip-line"></div>
+      <div class="grip-line"></div>
+      <div class="grip-line"></div>
+      <div class="grip-line"></div>
+    </div>
+  </div>
+
+  <!-- Panel Header -->
+  <div class="panel-header">
+    <div class="header-content">
+      <h2 class="panel-title" *ngIf="title">{{ title }}</h2>
+      <p class="panel-subtitle" *ngIf="subtitle">{{ subtitle }}</p>
+    </div>
+    
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <button
+        *ngFor="let action of allActions"
+        type="button"
+        class="action-btn"
+        [class.disabled]="action.disabled"
+        [title]="action.label"
+        [disabled]="action.disabled"
+        (click)="action.handler()">
+        <svg cIcon [name]="action.icon" width="16" height="16"></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Panel Content -->
+  <div class="panel-content">
+    <ng-content select="[panel-content]"></ng-content>
+  </div>
+
+  <!-- Panel Footer -->
+  <div class="panel-footer" *ngIf="hasFooter">
+    <ng-content select="[panel-actions]"></ng-content>
+  </div>
+
+</div>

@@ -1,0 +1,122 @@
+@import "../../../../../../scss/variables";
+@import "../../../../../../scss/mixins";
+@import "../../../../../../scss/utilities";
+
+// Component container
+.provider-product-list-container {
+  padding: map-get($os-spacing, '6');
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    padding: map-get($os-spacing, '4');
+  }
+}
+
+// Page header using existing patterns
+.page-header {
+  @include dashboard-card-header();
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: map-get($os-spacing, '6');
+  gap: map-get($os-spacing, '4');
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .header-content {
+    .page-title {
+      font-size: map-get($os-font-sizes, 'xl');
+      font-weight: 600;
+      color: var(--os-color-dark);
+      margin: 0 0 map-get($os-spacing, '2') 0;
+    }
+    
+    .page-subtitle {
+      font-size: map-get($os-font-sizes, 'base');
+      color: var(--os-color-medium);
+      margin: 0;
+    }
+  }
+  
+  .header-actions {
+    display: flex;
+    gap: map-get($os-spacing, '3');
+    align-items: center;
+    
+    @media (max-width: 768px) {
+      justify-content: flex-end;
+    }
+  }
+}
+
+// Loading state using existing patterns
+.loading-state {
+  @include loading-state();
+  padding: map-get($os-spacing, '12');
+  text-align: center;
+}
+
+// Error state using existing utilities
+.error-state {
+  padding: map-get($os-spacing, '12');
+  
+  .error-content {
+    text-align: center;
+    
+    .error-icon {
+      font-size: map-get($os-font-sizes, '3xl');
+      color: var(--os-color-danger);
+      margin-bottom: map-get($os-spacing, '4');
+    }
+    
+    h3 {
+      color: var(--os-color-danger);
+      margin-bottom: map-get($os-spacing, '2');
+    }
+    
+    p {
+      color: var(--os-color-medium);
+      margin-bottom: map-get($os-spacing, '6');
+    }
+  }
+}
+
+// Simple card using existing elevation
+.simple-card {
+  @include elevation(1);
+  background: var(--os-color-light);
+  border-radius: map-get($os-border-radius, 'medium');
+  padding: map-get($os-spacing, '6');
+}
+
+// Coming soon placeholder
+.coming-soon {
+  text-align: center;
+  padding: map-get($os-spacing, '12');
+  color: var(--os-color-medium);
+  
+  h3 {
+    margin-bottom: map-get($os-spacing, '4');
+    color: var(--os-color-dark);
+  }
+  
+  p {
+    margin: 0;
+  }
+}
+
+// Dark theme support
+:host-context(.dark-theme) {
+  .page-header .header-content .page-title,
+  .coming-soon h3 {
+    color: var(--os-color-light);
+  }
+  
+  .simple-card {
+    background: var(--os-color-dark-subtle-bg);
+  }
+}

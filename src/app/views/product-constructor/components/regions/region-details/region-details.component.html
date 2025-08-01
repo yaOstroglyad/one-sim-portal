@@ -1,0 +1,23 @@
+<div class="region-details" *ngIf="region">
+  <div class="detail-section">
+    <h3>{{ region.name }}</h3>
+    <p class="region-summary">
+      This region contains {{ region.countries?.length || 0 }} countries
+    </p>
+  </div>
+
+  <div class="detail-section" *ngIf="region.countries?.length">
+    <h4>Countries in this region:</h4>
+    <div class="countries-grid">
+      <span 
+        *ngFor="let country of region.countries"
+        class="country-tag">
+        {{ country.name }} ({{ country.isoAlphaCode2 }})
+      </span>
+    </div>
+  </div>
+
+  <div class="detail-section" *ngIf="!region.countries?.length">
+    <p class="no-countries">No countries assigned to this region yet.</p>
+  </div>
+</div>

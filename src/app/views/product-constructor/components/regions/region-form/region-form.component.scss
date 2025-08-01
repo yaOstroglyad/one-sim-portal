@@ -1,0 +1,11 @@
+@import "../../../../../../scss/variables";
+@import "../../../../../../scss/mixins";
+
+:host {
+  display: block;
+}
+
+.region-form {
+  // The form-generator handles all styling internally
+  // No additional styles needed since we're using pure form-generator
+}

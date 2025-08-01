@@ -2,6 +2,29 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> 🚨 **REMINDER**: Always use ABSOLUTE paths: `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/...` 
+> Never use relative paths like `../../../../` - they will fail!
+
+## ⚠️ CRITICAL FILE PATH RULES ⚠️
+
+### 🚨 ABSOLUTE PATHS ONLY 🚨
+
+**❌ NEVER USE RELATIVE PATHS**: `../../../../andreyостrogляд/IdeaProjects/...`
+**✅ ALWAYS USE ABSOLUTE PATHS**: `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/...`
+
+### Examples:
+```
+❌ WRONG: ../../../../andreyостrogляд/IdeaProjects/quantum-soft/one-sim-portal/src/app/...
+✅ CORRECT: /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/...
+
+❌ WRONG: ../../../scss/styles.scss  
+✅ CORRECT: /Users/andreyостrogляد/IdeaProjects/quantum-soft/one-sim-portal/src/scss/styles.scss
+```
+
+### Root Directory: `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/`
+
+**IF YOU USE RELATIVE PATHS, THE OPERATION WILL FAIL WITH "File does not exist" ERROR!**
+
 ## Project Overview
 
 This is an Angular 16 eSIM portal management application that provides a white-label solution for managing eSIM products, customers, orders, and inventory. The application uses CoreUI and Angular Material for UI components and implements JWT-based authentication with role-based access control.
@@ -63,6 +86,9 @@ The application follows Angular's modular architecture with lazy-loaded feature 
 4. **Generic Components** (`src/app/shared/components/`):
    - `GenericTableComponent` - Reusable data table with sorting, pagination, filtering
    - `FormGeneratorComponent` - Dynamic form generation from JSON schema
+     - **Documentation**: See `src/app/shared/components/form-generator/README.md`
+     - **HTTP Dependencies**: Supports dynamic field dependencies with API calls
+     - **FormArray Support**: Nested form arrays with field dependencies
    - `GenericDialogComponent` - Reusable dialog wrapper
 
 ### State Management
@@ -74,6 +100,7 @@ The application follows Angular's modular architecture with lazy-loaded feature 
 - Supported languages: English (en), Hebrew (he), Russian (ru), Ukrainian (uk)
 - Translation files in `src/assets/i18n/`
 - Uses `@ngx-translate/core` for translations
+- **Translation Keys Rule**: All translation keys MUST be lowercase (e.g., `nav.productconstructor` not `nav.productConstructor`)
 
 ## Important Technical Details
 
@@ -82,6 +109,7 @@ The application follows Angular's modular architecture with lazy-loaded feature 
    - Use `standalone: true` in component decorator
    - Import dependencies explicitly in `imports` array
    - NO module-based components
+   - NO NgModules for new features - use standalone components with lazy loading directly
 
 2. **Template Separation**: If HTML template contains more than one logical block, MUST extract to separate `.html` file
    - Simple components with single logical block can use inline templates
@@ -159,6 +187,8 @@ Most list views use `GenericTableComponent`:
 - Use `FormGeneratorComponent` for dynamic forms
 - Form schemas defined as JSON objects
 - Validation rules included in schema
+- **HTTP Dependencies**: Fields can depend on API responses (see README.md for examples)
+- **FormArray Support**: Dynamic form arrays with nested field dependencies
 
 ### API Service Pattern
 Services typically follow this pattern:
@@ -205,6 +235,57 @@ Use mixins from `src/scss/_mixins.scss`:
 ```
 
 **Before writing new styles, check if existing mixins can be used or extended.**
+
+## CoreUI Icons Integration
+
+### CRITICAL: How to Properly Use CoreUI Icons
+
+**NEVER use CSS classes like `<i class="icon cil-name">` - this will NOT work!**
+
+#### Correct Icon Implementation:
+
+1. **Use SVG with CoreUI directive**:
+   ```html
+   <svg cIcon [name]="iconName" width="24" height="24"></svg>
+   ```
+
+2. **Required imports in component**:
+   ```typescript
+   import { IconDirective, IconModule } from '@coreui/icons-angular';
+   
+   @Component({
+     imports: [IconDirective, IconModule, ...]
+   })
+   ```
+
+3. **CSS styling for SVG icons**:
+   ```scss
+   svg {
+     width: 1.5rem;
+     height: 1.5rem;
+     fill: white; // Use 'fill' not 'color' for SVG
+   }
+   ```
+
+4. **Icon availability**:
+   - All icons must be added to `src/app/icons/icon-subset.ts`
+   - Import icon from `@coreui/icons`
+   - Add to both import list and iconSubset object
+   - Icons are loaded globally via IconSetService in app.component.ts
+
+#### Available Icons Pattern:
+- Use `cil-` prefix: `cil-location-pin`, `cil-data-transfer-down`
+- Check `icon-subset.ts` for available icons before using
+- Add new icons to subset if needed
+
+#### Example Usage:
+```html
+<!-- Correct -->
+<svg cIcon name="cil-location-pin" width="20" height="20"></svg>
+
+<!-- Incorrect - will not display -->
+<i class="icon cil-location-pin"></i>
+```
 
 ## Known Issues & Limitations
 
@@ -314,3 +395,64 @@ A centralized color system is available in `src/scss/_variables.scss` for consis
 - Automatic generation of solid, outline, and subtle variants
 - Full CSS variable support for theming
 - Easy to add new colors globally
+
+## TypeScript Interface & Model Organization Rules
+
+### MANDATORY: Interface Location Rules
+**ALL TypeScript interfaces and types MUST be defined in dedicated model files, NEVER in components.**
+
+#### Component Interface Rules
+1. **NEVER create interfaces inside component files** (`.component.ts`)
+2. **ALWAYS create interfaces in corresponding model files** in `models/` directory
+3. **Component-specific interfaces** → Create `{component-name}.model.ts` 
+4. **Shared interfaces** → Place in existing model files or `common.model.ts`
+
+#### Model File Structure
+```typescript
+// Example: src/app/views/feature/models/overview.model.ts
+export interface OverviewStats {
+  // interface definition
+}
+
+export interface QuickAction {
+  // interface definition  
+}
+```
+
+#### Import Pattern
+```typescript
+// Component file - CORRECT
+import { OverviewStats, QuickAction } from '../../models';
+
+// Component file - WRONG (interfaces defined here)
+interface OverviewStats { ... } // ❌ NEVER DO THIS
+```
+
+#### Benefits of This Pattern
+- **Reusability**: Models can be imported by multiple components/services
+- **Type Safety**: Centralized type definitions prevent inconsistencies  
+- **Maintainability**: Single source of truth for data structures
+- **Testing**: Models can be tested independently
+- **API Contracts**: Clear separation between data models and view logic
+
+#### Model Export Pattern
+Always export new models through `models/index.ts`:
+```typescript
+export * from './overview.model';
+```
+
+**This rule applies to ALL components across the entire application.**
+
+---
+
+## 🚨 FINAL REMINDER: ABSOLUTE PATHS ONLY! 🚨
+
+Before using ANY file operation (Read, Edit, Write, etc.), remember:
+
+**ROOT**: `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/`
+
+**Examples:**
+- ✅ `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/...`
+- ✅ `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/scss/...`
+- ❌ `../../../../andreyостrogляд/...` (WILL FAIL!)
+- ❌ `../../../...` (WILL FAIL!)

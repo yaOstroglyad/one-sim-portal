@@ -1,0 +1,13 @@
+// FormArrayItem component styles
+@import "../../../../../scss/form-utilities";
+
+// Apply Material Form Field overrides for this component
+@include material-form-field-overrides();
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+// Component-specific overrides if needed
+// All hint, error, and form utilities are available via mixin

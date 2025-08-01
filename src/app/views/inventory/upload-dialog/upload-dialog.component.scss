@@ -1,54 +1,70 @@
+@import "../../../../scss/variables";
+
 .dialog-header {
-  font-size: 24px;
-  font-weight: 500;
+  border-bottom: 1px solid var(--os-color-light, #f4f5f8);
 }
 
-.mat-typography.dialog-content {
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  border: 2px dashed #90a4ae;
-  margin: 20px;
-}
-
-.drop-zone {
-  display: contents;
-  color: #607d8b;
-}
-
-.drag-over {
-  background-color: #e3f2fd;
-}
-
-.dialog-content:hover {
-  background-color: #e3f2fd;
-}
-
-.upload-success, .upload-error {
-  font-size: 16px;
-  margin: 10px 0;
-}
-
-.upload-success {
-  color: #388e3c;
-}
-
-.upload-error {
-  color: #d32f2f;
+.dialog-content {
+  padding: 1.5rem;
+  min-height: 200px;
+  min-width: 500px;
+  max-width: 600px;
 }
 
 .dialog-footer {
-  padding: 8px;
+  border-top: 1px solid var(--os-color-light, #f4f5f8);
+
+  button + button {
+    margin-left: 0.75rem;
+  }
 }
 
-button[mat-button] {
-  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+.upload-info {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: var(--os-color-light, #f4f5f8);
+  border-radius: 6px;
+
+  p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--os-color-dark, #222428);
+
+    strong {
+      color: var(--os-color-primary, #f9a743);
+    }
+  }
 }
 
-/* Дополнительные стили для кнопок, если нужно */
-button[mat-button]:hover {
-  background-color: #e3f2fd;
+.upload-status {
+  margin-top: 1rem;
+
+  .upload-success, .upload-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  .upload-success {
+    background-color: rgba(var(--os-color-success-rgb, 16, 185, 129), 0.1);
+    color: var(--os-color-success, #10b981);
+    border: 1px solid rgba(var(--os-color-success-rgb, 16, 185, 129), 0.2);
+
+    mat-icon {
+      color: var(--os-color-success, #10b981);
+    }
+  }
+
+  .upload-error {
+    background-color: rgba(var(--os-color-danger-rgb, 239, 68, 68), 0.1);
+    color: var(--os-color-danger, #ef4444);
+    border: 1px solid rgba(var(--os-color-danger-rgb, 239, 68, 68), 0.2);
+
+    mat-icon {
+      color: var(--os-color-danger, #ef4444);
+    }
+  }
 }

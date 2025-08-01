@@ -81,6 +81,15 @@ const routes: Routes = [
         canActivate: [FeatureToggleGuard],
         loadChildren: () => import('../../views/storybook/storybook.module').then(m => m.StorybookModule)
       },
+      {
+        path: 'product-constructor',
+        data: {
+          title: 'Product Constructor',
+          featureToggle: 'productConstructor'
+        },
+        canActivate: [FeatureToggleGuard],
+        loadChildren: () => import('../../views/product-constructor/product-constructor.routes').then(m => m.PRODUCT_CONSTRUCTOR_ROUTES)
+      },
     ]
   }
 ];

@@ -1,0 +1,63 @@
+@import "../../../../../../scss/variables";
+@import "../../../../../../scss/mixins";
+
+.region-details {
+  .detail-section {
+    margin-bottom: 1.5rem;
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--cui-body-color);
+      margin: 0 0 0.5rem 0;
+    }
+
+    h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--cui-body-color);
+      margin: 0 0 0.75rem 0;
+    }
+
+    .region-summary {
+      color: var(--cui-secondary-color, #6c757d);
+      margin: 0;
+    }
+
+    .countries-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+
+      .country-tag {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background-color: rgba(var(--cui-primary-rgb, 13, 110, 253), 0.1);
+        border: 1px solid var(--cui-primary, #0d6efd);
+        border-radius: 0.25rem;
+        color: var(--cui-primary, #0d6efd);
+        font-size: 0.875rem;
+      }
+    }
+
+    .no-countries {
+      color: var(--cui-secondary-color, #6c757d);
+      font-style: italic;
+      margin: 0;
+    }
+  }
+}
+
+// Dark theme support
+[data-coreui-theme="dark"] {
+  .region-details .detail-section {
+    h3, h4 {
+      color: var(--cui-body-color);
+    }
+
+    .region-summary,
+    .no-countries {
+      color: var(--cui-secondary-color);
+    }
+  }
+}

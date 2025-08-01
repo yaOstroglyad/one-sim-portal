@@ -1,0 +1,9 @@
+@import "../../../../../../scss/variables";
+@import "../../../../../../scss/mixins";
+@import "../../../../../../scss/utilities";
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

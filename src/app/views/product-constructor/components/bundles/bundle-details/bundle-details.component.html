@@ -1,0 +1,36 @@
+<div class="bundle-details" *ngIf="bundle">
+  <div class="detail-section">
+    <h3>{{ bundle.name }}</h3>
+  </div>
+
+  <div class="detail-section" *ngIf="bundle.usageUnits?.length">
+    <h4>Usage Units</h4>
+    <div class="usage-units-grid">
+      <div *ngFor="let unit of bundle.usageUnits" 
+           class="usage-unit-card"
+           [attr.data-type]="unit.type">
+        <div class="unit-icon">
+          <svg cIcon [name]="getUsageUnitIcon(unit.type)" width="24" height="24"></svg>
+        </div>
+        <div class="unit-info">
+          <div class="unit-value">{{ formatUsageUnit(unit) }}</div>
+          <div class="unit-type">{{ unit.type | titlecase }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-section">
+    <h4>Bundle Information</h4>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Bundle ID</span>
+        <span class="info-value">{{ bundle.id }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Total Usage Units</span>
+        <span class="info-value">{{ bundle.usageUnits?.length || 0 }}</span>
+      </div>
+    </div>
+  </div>
+</div>

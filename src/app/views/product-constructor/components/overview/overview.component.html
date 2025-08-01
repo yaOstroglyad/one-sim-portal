@@ -1,0 +1,78 @@
+<div class="overview-container">
+
+  <!-- Header -->
+  <div class="overview-header">
+    <h1 class="overview-title">Product Constructor</h1>
+    <p class="overview-subtitle">
+      Manage your eSIM product catalog with regions, bundles, and product configurations
+    </p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading statistics...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-container">
+    <div class="error-content">
+      <i class="icon cil-warning error-icon"></i>
+      <h3>Unable to load statistics</h3>
+      <p>There was an error loading the overview data. Please try again later.</p>
+      <button class="btn btn-primary" (click)="onRetry()">Retry</button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!loading && !error" class="overview-content">
+
+    <!-- KPI Metrics Row -->
+    <div class="kpi-row">
+      <app-metric-card
+        *ngFor="let metric of getKpiMetrics()"
+        [metric]="metric">
+      </app-metric-card>
+    </div>
+
+    <!-- Quick Actions Section -->
+    <div class="quick-actions-section">
+      <div class="card-header">
+        <h3>{{ 'productConstructor.overview.quickActions' | translate }}</h3>
+      </div>
+
+      <div class="actions-row">
+        <os-card
+          *ngFor="let action of quickActions"
+          variant="default"
+          class="action-card"
+          [class.disabled]="!isActionEnabled(action)"
+          [customClass]="'h-full'"
+          [routerLink]="isActionEnabled(action) ? ['..', action.route] : null">
+          <div class="card-header">
+            <h3>{{ action.title | translate }}</h3>
+            <span *ngIf="!isActionEnabled(action)" class="coming-soon-badge">
+              {{ 'productConstructor.overview.comingSoon' | translate }}
+            </span>
+          </div>
+          <div class="action-content">
+            <div class="action-icon" [ngClass]="action.color">
+              <svg cIcon [name]="action.icon" width="24" height="24"></svg>
+            </div>
+            <div class="action-details">
+              <p class="action-description">{{ action.description | translate }}</p>
+            </div>
+            <div class="action-arrow" *ngIf="isActionEnabled(action)">
+              <svg cIcon name="cil-arrow-right" width="20" height="20"></svg>
+            </div>
+            <div class="action-status" *ngIf="!isActionEnabled(action)">
+              <svg cIcon name="cil-lock-locked" width="20" height="20"></svg>
+            </div>
+          </div>
+        </os-card>
+      </div>
+    </div>
+
+  </div>
+
+</div>

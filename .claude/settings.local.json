@@ -25,7 +25,18 @@
       "Bash(npx tsc:*)",
       "Bash(jq:*)",
       "Bash(sed:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(touch:*)",
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(claude --version)",
+      "Bash(npm cache clean:*)",
+      "Bash(sudo rm:*)",
+      "Bash(realpath:*)",
+      "Bash(npm ls:*)",
+      "WebFetch(domain:esim-product.dev.global-sim.app)",
+      "Bash(curl:*)",
+      "Bash(npm i:*)"
     ],
     "deny": []
   }

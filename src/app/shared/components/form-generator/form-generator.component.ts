@@ -11,7 +11,7 @@ import {
 	SimpleChanges
 } from '@angular/core';
 import { FieldConfig, FieldType, FormConfig } from '../../model';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { 
 	createControl, 
 	initDynamicOptionsForField, 
@@ -21,7 +21,7 @@ import {
 	getFormFieldClass
 } from './form-generator.utils';
 import { isFunction } from 'rxjs/internal/util/isFunction';
-import { Subject, merge, combineLatest, BehaviorSubject } from 'rxjs';
+import { Subject, merge, combineLatest, BehaviorSubject, Observable } from 'rxjs';
 import { takeUntil, startWith, map, distinctUntilChanged } from 'rxjs/operators';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { CommonModule } from '@angular/common';
@@ -39,7 +39,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ChipsInputComponent } from '../chips-input/chips-input.component';
 import { FormCheckComponent, FormCheckInputDirective } from '@coreui/angular';
+import { IconDirective } from '@coreui/icons-angular';
 import { RichTextInputComponent } from '../rich-text-input';
+import { MultiselectGridComponent } from '../multiselect-grid';
+import { FormArrayItemComponent } from './form-array-item';
+import { FileUploadComponent } from '../file-upload';
 
 @Component({
 	selector: 'app-form-generator',
@@ -65,12 +69,18 @@ import { RichTextInputComponent } from '../rich-text-input';
 		ChipsInputComponent,
 		FormCheckComponent,
 		FormCheckInputDirective,
-		RichTextInputComponent
+		IconDirective,
+		RichTextInputComponent,
+		MultiselectGridComponent,
+		FormArrayItemComponent,
+		FileUploadComponent
 	]
 })
 export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 	private unsubscribe$ = new Subject<void>();
 	private fieldsHintState$ = new BehaviorSubject<Record<string, boolean>>({});
+	
+	addingItem = false;
 
 	@Input() config: FormConfig;
 	@Output() formChanges = new EventEmitter<FormGroup>();
@@ -116,9 +126,10 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 
 	createGroup(config: FormConfig): FormGroup {
 		const groupControls = config.fields.reduce((controls, field) => {
-			controls[field.name] = createControl(field);
+			const control = createControl(field);
+			controls[field.name] = control;
 			return controls;
-		}, {});
+		}, {} as any);
 
 		return this.fb.group(groupControls, {validators: config.formValidators});
 	}
@@ -201,4 +212,168 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 	shouldShowError(fieldName: string): boolean {
 		return shouldShowError(fieldName, this.form);
 	}
+
+	isRequired(field: FieldConfig): boolean {
+		const control = this.form.get(field.name);
+		if (control && control.validator) {
+			const validator = control.validator({} as any);
+			return !!(validator && validator['required']);
+		}
+		return false;
+	}
+
+	getGridOptions(field: FieldConfig): Observable<any[]> | any[] {
+		if (!field.gridOptions) {
+			return [];
+		}
+
+		if (Array.isArray(field.gridOptions)) {
+			return field.gridOptions;
+		}
+
+		if (typeof field.gridOptions === 'function') {
+			return field.gridOptions(this.form.value);
+		}
+
+		return field.gridOptions;
+	}
+
+	getFieldOptions(field: FieldConfig): Observable<any[]> | any[] {
+		if (!field.options) {
+			return [];
+		}
+
+		if (Array.isArray(field.options)) {
+			return field.options;
+		}
+
+		if (typeof field.options === 'function') {
+			return field.options(this.form.value);
+		}
+
+		return field.options;
+	}
+
+	getFormArray(fieldName: string): FormArray {
+		return this.form.get(fieldName) as FormArray;
+	}
+
+	canAddArrayItem(field: FieldConfig): boolean {
+		const formArray = this.getFormArray(field.name);
+		return !field.arrayConfig?.maxItems || formArray.length < field.arrayConfig.maxItems;
+	}
+
+	canRemoveArrayItem(field: FieldConfig): boolean {
+		const formArray = this.getFormArray(field.name);
+		return !field.arrayConfig?.minItems || formArray.length > field.arrayConfig.minItems;
+	}
+
+	addArrayItem(fieldName: string, config: any): void {
+		if (this.addingItem) return; // Prevent double clicks
+		
+		this.addingItem = true;
+		const formArray = this.getFormArray(fieldName);
+		const itemGroup = this.createArrayItemGroup(config);
+		
+		// Add the FormGroup directly
+		formArray.push(itemGroup);
+		
+		// Initialize dynamic options for the new item
+		config.itemConfig.fields.forEach((field: FieldConfig) => {
+			initDynamicOptionsForField(field, itemGroup, this.unsubscribe$);
+		});
+		
+		// Re-enable button after a short delay
+		setTimeout(() => {
+			this.addingItem = false;
+			this.cdr.detectChanges();
+		}, 100);
+	}
+
+	removeArrayItem(fieldName: string, index: number): void {
+		const formArray = this.getFormArray(fieldName);
+		formArray.removeAt(index);
+	}
+
+	private createArrayItemGroup(config: any): FormGroup {
+		const groupControls = config.itemConfig.fields.reduce((controls: any, field: FieldConfig) => {
+			// Create a copy of field with default value for new items
+			const fieldCopy = {
+				...field,
+				value: config.defaultItem?.[field.name] ?? field.value
+			};
+			controls[field.name] = createControl(fieldCopy);
+			return controls;
+		}, {});
+
+		return this.fb.group(groupControls);
+	}
+
+	trackByIndex(index: number, item: any): number {
+		return index;
+	}
+
+	// File Upload Methods
+	getFileUploadConfig(field: FieldConfig): any {
+		const defaultConfig = {
+			acceptedFormats: ['.csv', '.xlsx', '.xls'],
+			dropZoneText: 'Drag and drop a file here, or click to browse',
+			supportedFormatsText: 'Supported formats: CSV, Excel (.xlsx, .xls)',
+			chooseFileButtonText: 'Choose File',
+			uploadButtonText: 'Upload',
+			showUploadButton: false,
+			autoUpload: false
+		};
+
+		return {
+			...defaultConfig,
+			...field.fileUploadConfig
+		};
+	}
+
+	onFileSelected(file: File, field: FieldConfig): void {
+		// Set the file in the form control
+		const control = this.form.get(field.name);
+		if (control) {
+			control.setValue(file);
+			control.markAsTouched();
+		}
+
+		// Call custom input event handler if provided
+		if (field.inputEvent) {
+			field.inputEvent(file, this, field);
+		}
+	}
+
+	onFileUploadRequested(file: File, field: FieldConfig): void {
+		// Emit an event that parent component can handle
+		// This allows parent to handle the actual upload logic
+		if (field.inputEvent) {
+			field.inputEvent({ type: 'upload', file }, this, field);
+		}
+	}
+
+	onFileCleared(field: FieldConfig): void {
+		// Clear the file from form control
+		const control = this.form.get(field.name);
+		if (control) {
+			control.setValue(null);
+			control.markAsTouched();
+		}
+
+		// Call custom input event handler if provided
+		if (field.inputEvent) {
+			field.inputEvent({ type: 'clear' }, this, field);
+		}
+	}
+
+	isFieldRequired(field: FieldConfig): boolean {
+		const control = this.form.get(field.name);
+		if (control && control.validator) {
+			const validator = control.validator({} as any);
+			return !!(validator && validator['required']);
+		}
+		return false;
+	}
+
 }

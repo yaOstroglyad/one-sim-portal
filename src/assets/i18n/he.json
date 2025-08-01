@@ -38,16 +38,61 @@
   "common": {
     "create": "Create",
     "edit": "Edit",
+    "view": "צפייה",
     "setAsPrimary": "Set as primary",
     "cancel": "בטל",
     "send": "שלח",
     "save": "שמור",
     "apply": "החל",
     "submit": "שלח",
+    "selectAll": "בחר הכל",
+    "deselectAll": "בטל בחירת הכל",
+    "noResultsFound": "לא נמצאו תוצאות עבור",
+    "noItemsAvailable": "אין פריטים זמינים",
     "select_account_hint_message": "אנא בחר חשבון תחילה",
     "table": {
       "filterPlaceholder": "סנן נתוני טבלה"
     }
+  },
+  "product": {
+    "companyName": "שם החברה",
+    "productName": "שם המוצר",
+    "bundleName": "שם החבילה",
+    "bundle": "חבילה",
+    "bundleId": "מזהה חבילה",
+    "bundleInformation": "מידע חבילה",
+    "usageUnits": "יחידות שימוש",
+    "description": "תיאור",
+    "enterDescription": "הזן תיאור מוצר",
+    "enterProductName": "הזן שם מוצר",
+    "selectBundle": "בחר חבילה",
+    "coverage": "כיסוי",
+    "coverageName": "שם כיסוי",
+    "coverageId": "מזהה כיסוי",
+    "coverageType": "סוג כיסוי",
+    "coverageInformation": "מידע כיסוי",
+    "region": "אזור",
+    "country": "מדינה",
+    "selectRegion": "בחר אזור",
+    "selectCountry": "בחר מדינה",
+    "validityPeriod": "תקופת תוקף",
+    "validityInformation": "מידע תוקף",
+    "period": "תקופה",
+    "timeUnit": "יחידת זמן",
+    "enterValidityPeriod": "הזן תקופת תוקף",
+    "days": "ימים",
+    "weeks": "שבועות",
+    "months": "חודשים",
+    "years": "שנים",
+    "basicInformation": "מידע בסיסי",
+    "productId": "מזהה מוצר",
+    "status": "סטטוס",
+    "noDetailsAvailable": "אין פרטים זמינים"
+  },
+  "tariffOffer": {
+    "productName": "שם המוצר",
+    "providerProductName": "שם מוצר הספק", 
+    "allCurrencies": "כל המטבעות"
   },
   "default-header": {
     "language": "שפה",
@@ -72,6 +117,7 @@
     "products": "מוצרים",
     "inventory": "מלאי",
     "users": "משתמשים",
+    "productconstructor": "בניית מוצרים",
     "settings": "הגדרות",
     "general": "כללי",
     "paymentGateway": "שער תשלום",
@@ -501,5 +547,52 @@
     "iccids": "ICCIDים",
     "message_id": "מזהה הודעה",
     "metadata_status": "סטטוס מטא נתונים"
+  },
+  "productConstructor": {
+    "overview": {
+      "regions": "אזורים",
+      "bundles": "חבילות נייד",
+      "products": "מוצרי ליבה",
+      "status": "סטטוס מוצר",
+      "active": "פעיל",
+      "inactive": "לא פעיל",
+      "quickActions": "פעולות מהירות",
+      "comingSoon": "בקרוב"
+    },
+    "regions": {
+      "id": "מזהה",
+      "name": "שם אזור",
+      "countryCount": "מדינות"
+    },
+    "bundles": {
+      "id": "מזהה", 
+      "name": "שם חבילה",
+      "usageUnits": "יחידות שימוש",
+      "dataTotal": "סה״כ נתונים"
+    },
+    "providerProducts": {
+      "id": "מזהה",
+      "serviceProvider": "ספק שירות", 
+      "serviceCoverage": "כיסוי שירות",
+      "coverageType": "סוג כיסוי",
+      "status": "מצב"
+    },
+    "products": {
+      "id": "מזהה",
+      "productName": "שם מוצר",
+      "bundle": "חבילה",
+      "coverage": "כיסוי",
+      "validity": "תוקף",
+      "status": "מצב"
+    },
+    "companyProducts": {
+      "id": "מזהה",
+      "company": "חברה",
+      "productName": "שם מוצר",
+      "coverage": "כיסוי",
+      "price": "מחיר",
+      "currency": "מטבע",
+      "status": "מצב"
+    }
   }
 }

@@ -29,6 +29,7 @@ The `.context` directory contains organized information about features, implemen
 13. **Adding New Rules**: When a new rule is requested, always add it to the appropriate file in the `.context` directory for future reference and consistency.
 14. **Development Server Testing**: When checking if changes work, do NOT restart the development server - it's already running. Check for errors by visiting http://localhost:4200 to see runtime errors in the browser console and network tab. The server will automatically reload changes.
 15. **Build Verification**: For checking compilation and build errors without restarting the server, use `ng build` or `npm run build` commands. These will show TypeScript errors, missing imports, and other build issues quickly.
+16. **Data List Naming Convention**: When working with list components for any entity, the data observable MUST be named `dataList$`. This standardizes naming across all list components (e.g., regions list, products list, customers list). Never use entity-specific names like `regions$`, `products$`, etc. - always use `dataList$` for consistency with established patterns from orders, companies, and customers components.
 
 ## Current Features
 

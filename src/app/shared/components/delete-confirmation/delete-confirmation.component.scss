@@ -1,0 +1,43 @@
+@import "../../../../scss/variables";
+@import "../../../../scss/mixins";
+
+.delete-confirmation {
+  text-align: center;
+  padding: 1rem;
+
+  .warning-icon {
+    font-size: 3rem;
+    color: var(--os-color-warning);
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    color: var(--os-color-dark);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin-bottom: 0.5rem;
+    
+    &.message {
+      color: var(--os-color-medium);
+      font-size: 1rem;
+    }
+
+    &.warning-text {
+      color: var(--os-color-warning);
+      font-weight: 500;
+      margin-bottom: 0;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// Dark theme support
+:host-context(.dark-theme) {
+  .delete-confirmation h3 {
+    color: var(--os-color-light);
+  }
+}

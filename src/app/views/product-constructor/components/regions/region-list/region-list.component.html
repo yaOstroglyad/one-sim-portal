@@ -1,0 +1,170 @@
+<app-header class="os-header-sticky"
+            [formGroup]="filterForm"
+            [tableConfig$]="tableConfig$"
+            (onAddAction)="onCreateNew()">
+    <ng-container header-custom-inputs>
+        <input cFormControl formControlName="name" [type]="'text'" placeholder="Region Name">
+        <button cButton
+                color="secondary"
+                [disabled]="filterForm.pristine"
+                (click)="resetForm()">
+            <svg cIcon name="cilReload"></svg>
+        </button>
+    </ng-container>
+</app-header>
+
+<generic-table [config$]="tableConfig$"
+               [menu]="menuTemplate"
+               [data$]="dataList$"
+               [isRowClickable]="true"
+               (onRowClickEvent)="onViewDetails($event)">
+</generic-table>
+
+<ng-template #menuTemplate let-item>
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onViewDetails(item)">
+            <mat-icon>visibility</mat-icon>
+            <span>View Details</span>
+        </button>
+        <button mat-menu-item (click)="onEdit(item)">
+            <mat-icon>edit</mat-icon>
+            <span>Edit</span>
+        </button>
+        <button mat-menu-item (click)="onDelete(item)">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+        </button>
+    </mat-menu>
+</ng-template>
+
+<!-- Create Panel -->
+<app-generic-right-panel
+  *ngIf="showCreatePanel"
+  title="Create New Region"
+  [isOpen]="showCreatePanel"
+  [hasFooter]="true"
+  (close)="onPanelClose()">
+
+  <div panel-content>
+    <app-region-form
+      #createForm
+      [countries]="countries$ | async"
+      (save)="onRegionSaved()"
+      (cancel)="onPanelClose()">
+    </app-region-form>
+  </div>
+
+  <ng-container panel-actions>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="onPanelClose()">
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="createForm.onSubmit()"
+      [disabled]="createForm.loading || !createForm.regionForm?.valid">
+      <span *ngIf="createForm.loading" class="loading-spinner"></span>
+      Create Region
+    </button>
+  </ng-container>
+
+</app-generic-right-panel>
+
+<!-- Edit Panel -->
+<app-generic-right-panel
+  *ngIf="showEditPanel && selectedRegion"
+  title="Edit Region"
+  [isOpen]="showEditPanel"
+  [hasFooter]="true"
+  (close)="onPanelClose()">
+
+  <div panel-content>
+    <app-region-form
+      #editForm
+      [region]="selectedRegion"
+      [countries]="countries$ | async"
+      (save)="onRegionSaved()"
+      (cancel)="onPanelClose()">
+    </app-region-form>
+  </div>
+
+  <ng-container panel-actions>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="onPanelClose()">
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="editForm.onSubmit()"
+      [disabled]="editForm.loading || !editForm.regionForm?.valid">
+      <span *ngIf="editForm.loading" class="loading-spinner"></span>
+      Update Region
+    </button>
+  </ng-container>
+
+</app-generic-right-panel>
+
+<!-- Details Panel -->
+<app-generic-right-panel
+  *ngIf="showDetailsPanel && selectedRegionDetails"
+  title="Region Details"
+  [isOpen]="showDetailsPanel"
+  [actions]="detailsPanelActions"
+  [resizable]="true"
+  [defaultWidth]="600"
+  [maxWidth]="900"
+  (close)="onPanelClose()">
+
+  <div panel-content>
+    <app-region-details [region]="selectedRegionDetails"></app-region-details>
+  </div>
+
+</app-generic-right-panel>
+
+<!-- Delete Confirmation Panel -->
+<app-generic-right-panel
+  *ngIf="showDeletePanel && selectedRegion"
+  title="Confirm Delete"
+  [isOpen]="showDeletePanel"
+  [defaultWidth]="450"
+  [resizable]="false"
+  [hasFooter]="true"
+  (close)="onPanelClose()">
+
+  <div panel-content>
+    <app-delete-confirmation 
+      [config]="{
+        itemName: selectedRegion.name,
+        itemType: 'Region',
+        warningMessage: 'This action cannot be undone and may affect existing products.'
+      }"
+      (confirm)="onConfirmDelete()"
+      (cancel)="onPanelClose()">
+    </app-delete-confirmation>
+  </div>
+
+  <ng-container panel-actions>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="onPanelClose()">
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="onConfirmDelete()">
+      Delete Region
+    </button>
+  </ng-container>
+
+</app-generic-right-panel>
