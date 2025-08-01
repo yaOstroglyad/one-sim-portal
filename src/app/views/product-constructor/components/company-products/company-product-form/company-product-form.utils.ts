@@ -1,16 +1,12 @@
-import { FieldType, FormConfig } from '../../../../../shared';
+import { FieldType, FormConfig, SelectOption, FieldConfig } from '../../../../../shared';
 import { Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { CompanyProduct, CreateCompanyProductRequest, UpdateCompanyProductRequest } from '../../../models';
+import { AccountsDataService } from '../../../../../shared/services/accounts-data.service';
+import { ProductService } from '../../../services';
 
-// Mock data - will be replaced with actual service calls
-const mockCompanies = [
-  { id: 'company-1', name: 'TechCorp Solutions' },
-  { id: 'company-2', name: 'Global Enterprises Inc' },
-  { id: 'company-3', name: 'Digital Services Ltd' }
-];
-
+// Fallback mock data for when services are not available
 const mockProducts = [
   { id: 'product-1', name: 'Europe Business Plan' },
   { id: 'product-2', name: 'Global Roaming Package' },
@@ -26,107 +22,140 @@ const timeUnits = [
 
 export function getCompanyProductFormConfig(
   companyProduct: CompanyProduct | null = null,
-  isEditing: boolean = false
+  isEditing: boolean = false,
+  accountsService?: AccountsDataService,
+  isAdmin?: boolean,
+  productService?: ProductService
 ): FormConfig {
-  return {
-    fields: [
-      // Section Title: Product Assignment
-      {
-        type: FieldType.text,
-        name: 'sectionTitle1',
-        label: 'Product Assignment',
-        value: '',
-        invisible: true // This is just a section divider
-      },
+  const formFields: FieldConfig[] = [
+    // Section Title: Product Assignment
+    {
+      type: FieldType.text,
+      name: 'sectionTitle1',
+      label: 'Product Assignment',
+      value: '',
+      invisible: true // This is just a section divider
+    }
+  ];
 
-      // Company Selection
-      {
-        type: FieldType.select,
-        name: 'companyId',
-        label: 'Company',
-        placeholder: 'Select a company',
-        validators: [Validators.required],
-        options: of(mockCompanies.map(company => ({
-          value: company.id,
-          displayValue: company.name
-        }))),
-        value: companyProduct?.company?.id || '',
-        disabled: isEditing
-      },
+  // Add company selection field only for admins
+  if (isAdmin && accountsService) {
+    const companyField: FieldConfig = {
+      type: FieldType.select,
+      name: 'companyId',
+      label: 'Company',
+      placeholder: 'Select a company',
+      value: companyProduct?.company?.id || null,
+      disabled: isEditing,
+      validators: [Validators.required],
+      options: accountsService.ownerAccounts().pipe(
+        map(accounts => accounts.map(
+          account => ({
+            value: account.id,
+            displayValue: account.name || account.email || account.id
+          } as SelectOption)
+        ))
+      )
+    };
+    formFields.push(companyField);
+  }
 
-      // Product Selection
-      {
-        type: FieldType.select,
-        name: 'productId',
-        label: 'Product',
-        placeholder: 'Select a product',
-        validators: [Validators.required],
-        options: of(mockProducts.map(product => ({
+  // Product Selection field
+  const productField: FieldConfig = {
+    type: FieldType.select,
+    name: 'productId',
+    label: 'Product',
+    placeholder: 'Select a product',
+    validators: [Validators.required],
+    value: companyProduct?.id || '', // In edit mode, this represents the product
+    disabled: isEditing,
+    options: productService 
+      ? productService.getProducts({
+          searchParams: {},
+          page: { page: 0, size: 1000 } // Get all products for dropdown
+        }).pipe(
+          map(response => response.content.map(product => ({
+            value: product.id,
+            displayValue: product.name
+          } as SelectOption))),
+          catchError(() => of([]))
+        )
+      : of(mockProducts.map(product => ({
           value: product.id,
           displayValue: product.name
-        }))),
-        value: companyProduct?.id || '', // In edit mode, this represents the product
-        disabled: isEditing
-      },
+        })))
+  };
 
-      // Section Title: Product Details
-      {
-        type: FieldType.text,
-        name: 'sectionTitle2',
-        label: 'Product Details',
-        value: '',
-        invisible: true // This is just a section divider
-      },
+  formFields.push(...[
+    productField,
 
-      // Description
-      {
-        type: FieldType.textarea,
-        name: 'description',
-        label: 'Description',
-        placeholder: 'Enter a custom description for this company product',
-        validators: [Validators.maxLength(500)],
-        value: companyProduct?.description || '',
-        hintMessage: 'This description will be shown to customers of this company'
-      },
+    // Section Title: Product Details
+    {
+      type: FieldType.text,
+      name: 'sectionTitle2',
+      label: 'Product Details',
+      value: '',
+      invisible: true // This is just a section divider
+    },
 
-      // Section Title: Validity Period Override
-      {
-        type: FieldType.text,
-        name: 'sectionTitle3',
-        label: 'Validity Period Override',
-        value: '',
-        invisible: true // This is just a section divider
-      },
+    // Description
+    {
+      type: FieldType.textarea,
+      name: 'description',
+      label: 'Description',
+      placeholder: 'Enter a custom description for this company product',
+      validators: [Validators.maxLength(500)],
+      value: companyProduct?.description || '',
+      hintMessage: 'This description will be shown to customers of this company'
+    },
 
-      // Validity Period
-      {
-        type: FieldType.number,
-        name: 'period',
-        label: 'Period',
-        placeholder: '30',
-        validators: [Validators.required, Validators.min(1)],
-        value: companyProduct?.validityPeriod?.period || 30
-      },
+    // Section Title: Validity Period Override
+    {
+      type: FieldType.text,
+      name: 'sectionTitle3',
+      label: 'Validity Period Override',
+      value: '',
+      invisible: true // This is just a section divider
+    },
 
-      // Time Unit
-      {
-        type: FieldType.select,
-        name: 'timeUnit',
-        label: 'Time Unit',
-        validators: [Validators.required],
-        options: of(timeUnits),
-        value: companyProduct?.validityPeriod?.timeUnit || 'days'
-      }
-    ]
+    // Validity Period
+    {
+      type: FieldType.number,
+      name: 'period',
+      label: 'Period',
+      placeholder: '30',
+      validators: [Validators.required, Validators.min(1)],
+      value: companyProduct?.validityPeriod?.period || 30
+    },
+
+    // Time Unit
+    {
+      type: FieldType.select,
+      name: 'timeUnit',
+      label: 'Time Unit',
+      validators: [Validators.required],
+      options: of(timeUnits),
+      value: companyProduct?.validityPeriod?.timeUnit || 'days'
+    }
+  ]);
+
+  return {
+    fields: formFields
   };
 }
 
 export function getCompanyProductCreateRequest(formValue: any): CreateCompanyProductRequest {
-  return {
-    companyId: formValue.companyId,
+  const request: any = {
     productId: formValue.productId,
     description: formValue.description || undefined
   };
+
+  // Add companyId only if it's provided (admin case)
+  if (formValue.companyId) {
+    request.companyId = formValue.companyId;
+  }
+
+  return request;
 }
 
 export function getCompanyProductUpdateRequest(formValue: any): UpdateCompanyProductRequest {

@@ -4,8 +4,8 @@
             (onAddAction)="onCreateNew()"
             (columnSelectionChange)="onColumnSelectionChanged($event)">
     <ng-container header-custom-inputs>
-        <input cFormControl formControlName="companyName" [type]="'text'" placeholder="{{ 'product.companyName' | translate }}">
-        <input cFormControl formControlName="productName" [type]="'text'" placeholder="{{ 'product.productName' | translate }}">
+        <input cFormControl formControlName="countryId" [type]="'number'" placeholder="{{ 'product.countryId' | translate }}">
+        <input cFormControl formControlName="regionId" [type]="'number'" placeholder="{{ 'product.regionId' | translate }}">
         <button cButton
                 color="secondary"
                 [disabled]="filterForm.pristine"

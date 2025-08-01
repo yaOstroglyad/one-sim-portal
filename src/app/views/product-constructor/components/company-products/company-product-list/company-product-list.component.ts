@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map, switchMap, catchError, startWith } from 'rxjs/operators';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { map, switchMap, catchError, startWith, debounceTime, takeUntil } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
@@ -46,20 +46,21 @@ import { CompanyProductsTableService } from '../company-products-table.service';
   ],
   providers: [CompanyProductsTableService],
   templateUrl: './company-product-list.component.html',
-  styleUrls: ['./company-product-list.component.scss']
+  styleUrls: ['./company-product-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CompanyProductListComponent implements OnInit, AfterViewInit {
+export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('priceTemplate', { static: true }) priceTemplate: TemplateRef<any>;
   @ViewChild('statusTemplate', { static: true }) statusTemplate: TemplateRef<any>;
 
-  companyProducts$: Observable<any[]>;
+  companyProducts$: Observable<CompanyProduct[]>;
   tableConfig$: BehaviorSubject<TableConfig>;
   filterForm: FormGroup;
   loading = true;
   error = false;
 
-  private refreshTrigger$ = new BehaviorSubject<void>(undefined);
+  private unsubscribe$ = new Subject<void>();
 
   // Panel states
   showCreatePanel = false;
@@ -74,13 +75,14 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private companyProductService: CompanyProductService,
-    private tableService: CompanyProductsTableService
+    private tableService: CompanyProductsTableService,
+    private cdr: ChangeDetectorRef
   ) {
     // Initialize form
     this.filterForm = new FormGroup({
-      companyName: new FormControl(''),
-      productName: new FormControl(''),
-      status: new FormControl('')
+      countryId: new FormControl(null),
+      regionId: new FormControl(null),
+      accountId: new FormControl(null)
     });
 
     // Get table config from service
@@ -89,14 +91,18 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit {
     // Initialize panel actions
     this.initializePanelActions();
 
-    // Initialize company products$ immediately
-    this.loadData();
-    // Trigger initial load
-    this.refreshTrigger$.next();
+    // Initialize products$ with empty data
+    this.companyProducts$ = of([]);
   }
 
   ngOnInit(): void {
-    // Data already loaded in constructor
+    this.setupFilters();
+    this.loadData(); // Load initial data
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   ngAfterViewInit(): void {
@@ -104,42 +110,80 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit {
     this.tableService.setTemplates(this.priceTemplate, this.statusTemplate);
   }
 
-  private loadData(): void {
-    this.companyProducts$ = this.refreshTrigger$.pipe(
-      switchMap(() => {
-        this.loading = true;
-        this.error = false;
-        
-        return this.companyProductService.getCompanyProducts().pipe(
-          map(products => {
-            this.loading = false;
-            this.tableService.updateTableData(products);
-            return products;
-          }),
-          catchError(error => {
-            this.loading = false;
-            this.error = true;
-            console.error('Error loading company products:', error);
-            return of([]);
-          })
-        );
-      })
-    );
+  private setupFilters(): void {
+    this.filterForm.valueChanges.pipe(
+      debounceTime(700),
+      takeUntil(this.unsubscribe$)
+    ).subscribe(() => {
+      this.applyFilter();
+    });
+  }
+
+  private loadData(params: {
+    page: number;
+    size: number;
+    countryId?: number;
+    regionId?: number;
+    accountId?: string;
+  } = { page: 0, size: 20 }): void {
+    
+    const searchRequest: CompanyProductSearchRequest = {
+      searchParams: {
+        countryId: params.countryId || undefined,
+        regionId: params.regionId || undefined,
+        accountId: params.accountId || undefined
+      },
+      page: {
+        page: params.page,
+        size: params.size
+      }
+    };
+
+    this.companyProductService.searchCompanyProducts(searchRequest)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data) => {
+          this.tableService.updateConfigData(data?.totalPages || 20);
+          this.tableConfig$ = this.tableService.getTableConfig();
+          this.companyProducts$ = of(data.content);
+          this.loading = false;
+          this.error = false;
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error('Error loading company products:', error);
+          this.loading = false;
+          this.error = true;
+          this.companyProducts$ = of([]);
+          this.cdr.detectChanges();
+        }
+      });
   }
 
   onRefresh(): void {
-    this.refreshTrigger$.next();
+    this.loadData();
   }
 
   resetForm(): void {
     this.filterForm.reset();
-    this.onRefresh();
+    this.loadData();
   }
 
-  onPageChange(event: any): void {
-    // Handle page change - implement pagination logic here
-    console.log('Page change:', event);
-    this.onRefresh();
+  applyFilter(): void {
+    const params = {
+      page: 0,
+      size: 20,
+      ...this.filterForm.getRawValue()
+    };
+    this.loadData(params);
+  }
+
+  onPageChange({ page, size }: { page: number; size: number }): void {
+    this.loadData({
+      page,
+      size,
+      ...this.filterForm.getRawValue()
+    });
   }
 
   onColumnSelectionChanged(selectedColumns: Set<string>): void {

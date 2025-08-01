@@ -1,4 +1,4 @@
-import { ServiceCoverage, UsageUnit, ValidityPeriod, PageRequest, Company } from './common.model';
+import { ServiceCoverage, UsageUnit, ValidityPeriod, PageRequest, Company, Currency } from './common.model';
 
 export interface CompanyProduct {
   id: string;
@@ -7,14 +7,14 @@ export interface CompanyProduct {
   description: string;
   serviceCoverage: ServiceCoverage;
   price: number;
-  currency: string;
+  currency: Currency;
   usageUnits: UsageUnit[];
   validityPeriod: ValidityPeriod;
   active: boolean;
 }
 
 export interface CreateCompanyProductRequest {
-  companyId: string;
+  companyId?: string;
   productId: string;
   description?: string;
 }

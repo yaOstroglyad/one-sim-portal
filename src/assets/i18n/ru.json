@@ -96,6 +96,23 @@
     "regionId": "ID региона",
     "mobileBundleId": "ID мобильного пакета"
   },
+  "companyProduct": {
+    "accountId": "ID аккаунта",
+    "companyName": "Название компании",
+    "productName": "Название продукта",
+    "price": "Цена",
+    "currency": "Валюта",
+    "usageUnits": "Единицы использования",
+    "validityPeriod": "Период действия",
+    "status": "Статус",
+    "active": "Активен",
+    "inactive": "Неактивен",
+    "basicInformation": "Основная информация",
+    "companyInformation": "Информация о компании",
+    "coverageInformation": "Информация о покрытии",
+    "pricingInformation": "Информация о ценах",
+    "noDetailsAvailable": "Детали недоступны"
+  },
   "default-header": {
     "language": "Язык",
     "english": "Английский",

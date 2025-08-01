@@ -111,12 +111,34 @@ The application follows Angular's modular architecture with lazy-loaded feature 
    - NO module-based components
    - NO NgModules for new features - use standalone components with lazy loading directly
 
-2. **Template Separation**: If HTML template contains more than one logical block, MUST extract to separate `.html` file
+2. **OnPush Change Detection MANDATORY**: All new components MUST use OnPush strategy
+   - Use `changeDetection: ChangeDetectionStrategy.OnPush` in component decorator
+   - Inject `ChangeDetectorRef` and use `markForCheck()` when updating component state
+   - Use `markForCheck()` instead of `detectChanges()` for better performance
+   - NEVER mutate objects/arrays directly - use immutable patterns
+   - Example:
+   ```typescript
+   @Component({
+     standalone: true,
+     changeDetection: ChangeDetectionStrategy.OnPush,
+     // ...
+   })
+   export class MyComponent {
+     constructor(private cdr: ChangeDetectorRef) {}
+     
+     updateData(newData: any): void {
+       this.data = { ...this.data, ...newData }; // Immutable update
+       this.cdr.markForCheck(); // Trigger change detection
+     }
+   }
+   ```
+
+3. **Template Separation**: If HTML template contains more than one logical block, MUST extract to separate `.html` file
    - Simple components with single logical block can use inline templates
    - Complex components with multiple sections MUST use `templateUrl`
    - Example: Dashboard tabs, forms with multiple sections, lists with headers/footers
 
-3. **SCSS Reusability**: ALWAYS check for existing SCSS before creating new classes
+4. **SCSS Reusability**: ALWAYS check for existing SCSS before creating new classes
    - Review existing mixins in `src/scss/_mixins.scss`
    - Check global utilities in `src/scss/_utilities.scss`
    - Use dashboard mixins in `src/scss/_mixins.scss` for dashboard-specific styles

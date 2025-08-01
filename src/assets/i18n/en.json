@@ -102,6 +102,23 @@
     "regionId": "Region ID", 
     "mobileBundleId": "Mobile Bundle ID"
   },
+  "companyProduct": {
+    "accountId": "Account ID",
+    "companyName": "Company Name",
+    "productName": "Product Name",
+    "price": "Price",
+    "currency": "Currency",
+    "usageUnits": "Usage Units",
+    "validityPeriod": "Validity Period",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "basicInformation": "Basic Information",
+    "companyInformation": "Company Information",
+    "coverageInformation": "Coverage Information",
+    "pricingInformation": "Pricing Information",
+    "noDetailsAvailable": "No details available"
+  },
   "tariffOffer": {
     "productName": "Product Name",
     "providerProductName": "Provider Product Name", 
@@ -699,6 +716,7 @@
       "regions": "Regions",
       "bundles": "Mobile Bundles", 
       "products": "Core Products",
+      "companyProducts": "Company Products",
       "status": "Product Status",
       "active": "Active",
       "inactive": "Inactive",

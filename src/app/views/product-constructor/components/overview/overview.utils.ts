@@ -1,6 +1,6 @@
 import { QuickAction } from '../../models';
 
-export const QUICK_ACTIONS: QuickAction[] = [
+const ALL_QUICK_ACTIONS: QuickAction[] = [
   {
     title: 'Manage Regions',
     description: 'Create and manage geographical regions',
@@ -45,10 +45,45 @@ export const QUICK_ACTIONS: QuickAction[] = [
   }
 ];
 
+const NON_ADMIN_ALLOWED_ROUTES = ['regions', 'bundles', 'company-products'];
+
 /**
- * Determines if a quick action is enabled based on its route
- * Currently implemented: regions, bundles, provider-products, products, company-products, tariff-offers
+ * Returns quick actions based on user role
+ * @param isAdmin - Whether the user has admin permissions
+ * @returns Array of QuickAction objects filtered by role
  */
-export function isActionEnabled(action: QuickAction): boolean {
-  return action.route === 'regions' || action.route === 'bundles' || action.route === 'provider-products' || action.route === 'products' || action.route === 'company-products' || action.route === 'tariff-offers';
+export function getQuickActions(isAdmin: boolean): QuickAction[] {
+  if (isAdmin) {
+    return ALL_QUICK_ACTIONS;
+  }
+  
+  return ALL_QUICK_ACTIONS.filter(action => 
+    NON_ADMIN_ALLOWED_ROUTES.includes(action.route)
+  );
+}
+
+// Keep backward compatibility
+export const QUICK_ACTIONS = ALL_QUICK_ACTIONS;
+
+/**
+ * Determines if a quick action is enabled based on its route and user role
+ * Currently implemented: regions, bundles, provider-products, products, company-products, tariff-offers
+ * @param action - The QuickAction to check
+ * @param isAdmin - Whether the user has admin permissions
+ */
+export function isActionEnabled(action: QuickAction, isAdmin: boolean = true): boolean {
+  const implementedRoutes = ['regions', 'bundles', 'provider-products', 'products', 'company-products', 'tariff-offers'];
+  const isImplemented = implementedRoutes.includes(action.route);
+  
+  if (!isImplemented) {
+    return false;
+  }
+  
+  // If user is admin, all implemented actions are enabled
+  if (isAdmin) {
+    return true;
+  }
+  
+  // Non-admin users can only access specific routes
+  return NON_ADMIN_ALLOWED_ROUTES.includes(action.route);
 }
