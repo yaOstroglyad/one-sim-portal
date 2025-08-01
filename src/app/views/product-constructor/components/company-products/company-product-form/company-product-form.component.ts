@@ -4,8 +4,10 @@ import { FormGroup } from '@angular/forms';
 import { IconDirective } from '@coreui/icons-angular';
 
 import { FormGeneratorComponent, FormConfig } from '../../../../../shared';
-import { CompanyProductService } from '../../../services';
+import { CompanyProductService, ProductService } from '../../../services';
 import { CompanyProduct } from '../../../models';
+import { AccountsDataService } from '../../../../../shared/services/accounts-data.service';
+import { AuthService, ADMIN_PERMISSION } from '../../../../../shared/auth/auth.service';
 import { 
   getCompanyProductFormConfig,
   getCompanyProductCreateRequest,
@@ -34,11 +36,21 @@ export class CompanyProductFormComponent implements OnInit {
   error: string | null = null;
 
   constructor(
-    private companyProductService: CompanyProductService
+    private companyProductService: CompanyProductService,
+    private accountsService: AccountsDataService,
+    private authService: AuthService,
+    private productService: ProductService
   ) {}
 
   ngOnInit(): void {
-    this.formConfig = getCompanyProductFormConfig(this.companyProduct, this.isEditing);
+    const isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+    this.formConfig = getCompanyProductFormConfig(
+      this.companyProduct, 
+      this.isEditing, 
+      this.accountsService, 
+      isAdmin,
+      this.productService
+    );
   }
 
   get isEditing(): boolean {

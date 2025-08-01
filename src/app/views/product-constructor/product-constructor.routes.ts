@@ -3,9 +3,6 @@ import { Routes } from '@angular/router';
 export const PRODUCT_CONSTRUCTOR_ROUTES: Routes = [
   {
     path: '',
-    data: {
-      title: 'Product Constructor'
-    },
     children: [
       {
         path: '',
