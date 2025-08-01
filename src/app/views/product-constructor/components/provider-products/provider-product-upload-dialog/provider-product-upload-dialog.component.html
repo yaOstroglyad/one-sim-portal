@@ -1,0 +1,25 @@
+<h2 mat-dialog-title class="dialog-header">
+  {{ 'providerProduct.uploadDialog.title' | translate }}
+</h2>
+
+<mat-dialog-content class="mat-typography dialog-content">
+  <app-file-upload
+    [config]="uploadConfig"
+    (fileSelected)="onFileSelected($event)"
+    (uploadRequested)="onUploadRequested($event)"
+    (fileCleared)="onFileCleared()"
+    #fileUploadComponent>
+  </app-file-upload>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-footer" align="end">
+  <button mat-button (click)="onCancel()" *ngIf="!isUploading">
+    {{ uploadSuccess ? 'common.close' : 'common.cancel' | translate }}
+  </button>
+  <button mat-raised-button 
+          color="primary" 
+          (click)="onSubmit()"
+          *ngIf="uploadSuccess">
+    {{ 'common.done' | translate }}
+  </button>
+</mat-dialog-actions>

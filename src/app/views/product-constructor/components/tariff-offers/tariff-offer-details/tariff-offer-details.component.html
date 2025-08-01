@@ -1,0 +1,163 @@
+<div class="tariff-offer-details">
+  
+  <!-- Basic Information -->
+  <div class="details-section">
+    <h3 class="section-title">Basic Information</h3>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <span class="detail-label">Tariff Offer ID</span>
+          <div class="detail-value text-muted">{{ tariffOffer.id }}</div>
+        </div>
+        
+        <div class="mb-3">
+          <span class="detail-label">Price</span>
+          <div class="detail-value">
+            <span class="fw-bold fs-5 text-success">
+              {{ tariffOffer.price | currency:tariffOffer.currency:'symbol':'1.2-2' }}
+            </span>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <span class="detail-label">Currency</span>
+          <div class="detail-value">
+            <c-badge color="info" shape="rounded-pill">
+              {{ tariffOffer.currency }}
+            </c-badge>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="mb-3">
+          <span class="detail-label">Created Date</span>
+          <div class="detail-value">{{ tariffOffer.createdAt | date:'MMM dd, yyyy HH:mm' }}</div>
+        </div>
+        
+        <div class="mb-3" *ngIf="tariffOffer.updatedAt && tariffOffer.updatedAt !== tariffOffer.createdAt">
+          <span class="detail-label">Last Updated</span>
+          <div class="detail-value">{{ tariffOffer.updatedAt | date:'MMM dd, yyyy HH:mm' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Information -->
+  <div class="details-section" *ngIf="tariffOffer.product">
+    <h3 class="section-title">Product Information</h3>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <span class="detail-label">Product Name</span>
+          <div class="detail-value fw-semibold">{{ tariffOffer.product.name }}</div>
+        </div>
+        
+        <div class="mb-3" *ngIf="tariffOffer.product.description">
+          <span class="detail-label">Description</span>
+          <div class="detail-value">{{ tariffOffer.product.description }}</div>
+        </div>
+        
+        <div class="mb-3" *ngIf="tariffOffer.product.bundle?.name">
+          <span class="detail-label">Bundle Name</span>
+          <div class="detail-value">{{ tariffOffer.product.bundle.name }}</div>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="mb-3" *ngIf="tariffOffer.product.validityPeriod">
+          <span class="detail-label">Validity</span>
+          <div class="detail-value">{{ tariffOffer.product.validityPeriod.period }} {{ tariffOffer.product.validityPeriod.timeUnit }}</div>
+        </div>
+        
+        <div class="mb-3" *ngIf="tariffOffer.product.bundle?.usageUnits && tariffOffer.product.bundle.usageUnits.length > 0">
+          <span class="detail-label">Usage Units</span>
+          <div class="detail-value">
+            <div class="usage-units">
+              <c-badge 
+                *ngFor="let unit of tariffOffer.product.bundle.usageUnits" 
+                color="secondary" 
+                shape="rounded-pill" 
+                class="me-1 mb-1">
+                {{ formatUsageUnit(unit) }}
+              </c-badge>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <span class="detail-label">Product Status</span>
+          <div class="detail-value">
+            <c-badge [color]="tariffOffer.product.active ? 'success' : 'danger'" shape="rounded-pill">
+              {{ tariffOffer.product.active ? 'Active' : 'Inactive' }}
+            </c-badge>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Provider Product Information -->
+  <div class="details-section" *ngIf="tariffOffer.providerProduct">
+    <h3 class="section-title">Provider Product Information</h3>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <span class="detail-label">Provider</span>
+          <div class="detail-value fw-semibold">{{ tariffOffer.providerProduct.serviceProvider?.name }}</div>
+        </div>
+        
+        <div class="mb-3">
+          <span class="detail-label">Service Coverage</span>
+          <div class="detail-value">{{ tariffOffer.providerProduct.serviceCoverage?.name }}</div>
+        </div>
+        
+        <div class="mb-3">
+          <span class="detail-label">Coverage Type</span>
+          <div class="detail-value text-muted">{{ tariffOffer.providerProduct.serviceCoverage?.type }}</div>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="mb-3">
+          <span class="detail-label">Provider Product Status</span>
+          <div class="detail-value">
+            <c-badge [color]="tariffOffer.providerProduct.active ? 'success' : 'danger'" shape="rounded-pill">
+              {{ tariffOffer.providerProduct.active ? 'Active' : 'Inactive' }}
+            </c-badge>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing Summary -->
+  <div class="details-section">
+    <h3 class="section-title">Pricing Summary</h3>
+    
+    <div class="alert alert-light border">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h5 class="mb-1">
+            {{ tariffOffer.product?.name }} 
+            <span class="text-muted">via</span> 
+            {{ tariffOffer.providerProduct?.serviceProvider?.name }}
+          </h5>
+          <p class="mb-0 text-muted">
+            {{ tariffOffer.providerProduct?.serviceCoverage?.name }}
+          </p>
+        </div>
+        <div class="col-md-4 text-end">
+          <h3 class="mb-0 text-success fw-bold">
+            {{ tariffOffer.price | currency:tariffOffer.currency:'symbol':'1.2-2' }}
+          </h3>
+          <small class="text-muted">per unit</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

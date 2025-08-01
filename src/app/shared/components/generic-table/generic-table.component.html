@@ -2,6 +2,7 @@
     <div *ngIf="vm.data.length > 0; else noDataTpl"
          [class.clickable]="isRowClickable"
          [class.show-menu]="vm.config.showMenu"
+         [style.--ag-min-rows]="getMinRows(vm.data.length)"
          class="ag-grid-wrapper mx-3 mb-3">
 
         <ng-container *ngIf="customToolbarTpl">

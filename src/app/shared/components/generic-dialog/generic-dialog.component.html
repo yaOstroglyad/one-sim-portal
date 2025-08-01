@@ -1,0 +1,27 @@
+<div class="dialog-backdrop" *ngIf="isOpen" (click)="onOverlayClick($event)">
+  <div class="dialog-container" [class]="'dialog-' + size" (click)="$event.stopPropagation()">
+    
+    <!-- Header -->
+    <div class="dialog-header" *ngIf="title">
+      <h2 class="dialog-title">{{ title }}</h2>
+      <button 
+        type="button" 
+        class="dialog-close" 
+        (click)="onClose()"
+        aria-label="Close dialog">
+        <i class="icon cil-x"></i>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="dialog-content">
+      <ng-content select="[dialog-content]"></ng-content>
+    </div>
+
+    <!-- Actions -->
+    <div class="dialog-footer" *ngIf="hasActions">
+      <ng-content select="[dialog-actions]"></ng-content>
+    </div>
+
+  </div>
+</div>

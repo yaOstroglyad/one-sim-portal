@@ -1,0 +1,100 @@
+<app-header class="os-header-sticky"
+            [formGroup]="filterForm"
+            [tableConfig$]="tableConfig$"
+            (onAddAction)="onCreateNew()">
+    <ng-container header-custom-inputs>
+        <input cFormControl formControlName="countryId" [type]="'number'" placeholder="Country ID">
+        <input cFormControl formControlName="regionId" [type]="'number'" placeholder="Region ID">
+        <button cButton
+                color="secondary"
+                [disabled]="filterForm.pristine"
+                (click)="resetForm()">
+            <svg cIcon name="cilReload"></svg>
+        </button>
+    </ng-container>
+</app-header>
+
+<generic-table [config$]="tableConfig$"
+               [menu]="menuTemplate"
+               [data$]="providerProducts$"
+               [isRowClickable]="true"
+               (onRowClickEvent)="onViewDetails($event)"
+               (pageChange)="onPageChange($event)">
+</generic-table>
+
+<ng-template #menuTemplate let-item>
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onViewDetails(item)">
+            <mat-icon>visibility</mat-icon>
+            <span>View Details</span>
+        </button>
+        <button mat-menu-item (click)="onToggleStatus(item)">
+            <mat-icon>{{ item.active ? 'toggle_off' : 'toggle_on' }}</mat-icon>
+            <span>{{ item.active ? 'Deactivate' : 'Activate' }}</span>
+        </button>
+        <button mat-menu-item (click)="onDelete(item)">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+        </button>
+    </mat-menu>
+</ng-template>
+
+
+<!-- Details Panel -->
+<app-generic-right-panel
+  *ngIf="showDetailsPanel && selectedProviderProductDetails"
+  title="Provider Product Details"
+  [isOpen]="showDetailsPanel"
+  [actions]="detailsPanelActions"
+  [resizable]="true"
+  [defaultWidth]="600"
+  [maxWidth]="900"
+  (close)="onPanelClose()">
+
+  <div panel-content>
+    <app-provider-product-details [providerProduct]="selectedProviderProductDetails"></app-provider-product-details>
+  </div>
+
+</app-generic-right-panel>
+
+<!-- Delete Confirmation Panel -->
+<app-generic-right-panel
+  *ngIf="showDeletePanel && selectedProviderProduct"
+  title="Confirm Delete"
+  [isOpen]="showDeletePanel"
+  [defaultWidth]="450"
+  [resizable]="false"
+  [hasFooter]="true"
+  (close)="onPanelClose()">
+
+  <div panel-content>
+    <app-delete-confirmation
+      [config]="{
+        itemName: selectedProviderProduct.serviceProvider.name + ' - ' + selectedProviderProduct.serviceCoverage.name,
+        itemType: 'Provider Product',
+        warningMessage: 'This action cannot be undone and may affect existing products that use this provider product.'
+      }"
+      (confirm)="onConfirmDelete()"
+      (cancel)="onPanelClose()">
+    </app-delete-confirmation>
+  </div>
+
+  <ng-container panel-actions>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="onPanelClose()">
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="onConfirmDelete()">
+      Delete Provider Product
+    </button>
+  </ng-container>
+
+</app-generic-right-panel>

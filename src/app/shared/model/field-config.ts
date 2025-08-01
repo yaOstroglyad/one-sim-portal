@@ -16,7 +16,10 @@ export enum FieldType {
 	slide = 'slide',
 	color = 'color',
 	uuid = 'uuid',
-	richText = 'richText'
+	richText = 'richText',
+	multiselectGrid = 'multiselectGrid',
+	formArray = 'formArray',
+	fileUpload = 'fileUpload'
 }
 
 export interface BackendFieldConfig {
@@ -29,6 +32,30 @@ export interface BackendFieldConfig {
 export interface SelectOption {
 	value: any,
 	displayValue: string;
+}
+
+export interface GridSelectOption {
+	value: any;
+	displayValue: string;
+	secondary?: string;
+	tertiary?: string;
+	badge?: string;
+	disabled?: boolean;
+}
+
+export interface GridConfig {
+	searchable?: boolean;
+	searchFields?: string[];
+	showBulkActions?: boolean;
+	displayFields?: {
+		primary: string;
+		secondary?: string;
+		tertiary?: string;
+		badge?: string;
+	};
+	layout?: 'grid' | 'list';
+	columns?: number | 'auto';
+	searchPlaceholder?: string;
 }
 
 export interface FieldConfig {
@@ -48,6 +75,10 @@ export interface FieldConfig {
 
 	//select
 	options?: Observable<SelectOption[]> | ((values: Record<string, any>) => Observable<SelectOption[]>);
+	
+	//multiselectGrid
+	gridOptions?: Observable<GridSelectOption[]> | GridSelectOption[] | ((values: Record<string, any>) => Observable<GridSelectOption[]>);
+	gridConfig?: GridConfig;
 
 	validators?: ValidatorFn | ValidatorFn[];
 	asyncValidators?: AsyncValidatorFn | AsyncValidatorFn[];
@@ -61,6 +92,30 @@ export interface FieldConfig {
 
 	//richText
 	maxLength?: number;
+
+	//formArray
+	arrayConfig?: {
+		itemConfig: FormConfig;
+		minItems?: number;
+		maxItems?: number;
+		defaultItem?: any;
+		addButtonText?: string;
+		removeButtonText?: string;
+		emptyMessage?: string;
+		itemLabel?: (index: number) => string;
+	};
+
+	//fileUpload
+	fileUploadConfig?: {
+		acceptedFormats: string[];
+		maxFileSize?: number;
+		dropZoneText?: string;
+		supportedFormatsText?: string;
+		chooseFileButtonText?: string;
+		uploadButtonText?: string;
+		showUploadButton?: boolean;
+		autoUpload?: boolean;
+	};
 
 	dependsOn?: string[];
 	dependsOnValue?: string[];

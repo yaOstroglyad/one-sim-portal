@@ -76,15 +76,4 @@ export class CustomersDataService extends DataService<Customer> {
 			})
 		);
 	}
-
-	reSendInviteEmail(entityId: string, email: string): Observable<any> {
-		return this.http.post<any>('/api/v1/customers/send-user-registration-email', {
-			entityId, email
-		}).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
-		);
-	}
 }

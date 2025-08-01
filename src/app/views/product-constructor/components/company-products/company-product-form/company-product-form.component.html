@@ -1,0 +1,19 @@
+<div class="company-product-form-container">
+  <!-- Error Display -->
+  <div *ngIf="error" class="error-alert">
+    <svg cIcon name="cil-warning" width="20" height="20"></svg>
+    <span>{{ error }}</span>
+  </div>
+
+  <!-- Form Content -->
+  <app-form-generator 
+    [config]="formConfig" 
+    (formChanges)="onFormChanges($event)">
+  </app-form-generator>
+
+  <!-- Note about pricing -->
+  <div class="info-alert" *ngIf="!isEditing">
+    <svg cIcon name="cil-info" width="20" height="20"></svg>
+    <span><strong>Note:</strong> Pricing will be configured in the Tariff Offers section after creating this company product.</span>
+  </div>
+</div>

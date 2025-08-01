@@ -24,6 +24,7 @@
   --ag-row-even-background-color: #ffffff;
   --ag-header-column-separator-color: #dde2eb;
   --ag-border-color: #e2e2e2;
+  --ag-min-rows: 10; /* Default minimum rows */
 }
 
 /* AG-Grid Wrapper */
@@ -35,7 +36,7 @@
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  min-height: calc(var(--ag-row-height) * 10);
+  min-height: calc(var(--ag-row-height) * var(--ag-min-rows));
   overflow: hidden;
   position: relative;
 }
@@ -326,7 +327,7 @@ colgroup col {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  z-index: 10;
+  z-index: 1;
   min-height: 150px;
 }
 

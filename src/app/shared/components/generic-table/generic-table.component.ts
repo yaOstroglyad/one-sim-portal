@@ -127,6 +127,13 @@ export class GenericTableComponent implements OnChanges {
 		return !this.isEven(i);
 	}
 
+	public getMinRows(dataLength: number): number {
+		// Return the actual number of rows if less than 10, otherwise return 10
+		// This ensures the table shows actual size for small datasets
+		// but maintains a minimum height for larger datasets
+		return Math.min(dataLength || 0, 10);
+	}
+
 	private setSortDirection(columns: TableColumnConfig[]) {
 		columns.forEach(column => {
 			if (column?.sortable && !column.sortDirection) {

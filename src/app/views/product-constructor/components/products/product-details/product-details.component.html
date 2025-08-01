@@ -1,0 +1,118 @@
+<div class="product-details" *ngIf="product">
+  <!-- Basic Information -->
+  <div class="details-section">
+    <h5 class="section-title">{{ 'product.basicInformation' | translate }}</h5>
+    
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="detail-label">{{ 'product.productName' | translate }}</label>
+        <div class="detail-value">{{ product.name }}</div>
+      </div>
+      
+      <div class="col-md-6 mb-3">
+        <label class="detail-label">{{ 'product.status' | translate }}</label>
+        <div class="detail-value">
+          <c-badge [color]="getStatusColor()" shape="rounded-pill">
+            {{ getStatusText() }}
+          </c-badge>
+        </div>
+      </div>
+      
+      <div class="col-md-6 mb-3">
+        <label class="detail-label">{{ 'product.productId' | translate }}</label>
+        <div class="detail-value text-muted">{{ product.id }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bundle Information -->
+  <div class="details-section" *ngIf="product.bundle">
+    <h5 class="section-title">{{ 'product.bundleInformation' | translate }}</h5>
+    
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="detail-label">{{ 'product.bundleName' | translate }}</label>
+        <div class="detail-value">{{ product.bundle.name }}</div>
+      </div>
+      
+      <div class="col-md-6 mb-3">
+        <label class="detail-label">{{ 'product.bundleId' | translate }}</label>
+        <div class="detail-value text-muted">{{ product.bundle.id }}</div>
+      </div>
+      
+      <div class="col-12 mb-3">
+        <label class="detail-label">{{ 'product.usageUnits' | translate }}</label>
+        <div class="detail-value">
+          <div class="usage-units">
+            <c-badge 
+              *ngFor="let unit of product.bundle.usageUnits"
+              color="info" 
+              class="me-2 mb-1"
+              shape="rounded-pill">
+              {{ unit.value }} {{ unit.unitType }} {{ unit.type }}
+            </c-badge>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coverage Information -->
+  <div class="details-section" *ngIf="product.serviceCoverage">
+    <h5 class="section-title">{{ 'product.coverageInformation' | translate }}</h5>
+    
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="detail-label">{{ 'product.coverageName' | translate }}</label>
+        <div class="detail-value">{{ product.serviceCoverage.name }}</div>
+      </div>
+      
+      <div class="col-md-6 mb-3">
+        <label class="detail-label">{{ 'product.coverageType' | translate }}</label>
+        <div class="detail-value">
+          <c-badge 
+            [color]="product.serviceCoverage.type === 'REGION' ? 'primary' : 'secondary'"
+            shape="rounded-pill">
+            {{ product.serviceCoverage.type }}
+          </c-badge>
+        </div>
+      </div>
+      
+      <div class="col-md-6 mb-3">
+        <label class="detail-label">{{ 'product.coverageId' | translate }}</label>
+        <div class="detail-value text-muted">{{ product.serviceCoverage.id }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Validity Information -->
+  <div class="details-section" *ngIf="product.validityPeriod">
+    <h5 class="section-title">{{ 'product.validityInformation' | translate }}</h5>
+    
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="detail-label">{{ 'product.validityPeriod' | translate }}</label>
+        <div class="detail-value">
+          <c-badge color="warning" shape="rounded-pill">
+            {{ formatValidity() }}
+          </c-badge>
+        </div>
+      </div>
+      
+      <div class="col-md-6 mb-3">
+        <label class="detail-label">{{ 'product.period' | translate }}</label>
+        <div class="detail-value">{{ product.validityPeriod.period }}</div>
+      </div>
+      
+      <div class="col-md-6 mb-3">
+        <label class="detail-label">{{ 'product.timeUnit' | translate }}</label>
+        <div class="detail-value">{{ product.validityPeriod.timeUnit }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No data message -->
+  <div *ngIf="!product" class="text-center text-muted py-4">
+    <p>{{ 'product.noDetailsAvailable' | translate }}</p>
+  </div>
+</div>

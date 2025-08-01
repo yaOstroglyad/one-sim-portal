@@ -13,6 +13,7 @@
 @import "./variables";          // 1. Variables & maps only
 @import "./mixins";             // 2. All mixins (depends on variables)
 @import "./utilities";          // 3. Utility classes (depends on variables)
+@import "./form-utilities";     // 4. Form-specific utilities and styles
 
 // ==============================================
 // ANGULAR MATERIAL THEME SETUP

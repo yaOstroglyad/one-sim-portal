@@ -1,0 +1,97 @@
+<div class="multiselect-grid">
+  
+  <!-- Controls Section -->
+  <div class="controls-section">
+    <!-- Search Input -->
+    <div class="search-container" *ngIf="config.searchable !== false">
+      <div class="search-input-wrapper">
+        <input
+          type="text"
+          class="search-input"
+          [placeholder]="config.searchPlaceholder || placeholder"
+          [value]="searchQuery"
+          (input)="onSearchChange($any($event.target).value)"
+          [disabled]="disabled">
+        <svg cIcon name="cilSearch" class="search-icon"></svg>
+      </div>
+    </div>
+
+    <!-- Bulk Actions -->
+    <div class="bulk-actions" *ngIf="config.showBulkActions !== false">
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        (click)="onSelectAll()"
+        [disabled]="disabled">
+        {{ 'common.selectAll' | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm"
+        (click)="onDeselectAll()"
+        [disabled]="disabled">
+        {{ 'common.deselectAll' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Selection Info -->
+  <div class="selection-info" *ngIf="selectedCount > 0">
+    {{ selectedCount }} {{ selectedCount === 1 ? 'item' : 'items' }} selected
+  </div>
+
+  <!-- Options Container -->
+  <div class="options-container">
+    
+    <!-- Options Grid/List -->
+    <div class="options-grid" 
+         [class.grid-layout]="config.layout !== 'list'"
+         [class.list-layout]="config.layout === 'list'"
+         *ngIf="hasFilteredResults">
+      
+      <label
+        *ngFor="let option of filteredOptions"
+        class="option-item"
+        [class.selected]="isSelected(option)"
+        [class.disabled]="option.disabled || disabled">
+
+        <input
+          type="checkbox"
+          class="option-checkbox"
+          [checked]="isSelected(option)"
+          [disabled]="option.disabled || disabled"
+          (change)="onItemToggle(option)">
+
+        <div class="option-content">
+          <div class="option-main">
+            <div class="option-primary">{{ option.displayValue }}</div>
+            <div class="option-secondary" *ngIf="option.secondary">
+              {{ option.secondary }}
+            </div>
+          </div>
+          
+          <div class="option-badge" *ngIf="option.badge">
+            {{ option.badge }}
+          </div>
+        </div>
+
+      </label>
+    </div>
+
+    <!-- No Results -->
+    <div class="no-results" *ngIf="showNoResults">
+      <svg cIcon name="cilSearch" class="no-results-icon"></svg>
+      <p class="no-results-text">
+        {{ 'common.noResultsFound' | translate }} "{{ searchQuery }}"
+      </p>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!hasFilteredResults && !showNoResults">
+      <svg cIcon name="cilList" class="empty-icon"></svg>
+      <p class="empty-text">{{ 'common.noItemsAvailable' | translate }}</p>
+    </div>
+
+  </div>
+
+</div>

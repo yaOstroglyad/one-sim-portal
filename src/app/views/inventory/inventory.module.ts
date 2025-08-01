@@ -5,7 +5,6 @@ import { InventoryRoutingModule } from './inventory-routing.module';
 import { GenericTableModule, HeaderModule } from '../../shared';
 import { ButtonDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
-import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -26,7 +25,6 @@ import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [
     InventoryComponent,
-		UploadDialogComponent,
 		SetupResourceComponent,
 		MoveResourceComponent
   ],

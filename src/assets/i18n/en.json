@@ -38,15 +38,74 @@
   "common": {
     "create": "Create",
     "edit": "Edit",
+    "view": "View",
     "setAsPrimary": "Set as primary",
     "cancel": "Cancel",
+    "close": "Close",
     "send": "Send",
     "save": "Save",
     "apply": "Apply",
     "submit": "Submit",
+    "done": "Done",
+    "none": "None",
+    "retry": "Retry",
+    "clear": "Clear",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "noResultsFound": "No results found for",
+    "noItemsAvailable": "No items available",
     "table": {
       "filterPlaceholder": "Filter table data"
     }
+  },
+  "fileUpload": {
+    "uploading": "Uploading file...",
+    "uploadSuccess": "File uploaded successfully!",
+    "uploadError": "Upload failed. Please try again.",
+    "tryAgain": "Please try again or contact support"
+  },
+  "product": {
+    "companyName": "Company Name",
+    "productName": "Product Name",
+    "bundleName": "Bundle Name",
+    "bundle": "Bundle",
+    "bundleId": "Bundle ID",
+    "bundleInformation": "Bundle Information",
+    "usageUnits": "Usage Units",
+    "description": "Description",
+    "enterDescription": "Enter product description",
+    "enterProductName": "Enter product name",
+    "selectBundle": "Select a bundle",
+    "coverage": "Coverage",
+    "coverageName": "Coverage Name",
+    "coverageId": "Coverage ID",
+    "coverageType": "Coverage Type",
+    "coverageInformation": "Coverage Information",
+    "region": "Region",
+    "country": "Country",
+    "selectRegion": "Select a region",
+    "selectCountry": "Select a country",
+    "validityPeriod": "Validity Period",
+    "validityInformation": "Validity Information",
+    "period": "Period",
+    "timeUnit": "Time Unit",
+    "enterValidityPeriod": "Enter validity period",
+    "days": "Days",
+    "weeks": "Weeks",
+    "months": "Months",
+    "years": "Years",
+    "basicInformation": "Basic Information",
+    "productId": "Product ID",
+    "status": "Status",
+    "noDetailsAvailable": "No details available",
+    "countryId": "Country ID",
+    "regionId": "Region ID", 
+    "mobileBundleId": "Mobile Bundle ID"
+  },
+  "tariffOffer": {
+    "productName": "Product Name",
+    "providerProductName": "Provider Product Name", 
+    "allCurrencies": "All Currencies"
   },
   "default-header": {
     "language": "Language",
@@ -71,6 +130,7 @@
     "products": "Products",
     "inventory": "Inventory",
     "users": "Users",
+    "productconstructor": "Product Constructor",
     "settings": "Settings",
     "general": "General",
     "paymentGateway": "Payment Gateway",
@@ -308,6 +368,7 @@
   "uploadDialog": {
     "title": "Upload reasons",
     "dropZoneMessage": "Drag and drop your file here or click the button below to select the file.",
+    "supportedFormats": "Supported formats: CSV, Excel (.xlsx, .xls)",
     "chooseFileButton": "Choose File",
     "uploadSuccessMessage": "{{fileName}} uploaded successfully!",
     "uploadErrorMessage": "Something went wrong. Please try again."
@@ -631,6 +692,69 @@
       "quantity": "Quantity",
       "customer": "Customer",
       "total": "Total"
+    }
+  },
+  "productConstructor": {
+    "overview": {
+      "regions": "Regions",
+      "bundles": "Mobile Bundles", 
+      "products": "Core Products",
+      "status": "Product Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "quickActions": "Quick Actions",
+      "comingSoon": "Coming Soon"
+    },
+    "regions": {
+      "id": "ID",
+      "name": "Region Name",
+      "countryCount": "Countries"
+    },
+    "bundles": {
+      "id": "ID",
+      "name": "Bundle Name",
+      "usageUnits": "Usage Units",
+      "dataTotal": "Total Data"
+    },
+    "providerProducts": {
+      "id": "ID",
+      "serviceProvider": "Service Provider",
+      "serviceCoverage": "Service Coverage",
+      "coverageType": "Coverage Type",
+      "status": "Status"
+    },
+    "products": {
+      "id": "ID",
+      "productName": "Product Name",
+      "bundle": "Bundle",
+      "coverage": "Coverage",
+      "validity": "Validity",
+      "status": "Status"
+    },
+    "companyProducts": {
+      "id": "ID",
+      "company": "Company",
+      "productName": "Product Name",
+      "coverage": "Coverage",
+      "price": "Price",
+      "currency": "Currency",
+      "status": "Status"
+    }
+  },
+  "providerProduct": {
+    "providerId": "Provider ID",
+    "countryId": "Country",
+    "regionId": "Region",
+    "uploadDialog": {
+      "title": "Upload Provider Products",
+      "dropZoneMessage": "Drag and drop a file here, or click to browse",
+      "supportedFormats": "Supported formats: CSV, Excel (.xlsx, .xls)",
+      "chooseFileButton": "Choose File",
+      "uploadButton": "Upload",
+      "uploadingMessage": "Uploading file...",
+      "uploadSuccessMessage": "File uploaded successfully!",
+      "uploadErrorMessage": "Upload failed. Please try again.",
+      "tryAgain": "Please try again or contact support"
     }
   }
 }

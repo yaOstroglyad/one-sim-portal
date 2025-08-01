@@ -49,13 +49,18 @@ export const FEATURE_TOGGLE_CONFIG: FeatureToggleConfig[] = [
   },
   {
     key: 'dashboard',
-    defaultValue: false,
+    defaultValue: true,
     description: 'Enable new analytics dashboard feature'
   },
   {
     key: 'storybook',
     defaultValue: false,
     description: 'Enable storybook component library access'
+  },
+  {
+    key: 'productConstructor',
+    defaultValue: true,
+    description: 'Enable Product Constructor for eSIM product management'
   }
 ];
 
