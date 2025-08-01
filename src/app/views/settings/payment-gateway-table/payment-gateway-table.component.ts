@@ -68,6 +68,13 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 		});
 	}
 
+	get shouldShowContent(): boolean {
+		if (!this.isAdmin) {
+			return true;
+		}
+		return this.selectedAccount && !this.selectedAccount.isAdmin;
+	}
+
 	ngOnInit(): void {
 		if (!this.isAdmin) {
 			this.loadPaymentGateways();
@@ -78,6 +85,9 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 		if (this.isActiveFlagTemplate && this.isPrimaryFlagTemplate) {
 			this.tableService.isActiveFlagTemplate = this.isActiveFlagTemplate;
 			this.tableService.isPrimaryFlagTemplate = this.isPrimaryFlagTemplate;
+			
+			// Пересоздаем конфигурацию таблицы с новыми templates
+			this.tableConfig$ = this.tableService.getTableConfig();
 			this.cdr.detectChanges();
 		}
 	}
