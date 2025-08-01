@@ -1,133 +1,75 @@
-<ng-container *ngIf="!isAdmin; else forAdmin">
-    <div class="d-flex justify-content-between align-items-center mb-3 mx-3">
-        <mat-hint class="hint mb-1">
-            <mat-icon fontIcon="info_outline"></mat-icon>
-            {{ 'paymentGateway.hint' | translate }}
-        </mat-hint>
+<div class="container">
+    <!-- Account selector for admins only -->
+    <app-account-selector
+        *ngIf="isAdmin"
+        [helperText]="'COMMON.select_account_hint_message'"
+        (accountSelected)="onAccountSelected($event)">
+    </app-account-selector>
 
-        <ng-container *ngIf="strategyTypes$ | async as strategies">
-            <div *ngIf="strategies && strategies.length > 0">
-                <c-dropdown>
-                    <button cButton cDropdownToggle color="secondary">
-                        {{ 'paymentGateway.setupNew' | translate }}
-                    </button>
-                    <ul cDropdownMenu>
-                        <li *ngFor="let strategy of strategies">
-                            <a cDropdownItem (click)="edit({ name: strategy })">{{ strategy }}</a>
-                        </li>
-                    </ul>
-                </c-dropdown>
-            </div>
-        </ng-container>
+    <!-- Admin warning for admin accounts -->
+    <div *ngIf="isAdmin && selectedAccount?.isAdmin" class="admin-account-message mx-3">
+        <mat-icon color="warn">warning</mat-icon>
+        <span>{{ 'paymentGateway.adminAccountWarning' | translate }}</span>
     </div>
 
-    <generic-table [config$]="tableConfig$"
-                   [menu]="menuTemplate"
-                   [data$]="dataList$"></generic-table>
+    <!-- Main content - shown for non-admins always, for admins only when non-admin account selected -->
+    <ng-container *ngIf="shouldShowContent">
+        <div class="d-flex justify-content-between align-items-center mb-3 mx-3">
+            <mat-hint class="hint mb-1">
+                <mat-icon fontIcon="info_outline"></mat-icon>
+                {{ 'paymentGateway.hint' | translate }}
+            </mat-hint>
 
-    <ng-template #menuTemplate let-item>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="edit(item)">{{ 'paymentGateway.setup' | translate }}</button>
-        </mat-menu>
-    </ng-template>
-
-    <ng-template #isActiveFlag let-data='context'>
-        <td>
-            <div class="badge-display">
-                <c-badge [class]="data?.isActive ? 'active-badge' : 'disabled-badge'"
-                         class="me-1"
-                         shape="rounded-pill">{{ data?.isActive }}
-                </c-badge>
-            </div>
-        </td>
-    </ng-template>
-
-    <ng-template #isPrimaryFlag let-data='context'>
-        <td>
-            <div class="badge-display">
-                <c-badge [class]="data?.primary ? 'primary-badge' : 'disabled-badge'"
-                         class="me-1"
-                         shape="rounded-pill">{{ data?.primary }}
-                </c-badge>
-            </div>
-        </td>
-    </ng-template>
-</ng-container>
-
-<ng-template #forAdmin>
-    <div class="container">
-        <app-account-selector
-            [helperText]="'COMMON.select_account_hint_message'"
-            (accountSelected)="onAccountSelected($event)">
-        </app-account-selector>
-
-        <ng-container *ngIf="selectedAccount">
-            <div *ngIf="selectedAccount.isAdmin" class="admin-account-message mx-3">
-                <mat-icon color="warn">warning</mat-icon>
-                <span>{{ 'paymentGateway.adminAccountWarning' | translate }}</span>
-            </div>
-
-            <ng-container *ngIf="!selectedAccount.isAdmin">
-                <div class="d-flex justify-content-between align-items-center mb-3 mx-3">
-                    <mat-hint class="hint mb-1">
-                        <mat-icon fontIcon="info_outline"></mat-icon>
-                        {{ 'paymentGateway.hint' | translate }}
-                    </mat-hint>
-
-                    <ng-container *ngIf="strategyTypes$ | async as strategies">
-                        <div *ngIf="strategies && strategies.length > 0">
-                            <c-dropdown>
-                                <button cButton cDropdownToggle color="secondary">
-                                    {{ 'paymentGateway.setupNew' | translate }}
-                                </button>
-                                <ul cDropdownMenu>
-                                    <li *ngFor="let strategy of strategies">
-                                        <a cDropdownItem (click)="edit({ name: strategy })">{{ strategy }}</a>
-                                    </li>
-                                </ul>
-                            </c-dropdown>
-                        </div>
-                    </ng-container>
+            <ng-container *ngIf="strategyTypes$ | async as strategies">
+                <div *ngIf="strategies && strategies.length > 0">
+                    <c-dropdown>
+                        <button cButton cDropdownToggle color="secondary">
+                            {{ 'paymentGateway.setupNew' | translate }}
+                        </button>
+                        <ul cDropdownMenu>
+                            <li *ngFor="let strategy of strategies">
+                                <a cDropdownItem (click)="edit({ name: strategy })">{{ strategy }}</a>
+                            </li>
+                        </ul>
+                    </c-dropdown>
                 </div>
-
-                <generic-table [config$]="tableConfig$"
-                              [menu]="menuTemplate"
-                              [data$]="dataList$"></generic-table>
-
-                <ng-template #menuTemplate let-item>
-                    <button mat-icon-button [matMenuTriggerFor]="menu">
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
-                    <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="edit(item)">{{ 'paymentGateway.setup' | translate }}</button>
-                    </mat-menu>
-                </ng-template>
-
-                <ng-template #isActiveFlag let-data='context'>
-                    <td>
-                        <div class="badge-display">
-                            <c-badge [class]="data?.isActive ? 'active-badge' : 'disabled-badge'"
-                                     class="me-1"
-                                     shape="rounded-pill">{{ data?.isActive }}
-                            </c-badge>
-                        </div>
-                    </td>
-                </ng-template>
-
-                <ng-template #isPrimaryFlag let-data='context'>
-                    <td>
-                        <div class="badge-display">
-                            <c-badge [class]="data?.primary ? 'primary-badge' : 'disabled-badge'"
-                                     class="me-1"
-                                     shape="rounded-pill">{{ data?.primary }}
-                            </c-badge>
-                        </div>
-                    </td>
-                </ng-template>
             </ng-container>
-        </ng-container>
-    </div>
+        </div>
+
+        <generic-table [config$]="tableConfig$"
+                       [menu]="menuTemplate"
+                       [data$]="dataList$"></generic-table>
+    </ng-container>
+</div>
+
+<!-- Shared templates -->
+<ng-template #menuTemplate let-item>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="edit(item)">{{ 'paymentGateway.setup' | translate }}</button>
+    </mat-menu>
+</ng-template>
+
+<ng-template #isActiveFlag let-data='context'>
+    <td>
+        <div class="badge-display">
+            <c-badge [class]="data?.isActive ? 'active-badge' : 'disabled-badge'"
+                     class="me-1"
+                     shape="rounded-pill">{{ data?.isActive }}
+            </c-badge>
+        </div>
+    </td>
+</ng-template>
+
+<ng-template #isPrimaryFlag let-data='context'>
+    <td>
+        <div class="badge-display">
+            <c-badge [class]="data?.primary ? 'primary-badge' : 'disabled-badge'"
+                     class="me-1"
+                     shape="rounded-pill">{{ data?.primary }}
+            </c-badge>
+        </div>        
+    </td>
 </ng-template>
