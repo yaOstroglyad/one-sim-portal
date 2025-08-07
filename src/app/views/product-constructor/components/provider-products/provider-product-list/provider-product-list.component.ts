@@ -6,10 +6,10 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared/components/generic-right-panel/generic-right-panel.component';
+import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { ProviderProductDetailsComponent } from '../provider-product-details/provider-product-details.component';
-import { ProviderProductUploadDialogComponent } from '../provider-product-upload-dialog/provider-product-upload-dialog.component';
-import { GenericTableModule, HeaderModule, TableConfig, TemplateType, DeleteConfirmationComponent } from '../../../../../shared';
+import { ProviderProductUploadDialogComponent } from '../provider-product-upload-dialog';
+import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -56,7 +56,6 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
   // Panel states
-  showDeletePanel = false;
   showDetailsPanel = false;
   selectedProviderProduct: ProviderProduct | null = null;
   selectedProviderProductDetails: ProviderProduct | null = null;
@@ -128,7 +127,7 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
     countryId?: number;
     regionId?: number;
   } = {page: 0, size: 10}): void {
-    
+
     const searchRequest: ProviderProductSearchRequest = {
       searchParams: {
         countryId: params.countryId || undefined,
@@ -178,29 +177,7 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
     this.showDetailsPanel = true;
   }
 
-
-  onDelete(providerProduct: ProviderProduct): void {
-    this.selectedProviderProduct = providerProduct;
-    this.showDeletePanel = true;
-  }
-
-  onConfirmDelete(): void {
-    if (this.selectedProviderProduct) {
-      this.providerProductService.deleteProviderProduct(this.selectedProviderProduct.id).subscribe({
-        next: () => {
-          this.showDeletePanel = false;
-          this.selectedProviderProduct = null;
-          this.loadData();
-        },
-        error: (error) => {
-          console.error('Error deleting provider product:', error);
-        }
-      });
-    }
-  }
-
   onPanelClose(): void {
-    this.showDeletePanel = false;
     this.showDetailsPanel = false;
     this.selectedProviderProduct = null;
     this.selectedProviderProductDetails = null;

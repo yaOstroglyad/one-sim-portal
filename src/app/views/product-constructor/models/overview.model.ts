@@ -12,6 +12,12 @@ export interface OverviewStats {
   inactiveProducts: number;
 }
 
+export interface ProductStatisticsResponse {
+  productsCount: number;
+  mobileBundlesCount: number;
+  regionsCount: number;
+}
+
 export interface QuickAction {
   title: string;
   description: string;

@@ -2,7 +2,7 @@ import { FieldType, FormConfig, SelectOption, FieldConfig } from '../../../../..
 import { Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { CompanyProduct, CreateCompanyProductRequest, UpdateCompanyProductRequest } from '../../../models';
+import { CompanyProduct, CreateCompanyProductRequest, UpdateCompanyProductRequest, ActiveTariffOffer, Currency } from '../../../models';
 import { AccountsDataService } from '../../../../../shared/services/accounts-data.service';
 import { ProductService } from '../../../services';
 
@@ -25,7 +25,9 @@ export function getCompanyProductFormConfig(
   isEditing: boolean = false,
   accountsService?: AccountsDataService,
   isAdmin?: boolean,
-  productService?: ProductService
+  productService?: ProductService,
+  tariffOffers: ActiveTariffOffer[] = [],
+  selectedAccountId?: string | null
 ): FormConfig {
   const formFields: FieldConfig[] = [
     // Section Title: Product Assignment
@@ -45,7 +47,7 @@ export function getCompanyProductFormConfig(
       name: 'companyId',
       label: 'Company',
       placeholder: 'Select a company',
-      value: companyProduct?.company?.id || null,
+      value: selectedAccountId || null,
       disabled: isEditing,
       validators: [Validators.required],
       options: accountsService.ownerAccounts().pipe(
@@ -69,7 +71,7 @@ export function getCompanyProductFormConfig(
     validators: [Validators.required],
     value: companyProduct?.id || '', // In edit mode, this represents the product
     disabled: isEditing,
-    options: productService 
+    options: productService
       ? productService.getProducts({
           searchParams: {},
           page: { page: 0, size: 1000 } // Get all products for dropdown
@@ -86,9 +88,28 @@ export function getCompanyProductFormConfig(
         })))
   };
 
-  formFields.push(...[
-    productField,
+  formFields.push(productField);
 
+  // Add Tariff Offer field only for create mode
+  if (!isEditing) {
+    const tariffOfferField: FieldConfig = {
+      type: FieldType.select,
+      name: 'tariffOfferId',
+      label: 'Tariff Offer',
+      placeholder: 'Select a tariff offer',
+      validators: [Validators.required],
+      dependsOn: ['productId'],
+      options: of((tariffOffers || []).map((offer, index) => ({
+        // Temporary: Generate ID using productId + index until backend provides real ID
+        // When backend adds ID, just replace with: value: offer.id
+        value: `${offer.productId}_${index}`,
+        displayValue: `${offer.serviceProvider.name} - ${offer.price} ${offer.currency.toUpperCase()}`
+      } as SelectOption)))
+    };
+    formFields.push(tariffOfferField);
+  }
+
+  formFields.push(...[
     // Section Title: Product Details
     {
       type: FieldType.text,
@@ -144,16 +165,27 @@ export function getCompanyProductFormConfig(
   };
 }
 
-export function getCompanyProductCreateRequest(formValue: any): CreateCompanyProductRequest {
-  const request: any = {
-    productId: formValue.productId,
-    description: formValue.description || undefined
-  };
-
-  // Add companyId only if it's provided (admin case)
-  if (formValue.companyId) {
-    request.companyId = formValue.companyId;
+export function getCompanyProductCreateRequest(formValue: any, selectedTariffOffer: ActiveTariffOffer | null): CreateCompanyProductRequest {
+  if (!selectedTariffOffer) {
+    throw new Error('Tariff offer must be selected');
   }
+
+  const request: CreateCompanyProductRequest = {
+    companyId: formValue.companyId || '',
+    productId: formValue.productId,
+    retailTariff: {
+      // TODO: Replace with selectedTariffOffer.id when backend provides it
+      // For now, using a combination that backend can parse
+      tariffOfferId: `${selectedTariffOffer.productId}_${selectedTariffOffer.serviceProvider.id}`,
+      price: selectedTariffOffer.price,
+      currency: selectedTariffOffer.currency
+    },
+    description: formValue.description || '',
+    validityPeriod: {
+      period: parseInt(formValue.period) || 30,
+      timeUnit: formValue.timeUnit || 'days'
+    }
+  };
 
   return request;
 }

@@ -2,6 +2,14 @@
   /* everything described below is just default settings,
   the main color comes from the white-label.service.ts  */
 
+  /** typography **/
+  --os-font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  
+  /* Material Design typography overrides */
+  --mat-form-field-container-text-font: var(--os-font-family);
+  --mdc-typography-font-family: var(--os-font-family);
+  --mat-select-panel-font-family: var(--os-font-family);
+  --mat-option-text-font-family: var(--os-font-family);
 
   /** primary **/
   --os-color-primary: #f9a743;

@@ -1,4 +1,4 @@
-import { Currency, PageRequest } from './common.model';
+import { Currency, PageRequest, ServiceProvider } from './common.model';
 
 // Re-export Currency for use in components
 export { Currency } from './common.model';
@@ -36,4 +36,14 @@ export interface TariffOfferSearchParams {
 export interface TariffOfferSearchRequest {
   searchParams: TariffOfferSearchParams;
   page: PageRequest;
+}
+
+export interface ActiveTariffOffer {
+  id?: string; // Optional for now, will be required when backend adds it
+  productId: string;
+  productName: string;
+  serviceProvider: ServiceProvider;
+  price: number;
+  currency: Currency;
+  validFrom: Date | string;
 }

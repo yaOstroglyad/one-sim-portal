@@ -6,7 +6,7 @@ import { IconDirective } from '@coreui/icons-angular';
 
 import { FormGeneratorComponent, FormConfig } from '../../../../../shared';
 import { TariffOffer } from '../../../models';
-import { TariffOfferService } from '../../../services/tariff-offer.service';
+import { TariffOfferService } from '../../../../../shared/services/tariff-offer.service';
 import { ProductService } from '../../../services/product.service';
 import { ProviderProductService } from '../../../services/provider-product.service';
 import { 

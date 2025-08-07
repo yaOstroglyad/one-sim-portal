@@ -34,37 +34,37 @@ export class ProductsTableService extends TableConfigAbstractService<Product> {
 		showMenu: true,
 		columns: [
 			{
-				visible: false, 
-				key: 'id', 
+				visible: false,
+				key: 'id',
 				header: 'id'
 			},
 			{
-				visible: true, 
-				key: 'name', 
+				visible: true,
+				key: 'name',
 				header: 'productName',
 				templateType: TemplateType.Text,
 				sortable: true,
 				minWidth: '200px'
 			},
 			{
-				visible: true, 
-				key: 'bundle.name', 
+				visible: true,
+				key: 'bundle.name',
 				header: 'bundle',
 				templateType: TemplateType.Text,
 				sortable: true,
 				minWidth: '180px'
 			},
 			{
-				visible: true, 
-				key: 'serviceCoverage.name', 
+				visible: true,
+				key: 'serviceCoverage.name',
 				header: 'coverage',
 				templateType: TemplateType.Text,
 				sortable: true,
 				minWidth: '150px'
 			},
 			{
-				visible: true, 
-				key: 'validityPeriod', 
+				visible: true,
+				key: 'validityPeriod',
 				header: 'validity',
 				templateType: TemplateType.Custom,
 				customTemplate: () => this.validityTemplate,
@@ -73,8 +73,8 @@ export class ProductsTableService extends TableConfigAbstractService<Product> {
 				class: 'text-center'
 			},
 			{
-				visible: true, 
-				key: 'active', 
+				visible: true,
+				key: 'active',
 				header: 'status',
 				templateType: TemplateType.Custom,
 				customTemplate: () => this.statusTemplate,

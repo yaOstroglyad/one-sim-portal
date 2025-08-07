@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DefaultLayoutComponent } from './default-layout.component';
 import { FeatureToggleGuard } from '../../shared/auth/feature-toggle.guard';
-import { PRODUCT_CONSTRUCTOR_ROUTES } from '../../views/product-constructor/product-constructor.routes';
 
 const routes: Routes = [
   {
@@ -89,7 +88,15 @@ const routes: Routes = [
           featureToggle: 'productConstructor'
         },
         canActivate: [FeatureToggleGuard],
-        children: PRODUCT_CONSTRUCTOR_ROUTES
+        loadChildren: () => import('../../views/product-constructor/product-constructor.routes').then(m => m.PRODUCT_CONSTRUCTOR_ROUTES)
+      },
+      {
+        path: 'company-products',
+        data: {
+          title: 'nav.companyProducts'
+        },
+        loadComponent: () =>
+            import('../../views/product-constructor/components/company-products/company-product-list/company-product-list.component').then((m) => m.CompanyProductListComponent)
       },
     ]
   }

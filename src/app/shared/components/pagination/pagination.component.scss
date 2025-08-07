@@ -53,6 +53,13 @@
 .ag-pagination-button {
   @include ag-grid-button(26px);
   @include ag-grid-focus();
+  
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+  }
 }
 
 // Records range info - using utility class

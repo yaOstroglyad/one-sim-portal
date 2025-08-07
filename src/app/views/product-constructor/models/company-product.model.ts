@@ -13,10 +13,18 @@ export interface CompanyProduct {
   active: boolean;
 }
 
+export interface RetailTariff {
+  tariffOfferId: string;
+  price: number;
+  currency: Currency;
+}
+
 export interface CreateCompanyProductRequest {
-  companyId?: string;
+  companyId: string;
   productId: string;
-  description?: string;
+  retailTariff: RetailTariff;
+  description: string;
+  validityPeriod: ValidityPeriod;
 }
 
 export interface UpdateCompanyProductRequest {

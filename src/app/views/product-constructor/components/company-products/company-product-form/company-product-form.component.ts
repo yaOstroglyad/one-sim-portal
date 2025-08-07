@@ -5,9 +5,11 @@ import { IconDirective } from '@coreui/icons-angular';
 
 import { FormGeneratorComponent, FormConfig } from '../../../../../shared';
 import { CompanyProductService, ProductService } from '../../../services';
-import { CompanyProduct } from '../../../models';
+import { CompanyProduct, ActiveTariffOffer } from '../../../models';
 import { AccountsDataService } from '../../../../../shared/services/accounts-data.service';
+import { TariffOfferService } from '../../../../../shared/services/tariff-offer.service';
 import { AuthService, ADMIN_PERMISSION } from '../../../../../shared/auth/auth.service';
+import { SelectedTariffOfferDetailsComponent } from '../selected-tariff-offer-details/selected-tariff-offer-details.component';
 import { 
   getCompanyProductFormConfig,
   getCompanyProductCreateRequest,
@@ -20,7 +22,8 @@ import {
   imports: [
     CommonModule,
     FormGeneratorComponent,
-    IconDirective
+    IconDirective,
+    SelectedTariffOfferDetailsComponent
   ],
   templateUrl: './company-product-form.component.html',
   styleUrls: ['./company-product-form.component.scss']
@@ -28,18 +31,25 @@ import {
 export class CompanyProductFormComponent implements OnInit {
 
   @Input() companyProduct: CompanyProduct | null = null;
+  @Input() selectedAccountId: string | null = null;
   @Output() save = new EventEmitter<void>();
 
   formConfig: FormConfig;
   companyProductForm: FormGroup;
   loading = false;
   error: string | null = null;
+  tariffOffers: ActiveTariffOffer[] = [];
+  selectedTariffOffer: ActiveTariffOffer | null = null;
+  
+  // TODO: Remove this mapping when backend adds ID to ActiveTariffOffer response
+  // Currently using index-based temporary IDs
 
   constructor(
     private companyProductService: CompanyProductService,
     private accountsService: AccountsDataService,
     private authService: AuthService,
-    private productService: ProductService
+    private productService: ProductService,
+    private tariffOfferService: TariffOfferService
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +59,9 @@ export class CompanyProductFormComponent implements OnInit {
       this.isEditing, 
       this.accountsService, 
       isAdmin,
-      this.productService
+      this.productService,
+      this.tariffOffers,
+      this.selectedAccountId
     );
   }
 
@@ -59,6 +71,52 @@ export class CompanyProductFormComponent implements OnInit {
 
   onFormChanges(form: FormGroup): void {
     this.companyProductForm = form;
+    
+    // Listen for product changes to load tariff offers
+    form.get('productId')?.valueChanges.subscribe(productId => {
+      if (productId && !this.isEditing) {
+        this.loadTariffOffers(productId);
+      }
+    });
+    
+    // Listen for tariff offer selection
+    form.get('tariffOfferId')?.valueChanges.subscribe(tariffOfferId => {
+      if (tariffOfferId) {
+        // Temporary: using index-based ID until backend provides real ID
+        const [index] = tariffOfferId.split('_').slice(-1);
+        this.selectedTariffOffer = this.tariffOffers[parseInt(index)] || null;
+      }
+    });
+  }
+  
+  private loadTariffOffers(productId: string): void {
+    this.tariffOfferService.getActiveTariffOffers(productId).subscribe({
+      next: (offers) => {
+        this.tariffOffers = offers;
+        this.updateFormConfigWithTariffOffers();
+        // Reset tariff offer selection
+        this.companyProductForm.get('tariffOfferId')?.setValue(null);
+        this.selectedTariffOffer = null;
+      },
+      error: (error) => {
+        console.error('Error loading tariff offers:', error);
+        this.tariffOffers = [];
+        this.updateFormConfigWithTariffOffers();
+      }
+    });
+  }
+  
+  private updateFormConfigWithTariffOffers(): void {
+    const isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+    this.formConfig = getCompanyProductFormConfig(
+      this.companyProduct,
+      this.isEditing,
+      this.accountsService,
+      isAdmin,
+      this.productService,
+      this.tariffOffers,
+      this.selectedAccountId
+    );
   }
 
   onSubmit(): void {
@@ -75,7 +133,7 @@ export class CompanyProductFormComponent implements OnInit {
           getCompanyProductUpdateRequest(formValue)
         )
       : this.companyProductService.createCompanyProduct(
-          getCompanyProductCreateRequest(formValue)
+          getCompanyProductCreateRequest(formValue, this.selectedTariffOffer)
         );
 
     operation$.subscribe({
@@ -99,5 +157,27 @@ export class CompanyProductFormComponent implements OnInit {
       return error.message;
     }
     return 'An unexpected error occurred. Please try again.';
+  }
+  
+  onTariffOfferUpdated(updatedOffer: ActiveTariffOffer): void {
+    this.selectedTariffOffer = updatedOffer;
+    
+    // Update the form with the new tariff offer
+    if (this.companyProductForm) {
+      // Find the index of the updated offer in the tariffOffers array
+      const updatedIndex = this.tariffOffers.findIndex(offer => 
+        offer.productId === updatedOffer.productId && 
+        offer.serviceProvider.id === updatedOffer.serviceProvider.id
+      );
+      
+      if (updatedIndex !== -1) {
+        // Replace the old offer with the updated one
+        this.tariffOffers[updatedIndex] = updatedOffer;
+        
+        // Update form value to point to the updated offer
+        const newFormValue = `${updatedOffer.productId}_${updatedIndex}`;
+        this.companyProductForm.get('tariffOfferId')?.setValue(newFormValue, { emitEvent: false });
+      }
+    }
   }
 }

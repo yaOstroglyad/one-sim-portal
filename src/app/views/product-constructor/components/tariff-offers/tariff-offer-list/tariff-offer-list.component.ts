@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Observable, take } from 'rxjs';
+import { Observable, take, of, Subject, takeUntil } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,9 +12,9 @@ import { IconDirective } from '@coreui/icons-angular';
 import { FormControlDirective } from '@coreui/angular';
 import { BadgeComponent } from '@coreui/angular';
 
-import { TariffOffer } from '../../../models/tariff-offer.model';
+import { TariffOffer, ActiveTariffOffer } from '../../../models/tariff-offer.model';
 import { TariffOffersTableService } from '../tariff-offers-table.service';
-import { TariffOfferService } from '../../../services/tariff-offer.service';
+import { TariffOfferService } from '../../../../../shared/services/tariff-offer.service';
 import { GenericTableModule, HeaderModule, DeleteConfirmationComponent } from '../../../../../shared';
 import { GenericRightPanelComponent, PanelAction } from '../../../../../shared/components/generic-right-panel/generic-right-panel.component';
 import { TariffOfferFormComponent } from '../tariff-offer-form/tariff-offer-form.component';
@@ -23,6 +23,7 @@ import { TariffOfferDetailsComponent } from '../tariff-offer-details/tariff-offe
 @Component({
   selector: 'app-tariff-offer-list',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -45,13 +46,14 @@ import { TariffOfferDetailsComponent } from '../tariff-offer-details/tariff-offe
   templateUrl: './tariff-offer-list.component.html',
   styleUrls: ['./tariff-offer-list.component.scss']
 })
-export class TariffOfferListComponent implements OnInit, AfterViewInit {
+export class TariffOfferListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('priceTemplate', { static: true }) priceTemplate!: TemplateRef<any>;
   @ViewChild('statusTemplate', { static: true }) statusTemplate!: TemplateRef<any>;
 
   filterForm: FormGroup;
   tableConfig$!: Observable<any>;
-  tariffOffers$: Observable<TariffOffer[]>;
+  dataList$: Observable<ActiveTariffOffer[]>;
+  private unsubscribe$ = new Subject<void>();
 
   // Panel states
   showCreatePanel = false;
@@ -76,11 +78,10 @@ export class TariffOfferListComponent implements OnInit, AfterViewInit {
     private router: Router,
     private translateService: TranslateService,
     private tableService: TariffOffersTableService,
-    private tariffOfferService: TariffOfferService
+    private tariffOfferService: TariffOfferService,
+    private cdr: ChangeDetectorRef
   ) {
     this.filterForm = this.createFilterForm();
-    this.tableConfig$ = this.tableService.tableConfig$;
-    this.tariffOffers$ = this.tariffOfferService.getTariffOffers();
   }
 
   ngOnInit(): void {
@@ -89,6 +90,11 @@ export class TariffOfferListComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.tableService.setTemplates(this.priceTemplate, this.statusTemplate);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   private createFilterForm(): FormGroup {
@@ -100,7 +106,13 @@ export class TariffOfferListComponent implements OnInit, AfterViewInit {
   }
 
   loadTariffOffers(): void {
-    this.tariffOffers$ = this.tariffOfferService.getTariffOffers();
+    this.tariffOfferService.getActiveTariffOffers()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        this.tableConfig$ = this.tableService.tableConfig$;
+        this.dataList$ = of(data);
+        this.cdr.markForCheck();
+      });
   }
 
   onRefresh(): void {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
@@ -9,9 +9,9 @@ import { Product } from '../../../models';
 import { 
   ProductService, 
   BundleService, 
-  RegionService,
-  CountryService 
+  RegionService
 } from '../../../services';
+import { CountryService } from '../../../../../shared';
 import { 
   getProductFormConfig,
   getProductCreateRequest,
@@ -38,12 +38,12 @@ export class ProductFormComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  constructor(
-    private productService: ProductService,
-    private bundleService: BundleService,
-    private regionService: RegionService,
-    private countryService: CountryService
-  ) {}
+  private readonly productService = inject(ProductService);
+  private readonly bundleService = inject(BundleService);
+  private readonly regionService = inject(RegionService);
+  private readonly countryService = inject(CountryService);
+
+  constructor() {}
 
   ngOnInit(): void {
     this.formConfig = getProductFormConfig(
