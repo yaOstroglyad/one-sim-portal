@@ -51,8 +51,10 @@
     "retry": "Retry",
     "clear": "Clear",
     "selectAll": "Select All",
+    "all": "All",
+    "search": "Search",
     "deselectAll": "Deselect All",
-    "noResultsFound": "No results found for",
+    "noResultsFound": "No results found",
     "noItemsAvailable": "No items available",
     "table": {
       "filterPlaceholder": "Filter table data"
@@ -99,6 +101,8 @@
     "status": "Status",
     "noDetailsAvailable": "No details available",
     "countryId": "Country ID",
+    "selectCountry": "Select Country",
+    "selectRegion": "Select Region",
     "regionId": "Region ID", 
     "mobileBundleId": "Mobile Bundle ID"
   },
@@ -147,6 +151,7 @@
     "products": "Products",
     "inventory": "Inventory",
     "users": "Users",
+    "companyProducts": "Company Products",
     "productconstructor": "Product Constructor",
     "settings": "Settings",
     "general": "General",

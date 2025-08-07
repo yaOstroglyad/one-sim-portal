@@ -48,6 +48,9 @@
     "close": "Закрыть",
     "retry": "Повторить",
     "clear": "Очистить",
+    "all": "Все",
+    "search": "Поиск",
+    "noResultsFound": "Ничего не найдено",
     "table": {
       "filterPlaceholder": "Фильтровать данные таблицы"
     }
@@ -93,6 +96,8 @@
     "status": "Статус",
     "noDetailsAvailable": "Детали недоступны",
     "countryId": "ID страны",
+    "selectCountry": "Выберите страну",
+    "selectRegion": "Выберите регион",
     "regionId": "ID региона",
     "mobileBundleId": "ID мобильного пакета"
   },
@@ -136,6 +141,8 @@
     "products": "Продукты",
     "inventory": "Инвентарь",
     "users": "Пользователи",
+    "companyProducts": "Продукты компании",
+    "productconstructor": "Конструктор продуктов",
     "settings": "Настройки",
     "general": "Общие",
     "paymentGateway": "Платежный шлюз",

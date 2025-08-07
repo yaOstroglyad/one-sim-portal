@@ -1,38 +1,11 @@
-.dialog-header {
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 10px;
-}
+// Global dialog styles are now available from src/scss/_vendor-overrides.scss
+// All dialog structure styles (.dialog-header, .dialog-content, .dialog-footer, 
+// .grid-container, .grid-item, .full-width, .half-width) are globally available
 
+// Component-specific styles
 .dialog-content {
-  display: block;
-  padding-top: 20px;
-  max-height: 400px; /* Adjust the height as necessary */
+  max-height: 400px;
   overflow-y: auto;
-}
-
-.dialog-footer {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 10px;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-}
-
-.grid-item {
-  width: 100%;
-}
-
-
-
-.full-width {
-  width: 100%;
-}
-
-.half-width {
-  width: 50%;
 }
 
 .form-group {
@@ -55,10 +28,6 @@
 
 mat-form-field {
   margin-bottom: 16px;
-}
-
-mat-dialog-content {
-  overflow: hidden;
 }
 
 h3 {

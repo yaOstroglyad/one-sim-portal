@@ -11,9 +11,11 @@
     (formChanges)="onFormChanges($event)">
   </app-form-generator>
 
-  <!-- Note about pricing -->
-  <div class="info-alert" *ngIf="!isEditing">
-    <svg cIcon name="cil-info" width="20" height="20"></svg>
-    <span><strong>Note:</strong> Pricing will be configured in the Tariff Offers section after creating this company product.</span>
-  </div>
+  <!-- Selected Tariff Offer Details -->
+  <app-selected-tariff-offer-details
+    *ngIf="selectedTariffOffer && !isEditing"
+    [tariffOffer]="selectedTariffOffer"
+    [showEditButton]="true"
+    (tariffOfferUpdated)="onTariffOfferUpdated($event)">
+  </app-selected-tariff-offer-details>
 </div>

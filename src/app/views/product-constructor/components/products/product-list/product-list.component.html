@@ -57,10 +57,6 @@
             <mat-icon>{{ item.active ? 'toggle_off' : 'toggle_on' }}</mat-icon>
             <span>{{ item.active ? 'Deactivate' : 'Activate' }}</span>
         </button>
-        <button mat-menu-item (click)="onDelete(item)">
-            <mat-icon>delete</mat-icon>
-            <span>Delete</span>
-        </button>
     </mat-menu>
 </ng-template>
 
@@ -150,44 +146,5 @@
   <div panel-content>
     <app-product-details [product]="selectedProductDetails"></app-product-details>
   </div>
-
-</app-generic-right-panel>
-
-<!-- Delete Confirmation Panel -->
-<app-generic-right-panel
-  *ngIf="showDeletePanel && selectedProduct"
-  title="Confirm Delete"
-  [isOpen]="showDeletePanel"
-  [defaultWidth]="450"
-  [resizable]="false"
-  [hasFooter]="true"
-  (close)="onPanelClose()">
-
-  <div panel-content>
-    <app-delete-confirmation
-      [config]="{
-        itemName: selectedProduct.name,
-        itemType: 'Product',
-        warningMessage: 'This action cannot be undone. Company products based on this product may be affected.'
-      }"
-      (confirm)="onConfirmDelete()"
-      (cancel)="onPanelClose()">
-    </app-delete-confirmation>
-  </div>
-
-  <ng-container panel-actions>
-    <button
-      type="button"
-      class="btn btn-outline-secondary"
-      (click)="onPanelClose()">
-      Cancel
-    </button>
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="onConfirmDelete()">
-      Delete Product
-    </button>
-  </ng-container>
 
 </app-generic-right-panel>

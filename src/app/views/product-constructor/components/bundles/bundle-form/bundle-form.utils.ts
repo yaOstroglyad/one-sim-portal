@@ -14,8 +14,7 @@ const unitTypes = {
     { value: 'Byte', displayValue: 'Bytes' },
     { value: 'Kb', displayValue: 'KB' },
     { value: 'Mb', displayValue: 'MB' },
-    { value: 'Gb', displayValue: 'GB' },
-    { value: 'Tb', displayValue: 'TB' }
+    { value: 'Gb', displayValue: 'GB' }
   ],
   voice: [
     { value: 'Seconds', displayValue: 'Seconds' },

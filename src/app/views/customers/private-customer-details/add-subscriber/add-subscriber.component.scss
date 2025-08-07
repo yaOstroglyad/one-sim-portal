@@ -1,24 +1,18 @@
-.dialog-header {
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 10px;
-}
+// Global dialog styles are now available from src/scss/_vendor-overrides.scss
+// Add subscriber dialog specific styles
 
-.dialog-content {
+@import "../../../../../scss/variables";
+
+// Form generator spacing in dialog
+app-form-generator {
   display: block;
-  padding-top: 20px;
 }
 
-.dialog-footer {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 10px;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-}
-
-.grid-item {
+// Loader component styling in dialog
+app-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: map-get($os-spacing, '20'); // 80px
   width: 100%;
 }

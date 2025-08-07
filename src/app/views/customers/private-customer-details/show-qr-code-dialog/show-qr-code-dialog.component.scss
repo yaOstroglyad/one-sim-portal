@@ -1,24 +1,47 @@
-.dialog-header {
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 10px;
-}
+// Global dialog styles are now available from src/scss/_vendor-overrides.scss
+// QR-code dialog specific styles
 
 .dialog-content {
-  display: block;
-  padding-top: 20px;
+  min-width: 320px;
+  max-width: 400px;
+  text-align: center;
+  
+  app-qr-code {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+    
+    span {
+      font-family: monospace;
+      font-weight: 600;
+      background-color: var(--os-color-light);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      transition: background-color 0.15s ease-in-out;
+      
+      &:hover {
+        background-color: var(--os-color-medium-subtle-bg);
+      }
+    }
+  }
 }
 
-.dialog-footer {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 10px;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-}
-
-.grid-item {
-  width: 100%;
+// Dark theme support
+[data-coreui-theme="dark"] {
+  .dialog-content {
+    p span {
+      background-color: var(--os-color-dark-subtle-bg);
+      color: var(--os-color-light-text);
+      
+      &:hover {
+        background-color: var(--os-color-medium);
+      }
+    }
+  }
 }

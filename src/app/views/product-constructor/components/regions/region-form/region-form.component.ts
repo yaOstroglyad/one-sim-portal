@@ -75,10 +75,11 @@ export class RegionFormComponent implements OnInit, OnChanges {
   private updateFormWithRegionData(countryIds: number[]): void {
     // Wait for form to be available or set initial values
     if (this.regionForm) {
+      // Use emitEvent: false to prevent triggering infinite loops
       this.regionForm.patchValue({
         name: this.region?.name || '',
         countryIds: countryIds
-      });
+      }, { emitEvent: false });
     } else {
       // Store values to set when form becomes available
       this.initialFormValues = {
@@ -97,7 +98,8 @@ export class RegionFormComponent implements OnInit, OnChanges {
     
     // Apply initial values if they were stored before form was ready
     if (this.initialFormValues && form) {
-      form.patchValue(this.initialFormValues);
+      // Use emitEvent: false to prevent triggering valueChanges and causing infinite loop
+      form.patchValue(this.initialFormValues, { emitEvent: false });
       this.initialFormValues = null; // Clear after applying
     }
   }

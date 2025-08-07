@@ -1,25 +1,16 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { forkJoin, Observable, of, timer, Subscription } from 'rxjs';
-import { map, catchError, timeout } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 
 import { CardComponent } from '../../../../shared/components/card/card.component';
 import { BadgeComponent } from '../../../../shared/components/badge/badge.component';
 import { MetricCardComponent, MetricCard } from '../../../../shared/components/card/metric-card.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconDirective, IconModule } from '@coreui/icons-angular';
-// Services will be used when API endpoints are ready
-// import { 
-//   RegionService, 
-//   BundleService, 
-//   ProductService, 
-//   CompanyProductService,
-//   ProviderProductService 
-// } from '../../services';
 import { OverviewStats, QuickAction } from '../../models';
-import { getQuickActions, isActionEnabled } from './overview.utils';
-import { AuthService, ADMIN_PERMISSION } from '../../../../shared/auth/auth.service';
+import { QUICK_ACTIONS, isActionEnabled } from './overview.utils';
+import { OverviewService } from '../../services';
 
 @Component({
   selector: 'app-overview',
@@ -45,21 +36,16 @@ export class OverviewComponent implements OnInit, OnDestroy {
   error = false;
   private subscription: Subscription = new Subscription();
 
-  quickActions: QuickAction[] = [];
+  quickActions: QuickAction[] = QUICK_ACTIONS;
   kpiMetrics: MetricCard[] = [];
-  isAdmin: boolean = false;
 
   constructor(
-    private authService: AuthService,
-    private cdr: ChangeDetectorRef
-  ) {
-    // Services will be injected when API endpoints are ready
-  }
+    private cdr: ChangeDetectorRef,
+    private overviewService: OverviewService
+  ) {}
 
   ngOnInit(): void {
-    this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
-    this.quickActions = getQuickActions(this.isAdmin);
-    this.updateKpiMetrics(); // Инициализируем метрики
+    this.updateKpiMetrics();
     this.loadStats();
   }
 
@@ -87,38 +73,10 @@ export class OverviewComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Emulates API call to get overview statistics
-   * In real implementation, this would be replaced with actual HTTP service call
+   * Get overview statistics from API
    */
   private getOverviewStats(): Observable<OverviewStats> {
-    // Mock API response with different data for admin vs non-admin
-    const mockStats: OverviewStats = this.isAdmin 
-      ? {
-          regions: 12,
-          bundles: 25,
-          products: 18,
-          companyProducts: 45,
-          providerProducts: 32,
-          activeProducts: 15,
-          inactiveProducts: 3
-        }
-      : {
-          regions: 8,
-          bundles: 15,
-          products: 0, // Non-admin doesn't see core products
-          companyProducts: 28,
-          providerProducts: 0, // Non-admin doesn't see provider products
-          activeProducts: 25,
-          inactiveProducts: 3
-        };
-
-    // Simulate API call with delay
-    return timer(800).pipe(
-      map(() => mockStats),
-      catchError((error) => {
-        throw error;
-      })
-    );
+    return this.overviewService.getOverviewStats();
   }
 
   ngOnDestroy(): void {
@@ -132,7 +90,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
   }
 
   isActionEnabled(action: QuickAction): boolean {
-    return isActionEnabled(action, this.isAdmin);
+    return isActionEnabled(action);
   }
 
   private updateKpiMetrics(): void {
@@ -151,7 +109,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
       inactiveProducts: 0
     };
 
-    const adminMetrics: MetricCard[] = [
+    return [
       {
         id: 'regions',
         title: 'productConstructor.overview.regions',
@@ -174,31 +132,5 @@ export class OverviewComponent implements OnInit, OnDestroy {
         color: 'success'
       }
     ];
-
-    const nonAdminMetrics: MetricCard[] = [
-      {
-        id: 'regions',
-        title: 'productConstructor.overview.regions',
-        value: currentStats.regions,
-        icon: 'cil-location-pin',
-        color: 'primary'
-      },
-      {
-        id: 'bundles',
-        title: 'productConstructor.overview.bundles',
-        value: currentStats.bundles,
-        icon: 'cil-data-transfer-down',
-        color: 'info'
-      },
-      {
-        id: 'companyProducts',
-        title: 'productConstructor.overview.companyProducts',
-        value: currentStats.companyProducts,
-        icon: 'cil-industry',
-        color: 'secondary'
-      }
-    ];
-
-    return this.isAdmin ? adminMetrics : nonAdminMetrics;
   }
 }

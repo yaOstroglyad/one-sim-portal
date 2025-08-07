@@ -22,6 +22,7 @@ export * from './components/generic-right-panel'
 export * from './components/delete-confirmation'
 export * from './components/multiselect-grid'
 export * from './components/file-upload'
+export * from './components/searchable-select'
 
 export * from './components/header-component/header.module';
 export * from './pipes/format-time/format-time.module';

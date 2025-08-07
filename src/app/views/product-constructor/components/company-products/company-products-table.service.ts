@@ -34,37 +34,32 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 		showMenu: true,
 		columns: [
 			{
-				visible: false, 
-				key: 'id', 
-				header: 'id'
-			},
-			{
-				visible: true, 
-				key: 'company.name', 
+				visible: true,
+				key: 'company.name',
 				header: 'company',
 				templateType: TemplateType.Text,
 				sortable: true,
 				minWidth: '180px'
 			},
 			{
-				visible: true, 
-				key: 'name', 
+				visible: true,
+				key: 'name',
 				header: 'productName',
 				templateType: TemplateType.Text,
 				sortable: true,
 				minWidth: '200px'
 			},
 			{
-				visible: true, 
-				key: 'serviceCoverage.name', 
+				visible: true,
+				key: 'serviceCoverage.name',
 				header: 'coverage',
 				templateType: TemplateType.Text,
 				sortable: true,
 				minWidth: '150px'
 			},
 			{
-				visible: true, 
-				key: 'price', 
+				visible: true,
+				key: 'price',
 				header: 'price',
 				templateType: TemplateType.Custom,
 				customTemplate: () => this.priceTemplate,
@@ -73,8 +68,8 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 				class: 'text-end'
 			},
 			{
-				visible: true, 
-				key: 'currency', 
+				visible: true,
+				key: 'currency',
 				header: 'currency',
 				templateType: TemplateType.Text,
 				sortable: false,
@@ -82,8 +77,8 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 				class: 'text-center'
 			},
 			{
-				visible: true, 
-				key: 'active', 
+				visible: true,
+				key: 'active',
 				header: 'status',
 				templateType: TemplateType.Custom,
 				customTemplate: () => this.statusTemplate,

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { map, catchError, tap, switchMap } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
@@ -24,6 +24,7 @@ import { RegionsTableService } from '../regions-table.service';
 @Component({
   selector: 'app-region-list',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterModule,
@@ -45,7 +46,7 @@ import { RegionsTableService } from '../regions-table.service';
   templateUrl: './region-list.component.html',
   styleUrls: ['./region-list.component.scss']
 })
-export class RegionListComponent implements OnInit {
+export class RegionListComponent implements OnInit, OnDestroy {
 
   dataList$: Observable<RegionSummary[]>;
   countries$: Observable<Country[]>;
@@ -67,11 +68,12 @@ export class RegionListComponent implements OnInit {
   // Panel actions
   detailsPanelActions: PanelAction[] = [];
 
-  constructor(
-    private regionService: RegionService,
-    private countryService: CountryService,
-    private tableService: RegionsTableService
-  ) {
+  private readonly regionService = inject(RegionService);
+  private readonly countryService = inject(CountryService);
+  private readonly tableService = inject(RegionsTableService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  constructor() {
     // Initialize form
     this.filterForm = new FormGroup({
       name: new FormControl('')
@@ -93,27 +95,36 @@ export class RegionListComponent implements OnInit {
     // Data already loaded in constructor
   }
 
+  ngOnDestroy(): void {
+    // Cleanup handled automatically by Angular
+  }
+
   private loadData(): void {
     this.dataList$ = this.refreshTrigger$.pipe(
       switchMap(() => this.regionService.getRegions()),
-      map(apiData => apiData.map(region => ({
-        ...region,
-        countryCount: this.getCountryCountForRegion(region.id)
-      }))),
-      tap(data => {
-        this.tableService.updateTableData(data);
+      map(apiData => {
+        const regionsWithCounts = apiData.map(region => ({
+          ...region,
+          countryCount: this.getCountryCountForRegion(region.id)
+        }));
+        this.tableService.updateTableData(regionsWithCounts);
+        return regionsWithCounts;
       }),
       catchError(error => {
         console.error('Error loading regions:', error);
         return of([]);
       })
     );
-    this.countries$ = this.countryService.getCountries().pipe(
-      catchError(error => {
-        console.error('Error loading countries:', error);
-        return of([]);
-      })
-    );
+    
+    // Create countries$ once - don't recreate it each time!
+    if (!this.countries$) {
+      this.countries$ = this.countryService.getCountries().pipe(
+        catchError(error => {
+          console.error('Error loading countries:', error);
+          return of([]);
+        })
+      );
+    }
   }
 
   onRefresh(): void {
@@ -139,57 +150,43 @@ export class RegionListComponent implements OnInit {
   onCreateNew(): void {
     this.selectedRegion = null;
     this.showCreatePanel = true;
+    this.cdr.markForCheck();
   }
 
   onViewDetails(region: RegionSummary): void {
     this.selectedRegion = region;
 
-    // Mock region details data until API is ready
-    const mockRegionDetails: Region = {
-      id: region.id,
-      name: region.name,
-      countries: region.id === 1 ? [
-        { id: 1, name: 'Germany', isoAlphaCode2: 'DE', isoAlphaCode3: 'DEU', dialingCode: '+49' },
-        { id: 2, name: 'France', isoAlphaCode2: 'FR', isoAlphaCode3: 'FRA', dialingCode: '+33' },
-        { id: 5, name: 'Italy', isoAlphaCode2: 'IT', isoAlphaCode3: 'ITA', dialingCode: '+39' },
-        { id: 6, name: 'Spain', isoAlphaCode2: 'ES', isoAlphaCode3: 'ESP', dialingCode: '+34' },
-        { id: 7, name: 'Netherlands', isoAlphaCode2: 'NL', isoAlphaCode3: 'NLD', dialingCode: '+31' }
-      ] : [
-        { id: 3, name: 'United States', isoAlphaCode2: 'US', isoAlphaCode3: 'USA', dialingCode: '+1' },
-        { id: 4, name: 'Canada', isoAlphaCode2: 'CA', isoAlphaCode3: 'CAN', dialingCode: '+1' },
-        { id: 8, name: 'Mexico', isoAlphaCode2: 'MX', isoAlphaCode3: 'MEX', dialingCode: '+52' }
-      ]
-    };
-
-    this.selectedRegionDetails = mockRegionDetails;
-    this.showDetailsPanel = true;
-
-    // Uncomment when API is ready:
-    // this.regionService.getRegion(region.id).subscribe({
-    //   next: (details) => {
-    //     this.selectedRegionDetails = details;
-    //     this.showDetailsPanel = true;
-    //   },
-    //   error: (error) => {
-    //     console.error('Error loading region details:', error);
-    //   }
-    // });
+    // Load region details from API
+    this.regionService.getRegion(region.id).subscribe({
+      next: (details) => {
+        this.selectedRegionDetails = details;
+        this.showDetailsPanel = true;
+        this.cdr.markForCheck(); // Trigger change detection for OnPush
+      },
+      error: (error) => {
+        console.error('Error loading region details:', error);
+        this.cdr.markForCheck(); // Trigger change detection even for errors
+        // Show error state or fallback UI
+      }
+    });
   }
 
   onEdit(region: RegionSummary): void {
     this.selectedRegion = region;
     this.showEditPanel = true;
+    this.cdr.markForCheck();
   }
 
   onEditFromDetails(): void {
     this.showDetailsPanel = false;
     this.showEditPanel = true;
+    this.cdr.markForCheck();
   }
-
 
   onDelete(region: RegionSummary): void {
     this.selectedRegion = region;
     this.showDeletePanel = true;
+    this.cdr.markForCheck();
   }
 
   onConfirmDelete(): void {
@@ -199,9 +196,11 @@ export class RegionListComponent implements OnInit {
           this.showDeletePanel = false;
           this.selectedRegion = null;
           this.onRefresh();
+          this.cdr.markForCheck();
         },
         error: (error) => {
           console.error('Error deleting region:', error);
+          this.cdr.markForCheck();
         }
       });
     }
@@ -214,12 +213,14 @@ export class RegionListComponent implements OnInit {
     this.showDetailsPanel = false;
     this.selectedRegion = null;
     this.selectedRegionDetails = null;
+    this.cdr.markForCheck();
   }
 
   onRegionSaved(): void {
     this.onPanelClose();
     this.onRefresh();
   }
+
 
   /**
    * Hardcoded mapping for countryCount since backend doesn't provide this field

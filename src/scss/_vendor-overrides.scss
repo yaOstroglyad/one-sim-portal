@@ -20,7 +20,7 @@
   --ag-cell-horizontal-border: #e2e2e2;
   --ag-selected-row-background-color: rgba(var(--os-color-primary-rgb), 0.1);
   --ag-row-hover-color: rgba(var(--os-color-primary-rgb), 0.05);
-  --ag-font-family: 'Montserrat', sans-serif;
+  --ag-font-family: var(--os-font-family);
   --ag-row-even-background-color: #ffffff;
   --ag-header-column-separator-color: #dde2eb;
   --ag-border-color: #e2e2e2;
@@ -430,6 +430,45 @@ colgroup col {
 // ==============================================
 
 // Material Design component customizations
+// Material Form Fields (legacy and MDC) - comprehensive font override
+.mat-form-field,
+.mat-mdc-form-field {
+  // Use global font family for all Material Form Fields
+  font-family: var(--os-font-family) !important;
+}
+
+// Material Form Field specific elements - deep override
+.mat-mdc-form-field .mat-mdc-floating-label,
+.mat-mdc-form-field .mdc-floating-label,
+.mat-mdc-form-field .mat-mdc-form-field-input-control,
+.mat-mdc-form-field input,
+.mat-mdc-form-field textarea,
+.mat-mdc-form-field select,
+.mat-mdc-form-field .mat-select,
+.mat-mdc-form-field .mat-select-value,
+.mat-mdc-form-field .mat-mdc-select,
+.mat-form-field-label,
+.mat-form-field-wrapper,
+.mat-input-element,
+.mat-select,
+.mat-select-value {
+  font-family: var(--os-font-family) !important;
+}
+
+// Global input and form element overrides
+input, 
+textarea, 
+select,
+.form-control,
+.mat-mdc-text-field-wrapper,
+.mdc-text-field,
+.mdc-text-field__input,
+::ng-deep input,
+::ng-deep textarea,
+::ng-deep select {
+  font-family: var(--os-font-family) !important;
+}
+
 .mat-form-field {
   .mat-form-field-label {
     color: var(--os-color-medium-text);
@@ -446,14 +485,462 @@ colgroup col {
 
 .mat-button, .mat-raised-button, .mat-flat-button {
   border-radius: map-get($os-border-radius, 'medium');
-  font-family: $primary-font;
+  font-family: var(--os-font-family);
   font-weight: 500;
   text-transform: none;
 }
 
+// ==============================================
+// ANGULAR MATERIAL DIALOG GLOBAL STYLES
+// Comprehensive styling for all MatDialog components
+// ==============================================
+
 .mat-dialog-container {
   border-radius: map-get($os-border-radius, 'large');
   box-shadow: map-get($os-shadows, '2xl');
+  font-family: var(--os-font-family);
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+// Angular Material dialog element styles - Tailwind-inspired title styling
+// More specific selectors to override Angular Material defaults
+h1.mat-mdc-dialog-title,
+h2.mat-mdc-dialog-title,
+h3.mat-mdc-dialog-title,
+h4.mat-mdc-dialog-title,
+h5.mat-mdc-dialog-title,
+h6.mat-mdc-dialog-title,
+.mat-mdc-dialog-title,
+.mdc-dialog__title,
+.dialog-header {
+  padding: 1rem 1.5rem 0rem !important; // Top and sides padding, no bottom
+  margin: 0 !important;
+  
+  // Use global font family - consistent across all components
+  font-family: var(--os-font-family) !important; // Global Montserrat font
+  font-size: 1.5rem !important; // 24px - matches breadcrumb .os-breadcrumb-item
+  font-weight: 700 !important; // font-bold - matches breadcrumb active
+  line-height: 1.33 !important; // leading-tight - clean proportions (32px / 24px = 1.33)
+  letter-spacing: -0.025em !important; // tracking-tight - Tailwind standard
+  color: var(--os-color-dark) !important; // Strong, clean color
+  
+  // Clean Tailwind design - minimal styling
+  border: none !important;
+  background: transparent !important; // No background
+  text-shadow: none !important; // No shadows
+  
+  // Modern spacing and alignment
+  display: flex;
+  align-items: center;
+  min-height: 3.5rem; // 56px - proportional to 24px title
+  
+  // Icon support (if title contains icons) - proportional to title size
+  svg, mat-icon {
+    margin-right: 0.5rem;
+    font-size: 1.5rem; // 24px to match title size
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  
+  // Focus states for accessibility
+  &:focus-within {
+    outline: 2px solid var(--os-color-primary);
+    outline-offset: -2px;
+    border-radius: 0.125rem; // rounded-sm
+  }
+}
+
+// Tailwind-inspired dialog title variants
+h1.mat-mdc-dialog-title,
+h2.mat-mdc-dialog-title,
+h3.mat-mdc-dialog-title,
+h4.mat-mdc-dialog-title,
+h5.mat-mdc-dialog-title,
+h6.mat-mdc-dialog-title,
+.mat-mdc-dialog-title,
+.mdc-dialog__title,
+.dialog-header {
+  
+  // Primary variant - clean colored text only
+  &.dialog-title-primary {
+    background: transparent;
+    color: var(--os-color-primary);
+    border-bottom-color: var(--os-color-primary);
+  }
+  
+  // Success variant - clean colored text only  
+  &.dialog-title-success {
+    background: transparent;
+    color: var(--os-color-success);
+    border-bottom-color: var(--os-color-success);
+  }
+  
+  // Warning variant - clean colored text only
+  &.dialog-title-warning {
+    background: transparent;
+    color: var(--os-color-warning);
+    border-bottom-color: var(--os-color-warning);
+  }
+  
+  // Danger variant - clean colored text only
+  &.dialog-title-danger {
+    background: transparent;
+    color: var(--os-color-danger);
+    border-bottom-color: var(--os-color-danger);
+  }
+  
+  // Info variant - clean colored text only
+  &.dialog-title-info {
+    background: transparent;
+    color: var(--os-color-info);
+    border-bottom-color: var(--os-color-info);
+  }
+}
+
+.mat-mdc-dialog-content {
+  padding: 1.5rem !important;
+  margin: 0 !important;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  // Remove default Material typography if using custom
+  &:not(.mat-typography) {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+.mat-mdc-dialog-actions {
+  padding: 1rem 1.5rem 1rem !important;
+  margin: 0 !important;
+  border-top: 1px solid var(--os-color-medium-subtle-bg);
+  display: flex;
+  justify-content: flex-end;
+  gap: map-get($os-spacing, '3');
+  min-height: auto;
+  
+  // Button spacing in actions
+  button + button {
+    margin-left: 0.75rem;
+  }
+  
+  // Align options
+  &[align="start"] {
+    justify-content: flex-start;
+  }
+  
+  &[align="center"] {
+    justify-content: center;
+  }
+  
+  // Default is end alignment
+  &[align="end"], &:not([align]) {
+    justify-content: flex-end;
+  }
+}
+
+// Dialog structure classes (dialog-header now styled above with mat-mdc-dialog-title)
+
+.dialog-content {
+  padding: 1.5rem;
+  min-width: 400px;
+  
+  // Error alerts in dialogs
+  .error-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    background-color: rgba(var(--os-color-danger-rgb), 0.1);
+    color: var(--os-color-danger);
+    border: 1px solid rgba(var(--os-color-danger-rgb), 0.2);
+    border-radius: map-get($os-border-radius, 'medium');
+    
+    mat-icon, svg {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+  
+  // Success alerts in dialogs
+  .success-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    background-color: rgba(var(--os-color-success-rgb), 0.1);
+    color: var(--os-color-success);
+    border: 1px solid rgba(var(--os-color-success-rgb), 0.2);
+    border-radius: map-get($os-border-radius, 'medium');
+    
+    mat-icon, svg {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+  
+  // Info sections in dialogs
+  .original-info, .info-section {
+    background-color: var(--os-color-light);
+    padding: 1rem;
+    border-radius: map-get($os-border-radius, 'medium');
+    margin-bottom: 1.5rem;
+    
+    h6 {
+      margin: 0 0 0.75rem 0;
+      font-size: map-get($os-font-sizes, 'sm');
+      font-weight: 600;
+      color: var(--os-color-medium-text);
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+    
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.25rem 0;
+      
+      .label {
+        font-size: map-get($os-font-sizes, 'sm');
+        color: var(--os-color-medium-text);
+      }
+      
+      .value {
+        font-size: map-get($os-font-sizes, 'sm');
+        font-weight: 600;
+        color: var(--os-color-dark-text);
+      }
+    }
+  }
+  
+  // Form sections in dialogs
+  .form-section, .modify-form {
+    h6 {
+      margin: 0 0 1rem 0;
+      font-size: map-get($os-font-sizes, 'sm');
+      font-weight: 600;
+      color: var(--os-color-medium-text);
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      
+      mat-form-field {
+        width: 100%;
+      }
+      
+      .price-field {
+        flex: 2;
+      }
+      
+      .currency-field {
+        flex: 1;
+      }
+    }
+  }
+  
+  // Info notes in dialogs
+  .info-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: rgba(var(--os-color-info-rgb), 0.1);
+    color: var(--os-color-info);
+    border-radius: map-get($os-border-radius, 'medium');
+    font-size: map-get($os-font-sizes, 'sm');
+    
+    mat-icon, svg {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+      margin-top: 0.125rem;
+    }
+  }
+  
+  // Upload info sections
+  .upload-info {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: var(--os-color-light);
+    border-radius: map-get($os-border-radius, 'medium');
+
+    p {
+      margin: 0.5rem 0;
+      font-size: map-get($os-font-sizes, 'sm');
+      color: var(--os-color-dark-text);
+
+      strong {
+        color: var(--os-color-primary);
+      }
+    }
+  }
+  
+  // Upload status sections
+  .upload-status {
+    margin-top: 1rem;
+
+    .upload-success, .upload-error {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-radius: map-get($os-border-radius, 'medium');
+      font-weight: 500;
+    }
+
+    .upload-success {
+      background-color: rgba(var(--os-color-success-rgb), 0.1);
+      color: var(--os-color-success);
+      border: 1px solid rgba(var(--os-color-success-rgb), 0.2);
+
+      mat-icon {
+        color: var(--os-color-success);
+      }
+    }
+
+    .upload-error {
+      background-color: rgba(var(--os-color-danger-rgb), 0.1);
+      color: var(--os-color-danger);
+      border: 1px solid rgba(var(--os-color-danger-rgb), 0.2);
+
+      mat-icon {
+        color: var(--os-color-danger);
+      }
+    }
+  }
+  
+  // Grid layouts in dialogs
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: map-get($os-spacing, '5');
+  }
+
+  .grid-item {
+    width: 100%;
+  }
+  
+  // Standard dialog sizing
+  &.full-width {
+    width: 100%;
+  }
+
+  &.half-width {
+    width: 50%;
+  }
+  
+  // Override Angular Material content overflow
+  mat-dialog-content {
+    overflow: visible;
+    max-height: none;
+  }
+}
+
+.dialog-footer {
+  padding: 1rem 1.5rem 1rem;
+  border-top: 1px solid var(--os-color-medium-subtle-bg);
+  display: flex;
+  justify-content: flex-end;
+  gap: map-get($os-spacing, '3');
+
+  button + button {
+    margin-left: 0.75rem;
+  }
+  
+  .spinner {
+    margin-right: 0.5rem;
+  }
+}
+
+// Dark theme support for dialogs
+[data-coreui-theme="dark"] {
+  // Angular Material dialog elements - clean dark theme
+  h1.mat-mdc-dialog-title,
+  h2.mat-mdc-dialog-title,
+  h3.mat-mdc-dialog-title,
+  h4.mat-mdc-dialog-title,
+  h5.mat-mdc-dialog-title,
+  h6.mat-mdc-dialog-title,
+  .mat-mdc-dialog-title,
+  .mdc-dialog__title,
+  .dialog-header {
+    color: var(--os-color-light-text);
+    border-bottom-color: var(--os-color-dark-subtle-bg);
+    background: transparent; // No background in dark theme too
+    // No text shadow for clean look
+  }
+  
+  .mat-mdc-dialog-actions {
+    border-top-color: var(--os-color-dark-subtle-bg);
+  }
+  
+  // Legacy dialog classes (if any remain)
+  .dialog-header:not(.mat-mdc-dialog-title):not(.mdc-dialog__title) {
+    color: var(--os-color-light-text);
+    border-bottom-color: var(--os-color-dark-subtle-bg);
+  }
+  
+  .dialog-footer {
+    border-top-color: var(--os-color-dark-subtle-bg);
+  }
+  
+  .dialog-content {
+    .error-alert {
+      background-color: rgba(var(--os-color-danger-rgb), 0.15);
+      border-color: rgba(var(--os-color-danger-rgb), 0.3);
+    }
+    
+    .success-alert {
+      background-color: rgba(var(--os-color-success-rgb), 0.15);
+      border-color: rgba(var(--os-color-success-rgb), 0.3);
+    }
+    
+    .original-info, .info-section {
+      background-color: var(--os-color-dark-subtle-bg);
+      
+      h6 {
+        color: var(--os-color-light-text);
+      }
+      
+      .info-row {
+        .label {
+          color: var(--os-color-medium-text);
+        }
+        
+        .value {
+          color: var(--os-color-light-text);
+        }
+      }
+    }
+    
+    .form-section h6, .modify-form h6 {
+      color: var(--os-color-light-text);
+    }
+    
+    .info-note {
+      background-color: rgba(var(--os-color-info-rgb), 0.15);
+      border: 1px solid rgba(var(--os-color-info-rgb), 0.3);
+    }
+    
+    .upload-info {
+      background-color: var(--os-color-dark-subtle-bg);
+      
+      p {
+        color: var(--os-color-light-text);
+      }
+    }
+  }
 }
 
 // ==============================================
@@ -525,7 +1012,7 @@ colgroup col {
 // CoreUI component customizations using our design system
 .btn {
   border-radius: map-get($os-border-radius, 'medium');
-  font-family: $primary-font;
+  font-family: var(--os-font-family);
   font-weight: 500;
   padding: map-get($os-spacing, '2') map-get($os-spacing, '4');
 
@@ -565,7 +1052,7 @@ colgroup col {
 .form-control {
   border-radius: map-get($os-border-radius, 'medium');
   border: 1px solid var(--os-color-medium-subtle-bg);
-  font-family: $primary-font;
+  font-family: var(--os-font-family);
 
   &:focus {
     border-color: var(--os-color-primary);
@@ -582,7 +1069,7 @@ colgroup col {
   color: var(--os-color-light);
   border-radius: map-get($os-border-radius, 'medium');
   box-shadow: map-get($os-shadows, 'lg');
-  font-family: $primary-font;
+  font-family: var(--os-font-family);
   font-size: map-get($os-font-sizes, 'sm');
 }
 
@@ -660,7 +1147,7 @@ colgroup col {
   --mat-mdc-snack-bar-button-color: var(--os-color-dark-contrast);
   --mdc-snackbar-supporting-text-color: var(--os-color-dark-contrast);
   border-radius: map-get($os-border-radius, 'medium');
-  font-family: $primary-font;
+  font-family: var(--os-font-family);
 
   &.app-notification-error {
     --mdc-snackbar-container-color: var(--os-color-danger);

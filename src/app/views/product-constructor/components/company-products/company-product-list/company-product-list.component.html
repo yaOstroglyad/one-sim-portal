@@ -1,17 +1,48 @@
+<app-account-selector *ngIf="isAdmin"
+                      [helperText]="'COMMON.select_account_hint_message'"
+                      (accountSelected)="onAccountSelected($event)">
+</app-account-selector>
+
 <app-header class="os-header-sticky"
             [formGroup]="filterForm"
             [tableConfig$]="tableConfig$"
             (onAddAction)="onCreateNew()"
             (columnSelectionChange)="onColumnSelectionChanged($event)">
     <ng-container header-custom-inputs>
-        <input cFormControl formControlName="countryId" [type]="'number'" placeholder="{{ 'product.countryId' | translate }}">
-        <input cFormControl formControlName="regionId" [type]="'number'" placeholder="{{ 'product.regionId' | translate }}">
+        <app-searchable-select
+                [options]="countryOptions$ | async"
+                [config]="{
+                        placeholder: ('product.selectCountry' | translate),
+                        searchPlaceholder: ('common.search' | translate) + '...',
+                        noResultsText: ('common.noResultsFound' | translate),
+                        clearable: true,
+                        searchable: true
+                    }"
+                formControlName="countryId"
+                class="w-100">
+        </app-searchable-select>
+
+        <app-searchable-select
+                [options]="regionOptions$ | async"
+                [config]="{
+                        placeholder: ('product.selectRegion' | translate),
+                        searchPlaceholder: ('common.search' | translate) + '...',
+                        noResultsText: ('common.noResultsFound' | translate),
+                        clearable: true,
+                        searchable: true
+                    }"
+                formControlName="regionId"
+                class="w-100">
+        </app-searchable-select>
+
         <button cButton
                 color="secondary"
                 [disabled]="filterForm.pristine"
-                (click)="resetForm()">
+                (click)="resetForm()"
+                class="reset-button">
             <svg cIcon name="cilReload"></svg>
         </button>
+        <!--        </div>-->
     </ng-container>
 </app-header>
 
@@ -57,137 +88,98 @@
             <mat-icon>{{ item.active ? 'toggle_off' : 'toggle_on' }}</mat-icon>
             <span>{{ item.active ? 'Deactivate' : 'Activate' }}</span>
         </button>
-        <button mat-menu-item (click)="onDelete(item)">
-            <mat-icon>delete</mat-icon>
-            <span>Delete</span>
-        </button>
     </mat-menu>
 </ng-template>
 
 <!-- Create Panel -->
 <app-generic-right-panel
-  *ngIf="showCreatePanel"
-  title="Create Company Product"
-  subtitle="Link a product to a company with custom pricing"
-  [isOpen]="showCreatePanel"
-  [hasFooter]="true"
-  (close)="onPanelClose()">
+        *ngIf="showCreatePanel"
+        title="Create Company Product"
+        subtitle="Link a product to a company with custom pricing"
+        [isOpen]="showCreatePanel"
+        [hasFooter]="true"
+        (close)="onPanelClose()">
 
-  <div panel-content>
-    <app-company-product-form
-      #createForm
-      [companyProduct]="null"
-      (save)="onCompanyProductSaved()">
-    </app-company-product-form>
-  </div>
+    <div panel-content>
+        <app-company-product-form
+            #createForm
+            [companyProduct]="null"
+            [selectedAccountId]="selectedAccountId"
+            (save)="onCompanyProductSaved()">
+        </app-company-product-form>
+    </div>
 
-  <ng-container panel-actions>
-    <button
-      type="button"
-      class="btn btn-outline-secondary"
-      (click)="onPanelClose()">
-      Cancel
-    </button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="createForm.onSubmit()"
-      [disabled]="createForm.loading || createForm.companyProductForm?.invalid">
-      <span *ngIf="createForm.loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-      Create Company Product
-    </button>
-  </ng-container>
+    <ng-container panel-actions>
+        <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="onPanelClose()">
+            Cancel
+        </button>
+        <button
+                type="button"
+                class="btn btn-primary"
+                (click)="createForm.onSubmit()"
+                [disabled]="createForm.loading || createForm.companyProductForm?.invalid">
+            <span *ngIf="createForm.loading" class="spinner-border spinner-border-sm me-2" role="status"
+                  aria-hidden="true"></span>
+            Create Company Product
+        </button>
+    </ng-container>
 
 </app-generic-right-panel>
 
 <!-- Edit Panel -->
 <app-generic-right-panel
-  *ngIf="showEditPanel && selectedCompanyProduct"
-  title="Edit Company Product"
-  subtitle="Update company product details"
-  [isOpen]="showEditPanel"
-  [hasFooter]="true"
-  (close)="onPanelClose()">
+        *ngIf="showEditPanel && selectedCompanyProduct"
+        title="Edit Company Product"
+        subtitle="Update company product details"
+        [isOpen]="showEditPanel"
+        [hasFooter]="true"
+        (close)="onPanelClose()">
 
-  <div panel-content>
-    <app-company-product-form
-      #editForm
-      [companyProduct]="selectedCompanyProduct"
-      (save)="onCompanyProductSaved()">
-    </app-company-product-form>
-  </div>
+    <div panel-content>
+        <app-company-product-form
+            #editForm
+            [companyProduct]="selectedCompanyProduct"
+            [selectedAccountId]="selectedAccountId"
+            (save)="onCompanyProductSaved()">
+        </app-company-product-form>
+    </div>
 
-  <ng-container panel-actions>
-    <button
-      type="button"
-      class="btn btn-outline-secondary"
-      (click)="onPanelClose()">
-      Cancel
-    </button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="editForm.onSubmit()"
-      [disabled]="editForm.loading || editForm.companyProductForm?.invalid">
-      <span *ngIf="editForm.loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-      Update Company Product
-    </button>
-  </ng-container>
+    <ng-container panel-actions>
+        <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="onPanelClose()">
+            Cancel
+        </button>
+        <button
+                type="button"
+                class="btn btn-primary"
+                (click)="editForm.onSubmit()"
+                [disabled]="editForm.loading || editForm.companyProductForm?.invalid">
+            <span *ngIf="editForm.loading" class="spinner-border spinner-border-sm me-2" role="status"
+                  aria-hidden="true"></span>
+            Update Company Product
+        </button>
+    </ng-container>
 
 </app-generic-right-panel>
 
 <!-- Details Panel -->
 <app-generic-right-panel
-  *ngIf="showDetailsPanel && selectedCompanyProductDetails"
-  title="Company Product Details"
-  [isOpen]="showDetailsPanel"
-  [actions]="detailsPanelActions"
-  [resizable]="true"
-  [defaultWidth]="600"
-  [maxWidth]="900"
-  (close)="onPanelClose()">
+        *ngIf="showDetailsPanel && selectedCompanyProductDetails"
+        title="Company Product Details"
+        [isOpen]="showDetailsPanel"
+        [actions]="detailsPanelActions"
+        [resizable]="true"
+        [defaultWidth]="600"
+        [maxWidth]="900"
+        (close)="onPanelClose()">
 
-  <div panel-content>
-    <app-company-product-details [companyProduct]="selectedCompanyProductDetails"></app-company-product-details>
-  </div>
-
-</app-generic-right-panel>
-
-<!-- Delete Confirmation Panel -->
-<app-generic-right-panel
-  *ngIf="showDeletePanel && selectedCompanyProduct"
-  title="Confirm Delete"
-  [isOpen]="showDeletePanel"
-  [defaultWidth]="450"
-  [resizable]="false"
-  [hasFooter]="true"
-  (close)="onPanelClose()">
-
-  <div panel-content>
-    <app-delete-confirmation
-      [config]="{
-        itemName: selectedCompanyProduct.name,
-        itemType: 'Company Product',
-        warningMessage: 'This action cannot be undone. Customers who have purchased this product will still have access to it.'
-      }"
-      (confirm)="onConfirmDelete()"
-      (cancel)="onPanelClose()">
-    </app-delete-confirmation>
-  </div>
-
-  <ng-container panel-actions>
-    <button
-      type="button"
-      class="btn btn-outline-secondary"
-      (click)="onPanelClose()">
-      Cancel
-    </button>
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="onConfirmDelete()">
-      Delete Company Product
-    </button>
-  </ng-container>
+    <div panel-content>
+        <app-company-product-details [companyProduct]="selectedCompanyProductDetails"></app-company-product-details>
+    </div>
 
 </app-generic-right-panel>

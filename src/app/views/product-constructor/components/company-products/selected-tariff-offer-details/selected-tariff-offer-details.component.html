@@ -1,0 +1,40 @@
+<div class="selected-tariff-offer-details" *ngIf="tariffOffer">
+  <div class="header-section" *ngIf="showTitle || showEditButton">
+    <h5 class="section-title" *ngIf="showTitle">Selected Tariff Offer Details</h5>
+    <button 
+      *ngIf="showEditButton"
+      cButton
+      variant="outline"
+      color="primary"
+      size="sm"
+      (click)="onEditClick()"
+      class="edit-button">
+      <svg cIcon name="cil-pencil" width="14" height="14"></svg>
+      Modify Price
+    </button>
+  </div>
+  
+  <div class="detail-card">
+    <div class="detail-row">
+      <span class="detail-label">Service Provider:</span>
+      <span class="detail-value">{{ tariffOffer.serviceProvider.name }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Product:</span>
+      <span class="detail-value">{{ tariffOffer.productName }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Price:</span>
+      <span class="detail-value price">{{ tariffOffer.price }} {{ tariffOffer.currency.toUpperCase() }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Valid From:</span>
+      <span class="detail-value">{{ tariffOffer.validFrom | date:'medium' }}</span>
+    </div>
+  </div>
+  
+  <div class="info-note" *ngIf="infoMessage">
+    <svg cIcon name="cil-info" width="16" height="16"></svg>
+    <span>{{ infoMessage }}</span>
+  </div>
+</div>

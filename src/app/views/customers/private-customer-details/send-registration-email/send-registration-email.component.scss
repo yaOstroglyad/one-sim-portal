@@ -1,32 +1,35 @@
-.dialog-header {
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 10px;
-}
+// Global dialog styles are now available from src/scss/_vendor-overrides.scss
+// Send registration email dialog specific styles
 
-.dialog-content {
-  display: block;
-  padding-top: 20px;
-}
-
-.dialog-footer {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 10px;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-}
-
-.grid-item {
-  width: 100%;
-}
+@import "../../../../../scss/variables";
 
 .loading-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  color: #666;
+  padding: map-get($os-spacing, '5');
+  color: var(--os-color-medium-text);
+  font-size: map-get($os-font-sizes, 'sm');
+  
+  p {
+    margin: 0;
+  }
+}
+
+// Improve info strip spacing in dialog
+app-info-strip {
+  display: block;
+  margin-bottom: map-get($os-spacing, '4');
+}
+
+// Form generator spacing in dialog
+app-form-generator {
+  display: block;
+}
+
+// Dark theme support
+[data-coreui-theme="dark"] {
+  .loading-container {
+    color: var(--os-color-light-text);
+  }
 }

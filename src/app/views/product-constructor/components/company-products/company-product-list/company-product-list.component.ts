@@ -9,17 +9,22 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { GenericRightPanelComponent, PanelAction } from '../../../../../shared/components/generic-right-panel/generic-right-panel.component';
 import { CompanyProductDetailsComponent } from '../company-product-details/company-product-details.component';
 import { CompanyProductFormComponent } from '../company-product-form/company-product-form.component';
-import { GenericTableModule, HeaderModule, TableConfig, TemplateType, DeleteConfirmationComponent } from '../../../../../shared';
+import { GenericTableModule, HeaderModule, TableConfig, TemplateType, DeleteConfirmationComponent, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ButtonDirective, FormControlDirective, FormSelectDirective, BadgeComponent } from '@coreui/angular';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ButtonDirective, FormControlDirective, BadgeComponent } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { CompanyProductService } from '../../../services';
-import { CompanyProduct, CompanyProductSearchRequest } from '../../../models';
+import { CompanyProductService, RegionService } from '../../../services';
+import { CompanyProduct, CompanyProductSearchRequest, RegionSummary } from '../../../models';
 import { CompanyProductsTableService } from '../company-products-table.service';
+import { AccountSelectorComponent } from '../../../../../shared/components/account-selector/account-selector.component';
+import { AuthService, ADMIN_PERMISSION } from '../../../../../shared/auth/auth.service';
+import { Account, Country } from '../../../../../shared';
+import { CountryService } from '../../../../../shared/services/country.service';
 
 @Component({
   selector: 'app-company-product-list',
@@ -35,12 +40,14 @@ import { CompanyProductsTableService } from '../company-products-table.service';
     DeleteConfirmationComponent,
     GenericTableModule,
     HeaderModule,
+    AccountSelectorComponent,
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
+    MatDialogModule,
+    SearchableSelectComponent,
     ButtonDirective,
     FormControlDirective,
-    FormSelectDirective,
     BadgeComponent,
     IconDirective
   ],
@@ -57,7 +64,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   companyProducts$: Observable<CompanyProduct[]>;
   tableConfig$: BehaviorSubject<TableConfig>;
   filterForm: FormGroup;
-  loading = true;
+  loading = false; // Will be set to true when needed
   error = false;
 
   private unsubscribe$ = new Subject<void>();
@@ -73,10 +80,23 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   // Panel actions
   detailsPanelActions: PanelAction[] = [];
 
+  // Permission check and account selection
+  isAdmin = false;
+  selectedAccountId: string | null = null;
+
+  // Dropdown data
+  countries$: Observable<Country[]>;
+  regions$: Observable<RegionSummary[]>;
+  countryOptions$: Observable<SearchableSelectOption[]>;
+  regionOptions$: Observable<SearchableSelectOption[]>;
+
   constructor(
     private companyProductService: CompanyProductService,
     private tableService: CompanyProductsTableService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService,
+    private countryService: CountryService,
+    private regionService: RegionService
   ) {
     // Initialize form
     this.filterForm = new FormGroup({
@@ -93,11 +113,39 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
 
     // Initialize products$ with empty data
     this.companyProducts$ = of([]);
+
+    // Initialize dropdown data
+    this.countries$ = this.countryService.getCountries();
+    this.regions$ = this.regionService.getRegions();
+    
+    // Transform data for searchable-select
+    this.countryOptions$ = this.countries$.pipe(
+      map(countries => countries.map(country => ({
+        value: country.id,
+        label: country.name,
+        data: country
+      } as SearchableSelectOption)))
+    );
+    
+    this.regionOptions$ = this.regions$.pipe(
+      map(regions => regions.map(region => ({
+        value: region.id,
+        label: region.name,
+        data: region
+      } as SearchableSelectOption)))
+    );
   }
 
   ngOnInit(): void {
+    this.checkPermissions();
+    this.initializeAccount();
     this.setupFilters();
-    this.loadData(); // Load initial data
+    
+    // Only load data if user is not admin (non-admin users have account already set)
+    if (!this.isAdmin) {
+      this.loading = true;
+      this.loadData(); // Load initial data for non-admin users
+    }
   }
 
   ngOnDestroy(): void {
@@ -126,7 +174,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     regionId?: number;
     accountId?: string;
   } = { page: 0, size: 20 }): void {
-    
+
     const searchRequest: CompanyProductSearchRequest = {
       searchParams: {
         countryId: params.countryId || undefined,
@@ -204,39 +252,33 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   onCreateNew(): void {
     this.selectedCompanyProduct = null;
     this.showCreatePanel = true;
+    this.cdr.markForCheck(); // Mark for change detection
   }
 
   onViewDetails(companyProduct: CompanyProduct): void {
     this.selectedCompanyProduct = companyProduct;
-    // Show panel immediately with basic data
+    // Use table data directly - no need for API call
     this.selectedCompanyProductDetails = companyProduct;
     this.showDetailsPanel = true;
-    
-    // Then load detailed data if needed
-    this.companyProductService.getCompanyProduct(companyProduct.id).subscribe({
-      next: (product) => {
-        this.selectedCompanyProductDetails = product;
-      },
-      error: (error) => {
-        console.error('Error loading company product details:', error);
-        // Keep the panel open with basic data even if detailed loading fails
-      }
-    });
+    this.cdr.markForCheck(); // Mark for change detection
   }
 
   onEdit(companyProduct: CompanyProduct): void {
     this.selectedCompanyProduct = companyProduct;
     this.showEditPanel = true;
+    this.cdr.markForCheck(); // Mark for change detection
   }
 
   onEditFromDetails(): void {
     this.showDetailsPanel = false;
     this.showEditPanel = true;
+    this.cdr.markForCheck(); // Mark for change detection
   }
 
   onDelete(companyProduct: CompanyProduct): void {
     this.selectedCompanyProduct = companyProduct;
     this.showDeletePanel = true;
+    this.cdr.markForCheck(); // Mark for change detection
   }
 
   onConfirmDelete(): void {
@@ -261,6 +303,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     this.showDetailsPanel = false;
     this.selectedCompanyProduct = null;
     this.selectedCompanyProductDetails = null;
+    this.cdr.markForCheck(); // Mark for change detection
   }
 
   onCompanyProductSaved(): void {
@@ -272,8 +315,12 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     const newStatus = !companyProduct.active;
     this.companyProductService.updateCompanyProductStatus(companyProduct.id, { isActive: newStatus }).subscribe({
       next: () => {
-        companyProduct.active = newStatus;
+        // Не изменяем объект напрямую для OnPush стратегии
+        // companyProduct.active = newStatus;
+
+        // Обновляем данные через перезагрузку
         this.onRefresh();
+        this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Error updating company product status:', error);
@@ -288,5 +335,33 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
       currency: companyProduct.currency
     });
     return formatter.format(companyProduct.price);
+  }
+
+  // Account selection methods
+  private checkPermissions(): void {
+    this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+  }
+
+  private initializeAccount(): void {
+    if (!this.isAdmin) {
+      const loggedUser = this.authService.loggedUser;
+      if (loggedUser?.accountId) {
+        this.selectedAccountId = loggedUser.accountId;
+        this.filterForm.patchValue({ accountId: this.selectedAccountId });
+      }
+    }
+  }
+
+  public onAccountSelected(account: Account): void {
+    this.selectedAccountId = account.id;
+    this.filterForm.patchValue({ accountId: account.id }, { emitEvent: false });
+    
+    // For admins, this is the first time we load data after account selection
+    if (this.isAdmin) {
+      this.loading = true;
+      this.cdr.markForCheck();
+    }
+    
+    this.applyFilter();
   }
 }

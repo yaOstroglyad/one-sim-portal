@@ -27,7 +27,7 @@
         [disabled]="isFirstPage"
         (click)="goToFirst()"
         [attr.aria-label]="'pagination.first' | translate">
-        <svg cIcon [name]="navigationIcons.first" size="sm"></svg>
+        <mat-icon>{{ navigationIcons.first }}</mat-icon>
       </button>
       
       <!-- Previous page button -->
@@ -38,7 +38,7 @@
         [disabled]="isFirstPage"
         (click)="goToPrevious()"
         [attr.aria-label]="'pagination.previous' | translate">
-        <svg cIcon [name]="navigationIcons.previous" size="sm"></svg>
+        <mat-icon>{{ navigationIcons.previous }}</mat-icon>
       </button>
       
       <!-- Page numbers -->
@@ -73,7 +73,7 @@
         [disabled]="isLastPage"
         (click)="goToNext()"
         [attr.aria-label]="'pagination.next' | translate">
-        <svg cIcon [name]="navigationIcons.next" size="sm"></svg>
+        <mat-icon>{{ navigationIcons.next }}</mat-icon>
       </button>
       
       <!-- Last page button -->
@@ -85,7 +85,7 @@
         [disabled]="isLastPage"
         (click)="goToLast()"
         [attr.aria-label]="'pagination.last' | translate">
-        <svg cIcon [name]="navigationIcons.last" size="sm"></svg>
+        <mat-icon>{{ navigationIcons.last }}</mat-icon>
       </button>
     </div>
   </div>

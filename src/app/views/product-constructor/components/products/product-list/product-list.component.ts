@@ -60,13 +60,11 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
   loading = true;
   error = false;
 
-  private refreshTrigger$ = new BehaviorSubject<void>(undefined);
   private unsubscribe$ = new Subject<void>();
 
   // Panel states
   showCreatePanel = false;
   showEditPanel = false;
-  showDeletePanel = false;
   showDetailsPanel = false;
   selectedProduct: Product | null = null;
   selectedProductDetails: Product | null = null;
@@ -127,7 +125,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     regionId?: number;
     mobileBundleId?: string;
   } = { page: 0, size: 20 }): void {
-    
+
     const searchRequest: ProductSearchRequest = {
       searchParams: {
         countryId: params.countryId || undefined,
@@ -212,7 +210,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     // Show panel immediately with basic data
     this.selectedProductDetails = product;
     this.showDetailsPanel = true;
-    
+
     // Then load detailed data if needed
     this.productService.getProduct(product.id).subscribe({
       next: (productDetails) => {
@@ -235,30 +233,9 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showEditPanel = true;
   }
 
-  onDelete(product: Product): void {
-    this.selectedProduct = product;
-    this.showDeletePanel = true;
-  }
-
-  onConfirmDelete(): void {
-    if (this.selectedProduct) {
-      this.productService.deleteProduct(this.selectedProduct.id).subscribe({
-        next: () => {
-          this.showDeletePanel = false;
-          this.selectedProduct = null;
-          this.onRefresh();
-        },
-        error: (error) => {
-          console.error('Error deleting product:', error);
-        }
-      });
-    }
-  }
-
   onPanelClose(): void {
     this.showCreatePanel = false;
     this.showEditPanel = false;
-    this.showDeletePanel = false;
     this.showDetailsPanel = false;
     this.selectedProduct = null;
     this.selectedProductDetails = null;

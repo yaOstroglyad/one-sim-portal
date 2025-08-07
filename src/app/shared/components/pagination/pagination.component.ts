@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { IconModule } from '@coreui/icons-angular';
+import { MatIconModule } from '@angular/material/icon';
 
 export interface PaginationConfig {
   currentPage: number;
@@ -18,7 +18,7 @@ export interface PaginationConfig {
 @Component({
   selector: 'app-pagination',
   standalone: true,
-  imports: [CommonModule, TranslateModule, IconModule],
+  imports: [CommonModule, TranslateModule, MatIconModule],
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -107,18 +107,18 @@ export class PaginationComponent {
     if (this.isRtl) {
       // В RTL стрелки должны быть инвертированы
       return {
-        first: 'cilMediaStepForward',
-        previous: 'cilChevronRight', 
-        next: 'cilChevronLeft',
-        last: 'cilMediaStepBackward'
+        first: 'last_page',
+        previous: 'chevron_right', 
+        next: 'chevron_left',
+        last: 'first_page'
       };
     } else {
       // Обычные LTR стрелки
       return {
-        first: 'cilMediaStepBackward',
-        previous: 'cilChevronLeft',
-        next: 'cilChevronRight', 
-        last: 'cilMediaStepForward'
+        first: 'first_page',
+        previous: 'chevron_left',
+        next: 'chevron_right', 
+        last: 'last_page'
       };
     }
   }
