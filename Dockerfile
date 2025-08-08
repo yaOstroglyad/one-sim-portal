@@ -12,7 +12,8 @@ RUN npm run build-prod
 FROM nginx:alpine
 RUN rm -rf /var/www/html/*
 #COPY default.conf /etc/nginx/conf.d/default.conf
-COPY ./default.conf /etc/nginx/templates/default.conf.template
+COPY ./default.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /app/dist/ /var/www/html/
-CMD ["/bin/sh", "-c", "envsubst '$BACKEND_PROXY_URL' < /etc/nginx/templates/default.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"]
+CMD ["/bin/sh", "-c", "envsubst '$BACKEND_PROXY_URL' < /etc/nginx/conf.d/default.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+
 
