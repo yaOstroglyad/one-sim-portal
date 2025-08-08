@@ -3,6 +3,7 @@ name: Docker Image CI
 on:
 #  push:
 #    branches: ["main"]
+  workflow_dispatch:
   pull_request:
     branches: ["main"]
 env:
@@ -62,4 +63,5 @@ jobs:
         run: |
             aws eks --region eu-central-1  update-kubeconfig --name esim-dev
             kubectl set image deployment/esim-portal esim-portal=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} 
+
 
