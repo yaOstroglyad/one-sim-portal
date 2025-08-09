@@ -63,6 +63,11 @@ export class CompanyProductFormComponent implements OnInit {
       this.tariffOffers,
       this.selectedAccountId
     );
+    
+    // In edit mode, create a tariff offer from existing company product data
+    if (this.isEditing && this.companyProduct) {
+      this.selectedTariffOffer = this.createTariffOfferFromCompanyProduct(this.companyProduct);
+    }
   }
 
   get isEditing(): boolean {
@@ -130,7 +135,7 @@ export class CompanyProductFormComponent implements OnInit {
     const operation$ = this.isEditing
       ? this.companyProductService.updateCompanyProduct(
           this.companyProduct!.id, 
-          getCompanyProductUpdateRequest(formValue)
+          getCompanyProductUpdateRequest(formValue, this.selectedTariffOffer)
         )
       : this.companyProductService.createCompanyProduct(
           getCompanyProductCreateRequest(formValue, this.selectedTariffOffer)
@@ -162,8 +167,8 @@ export class CompanyProductFormComponent implements OnInit {
   onTariffOfferUpdated(updatedOffer: ActiveTariffOffer): void {
     this.selectedTariffOffer = updatedOffer;
     
-    // Update the form with the new tariff offer
-    if (this.companyProductForm) {
+    // Update the form with the new tariff offer (for create mode)
+    if (this.companyProductForm && !this.isEditing) {
       // Find the index of the updated offer in the tariffOffers array
       const updatedIndex = this.tariffOffers.findIndex(offer => 
         offer.productId === updatedOffer.productId && 
@@ -179,5 +184,23 @@ export class CompanyProductFormComponent implements OnInit {
         this.companyProductForm.get('tariffOfferId')?.setValue(newFormValue, { emitEvent: false });
       }
     }
+    // For edit mode, we just keep the updated selectedTariffOffer
+    // It will be sent in the update request
+  }
+  
+  private createTariffOfferFromCompanyProduct(companyProduct: CompanyProduct): ActiveTariffOffer {
+    // Create a mock tariff offer from company product data for edit mode
+    return {
+      id: `company-product-${companyProduct.id}`, // Generate a unique ID for edit mode
+      productId: companyProduct.id,
+      productName: companyProduct.name,
+      serviceProvider: {
+        id: 'current-provider', // We don't have this data, using placeholder
+        name: 'Current Provider' // We don't have this data, using placeholder
+      },
+      price: companyProduct.price,
+      currency: companyProduct.currency,
+      validFrom: new Date().toISOString() // Placeholder
+    } as ActiveTariffOffer;
   }
 }

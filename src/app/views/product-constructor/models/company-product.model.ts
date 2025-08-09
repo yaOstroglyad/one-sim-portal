@@ -28,6 +28,7 @@ export interface CreateCompanyProductRequest {
 }
 
 export interface UpdateCompanyProductRequest {
+  retailTariff?: RetailTariff;
   description?: string;
   validityPeriod?: ValidityPeriod;
 }

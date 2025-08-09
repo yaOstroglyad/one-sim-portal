@@ -103,6 +103,7 @@ export class EmailLogsTableConfigService extends TableConfigAbstractService<Emai
 	}
 
 	loadData(params: EmailLogFilterParams): Observable<EmailLogResponse> {
+		
 		let httpParams = new HttpParams()
 			.set('page', (params.page || 0).toString())
 			.set('size', (params.size || 10).toString());
@@ -111,13 +112,27 @@ export class EmailLogsTableConfigService extends TableConfigAbstractService<Emai
 			httpParams = httpParams.set('iccid', params.iccid);
 		}
 
+		if (params.email) {
+			httpParams = httpParams.set('email', params.email);
+		}
+
+		if (params.dateFrom) {
+			httpParams = httpParams.set('dateFrom', params.dateFrom);
+		}
+
+		if (params.dateTo) {
+			httpParams = httpParams.set('dateTo', params.dateTo);
+		}
+
 		if (params.sort && params.sort.length > 0) {
 			params.sort.forEach(sortItem => {
 				httpParams = httpParams.append('sort', sortItem);
 			});
 		}
 
-		return this.http.get<EmailLogResponse>(`/api/v1/email-logs/${params.accountId}`, {params: httpParams});
+		const finalUrl = `/api/v1/email-logs/${params.accountId}`;
+
+		return this.http.get<EmailLogResponse>(finalUrl, {params: httpParams});
 	}
 
 	getTableConfig(): BehaviorSubject<TableConfig> {

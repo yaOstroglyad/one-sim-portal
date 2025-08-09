@@ -6,7 +6,7 @@ import { map, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared/components/generic-right-panel/generic-right-panel.component';
+import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { RegionFormComponent } from '../region-form/region-form.component';
 import { RegionDetailsComponent } from '../region-details/region-details.component';
 import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent } from '../../../../../shared';
@@ -115,7 +115,7 @@ export class RegionListComponent implements OnInit, OnDestroy {
         return of([]);
       })
     );
-    
+
     // Create countries$ once - don't recreate it each time!
     if (!this.countries$) {
       this.countries$ = this.countryService.getCountries().pipe(

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { DatePickerWrapperComponent } from '../../shared';
 import { Subject, BehaviorSubject, Observable, of } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
@@ -10,8 +11,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { GenericTableModule, TableConfig, HeaderModule, Account } from '../../shared';
 import { AccountSelectorComponent } from '../../shared/components/account-selector/account-selector.component';
 import { EmailLogsTableConfigService } from './index';
-import { AuthService, ADMIN_PERMISSION } from '../../shared/auth/auth.service';
-import { EmailLog, EmailLogFilterParams } from '../../shared/model';
+import { AuthService, ADMIN_PERMISSION } from '../../shared';
+import { EmailLog, EmailLogFilterParams } from '../../shared';
 import { FormControlDirective, ButtonDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 
@@ -23,6 +24,7 @@ import { IconDirective } from '@coreui/icons-angular';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    DatePickerWrapperComponent,
     TranslateModule,
     GenericTableModule,
     AccountSelectorComponent,
@@ -42,6 +44,9 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
   // Form Controls
   public filterForm: FormGroup = new FormGroup({
     iccid: new FormControl(null),
+    email: new FormControl(null),
+    dateFrom: new FormControl(null),
+    dateTo: new FormControl(null),
   });
 
   // Table Configuration
@@ -94,7 +99,7 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
     this.filterForm.valueChanges.pipe(
       debounceTime(700),
       takeUntil(this.unsubscribe$)
-    ).subscribe(() => {
+    ).subscribe((formValues) => {
       this.applyFilter();
     });
   }
@@ -107,12 +112,15 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
   public applyFilter(): void {
     if (!this.selectedAccountId) return;
 
+    const formValues = this.filterForm.getRawValue();
+
     const params = {
       page: 0,
       size: 10,
       accountId: this.selectedAccountId,
-      ...this.filterForm.getRawValue()
+      ...formValues
     };
+
     this.loadData(params);
   }
 
@@ -139,9 +147,13 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
   private loadData(params: {
     accountId: string;
     iccid?: string;
+    email?: string;
+    dateFrom?: string | Date;
+    dateTo?: string | Date;
     page?: number;
     size?: number;
   }): void {
+
     const loadParams: EmailLogFilterParams = {
       accountId: params.accountId,
       page: params.page || 0,
@@ -151,6 +163,29 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
     if (params.iccid?.trim()) {
       loadParams.iccid = params.iccid.trim();
     }
+
+    if (params.email?.trim()) {
+      loadParams.email = params.email.trim();
+    }
+
+    if (params.dateFrom) {
+      const formattedDateFrom = this.formatDateForAPI(params.dateFrom);
+      if (formattedDateFrom) {
+        loadParams.dateFrom = formattedDateFrom;
+      } else {
+      }
+    } else {
+    }
+
+    if (params.dateTo) {
+      const formattedDateTo = this.formatDateForAPI(params.dateTo);
+      if (formattedDateTo) {
+        loadParams.dateTo = formattedDateTo;
+      } else {
+      }
+    } else {
+    }
+
 
     this.tableConfigService.loadData(loadParams)
       .pipe(takeUntil(this.unsubscribe$))
@@ -168,8 +203,7 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
             this.cdr.detectChanges();
           }
         },
-        error: (error) => {
-          console.error('Error loading email logs:', error);
+        error: () => {
           this.dataList$ = of([]);
           this.cdr.detectChanges();
         }
@@ -188,5 +222,22 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
         ? `${item.metadata.status}`
         : '-'
     }));
+  }
+
+  private formatDateForAPI(date: string | Date | null): string {
+    if (!date) return '';
+
+    try {
+      const dateObj = typeof date === 'string' ? new Date(date) : date;
+
+      // Check if the date is valid
+      if (isNaN(dateObj.getTime())) {
+        return '';
+      }
+
+      return dateObj.toISOString();
+    } catch {
+      return '';
+    }
   }
 }

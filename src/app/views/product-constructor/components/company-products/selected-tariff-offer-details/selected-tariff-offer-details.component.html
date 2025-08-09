@@ -9,7 +9,7 @@
       size="sm"
       (click)="onEditClick()"
       class="edit-button">
-      <svg cIcon name="cil-pencil" width="14" height="14"></svg>
+      <mat-icon>edit</mat-icon>
       Modify Price
     </button>
   </div>
@@ -25,7 +25,26 @@
     </div>
     <div class="detail-row">
       <span class="detail-label">Price:</span>
-      <span class="detail-value price">{{ tariffOffer.price }} {{ tariffOffer.currency.toUpperCase() }}</span>
+      <div class="detail-value price-container">
+        <!-- Show original price if modified -->
+        <div *ngIf="hasModifiedPrice" class="original-price">
+          <span class="price-label">Base Price:</span>
+          <span class="price-value original">{{ originalPrice }} {{ originalCurrency.toUpperCase() }}</span>
+        </div>
+        
+        <!-- Current price -->
+        <div class="current-price" [class.modified]="hasModifiedPrice">
+          <span *ngIf="hasModifiedPrice" class="price-label">Company Price:</span>
+          <span class="price-value current">{{ tariffOffer.price }} {{ tariffOffer.currency.toUpperCase() }}</span>
+          
+          <!-- Markup percentage -->
+          <span *ngIf="hasModifiedPrice" class="markup-badge" 
+                [class.positive]="markupPercentage > 0" 
+                [class.negative]="markupPercentage < 0">
+            {{ markupPercentage > 0 ? '+' : '' }}{{ markupPercentage | number:'1.1-1' }}%
+          </span>
+        </div>
+      </div>
     </div>
     <div class="detail-row">
       <span class="detail-label">Valid From:</span>
@@ -34,7 +53,7 @@
   </div>
   
   <div class="info-note" *ngIf="infoMessage">
-    <svg cIcon name="cil-info" width="16" height="16"></svg>
+    <mat-icon>info</mat-icon>
     <span>{{ infoMessage }}</span>
   </div>
 </div>

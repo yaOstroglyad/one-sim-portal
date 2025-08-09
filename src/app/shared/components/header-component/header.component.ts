@@ -57,7 +57,7 @@ export class HeaderComponent implements OnInit {
   resetColumnSelection(initial = false): void {
     const resetColumns = new Set<string>();
     this.initialTableConfig?.columns.forEach(col => {
-      if (col.visible || initial) { // Initially add all or only visible based on the flag
+      if (col.visible) { // Add only visible columns
         resetColumns.add(col.header);
       }
     });

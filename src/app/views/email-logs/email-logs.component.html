@@ -11,9 +11,32 @@
             (columnSelectionChange)="onColumnSelectionChanged($event)">
     <ng-container header-custom-inputs>
         <input cFormControl
-               formControlName="iccid"
-               [type]="'text'"
-               placeholder="{{ 'email_logs.iccid_placeholder' | translate }}">
+               formControlName="email"
+               [type]="'email'"
+               placeholder="{{ 'email_logs.email_placeholder' | translate }}">
+
+        <app-date-picker-wrapper
+            formControlName="dateFrom"
+            [config]="{
+                mode: 'single',
+                label: 'email_logs.date_from',
+                placeholder: 'email_logs.date_from_placeholder',
+                appearance: 'outline',
+                size: 'medium'
+            }">
+        </app-date-picker-wrapper>
+
+        <app-date-picker-wrapper
+            formControlName="dateTo"
+            [config]="{
+                mode: 'single',
+                label: 'email_logs.date_to',
+                placeholder: 'email_logs.date_to_placeholder',
+                appearance: 'outline',
+                size: 'medium'
+            }">
+        </app-date-picker-wrapper>
+
         <button cButton
                 color="secondary"
                 [disabled]="filterForm?.pristine"

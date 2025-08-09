@@ -1,4 +1,4 @@
-// ============================================== 
+// ==============================================
 // SHARED COMPONENT PATTERNS
 // Components patterns used across the application
 // ==============================================
@@ -6,7 +6,7 @@
 @import "variables";
 @import "mixins";
 
-// ============================================== 
+// ==============================================
 // SCREEN COMPONENT PATTERN
 // Used for mobile device mockups
 // ==============================================
@@ -42,7 +42,7 @@
   z-index: 0;
 }
 
-// ============================================== 
+// ==============================================
 // LOADING STATES
 // Global loading component patterns
 // ==============================================
@@ -78,7 +78,7 @@
   100% { transform: rotate(360deg); }
 }
 
-// ============================================== 
+// ==============================================
 // FORM COMPONENT PATTERNS
 // Reusable form patterns
 // ==============================================
@@ -101,18 +101,18 @@
 
 .form-control {
   width: 100%;
-  padding: map-get($os-spacing, '3') map-get($os-spacing, '4');
+  padding: map-get($os-spacing, '2-5') map-get($os-spacing, '4');
   border: 1px solid var(--os-color-medium);
   border-radius: map-get($os-border-radius, 'medium');
   font-size: map-get($os-font-sizes, 'base');
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  
+
   &:focus {
     outline: none;
     border-color: var(--os-color-primary);
     box-shadow: 0 0 0 3px rgba(var(--os-color-primary-rgb), 0.1);
   }
-  
+
   &:disabled {
     background-color: var(--os-color-light);
     opacity: 0.6;
@@ -120,7 +120,7 @@
   }
 }
 
-// ============================================== 
+// ==============================================
 // DIALOG/MODAL PATTERNS
 // Reusable dialog patterns
 // ==============================================

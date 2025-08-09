@@ -1,0 +1,68 @@
+<h2 mat-dialog-title class="dialog-header">Modify Price</h2>
+
+<mat-dialog-content class="mat-typography dialog-content">
+  <!-- Original Tariff Info -->
+  <div class="original-info" *ngIf="data.tariffOffer">
+    <h6>Current Tariff Offer:</h6>
+    <div class="info-row">
+      <span class="label">Service Provider:</span>
+      <span class="value">{{ data.tariffOffer.serviceProvider.name }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Current Price:</span>
+      <span class="value">{{ data.tariffOffer.price }} {{ data.tariffOffer.currency.toUpperCase() }}</span>
+    </div>
+  </div>
+
+  <!-- Modify Form -->
+  <form [formGroup]="modifyForm" class="modify-form">
+    <h6>New Price Settings:</h6>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="price-field">
+        <mat-label>Price</mat-label>
+        <input
+          matInput
+          type="number"
+          step="0.01"
+          min="0.01"
+          formControlName="price"
+          placeholder="0.00">
+        <mat-error *ngIf="modifyForm.get('price')?.hasError('required')">
+          Price is required
+        </mat-error>
+        <mat-error *ngIf="modifyForm.get('price')?.hasError('min')">
+          Price must be greater than 0
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="currency-field">
+        <mat-label>Currency</mat-label>
+        <mat-select formControlName="currency">
+          <mat-option *ngFor="let currency of currencyOptions$ | async" [value]="currency.value">
+            {{ currency.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+
+  <div class="info-note">
+    <mat-icon>info</mat-icon>
+    <span>This will update the price for selected company.</span>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-footer" align="end">
+  <button mat-button (click)="onCancel()">
+    Cancel
+  </button>
+
+  <button
+    mat-button
+    color="primary"
+    (click)="onSave()"
+    [disabled]="!isFormValid">
+    Update Price
+  </button>
+</mat-dialog-actions>
