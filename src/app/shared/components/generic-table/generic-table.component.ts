@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { TableColumnConfig, TableConfig } from '../../model/table-column-config.interface';
+import { TableColumnConfig, TableConfig } from '../../model';
 
 @Component({
 	selector: 'generic-table',

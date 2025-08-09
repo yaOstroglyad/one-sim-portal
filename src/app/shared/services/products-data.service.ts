@@ -1,16 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { Package } from '../model/package';
 import { DataService } from '../../shared';
 import { map } from 'rxjs/operators';
 import { Pagination } from '../model/grid-configs';
+import { CacheHubService, DataType } from './cache-hub';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class ProductsDataService extends DataService<Package> {
 	private apiUrl = '/api/v1/products/query/all';
+	private readonly cacheHub = inject(CacheHubService);
 
 	constructor(public http: HttpClient) {
 		super(http, '/api/v1/products');
@@ -87,12 +89,19 @@ export class ProductsDataService extends DataService<Package> {
 		);
 	}
 
-	getCurrencies(): Observable<any> {
-		return this.http.get<any>(`/api/v1/products/currency`).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
+	getCurrencies(): Observable<any[]> {
+		return this.cacheHub.get(
+			'currencies:all-currencies',
+			() => this.http.get<any[]>(`/api/v1/products/currency`).pipe(
+				catchError(() => {
+					console.warn('error happened, presenting mocked data');
+					return of([]);
+				})
+			),
+			{
+				dataType: DataType.REFERENCE,
+				ttl: 24 * 60 * 60 * 1000 // 24 hours - currencies don't change often
+			}
 		);
 	}
 

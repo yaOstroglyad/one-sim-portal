@@ -29,6 +29,9 @@ export enum EmailLogStatus {
 export interface EmailLogFilterParams {
   accountId: string;
   iccid?: string;
+  email?: string;
+  dateFrom?: string;
+  dateTo?: string;
   page?: number;
   size?: number;
   sort?: string[];

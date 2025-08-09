@@ -3,7 +3,7 @@
   <!-- Status Badge -->
   <div class="status-badge mb-3">
     <span class="badge" [ngClass]="'bg-' + statusColor">
-      <svg cIcon [name]="statusIcon" width="16" height="16" class="me-1"></svg>
+      <mat-icon [innerHTML]="statusIcon"></mat-icon>
       {{ statusText }}
     </span>
   </div>
@@ -11,7 +11,7 @@
   <!-- Company Information -->
   <div class="detail-section">
     <h6 class="section-title">
-      <svg cIcon name="cilBuilding" width="18" height="18" class="me-2"></svg>
+      <mat-icon>business</mat-icon>
       Company Information
     </h6>
     <div class="detail-row">
@@ -27,7 +27,7 @@
   <!-- Product Information -->
   <div class="detail-section">
     <h6 class="section-title">
-      <svg cIcon name="cilLayers" width="18" height="18" class="me-2"></svg>
+      <mat-icon>layers</mat-icon>
       Product Information
     </h6>
     <div class="detail-row">
@@ -43,14 +43,13 @@
   <!-- Coverage & Pricing -->
   <div class="detail-section">
     <h6 class="section-title">
-      <svg cIcon name="cilGlobe" width="18" height="18" class="me-2"></svg>
+      <mat-icon>public</mat-icon>
       Coverage & Pricing
     </h6>
     <div class="detail-row" *ngIf="companyProduct.serviceCoverage">
       <span class="detail-label">Service Coverage:</span>
       <span class="detail-value">
-        <svg cIcon [name]="coverageTypeIcon" 
-             width="16" height="16" class="me-1"></svg>
+        <mat-icon [innerHTML]="coverageTypeIcon"></mat-icon>
         {{ companyProduct.serviceCoverage.name }} 
         <span class="text-muted">({{ companyProduct.serviceCoverage.type }})</span>
       </span>
@@ -68,13 +67,13 @@
   <!-- Usage Units -->
   <div class="detail-section">
     <h6 class="section-title">
-      <svg cIcon name="cilDataTransferDown" width="18" height="18" class="me-2"></svg>
+      <mat-icon>cloud_download</mat-icon>
       Usage Units
     </h6>
     <div class="usage-units-grid" *ngIf="processedUsageUnits.length > 0">
       <div class="usage-unit-card" *ngFor="let unit of processedUsageUnits">
         <div class="unit-icon">
-          <svg cIcon [name]="unit.icon" width="24" height="24"></svg>
+          <mat-icon [innerHTML]="unit.icon"></mat-icon>
         </div>
         <div class="unit-details">
           <div class="unit-type">{{ unit.typeDisplay }}</div>
@@ -90,7 +89,7 @@
   <!-- Metadata -->
   <div class="detail-section">
     <h6 class="section-title">
-      <svg cIcon name="cilInfo" width="18" height="18" class="me-2"></svg>
+      <mat-icon>info</mat-icon>
       Additional Information
     </h6>
     <div class="detail-row">

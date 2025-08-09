@@ -13,9 +13,11 @@
 
   <!-- Selected Tariff Offer Details -->
   <app-selected-tariff-offer-details
-    *ngIf="selectedTariffOffer && !isEditing"
+    *ngIf="selectedTariffOffer"
     [tariffOffer]="selectedTariffOffer"
     [showEditButton]="true"
+    [showTitle]="!isEditing"
+    [infoMessage]="isEditing ? 'This shows the current pricing that will be updated for this company product.' : 'This price will be used as the base price for this company product.'"
     (tariffOfferUpdated)="onTariffOfferUpdated($event)">
   </app-selected-tariff-offer-details>
 </div>

@@ -1,13 +1,13 @@
 import { Component, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IconDirective } from '@coreui/icons-angular';
+import { MatIconModule } from '@angular/material/icon';
 import { CompanyProduct } from '../../../models';
 
 @Component({
   selector: 'app-company-product-details',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, IconDirective],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './company-product-details.component.html',
   styleUrls: ['./company-product-details.component.scss']
 })
@@ -77,23 +77,23 @@ export class CompanyProductDetailsComponent implements OnChanges {
   }
 
   getStatusIcon(active: boolean): string {
-    return active ? 'cilCheckCircle' : 'cilX';
+    return active ? 'check_circle' : 'cancel';
   }
 
   getCoverageTypeIcon(type: string): string {
     switch (type.toLowerCase()) {
-      case 'country': return 'cilLocationPin';
-      case 'region': return 'cilMap';
-      default: return 'cilGlobe';
+      case 'country': return 'location_on';
+      case 'region': return 'map';
+      default: return 'public';
     }
   }
 
   getUsageUnitIcon(type: string): string {
     switch (type) {
-      case 'data': return 'cilDataTransferDown';
-      case 'voice': return 'cilPhone';
-      case 'sms': return 'cilEnvelopeClosed';
-      default: return 'cilCircle';
+      case 'data': return 'cloud_download';
+      case 'voice': return 'phone';
+      case 'sms': return 'email';
+      default: return 'circle';
     }
   }
 

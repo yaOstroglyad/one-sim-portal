@@ -1,9 +1,9 @@
 import { FieldType, FormConfig, SelectOption, FieldConfig } from '../../../../../shared';
 import { Validators } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { CompanyProduct, CreateCompanyProductRequest, UpdateCompanyProductRequest, ActiveTariffOffer, Currency } from '../../../models';
-import { AccountsDataService } from '../../../../../shared/services/accounts-data.service';
+import { CompanyProduct, CreateCompanyProductRequest, UpdateCompanyProductRequest, ActiveTariffOffer } from '../../../models';
+import { AccountsDataService } from '../../../../../shared';
 import { ProductService } from '../../../services';
 
 // Fallback mock data for when services are not available
@@ -174,9 +174,8 @@ export function getCompanyProductCreateRequest(formValue: any, selectedTariffOff
     companyId: formValue.companyId || '',
     productId: formValue.productId,
     retailTariff: {
-      // TODO: Replace with selectedTariffOffer.id when backend provides it
-      // For now, using a combination that backend can parse
-      tariffOfferId: `${selectedTariffOffer.productId}_${selectedTariffOffer.serviceProvider.id}`,
+      tariffOfferId: selectedTariffOffer.id || `${selectedTariffOffer.productId}_${selectedTariffOffer.serviceProvider.id}`,
+      // Use the potentially modified price and currency from selectedTariffOffer
       price: selectedTariffOffer.price,
       currency: selectedTariffOffer.currency
     },
@@ -190,12 +189,23 @@ export function getCompanyProductCreateRequest(formValue: any, selectedTariffOff
   return request;
 }
 
-export function getCompanyProductUpdateRequest(formValue: any): UpdateCompanyProductRequest {
-  return {
+export function getCompanyProductUpdateRequest(formValue: any, selectedTariffOffer?: ActiveTariffOffer | null): UpdateCompanyProductRequest {
+  const request: UpdateCompanyProductRequest = {
     description: formValue.description || undefined,
     validityPeriod: {
       period: parseInt(formValue.period),
       timeUnit: formValue.timeUnit
     }
   };
+
+  // Include retailTariff only if tariffOffer is provided (price was modified)
+  if (selectedTariffOffer) {
+    request.retailTariff = {
+      tariffOfferId: selectedTariffOffer.id || `${selectedTariffOffer.productId}_${selectedTariffOffer.serviceProvider.id}`,
+      price: selectedTariffOffer.price,
+      currency: selectedTariffOffer.currency
+    };
+  }
+
+  return request;
 }
