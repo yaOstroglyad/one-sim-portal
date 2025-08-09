@@ -503,5 +503,10 @@
     "iccids": "ICCIDи",
     "message_id": "ID повідомлення",
     "metadata_status": "Статус метаданих"
+  },
+  "columnControl": {
+    "title": "Показати/Сховати колонки",
+    "resetToDefault": "Скинути за замовчуванням",
+    "columnsVisible": "{{count}} з {{total}} колонок видно"
   }
 }

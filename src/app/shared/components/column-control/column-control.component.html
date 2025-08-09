@@ -1,28 +1,44 @@
-<ng-container *ngIf="config$ | async; let config">
-    <c-dropdown>
-        <button class="column-picker"
-                cDropdownToggle
-                cButton
-                color="secondary">
-            <svg cIcon
-                 name="cilColumns"></svg>
-        </button>
-        <ul cDropdownMenu>
-            <li *ngFor="let col of config.columns"
-                class="p-1 c-pointer"
-                (click)="$event.stopPropagation();">
-                <c-form-check cDropdownItem>
-                    <input cFormCheckInput
-                           [checked]="col.visible || selectedColumns.has(col.header)"
-                           [id]="col.header"
-                           type="checkbox"
-                           #checkbox
-                           (change)="onColumnSelect(col.header, checkbox.checked);" />
-                    <label cFormCheckLabel
-                           class="c-pointer"
-                           [for]="col.header">{{ config?.translatePrefix + col.header | translate }}</label>
-                </c-form-check>
-            </li>
-        </ul>
-    </c-dropdown>
-</ng-container>
+<button 
+        [matMenuTriggerFor]="columnMenu"
+        class="column-control-button"
+        cButton
+        color="secondary">
+  <svg cIcon name="cilColumns"></svg>
+</button>
+
+<mat-menu #columnMenu="matMenu" class="column-control-menu">
+  <div class="column-control-header" (click)="$event.stopPropagation()">
+    <span class="header-text">{{ 'columnControl.title' | translate }}</span>
+    <button mat-icon-button
+            [matTooltip]="'columnControl.resetToDefault' | translate"
+            (click)="resetToDefault(); $event.stopPropagation()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+  
+  <mat-divider></mat-divider>
+  
+  <div class="column-list">
+    <ng-container *ngIf="tableConfig">
+      <label mat-menu-item 
+             *ngFor="let col of tableConfig.columns"
+             class="column-item"
+             (click)="toggleColumn(col.header); $event.stopPropagation()">
+        <mat-checkbox
+          [checked]="selectedColumns.has(col.header)"
+          (change)="onColumnSelect(col.header, $event.checked)"
+          color="primary">
+          {{ tableConfig.translatePrefix + col.header | translate }}
+        </mat-checkbox>
+      </label>
+    </ng-container>
+  </div>
+  
+  <mat-divider></mat-divider>
+  
+  <div class="column-control-footer" mat-menu-item (click)="$event.stopPropagation()">
+    <span class="selected-count">
+      {{ 'columnControl.columnsVisible' | translate: {count: selectedColumns.size, total: (tableConfig?.columns?.length || 0)} }}
+    </span>
+  </div>
+</mat-menu>
