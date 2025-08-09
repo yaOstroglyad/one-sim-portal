@@ -5,7 +5,7 @@ on:
 #    branches: ["main"]
   workflow_dispatch:
   pull_request:
-    branches: ["main"]
+    branches: ["main","release"]
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/quantum-soft-dev/esim-portal-ui
@@ -59,9 +59,17 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
-      - name: Run a multi-line script
+      - name: Deploy to Development (PR to main)
+        if: github.base_ref == 'main'
         run: |
-            aws eks --region eu-central-1  update-kubeconfig --name esim-dev
-            kubectl set image deployment/esim-portal esim-portal=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} 
+          aws eks --region eu-central-1 update-kubeconfig --name esim-dev
+          kubectl set image deployment/test-esim-portal test-esim-portal=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+      - name: Deploy to Release Environment (PR to release)
+        if: github.base_ref == 'release'
+        run: |
+          aws eks --region eu-central-1 update-kubeconfig --name esim-release
+          kubectl set image deployment/esim-portal esim-portal=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
 
 
