@@ -9,7 +9,7 @@ export interface Region {
 export interface RegionSummary {
   id: number;
   name: string;
-  countryCount?: number;
+  countryCount: number;
 }
 
 export interface CreateRegionRequest {

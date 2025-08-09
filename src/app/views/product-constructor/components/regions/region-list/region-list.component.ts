@@ -103,12 +103,8 @@ export class RegionListComponent implements OnInit, OnDestroy {
     this.dataList$ = this.refreshTrigger$.pipe(
       switchMap(() => this.regionService.getRegions()),
       map(apiData => {
-        const regionsWithCounts = apiData.map(region => ({
-          ...region,
-          countryCount: this.getCountryCountForRegion(region.id)
-        }));
-        this.tableService.updateTableData(regionsWithCounts);
-        return regionsWithCounts;
+        this.tableService.updateTableData(apiData);
+        return apiData;
       }),
       catchError(error => {
         console.error('Error loading regions:', error);
@@ -219,26 +215,5 @@ export class RegionListComponent implements OnInit, OnDestroy {
   onRegionSaved(): void {
     this.onPanelClose();
     this.onRefresh();
-  }
-
-
-  /**
-   * Hardcoded mapping for countryCount since backend doesn't provide this field
-   * TODO: Remove when backend API includes countryCount in response
-   */
-  private getCountryCountForRegion(regionId: number): number {
-    // Hardcoded mapping based on expected data
-    const countryCountMapping: Record<number, number> = {
-      1073741824: 25, // If API returns this specific ID
-      1: 25,          // Europe - fallback mapping
-      2: 3,           // North America - fallback mapping
-      3: 12,          // Asia Pacific - fallback mapping
-      4: 8,           // Middle East - fallback mapping
-      5: 15,          // Latin America - fallback mapping
-      6: 5,           // Africa - fallback mapping
-    };
-
-    // Return mapped count or default to 1 if region not found
-    return countryCountMapping[regionId] || 1;
   }
 }

@@ -595,5 +595,10 @@
       "currency": "מטבע",
       "status": "מצב"
     }
+  },
+  "columnControl": {
+    "title": "הצגה/הסתרה עמודות",
+    "resetToDefault": "איפוס לברירת מחדל",
+    "columnsVisible": "{{count}} מתוך {{total}} עמודות גלויות"
   }
 }

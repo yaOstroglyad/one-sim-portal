@@ -629,5 +629,10 @@
     "iccids": "ICCIDы",
     "message_id": "ID сообщения",
     "metadata_status": "Статус метаданных"
+  },
+  "columnControl": {
+    "title": "Показать/Скрыть колонки",
+    "resetToDefault": "Сбросить по умолчанию",
+    "columnsVisible": "{{count}} из {{total}} колонок видно"
   }
 }

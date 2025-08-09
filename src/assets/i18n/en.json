@@ -784,5 +784,10 @@
       "uploadErrorMessage": "Upload failed. Please try again.",
       "tryAgain": "Please try again or contact support"
     }
+  },
+  "columnControl": {
+    "title": "Show/Hide Columns",
+    "resetToDefault": "Reset to default",
+    "columnsVisible": "{{count}} of {{total}} columns visible"
   }
 }

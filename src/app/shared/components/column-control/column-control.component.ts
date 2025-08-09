@@ -7,7 +7,8 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  ChangeDetectorRef
 } from '@angular/core';
 import { TableColumnConfig, TableConfig } from '../../model';
 import { Observable, Subject } from 'rxjs';
@@ -26,16 +27,25 @@ export class ColumnControlComponent implements OnInit, OnChanges, OnDestroy {
 
   private destroy$ = new Subject<void>();
   public selectedColumns = new Set<string>();
+  public tableConfig: TableConfig | null = null;
+  private originalVisibleColumns = new Set<string>();
+  
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.config$.pipe(takeUntil(this.destroy$)).subscribe((config: TableConfig) => {
+      this.tableConfig = config;
       if (this.selectedColumns.size === 0) {
+        // Store original visible columns
+        this.originalVisibleColumns.clear();
         config.columns.forEach((col: TableColumnConfig) => {
           if (col.visible) {
             this.selectedColumns.add(col.header);
+            this.originalVisibleColumns.add(col.header);
           }
         });
       }
+      this.cdr.markForCheck();
     });
   }
 
@@ -53,6 +63,19 @@ export class ColumnControlComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.columnSelectionChange.emit(this.selectedColumns);
+  }
+  
+  toggleColumn(columnHeader: string): void {
+    const isCurrentlySelected = this.selectedColumns.has(columnHeader);
+    this.onColumnSelect(columnHeader, !isCurrentlySelected);
+    this.cdr.markForCheck();
+  }
+  
+  resetToDefault(): void {
+    // Use stored original visible columns
+    this.selectedColumns = new Set(this.originalVisibleColumns);
+    this.columnSelectionChange.emit(this.selectedColumns);
+    this.cdr.markForCheck();
   }
 
   ngOnDestroy(): void {

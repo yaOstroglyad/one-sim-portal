@@ -5,7 +5,7 @@ export const navItems: any[] = [
 		name: 'nav.dashboard',
 		url: 'dashboard',
 		iconComponent: {name: 'cil-chart-pie'},
-		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION],
+		permissions: [ADMIN_PERMISSION],
 		featureToggle: 'dashboard'
 	},
 	{
