@@ -1,42 +1,44 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpParameterCodec } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { 
+import {
   CompanyProduct,
   CreateCompanyProductRequest,
   UpdateCompanyProductRequest,
   CompanyProductStatusRequest,
   CompanyProductSearchRequest,
-  PageResponse
+  PageResponse,
+  Product
 } from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompanyProductService {
-  private readonly baseUrl = '/api-product/api/v1/esim-product/company-products';
+  private readonly baseUrl =  '/api-product/api/v1/esim-product/company-products';
 
   constructor(private http: HttpClient) {}
 
   searchCompanyProducts(request: CompanyProductSearchRequest): Observable<PageResponse<CompanyProduct>> {
+    // Try the original approach with flattened parameters
     let params = new HttpParams()
       .set('page', request.page.page.toString())
       .set('size', request.page.size.toString());
 
-    // Add sort parameters only if provided
+    // Add sort parameters if provided
     if (request.page.sort?.length) {
       params = params.set('sort', request.page.sort.join(','));
     }
 
-    // Add search parameters
-    if (request.searchParams.countryId) {
+    // Add search parameters directly
+    if (request.searchParams.countryId !== undefined) {
       params = params.set('countryId', request.searchParams.countryId.toString());
     }
-    if (request.searchParams.regionId) {
+    if (request.searchParams.regionId !== undefined) {
       params = params.set('regionId', request.searchParams.regionId.toString());
     }
-    if (request.searchParams.accountId) {
+    if (request.searchParams.accountId !== undefined) {
       params = params.set('accountId', request.searchParams.accountId);
     }
 
@@ -65,6 +67,11 @@ export class CompanyProductService {
 
   deleteCompanyProduct(id: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);
+  }
+
+  getMissingCoreProducts(accountId: string): Observable<Product[]> {
+    const params = new HttpParams().set('accountId', accountId);
+    return this.http.get<Product[]>(`${this.baseUrl}/missing-core-products`, { params });
   }
 
 }

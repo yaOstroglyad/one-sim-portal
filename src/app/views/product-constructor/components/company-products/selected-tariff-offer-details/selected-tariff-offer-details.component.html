@@ -29,13 +29,19 @@
         <!-- Show original price if modified -->
         <div *ngIf="hasModifiedPrice" class="original-price">
           <span class="price-label">Base Price:</span>
-          <span class="price-value original">{{ originalPrice }} {{ originalCurrency.toUpperCase() }}</span>
+          <span class="price-value original" *ngIf="originalPrice != null && originalCurrency">
+            {{ originalPrice }} {{ originalCurrency.toUpperCase() }}
+          </span>
+          <span class="price-value text-muted" *ngIf="originalPrice == null || !originalCurrency">N/A</span>
         </div>
         
         <!-- Current price -->
         <div class="current-price" [class.modified]="hasModifiedPrice">
           <span *ngIf="hasModifiedPrice" class="price-label">Company Price:</span>
-          <span class="price-value current">{{ tariffOffer.price }} {{ tariffOffer.currency.toUpperCase() }}</span>
+          <span class="price-value current" *ngIf="tariffOffer.price != null && tariffOffer.currency">
+            {{ tariffOffer.price }} {{ tariffOffer.currency.toUpperCase() }}
+          </span>
+          <span class="price-value text-muted" *ngIf="tariffOffer.price == null || !tariffOffer.currency">N/A</span>
           
           <!-- Markup percentage -->
           <span *ngIf="hasModifiedPrice" class="markup-badge" 
