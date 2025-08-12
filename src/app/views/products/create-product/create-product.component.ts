@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 })
 export class CreateProductComponent implements OnInit, OnDestroy {
 	form: FormGroup;
-	currencies = [];
+	currencies: string[] = [];
 	companies: any[] = [];
 	allUsageTypes: any[] = [];
 	timeUnits: string[] = [];

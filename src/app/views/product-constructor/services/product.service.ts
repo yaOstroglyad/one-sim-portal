@@ -72,9 +72,9 @@ export class ProductService {
 
   private isAllProductsRequest(searchRequest: ProductSearchRequest): boolean {
     // Check if this is a request for all products (used for form initialization)
-    return searchRequest.page.size >= 1000 && 
-           !searchRequest.searchParams.countryId && 
-           !searchRequest.searchParams.regionId && 
+    return searchRequest.page.size >= 1000 &&
+           !searchRequest.searchParams.countryId &&
+           !searchRequest.searchParams.regionId &&
            !searchRequest.searchParams.mobileBundleId;
   }
 
@@ -104,15 +104,6 @@ export class ProductService {
     return this.http.put(`${this.baseUrl}/${id}/status`, status).pipe(
       tap(() => {
         // Invalidate products cache after status update
-        this.cacheHub.invalidate('products:all');
-      })
-    );
-  }
-
-  deleteProduct(id: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`).pipe(
-      tap(() => {
-        // Invalidate products cache after deletion
         this.cacheHub.invalidate('products:all');
       })
     );
