@@ -10,7 +10,10 @@
     </div>
     <div class="info-row">
       <span class="label">Current Price:</span>
-      <span class="value">{{ data.tariffOffer.price }} {{ data.tariffOffer.currency.toUpperCase() }}</span>
+      <span class="value" *ngIf="data.tariffOffer.price != null && data.tariffOffer.currency">
+        {{ data.tariffOffer.price }} {{ data.tariffOffer.currency.toUpperCase() }}
+      </span>
+      <span class="value text-muted" *ngIf="data.tariffOffer.price == null || !data.tariffOffer.currency">N/A</span>
     </div>
   </div>
 

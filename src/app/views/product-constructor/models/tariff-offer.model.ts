@@ -21,8 +21,8 @@ export interface TariffOffer {
   id: string;
   product: Product;
   providerProduct: ProviderProduct;
-  price: number;
-  currency: Currency;
+  price: number | null;
+  currency: Currency | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -43,7 +43,7 @@ export interface ActiveTariffOffer {
   productId: string;
   productName: string;
   serviceProvider: ServiceProvider;
-  price: number;
-  currency: Currency;
+  price: number | null;
+  currency: Currency | null;
   validFrom: Date | string;
 }

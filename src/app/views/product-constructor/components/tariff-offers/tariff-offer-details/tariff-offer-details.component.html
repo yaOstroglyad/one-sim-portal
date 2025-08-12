@@ -14,9 +14,10 @@
         <div class="mb-3">
           <span class="detail-label">Price</span>
           <div class="detail-value">
-            <span class="fw-bold fs-5 text-success">
+            <span class="fw-bold fs-5 text-success" *ngIf="tariffOffer.price != null && tariffOffer.currency">
               {{ tariffOffer.price | currency:tariffOffer.currency:'symbol':'1.2-2' }}
             </span>
+            <span class="text-muted" *ngIf="tariffOffer.price == null || !tariffOffer.currency">N/A</span>
           </div>
         </div>
         
@@ -151,9 +152,10 @@
           </p>
         </div>
         <div class="col-md-4 text-end">
-          <h3 class="mb-0 text-success fw-bold">
+          <h3 class="mb-0 text-success fw-bold" *ngIf="tariffOffer.price != null && tariffOffer.currency">
             {{ tariffOffer.price | currency:tariffOffer.currency:'symbol':'1.2-2' }}
           </h3>
+          <h3 class="mb-0 text-muted" *ngIf="tariffOffer.price == null || !tariffOffer.currency">N/A</h3>
           <small class="text-muted">per unit</small>
         </div>
       </div>

@@ -26,7 +26,10 @@
 <!-- Custom template for price column -->
 <ng-template #priceTemplate let-data='context'>
     <td class="text-end">
-        <span class="fw-bold">{{ data.price | currency:data.currency:'symbol':'1.2-2' }}</span>
+        <span class="fw-bold" *ngIf="data.price != null && data.currency">
+            {{ data.price | currency:data.currency:'symbol':'1.2-2' }}
+        </span>
+        <span class="text-muted" *ngIf="data.price == null || !data.currency">N/A</span>
     </td>
 </ng-template>
 

@@ -6,21 +6,23 @@ export interface CompanyProduct {
   name: string;
   description: string;
   serviceCoverage: ServiceCoverage;
-  price: number;
-  currency: Currency;
+  price: number | null;
+  currency: Currency | null;
+  tariffOfferId?: string;
   usageUnits: UsageUnit[];
   validityPeriod: ValidityPeriod;
+  createdAt?: string;
   active: boolean;
 }
 
 export interface RetailTariff {
   tariffOfferId: string;
   price: number;
-  currency: Currency;
+  currency: string;
 }
 
 export interface CreateCompanyProductRequest {
-  companyId: string;
+  companyAccountId: string;
   productId: string;
   retailTariff: RetailTariff;
   description: string;

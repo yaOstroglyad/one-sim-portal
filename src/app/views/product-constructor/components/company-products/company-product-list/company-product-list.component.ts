@@ -2,14 +2,14 @@ import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, Ch
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { map, switchMap, catchError, startWith, debounceTime, takeUntil } from 'rxjs/operators';
+import { map, debounceTime, takeUntil } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared/components/generic-right-panel/generic-right-panel.component';
+import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { CompanyProductDetailsComponent } from '../company-product-details/company-product-details.component';
 import { CompanyProductFormComponent } from '../company-product-form/company-product-form.component';
-import { GenericTableModule, HeaderModule, TableConfig, TemplateType, DeleteConfirmationComponent, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
+import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,9 +22,9 @@ import { CompanyProductService, RegionService } from '../../../services';
 import { CompanyProduct, CompanyProductSearchRequest, RegionSummary } from '../../../models';
 import { CompanyProductsTableService } from '../company-products-table.service';
 import { AccountSelectorComponent } from '../../../../../shared/components/account-selector/account-selector.component';
-import { AuthService, ADMIN_PERMISSION } from '../../../../../shared/auth/auth.service';
+import { AuthService, ADMIN_PERMISSION } from '../../../../../shared';
 import { Account, Country } from '../../../../../shared';
-import { CountryService } from '../../../../../shared/services/country.service';
+import { CountryService } from '../../../../../shared';
 
 @Component({
   selector: 'app-company-product-list',
@@ -117,7 +117,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     // Initialize dropdown data
     this.countries$ = this.countryService.getCountries();
     this.regions$ = this.regionService.getRegions();
-    
+
     // Transform data for searchable-select
     this.countryOptions$ = this.countries$.pipe(
       map(countries => countries.map(country => ({
@@ -126,7 +126,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
         data: country
       } as SearchableSelectOption)))
     );
-    
+
     this.regionOptions$ = this.regions$.pipe(
       map(regions => regions.map(region => ({
         value: region.id,
@@ -140,12 +140,13 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     this.checkPermissions();
     this.initializeAccount();
     this.setupFilters();
-    
+
     // Only load data if user is not admin (non-admin users have account already set)
     if (!this.isAdmin) {
       this.loading = true;
       this.loadData(); // Load initial data for non-admin users
     }
+    // For admins, don't load data until they select an account
   }
 
   ngOnDestroy(): void {
@@ -175,11 +176,20 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     accountId?: string;
   } = { page: 0, size: 20 }): void {
 
+    // For admins, ensure we have a selected account before making the request
+    if (this.isAdmin && !params.accountId && !this.selectedAccountId) {
+      // No account selected, don't make the request
+      this.companyProducts$ = of([]);
+      this.loading = false;
+      this.cdr.detectChanges();
+      return;
+    }
+
     const searchRequest: CompanyProductSearchRequest = {
       searchParams: {
         countryId: params.countryId || undefined,
         regionId: params.regionId || undefined,
-        accountId: params.accountId || undefined
+        accountId: params.accountId || (this.isAdmin ? this.selectedAccountId : undefined) || undefined
       },
       page: {
         page: params.page,
@@ -209,12 +219,23 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   }
 
   onRefresh(): void {
-    this.loadData();
+    // Preserve current filter values including accountId
+    const currentFilters = this.filterForm.getRawValue();
+    this.loadData({
+      page: 0,
+      size: 20,
+      ...currentFilters
+    });
   }
 
   resetForm(): void {
-    this.filterForm.reset();
-    this.loadData();
+    // For admins, keep the selected account when resetting other filters
+    if (this.isAdmin && this.selectedAccountId) {
+      this.filterForm.reset({ accountId: this.selectedAccountId });
+    } else {
+      this.filterForm.reset();
+    }
+    this.applyFilter();
   }
 
   applyFilter(): void {
@@ -330,11 +351,22 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
 
   // Custom template for price display - available for future use
   formatPrice(companyProduct: CompanyProduct): string {
-    const formatter = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: companyProduct.currency
-    });
-    return formatter.format(companyProduct.price);
+    // Handle missing price or currency
+    if (companyProduct.price == null || companyProduct.currency == null) {
+      return 'N/A';
+    }
+
+    try {
+      const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: companyProduct.currency
+      });
+      return formatter.format(companyProduct.price);
+    } catch (error) {
+      // Fallback if currency code is invalid
+      console.warn(`Invalid currency code: ${companyProduct.currency}`, error);
+      return `${companyProduct.price} ${companyProduct.currency || ''}`.trim();
+    }
   }
 
   // Account selection methods
@@ -355,13 +387,13 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   public onAccountSelected(account: Account): void {
     this.selectedAccountId = account.id;
     this.filterForm.patchValue({ accountId: account.id }, { emitEvent: false });
-    
+
     // For admins, this is the first time we load data after account selection
     if (this.isAdmin) {
       this.loading = true;
       this.cdr.markForCheck();
     }
-    
+
     this.applyFilter();
   }
 }

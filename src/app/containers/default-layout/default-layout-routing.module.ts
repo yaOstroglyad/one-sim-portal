@@ -19,11 +19,6 @@ const routes: Routes = [
             import('../../views/providers/providers.module').then((m) => m.ProvidersModule)
       },
       {
-        path: 'products',
-        loadChildren: () =>
-            import('../../views/products/products.module').then((m) => m.ProductsModule)
-      },
-      {
         path: 'inventory',
         loadChildren: () =>
             import('../../views/inventory/inventory.module').then((m) => m.InventoryModule)
@@ -90,14 +85,14 @@ const routes: Routes = [
         canActivate: [FeatureToggleGuard],
         loadChildren: () => import('../../views/product-constructor/product-constructor.routes').then(m => m.PRODUCT_CONSTRUCTOR_ROUTES)
       },
-      {
-        path: 'company-products',
-        data: {
-          title: 'nav.companyProducts'
-        },
-        loadComponent: () =>
-            import('../../views/product-constructor/components/company-products/company-product-list/company-product-list.component').then((m) => m.CompanyProductListComponent)
-      },
+      // {
+      //   path: 'company-products',
+      //   data: {
+      //     title: 'nav.companyProducts'
+      //   },
+      //   loadComponent: () =>
+      //       import('../../views/product-constructor/components/company-products/company-product-list/company-product-list.component').then((m) => m.CompanyProductListComponent)
+      // },
     ]
   }
 ];
