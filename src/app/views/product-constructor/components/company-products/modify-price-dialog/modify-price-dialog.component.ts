@@ -63,9 +63,9 @@ export class ModifyPriceDialogComponent implements OnInit {
 
   private loadCurrencyOptions(): void {
     this.currencyOptions$ = this.productsDataService.getCurrencies().pipe(
-      map((currencies: any[]) => currencies.map((currency: any) => ({
-        value: currency.code ? currency.code.toLowerCase() : currency.toLowerCase(),
-        label: currency.code ? currency.code.toUpperCase() : currency.toUpperCase()
+      map((currencies: string[]) => currencies.map((currency: string) => ({
+        value: currency,
+        label: currency
       })))
     );
   }
@@ -73,7 +73,7 @@ export class ModifyPriceDialogComponent implements OnInit {
   private createForm(): FormGroup {
     return this.fb.group({
       price: [0, [Validators.required, Validators.min(0.01)]],
-      currency: ['usd', [Validators.required]]
+      currency: ['USD', [Validators.required]]
     });
   }
 

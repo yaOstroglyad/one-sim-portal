@@ -20,42 +20,6 @@ const timeUnits = [
   { value: 'years', displayValue: 'Years' }
 ];
 
-// Simplified product options logic based on clear business rules
-function getProductOptions(
-  mode: 'admin-create' | 'admin-edit' | 'user-edit',
-  productService?: ProductService,
-  companyProductService?: CompanyProductService,
-  selectedCompanyId?: string | null
-): Observable<SelectOption[]> {
-  
-  // Edit mode: Use cached products for initial form setup (both admin and user)
-  if (mode === 'admin-edit' || mode === 'user-edit') {
-    return getAllProducts(productService);
-  }
-  
-  // Admin create mode: Use missing products if company selected
-  if (mode === 'admin-create' && selectedCompanyId && companyProductService) {
-    return companyProductService.getMissingCoreProducts(selectedCompanyId).pipe(
-      map(products => {
-        if (products.length === 0) {
-          return [{
-            value: '',
-            displayValue: 'All products have been added to this company',
-            disabled: true
-          } as SelectOption];
-        }
-        return products.map(product => ({
-          value: product.id,
-          displayValue: product.name
-        } as SelectOption));
-      }),
-      catchError(() => of([]))
-    );
-  }
-  
-  // Default: empty options (admin create without company selection)
-  return of([]);
-}
 
 // Helper to get all products (now uses cache automatically via ProductService)
 function getAllProducts(productService?: ProductService): Observable<SelectOption[]> {
@@ -102,34 +66,77 @@ function createCompanySelectionField(
 function createProductSelectionField(
   mode: 'admin-create' | 'admin-edit' | 'user-edit',
   productService?: ProductService,
-  companyProductService?: CompanyProductService,
-  selectedAccountId?: string | null
+  companyProductService?: CompanyProductService
 ): FieldConfig {
-  return {
+  const baseConfig: FieldConfig = {
     type: FieldType.select,
     name: 'productId',
     label: 'Product',
     placeholder: 'Select a product',
     validators: [Validators.required],
     value: '', // In edit mode, will be set by component after products are loaded
-    disabled: mode !== 'admin-create', // Only admin can select products in create mode
-    ...(mode === 'admin-create' ? { dependsOn: ['companyId'] } : {}),
-    options: getProductOptions(mode, productService, companyProductService, selectedAccountId)
+    disabled: mode !== 'admin-create' // Only admin can select products in create mode
+  };
+
+  // Admin create mode: Dynamic options based on selected company
+  if (mode === 'admin-create') {
+    return {
+      ...baseConfig,
+      dependsOnValue: ['companyId'],
+      options: (values: any) => {
+        const { companyId } = values;
+        if (!companyId || !companyProductService) return of([]);
+        
+        return companyProductService.getMissingCoreProducts(companyId).pipe(
+          map(products => {
+            if (products.length === 0) {
+              return [{
+                value: '',
+                displayValue: 'All products have been added to this company',
+                disabled: true
+              } as SelectOption];
+            }
+            return products.map(product => ({
+              value: product.id,
+              displayValue: product.name
+            } as SelectOption));
+          }),
+          catchError(() => of([]))
+        );
+      }
+    };
+  }
+
+  // Edit modes: Static options (will be loaded by component)
+  return {
+    ...baseConfig,
+    options: getAllProducts(productService)
   };
 }
 
-function createTariffOfferSelectionField(tariffOffers: ActiveTariffOffer[]): FieldConfig {
+function createTariffOfferSelectionField(tariffOfferService: any): FieldConfig {
   return {
     type: FieldType.select,
     name: 'tariffOfferId',
     label: 'Tariff Offer',
     placeholder: 'Select a tariff offer',
     validators: [Validators.required],
-    dependsOn: ['productId'],
-    options: of((tariffOffers || []).map((offer, index) => ({
-      value: offer.id || `${offer.productId}_${index}`,
-      displayValue: `${offer.serviceProvider.name} - ${offer.price} ${offer.currency.toUpperCase()}`
-    } as SelectOption)))
+    dependsOnValue: ['productId'],
+    disabled: true,
+    options: (values: any) => {
+      const { productId } = values;
+      if (!productId || !tariffOfferService) return of([]);
+      
+      return tariffOfferService.getActiveTariffOffers(productId).pipe(
+        map((offers: ActiveTariffOffer[]) => 
+          offers.map((offer, index) => ({
+            value: offer.id || `${offer.productId}_${index}`,
+            displayValue: `${offer.serviceProvider.name} - ${offer.price} ${offer.currency.toUpperCase()}`
+          } as SelectOption))
+        ),
+        catchError(() => of([]))
+      );
+    }
   };
 }
 
@@ -139,7 +146,7 @@ export function getCompanyProductFormConfig(
   accountsService?: AccountsDataService,
   isAdmin?: boolean,
   productService?: ProductService,
-  tariffOffers: ActiveTariffOffer[] = [],
+  tariffOfferService?: any,
   selectedAccountId?: string | null,
   companyProductService?: CompanyProductService
 ): FormConfig {
@@ -166,13 +173,12 @@ export function getCompanyProductFormConfig(
   formFields.push(createProductSelectionField(
     mode, 
     productService, 
-    companyProductService, 
-    selectedAccountId
+    companyProductService
   ));
 
   // Tariff offer field (only for create mode)
   if (mode === 'admin-create') {
-    formFields.push(createTariffOfferSelectionField(tariffOffers));
+    formFields.push(createTariffOfferSelectionField(tariffOfferService));
   }
 
   formFields.push(...[

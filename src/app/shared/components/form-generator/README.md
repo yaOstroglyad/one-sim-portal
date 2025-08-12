@@ -56,6 +56,25 @@ export class MyComponent {
 
 ## Field Dependencies & HTTP Integration
 
+FormGenerator supports powerful field dependencies where child fields can dynamically load options based on parent field values. This is essential for creating cascading dropdowns and conditional forms.
+
+### 🔑 Key Properties for Dependencies
+
+```typescript
+interface FieldConfig {
+  dependsOnValue: string[];        // 🎯 Array of parent field names
+  disabled?: boolean;              // 🔒 Initially disabled until parent has value
+  options: (values: Record<string, any>) => Observable<SelectOption[]>; // 🚀 Dynamic function
+}
+```
+
+### ⚠️ Important Rules
+
+1. **Use `dependsOnValue` (not `dependsOn`)** - This is the correct property name
+2. **Use function for `options`** - Not static array/Observable  
+3. **Set `disabled: true`** - Child fields should be initially disabled
+4. **Return `of([])` when no parent value** - Always return empty Observable, not undefined
+
 ### Static Dependencies
 
 For simple static dependencies (like the bundle type/unit example):
@@ -65,15 +84,16 @@ For simple static dependencies (like the bundle type/unit example):
   type: FieldType.select,
   name: 'unitType',
   label: 'Unit Type',
+  dependsOnValue: ['type'],          // 🔑 Depends on 'type' field
+  disabled: true,                    // 🔒 Initially disabled
   options: (values: Record<string, any>) => {
     const selectedType = values['type'] || 'data';
     const unitTypes = {
       data: [{ value: 'MB', displayValue: 'Megabytes' }],
       voice: [{ value: 'Minutes', displayValue: 'Minutes' }]
     };
-    return of(unitTypes[selectedType] || []);
+    return of(unitTypes[selectedType] || []); // 🚀 Static data wrapped in Observable
   },
-  dependsOnValue: ['type'],
   validators: [Validators.required]
 }
 ```
@@ -87,9 +107,11 @@ For dynamic data loading from APIs:
   type: FieldType.select,
   name: 'region',
   label: 'Region',
+  dependsOnValue: ['country'],          // 🔑 Depends on 'country' field
+  disabled: true,                       // 🔒 Initially disabled
   options: (values: Record<string, any>) => {
     const countryId = values['country'];
-    if (!countryId) return of([]);
+    if (!countryId) return of([]);      // 🚀 Return empty when no parent value
     
     // HTTP request with proper error handling
     return this.regionService.getRegionsByCountry(countryId).pipe(
@@ -104,8 +126,118 @@ For dynamic data loading from APIs:
       })
     );
   },
-  dependsOnValue: ['country'],
   validators: [Validators.required]
+}
+```
+
+### Real-World Examples
+
+#### Example 1: Company → Product Dependency (from company-product-form)
+
+```typescript
+// Parent field: Company selection
+{
+  type: FieldType.select,
+  name: 'companyId',
+  label: 'Company',
+  placeholder: 'Select a company',
+  validators: [Validators.required],
+  options: accountsService.ownerAccounts().pipe(
+    map(accounts => accounts.map(account => ({
+      value: account.id,
+      displayValue: account.name || account.email || account.id
+    })))
+  )
+}
+
+// Child field: Available products for selected company
+{
+  type: FieldType.select,
+  name: 'productId',
+  label: 'Product',
+  placeholder: 'Select a product',
+  dependsOnValue: ['companyId'],        // 🔑 Depends on company selection
+  disabled: true,                       // 🔒 Initially disabled
+  validators: [Validators.required],
+  options: (values: any) => {
+    const { companyId } = values;
+    if (!companyId || !companyProductService) return of([]); // 🚀 Empty when no company
+    
+    return companyProductService.getMissingCoreProducts(companyId).pipe(
+      map(products => {
+        if (products.length === 0) {
+          return [{
+            value: '',
+            displayValue: 'All products have been added to this company',
+            disabled: true
+          }];
+        }
+        return products.map(product => ({
+          value: product.id,
+          displayValue: product.name
+        }));
+      }),
+      catchError(() => of([])) // 🛡️ Error handling
+    );
+  }
+}
+```
+
+#### Example 2: Product → Tariff Offers Dependency
+
+```typescript
+// Parent field: Product selection (already defined above)
+
+// Child field: Available tariff offers for selected product
+{
+  type: FieldType.select,
+  name: 'tariffOfferId',
+  label: 'Tariff Offer',
+  placeholder: 'Select a tariff offer',
+  dependsOnValue: ['productId'],        // 🔑 Depends on product selection
+  disabled: true,                       // 🔒 Initially disabled
+  validators: [Validators.required],
+  options: (values: any) => {
+    const { productId } = values;
+    if (!productId || !tariffOfferService) return of([]); // 🚀 Empty when no product
+    
+    return tariffOfferService.getActiveTariffOffers(productId).pipe(
+      map((offers: ActiveTariffOffer[]) => 
+        offers.map((offer, index) => ({
+          value: offer.id || `${offer.productId}_${index}`,
+          displayValue: `${offer.serviceProvider.name} - ${offer.price} ${offer.currency.toUpperCase()}`
+        }))
+      ),
+      catchError(() => of([])) // 🛡️ Error handling
+    );
+  }
+}
+```
+
+#### Example 3: Service Provider → Products Filter (from edit-customer.utils.ts)
+
+```typescript
+{
+  type: FieldType.select,
+  name: 'productId',
+  label: 'Product',
+  dependsOnValue: ['serviceProviderId'], // 🔑 Depends on service provider
+  disabled: true,                        // 🔒 Initially disabled  
+  validators: [],
+  options: (values) => {
+    const { serviceProviderId } = values;
+    if (!serviceProviderId) return of([]); // 🚀 Empty when no provider
+
+    return productsDataService.listFiltered({
+      serviceProviderId: serviceProviderId
+    }).pipe(
+      map(products => products.map(p => ({
+        value: p.id,
+        displayValue: p.name
+      }))),
+      catchError(() => of([])) // 🛡️ Error handling
+    );
+  }
 }
 ```
 
@@ -255,6 +387,67 @@ FormArray items also support field dependencies:
     }
   }
 }
+```
+
+### 🚀 How Dependencies Work Automatically
+
+FormGenerator handles all dependency logic automatically:
+
+1. **User selects parent field** (e.g., Company)
+2. **FormGenerator detects change** in `companyId` field
+3. **FormGenerator finds dependent fields** with `dependsOnValue: ['companyId']`
+4. **FormGenerator calls `options(currentFormValues)`** function for dependent fields
+5. **HTTP request is made** and options are loaded
+6. **Child field is enabled** automatically if options are available
+7. **Process repeats** for multi-level dependencies (Company → Product → TariffOffer)
+
+### 🛠️ Implementation Checklist
+
+When creating field dependencies:
+
+✅ **Use `dependsOnValue: ['parentField']`** (not `dependsOn`)  
+✅ **Set `disabled: true`** for child fields  
+✅ **Use function for `options`**: `(values) => Observable<SelectOption[]>`  
+✅ **Return `of([])` when no parent value**  
+✅ **Add proper error handling** with `catchError(() => of([]))`  
+✅ **Inject required services** in your component constructor  
+✅ **Pass services to form config** creation function  
+
+❌ **Don't use static `options`** for dependent fields  
+❌ **Don't forget error handling** - forms will break  
+❌ **Don't manually subscribe to valueChanges** - FormGenerator handles it  
+❌ **Don't use `dependsOn`** - use `dependsOnValue` instead  
+
+### 🔧 Troubleshooting Common Issues
+
+#### Issue 1: "Field not loading options"
+**Problem**: Using `dependsOn` instead of `dependsOnValue`
+```typescript
+// ❌ Wrong
+dependsOn: ['parentField']
+
+// ✅ Correct  
+dependsOnValue: ['parentField']
+```
+
+#### Issue 2: "Field stays disabled"
+**Problem**: Not returning empty Observable when parent is empty
+```typescript
+// ❌ Wrong
+if (!parentValue) return; // undefined breaks FormGenerator
+
+// ✅ Correct
+if (!parentValue) return of([]); // Empty Observable
+```
+
+#### Issue 3: "Options not updating"
+**Problem**: Using static options instead of function
+```typescript
+// ❌ Wrong - static Observable
+options: this.service.getOptions()
+
+// ✅ Correct - dynamic function
+options: (values) => this.service.getOptions(values.parentField)
 ```
 
 ## Best Practices

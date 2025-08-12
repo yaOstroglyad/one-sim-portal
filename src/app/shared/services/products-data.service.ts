@@ -18,6 +18,9 @@ export class ProductsDataService extends DataService<Package> {
 		super(http, '/api/v1/products');
 	}
 
+	/**
+	 * @deprecated Use ProductService.getProducts() instead
+	 */
 	list(): Observable<Package[]> {
 		return this.http.get<Package[]>(this.apiUrl).pipe(
 			catchError(() => {
@@ -27,6 +30,9 @@ export class ProductsDataService extends DataService<Package> {
 		);
 	}
 
+	/**
+	 * @deprecated Use ProductService.getProducts() instead
+	 */
 	listFiltered(params: {
 		serviceProviderId: string;
 		customerId?: string;
@@ -53,6 +59,9 @@ export class ProductsDataService extends DataService<Package> {
 		);
 	}
 
+	/**
+	 * @deprecated Use ProductService.createProduct() instead
+	 */
 	create(product: any): Observable<any> {
 		return this.http.post<any>(`/api/v1/products/command/create`, product).pipe(
 			catchError(() => {
@@ -62,6 +71,9 @@ export class ProductsDataService extends DataService<Package> {
 		);
 	}
 
+	/**
+	 * @deprecated Use ProductService.updateProduct() instead
+	 */
 	update(product: any): Observable<any> {
 		return this.http.patch<any>(`/api/v1/products/command/update`, product).pipe(
 			catchError(() => {
@@ -71,6 +83,9 @@ export class ProductsDataService extends DataService<Package> {
 		);
 	}
 
+	/**
+	 * @deprecated Use ProductService.updateProductStatus() instead
+	 */
 	updateStatus(changeStatus: any): Observable<any> {
 		return this.http.patch<any>(`/api/v1/products/command/update-status`, changeStatus).pipe(
 			catchError(() => {
@@ -80,6 +95,9 @@ export class ProductsDataService extends DataService<Package> {
 		);
 	}
 
+	/**
+	 * @deprecated This method is deprecated
+	 */
 	getStatuses(): Observable<string[]> {
 		return this.http.get<any>(`/api/v1/products/statuses`).pipe(
 			catchError(() => {
@@ -89,10 +107,10 @@ export class ProductsDataService extends DataService<Package> {
 		);
 	}
 
-	getCurrencies(): Observable<any[]> {
+	getCurrencies(): Observable<string[]> {
 		return this.cacheHub.get(
 			'currencies:all-currencies',
-			() => this.http.get<any[]>(`/api/v1/products/currency`).pipe(
+			() => this.http.get<string[]>(`/api-product/api/v1/esim-product/common/currency`).pipe(
 				catchError(() => {
 					console.warn('error happened, presenting mocked data');
 					return of([]);
@@ -105,6 +123,9 @@ export class ProductsDataService extends DataService<Package> {
 		);
 	}
 
+	/**
+	 * @deprecated This method is deprecated
+	 */
 	getProductTemplate(params: any): Observable<any> {
 		return this.http.get<any>(`/api/v1/products/command/template`, {params}).pipe(
 			catchError(() => {
@@ -114,6 +135,9 @@ export class ProductsDataService extends DataService<Package> {
 		);
 	}
 
+	/**
+	 * @deprecated This method is deprecated
+	 */
 	getParentProducts(): Observable<any> {
 		return this.http.get<any>(`/api/v1/products/query/parent`).pipe(
 			catchError(() => {

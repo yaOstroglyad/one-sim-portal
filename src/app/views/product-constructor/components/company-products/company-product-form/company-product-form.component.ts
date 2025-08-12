@@ -39,7 +39,6 @@ export class CompanyProductFormComponent implements OnInit {
   companyProductForm: FormGroup;
   loading = false;
   error: string | null = null;
-  tariffOffers: ActiveTariffOffer[] = [];
   selectedTariffOffer: ActiveTariffOffer | null = null;
   private pendingProductId: string | null = null;
 
@@ -70,7 +69,7 @@ export class CompanyProductFormComponent implements OnInit {
       this.accountsService,
       isAdmin,
       this.productService,
-      this.tariffOffers,
+      this.tariffOfferService,
       this.selectedAccountId,
       this.companyProductService
     );
@@ -112,8 +111,7 @@ export class CompanyProductFormComponent implements OnInit {
             // Form not ready yet, store for later
             this.pendingProductId = matchingProduct.id;
           }
-          // Load tariff offers for the base product to enable price editing
-          this.loadTariffOffers(matchingProduct.id);
+          // FormGenerator will now handle tariff offer loading automatically
         } else {
           console.warn('No matching product found for company product:', this.companyProduct?.name);
           // Fallback: try to use company product name as fallback matching
@@ -161,7 +159,7 @@ export class CompanyProductFormComponent implements OnInit {
         this.pendingProductId = fallbackProduct.id;
       }
       
-      this.loadTariffOffers(fallbackProduct.id);
+      // FormGenerator will handle tariff offer loading automatically
     } else {
       console.error('No product match found even with fallback for:', this.companyProduct.name);
     }
@@ -186,112 +184,46 @@ export class CompanyProductFormComponent implements OnInit {
   }
 
   private setupFormSubscriptions(form: FormGroup, isAdmin: boolean): void {
-    // Company changes (admin create mode only)
-    if (isAdmin && !this.isEditing) {
-      this.setupCompanyChangeSubscription(form);
-    }
-
-    // Product changes (admin create mode only - load tariff offers)
-    if (isAdmin && !this.isEditing) {
-      this.setupProductChangeSubscription(form);
-    }
-
-    // Tariff offer selection (admin create mode only)
+    // Only setup tariff offer selection for admin create mode
+    // FormGenerator now handles all field dependencies automatically
     if (isAdmin && !this.isEditing) {
       this.setupTariffOfferChangeSubscription(form);
     }
   }
 
-  private setupCompanyChangeSubscription(form: FormGroup): void {
-    form.get('companyId')?.valueChanges.subscribe(companyId => {
-      if (companyId) {
-        this.selectedAccountId = companyId;
-        this.updateFormConfigWithTariffOffers();
-        this.resetProductAndTariffSelection(form);
-        this.cdr.markForCheck();
-      }
-    });
-  }
-
-  private setupProductChangeSubscription(form: FormGroup): void {
-    form.get('productId')?.valueChanges.subscribe(productId => {
-      if (productId) {
-        this.loadTariffOffers(productId);
-        this.resetTariffOfferSelection(form);
-      }
-    });
-  }
-
   private setupTariffOfferChangeSubscription(form: FormGroup): void {
     form.get('tariffOfferId')?.valueChanges.subscribe(tariffOfferId => {
       if (tariffOfferId) {
-        this.selectedTariffOffer = this.findTariffOfferById(tariffOfferId);
-        this.cdr.markForCheck();
+        // Get real tariff offer data by making API call
+        const productId = form.get('productId')?.value;
+        if (productId) {
+          this.loadSelectedTariffOffer(productId, tariffOfferId);
+        }
       }
     });
   }
 
-  private resetProductAndTariffSelection(form: FormGroup): void {
-    form.get('productId')?.setValue(null, { emitEvent: false });
-    form.get('tariffOfferId')?.setValue(null, { emitEvent: false });
-    this.selectedTariffOffer = null;
-    this.tariffOffers = [];
-  }
-
-  private resetTariffOfferSelection(form: FormGroup): void {
-    form.get('tariffOfferId')?.setValue(null, { emitEvent: false });
-    this.selectedTariffOffer = null;
-  }
-
-  private findTariffOfferById(tariffOfferId: string): ActiveTariffOffer | null {
-    // Find by actual ID first
-    let offer = this.tariffOffers.find(offer => offer.id === tariffOfferId);
-
-    // Fallback to index-based lookup for backward compatibility
-    if (!offer && tariffOfferId.includes('_')) {
-      const [index] = tariffOfferId.split('_').slice(-1);
-      offer = this.tariffOffers[parseInt(index)];
-    }
-
-    return offer || null;
-  }
-
-  private loadTariffOffers(productId: string): void {
+  private loadSelectedTariffOffer(productId: string, tariffOfferId: string): void {
     this.tariffOfferService.getActiveTariffOffers(productId).subscribe({
       next: (offers) => {
-        this.tariffOffers = offers;
-        this.updateFormConfigWithTariffOffers();
+        const selectedOffer = offers.find(offer => 
+          (offer.id && offer.id === tariffOfferId) || 
+          `${offer.productId}_${offers.indexOf(offer)}` === tariffOfferId
+        );
         
-        // Reset tariff offer selection only in create mode (edit mode doesn't have tariffOfferId field)
-        if (!this.isEditing && this.companyProductForm) {
-          this.companyProductForm.get('tariffOfferId')?.setValue(null);
-          this.selectedTariffOffer = null;
+        if (selectedOffer) {
+          this.selectedTariffOffer = selectedOffer;
+          this.cdr.markForCheck();
         }
-        
-        this.cdr.markForCheck();
       },
       error: (error) => {
-        console.error('Error loading tariff offers:', error);
-        this.tariffOffers = [];
-        this.updateFormConfigWithTariffOffers();
-        this.cdr.markForCheck();
+        console.error('Error loading selected tariff offer:', error);
       }
     });
   }
 
-  private updateFormConfigWithTariffOffers(): void {
-    const isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
-    this.formConfig = getCompanyProductFormConfig(
-      this.companyProduct,
-      this.isEditing,
-      this.accountsService,
-      isAdmin,
-      this.productService,
-      this.tariffOffers,
-      this.selectedAccountId,
-      this.companyProductService
-    );
-  }
+
+
 
   onSubmit(): void {
     if (!this.companyProductForm?.valid) return;
@@ -340,20 +272,10 @@ export class CompanyProductFormComponent implements OnInit {
 
     // Update the form with the new tariff offer (for create mode)
     if (this.companyProductForm && !this.isEditing) {
-      // Find the index of the updated offer in the tariffOffers array
-      const updatedIndex = this.tariffOffers.findIndex(offer =>
-        offer.productId === updatedOffer.productId &&
-        offer.serviceProvider.id === updatedOffer.serviceProvider.id
-      );
-
-      if (updatedIndex !== -1) {
-        // Replace the old offer with the updated one
-        this.tariffOffers[updatedIndex] = updatedOffer;
-
-        // Update form value to point to the updated offer
-        const newFormValue = updatedOffer.id || `${updatedOffer.productId}_${updatedIndex}`;
-        this.companyProductForm.get('tariffOfferId')?.setValue(newFormValue, { emitEvent: false });
-      }
+      // Since FormGenerator now handles tariff offers dynamically,
+      // we just need to update the form value with the selected offer ID
+      const newFormValue = updatedOffer.id || `${updatedOffer.productId}_${updatedOffer.serviceProvider.id}`;
+      this.companyProductForm.get('tariffOfferId')?.setValue(newFormValue, { emitEvent: false });
     }
     // For edit mode, we just keep the updated selectedTariffOffer
     // It will be sent in the update request

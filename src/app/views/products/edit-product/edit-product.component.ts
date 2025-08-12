@@ -24,7 +24,7 @@ export class EditProductComponent implements OnInit {
 		companies: new FormControl([])
 	});
 
-	currencies = [];
+	currencies: string[] = [];
 	companies = [];
 	isAdmin: boolean;
 
