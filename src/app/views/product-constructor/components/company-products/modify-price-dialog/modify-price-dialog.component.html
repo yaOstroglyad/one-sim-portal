@@ -1,15 +1,26 @@
-<h2 mat-dialog-title class="dialog-header">Modify Price</h2>
+<h2 mat-dialog-title class="dialog-header">{{ data.isAdmin ? 'Modify Price' : 'Update Product Price' }}</h2>
 
 <mat-dialog-content class="mat-typography dialog-content">
-  <!-- Original Tariff Info -->
-  <div class="original-info" *ngIf="data.tariffOffer">
+  <!-- Original Tariff Info - Only show for admins -->
+  <div class="original-info" *ngIf="data.tariffOffer && data.isAdmin">
     <h6>Current Tariff Offer:</h6>
     <div class="info-row">
       <span class="label">Service Provider:</span>
       <span class="value">{{ data.tariffOffer.serviceProvider.name }}</span>
     </div>
     <div class="info-row">
-      <span class="label">Current Price:</span>
+      <span class="label">Base Price:</span>
+      <span class="value" *ngIf="data.tariffOffer.price != null && data.tariffOffer.currency">
+        {{ data.tariffOffer.price }} {{ data.tariffOffer.currency.toUpperCase() }}
+      </span>
+      <span class="value text-muted" *ngIf="data.tariffOffer.price == null || !data.tariffOffer.currency">N/A</span>
+    </div>
+  </div>
+
+  <!-- Current selling price for non-admin users -->
+  <div class="original-info" *ngIf="data.tariffOffer && !data.isAdmin">
+    <div class="info-row">
+      <span class="label">Current Customer Price:</span>
       <span class="value" *ngIf="data.tariffOffer.price != null && data.tariffOffer.currency">
         {{ data.tariffOffer.price }} {{ data.tariffOffer.currency.toUpperCase() }}
       </span>
@@ -19,7 +30,7 @@
 
   <!-- Modify Form -->
   <form [formGroup]="modifyForm" class="modify-form">
-    <h6>New Price Settings:</h6>
+    <h6>{{ data.isAdmin ? 'New Price Settings:' : 'Set New Price:' }}</h6>
 
     <div class="form-row">
       <mat-form-field appearance="outline" class="price-field">
@@ -52,7 +63,8 @@
 
   <div class="info-note">
     <mat-icon>info</mat-icon>
-    <span>This will update the price for selected company.</span>
+    <span *ngIf="data.isAdmin">This will set a custom price for the selected company, overriding the base tariff offer price.</span>
+    <span *ngIf="!data.isAdmin">This will update the price your customers pay for this product.</span>
   </div>
 </mat-dialog-content>
 

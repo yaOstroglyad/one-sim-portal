@@ -17,7 +17,7 @@
     [tariffOffer]="selectedTariffOffer"
     [showEditButton]="true"
     [showTitle]="!isEditing"
-    [infoMessage]="isEditing ? 'This shows the current pricing that will be updated for this company product.' : 'This price will be used as the base price for this company product.'"
+    [infoMessage]="infoMessage"
     (tariffOfferUpdated)="onTariffOfferUpdated($event)">
   </app-selected-tariff-offer-details>
 </div>

@@ -44,12 +44,12 @@ export const navItems: any[] = [
 		iconComponent: {name: 'cil-sim'},
 		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
 	},
-	// {
-	// 	name: 'nav.companyProducts',
-	// 	url: 'company-products',
-	// 	iconComponent: {name: 'cil3d'},
-	// 	permissions: [ADMIN_PERMISSION]
-	// },
+	{
+		name: 'nav.companyProducts',
+		url: 'company-products',
+		iconComponent: {name: 'cil3d'},
+		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
+	},
 	{
 		name: 'nav.users',
 		url: 'users',

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DefaultLayoutComponent } from './default-layout.component';
-import { FeatureToggleGuard } from '../../shared/auth/feature-toggle.guard';
+import { FeatureToggleGuard } from '../../shared';
 
 const routes: Routes = [
   {
@@ -85,14 +85,14 @@ const routes: Routes = [
         canActivate: [FeatureToggleGuard],
         loadChildren: () => import('../../views/product-constructor/product-constructor.routes').then(m => m.PRODUCT_CONSTRUCTOR_ROUTES)
       },
-      // {
-      //   path: 'company-products',
-      //   data: {
-      //     title: 'nav.companyProducts'
-      //   },
-      //   loadComponent: () =>
-      //       import('../../views/product-constructor/components/company-products/company-product-list/company-product-list.component').then((m) => m.CompanyProductListComponent)
-      // },
+      {
+        path: 'company-products',
+        data: {
+          title: 'nav.companyProducts'
+        },
+        loadComponent: () =>
+            import('../../views/product-constructor/components/company-products/company-product-list/company-product-list.component').then((m) => m.CompanyProductListComponent)
+      },
     ]
   }
 ];

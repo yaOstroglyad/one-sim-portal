@@ -41,6 +41,7 @@ export class CompanyProductFormComponent implements OnInit {
   error: string | null = null;
   selectedTariffOffer: ActiveTariffOffer | null = null;
   private pendingProductId: string | null = null;
+  isAdmin = false;
 
   constructor(
     private companyProductService: CompanyProductService,
@@ -52,9 +53,9 @@ export class CompanyProductFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+    this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 
-    this.initializeForm(isAdmin);
+    this.initializeForm(this.isAdmin);
 
     // In edit mode, initialize tariff offer and load tariff offers for product
     if (this.isEditing && this.companyProduct) {
@@ -167,6 +168,18 @@ export class CompanyProductFormComponent implements OnInit {
 
   get isEditing(): boolean {
     return !!this.companyProduct;
+  }
+
+  get infoMessage(): string {
+    if (this.isEditing) {
+      return this.isAdmin 
+        ? 'This shows the current pricing that will be updated for this company product.'
+        : 'This is the price your customers will pay for this product.';
+    } else {
+      return this.isAdmin
+        ? 'This price will be used as the base price for this company product.'
+        : 'Set the price your customers will pay for this product.';
+    }
   }
 
   onFormChanges(form: FormGroup): void {

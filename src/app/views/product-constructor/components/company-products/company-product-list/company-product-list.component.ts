@@ -120,19 +120,29 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
 
     // Transform data for searchable-select
     this.countryOptions$ = this.countries$.pipe(
-      map(countries => countries.map(country => ({
-        value: country.id,
-        label: country.name,
-        data: country
-      } as SearchableSelectOption)))
+      map(countries => {
+        if (!countries || !Array.isArray(countries)) {
+          return [];
+        }
+        return countries.map(country => ({
+          value: country.id,
+          label: country.name,
+          data: country
+        } as SearchableSelectOption));
+      })
     );
 
     this.regionOptions$ = this.regions$.pipe(
-      map(regions => regions.map(region => ({
-        value: region.id,
-        label: region.name,
-        data: region
-      } as SearchableSelectOption)))
+      map(regions => {
+        if (!regions || !Array.isArray(regions)) {
+          return [];
+        }
+        return regions.map(region => ({
+          value: region.id,
+          label: region.name,
+          data: region
+        } as SearchableSelectOption));
+      })
     );
   }
 
@@ -189,7 +199,8 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
       searchParams: {
         countryId: params.countryId || undefined,
         regionId: params.regionId || undefined,
-        accountId: params.accountId || (this.isAdmin ? this.selectedAccountId : undefined) || undefined
+        // Only send accountId for admin users
+        accountId: this.isAdmin ? (params.accountId || this.selectedAccountId || undefined) : undefined
       },
       page: {
         page: params.page,
@@ -219,8 +230,12 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   }
 
   onRefresh(): void {
-    // Preserve current filter values including accountId
+    // Preserve current filter values
     const currentFilters = this.filterForm.getRawValue();
+    // For non-admin users, exclude accountId from params
+    if (!this.isAdmin) {
+      delete currentFilters.accountId;
+    }
     this.loadData({
       page: 0,
       size: 20,
@@ -233,25 +248,36 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     if (this.isAdmin && this.selectedAccountId) {
       this.filterForm.reset({ accountId: this.selectedAccountId });
     } else {
+      // For non-admin users, reset without accountId
       this.filterForm.reset();
     }
     this.applyFilter();
   }
 
   applyFilter(): void {
+    const formValues = this.filterForm.getRawValue();
+    // For non-admin users, exclude accountId from params
+    if (!this.isAdmin) {
+      delete formValues.accountId;
+    }
     const params = {
       page: 0,
       size: 20,
-      ...this.filterForm.getRawValue()
+      ...formValues
     };
     this.loadData(params);
   }
 
   onPageChange({ page, size }: { page: number; size: number }): void {
+    const formValues = this.filterForm.getRawValue();
+    // For non-admin users, exclude accountId from params
+    if (!this.isAdmin) {
+      delete formValues.accountId;
+    }
     this.loadData({
       page,
       size,
-      ...this.filterForm.getRawValue()
+      ...formValues
     });
   }
 
@@ -379,7 +405,8 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
       const loggedUser = this.authService.loggedUser;
       if (loggedUser?.accountId) {
         this.selectedAccountId = loggedUser.accountId;
-        this.filterForm.patchValue({ accountId: this.selectedAccountId });
+        // Don't set accountId in form for non-admin users
+        // this.filterForm.patchValue({ accountId: this.selectedAccountId });
       }
     }
   }

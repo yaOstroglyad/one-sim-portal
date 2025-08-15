@@ -162,7 +162,8 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     this.isOpen = true;
     this.highlightedIndex = -1;
     this.searchControl.setValue('');
-    this.filteredOptions = [...this.options];
+    // Safe check for options array
+    this.filteredOptions = this.options ? [...this.options] : [];
     
     setTimeout(() => {
       if (this.config.searchable && this.searchInput) {
@@ -269,7 +270,7 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
         break;
       case 'Enter':
         event.preventDefault();
-        if (this.highlightedIndex >= 0) {
+        if (this.highlightedIndex >= 0 && this.filteredOptions && this.filteredOptions[this.highlightedIndex]) {
           this.selectOption(this.filteredOptions[this.highlightedIndex]);
         }
         break;
@@ -334,17 +335,21 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   private updateOptionStates(): void {
     this.optionStates = {};
     
-    this.filteredOptions.forEach((option, index) => {
-      const isSelected = this.isOptionSelected(option);
-      const isHighlighted = index === this.highlightedIndex;
-      const isDisabled = !!option.disabled;
-      
-      this.optionStates[option.value] = {
-        selected: isSelected,
-        highlighted: isHighlighted,
-        disabled: isDisabled
-      };
-    });
+    if (this.filteredOptions && Array.isArray(this.filteredOptions)) {
+      this.filteredOptions.forEach((option, index) => {
+        if (option && option.value !== undefined) {
+          const isSelected = this.isOptionSelected(option);
+          const isHighlighted = index === this.highlightedIndex;
+          const isDisabled = !!option.disabled;
+          
+          this.optionStates[option.value] = {
+            selected: isSelected,
+            highlighted: isHighlighted,
+            disabled: isDisabled
+          };
+        }
+      });
+    }
   }
 
   private handleSingleSelection(option: SearchableSelectOption): void {
@@ -385,7 +390,8 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   }
 
   private highlightNext(): void {
-    this.highlightedIndex = Math.min(this.highlightedIndex + 1, this.filteredOptions.length - 1);
+    const maxIndex = this.filteredOptions ? this.filteredOptions.length - 1 : -1;
+    this.highlightedIndex = Math.min(this.highlightedIndex + 1, maxIndex);
     this.updateOptionStates();
     this.scrollToHighlighted();
     this.cdr.markForCheck();
@@ -468,7 +474,7 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   }
 
   get showNoResults(): boolean {
-    return !this.config.loading && this.filteredOptions.length === 0;
+    return !this.config.loading && (!this.filteredOptions || this.filteredOptions.length === 0);
   }
 
   get showSearchInput(): boolean {
@@ -488,6 +494,6 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   }
 
   trackByOptionValue(index: number, option: SearchableSelectOption): any {
-    return option.value;
+    return option?.value;
   }
 }

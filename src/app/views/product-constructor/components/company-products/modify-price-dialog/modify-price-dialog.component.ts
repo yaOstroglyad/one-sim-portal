@@ -15,6 +15,7 @@ import { ProductsDataService } from '../../../../../shared';
 
 export interface ModifyPriceDialogData {
   tariffOffer: ActiveTariffOffer;
+  isAdmin?: boolean;
 }
 
 export interface ModifyPriceResult {

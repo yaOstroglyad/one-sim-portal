@@ -5,6 +5,7 @@ import { ButtonDirective } from '@coreui/angular';
 import { MatDialog } from '@angular/material/dialog';
 import { ActiveTariffOffer } from '../../../models';
 import { ModifyPriceDialogComponent, ModifyPriceDialogData, ModifyPriceResult } from '../modify-price-dialog/modify-price-dialog.component';
+import { AuthService, ADMIN_PERMISSION } from '../../../../../shared';
 
 @Component({
   selector: 'app-selected-tariff-offer-details',
@@ -35,7 +36,14 @@ export class SelectedTariffOfferDetailsComponent implements OnInit, OnChanges {
   hasModifiedPrice: boolean = false;
   markupPercentage: number = 0;
   
-  constructor(private dialog: MatDialog) {}
+  isAdmin: boolean = false;
+  
+  constructor(
+    private dialog: MatDialog,
+    private authService: AuthService
+  ) {
+    this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+  }
   
   ngOnInit(): void {
     this.initializeOriginalValues();
@@ -84,7 +92,10 @@ export class SelectedTariffOfferDetailsComponent implements OnInit, OnChanges {
     if (this.tariffOffer) {
       const dialogRef = this.dialog.open(ModifyPriceDialogComponent, {
         width: '500px',
-        data: { tariffOffer: this.tariffOffer } as ModifyPriceDialogData
+        data: { 
+          tariffOffer: this.tariffOffer,
+          isAdmin: this.isAdmin
+        } as ModifyPriceDialogData
       });
       
       dialogRef.afterClosed().subscribe((result: ModifyPriceResult) => {
