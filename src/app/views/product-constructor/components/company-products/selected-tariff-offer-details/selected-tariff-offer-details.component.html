@@ -1,103 +1,129 @@
-<div class="selected-tariff-offer-details" *ngIf="tariffOffer">
-  <div class="header-section" *ngIf="showTitle || showEditButton">
-    <h5 class="section-title" *ngIf="showTitle">{{ isAdmin ? 'Selected Tariff Offer Details' : 'Product Price Details' }}</h5>
-    <button 
-      *ngIf="showEditButton"
-      cButton
-      variant="outline"
-      color="primary"
-      size="sm"
-      (click)="onEditClick()"
-      class="edit-button">
-      <mat-icon>edit</mat-icon>
-      {{ isAdmin ? 'Modify Price' : 'Update Price' }}
-    </button>
-  </div>
+<ng-container *ngIf="viewModel$ | async as vm">
+  <div class="selected-tariff-offer-details" *ngIf="vm.hasValidTariffOffer">
+    <div class="header-section" *ngIf="vm.showTitle || vm.showEditButton">
+      <h5 class="section-title" *ngIf="vm.showTitle">{{ uiConfig.texts.sectionTitle }}</h5>
+      <button 
+        *ngIf="vm.canEdit"
+        cButton
+        variant="outline"
+        color="primary"
+        size="sm"
+        (click)="onEditClick()"
+        class="edit-button">
+        <mat-icon>edit</mat-icon>
+        {{ uiConfig.texts.buttonTexts.edit }}
+      </button>
+    </div>
   
-  <!-- Show full card for admin users -->
-  <div class="detail-card" *ngIf="isAdmin">
-    <div class="detail-row">
+  <!-- Show full card for users with full details -->
+  <div class="detail-card" *ngIf="uiConfig.visibility.showFullDetails">
+    <div class="detail-row" *ngIf="uiConfig.visibility.showServiceProvider">
       <span class="detail-label">Service Provider:</span>
-      <span class="detail-value">{{ tariffOffer.serviceProvider.name }}</span>
+      <span class="detail-value">{{ vm.tariffOffer?.serviceProvider?.name }}</span>
     </div>
     <div class="detail-row">
       <span class="detail-label">Product:</span>
-      <span class="detail-value">{{ tariffOffer.productName }}</span>
+      <span class="detail-value">{{ vm.tariffOffer?.productName }}</span>
     </div>
     <div class="detail-row">
       <span class="detail-label">Price:</span>
       <div class="detail-value price-container">
         <!-- Show original price if modified -->
-        <div *ngIf="hasModifiedPrice" class="original-price">
+        <div *ngIf="vm.priceComparison.hasModifiedPrice" class="original-price">
           <span class="price-label">Base Price:</span>
-          <span class="price-value original" *ngIf="originalPrice != null && originalCurrency">
-            {{ originalPrice }} {{ originalCurrency.toUpperCase() }}
-          </span>
-          <span class="price-value text-muted" *ngIf="originalPrice == null || !originalCurrency">N/A</span>
+          <span class="price-value original">{{ vm.priceComparison.formattedOriginalPrice }}</span>
         </div>
         
         <!-- Current price -->
-        <div class="current-price" [class.modified]="hasModifiedPrice">
-          <span *ngIf="hasModifiedPrice" class="price-label">Company Price:</span>
-          <span class="price-value current" *ngIf="tariffOffer.price != null && tariffOffer.currency">
-            {{ tariffOffer.price }} {{ tariffOffer.currency.toUpperCase() }}
-          </span>
-          <span class="price-value text-muted" *ngIf="tariffOffer.price == null || !tariffOffer.currency">N/A</span>
+        <div class="current-price" [class.modified]="vm.priceComparison.hasModifiedPrice">
+          <span *ngIf="vm.priceComparison.hasModifiedPrice || vm.priceComparison.showPendingChange" class="price-label">Company Price:</span>
+          
+          <!-- Show pending change with current price strikethrough and new price -->
+          <div class="price-change-preview" *ngIf="vm.priceComparison.showPendingChange">
+            <!-- Current company price (before change) -->
+            <span class="price-value strikethrough" *ngIf="vm.pendingState.previousCompanyPrice != null && vm.pendingState.previousCompanyCurrency">
+              {{ vm.pendingState.previousCompanyPrice }} {{ vm.pendingState.previousCompanyCurrency.toUpperCase() }}
+            </span>
+            <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+            <!-- New price that will be saved -->
+            <span class="price-value current pending" *ngIf="vm.pendingState.pendingPrice != null && vm.pendingState.pendingCurrency">
+              {{ vm.pendingState.pendingPrice }} {{ vm.pendingState.pendingCurrency.toUpperCase() }}
+            </span>
+            <span class="pending-badge">Pending</span>
+          </div>
+          
+          <!-- Show current price when no pending change -->
+          <div *ngIf="!vm.priceComparison.showPendingChange">
+            <span class="price-value current">{{ vm.priceComparison.formattedCurrentPrice }}</span>
+          </div>
           
           <!-- Markup percentage -->
-          <span *ngIf="hasModifiedPrice" class="markup-badge" 
-                [class.positive]="markupPercentage > 0" 
-                [class.negative]="markupPercentage < 0">
-            {{ markupPercentage > 0 ? '+' : '' }}{{ markupPercentage | number:'1.1-1' }}%
+          <span *ngIf="vm.priceComparison.hasModifiedPrice && !vm.priceComparison.showPendingChange && vm.priceComparison.markupDisplay" class="markup-badge" 
+                [class.positive]="vm.priceComparison.difference?.isIncrease" 
+                [class.negative]="vm.priceComparison.difference?.isDecrease">
+            {{ vm.priceComparison.markupDisplay }}
           </span>
         </div>
       </div>
     </div>
-    <div class="detail-row">
+    <div class="detail-row" *ngIf="uiConfig.visibility.showValidFrom">
       <span class="detail-label">Valid From:</span>
-      <span class="detail-value">{{ tariffOffer.validFrom | date:'medium' }}</span>
+      <span class="detail-value">{{ vm.tariffOffer?.validFrom | date:'medium' }}</span>
     </div>
   </div>
   
-  <!-- Simplified view for non-admin users -->
-  <div class="detail-card simplified" *ngIf="!isAdmin">
+  <!-- Simplified view for users without full details -->
+  <div class="detail-card simplified" *ngIf="!uiConfig.visibility.showFullDetails">
     <div class="detail-row">
       <span class="detail-label">Product:</span>
-      <span class="detail-value">{{ tariffOffer.productName }}</span>
+      <span class="detail-value">{{ vm.tariffOffer?.productName }}</span>
     </div>
     <div class="detail-row">
-      <span class="detail-label">Customer Price:</span>
+      <span class="detail-label">{{ uiConfig.texts.labels.customerPrice }}:</span>
       <div class="detail-value price-container">
         <!-- Show original price if modified -->
-        <div *ngIf="hasModifiedPrice" class="original-price">
-          <span class="price-label">Original Price:</span>
-          <span class="price-value original" *ngIf="originalPrice != null && originalCurrency">
-            {{ originalPrice }} {{ originalCurrency.toUpperCase() }}
-          </span>
-          <span class="price-value text-muted" *ngIf="originalPrice == null || !originalCurrency">N/A</span>
+        <div *ngIf="vm.priceComparison.hasModifiedPrice" class="original-price">
+          <span class="price-label">{{ uiConfig.texts.labels.originalPrice }}:</span>
+          <span class="price-value original">{{ vm.priceComparison.formattedOriginalPrice }}</span>
         </div>
         
         <!-- Current price -->
-        <div class="current-price" [class.modified]="hasModifiedPrice">
-          <span *ngIf="hasModifiedPrice" class="price-label">New Price:</span>
-          <span class="price-value current" *ngIf="tariffOffer.price != null && tariffOffer.currency">
-            {{ tariffOffer.price }} {{ tariffOffer.currency.toUpperCase() }}
-          </span>
-          <span class="price-value text-muted" *ngIf="tariffOffer.price == null || !tariffOffer.currency">N/A</span>
+        <div class="current-price" [class.modified]="vm.priceComparison.hasModifiedPrice">
+          <span *ngIf="vm.priceComparison.hasModifiedPrice || vm.priceComparison.showPendingChange" class="price-label">{{ uiConfig.texts.labels.customerPrice }}:</span>
+          
+          <!-- Show pending change with current price strikethrough and new price -->
+          <div class="price-change-preview" *ngIf="vm.priceComparison.showPendingChange">
+            <!-- Current company price (before change) -->
+            <span class="price-value strikethrough" *ngIf="vm.pendingState.previousCompanyPrice != null && vm.pendingState.previousCompanyCurrency">
+              {{ vm.pendingState.previousCompanyPrice }} {{ vm.pendingState.previousCompanyCurrency.toUpperCase() }}
+            </span>
+            <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+            <!-- New price that will be saved -->
+            <span class="price-value current pending" *ngIf="vm.pendingState.pendingPrice != null && vm.pendingState.pendingCurrency">
+              {{ vm.pendingState.pendingPrice }} {{ vm.pendingState.pendingCurrency.toUpperCase() }}
+            </span>
+            <span class="pending-badge">Pending</span>
+          </div>
+          
+          <!-- Show current price when no pending change -->
+          <div *ngIf="!vm.priceComparison.showPendingChange">
+            <span class="price-value current">{{ vm.priceComparison.formattedCurrentPrice }}</span>
+          </div>
           
           <!-- Price change percentage -->
-          <span *ngIf="hasModifiedPrice" class="profit-badge" 
-                [class.positive]="markupPercentage > 0" 
-                [class.negative]="markupPercentage < 0">
-            {{ markupPercentage > 0 ? '+' : '' }}{{ markupPercentage | number:'1.1-1' }}%
+          <span *ngIf="vm.priceComparison.hasModifiedPrice && !vm.priceComparison.showPendingChange && vm.priceComparison.markupDisplay" class="profit-badge" 
+                [class.positive]="vm.priceComparison.difference?.isIncrease" 
+                [class.negative]="vm.priceComparison.difference?.isDecrease">
+            {{ vm.priceComparison.markupDisplay }}
           </span>
         </div>
       </div>
     </div>
   </div>
   
-  <div class="info-note" *ngIf="infoMessage">
-    <mat-icon>info</mat-icon>
-    <span>{{ infoMessage }}</span>
+    <div class="info-note" *ngIf="vm.infoMessage">
+      <mat-icon>info</mat-icon>
+      <span>{{ vm.infoMessage }}</span>
+    </div>
   </div>
-</div>
+</ng-container>

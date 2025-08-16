@@ -71,7 +71,8 @@ export interface Company {
   accountId: string;
 }
 
-export type Currency = 'usd' | 'eur' | 'gbp' | 'ils' | 'rub' | 'uah';
+// Currency type - use ProductsDataService.getCurrencies() for available currencies
+export type Currency = string;
 
 export interface StatusUpdate {
   isActive: boolean;

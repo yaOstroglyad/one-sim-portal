@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, Inject, OnInit, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,25 +7,22 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import { ActiveTariffOffer, Currency } from '../../../models';
-import { ProductsDataService } from '../../../../../shared';
-
-export interface ModifyPriceDialogData {
-  tariffOffer: ActiveTariffOffer;
-  isAdmin?: boolean;
-}
-
-export interface ModifyPriceResult {
-  price: number;
-  currency: Currency;
-}
+import { ProductsDataService, UserRoleService } from '../../../../../shared';
+import { UIConfigFactory, ModifyPriceDialogConfig } from '../factories';
+import { 
+  ModifyPriceDialogData, 
+  ModifyPriceDialogViewModel 
+} from './models/modify-price-dialog.model';
+import { FormUtils, CurrencyOption } from './utils/form.utils';
+import { ModifyPriceDialogPresenter } from './services/modify-price-dialog.presenter';
 
 @Component({
   selector: 'app-modify-price-dialog',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -37,45 +34,72 @@ export interface ModifyPriceResult {
     MatIconModule
   ],
   templateUrl: './modify-price-dialog.component.html',
-  styleUrls: ['./modify-price-dialog.component.scss']
+  styleUrls: ['./modify-price-dialog.component.scss'],
+  providers: [ModifyPriceDialogPresenter]
 })
-export class ModifyPriceDialogComponent implements OnInit {
+export class ModifyPriceDialogComponent implements OnInit, OnDestroy {
   modifyForm: FormGroup;
-  currencyOptions$: Observable<Array<{ value: string; label: string }>>;
+  currencyOptions$: Observable<CurrencyOption[]>;
+  viewModel$: Observable<ModifyPriceDialogViewModel>;
+  uiConfig: ModifyPriceDialogConfig;
+
+  private readonly destroy$ = new Subject<void>();
+  private readonly uiConfigFactory = inject(UIConfigFactory);
+  private readonly userRoleService = inject(UserRoleService);
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ModifyPriceDialogData,
     public dialogRef: MatDialogRef<ModifyPriceDialogComponent>,
-    private fb: FormBuilder,
-    private productsDataService: ProductsDataService
+    private readonly fb: FormBuilder,
+    private readonly productsDataService: ProductsDataService,
+    private readonly presenter: ModifyPriceDialogPresenter
   ) {
-    this.modifyForm = this.createForm();
-    this.loadCurrencyOptions();
+    this.initializeComponent();
   }
 
   ngOnInit(): void {
-    if (this.data.tariffOffer) {
-      this.modifyForm.patchValue({
-        price: this.data.tariffOffer.price,
-        currency: this.data.tariffOffer.currency
-      });
-    }
+    this.initializeForm();
+    this.setupViewModel();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private initializeComponent(): void {
+    this.createForm();
+    this.loadCurrencyOptions();
+    this.initializeUIConfig();
+  }
+
+  private createForm(): void {
+    this.modifyForm = FormUtils.createModifyPriceForm(this.fb);
   }
 
   private loadCurrencyOptions(): void {
-    this.currencyOptions$ = this.productsDataService.getCurrencies().pipe(
-      map((currencies: string[]) => currencies.map((currency: string) => ({
-        value: currency,
-        label: currency
-      })))
-    );
+    this.currencyOptions$ = FormUtils.loadCurrencyOptions(this.productsDataService);
   }
 
-  private createForm(): FormGroup {
-    return this.fb.group({
-      price: [0, [Validators.required, Validators.min(0.01)]],
-      currency: ['USD', [Validators.required]]
-    });
+  private initializeUIConfig(): void {
+    const userRole = this.userRoleService.getCurrentUserRole();
+    this.uiConfig = this.uiConfigFactory.createModifyPriceDialogConfig(userRole);
+  }
+
+  private initializeForm(): void {
+    if (this.data.tariffOffer) {
+      FormUtils.initializeFormWithTariffOffer(this.modifyForm, this.data.tariffOffer);
+    }
+  }
+
+  private setupViewModel(): void {
+    this.viewModel$ = this.presenter.createViewModel(
+      this.modifyForm, 
+      this.data, 
+      this.uiConfig
+    ).pipe(
+      takeUntil(this.destroy$)
+    );
   }
 
   onCancel(): void {
@@ -83,19 +107,11 @@ export class ModifyPriceDialogComponent implements OnInit {
   }
 
   onSave(): void {
-    if (!this.modifyForm.valid || !this.data.tariffOffer) {
-      return;
+    const result = this.presenter.extractResult(this.modifyForm);
+    
+    if (result) {
+      this.dialogRef.close(result);
     }
-
-    const formValue = this.modifyForm.value;
-
-    // Create result object with new price and currency
-    const result: ModifyPriceResult = {
-      price: formValue.price,
-      currency: formValue.currency as Currency
-    };
-
-    this.dialogRef.close(result);
   }
 
   get isFormValid(): boolean {

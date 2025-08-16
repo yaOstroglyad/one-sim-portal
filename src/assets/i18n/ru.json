@@ -634,5 +634,11 @@
     "title": "Показать/Скрыть колонки",
     "resetToDefault": "Сбросить по умолчанию",
     "columnsVisible": "{{count}} из {{total}} колонок видно"
+  },
+  "productConstructor": {
+    "companyProducts": {
+      "serviceProvider": "Поставщик услуг",
+      "basePrice": "Базовая цена"
+    }
   }
 }

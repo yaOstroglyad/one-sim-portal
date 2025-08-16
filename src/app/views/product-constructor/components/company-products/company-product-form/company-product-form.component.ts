@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { IconDirective } from '@coreui/icons-angular';
@@ -8,8 +8,9 @@ import { CompanyProductService, ProductService } from '../../../services';
 import { CompanyProduct, ActiveTariffOffer } from '../../../models';
 import { AccountsDataService } from '../../../../../shared';
 import { TariffOfferService } from '../../../../../shared/services/tariff-offer.service';
-import { AuthService, ADMIN_PERMISSION } from '../../../../../shared';
 import { SelectedTariffOfferDetailsComponent } from '../selected-tariff-offer-details/selected-tariff-offer-details.component';
+import { UserRoleService } from '../../../../../shared';
+import { UIConfigFactory, CompanyProductFormConfig } from '../factories';
 import {
   getCompanyProductFormConfig,
   getCompanyProductCreateRequest,
@@ -41,21 +42,26 @@ export class CompanyProductFormComponent implements OnInit {
   error: string | null = null;
   selectedTariffOffer: ActiveTariffOffer | null = null;
   private pendingProductId: string | null = null;
-  isAdmin = false;
+  uiConfig: CompanyProductFormConfig;
+
+  private uiConfigFactory = inject(UIConfigFactory);
+  private userRoleService = inject(UserRoleService);
 
   constructor(
     private companyProductService: CompanyProductService,
     private accountsService: AccountsDataService,
-    private authService: AuthService,
     private productService: ProductService,
     private tariffOfferService: TariffOfferService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    // Initialize UI configuration based on user role
+    const userRole = this.userRoleService.getCurrentUserRole();
+    this.uiConfig = this.uiConfigFactory.createCompanyProductFormConfig(userRole);
+  }
 
   ngOnInit(): void {
-    this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
-
-    this.initializeForm(this.isAdmin);
+    const isAdmin = this.userRoleService.isAdmin();
+    this.initializeForm(isAdmin);
 
     // In edit mode, initialize tariff offer and load tariff offers for product
     if (this.isEditing && this.companyProduct) {
@@ -69,7 +75,6 @@ export class CompanyProductFormComponent implements OnInit {
       this.isEditing,
       this.accountsService,
       isAdmin,
-      this.productService,
       this.tariffOfferService,
       this.selectedAccountId,
       this.companyProductService
@@ -87,42 +92,65 @@ export class CompanyProductFormComponent implements OnInit {
   }
 
   private resolveAndLoadTariffOffers(): void {
-    if (!this.productService || !this.companyProduct) return;
+    if (!this.companyProduct) return;
 
-    // Get all products to find the base product that matches this company product
-    this.productService.getProducts({
-      searchParams: {},
-      page: { page: 0, size: 1000 }
-    }).subscribe({
-      next: (response) => {
-        // Check if response and response.content exist
-        if (!response || !response.content || !Array.isArray(response.content)) {
-          console.error('Invalid products response:', response);
-          return;
+    const isAdmin = this.userRoleService.isAdmin();
+
+    if (isAdmin) {
+      // Admin can access all products via productService
+      if (!this.productService) return;
+
+      this.companyProductService.searchCompanyProducts({
+        searchParams: { accountId: this.selectedAccountId },
+        page: { page: 0, size: 1000 }
+      }).subscribe({
+        next: (response) => {
+          this.handleProductsResponse(response);
+        },
+        error: (error) => {
+          console.error('Error loading products for edit mode:', error);
         }
-        
-        const matchingProduct = this.findMatchingBaseProduct(response.content, this.companyProduct!);
-        
-        if (matchingProduct) {
-          // Set the correct productId in the form after products are loaded
-          if (this.companyProductForm) {
-            this.companyProductForm.get('productId')?.setValue(matchingProduct.id, { emitEvent: false });
-            this.cdr.markForCheck();
-          } else {
-            // Form not ready yet, store for later
-            this.pendingProductId = matchingProduct.id;
-          }
-          // FormGenerator will now handle tariff offer loading automatically
-        } else {
-          console.warn('No matching product found for company product:', this.companyProduct?.name);
-          // Fallback: try to use company product name as fallback matching
-          this.tryFallbackMatching(response.content);
+      });
+    } else {
+      // Regular user can only access company products via companyProductService
+      this.companyProductService.searchCompanyProducts({
+        searchParams: {},
+        page: { page: 0, size: 1000 }
+      }).subscribe({
+        next: (response) => {
+          this.handleProductsResponse(response);
+        },
+        error: (error) => {
+          console.error('Error loading company products for edit mode:', error);
         }
-      },
-      error: (error) => {
-        console.error('Error loading products for edit mode:', error);
+      });
+    }
+  }
+
+  private handleProductsResponse(response: any): void {
+    // Check if response and response.content exist
+    if (!response || !response.content || !Array.isArray(response.content)) {
+      console.error('Invalid products response:', response);
+      return;
+    }
+
+    const matchingProduct = this.findMatchingBaseProduct(response.content, this.companyProduct!);
+
+    if (matchingProduct) {
+      // Set the correct productId in the form after products are loaded
+      if (this.companyProductForm) {
+        this.companyProductForm.get('productId')?.setValue(matchingProduct.id, { emitEvent: false });
+        this.cdr.markForCheck();
+      } else {
+        // Form not ready yet, store for later
+        this.pendingProductId = matchingProduct.id;
       }
-    });
+      // FormGenerator will now handle tariff offer loading automatically
+    } else {
+      console.warn('No matching product found for company product:', this.companyProduct?.name);
+      // Fallback: try to use company product name as fallback matching
+      this.tryFallbackMatching(response.content);
+    }
   }
 
   private findMatchingBaseProduct(products: any[], companyProduct: CompanyProduct): any | null {
@@ -136,15 +164,15 @@ export class CompanyProductFormComponent implements OnInit {
 
   private tryFallbackMatching(products: any[]): void {
     if (!this.companyProduct) return;
-    
+
     // Fallback 1: Match only by name (ignore service coverage differences)
-    let fallbackProduct = products.find(product => 
+    let fallbackProduct = products.find(product =>
       product.name === this.companyProduct!.name
     );
 
     // Fallback 2: Match by partial name (in case names have slight differences)
     if (!fallbackProduct) {
-      fallbackProduct = products.find(product => 
+      fallbackProduct = products.find(product =>
         product.name.toLowerCase().includes(this.companyProduct!.name.toLowerCase()) ||
         this.companyProduct!.name.toLowerCase().includes(product.name.toLowerCase())
       );
@@ -152,14 +180,14 @@ export class CompanyProductFormComponent implements OnInit {
 
     if (fallbackProduct) {
       console.log('Using fallback product match:', fallbackProduct.name);
-      
+
       if (this.companyProductForm) {
         this.companyProductForm.get('productId')?.setValue(fallbackProduct.id, { emitEvent: false });
         this.cdr.markForCheck();
       } else {
         this.pendingProductId = fallbackProduct.id;
       }
-      
+
       // FormGenerator will handle tariff offer loading automatically
     } else {
       console.error('No product match found even with fallback for:', this.companyProduct.name);
@@ -172,19 +200,15 @@ export class CompanyProductFormComponent implements OnInit {
 
   get infoMessage(): string {
     if (this.isEditing) {
-      return this.isAdmin 
-        ? 'This shows the current pricing that will be updated for this company product.'
-        : 'This is the price your customers will pay for this product.';
+      return this.uiConfig.texts.infoMessages.componentInfo.editing;
     } else {
-      return this.isAdmin
-        ? 'This price will be used as the base price for this company product.'
-        : 'Set the price your customers will pay for this product.';
+      return this.uiConfig.texts.infoMessages.componentInfo.creating;
     }
   }
 
   onFormChanges(form: FormGroup): void {
     this.companyProductForm = form;
-    const isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+    const isAdmin = this.userRoleService.isAdmin();
 
     // In edit mode, try to set productId if we have pending resolved product
     if (this.isEditing && this.pendingProductId) {
@@ -219,11 +243,11 @@ export class CompanyProductFormComponent implements OnInit {
   private loadSelectedTariffOffer(productId: string, tariffOfferId: string): void {
     this.tariffOfferService.getActiveTariffOffers(productId).subscribe({
       next: (offers) => {
-        const selectedOffer = offers.find(offer => 
-          (offer.id && offer.id === tariffOfferId) || 
+        const selectedOffer = offers.find(offer =>
+          (offer.id && offer.id === tariffOfferId) ||
           `${offer.productId}_${offers.indexOf(offer)}` === tariffOfferId
         );
-        
+
         if (selectedOffer) {
           this.selectedTariffOffer = selectedOffer;
           this.cdr.markForCheck();
@@ -296,17 +320,37 @@ export class CompanyProductFormComponent implements OnInit {
 
   private createTariffOfferFromCompanyProduct(companyProduct: CompanyProduct): ActiveTariffOffer {
     // Create a tariff offer from company product data for edit mode
+    // If companyProduct has tariffOffer, use its data, otherwise use fallback
+    if (companyProduct.tariffOffer) {
+      return {
+        id: companyProduct.tariffOffer.id,
+        productId: companyProduct.id,
+        productName: companyProduct.name,
+        serviceProvider: {
+          id: companyProduct.tariffOffer.serviceProvider.id,
+          name: companyProduct.tariffOffer.serviceProvider.name
+        },
+        price: companyProduct.price, // Use company price, not base price
+        currency: companyProduct.currency,
+        validFrom: companyProduct.tariffOffer.validFrom,
+        // Store original base price for comparison
+        originalPrice: companyProduct.tariffOffer.price,
+        originalCurrency: companyProduct.tariffOffer.currency
+      } as ActiveTariffOffer & { originalPrice?: number; originalCurrency?: string };
+    }
+    
+    // Fallback for older data without tariffOffer
     return {
-      id: companyProduct?.tariffOfferId || `company-product-${companyProduct.id}`, // Use actual tariffOfferId if available
+      id: companyProduct?.tariffOfferId || `company-product-${companyProduct.id}`,
       productId: companyProduct.id,
       productName: companyProduct.name,
       serviceProvider: {
-        id: 'current-provider', // We don't have this data, using placeholder
-        name: 'Current Provider' // We don't have this data, using placeholder
+        id: 'unknown',
+        name: 'Unknown Provider'
       },
       price: companyProduct.price,
       currency: companyProduct.currency,
-      validFrom: new Date().toISOString() // Placeholder
+      validFrom: new Date().toISOString()
     } as ActiveTariffOffer;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
@@ -22,7 +22,7 @@ import { CompanyProductService, RegionService } from '../../../services';
 import { CompanyProduct, CompanyProductSearchRequest, RegionSummary } from '../../../models';
 import { CompanyProductsTableService } from '../company-products-table.service';
 import { AccountSelectorComponent } from '../../../../../shared/components/account-selector/account-selector.component';
-import { AuthService, ADMIN_PERMISSION } from '../../../../../shared';
+import { UserRoleService } from '../../../../../shared';
 import { Account, Country } from '../../../../../shared';
 import { CountryService } from '../../../../../shared';
 
@@ -60,6 +60,8 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
 
   @ViewChild('priceTemplate', { static: true }) priceTemplate: TemplateRef<any>;
   @ViewChild('statusTemplate', { static: true }) statusTemplate: TemplateRef<any>;
+  @ViewChild('providerTemplate', { static: true }) providerTemplate: TemplateRef<any>;
+  @ViewChild('basePriceTemplate', { static: true }) basePriceTemplate: TemplateRef<any>;
 
   companyProducts$: Observable<CompanyProduct[]>;
   tableConfig$: BehaviorSubject<TableConfig>;
@@ -94,7 +96,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     private companyProductService: CompanyProductService,
     private tableService: CompanyProductsTableService,
     private cdr: ChangeDetectorRef,
-    private authService: AuthService,
+    private userRoleService: UserRoleService,
     private countryService: CountryService,
     private regionService: RegionService
   ) {
@@ -166,7 +168,12 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
 
   ngAfterViewInit(): void {
     // Set templates after view initialization
-    this.tableService.setTemplates(this.priceTemplate, this.statusTemplate);
+    this.tableService.setTemplates(
+      this.priceTemplate, 
+      this.statusTemplate,
+      this.providerTemplate,
+      this.basePriceTemplate
+    );
   }
 
   private setupFilters(): void {
@@ -397,12 +404,12 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
 
   // Account selection methods
   private checkPermissions(): void {
-    this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+    this.isAdmin = this.userRoleService.isAdmin();
   }
 
   private initializeAccount(): void {
     if (!this.isAdmin) {
-      const loggedUser = this.authService.loggedUser;
+      const loggedUser = this.userRoleService.getLoggedUser();
       if (loggedUser?.accountId) {
         this.selectedAccountId = loggedUser.accountId;
         // Don't set accountId in form for non-admin users

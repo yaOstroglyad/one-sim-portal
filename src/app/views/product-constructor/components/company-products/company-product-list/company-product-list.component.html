@@ -71,6 +71,30 @@
     </td>
 </ng-template>
 
+<!-- Custom template for provider column -->
+<ng-template #providerTemplate let-data='context'>
+    <td>
+        <span *ngIf="data.tariffOffer?.serviceProvider?.name; else noProvider">
+            {{ data.tariffOffer.serviceProvider.name }}
+        </span>
+        <ng-template #noProvider>
+            <span class="text-muted">-</span>
+        </ng-template>
+    </td>
+</ng-template>
+
+<!-- Custom template for base price column -->
+<ng-template #basePriceTemplate let-data='context'>
+    <td class="text-end">
+        <span *ngIf="data.tariffOffer?.price !== null && data.tariffOffer?.price !== undefined; else noBasePrice">
+            {{ data.tariffOffer.price | currency:data.tariffOffer.currency:'symbol':'1.2-2' }}
+        </span>
+        <ng-template #noBasePrice>
+            <span class="text-muted">-</span>
+        </ng-template>
+    </td>
+</ng-template>
+
 <ng-template #menuTemplate let-item>
     <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
         <mat-icon>more_vert</mat-icon>

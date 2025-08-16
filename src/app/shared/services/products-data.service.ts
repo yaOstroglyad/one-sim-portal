@@ -124,6 +124,64 @@ export class ProductsDataService extends DataService<Package> {
 	}
 
 	/**
+	 * Get currency exchange rates (mock data with current rates as of today)
+	 * In production, this should fetch from a real exchange rate API
+	 */
+	getExchangeRates(): Observable<Record<string, number>> {
+		return this.cacheHub.get(
+			'exchange-rates:all-rates',
+			() => {
+				// Mock data with current exchange rates (December 2024)
+				// Base currency: USD
+				const mockExchangeRates: Record<string, number> = {
+					'USD': 1.0,      // Base currency
+					'EUR': 0.93,     // US Dollar to Euro
+					'GBP': 0.79,     // US Dollar to British Pound
+					'JPY': 149.50,   // US Dollar to Japanese Yen
+					'CAD': 1.39,     // US Dollar to Canadian Dollar
+					'AUD': 1.52,     // US Dollar to Australian Dollar
+					'CHF': 0.88,     // US Dollar to Swiss Franc
+					'CNY': 7.25,     // US Dollar to Chinese Yuan
+					'SEK': 10.85,    // US Dollar to Swedish Krona
+					'NOK': 11.15,    // US Dollar to Norwegian Krone
+					'DKK': 6.95,     // US Dollar to Danish Krone
+					'PLN': 4.05,     // US Dollar to Polish Zloty
+					'CZK': 23.50,    // US Dollar to Czech Koruna
+					'HUF': 385.0,    // US Dollar to Hungarian Forint
+					'RUB': 95.0,     // US Dollar to Russian Ruble
+					'UAH': 41.0,     // US Dollar to Ukrainian Hryvnia
+					'ILS': 3.65,     // US Dollar to Israeli Shekel
+					'TRY': 34.0,     // US Dollar to Turkish Lira
+					'INR': 84.0,     // US Dollar to Indian Rupee
+					'BRL': 6.10,     // US Dollar to Brazilian Real
+					'KRW': 1380.0,   // US Dollar to South Korean Won
+					'SGD': 1.35,     // US Dollar to Singapore Dollar
+					'HKD': 7.80,     // US Dollar to Hong Kong Dollar
+					'NZD': 1.67,     // US Dollar to New Zealand Dollar
+					'MXN': 20.15,    // US Dollar to Mexican Peso
+					'ZAR': 18.50,    // US Dollar to South African Rand
+					'THB': 35.0,     // US Dollar to Thai Baht
+					'MYR': 4.48,     // US Dollar to Malaysian Ringgit
+					'IDR': 15800.0,  // US Dollar to Indonesian Rupiah
+					'PHP': 57.0,     // US Dollar to Philippine Peso
+					'VND': 24500.0   // US Dollar to Vietnamese Dong
+				};
+
+				return of(mockExchangeRates).pipe(
+					catchError(() => {
+						console.warn('Error getting exchange rates, using fallback USD rates');
+						return of({ 'USD': 1.0 });
+					})
+				);
+			},
+			{
+				dataType: DataType.REFERENCE,
+				ttl: 60 * 60 * 1000 // 1 hour - exchange rates change frequently
+			}
+		);
+	}
+
+	/**
 	 * @deprecated This method is deprecated
 	 */
 	getProductTemplate(params: any): Observable<any> {

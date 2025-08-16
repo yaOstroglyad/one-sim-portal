@@ -766,6 +766,8 @@
       "coverage": "Coverage",
       "price": "Price",
       "currency": "Currency",
+      "serviceProvider": "Service Provider",
+      "basePrice": "Base Price",
       "status": "Status"
     }
   },

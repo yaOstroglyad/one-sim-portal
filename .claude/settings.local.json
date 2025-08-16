@@ -36,7 +36,9 @@
       "Bash(npm ls:*)",
       "WebFetch(domain:esim-product.dev.global-sim.app)",
       "Bash(curl:*)",
-      "Bash(npm i:*)"
+      "Bash(npm i:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(cp:*)"
     ],
     "deny": []
   }

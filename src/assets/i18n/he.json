@@ -593,6 +593,8 @@
       "coverage": "כיסוי",
       "price": "מחיר",
       "currency": "מטבע",
+      "serviceProvider": "ספק שירות",
+      "basePrice": "מחיר בסיס",
       "status": "מצב"
     }
   },

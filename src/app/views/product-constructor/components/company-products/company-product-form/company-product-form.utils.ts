@@ -1,17 +1,11 @@
 import { FieldType, FormConfig, SelectOption, FieldConfig } from '../../../../../shared';
 import { Validators } from '@angular/forms';
-import { of, Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { CompanyProduct, CreateCompanyProductRequest, UpdateCompanyProductRequest, ActiveTariffOffer } from '../../../models';
 import { AccountsDataService } from '../../../../../shared';
-import { ProductService, CompanyProductService } from '../../../services';
+import { CompanyProductService } from '../../../services';
 
-// Fallback mock data for when services are not available
-const mockProducts = [
-  { id: 'product-1', name: 'Europe Business Plan' },
-  { id: 'product-2', name: 'Global Roaming Package' },
-  { id: 'product-3', name: 'US Data Bundle' }
-];
 
 const timeUnits = [
   { value: 'days', displayValue: 'Days' },
@@ -21,26 +15,6 @@ const timeUnits = [
 ];
 
 
-// Helper to get all products (now uses cache automatically via ProductService)
-function getAllProducts(productService?: ProductService): Observable<SelectOption[]> {
-  if (!productService) {
-    return of(mockProducts.map(product => ({
-      value: product.id,
-      displayValue: product.name
-    })));
-  }
-  
-  return productService.getProducts({
-    searchParams: {},
-    page: { page: 0, size: 1000 }
-  }).pipe(
-    map(response => response.content.map(product => ({
-      value: product.id,
-      displayValue: product.name
-    } as SelectOption))),
-    catchError(() => of([]))
-  );
-}
 
 // Helper functions for creating form fields
 function createCompanySelectionField(
@@ -52,6 +26,7 @@ function createCompanySelectionField(
     name: 'companyId',
     label: 'Company',
     placeholder: 'Select a company',
+    disabled: true,
     value: selectedAccountId || null,
     validators: [Validators.required],
     options: accountsService.ownerAccounts().pipe(
@@ -63,54 +38,93 @@ function createCompanySelectionField(
   };
 }
 
-function createProductSelectionField(
-  mode: 'admin-create' | 'admin-edit' | 'user-edit',
-  productService?: ProductService,
-  companyProductService?: CompanyProductService
-): FieldConfig {
-  const baseConfig: FieldConfig = {
+// Helper functions for creating specific product selection fields
+function createAdminCreateProductField(companyProductService?: CompanyProductService): FieldConfig {
+  return {
     type: FieldType.select,
     name: 'productId',
     label: 'Product',
     placeholder: 'Select a product',
     validators: [Validators.required],
-    value: '', // In edit mode, will be set by component after products are loaded
-    disabled: mode !== 'admin-create' // Only admin can select products in create mode
+    value: '',
+    disabled: false,
+    dependsOnValue: ['companyId'],
+    options: (values: any) => {
+      const { companyId } = values;
+      if (!companyId || !companyProductService) return of([]);
+
+      // Admin создание: использовать getMissingCoreProducts по companyId
+      return companyProductService.getMissingCoreProducts(companyId).pipe(
+        map(products => {
+          if (products.length === 0) {
+            return [{
+              value: '',
+              displayValue: 'All products have been added to this company',
+              disabled: true
+            } as SelectOption];
+          }
+          return products.map(product => ({
+            value: product.id,
+            displayValue: product.name
+          } as SelectOption));
+        }),
+        catchError(() => of([]))
+      );
+    }
   };
+}
 
-  // Admin create mode: Dynamic options based on selected company
-  if (mode === 'admin-create') {
-    return {
-      ...baseConfig,
-      dependsOnValue: ['companyId'],
-      options: (values: any) => {
-        const { companyId } = values;
-        if (!companyId || !companyProductService) return of([]);
-        
-        return companyProductService.getMissingCoreProducts(companyId).pipe(
-          map(products => {
-            if (products.length === 0) {
-              return [{
-                value: '',
-                displayValue: 'All products have been added to this company',
-                disabled: true
-              } as SelectOption];
-            }
-            return products.map(product => ({
-              value: product.id,
-              displayValue: product.name
-            } as SelectOption));
-          }),
-          catchError(() => of([]))
-        );
-      }
-    };
-  }
-
-  // Edit modes: Static options (will be loaded by component)
+function createAdminEditProductField(companyProductService?: CompanyProductService): FieldConfig {
   return {
-    ...baseConfig,
-    options: getAllProducts(productService)
+    type: FieldType.select,
+    name: 'productId',
+    label: 'Product',
+    placeholder: 'Select a product',
+    validators: [Validators.required],
+    value: '',
+    invisible: true,
+    dependsOnValue: ['companyId'],
+    options: (values: any) => {
+      const { companyId } = values;
+      if (!companyId || !companyProductService) return of([]);
+
+      // Admin редактирование: использовать searchCompanyProducts с указанной компанией
+      return companyProductService.searchCompanyProducts({
+        searchParams: { accountId: companyId },
+        page: { page: 0, size: 1000 }
+      }).pipe(
+        map(response => response.content.map(product => ({
+          value: product.id,
+          displayValue: product.name
+        } as SelectOption))),
+        catchError(() => of([]))
+      );
+    }
+  };
+}
+
+function createUserEditProductField(companyProductService?: CompanyProductService): FieldConfig {
+  return {
+    type: FieldType.select,
+    name: 'productId',
+    label: 'Product',
+    placeholder: 'Select a product',
+    validators: [Validators.required],
+    value: '',
+    disabled: true, // Disabled in edit mode
+    options: companyProductService ?
+      // Пользователь редактирование: использовать searchCompanyProducts без companyId
+      companyProductService.searchCompanyProducts({
+        searchParams: {},
+        page: { page: 0, size: 1000 }
+      }).pipe(
+        map(response => response.content.map(product => ({
+          value: product.id,
+          displayValue: product.name
+        } as SelectOption))),
+        catchError(() => of([]))
+      ) :
+      of([])
   };
 }
 
@@ -126,9 +140,9 @@ function createTariffOfferSelectionField(tariffOfferService: any): FieldConfig {
     options: (values: any) => {
       const { productId } = values;
       if (!productId || !tariffOfferService) return of([]);
-      
+
       return tariffOfferService.getActiveTariffOffers(productId).pipe(
-        map((offers: ActiveTariffOffer[]) => 
+        map((offers: ActiveTariffOffer[]) =>
           offers.map((offer, index) => ({
             value: offer.id || `${offer.productId}_${index}`,
             displayValue: `${offer.serviceProvider.name} - ${offer.price} ${offer.currency.toUpperCase()}`
@@ -145,13 +159,12 @@ export function getCompanyProductFormConfig(
   isEditing: boolean = false,
   accountsService?: AccountsDataService,
   isAdmin?: boolean,
-  productService?: ProductService,
   tariffOfferService?: any,
   selectedAccountId?: string | null,
   companyProductService?: CompanyProductService
 ): FormConfig {
   // Determine the mode based on user role and editing state
-  const mode: 'admin-create' | 'admin-edit' | 'user-edit' = 
+  const mode: 'admin-create' | 'admin-edit' | 'user-edit' =
     isAdmin ? (isEditing ? 'admin-edit' : 'admin-create') : 'user-edit';
 
   const formFields: FieldConfig[] = [
@@ -164,17 +177,27 @@ export function getCompanyProductFormConfig(
     }
   ];
 
-  // Company selection field (only for admin create mode)
-  if (mode === 'admin-create' && accountsService) {
+  // Company selection field (for admin modes)
+  // if ((mode === 'admin-create' || mode === 'admin-edit') && accountsService) {
+  //   // In edit mode, use the company from the existing product
+  //   const companyIdValue = mode === 'admin-edit' && companyProduct?.company?.id
+  //     ? companyProduct.company.id
+  //     : selectedAccountId;
+  //   formFields.push(createCompanySelectionField(accountsService, companyIdValue, mode));
+  // }
+
+  if ((mode === 'admin-create' || mode === 'admin-edit') && accountsService) {
     formFields.push(createCompanySelectionField(accountsService, selectedAccountId));
   }
 
   // Product selection field (behavior differs by mode)
-  formFields.push(createProductSelectionField(
-    mode, 
-    productService, 
-    companyProductService
-  ));
+  if (mode === 'admin-edit') {
+    formFields.push(createAdminEditProductField(companyProductService));
+  } else if (mode === 'admin-create') {
+    formFields.push(createAdminCreateProductField(companyProductService));
+  } else if (mode === 'user-edit') {
+    formFields.push(createUserEditProductField(companyProductService));
+  }
 
   // Tariff offer field (only for create mode)
   if (mode === 'admin-create') {

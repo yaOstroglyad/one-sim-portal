@@ -5,7 +5,7 @@
                           (accountSelected)="onAccountSelected($event)">
     </app-account-selector>
 
-    <div class="template-types-grid mx-3 mb-3">
+    <div class="template-types-grid mx-3 mt-3">
         <div class="template-type-card" *ngFor="let type of templateTypes$ | async">
             <mat-card
                     (click)="selectTemplateType(type)"

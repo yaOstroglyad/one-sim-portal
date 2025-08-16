@@ -153,6 +153,49 @@
                 border: 1px solid rgba(var(--os-color-danger-rgb), 0.3);
               }
             }
+            
+            // Price change preview styles
+            .price-change-preview {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              flex-wrap: wrap;
+              
+              .price-value.strikethrough {
+                text-decoration: line-through;
+                color: var(--os-color-medium);
+                font-size: 0.875rem;
+                font-weight: 500;
+              }
+              
+              .arrow-icon {
+                font-size: 16px;
+                color: var(--os-color-medium);
+                width: 16px;
+                height: 16px;
+              }
+              
+              .price-value.pending {
+                color: var(--os-color-warning);
+                font-weight: 700;
+                font-size: 1.125rem;
+              }
+              
+              .pending-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.125rem 0.5rem;
+                border-radius: map-get($os-border-radius, 'small');
+                font-size: map-get($font-sizes, 'xs');
+                font-weight: 600;
+                background-color: var(--os-color-warning-subtle-bg);
+                color: var(--os-color-warning);
+                border: 1px solid rgba(var(--os-color-warning-rgb), 0.3);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+              }
+            }
           }
         }
       }

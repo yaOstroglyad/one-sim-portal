@@ -508,5 +508,11 @@
     "title": "Показати/Сховати колонки",
     "resetToDefault": "Скинути за замовчуванням",
     "columnsVisible": "{{count}} з {{total}} колонок видно"
+  },
+  "productConstructor": {
+    "companyProducts": {
+      "serviceProvider": "Постачальник послуг",
+      "basePrice": "Базова ціна"
+    }
   }
 }

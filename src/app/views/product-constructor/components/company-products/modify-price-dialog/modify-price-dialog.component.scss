@@ -11,6 +11,88 @@
   color: var(--os-color-warning);
 }
 
+// Base price styling
+.original-info {
+  .info-row {
+    &:first-child {
+      .label {
+        color: var(--os-color-medium);
+        font-size: 0.875rem;
+      }
+      .value {
+        color: var(--os-color-medium);
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+// Price difference indicator
+.price-difference {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--os-color-success);
+  margin-left: 0.5rem;
+}
+
+// Price preview section
+.price-preview {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: var(--os-color-light);
+  border-radius: 8px;
+  border: 1px solid var(--os-color-medium-subtle-bg);
+
+  h6 {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--os-color-dark);
+  }
+
+  .preview-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+
+    .old-price {
+      font-size: 1rem;
+      color: var(--os-color-medium);
+      text-decoration: line-through;
+      font-weight: 500;
+    }
+
+    .arrow-icon {
+      font-size: 20px;
+      color: var(--os-color-medium);
+    }
+
+    .new-price {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--os-color-primary);
+    }
+
+    .price-change {
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.125rem 0.5rem;
+      border-radius: 4px;
+      
+      &.increase {
+        color: var(--os-color-danger);
+        background-color: var(--os-color-danger-subtle-bg);
+      }
+      
+      &.decrease {
+        color: var(--os-color-success);
+        background-color: var(--os-color-success-subtle-bg);
+      }
+    }
+  }
+}
+
 .info-note-inline {
   display: flex;
   align-items: flex-start;

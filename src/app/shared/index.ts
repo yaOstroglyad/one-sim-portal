@@ -52,6 +52,7 @@ export * from './services/white-label-data.service';
 export * from './services/country.service';
 
 export * from './services/feature-toggle';
+export * from './services/user-role.service';
 export * from './directives/feature-toggle.directive';
 
 export * from './auth/permission.guard';

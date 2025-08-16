@@ -1,24 +1,24 @@
 import { inject, Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {
-	ADMIN_PERMISSION,
-	AuthService,
-	SPECIAL_PERMISSION,
 	TableConfig,
 	TableConfigAbstractService,
 	TemplateType
 } from 'src/app/shared';
 import { CompanyProduct } from '../../models';
+import { UserRoleService } from '../../../../shared';
 
 @Injectable()
 export class CompanyProductsTableService extends TableConfigAbstractService<CompanyProduct> {
-	private authService = inject(AuthService);
-	private isSpecial = this.authService.hasPermission(SPECIAL_PERMISSION);
-	private isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+	private userRoleService = inject(UserRoleService);
+	private isAdmin = this.userRoleService.isAdmin();
+	private isSpecial = this.userRoleService.isSpecial();
 
 	// Template references
 	public priceTemplate: TemplateRef<any>;
 	public statusTemplate: TemplateRef<any>;
+	public providerTemplate: TemplateRef<any>;
+	public basePriceTemplate: TemplateRef<any>;
 
 	public originalDataSubject = new BehaviorSubject<CompanyProduct[]>([]);
 	public dataList$: Observable<CompanyProduct[]> = this.originalDataSubject.asObservable();
@@ -30,7 +30,7 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 		translatePrefix: 'productConstructor.companyProducts.',
 		showCheckboxes: false,
 		showEditButton: false,
-		showAddButton: this.isAdmin || this.isSpecial,
+		showAddButton: this.isAdmin,
 		showMenu: true,
 		columns: [
 			{
@@ -77,6 +77,25 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 				class: 'text-center'
 			},
 			{
+				visible: this.isAdmin,
+				key: 'tariffOffer.serviceProvider.name',
+				header: 'serviceProvider',
+				templateType: TemplateType.Custom,
+				customTemplate: () => this.providerTemplate,
+				sortable: true,
+				minWidth: '120px'
+			},
+			{
+				visible: this.isAdmin,
+				key: 'tariffOffer.price',
+				header: 'basePrice',
+				templateType: TemplateType.Custom,
+				customTemplate: () => this.basePriceTemplate,
+				sortable: true,
+				minWidth: '100px',
+				class: 'text-end'
+			},
+			{
 				visible: true,
 				key: 'active',
 				header: 'status',
@@ -97,9 +116,16 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 		this.originalDataSubject.next(data);
 	}
 
-	public setTemplates(priceTemplate: TemplateRef<any>, statusTemplate: TemplateRef<any>): void {
+	public setTemplates(
+		priceTemplate: TemplateRef<any>, 
+		statusTemplate: TemplateRef<any>,
+		providerTemplate: TemplateRef<any>,
+		basePriceTemplate: TemplateRef<any>
+	): void {
 		this.priceTemplate = priceTemplate;
 		this.statusTemplate = statusTemplate;
+		this.providerTemplate = providerTemplate;
+		this.basePriceTemplate = basePriceTemplate;
 		// Re-emit the current config to trigger update with new templates
 		this.tableConfigSubject.next(this.tableConfigSubject.value);
 	}

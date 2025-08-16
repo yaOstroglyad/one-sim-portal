@@ -1,5 +1,18 @@
 import { ServiceCoverage, UsageUnit, ValidityPeriod, PageRequest, Company, Currency } from './common.model';
 
+export interface CompanyProductServiceProvider {
+  id: string;
+  name: string;
+}
+
+export interface CompanyProductTariffOffer {
+  id: string;
+  serviceProvider: CompanyProductServiceProvider;
+  price: number;
+  currency: string;
+  validFrom: string;
+}
+
 export interface CompanyProduct {
   id: string;
   company: Company;
@@ -9,6 +22,7 @@ export interface CompanyProduct {
   price: number | null;
   currency: Currency | null;
   tariffOfferId?: string;
+  tariffOffer?: CompanyProductTariffOffer;
   usageUnits: UsageUnit[];
   validityPeriod: ValidityPeriod;
   createdAt?: string;

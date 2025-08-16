@@ -281,8 +281,17 @@ export function initDynamicOptionsForField(
 	}
 
 	// Подписываемся на изменения зависимых полей
+	const validControls = field.dependsOnValue
+		.map(dep => form.get(dep))
+		.filter(control => control !== null);
+	
+	if (validControls.length === 0) {
+		console.warn(`No valid form controls found for dependencies: ${field.dependsOnValue.join(', ')}`);
+		return;
+	}
+	
 	const combined$ = combineLatest(
-		field.dependsOnValue.map(dep => form.get(dep)!.valueChanges)
+		validControls.map(control => control!.valueChanges)
 	);
 
 	combined$

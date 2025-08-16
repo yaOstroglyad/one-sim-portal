@@ -1,70 +1,106 @@
-<h2 mat-dialog-title class="dialog-header">{{ data.isAdmin ? 'Modify Price' : 'Update Product Price' }}</h2>
+<h2 mat-dialog-title class="dialog-header">{{ uiConfig.texts.dialogTitle }}</h2>
 
 <mat-dialog-content class="mat-typography dialog-content">
-  <!-- Original Tariff Info - Only show for admins -->
-  <div class="original-info" *ngIf="data.tariffOffer && data.isAdmin">
-    <h6>Current Tariff Offer:</h6>
-    <div class="info-row">
-      <span class="label">Service Provider:</span>
-      <span class="value">{{ data.tariffOffer.serviceProvider.name }}</span>
+  <!-- Price Information Section -->
+  <ng-container *ngIf="viewModel$ | async as vm">
+    
+    <!-- Current Tariff Info for Admin/Full View -->
+    <div class="original-info" *ngIf="uiConfig.showCurrentTariffInfo && vm.priceInfo">
+      <h6>Current Tariff Offer:</h6>
+      
+      <div class="info-row" *ngIf="vm.showServiceProvider && vm.serviceProviderName">
+        <span class="label">Service Provider:</span>
+        <span class="value">{{ vm.serviceProviderName }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">{{ uiConfig.texts.labels.basePrice }}:</span>
+        <span class="value">{{ vm.priceInfo.formattedBasePrice }}</span>
+      </div>
+      
+      <div class="info-row" *ngIf="vm.priceInfo.hasPriceDifference">
+        <span class="label">{{ uiConfig.texts.labels.customerPrice }}:</span>
+        <span class="value">
+          {{ vm.priceInfo.formattedCurrentPrice }}
+          <span class="price-difference" *ngIf="vm.priceInfo.priceDifference !== 0">
+            ({{ vm.priceInfo.priceDifference > 0 ? '+' : '' }}{{ vm.priceInfo.priceDifferencePercentage | number:'1.1-1' }}%)
+          </span>
+        </span>
+      </div>
     </div>
-    <div class="info-row">
-      <span class="label">Base Price:</span>
-      <span class="value" *ngIf="data.tariffOffer.price != null && data.tariffOffer.currency">
-        {{ data.tariffOffer.price }} {{ data.tariffOffer.currency.toUpperCase() }}
-      </span>
-      <span class="value text-muted" *ngIf="data.tariffOffer.price == null || !data.tariffOffer.currency">N/A</span>
+
+    <!-- Simplified Price Info for Regular Users -->
+    <div class="original-info" *ngIf="!uiConfig.showCurrentTariffInfo && vm.priceInfo">
+      <div class="info-row" *ngIf="vm.priceInfo.hasPriceDifference">
+        <span class="label">{{ uiConfig.texts.labels.basePrice }}:</span>
+        <span class="value">{{ vm.priceInfo.formattedBasePrice }}</span>
+      </div>
+      
+      <div class="info-row">
+        <span class="label">{{ uiConfig.texts.labels.currentPrice }}:</span>
+        <span class="value">
+          {{ vm.priceInfo.formattedCurrentPrice }}
+          <span class="price-difference" *ngIf="vm.priceInfo.priceDifference !== 0">
+            ({{ vm.priceInfo.priceDifference > 0 ? '+' : '' }}{{ vm.priceInfo.priceDifferencePercentage | number:'1.1-1' }}%)
+          </span>
+        </span>
+      </div>
     </div>
-  </div>
 
-  <!-- Current selling price for non-admin users -->
-  <div class="original-info" *ngIf="data.tariffOffer && !data.isAdmin">
-    <div class="info-row">
-      <span class="label">Current Customer Price:</span>
-      <span class="value" *ngIf="data.tariffOffer.price != null && data.tariffOffer.currency">
-        {{ data.tariffOffer.price }} {{ data.tariffOffer.currency.toUpperCase() }}
-      </span>
-      <span class="value text-muted" *ngIf="data.tariffOffer.price == null || !data.tariffOffer.currency">N/A</span>
+    <!-- Modify Form -->
+    <form [formGroup]="modifyForm" class="modify-form">
+      <h6>{{ uiConfig.texts.labels.newPrice }}:</h6>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="price-field">
+          <mat-label>Price</mat-label>
+          <input
+            matInput
+            type="number"
+            step="0.01"
+            min="0.01"
+            formControlName="price"
+            placeholder="0.00">
+          <mat-error *ngIf="modifyForm.get('price')?.hasError('required')">
+            Price is required
+          </mat-error>
+          <mat-error *ngIf="modifyForm.get('price')?.hasError('min')">
+            Price must be greater than 0
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="currency-field">
+          <mat-label>Currency</mat-label>
+          <mat-select formControlName="currency">
+            <mat-option *ngFor="let currency of currencyOptions$ | async" [value]="currency.value">
+              {{ currency.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+
+    <!-- Price Preview Section -->
+    <div class="price-preview" *ngIf="vm.pricePreview.isVisible">
+      <h6>Price Preview:</h6>
+      <div class="preview-row">
+        <span class="old-price">{{ vm.pricePreview.formattedOldPrice }}</span>
+        <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+        <span class="new-price">{{ vm.pricePreview.formattedNewPrice }}</span>
+        <span class="price-change" 
+              [class.increase]="vm.pricePreview.isIncrease" 
+              [class.decrease]="vm.pricePreview.isDecrease">
+          ({{ vm.pricePreview.changePercentage > 0 ? '+' : '' }}{{ vm.pricePreview.changePercentage | number:'1.1-1' }}%)
+        </span>
+      </div>
     </div>
-  </div>
 
-  <!-- Modify Form -->
-  <form [formGroup]="modifyForm" class="modify-form">
-    <h6>{{ data.isAdmin ? 'New Price Settings:' : 'Set New Price:' }}</h6>
+  </ng-container>
 
-    <div class="form-row">
-      <mat-form-field appearance="outline" class="price-field">
-        <mat-label>Price</mat-label>
-        <input
-          matInput
-          type="number"
-          step="0.01"
-          min="0.01"
-          formControlName="price"
-          placeholder="0.00">
-        <mat-error *ngIf="modifyForm.get('price')?.hasError('required')">
-          Price is required
-        </mat-error>
-        <mat-error *ngIf="modifyForm.get('price')?.hasError('min')">
-          Price must be greater than 0
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="currency-field">
-        <mat-label>Currency</mat-label>
-        <mat-select formControlName="currency">
-          <mat-option *ngFor="let currency of currencyOptions$ | async" [value]="currency.value">
-            {{ currency.label }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </form>
-
+  <!-- Info Message -->
   <div class="info-note">
     <mat-icon>info</mat-icon>
-    <span *ngIf="data.isAdmin">This will set a custom price for the selected company, overriding the base tariff offer price.</span>
-    <span *ngIf="!data.isAdmin">This will update the price your customers pay for this product.</span>
+    <span>{{ uiConfig.texts.infoMessages.dialogInfo }}</span>
   </div>
 </mat-dialog-content>
 
@@ -73,11 +109,13 @@
     Cancel
   </button>
 
-  <button
-    mat-button
-    color="primary"
-    (click)="onSave()"
-    [disabled]="!isFormValid">
-    Update Price
-  </button>
+  <ng-container *ngIf="viewModel$ | async as vm">
+    <button
+      mat-button
+      color="primary"
+      (click)="onSave()"
+      [disabled]="!isFormValid">
+      {{ vm.pricePreview.isVisible ? 'Apply Price Change' : uiConfig.texts.buttonTexts.update }}
+    </button>
+  </ng-container>
 </mat-dialog-actions>
