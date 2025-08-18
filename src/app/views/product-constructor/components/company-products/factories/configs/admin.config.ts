@@ -15,7 +15,7 @@ export class AdminUIConfig implements UIConfig {
       originalPrice: 'Base Price',
       serviceProvider: 'Service Provider',
       basePrice: 'Base Price',
-      customerPrice: 'Company Price'
+      customerPrice: 'Customer Price'
     },
     infoMessages: {
       dialogInfo: 'This will set a custom price for the selected company.',

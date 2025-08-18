@@ -1,0 +1,33 @@
+{
+  "content": [
+    {
+      "username": "admin.user",
+      "accountId": "ACC-ADMIN-001",
+      "accountType": "CORPORATE",
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@onesim.com"
+    },
+    {
+      "username": "joseph.martinez",
+      "accountId": "ACC-CORP-010",
+      "accountType": "CORPORATE",
+      "firstName": "Joseph",
+      "lastName": "Martinez",
+      "email": "joseph.martinez@logistics.com"
+    }
+  ],
+  "totalElements": 150,
+  "totalPages": 8,
+  "number": 0,
+  "size": 20,
+  "sort": {
+    "sorted": false,
+    "unsorted": true,
+    "empty": true
+  },
+  "first": true,
+  "last": false,
+  "numberOfElements": 20,
+  "empty": false
+}

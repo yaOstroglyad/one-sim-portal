@@ -2,9 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { DataService, User } from '../../shared';
+import { MockedService } from '../../shared/decorators/mock.decorator';
 
 @Injectable({
   providedIn: 'root'
+})
+@MockedService({
+  endpoints: ['list', 'paginatedUsers', 'createUser', 'verifyEmail']
 })
 export class UsersDataService extends DataService<User> {
   private apiUrl = '/api/v1/users/query/all';

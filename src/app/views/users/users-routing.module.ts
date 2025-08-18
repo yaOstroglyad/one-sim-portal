@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ADMIN_PERMISSION, permissionGuard } from '../../shared';
+import { ADMIN_PERMISSION, permissionGuard, SUPPORT_PERMISSION } from '../../shared';
 import { UsersComponent } from './users.component';
 
 const routes: Routes = [
@@ -8,7 +8,7 @@ const routes: Routes = [
 		path: '',
 		data: {
 			title: 'nav.users',
-			permissions: [ADMIN_PERMISSION]
+			permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION]
 		},
 		component: UsersComponent,
 		canActivate: [permissionGuard]

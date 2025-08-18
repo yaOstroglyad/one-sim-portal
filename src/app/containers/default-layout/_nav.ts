@@ -54,7 +54,7 @@ export const navItems: any[] = [
 		name: 'nav.users',
 		url: 'users',
 		iconComponent: {name: 'cil-user'},
-		permissions: [ADMIN_PERMISSION]
+		permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION]
 	},
 	{
 		name: 'nav.productconstructor',
@@ -66,6 +66,7 @@ export const navItems: any[] = [
 	{
 		name: 'nav.settings',
 		url: '/home/settings',
+		permissions: [ADMIN_PERMISSION],
 		iconComponent: {name: 'cil-settings'},
 		children: [
 			{

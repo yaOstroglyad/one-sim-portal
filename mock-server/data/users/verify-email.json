@@ -1,0 +1,11 @@
+{
+  "existingEmails": [
+    "admin@onesim.com",
+    "john.doe@techcorp.com",
+    "jane.smith@globalinc.com",
+    "test@example.com"
+  ],
+  "response": {
+    "isExist": false
+  }
+}

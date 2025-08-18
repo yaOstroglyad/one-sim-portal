@@ -1,0 +1,28 @@
+{
+  "services": {
+    "UsersDataService": {
+      "mocked": true,
+      "endpoints": ["list", "paginatedUsers", "createUser", "verifyEmail"]
+    }
+  },
+  "endpoints": [
+    {
+      "path": "/api/v1/users/query/all",
+      "method": "GET",
+      "service": "UsersDataService",
+      "handler": "users/list"
+    },
+    {
+      "path": "/api/v1/users/command/create",
+      "method": "POST",
+      "service": "UsersDataService",
+      "handler": "users/create"
+    },
+    {
+      "path": "/api/v1/users/query/verify-user",
+      "method": "GET",
+      "service": "UsersDataService",
+      "handler": "users/verify-email"
+    }
+  ]
+}

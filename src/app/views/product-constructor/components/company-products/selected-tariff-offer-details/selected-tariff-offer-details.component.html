@@ -2,7 +2,7 @@
   <div class="selected-tariff-offer-details" *ngIf="vm.hasValidTariffOffer">
     <div class="header-section" *ngIf="vm.showTitle || vm.showEditButton">
       <h5 class="section-title" *ngIf="vm.showTitle">{{ uiConfig.texts.sectionTitle }}</h5>
-      <button 
+      <button
         *ngIf="vm.canEdit"
         cButton
         variant="outline"
@@ -14,7 +14,7 @@
         {{ uiConfig.texts.buttonTexts.edit }}
       </button>
     </div>
-  
+
   <!-- Show full card for users with full details -->
   <div class="detail-card" *ngIf="uiConfig.visibility.showFullDetails">
     <div class="detail-row" *ngIf="uiConfig.visibility.showServiceProvider">
@@ -33,11 +33,11 @@
           <span class="price-label">Base Price:</span>
           <span class="price-value original">{{ vm.priceComparison.formattedOriginalPrice }}</span>
         </div>
-        
+
         <!-- Current price -->
         <div class="current-price" [class.modified]="vm.priceComparison.hasModifiedPrice">
-          <span *ngIf="vm.priceComparison.hasModifiedPrice || vm.priceComparison.showPendingChange" class="price-label">Company Price:</span>
-          
+          <span *ngIf="vm.priceComparison.hasModifiedPrice || vm.priceComparison.showPendingChange" class="price-label">Customer Price:</span>
+
           <!-- Show pending change with current price strikethrough and new price -->
           <div class="price-change-preview" *ngIf="vm.priceComparison.showPendingChange">
             <!-- Current company price (before change) -->
@@ -51,15 +51,15 @@
             </span>
             <span class="pending-badge">Pending</span>
           </div>
-          
+
           <!-- Show current price when no pending change -->
           <div *ngIf="!vm.priceComparison.showPendingChange">
             <span class="price-value current">{{ vm.priceComparison.formattedCurrentPrice }}</span>
           </div>
-          
+
           <!-- Markup percentage -->
-          <span *ngIf="vm.priceComparison.hasModifiedPrice && !vm.priceComparison.showPendingChange && vm.priceComparison.markupDisplay" class="markup-badge" 
-                [class.positive]="vm.priceComparison.difference?.isIncrease" 
+          <span *ngIf="vm.priceComparison.hasModifiedPrice && !vm.priceComparison.showPendingChange && vm.priceComparison.markupDisplay" class="markup-badge"
+                [class.positive]="vm.priceComparison.difference?.isIncrease"
                 [class.negative]="vm.priceComparison.difference?.isDecrease">
             {{ vm.priceComparison.markupDisplay }}
           </span>
@@ -71,7 +71,7 @@
       <span class="detail-value">{{ vm.tariffOffer?.validFrom | date:'medium' }}</span>
     </div>
   </div>
-  
+
   <!-- Simplified view for users without full details -->
   <div class="detail-card simplified" *ngIf="!uiConfig.visibility.showFullDetails">
     <div class="detail-row">
@@ -86,11 +86,11 @@
           <span class="price-label">{{ uiConfig.texts.labels.originalPrice }}:</span>
           <span class="price-value original">{{ vm.priceComparison.formattedOriginalPrice }}</span>
         </div>
-        
+
         <!-- Current price -->
         <div class="current-price" [class.modified]="vm.priceComparison.hasModifiedPrice">
           <span *ngIf="vm.priceComparison.hasModifiedPrice || vm.priceComparison.showPendingChange" class="price-label">{{ uiConfig.texts.labels.customerPrice }}:</span>
-          
+
           <!-- Show pending change with current price strikethrough and new price -->
           <div class="price-change-preview" *ngIf="vm.priceComparison.showPendingChange">
             <!-- Current company price (before change) -->
@@ -104,15 +104,15 @@
             </span>
             <span class="pending-badge">Pending</span>
           </div>
-          
+
           <!-- Show current price when no pending change -->
           <div *ngIf="!vm.priceComparison.showPendingChange">
             <span class="price-value current">{{ vm.priceComparison.formattedCurrentPrice }}</span>
           </div>
-          
+
           <!-- Price change percentage -->
-          <span *ngIf="vm.priceComparison.hasModifiedPrice && !vm.priceComparison.showPendingChange && vm.priceComparison.markupDisplay" class="profit-badge" 
-                [class.positive]="vm.priceComparison.difference?.isIncrease" 
+          <span *ngIf="vm.priceComparison.hasModifiedPrice && !vm.priceComparison.showPendingChange && vm.priceComparison.markupDisplay" class="profit-badge"
+                [class.positive]="vm.priceComparison.difference?.isIncrease"
                 [class.negative]="vm.priceComparison.difference?.isDecrease">
             {{ vm.priceComparison.markupDisplay }}
           </span>
@@ -120,7 +120,7 @@
       </div>
     </div>
   </div>
-  
+
     <div class="info-note" *ngIf="vm.infoMessage">
       <mat-icon>info</mat-icon>
       <span>{{ vm.infoMessage }}</span>

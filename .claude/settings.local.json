@@ -38,7 +38,8 @@
       "Bash(curl:*)",
       "Bash(npm i:*)",
       "mcp__ide__getDiagnostics",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }

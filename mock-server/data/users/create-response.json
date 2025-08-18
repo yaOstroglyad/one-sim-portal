@@ -1,0 +1,12 @@
+{
+  "username": "{{username}}",
+  "accountId": "{{accountId}}",
+  "accountType": "{{accountType}}",
+  "firstName": "{{firstName}}",
+  "lastName": "{{lastName}}",
+  "email": "{{email}}",
+  "id": "{{generateId}}",
+  "createdAt": "{{timestamp}}",
+  "updatedAt": "{{timestamp}}",
+  "status": "ACTIVE"
+}
