@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, HostListener, OnInit } from '@angul
 import { FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from '../../../shared';
 import { LoginService } from './login.service';
+import { CacheHubService } from '../../../shared/services/cache-hub';
 
 @Component({
 	selector: 'app-login',
@@ -25,11 +26,14 @@ export class LoginComponent implements OnInit {
 
 	constructor(
 		private loginService: LoginService,
-		private authService: AuthService
+		private authService: AuthService,
+		private cacheHubService: CacheHubService
 	) { }
 
 	ngOnInit(): void {
 		this.authService.deleteLoginResponse();
+		// Clear all cached data when arriving at login page
+		this.cacheHubService.clear();
 	}
 
 	login(): void {
