@@ -2,14 +2,14 @@ import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, Ch
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { map, switchMap, catchError, startWith, debounceTime, takeUntil } from 'rxjs/operators';
+import { map, debounceTime, takeUntil } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared/components/generic-right-panel/generic-right-panel.component';
+import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { ProductDetailsComponent } from '../product-details/product-details.component';
 import { ProductFormComponent } from '../product-form/product-form.component';
-import { GenericTableModule, HeaderModule, TableConfig, TemplateType, DeleteConfirmationComponent } from '../../../../../shared';
+import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,8 +17,9 @@ import { ButtonDirective, FormControlDirective, FormSelectDirective, BadgeCompon
 import { IconDirective } from '@coreui/icons-angular';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { ProductService } from '../../../services';
-import { Product, ProductSearchRequest } from '../../../models';
+import { ProductService, RegionService } from '../../../services';
+import { Product, ProductSearchRequest, RegionSummary } from '../../../models';
+import { Country, CountryService } from '../../../../../shared';
 import { ProductsTableService } from '../products-table.service';
 
 @Component({
@@ -42,7 +43,8 @@ import { ProductsTableService } from '../products-table.service';
     FormControlDirective,
     FormSelectDirective,
     BadgeComponent,
-    IconDirective
+    IconDirective,
+    SearchableSelectComponent
   ],
   providers: [ProductsTableService],
   templateUrl: './product-list.component.html',
@@ -72,10 +74,18 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
   // Panel actions
   detailsPanelActions: PanelAction[] = [];
 
+  // Dropdown data
+  countries$: Observable<Country[]>;
+  regions$: Observable<RegionSummary[]>;
+  countryOptions$: Observable<SearchableSelectOption[]>;
+  regionOptions$: Observable<SearchableSelectOption[]>;
+
   constructor(
     private productService: ProductService,
     private tableService: ProductsTableService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private countryService: CountryService,
+    private regionService: RegionService
   ) {
     // Initialize form
     this.filterForm = new FormGroup({
@@ -92,6 +102,37 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Initialize products$ with empty data
     this.products$ = of([]);
+
+    // Initialize dropdown data
+    this.countries$ = this.countryService.getCountries();
+    this.regions$ = this.regionService.getRegions();
+
+    // Transform data for searchable-select
+    this.countryOptions$ = this.countries$.pipe(
+      map(countries => {
+        if (!countries || !Array.isArray(countries)) {
+          return [];
+        }
+        return countries.map(country => ({
+          value: country.id,
+          label: country.name + ' ' + "(" + country?.isoAlphaCode3 + ")" || '',
+          data: country
+        } as SearchableSelectOption));
+      })
+    );
+
+    this.regionOptions$ = this.regions$.pipe(
+      map(regions => {
+        if (!regions || !Array.isArray(regions)) {
+          return [];
+        }
+        return regions.map(region => ({
+          value: region.id,
+          label: region.name,
+          data: region
+        } as SearchableSelectOption));
+      })
+    );
   }
 
   ngOnInit(): void {
@@ -124,7 +165,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     countryId?: number;
     regionId?: number;
     mobileBundleId?: string;
-  } = { page: 0, size: 20 }): void {
+  } = { page: 0, size: 15 }): void {
 
     const searchRequest: ProductSearchRequest = {
       searchParams: {
@@ -142,7 +183,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (data) => {
-          this.tableService.updateConfigData(data?.totalPages || 20);
+          this.tableService.updateConfigData(data?.totalPages || 15);
           this.tableConfig$ = this.tableService.getTableConfig();
           this.products$ = of(data.content);
           this.loading = false;
@@ -171,7 +212,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
   applyFilter(): void {
     const params = {
       page: 0,
-      size: 20,
+      size: 15,
       ...this.filterForm.getRawValue()
     };
     this.loadData(params);

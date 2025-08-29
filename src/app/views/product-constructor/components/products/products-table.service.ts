@@ -43,7 +43,7 @@ export class ProductsTableService extends TableConfigAbstractService<Product> {
 				key: 'name',
 				header: 'productName',
 				templateType: TemplateType.Text,
-				sortable: true,
+				sortable: false,
 				minWidth: '200px'
 			},
 			{
@@ -51,7 +51,7 @@ export class ProductsTableService extends TableConfigAbstractService<Product> {
 				key: 'bundle.name',
 				header: 'bundle',
 				templateType: TemplateType.Text,
-				sortable: true,
+				sortable: false,
 				minWidth: '180px'
 			},
 			{
@@ -59,7 +59,7 @@ export class ProductsTableService extends TableConfigAbstractService<Product> {
 				key: 'serviceCoverage.name',
 				header: 'coverage',
 				templateType: TemplateType.Text,
-				sortable: true,
+				sortable: false,
 				minWidth: '150px'
 			},
 			{
@@ -78,7 +78,7 @@ export class ProductsTableService extends TableConfigAbstractService<Product> {
 				header: 'status',
 				templateType: TemplateType.Custom,
 				customTemplate: () => this.statusTemplate,
-				sortable: true,
+				sortable: false,
 				minWidth: '100px',
 				class: 'text-center'
 			}

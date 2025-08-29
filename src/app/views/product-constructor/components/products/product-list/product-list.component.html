@@ -4,12 +4,37 @@
             (onAddAction)="onCreateNew()"
             (columnSelectionChange)="onColumnSelectionChanged($event)">
     <ng-container header-custom-inputs>
-        <input cFormControl formControlName="countryId" [type]="'number'" placeholder="{{ 'product.countryId' | translate }}">
-        <input cFormControl formControlName="regionId" [type]="'number'" placeholder="{{ 'product.regionId' | translate }}">
+        <app-searchable-select
+                [options]="countryOptions$ | async"
+                [config]="{
+                        placeholder: ('product.selectCountry' | translate),
+                        searchPlaceholder: ('common.search' | translate) + '...',
+                        noResultsText: ('common.noResultsFound' | translate),
+                        clearable: true,
+                        searchable: true
+                    }"
+                formControlName="countryId"
+                class="w-100">
+        </app-searchable-select>
+
+        <app-searchable-select
+                [options]="regionOptions$ | async"
+                [config]="{
+                        placeholder: ('product.selectRegion' | translate),
+                        searchPlaceholder: ('common.search' | translate) + '...',
+                        noResultsText: ('common.noResultsFound' | translate),
+                        clearable: true,
+                        searchable: true
+                    }"
+                formControlName="regionId"
+                class="w-100">
+        </app-searchable-select>
+
         <button cButton
                 color="secondary"
                 [disabled]="filterForm.pristine"
-                (click)="resetForm()">
+                (click)="resetForm()"
+                class="reset-button">
             <svg cIcon name="cilReload"></svg>
         </button>
     </ng-container>

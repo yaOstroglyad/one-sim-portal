@@ -128,7 +128,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
         }
         return countries.map(country => ({
           value: country.id,
-          label: country.name,
+          label: country.name + ' ' + "(" + country?.isoAlphaCode3 + ")" || '',
           data: country
         } as SearchableSelectOption));
       })
@@ -169,7 +169,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   ngAfterViewInit(): void {
     // Set templates after view initialization
     this.tableService.setTemplates(
-      this.priceTemplate, 
+      this.priceTemplate,
       this.statusTemplate,
       this.providerTemplate,
       this.basePriceTemplate

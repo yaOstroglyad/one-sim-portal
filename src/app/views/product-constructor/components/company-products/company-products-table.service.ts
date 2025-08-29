@@ -38,7 +38,7 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 				key: 'company.name',
 				header: 'company',
 				templateType: TemplateType.Text,
-				sortable: true,
+				sortable: false,
 				minWidth: '180px'
 			},
 			{
@@ -46,7 +46,7 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 				key: 'name',
 				header: 'productName',
 				templateType: TemplateType.Text,
-				sortable: true,
+				sortable: false,
 				minWidth: '200px'
 			},
 			{
@@ -54,7 +54,7 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 				key: 'serviceCoverage.name',
 				header: 'coverage',
 				templateType: TemplateType.Text,
-				sortable: true,
+				sortable: false,
 				minWidth: '150px'
 			},
 			{
@@ -63,7 +63,7 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 				header: 'price',
 				templateType: TemplateType.Custom,
 				customTemplate: () => this.priceTemplate,
-				sortable: true,
+				sortable: false,
 				minWidth: '100px',
 				class: 'text-end'
 			},
@@ -82,7 +82,7 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 				header: 'serviceProvider',
 				templateType: TemplateType.Custom,
 				customTemplate: () => this.providerTemplate,
-				sortable: true,
+				sortable: false,
 				minWidth: '120px'
 			},
 			{
@@ -91,7 +91,7 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 				header: 'basePrice',
 				templateType: TemplateType.Custom,
 				customTemplate: () => this.basePriceTemplate,
-				sortable: true,
+				sortable: false,
 				minWidth: '100px',
 				class: 'text-end'
 			},
@@ -101,7 +101,7 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 				header: 'status',
 				templateType: TemplateType.Custom,
 				customTemplate: () => this.statusTemplate,
-				sortable: true,
+				sortable: false,
 				minWidth: '100px',
 				class: 'text-center'
 			}
@@ -117,7 +117,7 @@ export class CompanyProductsTableService extends TableConfigAbstractService<Comp
 	}
 
 	public setTemplates(
-		priceTemplate: TemplateRef<any>, 
+		priceTemplate: TemplateRef<any>,
 		statusTemplate: TemplateRef<any>,
 		providerTemplate: TemplateRef<any>,
 		basePriceTemplate: TemplateRef<any>

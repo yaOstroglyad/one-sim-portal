@@ -35,7 +35,7 @@ export class GenericTableComponent implements OnChanges {
 
 	public viewModel$!: Observable<{ config: TableConfig; data: any[] }>;
 	public currentPage = 0;
-	public pageSize = 10;
+	public pageSize = 15;
 	public totalPages = 0;
 	public selectedItems = new Set<any>();
 

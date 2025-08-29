@@ -268,7 +268,7 @@ export class CompanyProductFormComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    const formValue = this.companyProductForm.value;
+    const formValue = this.companyProductForm.getRawValue();
 
     const operation$ = this.isEditing
       ? this.companyProductService.updateCompanyProduct(
@@ -338,7 +338,7 @@ export class CompanyProductFormComponent implements OnInit {
         originalCurrency: companyProduct.tariffOffer.currency
       } as ActiveTariffOffer & { originalPrice?: number; originalCurrency?: string };
     }
-    
+
     // Fallback for older data without tariffOffer
     return {
       id: companyProduct?.tariffOfferId || `company-product-${companyProduct.id}`,
