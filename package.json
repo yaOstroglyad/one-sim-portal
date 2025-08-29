@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.js",
     "start-verbose": "ng serve --verbose --proxy-config proxy.conf.js",
-    "start:mock": "concurrently \"npm run mock-server\" \"cross-env MOCK_SERVER=true npm start\"",
+    "start:mock": "concurrently \"npm run mock-server\" \"ng serve --proxy-config mock-server/proxy.conf.mock.js\"",
     "mock-server": "cd mock-server && npm install && npm start",
     "mock-server:dev": "cd mock-server && npm install && npm run dev",
     "build": "ng build",
