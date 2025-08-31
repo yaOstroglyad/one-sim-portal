@@ -78,7 +78,7 @@ export class CompaniesComponent implements OnInit, OnDestroy {
 	public applyFilter(): void {
 		const params = {
 			page: 0,
-			size: 10,
+			size: 20,
 			...this.filterForm.getRawValue()
 		};
 		this.loadData(params);
@@ -155,7 +155,7 @@ export class CompaniesComponent implements OnInit, OnDestroy {
 		size: number;
 		name?: string;
 		type?: string
-	} = {page: 0, size: 10}): void {
+	} = {page: 0, size: 20}): void {
 		this.companiesDataService.paginatedCompanies(params, params.page, params.size)
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe(data => {
