@@ -191,7 +191,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     countryId?: number;
     regionId?: number;
     accountId?: string;
-  } = { page: 0, size: 20 }): void {
+  } = { page: 0, size: 15 }): void {
 
     // For admins, ensure we have a selected account before making the request
     if (this.isAdmin && !params.accountId && !this.selectedAccountId) {
@@ -219,7 +219,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (data) => {
-          this.tableService.updateConfigData(data?.totalPages || 20);
+          this.tableService.updateConfigData(data?.totalPages || 15);
           this.tableConfig$ = this.tableService.getTableConfig();
           this.companyProducts$ = of(data.content);
           this.loading = false;
@@ -245,7 +245,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     }
     this.loadData({
       page: 0,
-      size: 20,
+      size: 15,
       ...currentFilters
     });
   }
@@ -269,7 +269,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     }
     const params = {
       page: 0,
-      size: 20,
+      size: 15,
       ...formValues
     };
     this.loadData(params);

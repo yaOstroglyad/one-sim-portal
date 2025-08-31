@@ -6,7 +6,7 @@ import { map, switchMap, catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared/components/generic-right-panel/generic-right-panel.component';
+import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { BundleFormComponent } from '../bundle-form/bundle-form.component';
 import { BundleDetailsComponent } from '../bundle-details/bundle-details.component';
 import { GenericTableModule, HeaderModule, TableConfig, TemplateType, DeleteConfirmationComponent } from '../../../../../shared';
@@ -111,7 +111,7 @@ export class BundleListComponent implements OnInit {
   private calculateTotalData(usageUnits: any[]): string {
     const dataUnits = usageUnits.filter(unit => unit.type === 'data');
     if (dataUnits.length === 0) return 'No data';
-    
+
     const totalBytes = dataUnits.reduce((total, unit) => {
       const bytes = this.convertToBytes(unit.value, unit.unitType);
       return total + bytes;
@@ -133,11 +133,11 @@ export class BundleListComponent implements OnInit {
 
   private formatBytes(bytes: number): string {
     if (bytes === 0) return '0 Bytes';
-    
+
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
+
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 

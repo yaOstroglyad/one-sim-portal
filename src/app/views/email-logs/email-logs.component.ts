@@ -116,7 +116,7 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
 
     const params = {
       page: 0,
-      size: 10,
+      size: 15,
       accountId: this.selectedAccountId,
       ...formValues
     };
@@ -157,7 +157,7 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
     const loadParams: EmailLogFilterParams = {
       accountId: params.accountId,
       page: params.page || 0,
-      size: params.size || 10
+      size: params.size || 15
     };
 
     if (params.iccid?.trim()) {

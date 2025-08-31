@@ -31,7 +31,7 @@ export class CustomersDataService extends DataService<Customer> {
 
 	paginatedCustomers(searchParams: any = {},
 										 page: number = 0,
-										 size: number = 20,
+										 size: number = 15,
 										 sort: string[] = []): Observable<Pagination<Customer>> {
 		let params = new HttpParams()
 			.set('page', page.toString())

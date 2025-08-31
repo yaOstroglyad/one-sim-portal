@@ -93,7 +93,7 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
   public applyFilter(): void {
     const params = {
       page: 0,
-      size: 10,
+      size: 15,
       ...this.filterForm.getRawValue()
     };
     this.loadData(params);
@@ -126,7 +126,7 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
     providerId?: string;
     countryId?: number;
     regionId?: number;
-  } = {page: 0, size: 10}): void {
+  } = {page: 0, size: 15}): void {
 
     const searchRequest: ProviderProductSearchRequest = {
       searchParams: {

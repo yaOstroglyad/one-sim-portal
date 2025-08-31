@@ -48,7 +48,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
-		this.loadData({page: 0, size: 10});
+		this.loadData({page: 0, size: 15});
 		this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	}
 
@@ -63,7 +63,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 		this.inventoryDataService.list(params)
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe(data => {
-				this.tableService.updateConfigData(data?.totalPages || 20);
+				this.tableService.updateConfigData(data?.totalPages || 15);
 				this.tableConfig$ = this.tableService.getTableConfig();
 				this.dataList$ = of(data.content);
 				this.cdr.detectChanges();
@@ -75,7 +75,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
 		this.loadData({
 			page: 0,
-			size: 10,
+			size: 15,
 			...(this.filterValue ? {searchIccid: this.filterValue} : {})
 		});
 	}
@@ -106,7 +106,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
 					...selectionResult,
 					isActive: true
 				};
-				this.onPageChange({page: 0, size: 10});
+				this.onPageChange({page: 0, size: 15});
 				setTimeout(() => {
 					this.moveResult.isActive = false;
 				}, 5000);

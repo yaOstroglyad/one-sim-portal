@@ -54,7 +54,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 	public applyFilter(): void {
 		const params = {
 			page: 0,
-			size: 10,
+			size: 15,
 			...this.filterForm.getRawValue()
 		};
 		this.loadData(params);
@@ -116,11 +116,11 @@ export class CustomersComponent implements OnInit, OnDestroy {
 		externalId?: string;
 		externalTransactionId?: string;
 		type?: string
-	} = {page: 0, size: 10}): void {
+	} = {page: 0, size: 15}): void {
 		this.customersDataService.paginatedCustomers(params, params.page, params.size)
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe(data => {
-				this.tableService.updateConfigData(data?.totalPages || 20);
+				this.tableService.updateConfigData(data?.totalPages || 15);
 				this.tableConfig$ = this.tableService.getTableConfig();
 				this.dataList$ = of(data.content);
 				this.cdr.detectChanges();
