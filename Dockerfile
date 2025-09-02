@@ -11,6 +11,7 @@ RUN rm -rf /var/www/html/*
 COPY default.conf /etc/nginx/conf.d/default.conf.template
 COPY --from=build-stage /app/dist/ /var/www/html/
 
+#CMD ["/bin/sh", "-c", "echo 'BACKEND_PROXY_URL='$BACKEND_PROXY_URL && envsubst '$BACKEND_PROXY_URL' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && cat /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
 
 CMD ["/bin/sh", "-c", "envsubst '$MAIN_BACKEND_SERVER $MAIN_BACKEND_HOST $API_PRODUCT_SERVER $API_PRODUCT_HOST' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
 
