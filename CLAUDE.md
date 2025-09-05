@@ -25,6 +25,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **IF YOU USE RELATIVE PATHS, THE OPERATION WILL FAIL WITH "File does not exist" ERROR!**
 
+## Documentation and Comments Language Rule
+
+**ALL documentation, README files, code comments, and commit messages MUST be written in English.**
+- This includes inline comments, JSDoc/TSDoc comments, README files, and any other documentation
+- Variable names, function names, and code identifiers should also use English
+- Exception: User-facing text and translations remain in their respective languages
+
+## Mock Server Rules
+
+**Mock server has its own architecture rules** - see `/mock-server/CLAUDE-MOCK.md` for detailed guidelines when working with mock server code.
+
 ## Project Overview
 
 This is an Angular 16 eSIM portal management application that provides a white-label solution for managing eSIM products, customers, orders, and inventory. The application uses CoreUI and Angular Material for UI components and implements JWT-based authentication with role-based access control.

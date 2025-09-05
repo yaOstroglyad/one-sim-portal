@@ -1,0 +1,59 @@
+{
+  "attachments": [
+    {
+      "id": "attachment-001",
+      "filename": "error-screenshot.png",
+      "size": 245760,
+      "contentType": "image/png",
+      "ticketId": "ticket-001",
+      "uploadedById": "user-001",
+      "uploadedByName": "John Doe",
+      "uploadedAt": "2024-01-15T10:35:00Z",
+      "s3Key": "attachments/ticket-001/error-screenshot.png"
+    },
+    {
+      "id": "attachment-002",
+      "filename": "browser-logs.txt",
+      "size": 12480,
+      "contentType": "text/plain",
+      "ticketId": "ticket-001",
+      "uploadedById": "user-001",
+      "uploadedByName": "John Doe",
+      "uploadedAt": "2024-01-15T10:37:00Z",
+      "s3Key": "attachments/ticket-001/browser-logs.txt"
+    },
+    {
+      "id": "attachment-003",
+      "filename": "december-usage-report.pdf",
+      "size": 856432,
+      "contentType": "application/pdf",
+      "ticketId": "ticket-002",
+      "uploadedById": "user-002",
+      "uploadedByName": "Jane Smith",
+      "uploadedAt": "2024-01-14T09:20:00Z",
+      "s3Key": "attachments/ticket-002/december-usage-report.pdf"
+    },
+    {
+      "id": "attachment-004",
+      "filename": "performance-monitoring.zip",
+      "size": 2048576,
+      "contentType": "application/zip",
+      "ticketId": "ticket-005",
+      "uploadedById": "user-005",
+      "uploadedByName": "Michael Wilson",
+      "uploadedAt": "2024-01-11T14:20:00Z",
+      "s3Key": "attachments/ticket-005/performance-monitoring.zip"
+    },
+    {
+      "id": "attachment-005",
+      "filename": "network-trace.har",
+      "size": 567890,
+      "contentType": "application/json",
+      "ticketId": "ticket-005",
+      "uploadedById": "tech-001",
+      "uploadedByName": "Lisa Anderson",
+      "uploadedAt": "2024-01-15T08:45:00Z",
+      "s3Key": "attachments/ticket-005/network-trace.har"
+    }
+  ]
+}
