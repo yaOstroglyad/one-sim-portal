@@ -1,0 +1,54 @@
+{
+  "comments": [
+    {
+      "id": "comment-001",
+      "content": "I've investigated the login issues and found that it's related to session timeout configuration. The issue occurs when users have been inactive for more than 30 minutes.",
+      "isInternal": false,
+      "ticketId": "ticket-001",
+      "authorId": "support-001",
+      "authorName": "Sarah Wilson",
+      "createdAt": "2024-01-15T11:15:00Z",
+      "updatedAt": "2024-01-15T11:15:00Z"
+    },
+    {
+      "id": "comment-002",
+      "content": "Thanks for the quick response! Could you please provide a temporary workaround while this is being fixed?",
+      "isInternal": false,
+      "ticketId": "ticket-001",
+      "authorId": "user-001",
+      "authorName": "John Doe",
+      "createdAt": "2024-01-15T12:30:00Z",
+      "updatedAt": "2024-01-15T12:30:00Z"
+    },
+    {
+      "id": "comment-003",
+      "content": "Internal note: Need to check with DevOps team about session configuration in production environment.",
+      "isInternal": true,
+      "ticketId": "ticket-001",
+      "authorId": "support-001",
+      "authorName": "Sarah Wilson",
+      "createdAt": "2024-01-15T13:45:00Z",
+      "updatedAt": "2024-01-15T13:45:00Z"
+    },
+    {
+      "id": "comment-004",
+      "content": "I've reviewed your December usage and found the discrepancy. The additional 150 activations were from a test environment that was accidentally included in the production billing.",
+      "isInternal": false,
+      "ticketId": "ticket-002",
+      "authorId": "billing-001",
+      "authorName": "Mike Johnson",
+      "createdAt": "2024-01-15T10:20:00Z",
+      "updatedAt": "2024-01-15T10:20:00Z"
+    },
+    {
+      "id": "comment-005",
+      "content": "Thank you for clarifying! Will we receive a credit for the overcharge?",
+      "isInternal": false,
+      "ticketId": "ticket-002",
+      "authorId": "user-002",
+      "authorName": "Jane Smith",
+      "createdAt": "2024-01-15T11:45:00Z",
+      "updatedAt": "2024-01-15T11:45:00Z"
+    }
+  ]
+}

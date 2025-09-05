@@ -3,6 +3,10 @@
     "UsersDataService": {
       "mocked": true,
       "endpoints": ["list", "paginatedUsers", "createUser", "verifyEmail"]
+    },
+    "TicketsDataService": {
+      "mocked": true,
+      "endpoints": ["getTickets", "createTicket", "getTicketById", "updateTicket", "deleteTicket", "getRecentTickets", "getTicketCount", "getAllCompanyTickets", "getTicketComments", "addComment", "getTicketAttachments", "uploadAttachment"]
     }
   },
   "endpoints": [
@@ -23,6 +27,36 @@
       "method": "GET",
       "service": "UsersDataService",
       "handler": "users/verify-email"
+    },
+    {
+      "path": "/api/v1/tickets",
+      "method": "GET",
+      "service": "TicketsDataService",
+      "handler": "tickets/list"
+    },
+    {
+      "path": "/api/v1/tickets",
+      "method": "POST",
+      "service": "TicketsDataService",
+      "handler": "tickets/create"
+    },
+    {
+      "path": "/api/v1/tickets/recent",
+      "method": "GET",
+      "service": "TicketsDataService",
+      "handler": "tickets/recent"
+    },
+    {
+      "path": "/api/v1/tickets/count",
+      "method": "GET",
+      "service": "TicketsDataService",
+      "handler": "tickets/count"
+    },
+    {
+      "path": "/api/v1/tickets/all",
+      "method": "GET",
+      "service": "TicketsDataService",
+      "handler": "tickets/all-company"
     }
   ]
 }

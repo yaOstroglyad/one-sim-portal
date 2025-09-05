@@ -4,7 +4,7 @@ const path = require('path');
 // Load mock registry
 let mockRegistry = { endpoints: [] };
 try {
-  const registryPath = path.join(__dirname, 'mock-server', 'registry.json');
+  const registryPath = path.join(__dirname, 'registry.json');
   if (fs.existsSync(registryPath)) {
     mockRegistry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
     console.log('[PROXY] Mock mode enabled. Loaded registry with', mockRegistry.endpoints.length, 'endpoints');
