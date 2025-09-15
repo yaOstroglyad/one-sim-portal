@@ -17,7 +17,9 @@
         <button mat-menu-item (click)="openEditDescriptionDialog(item)">
             {{ 'order.editDescription' | translate }}
         </button>
-        <button mat-menu-item (click)="openRevertOrderDialog(item)">
+        <button *ngIf="isAdmin"
+                mat-menu-item
+                (click)="openRevertOrderDialog(item)">
             {{ 'order.revertOrder.action' | translate }}
         </button>
     </mat-menu>

@@ -10,7 +10,7 @@ import {
 	HeaderConfig,
 	TableConfig,
 	TableFilterFieldType,
-	OrdersDataService
+	OrdersDataService, ADMIN_PERMISSION, AuthService
 } from '../../shared';
 import { OrdersTableService } from './orders-table.service';
 import { switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -31,11 +31,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
 	public tableConfig$: BehaviorSubject<TableConfig>;
 	public dataList$: Observable<Order[]>;
 	public headerConfig: HeaderConfig = {};
+	public isAdmin: boolean;
 
 	constructor(private cdr: ChangeDetectorRef,
 							private tableService: OrdersTableService,
 							private ordersDataService: OrdersDataService,
 							private translate: TranslateService,
+							private authService: AuthService,
 							private dialog: MatDialog
 	) {
 		this.initheaderConfig();
@@ -48,6 +50,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.loadOrders();
+		this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	}
 
 	private loadOrders(): void {
