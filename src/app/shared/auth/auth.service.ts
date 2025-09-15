@@ -72,6 +72,7 @@ export class AuthService {
 			'Intourist',
 			'wecom',
 			'seamless-travel-support',
+			'intourist-support',
 			'wander-world-travel-support',
 			'adysally@gmail.com',
 			'adysally+1@gmail.com',

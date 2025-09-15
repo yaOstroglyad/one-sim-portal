@@ -1,0 +1,218 @@
+<!-- Account Selector (только для админов) -->
+<app-account-selector *ngIf="isAdmin"
+                      [helperText]="'COMMON.select_account_hint_message'"
+                      [defaultAccountName]="'only-sim'"
+                      [preSelectedAccountId]="selectedAccountId"
+                      (accountSelected)="onAccountSelected($event)">
+</app-account-selector>
+
+<app-header class="os-header-sticky"
+            [formGroup]="filterForm"
+            [tableConfig$]="tableConfig$"
+            (onAddAction)="onCreateNew()"
+            (columnSelectionChange)="onColumnSelectionChanged($event)">
+    <ng-container header-custom-inputs>
+        <app-searchable-select
+                [options]="statusOptions"
+                [config]="statusSelectConfig"
+                formControlName="status"
+                class="w-100">
+        </app-searchable-select>
+
+        <app-searchable-select
+                [options]="priorityOptions"
+                [config]="prioritySelectConfig"
+                formControlName="priority"
+                class="w-100">
+        </app-searchable-select>
+
+        <app-searchable-select
+                [options]="categoryOptions"
+                [config]="categorySelectConfig"
+                formControlName="category"
+                class="w-100">
+        </app-searchable-select>
+        <button cButton
+                color="secondary"
+                [disabled]="filterForm.pristine"
+                (click)="resetForm()">
+            <svg cIcon name="cilReload"></svg>
+        </button>
+    </ng-container>
+</app-header>
+
+<generic-table [config$]="tableConfig$"
+               [menu]="menuTemplate"
+               [data$]="tickets$"
+               [isRowClickable]="true"
+               (onRowClickEvent)="onViewDetails($event)"
+               (pageChange)="onPageChange($event)"
+               (sortChange)="onSortChange($event)">
+</generic-table>
+
+<!-- Custom template for status column -->
+<ng-template #statusTemplate let-data='context'>
+    <td class="text-center">
+        <c-badge [color]="getStatusColor(data.status)"
+                 shape="rounded-pill">
+            {{ 'tickets.statusValues.' + (data.status === 'IN_PROGRESS' ? 'inProgress' : data.status.toLowerCase()) | translate }}
+        </c-badge>
+    </td>
+</ng-template>
+
+<!-- Custom template for priority column -->
+<ng-template #priorityTemplate let-data='context'>
+    <td class="text-center">
+        <c-badge [color]="getPriorityColor(data.priority)"
+                 shape="rounded-pill">
+            {{ ('tickets.priorityValues.' + data.priority.toLowerCase()) | translate }}
+        </c-badge>
+    </td>
+</ng-template>
+
+<!-- Custom template for category column -->
+<ng-template #categoryTemplate let-data='context'>
+    <td>
+        <span class="category-label">
+            {{ getCategoryLabel(data.category) }}
+        </span>
+    </td>
+</ng-template>
+
+<!-- Custom template for assignee column -->
+<ng-template #assigneeTemplate let-data='context'>
+    <td>
+        <div class="assignee-info">
+            <span *ngIf="data.assignedToName; else unassigned" class="assignee-name">
+                {{ data.assignedToName }}
+            </span>
+            <ng-template #unassigned>
+                <span class="text-muted">{{ 'tickets.unassigned' | translate }}</span>
+            </ng-template>
+        </div>
+    </td>
+</ng-template>
+
+<ng-template #menuTemplate let-item>
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onViewDetails(item)">
+            <mat-icon>visibility</mat-icon>
+            <span>{{ 'common.view' | translate }}</span>
+        </button>
+        <button mat-menu-item (click)="onEdit(item)">
+            <mat-icon>edit</mat-icon>
+            <span>{{ 'common.edit' | translate }}</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item
+                (click)="onStatusChange(item, 'IN_PROGRESS')"
+                *ngIf="item.status === 'OPEN'">
+            <mat-icon>play_arrow</mat-icon>
+            <span>{{ 'tickets.actions.startProgress' | translate }}</span>
+        </button>
+        <button mat-menu-item
+                (click)="onStatusChange(item, 'RESOLVED')"
+                *ngIf="item.status === 'IN_PROGRESS'">
+            <mat-icon>check_circle</mat-icon>
+            <span>{{ 'tickets.actions.markResolved' | translate }}</span>
+        </button>
+        <button mat-menu-item
+                (click)="onStatusChange(item, 'CLOSED')"
+                *ngIf="item.status === 'RESOLVED'">
+            <mat-icon>archive</mat-icon>
+            <span>{{ 'tickets.actions.closeTicket' | translate }}</span>
+        </button>
+    </mat-menu>
+</ng-template>
+
+<!-- Create Panel -->
+<app-generic-right-panel
+  *ngIf="showCreatePanel"
+  title="{{ 'tickets.create.title' | translate }}"
+  subtitle="{{ 'tickets.create.subtitle' | translate }}"
+  [isOpen]="showCreatePanel"
+  [hasFooter]="true"
+  (close)="onPanelClose()">
+
+  <div panel-content>
+    <app-ticket-form
+      #createForm
+      [ticket]="null"
+      (save)="onTicketSaved()">
+    </app-ticket-form>
+  </div>
+
+  <ng-container panel-actions>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="onPanelClose()">
+      {{ 'common.cancel' | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="createForm.onSubmit()"
+      [disabled]="createForm.loading || createForm.isFormInvalid">
+      <span *ngIf="createForm.loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      {{ 'tickets.create.createTicket' | translate }}
+    </button>
+  </ng-container>
+
+</app-generic-right-panel>
+
+<!-- Edit Panel -->
+<app-generic-right-panel
+  *ngIf="showEditPanel && selectedTicket"
+  title="{{ 'tickets.edit.title' | translate }}"
+  subtitle="{{ 'tickets.edit.subtitle' | translate }}"
+  [isOpen]="showEditPanel"
+  [hasFooter]="true"
+  (close)="onPanelClose()">
+
+  <div panel-content>
+    <app-ticket-form
+      #editForm
+      [ticket]="selectedTicket"
+      (save)="onTicketSaved()">
+    </app-ticket-form>
+  </div>
+
+  <ng-container panel-actions>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="onPanelClose()">
+      {{ 'common.cancel' | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="editForm.onSubmit()"
+      [disabled]="editForm.loading || editForm.isFormInvalid">
+      <span *ngIf="editForm.loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      {{ 'tickets.edit.updateTicket' | translate }}
+    </button>
+  </ng-container>
+
+</app-generic-right-panel>
+
+<!-- Details Panel -->
+<app-generic-right-panel
+  *ngIf="showDetailsPanel && selectedTicketDetails"
+  title="{{ 'tickets.details.title' | translate }}"
+  [isOpen]="showDetailsPanel"
+  [actions]="detailsPanelActions"
+  [resizable]="true"
+  [defaultWidth]="600"
+  [maxWidth]="900"
+  (close)="onPanelClose()">
+
+  <div panel-content>
+    <app-ticket-details-wrapper [ticket]="selectedTicketDetails"></app-ticket-details-wrapper>
+  </div>
+
+</app-generic-right-panel>

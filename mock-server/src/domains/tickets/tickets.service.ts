@@ -154,7 +154,7 @@ export class TicketsService {
 
   // DELETE /api/v1/tickets/{id} - Delete ticket (soft delete)
   public deleteTicket(id: string): void {
-    const ticket = this.getTicketById(id); // This will throw if not found
+    this.getTicketById(id); // Validate that ticket exists, will throw if not found
     console.log('[MOCK] Deleted ticket:', id);
   }
 
@@ -231,7 +231,60 @@ export class TicketsService {
       s3Key: `attachments/${ticketId}/mock-file-${Date.now()}.pdf`
     };
     
+    // Use attachmentData to avoid unused variable warning
+    console.log('[MOCK] Processing file:', attachmentData.file);
+    
     console.log('[MOCK] Uploaded attachment:', newAttachment);
     return newAttachment;
+  }
+
+  // GET /api/v1/tickets/stats - Get ticket statistics for overview
+  public getTicketStats(): any {
+    const ticketsData = this.readJsonFile<TicketsListData>('list.json');
+    
+    const stats = {
+      totalTickets: ticketsData.content.length,
+      openTickets: ticketsData.content.filter(t => t.status === 'OPEN').length,
+      inProgressTickets: ticketsData.content.filter(t => t.status === 'IN_PROGRESS').length,
+      resolvedTickets: ticketsData.content.filter(t => t.status === 'RESOLVED').length,
+      closedTickets: ticketsData.content.filter(t => t.status === 'CLOSED').length,
+      averageResolutionTime: this.calculateAverageResolutionTime(ticketsData.content),
+      ticketsTodayCount: this.getTicketsCountByDateRange(ticketsData.content, 'today'),
+      ticketsThisWeekCount: this.getTicketsCountByDateRange(ticketsData.content, 'week'),
+      ticketsThisMonthCount: this.getTicketsCountByDateRange(ticketsData.content, 'month')
+    };
+    
+    console.log('[MOCK] Generated ticket stats:', stats);
+    return stats;
+  }
+
+  private calculateAverageResolutionTime(tickets: TicketListItem[]): number {
+    // For list items, we don't have resolvedAt, so return a mock average of 24 hours
+    const resolvedTickets = tickets.filter(t => t.status === 'RESOLVED');
+    if (resolvedTickets.length === 0) return 0;
+    
+    // Mock calculation - return average of 24 hours for resolved tickets
+    return 24;
+  }
+
+  private getTicketsCountByDateRange(tickets: TicketListItem[], range: 'today' | 'week' | 'month'): number {
+    const now = new Date();
+    let startDate: Date;
+    
+    switch (range) {
+      case 'today':
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        break;
+      case 'week':
+        startDate = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+        break;
+      case 'month':
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        break;
+      default:
+        startDate = new Date(0);
+    }
+    
+    return tickets.filter(t => new Date(t.createdAt) >= startDate).length;
   }
 }

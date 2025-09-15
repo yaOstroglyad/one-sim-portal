@@ -1,5 +1,8 @@
 export * from './model/index';
+export * from './models/index';
 
+export { CommentsComponent } from './components/comments/comments.component'
+export { AttachmentsComponent } from './components/attachments/attachments.component'
 export * from './components/confirmation-dialog/confirmation-dialog.component'
 export * from './components/timeline/timeline.component'
 export * from './components/chart/chart.component'

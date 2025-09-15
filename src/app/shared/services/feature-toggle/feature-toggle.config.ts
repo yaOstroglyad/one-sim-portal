@@ -61,6 +61,11 @@ export const FEATURE_TOGGLE_CONFIG: FeatureToggleConfig[] = [
     key: 'productConstructor',
     defaultValue: true,
     description: 'Enable Product Constructor for eSIM product management'
+  },
+  {
+    key: 'tickets',
+    defaultValue: false,
+    description: 'Enable Support Tickets system for ticket management'
   }
 ];
 

@@ -2,7 +2,7 @@ import { Response, Application } from 'express';
 import { BaseController } from '../../shared/base.controller';
 import { UsersService } from './users.service';
 import { MockRequest } from '../../types';
-import { User, GetUsersParams } from './user';
+import { User } from './user';
 
 export class UsersController extends BaseController {
   private usersService: UsersService;

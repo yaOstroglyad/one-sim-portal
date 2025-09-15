@@ -1,0 +1,48 @@
+.revert-order-dialog {
+  min-width: 400px;
+  max-width: 600px;
+
+  .dialog-content {
+    padding: 20px 0;
+    
+    .dialog-description {
+      margin-bottom: 20px;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .order-info {
+      background-color: #f5f5f5;
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      
+      p {
+        margin: 0;
+        font-size: 13px;
+        
+        strong {
+          color: #333;
+        }
+      }
+    }
+  }
+
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 0 0 0;
+    margin-top: 20px;
+    border-top: 1px solid #e0e0e0;
+
+    .cancel-button {
+      color: #666;
+    }
+
+    .submit-button {
+      min-width: 120px;
+    }
+  }
+}

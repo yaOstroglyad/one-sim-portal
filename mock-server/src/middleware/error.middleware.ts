@@ -5,10 +5,11 @@ import { MockRequest } from '../types';
 export function errorSimulationMiddleware(req: MockRequest, res: Response, next: NextFunction): void {
   if (req.query.mock_error) {
     const errorCode = parseInt(String(req.query.mock_error));
-    return res.status(errorCode).json({
+    res.status(errorCode).json({
       error: `Mock error ${errorCode}`,
       message: 'This is a simulated error for testing'
     });
+    return;
   }
   next();
 }

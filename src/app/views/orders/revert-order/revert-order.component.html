@@ -1,0 +1,38 @@
+<div class="revert-order-dialog">
+	<h2 mat-dialog-title>{{ 'order.revertOrder.title' | translate }}</h2>
+	
+	<div mat-dialog-content class="dialog-content">
+		<p class="dialog-description">
+			{{ 'order.revertOrder.description' | translate }}
+		</p>
+		
+		<div class="order-info">
+			<p><strong>{{ 'order.selectedOrder' | translate }}:</strong> {{ data?.description }}</p>
+		</div>
+
+		<app-form-generator
+			[config]="revertOrderFormConfig"
+			(formChanges)="handleFormChanges($event)">
+		</app-form-generator>
+	</div>
+
+	<div mat-dialog-actions class="dialog-actions">
+		<button 
+			mat-button 
+			type="button" 
+			(click)="close()"
+			class="cancel-button">
+			{{ 'common.cancel' | translate }}
+		</button>
+		
+		<button 
+			mat-raised-button 
+			color="primary" 
+			type="submit"
+			[disabled]="!isFormValid"
+			(click)="submit()"
+			class="submit-button">
+			{{ 'order.revertOrder.submit' | translate }}
+		</button>
+	</div>
+</div>

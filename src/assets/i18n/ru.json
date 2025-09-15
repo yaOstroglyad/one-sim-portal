@@ -51,6 +51,11 @@
     "all": "Все",
     "search": "Поиск",
     "noResultsFound": "Ничего не найдено",
+    "loadingStatistics": "Загрузка статистики...",
+    "unableToLoadStatistics": "Не удалось загрузить статистику",
+    "errorLoadingOverviewData": "Произошла ошибка при загрузке данных обзора. Пожалуйста, попробуйте еще раз.",
+    "comingSoon": "Скоро",
+    "viewAll": "Посмотреть все",
     "table": {
       "filterPlaceholder": "Фильтровать данные таблицы"
     }
@@ -60,6 +65,24 @@
     "uploadSuccess": "Файл успешно загружен!",
     "uploadError": "Ошибка загрузки. Пожалуйста, попробуйте еще раз.",
     "tryAgain": "Пожалуйста, попробуйте еще раз или обратитесь в службу поддержки"
+  },
+  "comments": {
+    "noComments": "Комментариев нет",
+    "addComment": "Добавить комментарий",
+    "placeholder": "Написать комментарий...",
+    "required": "Комментарий обязателен",
+    "minLength": "Комментарий должен содержать минимум 3 символа",
+    "maxLength": "Комментарий слишком длинный",
+    "loading": "Загрузка комментариев..."
+  },
+  "attachments": {
+    "noAttachments": "Нет вложений",
+    "uploadFile": "Загрузить файл",
+    "uploading": "Загрузка...",
+    "uploadHint": "Максимальный размер файла: 10МБ. Поддерживаемые форматы: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, PNG, JPG, JPEG, GIF",
+    "uploadedBy": "от",
+    "download": "Скачать",
+    "loading": "Загрузка вложений..."
   },
   "product": {
     "companyName": "Название компании",
@@ -80,8 +103,6 @@
     "coverageInformation": "Информация о покрытии",
     "region": "Регион",
     "country": "Страна",
-    "selectRegion": "Выберите регион",
-    "selectCountry": "Выберите страну",
     "validityPeriod": "Период действия",
     "validityInformation": "Информация о периоде действия",
     "period": "Период",
@@ -141,6 +162,9 @@
     "products": "Продукты",
     "inventory": "Инвентарь",
     "users": "Пользователи",
+    "tickets": "Тикеты",
+    "ticketsOverview": "Обзор",
+    "ticketsList": "Список тикетов",
     "companyProducts": "Продукты компании",
     "productconstructor": "Конструктор продуктов",
     "settings": "Настройки",
@@ -639,6 +663,119 @@
     "companyProducts": {
       "serviceProvider": "Поставщик услуг",
       "basePrice": "Базовая цена"
+    }
+  },
+  "tickets": {
+    "title": "Тикеты",
+    "ticketNumber": "Номер тикета",
+    "subject": "Тема",
+    "description": "Описание",
+    "status": "Статус",
+    "priority": "Приоритет",
+    "category": "Категория",
+    "assignedTo": "Назначен",
+    "createdBy": "Создал",
+    "createdAt": "Создан",
+    "updatedAt": "Обновлен",
+    "comments": "Комментарии",
+    "attachments": "Вложения",
+    "company": "Компания",
+    "unassigned": "Не назначен",
+    "commentsWillBeImplemented": "Функционал комментариев будет реализован в ближайшее время",
+    "attachmentsWillBeImplemented": "Функционал вложений будет реализован в ближайшее время",
+    "filter": {
+      "selectStatus": "Выберите статус",
+      "selectPriority": "Выберите приоритет",
+      "selectCategory": "Выберите категорию"
+    },
+    "statusValues": {
+      "open": "Открыт",
+      "inProgress": "В работе",
+      "resolved": "Решен",
+      "closed": "Закрыт",
+      "cancelled": "Отменен"
+    },
+    "priorityValues": {
+      "low": "Низкий",
+      "medium": "Средний",
+      "high": "Высокий",
+      "urgent": "Срочный"
+    },
+    "categoryValues": {
+      "generalInquiry": "Общий вопрос",
+      "technicalIssue": "Техническая проблема",
+      "billingQuestion": "Вопрос по оплате",
+      "featureRequest": "Запрос функции",
+      "bugReport": "Сообщение об ошибке",
+      "accountIssue": "Проблема с аккаунтом",
+      "integrationSupport": "Поддержка интеграции",
+      "performanceIssue": "Проблема производительности",
+      "securityConcern": "Вопрос безопасности",
+      "dataRequest": "Запрос данных",
+      "complianceInquiry": "Вопрос соответствия",
+      "other": "Другое"
+    },
+    "form": {
+      "subject": "Тема",
+      "subjectPlaceholder": "Введите тему тикета",
+      "description": "Описание",
+      "descriptionPlaceholder": "Опишите вашу проблему или запрос подробно",
+      "category": "Категория",
+      "selectCategory": "Выберите категорию",
+      "priority": "Приоритет",
+      "selectPriority": "Выберите уровень приоритета",
+      "status": "Статус",
+      "selectStatus": "Выберите статус"
+    },
+    "create": {
+      "title": "Создать тикет",
+      "subtitle": "Создайте новый тикет поддержки или сообщите о проблеме",
+      "createTicket": "Создать тикет"
+    },
+    "edit": {
+      "title": "Редактировать тикет",
+      "subtitle": "Изменить детали тикета и обновить статус",
+      "updateTicket": "Обновить тикет"
+    },
+    "details": {
+      "title": "Детали тикета"
+    },
+    "actions": {
+      "createTicket": "Создать тикет",
+      "editTicket": "Редактировать тикет",
+      "viewDetails": "Посмотреть детали",
+      "addComment": "Добавить комментарий",
+      "attachFile": "Прикрепить файл",
+      "assignTicket": "Назначить тикет",
+      "startProgress": "Начать работу",
+      "markResolved": "Отметить как решённый",
+      "closeTicket": "Закрыть тикет",
+      "reopenTicket": "Переоткрыть тикет"
+    },
+    "overview": {
+      "title": "Обзор тикетов поддержки",
+      "subtitle": "Отслеживайте и управляйте вашими тикетами поддержки с помощью полной аналитики и быстрых действий.",
+      "quickActions": "Быстрые действия",
+      "recentActivity": "Недавняя активность",
+      "totalTickets": "Всего тикетов",
+      "openTickets": "Открытые тикеты",
+      "inProgressTickets": "В работе",
+      "resolvedTickets": "Решенные тикеты",
+      "avgResolutionTime": "Среднее время решения",
+      "ticketsToday": "Тикеты сегодня",
+      "ticketsCreatedToday": "Тикеты созданы сегодня",
+      "ticketsThisWeek": "На этой неделе",
+      "ticketsThisMonth": "В этом месяце",
+      "actions": {
+        "createTicket": "Создать новый тикет",
+        "createTicketDesc": "Отправить новую заявку в поддержку или сообщить о проблеме",
+        "viewAllTickets": "Посмотреть все тикеты",
+        "viewAllTicketsDesc": "Просмотреть и управлять всеми вашими тикетами поддержки",
+        "urgentTickets": "Срочные тикеты",
+        "urgentTicketsDesc": "Просмотр и обработка высокоприоритетных срочных тикетов",
+        "myTickets": "Мои тикеты",
+        "myTicketsDesc": "Посмотреть тикеты, назначенные вам или созданные вами"
+      }
     }
   }
 }

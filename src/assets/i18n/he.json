@@ -117,6 +117,9 @@
     "products": "מוצרים",
     "inventory": "מלאי",
     "users": "משתמשים",
+    "tickets": "כרטיסים",
+    "ticketsOverview": "סקירה כללית",
+    "ticketsList": "רשימת כרטיסים",
     "companyProducts": "מוצרי חברה",
     "productconstructor": "בניית מוצרים",
     "settings": "הגדרות",
@@ -602,5 +605,81 @@
     "title": "הצגה/הסתרה עמודות",
     "resetToDefault": "איפוס לברירת מחדל",
     "columnsVisible": "{{count}} מתוך {{total}} עמודות גלויות"
+  },
+  "tickets": {
+    "title": "כרטיסים",
+    "ticketNumber": "מספר כרטיס",
+    "subject": "נושא",
+    "description": "תיאור",
+    "status": "סטטוס",
+    "priority": "עדיפות",
+    "category": "קטגוריה",
+    "assignedTo": "מוקצה ל",
+    "createdBy": "נוצר על ידי",
+    "createdAt": "תאריך יצירה",
+    "updatedAt": "תאריך עדכון",
+    "comments": "הערות",
+    "attachments": "קבצים מצורפים",
+    "company": "חברה",
+    "unassigned": "לא מוקצה",
+    "commentsWillBeImplemented": "פונקציונליות התגובות תיושם בקרוב",
+    "attachmentsWillBeImplemented": "פונקציונליות הקבצים המצורפים תיושם בקרוב",
+    "filter": {
+      "selectStatus": "בחר סטטוס",
+      "selectPriority": "בחר עדיפות",
+      "selectCategory": "בחר קטגוריה"
+    },
+    "statusValues": {
+      "open": "פתוח",
+      "inProgress": "בעבודה",
+      "resolved": "נפתר",
+      "closed": "סגור",
+      "cancelled": "בוטל"
+    },
+    "priorityValues": {
+      "low": "נמוכה",
+      "medium": "בינונית",
+      "high": "גבוהה",
+      "urgent": "דחופה"
+    },
+    "categoryValues": {
+      "generalInquiry": "פניה כללית",
+      "technicalIssue": "בעיה טכנית",
+      "billingQuestion": "שאלת חיוב",
+      "featureRequest": "בקשת תכונה",
+      "bugReport": "דיווח באג",
+      "accountIssue": "בעיית חשבון",
+      "integrationSupport": "תמיכה באינטגרציה",
+      "performanceIssue": "בעיית ביצועים",
+      "securityConcern": "דאגה ביטחונית",
+      "dataRequest": "בקשת נתונים",
+      "complianceInquiry": "פניית ציות",
+      "other": "אחר"
+    },
+    "overview": {
+      "title": "סקירה של כרטיסי תמיכה",
+      "subtitle": "עקוב ונהל את כרטיסי התמיכה שלך עם תובנות מקיפות ופעולות מהירות.",
+      "quickActions": "פעולות מהירות",
+      "recentActivity": "פעילות אחרונה",
+      "totalTickets": "סה\"כ כרטיסים",
+      "openTickets": "כרטיסים פתוחים",
+      "inProgressTickets": "בעבודה",
+      "resolvedTickets": "כרטיסים שנפתרו",
+      "avgResolutionTime": "זמן פתרון ממוצע",
+      "ticketsToday": "כרטיסים היום",
+      "ticketsCreatedToday": "כרטיסים שנוצרו היום",
+      "ticketsThisWeek": "השבוע",
+      "ticketsThisMonth": "החודש",
+      "actions": {
+        "createTicket": "צור כרטיס חדש",
+        "createTicketDesc": "שלח בקשת תמיכה חדשה או דווח על בעיה",
+        "viewAllTickets": "צפה בכל הכרטיסים",
+        "viewAllTicketsDesc": "עיין ונהל את כל כרטיסי התמיכה שלך",
+        "urgentTickets": "כרטיסים דחופים",
+        "urgentTicketsDesc": "צפה וטפל בכרטיסים דחופים בעדיפות גבוהה",
+        "myTickets": "הכרטיסים שלי",
+        "myTicketsDesc": "ראה כרטיסים שהוקצו לך או שנוצרו על ידיך"
+      }
+    }
   }
 }

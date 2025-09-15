@@ -1,0 +1,157 @@
+@import "../../../../scss/variables";
+@import "../../../../scss/mixins";
+@import "../../../../scss/utilities";
+
+.attachments-container {
+  .loading-state {
+    text-align: center;
+    padding: map-get($os-spacing, '4');
+    color: var(--cui-body-color-rgb);
+    opacity: 0.7;
+  }
+
+  .upload-section {
+    margin-bottom: map-get($os-spacing, '4');
+    padding: map-get($os-spacing, '4');
+    border: 2px dashed var(--cui-border-color);
+    border-radius: map-get($os-border-radius, 'medium');
+    text-align: center;
+    background-color: var(--cui-tertiary-bg);
+    
+    button {
+      margin-bottom: map-get($os-spacing, '2');
+      
+      svg {
+        margin-right: map-get($os-spacing, '1');
+      }
+    }
+    
+    .upload-hint {
+      font-size: map-get($os-font-sizes, 'xs');
+      color: var(--cui-body-color-rgb);
+      opacity: 0.7;
+    }
+  }
+  
+  .attachments-list {
+    .attachment {
+      display: flex;
+      align-items: center;
+      gap: map-get($os-spacing, '3');
+      padding: map-get($os-spacing, '3');
+      border: 1px solid var(--cui-border-color);
+      border-radius: map-get($os-border-radius, 'medium');
+      margin-bottom: map-get($os-spacing, '2');
+      background-color: var(--cui-bg);
+      transition: all 0.15s ease-in-out;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      &:hover {
+        border-color: var(--cui-primary);
+        background-color: var(--cui-secondary-bg);
+      }
+      
+      .attachment-icon {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--cui-primary-bg);
+        border-radius: map-get($os-border-radius, 'medium');
+        color: var(--cui-primary);
+      }
+      
+      .attachment-info {
+        flex: 1;
+        min-width: 0; // Prevent flex item from overflowing
+        
+        .attachment-name {
+          font-weight: 500;
+          font-size: map-get($os-font-sizes, 'sm');
+          color: var(--cui-body-color);
+          margin-bottom: map-get($os-spacing, '1');
+          @include truncate;
+        }
+        
+        .attachment-meta {
+          font-size: map-get($os-font-sizes, 'xs');
+          color: var(--cui-body-color-rgb);
+          opacity: 0.7;
+          
+          .separator {
+            margin: 0 map-get($os-spacing, '1');
+          }
+        }
+      }
+      
+      .attachment-actions {
+        flex-shrink: 0;
+        
+        button {
+          &:hover {
+            background-color: var(--cui-primary-bg);
+            color: var(--cui-primary);
+          }
+        }
+      }
+    }
+  }
+  
+  .no-attachments {
+    text-align: center;
+    padding: map-get($os-spacing, '8') map-get($os-spacing, '4');
+    color: var(--cui-body-color-rgb);
+    opacity: 0.6;
+    
+    svg {
+      margin-bottom: map-get($os-spacing, '2');
+      opacity: 0.5;
+    }
+    
+    p {
+      margin: 0;
+      font-style: italic;
+      font-size: map-get($os-font-sizes, 'sm');
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .attachments-container {
+    .attachment {
+      gap: map-get($os-spacing, '2');
+      
+      .attachment-icon {
+        width: 32px;
+        height: 32px;
+        
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+      
+      .attachment-info {
+        .attachment-meta {
+          display: block;
+          
+          .separator {
+            display: none;
+          }
+          
+          .upload-info,
+          .upload-date {
+            display: block;
+            margin-top: 2px;
+          }
+        }
+      }
+    }
+  }
+}

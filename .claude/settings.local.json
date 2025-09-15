@@ -40,7 +40,9 @@
       "mcp__ide__getDiagnostics",
       "Bash(cp:*)",
       "Bash(git push:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(timeout 30 npm start)",
+      "Bash(npx ng build:*)"
     ],
     "deny": []
   }
