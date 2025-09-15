@@ -59,6 +59,7 @@
                     <input matInput
                            [formControlName]="field.name"
                            [type]="field.type"
+                           [placeholder]="field.placeholder | translate"
                            (input)="onInputChange($event, field)">
                 </mat-form-field>
 
@@ -170,7 +171,7 @@
                             (selectionChange)="onInputChange($event, field)"
                             [multiple]="field.multiple">
                     <mat-option *ngFor="let option of field.options | async" [value]="option.value">
-                        {{ option.displayValue }}
+                        {{ option.displayValue | translate }}
                     </mat-option>
                 </mat-select>
 

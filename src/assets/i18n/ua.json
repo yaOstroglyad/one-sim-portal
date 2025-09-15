@@ -72,6 +72,9 @@
     "products": "Продукти",
     "inventory": "Інвентар",
     "users": "Користувачі",
+    "tickets": "Тікети",
+    "ticketsOverview": "Огляд",
+    "ticketsList": "Список тікетів",
     "companyProducts": "Продукти компанії",
     "productConstructor": "Конструктор продуктів",
     "settings": "Налаштування",
@@ -314,6 +317,24 @@
     "uploadSuccessMessage": "{{fileName}} успішно завантажено!",
     "uploadErrorMessage": "Щось пішло не так. Спробуйте ще раз."
   },
+  "comments": {
+    "noComments": "Немає коментарів",
+    "addComment": "Додати коментар",
+    "placeholder": "Написати коментар...",
+    "required": "Коментар обов'язковий",
+    "minLength": "Коментар має містити мінімум 3 символи",
+    "maxLength": "Коментар занадто довгий",
+    "loading": "Завантаження коментарів..."
+  },
+  "attachments": {
+    "noAttachments": "Немає вкладень",
+    "uploadFile": "Завантажити файл",
+    "uploading": "Завантаження...",
+    "uploadHint": "Максимальний розмір файлу: 10МБ. Підтримувані формати: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, PNG, JPG, JPEG, GIF",
+    "uploadedBy": "від",
+    "download": "Завантажити",
+    "loading": "Завантаження вкладень..."
+  },
   "inventory": {
     "id": "ID",
     "lpa": "LPA",
@@ -513,6 +534,119 @@
     "companyProducts": {
       "serviceProvider": "Постачальник послуг",
       "basePrice": "Базова ціна"
+    }
+  },
+  "tickets": {
+    "title": "Квитки",
+    "ticketNumber": "Номер квитка",
+    "subject": "Тема",
+    "description": "Опис",
+    "status": "Статус",
+    "priority": "Пріоритет",
+    "category": "Категорія",
+    "assignedTo": "Призначено",
+    "createdBy": "Створено",
+    "createdAt": "Дата створення",
+    "updatedAt": "Дата оновлення",
+    "comments": "Коментарі",
+    "attachments": "Вкладення",
+    "company": "Компанія",
+    "unassigned": "Не призначено",
+    "commentsWillBeImplemented": "Функціонал коментарів буде реалізований найближчим часом",
+    "attachmentsWillBeImplemented": "Функціонал вкладень буде реалізований найближчим часом",
+    "filter": {
+      "selectStatus": "Виберіть статус",
+      "selectPriority": "Виберіть пріоритет",
+      "selectCategory": "Виберіть категорію"
+    },
+    "statusValues": {
+      "open": "Відкритий",
+      "inProgress": "У роботі",
+      "resolved": "Вирішений",
+      "closed": "Закритий",
+      "cancelled": "Скасований"
+    },
+    "priorityValues": {
+      "low": "Низький",
+      "medium": "Середній",
+      "high": "Високий",
+      "urgent": "Терміновий"
+    },
+    "categoryValues": {
+      "generalInquiry": "Загальний запит",
+      "technicalIssue": "Технічна проблема",
+      "billingQuestion": "Питання щодо оплати",
+      "featureRequest": "Запит функції",
+      "bugReport": "Звіт про помилку",
+      "accountIssue": "Проблема з акаунтом",
+      "integrationSupport": "Підтримка інтеграції",
+      "performanceIssue": "Проблема продуктивності",
+      "securityConcern": "Питання безпеки",
+      "dataRequest": "Запит даних",
+      "complianceInquiry": "Запит відповідності",
+      "other": "Інше"
+    },
+    "form": {
+      "subject": "Тема",
+      "subjectPlaceholder": "Введіть тему квитка",
+      "description": "Опис",
+      "descriptionPlaceholder": "Опишіть вашу проблему або запит детально",
+      "category": "Категорія",
+      "selectCategory": "Виберіть категорію",
+      "priority": "Пріоритет",
+      "selectPriority": "Виберіть рівень пріоритету",
+      "status": "Статус",
+      "selectStatus": "Виберіть статус"
+    },
+    "create": {
+      "title": "Створити квиток",
+      "subtitle": "Створіть новий квиток підтримки або повідомте про проблему",
+      "createTicket": "Створити квиток"
+    },
+    "edit": {
+      "title": "Редагувати квиток",
+      "subtitle": "Змінити деталі квитка та оновити статус",
+      "updateTicket": "Оновити квиток"
+    },
+    "details": {
+      "title": "Деталі квитка"
+    },
+    "actions": {
+      "createTicket": "Створити квиток",
+      "editTicket": "Редагувати квиток",
+      "viewDetails": "Переглянути деталі",
+      "addComment": "Додати коментар",
+      "attachFile": "Прикріпити файл",
+      "assignTicket": "Призначити квиток",
+      "startProgress": "Почати роботу",
+      "markResolved": "Позначити як вирішений",
+      "closeTicket": "Закрити квиток",
+      "reopenTicket": "Перевідкрити квиток"
+    },
+    "overview": {
+      "title": "Огляд квитків підтримки",
+      "subtitle": "Відстежуйте та керуйте своїми квитками підтримки за допомогою повної аналітики та швидких дій.",
+      "quickActions": "Швидкі дії",
+      "recentActivity": "Недавня активність",
+      "totalTickets": "Всього квитків",
+      "openTickets": "Відкриті квитки",
+      "inProgressTickets": "У роботі",
+      "resolvedTickets": "Вирішені квитки",
+      "avgResolutionTime": "Середній час вирішення",
+      "ticketsToday": "Квитки сьогодні",
+      "ticketsCreatedToday": "Квитки створені сьогодні",
+      "ticketsThisWeek": "Цього тижня",
+      "ticketsThisMonth": "Цього місяця",
+      "actions": {
+        "createTicket": "Створити новий квиток",
+        "createTicketDesc": "Надіслати нову заявку до підтримки або повідомити про проблему",
+        "viewAllTickets": "Переглянути всі квитки",
+        "viewAllTicketsDesc": "Переглянути та керувати всіма вашими квитками підтримки",
+        "urgentTickets": "Термінові квитки",
+        "urgentTicketsDesc": "Перегляд та обробка високопріоритетних термінових квитків",
+        "myTickets": "Мої квитки",
+        "myTicketsDesc": "Переглянути квитки, призначені вам або створені вами"
+      }
     }
   }
 }

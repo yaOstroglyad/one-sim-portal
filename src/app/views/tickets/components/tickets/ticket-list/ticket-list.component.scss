@@ -1,0 +1,87 @@
+@import "../../../../../../scss/variables";
+@import "../../../../../../scss/mixins";
+@import "../../../../../../scss/utilities";
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+// Header customizations
+.os-header-sticky {
+  // Use existing header styling from shared components
+}
+
+// Table customizations
+::ng-deep generic-table {
+  // Status column styling
+  .status-column {
+    .badge {
+      font-weight: 500;
+      font-size: map-get($os-font-sizes, 'xs');
+      padding: 4px 12px;
+    }
+  }
+
+  // Priority column styling
+  .priority-column {
+    .badge {
+      font-weight: 500;
+      font-size: map-get($os-font-sizes, 'xs');
+      padding: 4px 12px;
+    }
+  }
+
+  // Custom table cell styling
+  td {
+    vertical-align: middle;
+
+    &.font-weight-bold {
+      font-weight: 600;
+    }
+  }
+}
+
+// Custom template content styling
+.category-label {
+  font-size: map-get($os-font-sizes, 'sm');
+  color: var(--cui-body-color);
+}
+
+.assignee-info {
+  .assignee-name {
+    font-weight: 500;
+    color: var(--cui-body-color);
+  }
+
+  .text-muted {
+    color: var(--cui-body-color-rgb);
+    opacity: 0.6;
+    font-style: italic;
+  }
+}
+
+// Panel styling
+.tickets-panel {
+  // Panel content specific styling only
+  // Generic panel styling handled by GenericRightPanelComponent
+
+  &__form {
+    padding: map-get($os-spacing, '4');
+  }
+
+  &__details {
+    // Details panel specific styling
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  ::ng-deep generic-table {
+    // Mobile-specific table adjustments
+    .table-responsive {
+      // Allow horizontal scroll on mobile
+      overflow-x: auto;
+    }
+  }
+}

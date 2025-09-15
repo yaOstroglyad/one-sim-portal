@@ -17,6 +17,7 @@ import { switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Order } from '../../shared/model/order';
 import { MatDialog } from '@angular/material/dialog';
 import { EditOrderDescriptionComponent } from './edit-order-description/edit-order-description.component';
+import { RevertOrderComponent } from './revert-order/revert-order.component';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -86,6 +87,30 @@ export class OrdersComponent implements OnInit, OnDestroy {
 				if (this.isDescriptionChanged(newDescription, item.description)) {
 					return this.ordersDataService.updateDescription({id: item.id, description: newDescription}).pipe(
 						tap(() => this.loadOrders())
+					);
+				}
+				return of(null);
+			})
+		).subscribe();
+	}
+
+	public openRevertOrderDialog(item: Order): void {
+		const dialogRef = this.dialog.open(RevertOrderComponent, {
+			width: '500px',
+			data: item
+		});
+
+		dialogRef.afterClosed().pipe(
+			takeUntil(this.unsubscribe$),
+			switchMap(result => {
+				if (result) {
+					// Revert order was successful, reload orders
+					return this.ordersDataService.list().pipe(
+						tap(data => {
+							this.tableConfig$ = this.tableService.getTableConfig();
+							this.dataList$ = of(data);
+							this.cdr.detectChanges();
+						})
 					);
 				}
 				return of(null);

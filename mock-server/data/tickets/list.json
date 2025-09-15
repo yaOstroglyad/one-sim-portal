@@ -60,6 +60,18 @@
       "updatedAt": "2024-01-15T09:20:00Z"
     },
     {
+      "id": "ticket-007",
+      "ticketNumber": "TK-000007",
+      "subject": "Critical: Production server down",
+      "status": "OPEN",
+      "priority": "URGENT",
+      "category": "CRITICAL_ISSUE",
+      "createdByName": "System Alert",
+      "assignedToName": "DevOps Team",
+      "createdAt": "2024-01-15T16:00:00Z",
+      "updatedAt": "2024-01-15T16:00:00Z"
+    },
+    {
       "id": "ticket-006",
       "ticketNumber": "TK-000006",
       "subject": "Account access permissions issue",

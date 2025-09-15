@@ -5,8 +5,9 @@ import { OrdersRoutingModule } from './orders-routing.module';
 import { TableDirective } from '@coreui/angular';
 import { GenericTableModule, HeaderModule } from '../../shared';
 import { EditOrderDescriptionComponent } from './edit-order-description/edit-order-description.component';
+import { RevertOrderComponent } from './revert-order/revert-order.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { FormGeneratorModule } from '../../shared/components/form-generator/form-generator.module';
+import { FormGeneratorModule } from '../../shared';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,7 +18,8 @@ import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [
     OrdersComponent,
-		EditOrderDescriptionComponent
+		EditOrderDescriptionComponent,
+		RevertOrderComponent
   ],
 	imports: [
 		CommonModule,

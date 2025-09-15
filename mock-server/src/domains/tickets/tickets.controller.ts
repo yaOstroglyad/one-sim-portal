@@ -16,7 +16,7 @@ export class TicketsController extends BaseController {
   private getTickets = (req: MockRequest, res: Response): void => {
     try {
       this.logRequest('GET', '/api/v1/tickets', req.query);
-      const result = this.ticketsService.getTickets(req.query);
+      const result = this.ticketsService.getTickets(req.query as any);
       this.successResponse(res, result);
     } catch (error) {
       this.handleError(res, error, 'Failed to load tickets');
@@ -83,7 +83,7 @@ export class TicketsController extends BaseController {
   private getRecentTickets = (req: MockRequest, res: Response): void => {
     try {
       this.logRequest('GET', '/api/v1/tickets/recent', req.query);
-      const result = this.ticketsService.getRecentTickets(req.query);
+      const result = this.ticketsService.getRecentTickets(req.query as any);
       this.successResponse(res, result);
     } catch (error) {
       this.handleError(res, error, 'Failed to load recent tickets');
@@ -98,6 +98,17 @@ export class TicketsController extends BaseController {
       this.successResponse(res, result);
     } catch (error) {
       this.handleError(res, error, 'Failed to load ticket count');
+    }
+  }
+
+  // GET /api/v1/tickets/stats - Get ticket statistics for overview
+  private getTicketStats = (req: MockRequest, res: Response): void => {
+    try {
+      this.logRequest('GET', '/api/v1/tickets/stats', req.query);
+      const stats = this.ticketsService.getTicketStats();
+      this.successResponse(res, stats);
+    } catch (error) {
+      this.handleError(res, error, 'Failed to load ticket statistics');
     }
   }
 
@@ -178,11 +189,14 @@ export class TicketsController extends BaseController {
     // Main tickets endpoints
     app.get('/api/v1/tickets', this.getTickets);
     app.post('/api/v1/tickets', this.createTicket);
+    
+    // Specific endpoints MUST be registered BEFORE parameterized routes
     app.get('/api/v1/tickets/recent', this.getRecentTickets);
     app.get('/api/v1/tickets/count', this.getTicketCount);
+    app.get('/api/v1/tickets/stats', this.getTicketStats);
     app.get('/api/v1/tickets/all', this.getAllCompanyTickets);
     
-    // Individual ticket operations
+    // Individual ticket operations (with :id parameter)
     app.get('/api/v1/tickets/:id', this.getTicketById);
     app.patch('/api/v1/tickets/:id', this.updateTicket);
     app.delete('/api/v1/tickets/:id', this.deleteTicket);

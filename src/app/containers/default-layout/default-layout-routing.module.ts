@@ -93,6 +93,15 @@ const routes: Routes = [
         loadComponent: () =>
             import('../../views/product-constructor/components/company-products/company-product-list/company-product-list.component').then((m) => m.CompanyProductListComponent)
       },
+      {
+        path: 'tickets',
+        data: {
+          title: 'Support Tickets',
+          featureToggle: 'tickets'
+        },
+        canActivate: [FeatureToggleGuard],
+        loadChildren: () => import('../../views/tickets/tickets.routes').then(m => m.TICKETS_ROUTES)
+      },
     ]
   }
 ];

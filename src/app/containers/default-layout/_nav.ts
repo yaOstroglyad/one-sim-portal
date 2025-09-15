@@ -57,6 +57,25 @@ export const navItems: any[] = [
 		permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION]
 	},
 	{
+		name: 'nav.tickets',
+		url: '/home/tickets',
+		iconComponent: {name: 'cil-speech'},
+		permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION, CUSTOMER_PERMISSION],
+		featureToggle: 'tickets',
+		children: [
+			{
+				name: 'nav.ticketsOverview',
+				url: '/home/tickets/overview',
+				permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION]
+			},
+			{
+				name: 'nav.ticketsList',
+				url: '/home/tickets/list',
+				permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION, CUSTOMER_PERMISSION]
+			}
+		]
+	},
+	{
 		name: 'nav.productconstructor',
 		url: 'product-constructor',
 		iconComponent: {name: 'cil-layers'},

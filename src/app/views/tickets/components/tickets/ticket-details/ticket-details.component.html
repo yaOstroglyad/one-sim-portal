@@ -1,0 +1,69 @@
+<div class="ticket-details" *ngIf="ticket">
+  
+  <!-- Ticket Header -->
+  <div class="ticket-header">
+    <div class="ticket-title">
+      <h3>{{ ticket.subject }}</h3>
+      <span class="ticket-number">{{ ticket.ticketNumber }}</span>
+    </div>
+    
+    <div class="ticket-badges">
+      <c-badge [color]="getStatusColor(ticket.status)" shape="rounded-pill">
+        {{ 'tickets.statusValues.' + (ticket.status === 'IN_PROGRESS' ? 'inProgress' : ticket.status.toLowerCase()) | translate }}
+      </c-badge>
+      <c-badge [color]="getPriorityColor(ticket.priority)" shape="rounded-pill">
+        {{ ('tickets.priorityValues.' + ticket.priority.toLowerCase()) | translate }}
+      </c-badge>
+    </div>
+  </div>
+
+  <!-- Ticket Meta Information -->
+  <os-card variant="default" class="ticket-meta-card">
+    <div class="meta-grid">
+      <div class="meta-item">
+        <label>{{ 'tickets.category' | translate }}</label>
+        <span>{{ getCategoryTranslationKey(ticket.category) | translate }}</span>
+      </div>
+      
+      <div class="meta-item">
+        <label>{{ 'tickets.createdBy' | translate }}</label>
+        <span>{{ ticket.createdByName }}</span>
+      </div>
+      
+      <div class="meta-item">
+        <label>{{ 'tickets.assignedTo' | translate }}</label>
+        <span *ngIf="ticket.assignedToName; else unassigned">{{ ticket.assignedToName }}</span>
+        <ng-template #unassigned>
+          <span class="text-muted">{{ 'tickets.unassigned' | translate }}</span>
+        </ng-template>
+      </div>
+      
+      <div class="meta-item">
+        <label>{{ 'tickets.company' | translate }}</label>
+        <span>{{ ticket.companyName }}</span>
+      </div>
+      
+      <div class="meta-item">
+        <label>{{ 'tickets.createdAt' | translate }}</label>
+        <span>{{ ticket.createdAt | date:'medium' }}</span>
+      </div>
+      
+      <div class="meta-item" *ngIf="ticket.updatedAt !== ticket.createdAt">
+        <label>{{ 'tickets.updatedAt' | translate }}</label>
+        <span>{{ ticket.updatedAt | date:'medium' }}</span>
+      </div>
+    </div>
+  </os-card>
+
+  <!-- Ticket Description -->
+  <os-card variant="default" class="ticket-description-card">
+    <div class="card-header">
+      <h4>{{ 'tickets.description' | translate }}</h4>
+    </div>
+    <div class="description-content">
+      <p>{{ ticket.description }}</p>
+    </div>
+  </os-card>
+
+
+</div>

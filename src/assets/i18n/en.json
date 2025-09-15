@@ -46,6 +46,7 @@
     "save": "Save",
     "apply": "Apply",
     "submit": "Submit",
+    "submitting": "Submitting...",
     "done": "Done",
     "none": "None",
     "retry": "Retry",
@@ -56,6 +57,11 @@
     "deselectAll": "Deselect All",
     "noResultsFound": "No results found",
     "noItemsAvailable": "No items available",
+    "loadingStatistics": "Loading statistics...",
+    "unableToLoadStatistics": "Unable to Load Statistics",
+    "errorLoadingOverviewData": "There was an error loading the overview data. Please try again.",
+    "comingSoon": "Coming Soon",
+    "viewAll": "View All",
     "table": {
       "filterPlaceholder": "Filter table data"
     }
@@ -65,6 +71,24 @@
     "uploadSuccess": "File uploaded successfully!",
     "uploadError": "Upload failed. Please try again.",
     "tryAgain": "Please try again or contact support"
+  },
+  "comments": {
+    "noComments": "No comments yet",
+    "addComment": "Add Comment",
+    "placeholder": "Write a comment...",
+    "required": "Comment is required",
+    "minLength": "Comment must be at least 3 characters long",
+    "maxLength": "Comment is too long",
+    "loading": "Loading comments..."
+  },
+  "attachments": {
+    "noAttachments": "No attachments",
+    "uploadFile": "Upload File",
+    "uploading": "Uploading...",
+    "uploadHint": "Maximum file size: 10MB. Supported formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, PNG, JPG, JPEG, GIF",
+    "uploadedBy": "by",
+    "download": "Download",
+    "loading": "Loading attachments..."
   },
   "product": {
     "companyName": "Company Name",
@@ -85,8 +109,6 @@
     "coverageInformation": "Coverage Information",
     "region": "Region",
     "country": "Country",
-    "selectRegion": "Select a region",
-    "selectCountry": "Select a country",
     "validityPeriod": "Validity Period",
     "validityInformation": "Validity Information",
     "period": "Period",
@@ -103,7 +125,7 @@
     "countryId": "Country ID",
     "selectCountry": "Select Country",
     "selectRegion": "Select Region",
-    "regionId": "Region ID", 
+    "regionId": "Region ID",
     "mobileBundleId": "Mobile Bundle ID"
   },
   "companyProduct": {
@@ -125,8 +147,132 @@
   },
   "tariffOffer": {
     "productName": "Product Name",
-    "providerProductName": "Provider Product Name", 
+    "providerProductName": "Provider Product Name",
     "allCurrencies": "All Currencies"
+  },
+  "tickets": {
+    "title": "Tickets",
+    "ticketNumber": "Ticket Number",
+    "subject": "Subject",
+    "description": "Description",
+    "status": "Status",
+    "priority": "Priority",
+    "category": "Category",
+    "assignedTo": "Assigned To",
+    "createdBy": "Created By",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "comments": "Comments",
+    "attachments": "Attachments",
+    "company": "Company",
+    "unassigned": "Unassigned",
+    "commentsWillBeImplemented": "Comments functionality will be implemented soon",
+    "attachmentsWillBeImplemented": "Attachments functionality will be implemented soon",
+    "form": {
+      "subject": "Subject",
+      "subjectPlaceholder": "Enter ticket subject",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your issue or request in detail",
+      "category": "Category",
+      "selectCategory": "Select a category",
+      "priority": "Priority",
+      "selectPriority": "Select priority level",
+      "status": "Status",
+      "selectStatus": "Select status"
+    },
+    "filter": {
+      "selectStatus": "Select Status",
+      "selectPriority": "Select Priority",
+      "selectCategory": "Select Category"
+    },
+    "statusValues": {
+      "open": "Open",
+      "inProgress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed",
+      "cancelled": "Cancelled"
+    },
+    "priorityValues": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "categoryValues": {
+      "generalInquiry": "General Inquiry",
+      "technicalIssue": "Technical Issue",
+      "billingQuestion": "Billing Question",
+      "featureRequest": "Feature Request",
+      "bugReport": "Bug Report",
+      "accountIssue": "Account Issue",
+      "integrationSupport": "Integration Support",
+      "performanceIssue": "Performance Issue",
+      "securityConcern": "Security Concern",
+      "dataRequest": "Data Request",
+      "complianceInquiry": "Compliance Inquiry",
+      "other": "Other"
+    },
+    "create": {
+      "title": "Create Ticket",
+      "subtitle": "Create a new support ticket or report an issue",
+      "createTicket": "Create Ticket"
+    },
+    "edit": {
+      "title": "Edit Ticket",
+      "subtitle": "Modify ticket details and update status",
+      "updateTicket": "Update Ticket"
+    },
+    "details": {
+      "title": "Ticket Details"
+    },
+    "actions": {
+      "createTicket": "Create Ticket",
+      "editTicket": "Edit Ticket",
+      "viewDetails": "View Details",
+      "addComment": "Add Comment",
+      "attachFile": "Attach File",
+      "assignTicket": "Assign Ticket",
+      "startProgress": "Start Progress",
+      "markResolved": "Mark as Resolved",
+      "closeTicket": "Close Ticket",
+      "reopenTicket": "Reopen Ticket"
+    },
+    "messages": {
+      "createSuccess": "Ticket created successfully",
+      "updateSuccess": "Ticket updated successfully",
+      "deleteSuccess": "Ticket deleted successfully",
+      "createError": "Failed to create ticket",
+      "updateError": "Failed to update ticket",
+      "deleteError": "Failed to delete ticket",
+      "loadError": "Failed to load tickets",
+      "noTicketsFound": "No tickets found",
+      "loadingTickets": "Loading tickets..."
+    },
+    "overview": {
+      "title": "Support Tickets Overview",
+      "subtitle": "Monitor and manage your support tickets with comprehensive insights and quick actions.",
+      "quickActions": "Quick Actions",
+      "recentActivity": "Recent Activity",
+      "totalTickets": "Total Tickets",
+      "openTickets": "Open Tickets",
+      "inProgressTickets": "In Progress",
+      "resolvedTickets": "Resolved Tickets",
+      "avgResolutionTime": "Avg Resolution Time",
+      "ticketsToday": "Today's Tickets",
+      "ticketsCreatedToday": "Tickets Created Today",
+      "ticketsThisWeek": "This Week",
+      "ticketsThisMonth": "This Month",
+      "actions": {
+        "createTicket": "Create New Ticket",
+        "createTicketDesc": "Submit a new support request or report an issue",
+        "viewAllTickets": "View All Tickets",
+        "viewAllTicketsDesc": "Browse and manage all your support tickets",
+        "urgentTickets": "Urgent Tickets",
+        "urgentTicketsDesc": "View and handle high-priority urgent tickets",
+        "myTickets": "My Tickets",
+        "myTicketsDesc": "See tickets assigned to you or created by you"
+      }
+    }
   },
   "default-header": {
     "language": "Language",
@@ -151,6 +297,9 @@
     "products": "Products",
     "inventory": "Inventory",
     "users": "Users",
+    "tickets": "Tickets",
+    "ticketsOverview": "Overview",
+    "ticketsList": "Tickets List",
     "companyProducts": "Company Products",
     "productconstructor": "Product Constructor",
     "settings": "Settings",
@@ -319,7 +468,18 @@
     "createdDate": "Created Date",
     "fromOwner": "From Customer",
     "toOwner": "To Customer",
-    "editDescription": "Edit description"
+    "editDescription": "Edit description",
+    "selectedOrder": "Selected Order",
+    "revertOrder": {
+      "action": "Revert Order",
+      "title": "Revert Order",
+      "description": "Revert a specified number of SIMs from the selected order. This action will create a new order with the reverted SIMs.",
+      "orderDescription": "Order Description",
+      "orderDescriptionPlaceholder": "Enter description for the revert order",
+      "simCount": "Number of SIMs to Revert",
+      "simCountPlaceholder": "Enter number of SIMs",
+      "submit": "Revert Order"
+    }
   },
   "editOrderDescription": {
     "title": "Edit description",
@@ -724,7 +884,7 @@
   "productConstructor": {
     "overview": {
       "regions": "Regions",
-      "bundles": "Mobile Bundles", 
+      "bundles": "Mobile Bundles",
       "products": "Core Products",
       "companyProducts": "Company Products",
       "status": "Product Status",

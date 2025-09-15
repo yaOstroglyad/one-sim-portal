@@ -32,13 +32,16 @@ $one-sim-portal-theme: mat.define-light-theme((
   )
 ));
 
+// Include themes only once to avoid duplication
 @include mat.all-component-themes($one-sim-portal-theme);
 
 $enable-ltr: true;
 $enable-rtl: true;
 
+// RTL support without duplicating all component themes
 html[dir="rtl"] {
-  @include mat.all-component-themes($one-sim-portal-theme);
+  // Only include directional-specific overrides here if needed
+  // @include mat.all-component-themes($one-sim-portal-theme); // Removed to avoid duplication
 }
 
 // ==============================================

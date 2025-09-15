@@ -1,0 +1,169 @@
+@import "../../../../scss/variables";
+@import "../../../../scss/mixins";
+@import "../../../../scss/utilities";
+
+.comments-container {
+  .loading-state {
+    text-align: center;
+    padding: map-get($os-spacing, '4');
+    color: var(--cui-body-color-rgb);
+    opacity: 0.7;
+  }
+
+  .comments-list {
+    margin-bottom: map-get($os-spacing, '6');
+    
+    .comment {
+      display: flex;
+      gap: map-get($os-spacing, '3');
+      margin-bottom: map-get($os-spacing, '4');
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      .comment-avatar {
+        flex-shrink: 0;
+      }
+      
+      .comment-content {
+        flex: 1;
+        min-width: 0; // Prevent flex item from overflowing
+        
+        .comment-header {
+          display: flex;
+          align-items: center;
+          gap: map-get($os-spacing, '2');
+          margin-bottom: map-get($os-spacing, '1');
+          
+          .comment-author {
+            font-weight: 600;
+            font-size: map-get($os-font-sizes, 'sm');
+            color: var(--cui-body-color);
+          }
+          
+          .comment-date {
+            font-size: map-get($os-font-sizes, 'xs');
+            color: var(--cui-body-color-rgb);
+            opacity: 0.7;
+          }
+        }
+        
+        .comment-text {
+          font-size: map-get($os-font-sizes, 'sm');
+          line-height: 1.5;
+          color: var(--cui-body-color);
+          white-space: pre-wrap;
+          word-wrap: break-word;
+        }
+      }
+    }
+  }
+  
+  .no-comments {
+    text-align: center;
+    padding: map-get($os-spacing, '8') map-get($os-spacing, '4');
+    color: var(--cui-body-color-rgb);
+    opacity: 0.6;
+    
+    svg {
+      margin-bottom: map-get($os-spacing, '2');
+      opacity: 0.5;
+    }
+    
+    p {
+      margin: 0;
+      font-style: italic;
+      font-size: map-get($os-font-sizes, 'sm');
+    }
+  }
+  
+  .add-comment-form {
+    border-top: 1px solid var(--cui-border-color);
+    padding-top: map-get($os-spacing, '4');
+    margin-top: map-get($os-spacing, '4');
+    
+    .form-group {
+      margin-bottom: map-get($os-spacing, '3');
+      
+      label {
+        display: block;
+        font-size: map-get($os-font-sizes, 'sm');
+        font-weight: 600;
+        color: var(--cui-body-color);
+        margin-bottom: map-get($os-spacing, '2');
+      }
+      
+      textarea.form-control {
+        width: 100%;
+        padding: map-get($os-spacing, '3');
+        border: 1px solid var(--cui-border-color);
+        border-radius: map-get($os-border-radius, 'medium');
+        font-size: map-get($os-font-sizes, 'sm');
+        line-height: 1.5;
+        background-color: var(--cui-bg);
+        color: var(--cui-body-color);
+        resize: vertical;
+        min-height: 80px;
+        
+        &:focus {
+          outline: none;
+          border-color: var(--cui-primary);
+          box-shadow: 0 0 0 2px rgba(var(--cui-primary-rgb), 0.1);
+        }
+        
+        &.is-invalid {
+          border-color: var(--cui-danger);
+          
+          &:focus {
+            border-color: var(--cui-danger);
+            box-shadow: 0 0 0 2px rgba(var(--cui-danger-rgb), 0.1);
+          }
+        }
+        
+        &::placeholder {
+          color: var(--cui-body-color-rgb);
+          opacity: 0.6;
+        }
+      }
+      
+      .invalid-feedback {
+        display: block;
+        font-size: map-get($os-font-sizes, 'xs');
+        color: var(--cui-danger);
+        margin-top: map-get($os-spacing, '1');
+      }
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      
+      button {
+        &.loading {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .comments-container {
+    .comment {
+      gap: map-get($os-spacing, '2');
+    }
+    
+    .add-comment-form {
+      .form-actions {
+        justify-content: stretch;
+        
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

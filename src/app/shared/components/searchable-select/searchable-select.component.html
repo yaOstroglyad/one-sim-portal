@@ -5,7 +5,7 @@
 
   <!-- Label -->
   <label *ngIf="label" class="select-label">
-    {{ label }}
+    {{ label | translate }}
     <span *ngIf="required" class="required">*</span>
   </label>
 
@@ -22,14 +22,15 @@
     <div class="select-value" [class.placeholder]="hasPlaceholder">
       <!-- Single selection display -->
       <span *ngIf="!config.multiple" class="single-value" [class.placeholder]="hasPlaceholder">
-        {{ displayText }}
+        <span *ngIf="!hasPlaceholder">{{ displayText }}</span>
+        <span *ngIf="hasPlaceholder">{{ config.placeholder | translate }}</span>
       </span>
 
       <!-- Multiple selection display -->
       <div *ngIf="config.multiple" class="multiple-values">
         <!-- Show placeholder text when no selections -->
         <span *ngIf="hasPlaceholder" class="placeholder">
-          {{ displayText }}
+          {{ config.placeholder | translate }}
         </span>
         <!-- Show chips when items are selected -->
         <div *ngIf="hasSelectedChips" class="selected-chips">
@@ -78,7 +79,7 @@
              type="text"
              class="search-input"
              [formControl]="searchControl"
-             [placeholder]="config.searchPlaceholder"
+             [placeholder]="config.searchPlaceholder | translate"
              (click)="$event.stopPropagation()">
     </div>
 
@@ -88,12 +89,12 @@
       <!-- Loading state -->
       <div *ngIf="showLoadingState" class="option loading">
         <svg cIcon name="cilReload" width="16" height="16" class="spinning"></svg>
-        {{ config.loadingText }}
+        {{ config.loadingText | translate }}
       </div>
 
       <!-- No results -->
       <div *ngIf="showNoResults" class="option no-results">
-        {{ config.noResultsText }}
+        {{ config.noResultsText | translate }}
       </div>
 
       <!-- Options -->
@@ -128,6 +129,6 @@
 
   <!-- Error message -->
   <div *ngIf="error" class="error-message">
-    {{ error }}
+    {{ error | translate }}
   </div>
 </div>

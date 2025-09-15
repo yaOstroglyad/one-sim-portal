@@ -1,0 +1,50 @@
+@import "../../../../../../scss/variables";
+@import "../../../../../../scss/mixins";
+@import "../../../../../../scss/utilities";
+@import "../../../../../../scss/form-utilities";
+
+:host {
+  @include material-form-field-overrides();
+}
+
+.ticket-form {
+  padding: map-get($os-spacing, '4');
+
+  // Form generator styling is handled by the shared component
+  // Add any ticket-specific form customizations here
+  
+  ::ng-deep app-form-generator {
+    .form-field-grid {
+      // Custom grid spacing for ticket form
+      gap: map-get($os-spacing, '4');
+    }
+    
+    .form-field {
+      &.textarea-field {
+        // Textarea specific styling
+        .form-control {
+          resize: vertical;
+          min-height: 120px;
+        }
+      }
+      
+      &.select-field {
+        // Select field styling
+        .form-select {
+          background-color: var(--cui-body-bg);
+          border-color: var(--cui-border-color);
+        }
+      }
+    }
+    
+    // Form validation styling
+    .invalid-feedback {
+      font-size: map-get($os-font-sizes, 'xs');
+      color: var(--os-color-danger);
+    }
+    
+    .form-control.is-invalid {
+      border-color: var(--os-color-danger);
+    }
+  }
+}
