@@ -77,7 +77,7 @@ export class AuthService {
 			'adysally@gmail.com',
 			'adysally+1@gmail.com',
 			'david+fantasticvacations@1-esim.com',
-			'anneke.geldenhuys+1@optimavibe.co.za'
+			'anneke.geldenhuys@optimavibe.co.za'
 		];
 		const support = [];
 		const loggedUser = this.loggedUser;
