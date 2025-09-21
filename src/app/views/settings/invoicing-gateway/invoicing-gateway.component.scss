@@ -1,0 +1,77 @@
+@import "../../../../scss/custom";
+
+.loading-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.primary-badge {
+  background: #0083e1;
+}
+
+.active-badge {
+  background: #55a961;
+}
+
+.disabled-badge {
+  background: #909190;
+}
+
+.admin-account-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background-color: rgba(244, 67, 54, 0.1);
+  border-radius: 4px;
+  color: rgba(0, 0, 0, 0.87);
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.account-selector {
+  .helper-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    color: rgba(0, 0, 0, 0.6);
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.badge-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.active-badge {
+  background-color: #4caf50;
+  color: white;
+}
+
+.disabled-badge {
+  background-color: #9e9e9e;
+  color: white;
+}
