@@ -97,6 +97,10 @@ export const navItems: any[] = [
 				url: '/home/settings/payment-gateway'
 			},
 			{
+				name: 'nav.invoicingGateway',
+				url: '/home/settings/invoices'
+			},
+			{
 				name: 'nav.domains',
 				permissions: [ADMIN_PERMISSION],
 				url: '/home/settings/domains'

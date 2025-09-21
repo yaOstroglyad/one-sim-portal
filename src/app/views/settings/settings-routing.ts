@@ -28,6 +28,16 @@ export const SettingsRouting: Routes = [
     canActivate: [permissionGuard]
   },
   {
+    path: 'invoices',
+    loadComponent: () => import('./invoicing-gateway/invoicing-gateway.component')
+      .then(m => m.InvoicingGatewayComponent),
+    data: {
+      title: 'nav.invoicingGateway',
+      permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
+    },
+    canActivate: [permissionGuard]
+  },
+  {
     path: 'domains',
     loadComponent: () => import('./domains/domains.component')
       .then(m => m.DomainsComponent),

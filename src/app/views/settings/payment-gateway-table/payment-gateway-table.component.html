@@ -28,7 +28,7 @@
                         </button>
                         <ul cDropdownMenu>
                             <li *ngFor="let strategy of strategies">
-                                <a cDropdownItem (click)="edit({ name: strategy })">{{ strategy }}</a>
+                                <a cDropdownItem (click)="openPanel({ name: strategy }, 'create')">{{ strategy }}</a>
                             </li>
                         </ul>
                     </c-dropdown>
@@ -70,6 +70,53 @@
                      class="me-1"
                      shape="rounded-pill">{{ data?.primary }}
             </c-badge>
-        </div>        
+        </div>
     </td>
 </ng-template>
+
+<!-- Right Panel for Create/Edit Payment Gateway -->
+<app-generic-right-panel
+    [isOpen]="isPanelOpen"
+    [title]="panelTitle | translate"
+    [subtitle]="selectedPaymentGateway?.name"
+    [hasFooter]="true"
+    [defaultWidth]="650"
+    [minWidth]="500"
+    [maxWidth]="900"
+    (close)="onPanelClose()">
+
+    <div panel-content *ngIf="selectedPaymentGateway">
+        <app-edit-payment-gateway
+            #paymentGatewayFormRef
+            [paymentStrategy]="selectedPaymentGateway"
+            [accountId]="selectedAccount?.id"
+            (save)="onPaymentGatewaySaved()"
+            (cancel)="onPanelClose()">
+        </app-edit-payment-gateway>
+    </div>
+
+    <ng-container panel-actions>
+        <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="onPanelClose()">
+            {{ 'common.cancel' | translate }}
+        </button>
+        <button
+            *ngIf="selectedPaymentGateway?.id"
+            type="button"
+            class="btn"
+            [ngClass]="selectedPaymentGateway?.isActive ? 'btn-warning' : 'btn-success'"
+            (click)="onToggleStatus()">
+            {{ selectedPaymentGateway?.isActive ? ('editPaymentGateway.deactivate' | translate) : ('editPaymentGateway.activate' | translate) }}
+        </button>
+        <button
+            type="button"
+            class="btn btn-primary"
+            (click)="paymentGatewayFormRef?.submit()"
+            [disabled]="paymentGatewayFormRef?.loading || !paymentGatewayFormRef?.isFormValid">
+            <span *ngIf="paymentGatewayFormRef?.loading" class="loading-spinner"></span>
+            {{ panelMode === 'create' ? ('editPaymentGateway.create' | translate) : ('editPaymentGateway.save' | translate) }}
+        </button>
+    </ng-container>
+</app-generic-right-panel>

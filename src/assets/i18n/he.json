@@ -125,6 +125,7 @@
     "settings": "הגדרות",
     "general": "כללי",
     "paymentGateway": "שער תשלום",
+    "invoicingGateway": "שער הוצאת חשבוניות",
     "viewConfiguration": "תצורת תצוגה",
     "portal": "פורטל",
     "portalViewConfiguration": "הגדרות תצוגת פורטל",
@@ -681,5 +682,67 @@
         "myTicketsDesc": "ראה כרטיסים שהוקצו לך או שנוצרו על ידיך"
       }
     }
+  },
+  "paymentGateway": {
+    "id": "מזהה",
+    "name": "שם",
+    "isActive": "סטטוס",
+    "isPrimary": "ראשי",
+    "paymentStrategy": "אסטרטגיית תשלום",
+    "createdDate": "תאריך יצירה",
+    "hint": "בחלק זה תוכל להגדיר את כל שערי התשלום הזמינים לך.",
+    "setupNew": "הגדר שער תשלום חדש",
+    "createNew": "צור שער תשלום חדש",
+    "setup": "הגדר",
+    "adminHint": "תצורה זו זמינה למשתמשים ללא הרשאות מנהל בלבד.",
+    "title": "הגדרות שער תשלום",
+    "edit": "עדכן",
+    "adminAccountWarning": "לא ניתן ליצור שיטות תשלום עבור חשבון מנהל. אנא בחר חשבון אחר."
+  },
+  "editPaymentGateway": {
+    "setupPaymentGateway": "הגדרת שער תשלום",
+    "title": "הגדרת שער תשלום",
+    "active": "פעיל",
+    "deactivated": "מבוטל",
+    "activate": "הפעל",
+    "deactivate": "בטל",
+    "setPrimary": "הגדר כראשי",
+    "unsetPrimary": "הסר ראשי",
+    "create": "צור",
+    "save": "שמור",
+    "primaryPaymentGatewayTooltip": "שער תשלום ראשי, לא ניתן לבטל",
+    "statusUpdated": "הסטטוס עודכן בהצלחה",
+    "configurationCreated": "התצורה נוצרה בהצלחה",
+    "configurationUpdated": "התצורה עודכנה בהצלחה",
+    "formInvalid": "הטופס אינו תקין"
+  },
+  "invoicingGateway": {
+    "id": "מזהה",
+    "name": "שם",
+    "isActive": "סטטוס",
+    "invoicingStrategy": "אסטרטגיית חיוב",
+    "createdDate": "תאריך יצירה",
+    "hint": "בחלק זה תוכל להגדיר את כל שערי החיוב הזמינים לך.",
+    "setupNew": "הגדר שער חיוב חדש",
+    "setup": "הגדר",
+    "createNew": "צור שער חיוב חדש",
+    "adminAccountWarning": "לא ניתן ליצור שערי חיוב עבור חשבון מנהל. אנא בחר חשבון אחר."
+  },
+  "editInvoicingGateway": {
+    "title": "הגדרת שער חיוב",
+    "status": "סטטוס",
+    "active": "פעיל",
+    "inactive": "לא פעיל",
+    "isActive": "פעיל",
+    "changeStatusHint": "לחץ על הכפתורים למטה כדי לשנות סטטוס",
+    "activate": "הפעל",
+    "deactivate": "בטל",
+    "save": "שמור",
+    "create": "צור",
+    "close": "סגור",
+    "statusUpdated": "הסטטוס עודכן בהצלחה",
+    "configurationCreated": "התצורה נוצרה בהצלחה",
+    "configurationUpdated": "התצורה עודכנה בהצלחה",
+    "formInvalid": "הטופס אינו תקין"
   }
 }

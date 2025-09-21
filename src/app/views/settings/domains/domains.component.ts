@@ -206,7 +206,7 @@ export class DomainsComponent implements OnInit, OnDestroy, AfterViewInit {
     size: number;
     name?: string;
     applicationType?: string
-  } = {page: 0, size: 10}): void {
+  } = {page: 0, size: 15}): void {
     this.domainsDataService.paginatedDomains(params, params.page, params.size)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => {

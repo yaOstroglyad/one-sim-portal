@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef, AfterViewInit, Optional, Inject } from '@angular/core';
+import { FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { PaymentGatewayService } from '../payment-gateway.service';
 import { map } from 'rxjs/operators';
@@ -11,11 +11,12 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormGeneratorModule } from 'src/app/shared/components/form-generator/form-generator.module';
+import { FormGeneratorComponent } from 'src/app/shared/components/form-generator/form-generator.component';
 import { FormCheckComponent } from '@coreui/angular';
 import { FormCheckInputDirective } from '@coreui/angular';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PaymentGatewayUtilsService } from '../payment-gateway.utils.service';
+import { FormConfig } from 'src/app/shared';
 
 @Component({
   selector: 'app-edit-payment-gateway',
@@ -25,125 +26,140 @@ import { PaymentGatewayUtilsService } from '../payment-gateway.utils.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatDialogModule,
     MatSnackBarModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     TranslateModule,
-    FormGeneratorModule,
+    FormGeneratorComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     MatTooltipModule
   ]
 })
-export class EditPaymentGatewayComponent implements OnInit, AfterViewInit {
-  public componentConfig$: Observable<PgComponentConfig>;
-  public form: FormGroup;
-  public isActive: boolean = false;
-  public isPrimary: boolean = false;
-  public strategyId: Partial<PaymentStrategy['id']> = null;
-  public isFormValid: boolean = false;
-  private initialValues: any;
-  private accountId: string | null = null;
+export class EditPaymentGatewayComponent implements OnInit, OnChanges, AfterViewInit {
+  @Input() paymentStrategy: PaymentStrategy | null = null;
+  @Input() accountId: string | null = null;
+  
+  @Output() save = new EventEmitter<void>();
+  @Output() cancel = new EventEmitter<void>();
+  
+  formConfig: FormConfig;
+  gatewayForm: FormGroup; // Public for parent access like region-form
+  loading = false;
+  isFormValid: boolean = false;
+  private initialFormValues: any = null;
 
   constructor(
-    public dialogRef: MatDialogRef<EditPaymentGatewayComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PaymentStrategy & { accountId?: string },
+    @Optional() public dialogRef: MatDialogRef<EditPaymentGatewayComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: PaymentStrategy & { accountId?: string },
     private paymentGatewayService: PaymentGatewayService,
     private paymentGatewayUtilsService: PaymentGatewayUtilsService,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
     private cdr: ChangeDetectorRef
   ) {
-    this.isActive = this.data?.isActive ?? false;
-    this.isPrimary = this.data?.primary ?? false;
-    this.strategyId = this.data?.id || null;
-    this.accountId = this.data?.accountId || null;
+    // Support dialog mode
+    if (this.dialogData) {
+      this.paymentStrategy = this.dialogData;
+      this.accountId = this.dialogData.accountId || null;
+    }
   }
 
-  public ngOnInit(): void {
-    this.componentConfig$ = this.paymentGatewayService.getFieldsByStrategyType(this.data.name).pipe(
-      map(fields => {
-        const paymentMethodParameters = this.data?.paymentMethodParameters || {};
-        return {
-          id: this.data?.id,
-          isActive: this.isActive,
-          type: this.data.name,
-          config: this.paymentGatewayUtilsService.generateForm(fields, paymentMethodParameters, this.data)
-        };
-      })
-    );
+  ngOnInit(): void {
+    if (this.paymentStrategy) {
+      this.initializeForm();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['paymentStrategy'] && !changes['paymentStrategy'].firstChange) {
+      // Reinitialize form when payment strategy changes
+      if (this.paymentStrategy) {
+        this.initializeForm();
+      }
+    }
+  }
+
+  private initializeForm(): void {
+    console.log('Initializing form for strategy:', this.paymentStrategy?.name);
+    this.loading = true;
+    
+    this.paymentGatewayService.getFieldsByStrategyType(this.paymentStrategy.name).subscribe({
+      next: (fields) => {
+        console.log('Received fields from API:', fields);
+        const paymentMethodParameters = this.paymentStrategy?.paymentMethodParameters || {};
+        this.formConfig = this.paymentGatewayUtilsService.generateForm(fields, paymentMethodParameters, this.paymentStrategy);
+        console.log('Generated form config:', this.formConfig);
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
+      error: (error) => {
+        console.error('Error loading fields:', error);
+        this.loading = false;
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   ngAfterViewInit() {
     this.cdr.detectChanges();
   }
 
-  public handleFormChanges(form: FormGroup): void {
-    if (!form) return;
+  get isEditing(): boolean {
+    return !!this.paymentStrategy?.id;
+  }
 
-    this.form = form;
-    const primaryControl = this.form.get('primary');
-    if (primaryControl) {
-      this.isPrimary = primaryControl.value;
+  onFormChanges(form: FormGroup): void {
+    this.gatewayForm = form; // For parent access like region-form
+    
+    // Apply initial values if they were stored before form was ready
+    if (this.initialFormValues && form) {
+      form.patchValue(this.initialFormValues, { emitEvent: false });
+      this.initialFormValues = null; // Clear after applying
     }
-
-    if (!this.initialValues) {
-      this.initialValues = this.form.getRawValue();
-    }
-
+    
     this.isFormValid = form.valid;
-    this.cdr.detectChanges();
   }
 
-  public updateStatus(): void {
-    this.isActive = !this.isActive;
-    const status = {
-      id: this.strategyId,
-      active: this.isActive
+  submit(): void {
+    if (!this.gatewayForm?.valid) return;
+
+    this.loading = true;
+    const formValue = this.gatewayForm.value;
+    
+    const gatewayData: PaymentStrategy = {
+      id: this.paymentStrategy?.id,
+      name: this.paymentStrategy.name,
+      paymentStrategy: this.paymentStrategy?.paymentStrategy ?? this.paymentStrategy.name,
+      primary: formValue.primary || false,
+      paymentMethodParameters: formValue
     };
-    this.paymentGatewayService.updateStatus(status).subscribe(() => this.notify(this.translate.instant('editPaymentGateway.statusUpdated')));
-  }
 
-  public submit(): void {
-    if (this.isFormValid && !this.isFormUnchanged() && this.form) {
-      const customerData: PaymentStrategy = {
-        id: this.data.id,
-        name: this.data.name,
-        paymentStrategy: this.data?.paymentStrategy ?? this.data.name,
-        primary: this.isPrimary,
-        paymentMethodParameters: this.form.value
-      };
+    const operation$ = this.isEditing
+      ? this.paymentGatewayService.update(gatewayData)
+      : this.paymentGatewayService.create(gatewayData, this.accountId);
 
-      if (!this.data.id) {
-        this.paymentGatewayService.create(customerData, this.accountId).subscribe(() => this.notify(this.translate.instant('editPaymentGateway.configurationCreated')));
-      } else {
-        this.paymentGatewayService.update(customerData).subscribe(() => this.notify(this.translate.instant('editPaymentGateway.configurationUpdated')));
+    operation$.subscribe({
+      next: () => {
+        this.loading = false;
+        this.save.emit();
+      },
+      error: (error) => {
+        this.loading = false;
+        console.error('Error saving payment gateway:', error);
       }
-      this.close();
-    } else {
-      this.isFormValid && console.warn(this.translate.instant('editPaymentGateway.formInvalid'));
-      this.close();
-    }
+    });
   }
 
+  // Legacy support for dialog mode
   public close(): void {
-    this.dialogRef.close()
-  }
-
-  private notify(message: string, panelClass = 'app-notification-success'): void {
-    this.snackBar.open(
-      message,
-      null,
-      {
-        panelClass,
-        duration: 2000
-      }
-    )
-  }
-
-  private isFormUnchanged(): boolean {
-    return JSON.stringify(this.form.getRawValue()) === JSON.stringify(this.initialValues);
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    } else {
+      this.cancel.emit();
+    }
   }
 }

@@ -19,3 +19,4 @@ export * from './email-template';
 export * from './email-log';
 export * from './account.model';
 export * from './country';
+export * from './invoicing-method';

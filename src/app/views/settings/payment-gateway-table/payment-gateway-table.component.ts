@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, OnDestroy, ChangeDetectorRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,18 +9,19 @@ import { BadgeModule, ButtonModule, DropdownModule } from '@coreui/angular';
 import { PaymentGatewayTableConfigService } from './payment-gateway-table-config.service';
 import { BehaviorSubject, switchMap, combineLatest, Observable, Subject, takeUntil, of } from 'rxjs';
 import { PaymentGatewayService } from './payment-gateway.service';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EditPaymentGatewayComponent } from './edit-payment-gateway/edit-payment-gateway.component';
 import { PaymentStrategy } from 'src/app/shared/model/payment-strategies';
 import { GenericTableModule } from 'src/app/shared/components/generic-table/generic-table.module';
 import { ADMIN_PERMISSION, AuthService, TableConfig, Account } from 'src/app/shared';
 import { AccountSelectorComponent } from 'src/app/shared/components/account-selector/account-selector.component';
+import { GenericRightPanelComponent, PanelAction } from 'src/app/shared/components/generic-right-panel/generic-right-panel.component';
 
 @Component({
 	selector: 'app-payment-gateway-table',
 	templateUrl: './payment-gateway-table.component.html',
 	styleUrls: ['./payment-gateway-table.component.scss'],
 	standalone: true,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [
 		CommonModule,
 		GenericTableModule,
@@ -28,12 +29,13 @@ import { AccountSelectorComponent } from 'src/app/shared/components/account-sele
 		MatIconModule,
 		MatButtonModule,
 		MatMenuModule,
-		MatFormFieldModule,		
+		MatFormFieldModule,
 		BadgeModule,
 		ButtonModule,
 		DropdownModule,
-		MatDialogModule,
-		AccountSelectorComponent
+		AccountSelectorComponent,
+		GenericRightPanelComponent,
+		EditPaymentGatewayComponent
 	],
 	providers: [
 		PaymentGatewayTableConfigService,
@@ -43,6 +45,7 @@ import { AccountSelectorComponent } from 'src/app/shared/components/account-sele
 export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	@ViewChild('isActiveFlag') isActiveFlagTemplate: TemplateRef<any>;
 	@ViewChild('isPrimaryFlag') isPrimaryFlagTemplate: TemplateRef<any>;
+	@ViewChild('paymentGatewayFormRef', { static: false }) paymentGatewayFormRef?: EditPaymentGatewayComponent;
 	private unsubscribe$ = new Subject<void>();
 	public isAdmin: boolean;
 	public tableConfig$: BehaviorSubject<TableConfig>;
@@ -50,12 +53,18 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 	public strategyTypes$: Observable<string[]>;
 	public selectedAccount: Account | null = null;
 
+	// Right panel properties
+	public isPanelOpen: boolean = false;
+	public selectedPaymentGateway: PaymentStrategy | null = null;
+	public panelMode: 'create' | 'edit' = 'create';
+	public panelTitle: string = '';
+	public panelActions: PanelAction[] = [];
+
 	constructor(
 		private cdr: ChangeDetectorRef,
 		private tableService: PaymentGatewayTableConfigService,
 		private paymentGatewayService: PaymentGatewayService,
-		private authService: AuthService,
-		private dialog: MatDialog
+		private authService: AuthService
 	) {
 		this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 		this.tableConfig$ = new BehaviorSubject<TableConfig>({
@@ -78,6 +87,9 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 	ngOnInit(): void {
 		if (!this.isAdmin) {
 			this.loadPaymentGateways();
+		} else {
+			// Initialize strategyTypes$ for admin to show create button
+			this.strategyTypes$ = this.paymentGatewayService.getPaymentStrategyTypes();
 		}
 	}
 
@@ -85,7 +97,7 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 		if (this.isActiveFlagTemplate && this.isPrimaryFlagTemplate) {
 			this.tableService.isActiveFlagTemplate = this.isActiveFlagTemplate;
 			this.tableService.isPrimaryFlagTemplate = this.isPrimaryFlagTemplate;
-			
+
 			// Пересоздаем конфигурацию таблицы с новыми templates
 			this.tableConfig$ = this.tableService.getTableConfig();
 			this.cdr.detectChanges();
@@ -126,21 +138,56 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 		);
 	}
 
-	public edit(item: PaymentStrategy): void {
-		const dialogRef = this.dialog.open(EditPaymentGatewayComponent, {
-			width: '650px',
-			data: {
-				...item,
-				accountId: this.selectedAccount?.id
-			}
-		});
+	public openPanel(item: PaymentStrategy | null, mode: 'create' | 'edit' = 'edit'): void {
+		this.selectedPaymentGateway = item;
+		this.panelMode = mode;
 
-		dialogRef.afterClosed()
-			.pipe(takeUntil(this.unsubscribe$))
-			.subscribe(() => {
-				setTimeout(() => {
-					this.loadPaymentGateways(this.selectedAccount?.id);
-				}, 3000);
-			});
+		if (mode === 'create') {
+			this.panelTitle = 'paymentGateway.createNew';
+			this.selectedPaymentGateway = {
+				name: item?.name || '',
+				paymentStrategy: item?.name || '',
+				paymentMethodParameters: {},
+				primary: false
+			};
+		} else {
+			this.panelTitle = 'editPaymentGateway.title';
+		}
+
+		this.isPanelOpen = true;
+		this.cdr.markForCheck();
 	}
-} 
+
+	public onPanelClose(): void {
+		this.isPanelOpen = false;
+		this.selectedPaymentGateway = null;
+		this.cdr.markForCheck();
+	}
+
+	public onPaymentGatewaySaved(): void {
+		this.onPanelClose();
+		setTimeout(() => {
+			this.loadPaymentGateways(this.selectedAccount?.id);
+		}, 1000);
+	}
+
+	public edit(item: PaymentStrategy): void {
+		this.openPanel(item, 'edit');
+	}
+
+	public onToggleStatus(): void {
+		if (this.selectedPaymentGateway?.id) {
+			const status = {
+				id: this.selectedPaymentGateway.id,
+				active: !this.selectedPaymentGateway.isActive
+			};
+
+			this.paymentGatewayService.updateStatus(status).subscribe(() => {
+				if (this.selectedPaymentGateway) {
+					this.selectedPaymentGateway.isActive = !this.selectedPaymentGateway.isActive;
+					this.cdr.markForCheck();
+				}
+			});
+		}
+	}
+}

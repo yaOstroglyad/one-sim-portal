@@ -42,7 +42,9 @@
       "Bash(git push:*)",
       "Bash(git fetch:*)",
       "Bash(timeout 30 npm start)",
-      "Bash(npx ng build:*)"
+      "Bash(npx ng build:*)",
+      "Bash(python3:*)",
+      "Bash(sudo xcodebuild:*)"
     ],
     "deny": []
   }
