@@ -58,7 +58,8 @@ const routes: Routes = [
       {
         path: 'users',
         data: {
-          title: 'nav.users'
+          title: 'nav.users',
+          permissions: [ADMIN_PERMISSION],
         },
         canActivate: [permissionGuard],
         loadComponent: () =>
@@ -115,7 +116,8 @@ const routes: Routes = [
       {
         path: 'roles',
         data: {
-          title: 'nav.roles'
+          title: 'nav.roles',
+          permissions: [ADMIN_PERMISSION],
         },
         loadComponent: () =>
           import('../../views/roles/components/role-list/role-list.component').then((m) => m.RoleListComponent)
