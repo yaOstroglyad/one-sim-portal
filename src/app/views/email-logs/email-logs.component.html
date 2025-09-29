@@ -47,7 +47,7 @@
 </app-header>
 
 <!-- Generic Table -->
-<generic-table
+<generic-table #genericTable
         [config$]="tableConfig$"
         [data$]="dataList$"
         (pageChange)="onPageChange($event)">

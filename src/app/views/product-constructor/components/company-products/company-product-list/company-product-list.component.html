@@ -46,7 +46,8 @@
     </ng-container>
 </app-header>
 
-<generic-table [config$]="tableConfig$"
+<generic-table #genericTable
+               [config$]="tableConfig$"
                [menu]="menuTemplate"
                [data$]="companyProducts$"
                [isRowClickable]="true"

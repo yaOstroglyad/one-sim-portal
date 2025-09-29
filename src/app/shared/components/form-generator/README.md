@@ -4,6 +4,214 @@
 
 FormGenerator is a dynamic form component that creates reactive forms based on configuration objects. It supports various field types, validation, conditional logic, and dynamic data loading.
 
+## 🏗️ **Architecture Standards & Best Practices**
+
+### **Mandatory File Structure Pattern**
+
+When creating forms with form-generator, follow this **required structure**:
+
+```
+component-name/
+├── component-name.component.ts    # Component logic, service injection, submission
+├── component-name.component.html  # Minimal template with <app-form-generator>
+├── component-name.component.scss  # Component-specific styles
+└── component-name.utils.ts        # Form configuration & data transformation
+```
+
+### **🚨 Critical Requirements**
+
+1. **Use `inject()` pattern** - NEVER use constructor injection
+2. **Extract form config to `.utils.ts`** - NEVER inline form configuration
+3. **Standalone components only** - NO NgModules
+4. **OnPush change detection** - Mandatory for performance
+5. **Separate data transformation** - Utils handle form ↔ API conversions
+
+---
+
+## 📋 **Component Implementation Template**
+
+### **1. Component File (`component.ts`)**
+
+```typescript
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormGroup } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+
+import { YourService } from '../../services';
+import { YourModel } from '../../models';
+import { FormGeneratorComponent, FormConfig } from '../../../../shared';
+import { getYourFormConfig, getYourCreateRequest, getYourUpdateRequest } from './your-form.utils';
+
+@Component({
+  selector: 'app-your-form',
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    FormGeneratorComponent
+  ],
+  templateUrl: './your-form.component.html',
+  styleUrls: ['./your-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class YourFormComponent implements OnInit {
+  private yourService = inject(YourService);
+  private cdr = inject(ChangeDetectorRef);
+
+  @Input() item: YourModel | null = null;
+  @Output() save = new EventEmitter<void>();
+
+  formConfig: FormConfig;
+  form: FormGroup;
+  loading = false;
+  isEditMode = false;
+
+  ngOnInit(): void {
+    this.isEditMode = !!this.item;
+    this.formConfig = getYourFormConfig(this.item, this.isEditMode);
+  }
+
+  onFormChanges(form: FormGroup): void {
+    this.form = form;
+    this.cdr.markForCheck();
+  }
+
+  onSubmit(): void {
+    if (!this.form || this.form.invalid || this.loading) return;
+
+    this.loading = true;
+    this.cdr.markForCheck();
+
+    const formValue = this.form.getRawValue();
+
+    const operation$ = this.isEditMode && this.item
+      ? this.yourService.update(this.item.id, getYourUpdateRequest(formValue))
+      : this.yourService.create(getYourCreateRequest(formValue));
+
+    operation$.subscribe({
+      next: () => {
+        this.loading = false;
+        this.save.emit();
+        this.cdr.markForCheck();
+      },
+      error: (error) => {
+        this.loading = false;
+        this.handleError(error);
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  private handleError(error: any): void {
+    console.error('Error saving:', error);
+    // Handle specific API errors (409 conflicts, validation errors, etc.)
+  }
+}
+```
+
+### **2. Template File (`component.html`)**
+
+```html
+<app-form-generator 
+  [config]="formConfig"
+  (formChanges)="onFormChanges($event)">
+</app-form-generator>
+```
+
+### **3. Utils File (`component.utils.ts`)**
+
+```typescript
+import { Validators } from '@angular/forms';
+import { FormConfig, FieldConfig, FieldType } from '../../../../shared';
+import { YourModel, CreateYourRequest, UpdateYourRequest } from '../../models';
+
+/**
+ * Creates form configuration for your form
+ */
+export function getYourFormConfig(item: YourModel | null = null, isEditMode: boolean = false): FormConfig {
+  const fields: FieldConfig[] = [
+    {
+      type: FieldType.text,
+      name: 'name',
+      label: 'your.name',
+      placeholder: 'your.namePlaceholder',
+      value: item?.name || '',
+      disabled: isEditMode, // Disable critical fields in edit mode
+      validators: [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(100)
+      ],
+      hintMessage: !isEditMode ? 'your.nameHint' : undefined
+    },
+    {
+      type: FieldType.textarea,
+      name: 'description',
+      label: 'your.description',
+      placeholder: 'your.descriptionPlaceholder',
+      value: item?.description || '',
+      validators: [
+        Validators.required,
+        Validators.maxLength(500)
+      ]
+    }
+    // Add more fields as needed
+  ];
+
+  return { fields };
+}
+
+/**
+ * Transforms form values to create request
+ */
+export function getYourCreateRequest(formValue: any): CreateYourRequest {
+  return {
+    name: formValue.name,
+    description: formValue.description
+    // Transform other fields as needed
+  };
+}
+
+/**
+ * Transforms form values to update request
+ */
+export function getYourUpdateRequest(formValue: any): UpdateYourRequest {
+  return {
+    description: formValue.description
+    // Usually fewer fields for updates
+  };
+}
+
+/**
+ * Gets initial form values from model
+ */
+export function getYourInitialValues(item: YourModel | null): any {
+  if (!item) {
+    return {
+      name: '',
+      description: ''
+    };
+  }
+
+  return {
+    name: item.name,
+    description: item.description || ''
+  };
+}
+```
+
+### **4. Export Pattern (`index.ts`)**
+
+Always export utilities in component index.ts:
+
+```typescript
+export * from './your-component/your-component.component';
+export * from './your-component/your-component.utils';
+```
+
+---
+
 ## Basic Usage
 
 ```typescript

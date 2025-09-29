@@ -12,16 +12,16 @@ import {
 } from '@angular/core';
 import { FieldConfig, FieldType, FormConfig } from '../../model';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
-import { 
-	createControl, 
-	initDynamicOptionsForField, 
+import {
+	createControl,
+	initDynamicOptionsForField,
 	setupDisabledState,
 	hasFieldHintOrError,
 	shouldShowError,
 	getFormFieldClass
 } from './form-generator.utils';
 import { isFunction } from 'rxjs/internal/util/isFunction';
-import { Subject, merge, combineLatest, BehaviorSubject, Observable } from 'rxjs';
+import { Subject, merge, BehaviorSubject, Observable } from 'rxjs';
 import { takeUntil, startWith, map, distinctUntilChanged } from 'rxjs/operators';
 import { ColorPickerComponent } from '../color-picker/color-picker.component';
 import { CommonModule } from '@angular/common';
@@ -79,7 +79,7 @@ import { FileUploadComponent } from '../file-upload';
 export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 	private unsubscribe$ = new Subject<void>();
 	private fieldsHintState$ = new BehaviorSubject<Record<string, boolean>>({});
-	
+
 	addingItem = false;
 
 	@Input() config: FormConfig;
@@ -170,8 +170,6 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 		return getFormFieldClass(field, this.form);
 	}
 
-
-
 	private initDynamicOptions(): void {
 		this.config.fields.forEach(field => {
 			initDynamicOptionsForField(field, this.form, this.unsubscribe$);
@@ -238,22 +236,6 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 		return field.gridOptions;
 	}
 
-	getFieldOptions(field: FieldConfig): Observable<any[]> | any[] {
-		if (!field.options) {
-			return [];
-		}
-
-		if (Array.isArray(field.options)) {
-			return field.options;
-		}
-
-		if (typeof field.options === 'function') {
-			return field.options(this.form.value);
-		}
-
-		return field.options;
-	}
-
 	getFormArray(fieldName: string): FormArray {
 		return this.form.get(fieldName) as FormArray;
 	}
@@ -270,19 +252,19 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 
 	addArrayItem(fieldName: string, config: any): void {
 		if (this.addingItem) return; // Prevent double clicks
-		
+
 		this.addingItem = true;
 		const formArray = this.getFormArray(fieldName);
 		const itemGroup = this.createArrayItemGroup(config);
-		
+
 		// Add the FormGroup directly
 		formArray.push(itemGroup);
-		
+
 		// Initialize dynamic options for the new item
 		config.itemConfig.fields.forEach((field: FieldConfig) => {
 			initDynamicOptionsForField(field, itemGroup, this.unsubscribe$);
 		});
-		
+
 		// Re-enable button after a short delay
 		setTimeout(() => {
 			this.addingItem = false;
@@ -349,7 +331,7 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 		// Emit an event that parent component can handle
 		// This allows parent to handle the actual upload logic
 		if (field.inputEvent) {
-			field.inputEvent({ type: 'upload', file }, this, field);
+			field.inputEvent({type: 'upload', file}, this, field);
 		}
 	}
 
@@ -363,7 +345,7 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 
 		// Call custom input event handler if provided
 		if (field.inputEvent) {
-			field.inputEvent({ type: 'clear' }, this, field);
+			field.inputEvent({type: 'clear'}, this, field);
 		}
 	}
 

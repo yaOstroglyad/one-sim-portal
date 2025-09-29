@@ -1,13 +1,23 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { Customer, CustomersDataService, CustomerType, TableConfig } from '../../shared';
-import { CustomersTableService } from './customers-table.service';
-import { EditCustomerComponent } from './edit-customer/edit-customer.component';
-import { MatDialog } from '@angular/material/dialog';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import { FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup } from '@angular/forms';
+import {
+  Customer,
+  CustomersDataService,
+  CustomerType,
+  TableConfig,
+  CompaniesDataService,
+  SearchableSelectOption,
+  SmartFilterConfig,
+  AuthService,
+  ADMIN_PERMISSION
+} from '../../shared';
+import { CustomersTableService } from './customers-table.service';
+import { CustomersUtils, CustomersFilterParams } from './customers.utils';
 
 @Component({
 	selector: 'app-customers',
@@ -16,24 +26,28 @@ import { FormControl, FormGroup } from '@angular/forms';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomersComponent implements OnInit, OnDestroy {
+	private cdr = inject(ChangeDetectorRef);
+	private tableService = inject(CustomersTableService);
+	private customersDataService = inject(CustomersDataService);
+	private companiesDataService = inject(CompaniesDataService);
+	private router = inject(Router);
+	private dialog = inject(MatDialog);
+	private snackBar = inject(MatSnackBar);
+	private authService = inject(AuthService);
+
 	protected readonly CustomerType = CustomerType;
 	private unsubscribe$ = new Subject<void>();
+	public isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	public tableConfig$: BehaviorSubject<TableConfig>;
 	public dataList$: Observable<Customer[]>;
 	public filterForm: FormGroup;
-
-	constructor(
-		private cdr: ChangeDetectorRef,
-		private tableService: CustomersTableService,
-		private customersDataService: CustomersDataService,
-		private router: Router,
-		private dialog: MatDialog,
-		private snackBar: MatSnackBar
-	) {
-	}
+	public companyOptions$: Observable<SearchableSelectOption[]>;
+	public smartFilterConfig: SmartFilterConfig;
 
 	public ngOnInit(): void {
 		this.initFormControls();
+		this.initializeCompanyOptions();
+		this.initSmartFilterConfig();
 		this.loadData();
 		this.setupFilters();
 	}
@@ -44,19 +58,12 @@ export class CustomersComponent implements OnInit, OnDestroy {
 	}
 
 	public onPageChange({page, size}: { page: number; size: number }): void {
-		this.loadData({
-			page,
-			size,
-			...this.filterForm.getRawValue()
-		});
+		const params = CustomersUtils.Form.createFilterParams(this.filterForm.getRawValue(), page, size as any);
+		this.loadData(params);
 	}
 
 	public applyFilter(): void {
-		const params = {
-			page: 0,
-			size: 15,
-			...this.filterForm.getRawValue()
-		};
+		const params = CustomersUtils.Form.createFilterParams(this.filterForm.getRawValue());
 		this.loadData(params);
 	}
 
@@ -65,24 +72,15 @@ export class CustomersComponent implements OnInit, OnDestroy {
 	}
 
 	public createCustomer(): void {
-		const dialogRef = this.dialog.open(EditCustomerComponent, {
-			width: '650px',
-			data: {}
-		});
-
-		dialogRef.afterClosed().subscribe(result => {
-			if (result) {
-				this.customersDataService.create(result).subscribe(() => {
-					this.loadData();
-				});
-			}
-		});
+		CustomersUtils.Dialog.openCreateCustomerDialog(
+			this.dialog,
+			this.customersDataService,
+			() => this.loadData()
+		);
 	}
 
 	public openCustomerDetails(customer: Customer): void {
-		if (customer.type.toUpperCase() === CustomerType.Private.toUpperCase()) {
-			this.router.navigate([`home/customers/customer-details/${customer.type}/${customer.id}`]);
-		}
+		CustomersUtils.Navigation.navigateToCustomerDetails(this.router, customer);
 	}
 
 	public resetForm(): void {
@@ -90,46 +88,45 @@ export class CustomersComponent implements OnInit, OnDestroy {
 	}
 
 	private initFormControls(): void {
-		this.filterForm = new FormGroup({
-			iccid: new FormControl(null),
-			name: new FormControl(null),
-			externalId: new FormControl(null),
-			externalTransactionId: new FormControl(null),
-			type: new FormControl(null)
-		});
+		this.filterForm = CustomersUtils.Form.createFilterForm();
 	}
 
 	private setupFilters(): void {
 		this.filterForm.valueChanges.pipe(
-			debounceTime(700),
+			debounceTime(CustomersUtils.CONFIG.FILTER_DEBOUNCE_TIME),
 			takeUntil(this.unsubscribe$)
 		).subscribe(() => {
 			this.applyFilter();
 		});
 	}
 
-	private loadData(params: {
-		page: number;
-		size: number;
-		iccid?: string;
-		name?: string;
-		externalId?: string;
-		externalTransactionId?: string;
-		type?: string
-	} = {page: 0, size: 15}): void {
+	private loadData(params: CustomersFilterParams = CustomersUtils.Form.createFilterParams({})): void {
 		this.customersDataService.paginatedCustomers(params, params.page, params.size)
 			.pipe(takeUntil(this.unsubscribe$))
 			.subscribe(data => {
-				this.tableService.updateConfigData(data?.totalPages || 15);
+				const processedData = CustomersUtils.Data.processCustomersData(data);
+
+				this.tableService.updateConfigData(processedData.totalPages);
 				this.tableConfig$ = this.tableService.getTableConfig();
-				this.dataList$ = of(data.content);
+				this.dataList$ = of(processedData.content);
 				this.cdr.detectChanges();
+
 				if (this.filterForm.dirty) {
-					this.snackBar.open(`Search results loaded successfully. Total elements: ${data.totalElements}`, null, {
-						panelClass: 'app-notification-success',
-						duration: 1000
-					});
+					CustomersUtils.Notification.showSearchResultsNotification(
+						this.snackBar,
+						processedData.totalElements
+					);
 				}
 			});
+	}
+
+	private initializeCompanyOptions(): void {
+		if (this.isAdmin) {
+			this.companyOptions$ = CustomersUtils.Company.createCompanyOptions(this.companiesDataService);
+		}
+	}
+
+	private initSmartFilterConfig(): void {
+		this.smartFilterConfig = CustomersUtils.SmartFilter.create(this.companiesDataService, this.isAdmin);
 	}
 }

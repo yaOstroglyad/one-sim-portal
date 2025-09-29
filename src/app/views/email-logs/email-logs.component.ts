@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +9,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { GenericTableModule, TableConfig, HeaderModule, Account } from '../../shared';
+import { GenericTableComponent } from '../../shared/components/generic-table/generic-table.component';
 import { AccountSelectorComponent } from '../../shared/components/account-selector/account-selector.component';
 import { EmailLogsTableConfigService } from './index';
 import { AuthService, ADMIN_PERMISSION } from '../../shared';
@@ -39,6 +40,8 @@ import { IconDirective } from '@coreui/icons-angular';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmailLogsComponent implements OnInit, OnDestroy {
+  @ViewChild('genericTable') genericTable: GenericTableComponent;
+
   private unsubscribe$ = new Subject<void>();
 
   // Form Controls
@@ -106,7 +109,8 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
 
   public onAccountSelected(account: Account): void {
     this.selectedAccountId = account.id;
-    this.applyFilter();
+    // Reset form (which also resets pagination) when account changes
+    this.resetForm();
   }
 
   public applyFilter(): void {
@@ -141,7 +145,13 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
   }
 
   public resetForm(): void {
+    // Reset pagination directly on the table component
+    if (this.genericTable) {
+      this.genericTable.currentPage = 0;
+    }
+
     this.filterForm?.reset();
+    this.applyFilter();
   }
 
   private loadData(params: {

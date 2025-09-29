@@ -5,7 +5,8 @@ import {
 	AuthService,
 	SPECIAL_PERMISSION,
 	TableConfig,
-	TableConfigAbstractService
+	TableConfigAbstractService,
+	TemplateType
 } from 'src/app/shared';
 import { Customer } from '../../shared';
 
@@ -34,6 +35,7 @@ export class CustomersTableService extends TableConfigAbstractService<Customer> 
 			{visible: true, key: 'type', header: 'type' },
 			{visible: true, key: 'tags', header: 'tags' },
 			{visible: true, key: 'description', header: 'description' },
+			{visible: this.isAdmin, key: 'company.name', header: 'company', templateType: TemplateType.Text },
 		]
 	});
 

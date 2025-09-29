@@ -53,8 +53,8 @@
         <ng-template #textTemplate let-field>
             <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
                 <mat-form-field appearance="outline"
-                               class="w-100"
-                               [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+                                class="w-100"
+                                [hideRequiredMarker]="field.hideRequiredMarker ?? false">
                     <mat-label>{{ field.label | translate }}</mat-label>
                     <input matInput
                            [formControlName]="field.name"
@@ -110,11 +110,11 @@
             </mat-form-field>
         </ng-template>
 
-                <ng-template #email let-field>
+        <ng-template #email let-field>
             <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
                 <mat-form-field appearance="outline"
-                               class="w-100"
-                               [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+                                class="w-100"
+                                [hideRequiredMarker]="field.hideRequiredMarker ?? false">
                     <mat-label>{{ field.label | translate }}</mat-label>
                     <input matInput
                            [formControlName]="field.name"
@@ -138,11 +138,11 @@
             </div>
         </ng-template>
 
-                <ng-template #datePickerTemplate let-field>
+        <ng-template #datePickerTemplate let-field>
             <div [attr.class]="getFormFieldClass(field)">
                 <mat-form-field appearance="outline"
-                               class="full-width"
-                               [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+                                class="full-width"
+                                [hideRequiredMarker]="field.hideRequiredMarker ?? false">
                     <mat-label>{{ field.label | translate }}</mat-label>
                     <input matInput
                            [matDatepicker]="picker"
@@ -163,20 +163,22 @@
         </ng-template>
 
         <ng-template #selectTemplate let-field>
-            <mat-form-field appearance="outline"
-                            [attr.class]="'w-100 ' + getFormFieldClass(field)"
-                            [hideRequiredMarker]="field.hideRequiredMarker ?? false">
-                <mat-label>{{ field.label | translate }}</mat-label>
-                <mat-select [formControlName]="field.name"
-                            (selectionChange)="onInputChange($event, field)"
-                            [multiple]="field.multiple">
-                    <mat-option *ngFor="let option of field.options | async" [value]="option.value">
-                        {{ option.displayValue | translate }}
-                    </mat-option>
-                </mat-select>
+            <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
+                <mat-form-field appearance="outline"
+                                class="w-100"
+                                [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+                    <mat-label>{{ field.label | translate }}</mat-label>
+                    <mat-select [formControlName]="field.name"
+                                (selectionChange)="onInputChange($event, field)"
+                                [multiple]="field.multiple">
+                        <mat-option *ngFor="let option of field.options | async" [value]="option.value">
+                            {{ option.displayValue | translate }}
+                        </mat-option>
+                    </mat-select>
 
+                </mat-form-field>
                 <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </mat-form-field>
+            </div>
         </ng-template>
 
         <ng-template #checkboxTemplate let-field>
@@ -245,12 +247,12 @@
                     {{ field.label | translate }}
                     <span class="text-danger" *ngIf="isRequired(field) && !field.hideRequiredMarker">*</span>
                 </label>
-                
+
                 <app-multiselect-grid
-                    [options]="getGridOptions(field)"
-                    [config]="field.gridConfig || {}"
-                    [placeholder]="field.placeholder | translate"
-                    [formControlName]="field.name">
+                        [options]="getGridOptions(field)"
+                        [config]="field.gridConfig || {}"
+                        [placeholder]="field.placeholder | translate"
+                        [formControlName]="field.name">
                 </app-multiselect-grid>
 
                 <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
@@ -263,37 +265,37 @@
                     {{ field.label | translate }}
                     <span class="text-danger" *ngIf="isRequired(field) && !field.hideRequiredMarker">*</span>
                 </label>
-                
+
                 <div class="form-array-container" [formArrayName]="field.name">
-                    <div *ngFor="let item of getFormArray(field.name).controls; let i = index; trackBy: trackByIndex" 
+                    <div *ngFor="let item of getFormArray(field.name).controls; let i = index; trackBy: trackByIndex"
                          class="form-array-item"
                          [formGroupName]="i">
-                        
+
                         <div class="item-header" *ngIf="field.arrayConfig?.itemLabel">
                             <span class="item-label">{{ field.arrayConfig.itemLabel(i) }}</span>
                             <button
-                                *ngIf="canRemoveArrayItem(field)"
-                                type="button"
-                                class="btn btn-sm btn-ghost-danger"
-                                (click)="removeArrayItem(field.name, i)"
-                                [title]="field.arrayConfig?.removeButtonText || 'Remove'">
+                                    *ngIf="canRemoveArrayItem(field)"
+                                    type="button"
+                                    class="btn btn-sm btn-ghost-danger"
+                                    (click)="removeArrayItem(field.name, i)"
+                                    [title]="field.arrayConfig?.removeButtonText || 'Remove'">
                                 <svg cIcon name="cilTrash" width="16" height="16"></svg>
                             </button>
                         </div>
 
                         <div class="item-content">
-                            <app-form-array-item 
-                                [itemFormGroup]="$any(getFormArray(field.name).at(i))"
-                                [fields]="field.arrayConfig!.itemConfig.fields">
+                            <app-form-array-item
+                                    [itemFormGroup]="$any(getFormArray(field.name).at(i))"
+                                    [fields]="field.arrayConfig!.itemConfig.fields">
                             </app-form-array-item>
                         </div>
 
                         <button
-                            *ngIf="!field.arrayConfig?.itemLabel && canRemoveArrayItem(field)"
-                            type="button"
-                            class="btn btn-sm btn-ghost-danger mt-2"
-                            (click)="removeArrayItem(field.name, i)"
-                            [title]="field.arrayConfig?.removeButtonText || 'Remove'">
+                                *ngIf="!field.arrayConfig?.itemLabel && canRemoveArrayItem(field)"
+                                type="button"
+                                class="btn btn-sm btn-ghost-danger mt-2"
+                                (click)="removeArrayItem(field.name, i)"
+                                [title]="field.arrayConfig?.removeButtonText || 'Remove'">
                             <svg cIcon name="cilTrash" width="16" height="16"></svg>
                             <span class="ms-1">{{ field.arrayConfig?.removeButtonText || 'Remove' }}</span>
                         </button>
@@ -304,11 +306,11 @@
                     </div>
 
                     <button
-                        *ngIf="canAddArrayItem(field)"
-                        type="button"
-                        class="btn btn-outline-primary mt-3"
-                        (click)="addArrayItem(field.name, field.arrayConfig!)"
-                        [disabled]="addingItem">
+                            *ngIf="canAddArrayItem(field)"
+                            type="button"
+                            class="btn btn-outline-primary mt-3"
+                            (click)="addArrayItem(field.name, field.arrayConfig!)"
+                            [disabled]="addingItem">
                         <svg cIcon name="cilPlus" width="16" height="16"></svg>
                         <span class="ms-1">{{ field.arrayConfig?.addButtonText || 'Add Item' }}</span>
                     </button>
@@ -324,13 +326,13 @@
                     {{ field.label | translate }}
                     <span *ngIf="!field.hideRequiredMarker && isFieldRequired(field)" class="text-danger">*</span>
                 </label>
-                
+
                 <app-file-upload
-                    [config]="getFileUploadConfig(field)"
-                    [disabled]="field.disabled || false"
-                    (fileSelected)="onFileSelected($event, field)"
-                    (uploadRequested)="onFileUploadRequested($event, field)"
-                    (fileCleared)="onFileCleared(field)">
+                        [config]="getFileUploadConfig(field)"
+                        [disabled]="field.disabled || false"
+                        (fileSelected)="onFileSelected($event, field)"
+                        (uploadRequested)="onFileUploadRequested($event, field)"
+                        (fileCleared)="onFileCleared(field)">
                 </app-file-upload>
 
                 <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>

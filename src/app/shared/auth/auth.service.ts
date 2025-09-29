@@ -7,15 +7,10 @@ import { catchError, map, takeUntil, tap } from 'rxjs/operators';
 import { LoginRequest, LoginResponse } from '../model';
 import { Router } from '@angular/router';
 
-export const ADMIN_PERMISSION = 'adminAccess';
-export const SPECIAL_PERMISSION = 'specialAccess';
-export const CUSTOMER_PERMISSION = 'customerAccess';
-export const SUPPORT_PERMISSION = 'supportAccess';
-//TODO mb Arrays will be removed later
-export const ARRAY_OF_ADMIN_PERMISSIONS = [ADMIN_PERMISSION];
-export const ARRAY_OF_SPECIAL_PERMISSIONS = [SPECIAL_PERMISSION];
-export const ARRAY_OF_CUSTOMER_PERMISSIONS = [CUSTOMER_PERMISSION];
-export const ARRAY_OF_SUPPORT_PERMISSIONS = [SUPPORT_PERMISSION];
+export const ADMIN_PERMISSION = 'ADMIN';
+export const SPECIAL_PERMISSION = 'SPECIAL';
+export const CUSTOMER_PERMISSION = 'CUSTOMER';
+export const SUPPORT_PERMISSION = 'SUPPORT';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -33,74 +28,22 @@ export class AuthService {
 	reLoginTimeout: any;
 
 	get loggedUser() {
-    const loginResponse = this.$SessionStorageService.retrieve('loginResponse')
-      || this.$LocalStorageService.retrieve('loginResponse');
+		const loginResponse = this.$SessionStorageService.retrieve('loginResponse')
+			|| this.$LocalStorageService.retrieve('loginResponse');
 
-    if (loginResponse?.token) {
-      return this.jwtHelper.decodeToken(loginResponse.token);
-    }
+		if (loginResponse?.token) {
+			return this.jwtHelper.decodeToken(loginResponse.token);
+		}
 
-    return null;
+		return null;
 	}
 
 	loadPermissions(): Observable<string[]> {
-		// return this.http.get<string[]>('/api/permissions').pipe(
-		//   tap(permissions => {
-		//     this.permissions = permissions;
-		//   }),
-		//   catchError(() => {
-		const admins = [
-			'admin'
-		];
-		const special = [
-			'daniel@1-esim.com',
-			'vb@venturebot.fund'
-		];
-		const customers = [
-			'anex@mail.com',
-			'welcome@intourist.com',
-			'sergey.tepkeev@anextour.com',
-			'daniel-1esim',
-			'vasily@1-esim.com',
-			'vb@venturebot.fund',
-			'esimrb@anextour.com',
-			'daniel.goldberg.dg+4@gmail.com',
-			'harriet-travels@1-esim.com',
-			'harriet-travels',
-			'wecom@gmail.com',
-			'wecom-support',
-			'Intourist',
-			'wecom',
-			'seamless-travel-support',
-			'intourist-support',
-			'wander-world-travel-support',
-			'adysally@gmail.com',
-			'adysally+1@gmail.com',
-			'david+fantasticvacations@1-esim.com',
-			'anneke.geldenhuys@optimavibe.co.za'
-		];
-		const support = [];
-		const loggedUser = this.loggedUser;
-
-		if (loggedUser) {
-			if (admins.includes(loggedUser.preferred_username) || admins.includes(loggedUser.email)) {
-				this.permissions = [...ARRAY_OF_ADMIN_PERMISSIONS];
-			} else if (special.includes(loggedUser.preferred_username) || special.includes(loggedUser.email)) {
-				this.permissions = [...ARRAY_OF_SPECIAL_PERMISSIONS, ...ARRAY_OF_CUSTOMER_PERMISSIONS];
-			} else if (customers.includes(loggedUser.preferred_username) || customers.includes(loggedUser.email)) {
-				this.permissions = [...ARRAY_OF_CUSTOMER_PERMISSIONS];
-			} else if (support.includes(loggedUser.preferred_username) || support.includes(loggedUser.email)) {
-				this.permissions = [...ARRAY_OF_SUPPORT_PERMISSIONS];
-			} else {
-				this.permissions = [...ARRAY_OF_SUPPORT_PERMISSIONS];
-			}
-		} else {
-			this.permissions = [...ARRAY_OF_SUPPORT_PERMISSIONS];
-		}
-
-		return of([]);
-		//   })
-		// );
+		return this.http.get<{ id: string; name: string; displayName: string }[]>('/api/v1/users/roles')
+			.pipe(
+				map(res => res.map(role => role.name)),
+				tap(roles => this.permissions = roles)
+			);
 	}
 
 	hasPermission(permission: string): boolean {

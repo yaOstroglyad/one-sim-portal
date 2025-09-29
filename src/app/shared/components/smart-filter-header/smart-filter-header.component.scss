@@ -1,0 +1,206 @@
+@import "../../../../scss/variables";
+@import "../../../../scss/utilities";
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  //gap: 0.75rem;
+  flex-wrap: wrap;
+
+  // Адаптивность для мобильных устройств
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    .filter-chips-container {
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .filters-button-container {
+      align-self: flex-end;
+      margin-left: 0;
+    }
+  }
+}
+
+.filters-button-container {
+  display: flex;
+  align-items: center;
+  margin-left: auto; // Прижать к правой стороне
+}
+
+.filters-button {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.filter-chips-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex: 1; // Занимать доступное пространство слева
+  max-width: calc(100% - 120px); // Оставить место для кнопки
+}
+
+.empty-filters {
+  display: flex;
+  align-items: center;
+  flex: 1;
+
+  .text-muted {
+    font-size: 0.875rem;
+    font-style: italic;
+    color: var(--cui-secondary);
+  }
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 200px;
+  font-size: 0.75rem;
+
+  .chip-content {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    overflow: hidden;
+  }
+
+  .chip-label {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .chip-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100px;
+  }
+
+  .chip-remove {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0;
+    margin-left: 0.25rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s ease-in-out;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &.overflow-chip {
+    cursor: help;
+
+    &:hover {
+      background-color: var(--os-color-secondary-shade);
+    }
+  }
+
+  // Стили для не удаляемых чипов
+  &.non-removable {
+    .chip-content {
+      padding-right: 0.25rem; // Компенсируем отсутствие кнопки удаления
+    }
+  }
+}
+
+.overflow-chip-wrapper {
+  display: inline-flex;
+  cursor: help;
+}
+
+.advanced-filters-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  padding: 1rem 0;
+
+  // Убираем gap для последнего элемента
+  > *:last-child {
+    margin-bottom: 0;
+  }
+
+  // Адаптивность для мобильных устройств
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+// Стили для элементов формы внутри панели
+.advanced-filters-content {
+  :global {
+    input[cFormControl],
+    select[cSelect],
+    app-searchable-select {
+      width: 100%;
+      margin-bottom: 0;
+    }
+
+    // Группировка связанных полей
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-weight: 500;
+        font-size: 0.875rem;
+        color: var(--os-color-dark);
+        margin-bottom: 0.25rem;
+      }
+    }
+  }
+}
+
+// Анимации
+.filter-chip {
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Темная тема
+@media (prefers-color-scheme: dark) {
+  .filter-chip {
+    .chip-label {
+      color: var(--os-color-light);
+    }
+  }
+
+  .advanced-filters-content {
+    :global {
+      label {
+        color: var(--os-color-light);
+      }
+    }
+  }
+}

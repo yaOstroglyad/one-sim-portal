@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { DataService } from './data.service';
 import { Company } from '../model';
+import { CacheHubService, DataType } from './cache-hub';
 
 @Injectable({
 	providedIn: 'root'
@@ -10,23 +11,35 @@ import { Company } from '../model';
 export class CompaniesDataService extends DataService<Company> {
 	private apiUrl = '/api/v1/companies/query/all';
 
-	constructor(public http: HttpClient) {
+	constructor(
+		public http: HttpClient,
+		private cacheHub: CacheHubService
+	) {
 		super(http, '/api/v1/companies');
 	}
 
 	list(): Observable<Company[]> {
-		let params = new HttpParams();
-
-		return this.http.get<Company[]>(this.apiUrl, {params}).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
+		return this.cacheHub.get(
+			'companies:list',
+			() => {
+				let params = new HttpParams();
+				return this.http.get<Company[]>(this.apiUrl, {params}).pipe(
+					catchError(() => {
+						console.warn('error happened, presenting mocked data');
+						return of([]);
+					})
+				);
+			},
+			{ dataType: DataType.REFERENCE }
 		);
 	}
 
 	create(company: Company): Observable<any> {
 		return this.http.post<any>(`/api/v1/companies/command/create`, company).pipe(
+			tap(() => {
+				// Invalidate companies list cache after creation
+				this.cacheHub.invalidate('companies:list');
+			}),
 			catchError(() => {
 				console.warn('error happened, presenting mocked data');
 				return of([]);

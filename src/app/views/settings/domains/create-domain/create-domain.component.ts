@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { getDomainCreateRequest, getCreateDomainFormConfig } from './create-domain.utils';
-import { FormConfig, FormGeneratorModule } from '../../../../shared';
-import { DomainsDataService } from '../../../../shared/services/domains-data.service';
+import {
+	FormConfig, FormGeneratorModule, AccountsDataService,
+	WhiteLabelDataService, DomainsDataService
+} from '../../../../shared';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
-import { AccountsDataService } from '../../../../shared/services/accounts-data.service';
-import { WhiteLabelDataService } from '../../../../shared/services/white-label-data.service';
 
 @Component({
 	selector: 'app-create-domain',
@@ -34,11 +34,11 @@ export class CreateDomainComponent implements OnInit {
 		private domainsDataService: DomainsDataService,
 		private accountsDataService: AccountsDataService,
 		private whiteLabelDataService: WhiteLabelDataService
-	) {}
+	) {
+	}
 
 	ngOnInit() {
 		this.formConfig = getCreateDomainFormConfig(
-			this.domainsDataService,
 			this.accountsDataService,
 			this.whiteLabelDataService
 		);

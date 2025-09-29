@@ -1,11 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { TableConfig, TableConfigAbstractService, TemplateType, User } from 'src/app/shared';
+import {
+  TableConfig,
+  TableConfigAbstractService,
+  TemplateType,
+  User
+} from '../../../shared';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersTableService extends TableConfigAbstractService<User> {
+  userRolesTemplate: TemplateRef<any>;
+  
   public originalDataSubject = new BehaviorSubject<User[]>([]);
   public dataList$: Observable<User[]> = this.originalDataSubject.asObservable();
   public tableConfigSubject = new BehaviorSubject<TableConfig>({
@@ -24,23 +31,10 @@ export class UsersTableService extends TableConfigAbstractService<User> {
       { visible: true, templateType: TemplateType.Text, key: 'accountInfo.externalId', header: 'externalId' },
       { visible: true, templateType: TemplateType.Text, key: 'accountInfo.type', header: 'accountType' },
       { visible: true, key: 'name', header: 'name' },
-      { visible: true, key: 'email', header: 'email' }
+      { visible: true, key: 'email', header: 'email' },
+      { visible: true, templateType: TemplateType.Custom, key: 'roles', header: 'roles', customTemplate: () => this.userRolesTemplate }
     ]
   });
-
-  // "id": "9b3e9dcd-e55f-4861-b85e-1603a836baa1",
-  // "name": "ILYA KOROLKOV",
-  // "loginName": "29935961",
-  // "email": "mplaneta-tour@yandex.ru",
-  // "phone": "+79109495261",
-  // "createdAt": "2024-12-28T05:30:52.236639Z",
-  // "createdBy": "anexit",
-  // "accountInfo": {
-  //   "id": "035a1d27-0dcf-41cb-96e8-80d512353888",
-  //   "name": "KOROLKOV ILYA",
-  //   "type": "CUSTOMER",
-  //   "externalId": "29935961"
-  // }
 
   constructor() {
     super();
@@ -48,5 +42,9 @@ export class UsersTableService extends TableConfigAbstractService<User> {
 
   public updateTableData(data: User[]): void {
     this.originalDataSubject.next(data);
+  }
+
+  public setUserRolesTemplate(template: TemplateRef<any>): void {
+    this.userRolesTemplate = template;
   }
 }

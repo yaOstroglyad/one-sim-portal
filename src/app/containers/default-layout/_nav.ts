@@ -57,6 +57,12 @@ export const navItems: any[] = [
 		permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION]
 	},
 	{
+		name: 'nav.roles',
+		url: 'roles',
+		iconComponent: {name: 'cil-shield-alt'},
+		permissions: [ADMIN_PERMISSION]
+	},
+	{
 		name: 'nav.tickets',
 		url: '/home/tickets',
 		iconComponent: {name: 'cil-speech'},

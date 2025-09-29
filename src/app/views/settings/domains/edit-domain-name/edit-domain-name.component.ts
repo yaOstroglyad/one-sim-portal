@@ -48,7 +48,12 @@ export class EditDomainNameComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      this.dialogRef.close(this.form.value);
+      const formValue = this.form.value;
+      const trimmedValue = {
+        ...formValue,
+        name: formValue.name?.trim()
+      };
+      this.dialogRef.close(trimmedValue);
     }
   }
 

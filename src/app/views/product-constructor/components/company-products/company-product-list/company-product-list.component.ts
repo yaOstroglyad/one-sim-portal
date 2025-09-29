@@ -10,6 +10,7 @@ import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { CompanyProductDetailsComponent } from '../company-product-details/company-product-details.component';
 import { CompanyProductFormComponent } from '../company-product-form/company-product-form.component';
 import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
+import { GenericTableComponent } from '../../../../../shared/components/generic-table/generic-table.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -62,6 +63,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   @ViewChild('statusTemplate', { static: true }) statusTemplate: TemplateRef<any>;
   @ViewChild('providerTemplate', { static: true }) providerTemplate: TemplateRef<any>;
   @ViewChild('basePriceTemplate', { static: true }) basePriceTemplate: TemplateRef<any>;
+  @ViewChild('genericTable') genericTable: GenericTableComponent;
 
   companyProducts$: Observable<CompanyProduct[]>;
   tableConfig$: BehaviorSubject<TableConfig>;
@@ -251,6 +253,11 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   }
 
   resetForm(): void {
+    // Reset pagination directly on the table component
+    if (this.genericTable) {
+      this.genericTable.currentPage = 0;
+    }
+
     // For admins, keep the selected account when resetting other filters
     if (this.isAdmin && this.selectedAccountId) {
       this.filterForm.reset({ accountId: this.selectedAccountId });
@@ -267,6 +274,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     if (!this.isAdmin) {
       delete formValues.accountId;
     }
+
     const params = {
       page: 0,
       size: 15,
@@ -428,6 +436,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
       this.cdr.markForCheck();
     }
 
-    this.applyFilter();
+    // Reset form (which also resets pagination) when account changes
+    this.resetForm();
   }
 }

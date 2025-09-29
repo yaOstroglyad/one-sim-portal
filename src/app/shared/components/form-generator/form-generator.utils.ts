@@ -1,4 +1,4 @@
-import { FormControl, FormGroup, FormArray, FormBuilder, AbstractControl } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
 import { FieldConfig, FieldType } from '../../model';
 import { combineLatest, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -7,7 +7,7 @@ export function createControl(field: FieldConfig): AbstractControl {
 	if (field.type === FieldType.formArray) {
 		const fb = new FormBuilder();
 		const array = fb.array([] as AbstractControl[], field.validators);
-		
+
 		// Initialize with default items
 		if (field.value && Array.isArray(field.value)) {
 			field.value.forEach((item: any) => {
@@ -21,10 +21,10 @@ export function createControl(field: FieldConfig): AbstractControl {
 				array.push(itemGroup);
 			}
 		}
-		
+
 		return array;
 	}
-	
+
 	const { value, disabled, validators, asyncValidators } = field;
 	return new FormControl({ value, disabled }, validators, asyncValidators);
 }
@@ -284,12 +284,12 @@ export function initDynamicOptionsForField(
 	const validControls = field.dependsOnValue
 		.map(dep => form.get(dep))
 		.filter(control => control !== null);
-	
+
 	if (validControls.length === 0) {
 		console.warn(`No valid form controls found for dependencies: ${field.dependsOnValue.join(', ')}`);
 		return;
 	}
-	
+
 	const combined$ = combineLatest(
 		validControls.map(control => control!.valueChanges)
 	);

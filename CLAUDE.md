@@ -202,6 +202,42 @@ The HTTP interceptor automatically:
 - Redirects to login on 401 errors
 - Located at `src/app/shared/auth/httpInspector.service.ts`
 
+### CacheHubService Usage
+
+**CRITICAL: Cache Invalidation Pattern Rules**
+
+When using CacheHubService, cache keys include namespace prefixes. Always match invalidation patterns with full keys:
+
+#### ❌ WRONG - Missing namespace:
+```typescript
+// Cache key: "default:users:page-0-15-active"
+this.cacheHub.invalidatePattern('users:page-*'); // WON'T WORK!
+```
+
+#### ✅ CORRECT - Include namespace:
+```typescript
+// Cache key: "default:users:page-0-15-active"  
+this.cacheHub.invalidatePattern('default:users:page-*'); // WORKS!
+```
+
+#### Best Practices:
+1. **Always log cache keys during development** to see the actual format
+2. **Include namespace in invalidation patterns**: `default:resource:*` not `resource:*`
+3. **Use consistent naming**: `resource:page-{page}-{size}-{filters}`
+4. **Test cache invalidation** after CRUD operations to ensure data refresh
+
+#### Example Service Pattern:
+```typescript
+createUser(user: CreateUserRequest): Observable<User> {
+  return this.http.post<User>('/api/users', user).pipe(
+    tap(() => {
+      // Include namespace in pattern!
+      this.cacheHub.invalidatePattern('default:users:page-*');
+    })
+  );
+}
+```
+
 ### Generic Table Usage
 Most list views use `GenericTableComponent`:
 - Configured via `tableConfig` object

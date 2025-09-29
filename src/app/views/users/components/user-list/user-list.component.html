@@ -1,0 +1,260 @@
+<app-header class="os-header-sticky"
+            [formGroup]="filterForm"
+            [tableConfig$]="tableConfig$"
+            (onAddAction)="createUser()"
+            (columnSelectionChange)="onColumnSelectionChanged($event)">
+    <ng-container header-custom-inputs>
+        <input cFormControl formControlName="searchQuery" [type]="'text'" placeholder="Search users">
+        <button cButton
+                color="secondary"
+                [disabled]="filterForm.pristine"
+                (click)="resetForm()">
+            <svg cIcon name="cilReload"></svg>
+        </button>
+    </ng-container>
+</app-header>
+<generic-table [config$]="tableConfig$"
+               [menu]="menuTemplate"
+               [data$]="dataList$"
+               (pageChange)="onPageChange($event)"></generic-table>
+
+<ng-template #menuTemplate let-item>
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item
+                (click)="editUser(item)"
+                [disabled]="!canEditUser(item)">
+            <mat-icon>edit</mat-icon>
+            <span>{{ 'common.edit' | translate }}</span>
+        </button>
+        <button mat-menu-item
+                (click)="assignRoles(item)"
+                [disabled]="!canManageRoles(item)">
+            <mat-icon>add_circle</mat-icon>
+            <span>{{ 'users.assignRoles' | translate }}</span>
+        </button>
+        <button mat-menu-item
+                (click)="removeRoles(item)"
+                [disabled]="!canManageRoles(item)">
+            <mat-icon>remove_circle</mat-icon>
+            <span>{{ 'users.removeRoles' | translate }}</span>
+        </button>
+<!--        <button mat-menu-item -->
+<!--                (click)="resetPassword(item)"-->
+<!--                [disabled]="!canResetPassword(item)">-->
+<!--            <mat-icon>lock_reset</mat-icon>-->
+<!--            <span>{{ 'user.resetPassword' | translate }}</span>-->
+<!--        </button>-->
+<!--        <button mat-menu-item-->
+<!--                (click)="deleteUser(item)"-->
+<!--                [disabled]="!canDeleteUser(item)"-->
+<!--                class="text-danger">-->
+<!--            <mat-icon>delete</mat-icon>-->
+<!--            <span>{{ 'common.delete' | translate }}</span>-->
+<!--        </button>-->
+    </mat-menu>
+</ng-template>
+
+<ng-template #userRolesTemplate let-data='context'>
+    <div class="roles-display">
+        <span *ngIf="!data?.roles || data.roles.length === 0" class="text-muted">
+            {{ 'users.noRoles' | translate }}
+        </span>
+        <div *ngIf="data?.roles && data.roles.length > 0" class="roles-list">
+            <span *ngFor="let role of data.roles; let last = last" class="role-item">
+                {{ role.displayName || role.name }}<span *ngIf="!last">, </span>
+            </span>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Create Panel -->
+<app-generic-right-panel
+        *ngIf="showCreatePanel"
+        title="{{ 'users.createTitle' | translate }}"
+        subtitle="{{ 'users.createSubtitle' | translate }}"
+        [isOpen]="showCreatePanel"
+        [hasFooter]="true"
+        (close)="onPanelClose()">
+
+    <div panel-content>
+        <app-user-form
+            #createForm
+            [user]="null"
+            (save)="onUserSaved()">
+        </app-user-form>
+    </div>
+
+    <ng-container panel-actions>
+        <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="onPanelClose()">
+            {{ 'common.cancel' | translate }}
+        </button>
+        <button
+                type="button"
+                class="btn btn-primary"
+                (click)="createForm.onSubmit()"
+                [disabled]="createForm.loading || createForm.userForm?.invalid">
+            <span *ngIf="createForm.loading" class="spinner-border spinner-border-sm me-2" role="status"
+                  aria-hidden="true"></span>
+            {{ 'users.create' | translate }}
+        </button>
+    </ng-container>
+
+</app-generic-right-panel>
+
+<!-- Edit Panel -->
+<app-generic-right-panel
+        *ngIf="showEditPanel && selectedUser"
+        title="{{ 'users.editTitle' | translate }}"
+        subtitle="{{ 'users.editSubtitle' | translate }}"
+        [isOpen]="showEditPanel"
+        [hasFooter]="true"
+        (close)="onPanelClose()">
+
+    <div panel-content>
+        <app-user-form
+            #editForm
+            [user]="selectedUser"
+            (save)="onUserSaved()">
+        </app-user-form>
+    </div>
+
+    <ng-container panel-actions>
+        <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="onPanelClose()">
+            {{ 'common.cancel' | translate }}
+        </button>
+        <button
+                type="button"
+                class="btn btn-primary"
+                (click)="editForm.onSubmit()"
+                [disabled]="editForm.loading || editForm.userForm?.invalid">
+            <span *ngIf="editForm.loading" class="spinner-border spinner-border-sm me-2" role="status"
+                  aria-hidden="true"></span>
+            {{ 'users.update' | translate }}
+        </button>
+    </ng-container>
+
+</app-generic-right-panel>
+
+<!-- Assign Roles Panel -->
+<app-generic-right-panel
+        *ngIf="showAssignRolesPanel && selectedUser"
+        title="{{ 'users.assignRolesToUser' | translate }}"
+        subtitle="{{ 'users.selectRolesToAssign' | translate }}"
+        [isOpen]="showAssignRolesPanel"
+        [hasFooter]="true"
+        (close)="onPanelClose()">
+
+    <div panel-content>
+        <app-role-management-form
+            #assignRoleForm
+            [availableRoles]="availableRoles"
+            [selectedRoleIds]="[]"
+            [mode]="'assign'">
+        </app-role-management-form>
+    </div>
+
+    <ng-container panel-actions>
+        <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="onPanelClose()">
+            {{ 'common.cancel' | translate }}
+        </button>
+        <button
+                type="button"
+                class="btn btn-primary"
+                (click)="onConfirmAssignRoles()"
+                [disabled]="assignRoleForm?.loading || !assignRoleForm?.hasSelectedRoles()">
+            <span *ngIf="assignRoleForm?.loading" class="spinner-border spinner-border-sm me-2" role="status"
+                  aria-hidden="true"></span>
+            {{ 'users.assignRoles' | translate }}
+        </button>
+    </ng-container>
+
+</app-generic-right-panel>
+
+<!-- Remove Roles Panel -->
+<app-generic-right-panel
+        *ngIf="showRemoveRolesPanel && selectedUser"
+        title="{{ 'users.removeRolesFromUser' | translate }}"
+        subtitle="{{ 'users.selectRolesToRemove' | translate }}"
+        [isOpen]="showRemoveRolesPanel"
+        [hasFooter]="true"
+        (close)="onPanelClose()">
+
+    <div panel-content>
+        <app-role-management-form
+            #removeRoleForm
+            [availableRoles]="userRoles"
+            [selectedRoleIds]="[]"
+            [mode]="'remove'">
+        </app-role-management-form>
+    </div>
+
+    <ng-container panel-actions>
+        <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="onPanelClose()">
+            {{ 'common.cancel' | translate }}
+        </button>
+        <button
+                type="button"
+                class="btn btn-danger"
+                (click)="onConfirmRemoveRoles()"
+                [disabled]="removeRoleForm?.loading || !removeRoleForm?.hasSelectedRoles()">
+            <span *ngIf="removeRoleForm?.loading" class="spinner-border spinner-border-sm me-2" role="status"
+                  aria-hidden="true"></span>
+            {{ 'users.removeRoles' | translate }}
+        </button>
+    </ng-container>
+
+</app-generic-right-panel>
+
+<!-- Delete Confirmation Panel -->
+<app-generic-right-panel
+        *ngIf="showDeletePanel && selectedUser"
+        title="{{ 'users.deleteTitle' | translate }}"
+        subtitle="{{ 'users.deleteSubtitle' | translate }}"
+        [isOpen]="showDeletePanel"
+        [hasFooter]="true"
+        (close)="onPanelClose()">
+
+    <div panel-content>
+        <app-delete-confirmation
+            [config]="{
+              itemName: selectedUser.name,
+              itemType: 'User',
+              title: ('users.deleteTitle' | translate),
+              message: ('users.deleteMessage' | translate: { name: selectedUser.name })
+            }"
+            (confirm)="onConfirmDelete()"
+            (cancel)="onPanelClose()">
+        </app-delete-confirmation>
+    </div>
+
+    <ng-container panel-actions>
+        <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="onPanelClose()">
+            {{ 'common.cancel' | translate }}
+        </button>
+        <button
+                type="button"
+                class="btn btn-danger"
+                (click)="onConfirmDelete()">
+            {{ 'users.delete' | translate }}
+        </button>
+    </ng-container>
+
+</app-generic-right-panel>

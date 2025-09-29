@@ -1,13 +1,54 @@
 <app-header class="os-header-sticky"
-            [formGroup]="filterForm"
             [tableConfig$]="tableConfig$"
             (onAddAction)="createCustomer()"
             (columnSelectionChange)="onColumnSelectionChanged($event)">
     <ng-container header-custom-inputs>
-        <input cFormControl formControlName="name" [type]="'text'" placeholder="{{ 'customer.name' | translate }}">
-        <input cFormControl formControlName="iccid" [type]="'text'" placeholder="{{ 'customer.iccid' | translate }}">
-        <input cFormControl formControlName="externalId" [type]="'text'" placeholder="{{ 'customer.externalId' | translate }}">
-        <input cFormControl formControlName="externalTransactionId" [type]="'text'" placeholder="{{ 'customer.externalTransactionId' | translate }}">
+        <app-smart-filter-header
+            [formGroup]="filterForm"
+            [config]="smartFilterConfig"
+            (resetFilters)="resetForm()">
+
+            <ng-template #advancedFilters>
+                <div *ngIf="isAdmin" class="form-group">
+                    <label for="companyId">{{ 'customer.company' | translate }}</label>
+                    <app-searchable-select
+                            id="companyId"
+                            [options]="companyOptions$ | async"
+                            [config]="{
+                                    placeholder: ('company.name' | translate),
+                                    searchPlaceholder: ('common.search' | translate) + '...',
+                                    noResultsText: ('common.noResultsFound' | translate),
+                                    clearable: true,
+                                    searchable: true
+                                }"
+                            formControlName="companyId"
+                            class="w-100">
+                    </app-searchable-select>
+                </div>
+
+                <div class="form-group">
+                    <label for="name">{{ 'customer.name' | translate }}</label>
+                    <input id="name" cFormControl formControlName="name" [type]="'text'" placeholder="{{ 'customer.name' | translate }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="iccid">{{ 'customer.iccid' | translate }}</label>
+                    <input id="iccid" cFormControl formControlName="iccid" [type]="'text'" placeholder="{{ 'customer.iccid' | translate }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="externalId">{{ 'customer.externalId' | translate }}</label>
+                    <input id="externalId" cFormControl formControlName="externalId" [type]="'text'" placeholder="{{ 'customer.externalId' | translate }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="externalTransactionId">{{ 'customer.externalTransactionId' | translate }}</label>
+                    <input id="externalTransactionId" cFormControl formControlName="externalTransactionId" [type]="'text'" placeholder="{{ 'customer.externalTransactionId' | translate }}">
+                </div>
+            </ng-template>
+
+        </app-smart-filter-header>
+
         <button cButton
                 color="secondary"
                 [disabled]="filterForm.pristine"

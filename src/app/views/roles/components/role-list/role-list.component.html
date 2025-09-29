@@ -1,0 +1,162 @@
+<app-header class="os-header-sticky"
+            [formGroup]="filterForm"
+            [tableConfig$]="tableConfig$"
+            (onAddAction)="onCreateNew()"
+            (columnSelectionChange)="onColumnSelectionChanged($event)">
+    <ng-container header-custom-inputs>
+        <input cFormControl
+               formControlName="category"
+               type="text"
+               placeholder="{{ 'roles.categoryPlaceholder' | translate }}">
+
+        <button cButton
+                color="secondary"
+                [disabled]="filterForm.pristine"
+                (click)="resetForm()"
+                class="reset-button">
+            <svg cIcon name="cilReload"></svg>
+        </button>
+    </ng-container>
+</app-header>
+
+<generic-table #genericTable
+               [config$]="tableConfig$"
+               [menu]="menuTemplate"
+               [data$]="roles$"
+               [isRowClickable]="false"
+               (pageChange)="onPageChange($event)">
+</generic-table>
+
+<ng-template #menuTemplate let-item>
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item 
+                (click)="onEdit(item)"
+                [disabled]="!canEditRole(item)">
+            <mat-icon>edit</mat-icon>
+            <span>{{ 'common.edit' | translate }}</span>
+        </button>
+        <button mat-menu-item 
+                (click)="onDelete(item)"
+                [disabled]="!canDeleteRole(item)"
+                class="text-danger">
+            <mat-icon>delete</mat-icon>
+            <span>{{ 'common.delete' | translate }}</span>
+        </button>
+    </mat-menu>
+</ng-template>
+
+<!-- Create Panel -->
+<app-generic-right-panel
+        *ngIf="showCreatePanel"
+        title="{{ 'roles.createTitle' | translate }}"
+        subtitle="{{ 'roles.createSubtitle' | translate }}"
+        [isOpen]="showCreatePanel"
+        [hasFooter]="true"
+        (close)="onPanelClose()">
+
+    <div panel-content>
+        <app-role-form
+            #createForm
+            [role]="null"
+            (save)="onRoleSaved()">
+        </app-role-form>
+    </div>
+
+    <ng-container panel-actions>
+        <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="onPanelClose()">
+            {{ 'common.cancel' | translate }}
+        </button>
+        <button
+                type="button"
+                class="btn btn-primary"
+                (click)="createForm.onSubmit()"
+                [disabled]="createForm.loading || createForm.roleForm?.invalid">
+            <span *ngIf="createForm.loading" class="spinner-border spinner-border-sm me-2" role="status"
+                  aria-hidden="true"></span>
+            {{ 'roles.create' | translate }}
+        </button>
+    </ng-container>
+
+</app-generic-right-panel>
+
+<!-- Edit Panel -->
+<app-generic-right-panel
+        *ngIf="showEditPanel && selectedRole"
+        title="{{ 'roles.editTitle' | translate }}"
+        subtitle="{{ 'roles.editSubtitle' | translate }}"
+        [isOpen]="showEditPanel"
+        [hasFooter]="true"
+        (close)="onPanelClose()">
+
+    <div panel-content>
+        <app-role-form
+            #editForm
+            [role]="selectedRole"
+            (save)="onRoleSaved()">
+        </app-role-form>
+    </div>
+
+    <ng-container panel-actions>
+        <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="onPanelClose()">
+            {{ 'common.cancel' | translate }}
+        </button>
+        <button
+                type="button"
+                class="btn btn-primary"
+                (click)="editForm.onSubmit()"
+                [disabled]="editForm.loading || editForm.roleForm?.invalid">
+            <span *ngIf="editForm.loading" class="spinner-border spinner-border-sm me-2" role="status"
+                  aria-hidden="true"></span>
+            {{ 'roles.update' | translate }}
+        </button>
+    </ng-container>
+
+</app-generic-right-panel>
+
+<!-- Delete Confirmation Panel -->
+<app-generic-right-panel
+        *ngIf="showDeletePanel && selectedRole"
+        title="{{ 'roles.deleteTitle' | translate }}"
+        subtitle="{{ 'roles.deleteSubtitle' | translate }}"
+        [isOpen]="showDeletePanel"
+        [hasFooter]="true"
+        (close)="onPanelClose()">
+
+    <div panel-content>
+        <app-delete-confirmation
+            [config]="{
+              itemName: selectedRole.name,
+              itemType: 'Role',
+              title: ('roles.deleteTitle' | translate),
+              message: ('roles.deleteMessage' | translate: { name: selectedRole.name })
+            }"
+            (confirm)="onConfirmDelete()"
+            (cancel)="onPanelClose()">
+        </app-delete-confirmation>
+    </div>
+
+    <ng-container panel-actions>
+        <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="onPanelClose()">
+            {{ 'common.cancel' | translate }}
+        </button>
+        <button
+                type="button"
+                class="btn btn-danger"
+                (click)="onConfirmDelete()">
+            {{ 'roles.delete' | translate }}
+        </button>
+    </ng-container>
+
+</app-generic-right-panel>

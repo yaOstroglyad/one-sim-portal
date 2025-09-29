@@ -1,0 +1,20 @@
+@import "../../../../../scss/variables";
+@import "../../../../../scss/mixins";
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.reset-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}

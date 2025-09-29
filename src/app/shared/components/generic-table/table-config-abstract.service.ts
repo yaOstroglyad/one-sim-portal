@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { TableConfig } from '../../model/table-column-config.interface';
+import { TableConfig } from '../../model';
 import { map } from 'rxjs/operators';
-import { deepSearch } from '../../utils/utils';
+import { deepSearch } from '../../utils';
 
 @Injectable({
 	providedIn: 'root'

@@ -1,21 +1,17 @@
-import { FieldType, FormConfig } from '../../../../shared';
+import { FieldType, FormConfig, AccountsDataService, WhiteLabelDataService } from '../../../../shared';
 import { Validators } from '@angular/forms';
-import { DomainsDataService } from '../../../../shared/services/domains-data.service';
 import { map } from 'rxjs/operators';
-import { AccountsDataService } from '../../../../shared/services/accounts-data.service';
-import { WhiteLabelDataService } from '../../../../shared/services/white-label-data.service';
 
 export function getDomainCreateRequest(form: any) {
   return {
     id: form?.id || null,
-    name: form.name,
+    name: form.name?.trim(),
     ownerAccountId: form.ownerAccountId,
     applicationType: form.applicationType
   };
 }
 
 export function getCreateDomainFormConfig(
-  domainsDataService: DomainsDataService,
   accountsDataService: AccountsDataService,
   whiteLabelDataService: WhiteLabelDataService
 ): FormConfig {

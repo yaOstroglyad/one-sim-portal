@@ -1,4 +1,5 @@
 import { Subscriber } from './subscriberInfo';
+import { Company } from './company';
 
 export enum CustomerType {
   Corporate = 'Corporate',
@@ -14,6 +15,7 @@ export interface Customer {
   accountId?: string;
   parentCustomer?: ParentCustomer;
   tags?: string[];
+  company?: Company;
 }
 
 export interface ParentCustomer {
