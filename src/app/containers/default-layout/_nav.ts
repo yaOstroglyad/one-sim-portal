@@ -48,13 +48,13 @@ export const navItems: any[] = [
 		name: 'nav.products',
 		url: 'company-products',
 		iconComponent: {name: 'cil3d'},
-		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
+		permissions: [CUSTOMER_PERMISSION]
 	},
 	{
 		name: 'nav.users',
 		url: 'users',
 		iconComponent: {name: 'cil-user'},
-		permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION]
+		permissions: [ADMIN_PERMISSION]
 	},
 	{
 		name: 'nav.roles',

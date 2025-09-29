@@ -1,7 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DefaultLayoutComponent } from './default-layout.component';
-import { FeatureToggleGuard, permissionGuard, ADMIN_PERMISSION, SUPPORT_PERMISSION } from '../../shared';
+import {
+  FeatureToggleGuard,
+  permissionGuard,
+  ADMIN_PERMISSION,
+  SUPPORT_PERMISSION,
+  CUSTOMER_PERMISSION
+} from '../../shared';
 
 const routes: Routes = [
   {
@@ -52,8 +58,7 @@ const routes: Routes = [
       {
         path: 'users',
         data: {
-          title: 'nav.users',
-          permissions: [ADMIN_PERMISSION]
+          title: 'nav.users'
         },
         canActivate: [permissionGuard],
         loadComponent: () =>
