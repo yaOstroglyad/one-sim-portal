@@ -75,10 +75,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "one-sim-portal:build:production"
+              "buildTarget": "one-sim-portal:build:production"
             },
             "development": {
-              "browserTarget": "one-sim-portal:build:development"
+              "buildTarget": "one-sim-portal:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,7 +86,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "one-sim-portal:build"
+            "buildTarget": "one-sim-portal:build"
           }
         },
         "test": {
