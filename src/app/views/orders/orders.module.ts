@@ -7,7 +7,7 @@ import { GenericTableModule, HeaderModule } from '../../shared';
 import { EditOrderDescriptionComponent } from './edit-order-description/edit-order-description.component';
 import { RevertOrderComponent } from './revert-order/revert-order.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { FormGeneratorModule } from '../../shared';
+import { FormGeneratorComponent } from '../../shared';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -28,7 +28,7 @@ import { TranslateModule } from '@ngx-translate/core';
 		GenericTableModule,
 		HeaderModule,
 		MatDialogModule,
-		FormGeneratorModule,
+		FormGeneratorComponent,
 		MatButtonModule,
 		MatIconModule,
 		MatMenuModule,

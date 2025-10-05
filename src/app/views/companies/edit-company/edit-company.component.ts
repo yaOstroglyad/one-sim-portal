@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { FormConfig, FormGeneratorModule } from '../../../shared';
+import { FormConfig, FormGeneratorComponent } from '../../../shared';
 import { Subject } from 'rxjs';
 import { getCompanyCreateRequest, getEditCompanyFormConfig } from './edit-company.utils';
 import { TranslateModule } from '@ngx-translate/core';
@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
     imports: [
         MatDialogModule,
         TranslateModule,
-        FormGeneratorModule,
+        FormGeneratorComponent,
         MatButtonModule
     ],
     styleUrls: ['./edit-company.component.scss']

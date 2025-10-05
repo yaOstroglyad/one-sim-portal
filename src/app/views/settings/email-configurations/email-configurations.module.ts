@@ -10,7 +10,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
-import { GenericTableModule, FormGeneratorModule } from '../../../shared';
+import { GenericTableModule } from '../../../shared';
+import { FormGeneratorComponent } from '../../../shared/components/form-generator/form-generator.component';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
@@ -32,7 +33,7 @@ import { RouterModule } from '@angular/router';
     MatSnackBarModule,
     TranslateModule,
     GenericTableModule,
-    FormGeneratorModule
+    FormGeneratorComponent
   ]
 })
 export class EmailConfigurationsModule { } 

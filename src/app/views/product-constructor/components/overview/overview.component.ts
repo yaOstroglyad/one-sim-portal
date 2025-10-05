@@ -20,7 +20,6 @@ import { OverviewService } from '../../services';
         RouterModule,
         TranslateModule,
         CardComponent,
-        BadgeComponent,
         MetricCardComponent,
         IconDirective,
         IconModule

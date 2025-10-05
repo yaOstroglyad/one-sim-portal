@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ADMIN_PERMISSION, AuthService, FormGeneratorModule } from 'src/app/shared';
-import { FormGeneratorComponent } from 'src/app/shared/components/form-generator/form-generator.component';
+import { ADMIN_PERMISSION, AuthService, FormGeneratorComponent } from 'src/app/shared';
 import { getGeneralSettingsFormConfig, getCompanySettingsRequest } from './general-settings.utils';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
@@ -16,7 +15,7 @@ import { WhiteLabelDataService } from 'src/app/shared/services/white-label-data.
     selector: 'app-general-settings',
     imports: [
         CommonModule,
-        FormGeneratorModule,
+        FormGeneratorComponent,
         TranslateModule,
         MatSnackBarModule,
         MatButtonModule,

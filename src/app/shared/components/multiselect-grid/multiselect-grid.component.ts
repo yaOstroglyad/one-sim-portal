@@ -11,6 +11,7 @@ import { GridSelectOption, GridConfig } from '../../model';
 
 @Component({
     selector: 'app-multiselect-grid',
+    standalone: true,
     imports: [
         CommonModule,
         FormsModule,

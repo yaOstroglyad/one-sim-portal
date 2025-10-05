@@ -33,8 +33,6 @@ import { InvoicesUtilsService } from '../invoices.utils.service';
         MatButtonModule,
         TranslateModule,
         FormGeneratorComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
         MatTooltipModule
     ]
 })

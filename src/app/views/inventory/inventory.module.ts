@@ -12,7 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SetupResourceComponent } from './setup-resource/setup-resource.component';
-import { FormGeneratorModule } from '../../shared/components/form-generator/form-generator.module';
+import { FormGeneratorComponent } from '../../shared/components/form-generator/form-generator.component';
 import { MoveResourceComponent } from './move-resource/move-resource.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
@@ -41,7 +41,7 @@ import { TranslateModule } from '@ngx-translate/core';
 		MatFormFieldModule,
 		MatInputModule,
 		ReactiveFormsModule,
-		FormGeneratorModule,
+		FormGeneratorComponent,
 		MatTooltipModule,
 		MatCardModule,
 		MatIconModule,

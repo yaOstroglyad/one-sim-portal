@@ -8,10 +8,9 @@ import { CommonModule } from '@angular/common';
 import {
 	ADMIN_PERMISSION,
 	AuthService,
-	FormGeneratorModule
+	FormGeneratorComponent
 } from 'src/app/shared';
 import { PortalPreviewComponent } from './portal-preview/portal-preview.component';
-import { FormGeneratorComponent } from 'src/app/shared/components/form-generator/form-generator.component';
 import {
 	getPortalFormConfig,
 	getPortalSettingsRequest
@@ -44,7 +43,7 @@ import { VisualService } from 'src/app/shared/services/visual.service';
     styleUrls: ['./portal.component.scss'],
     imports: [
         CommonModule,
-        FormGeneratorModule,
+        FormGeneratorComponent,
         PortalPreviewComponent,
         TranslateModule,
         MatSnackBarModule,

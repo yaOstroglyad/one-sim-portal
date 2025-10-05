@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
     selector: 'app-rich-text-input',
     templateUrl: './rich-text-input.component.html',
     styleUrls: ['./rich-text-input.component.scss'],
+    standalone: true,
     imports: [
         TranslateModule,
         HtmlDialogComponent

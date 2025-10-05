@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { FormConfig, FormGeneratorModule } from '../../../../shared';
+import { FormConfig, FormGeneratorComponent } from '../../../../shared';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { EmailTemplate } from '../../../../shared';
 import { WhiteLabelDataService } from '../../../../shared';
@@ -16,7 +16,7 @@ import { FormGroup } from '@angular/forms';
         CommonModule,
         MatDialogModule,
         MatButtonModule,
-        FormGeneratorModule,
+        FormGeneratorComponent,
         TranslateModule
     ],
     changeDetection: ChangeDetectionStrategy.OnPush

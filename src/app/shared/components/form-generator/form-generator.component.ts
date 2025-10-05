@@ -50,6 +50,7 @@ import { FileUploadComponent } from '../file-upload';
     templateUrl: './form-generator.component.html',
     styleUrls: ['./form-generator.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

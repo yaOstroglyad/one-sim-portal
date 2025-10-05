@@ -11,7 +11,7 @@ import { LoaderComponent } from '../../../../shared/components/loader/loader.com
 import { getAddSubscriberFormConfig } from './add-subscriber.utils';
 import {
   FormConfig,
-  FormGeneratorModule,
+  FormGeneratorComponent,
   ProductsDataService,
   ProvidersDataService,
   SubscriberDataService
@@ -22,7 +22,7 @@ import {
     templateUrl: './add-subscriber.component.html',
     imports: [
         MatDialogModule,
-        FormGeneratorModule,
+        FormGeneratorComponent,
         MatButtonModule,
         MatFormFieldModule,
         MatIconModule,

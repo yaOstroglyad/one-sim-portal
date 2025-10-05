@@ -4,6 +4,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
     selector: 'app-color-picker',
+    standalone: true,
     imports: [CommonModule],
     template: `
     <div class="color-picker-container">

@@ -2,7 +2,7 @@ import { Component, inject, Inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormConfig } from '../../model';
-import { FormGeneratorModule } from '../form-generator/form-generator.module';
+import { FormGeneratorComponent } from '../form-generator/form-generator.component';
 import { MatButtonModule } from '@angular/material/button';
 import { getRefundFormConfig } from './refund-product.utils';
 import { RefundProductService } from './refund-product.service';
@@ -19,7 +19,7 @@ import { TranslateModule } from '@ngx-translate/core';
     templateUrl: './refund-product.component.html',
     imports: [
         MatDialogModule,
-        FormGeneratorModule,
+        FormGeneratorComponent,
         MatButtonModule,
         MatFormFieldModule,
         MatIconModule,

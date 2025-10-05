@@ -32,7 +32,6 @@ import { FormConfig } from 'src/app/shared';
         MatButtonModule,
         TranslateModule,
         FormGeneratorComponent,
-        FormCheckComponent,
         MatTooltipModule
     ]
 })

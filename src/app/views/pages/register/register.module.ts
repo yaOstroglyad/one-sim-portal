@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegisterComponent } from './register.component';
-import { FormGeneratorModule } from '../../../shared/components/form-generator/form-generator.module';
+import { FormGeneratorComponent } from '../../../shared/components/form-generator/form-generator.component';
 import { RegisterRoutingModule } from './register-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
 	imports: [
 		CommonModule,
-		FormGeneratorModule,
+		FormGeneratorComponent,
 		RegisterRoutingModule,
 		ReactiveFormsModule,
 		MatButtonModule,

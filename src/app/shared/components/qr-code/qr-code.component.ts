@@ -17,7 +17,6 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
     </app-empty-state>
   `,
     imports: [
-        AsyncPipe,
         EmptyStateComponent,
         NgIf,
         TranslateModule

@@ -29,7 +29,6 @@ import { ProviderProductsTableService } from '../provider-products-table.service
         ReactiveFormsModule,
         GenericRightPanelComponent,
         ProviderProductDetailsComponent,
-        DeleteConfirmationComponent,
         GenericTableModule,
         HeaderModule,
         MatMenuModule,
@@ -37,8 +36,6 @@ import { ProviderProductsTableService } from '../provider-products-table.service
         MatButtonModule,
         MatDialogModule,
         ButtonDirective,
-        FormControlDirective,
-        FormSelectDirective,
         IconDirective
     ],
     providers: [ProviderProductsTableService],

@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ADMIN_PERMISSION, AuthService, FormGeneratorModule } from 'src/app/shared';
+import { ADMIN_PERMISSION, AuthService, FormGeneratorComponent } from 'src/app/shared';
 import { RetailPreviewComponent } from './retail-preview/retail-preview.component';
-import { FormGeneratorComponent } from 'src/app/shared/components/form-generator/form-generator.component';
 import { getRetailFormConfig, getRetailSettingsRequest } from './retail.utils';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
@@ -21,7 +20,7 @@ import { MatInputModule } from '@angular/material/input';
     styleUrls: ['./retail.component.scss'],
     imports: [
         CommonModule,
-        FormGeneratorModule,
+        FormGeneratorComponent,
         RetailPreviewComponent,
         TranslateModule,
         MatSnackBarModule,

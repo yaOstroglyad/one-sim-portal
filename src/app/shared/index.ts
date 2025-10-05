@@ -33,7 +33,6 @@ export * from './components/header-component/header.module';
 export * from './pipes/format-time/format-time.module';
 export * from './components/generic-table/generic-table.module';
 export * from './components/column-control/column-control.module'
-export * from './components/form-generator/form-generator.module'
 export * from './components/form-generator/form-generator.component'
 export * from './components/form-generator/form-array-item'
 

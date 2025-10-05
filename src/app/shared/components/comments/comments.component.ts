@@ -14,7 +14,6 @@ import { Comment, CommentsConfiguration, CreateCommentRequest } from '../../mode
         ReactiveFormsModule,
         TranslateModule,
         ButtonDirective,
-        FormControlDirective,
         AvatarComponent,
         IconDirective
     ],

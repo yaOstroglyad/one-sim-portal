@@ -37,7 +37,6 @@ import { CountryService } from '../../../../../shared';
         GenericRightPanelComponent,
         CompanyProductDetailsComponent,
         CompanyProductFormComponent,
-        DeleteConfirmationComponent,
         GenericTableModule,
         HeaderModule,
         AccountSelectorComponent,
@@ -47,7 +46,6 @@ import { CountryService } from '../../../../../shared';
         MatDialogModule,
         SearchableSelectComponent,
         ButtonDirective,
-        FormControlDirective,
         BadgeComponent,
         IconDirective
     ],

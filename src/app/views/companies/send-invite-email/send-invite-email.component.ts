@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { FormConfig, FormGeneratorModule } from '../../../shared';
+import { FormConfig, FormGeneratorComponent } from '../../../shared';
 import { getInviteEmailFormConfig } from './send-invite-email.utils';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,7 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
     templateUrl: './send-invite-email.component.html',
     imports: [
         MatDialogModule,
-        FormGeneratorModule,
+        FormGeneratorComponent,
         TranslateModule,
         MatButtonModule
     ],

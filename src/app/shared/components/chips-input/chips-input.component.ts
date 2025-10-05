@@ -20,6 +20,7 @@ import { TranslateModule } from '@ngx-translate/core';
     selector: 'app-chips-input',
     templateUrl: './chips-input.component.html',
     styleUrls: ['./chips-input.component.scss'],
+    standalone: true,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

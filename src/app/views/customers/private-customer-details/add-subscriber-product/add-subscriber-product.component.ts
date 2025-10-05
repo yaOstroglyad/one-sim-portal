@@ -10,7 +10,7 @@ import { NgIf } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { getSubscriberProductsFormConfig } from './add-subscriber-product.utils';
-import { FormConfig, FormGeneratorModule } from '../../../../shared';
+import { FormConfig, FormGeneratorComponent } from '../../../../shared';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
@@ -18,7 +18,7 @@ import { LoaderComponent } from '../../../../shared/components/loader/loader.com
     templateUrl: './add-subscriber-product.component.html',
     imports: [
         MatDialogModule,
-        FormGeneratorModule,
+        FormGeneratorComponent,
         MatButtonModule,
         MatFormFieldModule,
         MatIconModule,

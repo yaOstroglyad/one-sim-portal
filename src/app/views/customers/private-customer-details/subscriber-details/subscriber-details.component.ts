@@ -29,8 +29,6 @@ import { TranslateModule } from '@ngx-translate/core';
         MatButtonModule,
         MatCardModule,
         MatListModule,
-        TimelineComponent,
-        ChartComponent,
         MatTableModule,
         EventStatusComponent,
         TransactionOrdersTableComponent,

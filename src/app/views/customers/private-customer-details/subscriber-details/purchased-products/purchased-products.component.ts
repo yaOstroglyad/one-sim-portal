@@ -14,9 +14,7 @@ import { log10 } from 'chart.js/helpers';
     templateUrl: './purchased-products.component.html',
     imports: [
         MatTableModule,
-        RouterLink,
         DatePipe,
-        CurrencyPipe,
         NgClass,
         AsyncPipe,
         NgIf,

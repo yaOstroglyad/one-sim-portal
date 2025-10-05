@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FieldType, FormConfig, FormGeneratorModule, SubscriberDataService, PurchasedProductsDataService, InfoStripComponent } from '../../../../shared';
+import { FieldType, FormConfig, FormGeneratorComponent, SubscriberDataService, PurchasedProductsDataService, InfoStripComponent } from '../../../../shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
     selector: 'app-send-registration-email',
     templateUrl: './send-registration-email.component.html',
     styleUrls: ['./send-registration-email.component.scss'],
-    imports: [FormGeneratorModule, MatDialogModule, TranslateModule, ReactiveFormsModule, MatButtonModule, InfoStripComponent, CommonModule]
+    imports: [FormGeneratorComponent, MatDialogModule, TranslateModule, ReactiveFormsModule, MatButtonModule, InfoStripComponent, CommonModule]
 })
 export class SendRegistrationEmailComponent implements OnInit {
   formConfig: FormConfig;

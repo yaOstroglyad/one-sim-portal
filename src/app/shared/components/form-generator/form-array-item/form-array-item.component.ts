@@ -12,14 +12,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslateModule } from '@ngx-translate/core';
-import { ColorPickerComponent } from '../../color-picker/color-picker.component';
-import { ChipsInputComponent } from '../../chips-input/chips-input.component';
-import { FormCheckComponent, FormCheckInputDirective } from '@coreui/angular';
-import { RichTextInputComponent } from '../../rich-text-input';
-import { MultiselectGridComponent } from '../../multiselect-grid';
 import { 
 	hasFieldHintOrError, 
 	shouldShowError, 
@@ -31,6 +26,7 @@ import { isFunction } from 'rxjs/internal/util/isFunction';
     selector: 'app-form-array-item',
     templateUrl: './form-array-item.component.html',
     styleUrls: ['./form-array-item.component.scss'],
+    standalone: true,
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
@@ -42,16 +38,11 @@ import { isFunction } from 'rxjs/internal/util/isFunction';
         MatCheckboxModule,
         MatIconModule,
         TranslateModule,
-        ColorPickerComponent,
         MatButtonModule,
         MatListModule,
         MatNativeDateModule,
-        FlexLayoutModule,
-        ChipsInputComponent,
-        FormCheckComponent,
-        FormCheckInputDirective,
-        RichTextInputComponent,
-        MultiselectGridComponent
+        MatOptionModule,
+        FlexLayoutModule
     ]
 })
 export class FormArrayItemComponent {

@@ -18,7 +18,6 @@ import { TranslateModule } from '@ngx-translate/core';
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         MatTableModule,
-        JsonPipe,
         DatePipe,
         AsyncPipe,
         NgIf,

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CustomersComponent } from './customers.component';
 import { CustomersRoutingModule } from './customers-routing.module';
 import { ButtonDirective, CardComponent, FormControlDirective, TableDirective } from '@coreui/angular';
-import { GenericTableModule, HeaderModule, FormGeneratorModule, SearchableSelectComponent, SmartFilterHeaderComponent } from '../../shared';
+import { GenericTableModule, HeaderModule, FormGeneratorComponent, SearchableSelectComponent, SmartFilterHeaderComponent } from '../../shared';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
@@ -41,7 +41,7 @@ import { CustomersTableService } from './customers-table.service';
 		MatIconModule,
 		ChipsInputComponent,
 		MatSnackBarModule,
-		FormGeneratorModule,
+		FormGeneratorComponent,
 		SearchableSelectComponent,
 		SmartFilterHeaderComponent,
 		FormControlDirective,

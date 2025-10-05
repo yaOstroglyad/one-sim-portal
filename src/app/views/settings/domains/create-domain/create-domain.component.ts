@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { getDomainCreateRequest, getCreateDomainFormConfig } from './create-domain.utils';
 import {
-	FormConfig, FormGeneratorModule, AccountsDataService,
+	FormConfig, FormGeneratorComponent, AccountsDataService,
 	WhiteLabelDataService, DomainsDataService
 } from '../../../../shared';
 import { CommonModule } from '@angular/common';
@@ -20,7 +20,7 @@ import { TranslateModule } from '@ngx-translate/core';
         MatDialogModule,
         MatButtonModule,
         TranslateModule,
-        FormGeneratorModule
+        FormGeneratorComponent
     ]
 })
 export class CreateDomainComponent implements OnInit {
