@@ -1,6 +1,6 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
 import { FieldConfig, FieldType } from '../../../model';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -69,8 +69,15 @@ export class FormArrayItemComponent {
 			// Create a mock form generator object with access to this item's FormGroup
 			const mockFormGenerator = {
 				form: this.itemFormGroup,
-				itemFormGroup: this.itemFormGroup
-			};
+				itemFormGroup: this.itemFormGroup,
+				unsubscribe$: new Subject<void>(),
+				fieldsHintState$: new BehaviorSubject<Record<string, boolean>>({}),
+				addingItem: false,
+				config: null,
+				formChanges: new EventEmitter<FormGroup>(),
+				dir: 'ltr' as 'ltr' | 'rtl',
+				cdr: null
+			} as any;
 			field.inputEvent(event, mockFormGenerator, field);
 		}
 	}

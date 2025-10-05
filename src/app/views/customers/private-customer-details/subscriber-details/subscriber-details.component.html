@@ -9,7 +9,7 @@
                     <p><strong>{{ 'subscriberDetails.state' | translate }}:</strong> {{ simView.simDetails.networkStatus }}</p>
                     <p><strong>{{ 'subscriberDetails.country' | translate }}:</strong> {{ simView.locations[0]?.country || 'N/A' }}</p>
                     <p><strong>{{ 'subscriberDetails.operator' | translate }}:</strong> {{ simView.locations[0]?.operator || 'N/A' }}</p>
-                    <p><strong>{{ 'subscriberDetails.lastUpdatedAt' | translate }}:</strong> {{ simView.simDetails.updatedAt | date: 'dd/MM/yyyy HH:mm' || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.lastUpdatedAt' | translate }}:</strong> {{ (simView.simDetails.updatedAt | date: 'dd/MM/yyyy HH:mm') || 'N/A' }}</p>
                 </mat-card-content>
             </mat-card>
             <mat-card>
@@ -34,9 +34,9 @@
                     <p><strong>{{ 'subscriberDetails.msisdn' | translate }}:</strong> {{ simView.simDetails.msisdn || 'N/A' }}</p>
                     <p><strong>{{ 'subscriberDetails.imei' | translate }}:</strong> {{ simView.simDetails.imei || 'N/A' }}</p>
                     <p><strong>{{ 'subscriberDetails.iccid' | translate }}:</strong> {{ simView.simDetails.iccid || 'N/A' }}</p>
-                    <p><strong>{{ 'subscriberDetails.createdAt' | translate }}:</strong> {{ simView.simDetails.createdAt | date: 'dd/MM/yyyy HH:mm' || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.createdAt' | translate }}:</strong> {{ (simView.simDetails.createdAt | date: 'dd/MM/yyyy HH:mm') || 'N/A' }}</p>
                     <p><strong>{{ 'subscriberDetails.createdBy' | translate }}:</strong> {{ simView.simDetails.createdBy || 'N/A' }}</p>
-                    <p><strong>{{ 'subscriberDetails.updatedAt' | translate }}:</strong> {{ simView.simDetails.updatedAt | date: 'dd/MM/yyyy HH:mm' || 'N/A' }}</p>
+                    <p><strong>{{ 'subscriberDetails.updatedAt' | translate }}:</strong> {{ (simView.simDetails.updatedAt | date: 'dd/MM/yyyy HH:mm') || 'N/A' }}</p>
                     <p><strong>{{ 'subscriberDetails.updatedBy' | translate }}:</strong> {{ simView.simDetails.updatedBy || 'N/A' }}</p>
                     <p><strong>{{ 'subscriberDetails.externalReferenceId' | translate }}:</strong> {{ simView.simDetails.externalReferenceId || 'N/A' }}</p>
                 </mat-card-content>
