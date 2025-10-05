@@ -13,7 +13,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormGeneratorComponent } from 'src/app/shared/components/form-generator/form-generator.component';
 import { FormCheckComponent } from '@coreui/angular';
-import { FormCheckInputDirective } from '@coreui/angular';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PaymentGatewayUtilsService } from '../payment-gateway.utils.service';
 import { FormConfig } from 'src/app/shared';
@@ -34,7 +33,6 @@ import { FormConfig } from 'src/app/shared';
         TranslateModule,
         FormGeneratorComponent,
         FormCheckComponent,
-        FormCheckInputDirective,
         MatTooltipModule
     ]
 })

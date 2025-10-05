@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 import { CardComponent } from '../../../../shared';
-import { BadgeComponent } from '../../../../shared';
 import { MetricCardComponent, MetricCard } from '../../../../shared';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconDirective, IconModule } from '@coreui/icons-angular';
@@ -24,7 +23,6 @@ import { QuickAction } from '../../models';
         RouterModule,
         TranslateModule,
         CardComponent,
-        BadgeComponent,
         MetricCardComponent,
         IconDirective,
         IconModule,

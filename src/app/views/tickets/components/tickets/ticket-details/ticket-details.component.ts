@@ -2,7 +2,6 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { BadgeComponent } from '@coreui/angular';
-import { IconDirective } from '@coreui/icons-angular';
 
 import { Ticket } from '../../../models';
 import { CardComponent } from '../../../../../shared';
@@ -13,7 +12,6 @@ import { CardComponent } from '../../../../../shared';
         CommonModule,
         TranslateModule,
         BadgeComponent,
-        IconDirective,
         CardComponent
     ],
     templateUrl: './ticket-details.component.html',
