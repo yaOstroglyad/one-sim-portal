@@ -18,7 +18,7 @@ import {
 	HeaderModule,
 	ListGroupModule,
 	NavModule,
-	ProgressModule, SharedModule, SidebarModule, TabsModule, UtilitiesModule
+	ProgressModule, SidebarModule, TabsModule, UtilitiesModule
 } from '@coreui/angular';
 import { IconModule } from '@coreui/icons-angular';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -51,13 +51,10 @@ import { SidebarBrandComponent } from '../../shared/components/sidebar-brand/sid
 		UtilitiesModule,
 		ButtonGroupModule,
 		ReactiveFormsModule,
-		SidebarModule,
-		SharedModule,
 		TabsModule,
 		ListGroupModule,
 		ProgressModule,
 		BadgeModule,
-		ListGroupModule,
 		CardModule,
 		NgScrollbarModule,
 		BreadcrumbComponent,
