@@ -28,20 +28,19 @@ import { SmartFilterValueMapperService } from './services/smart-filter-value-map
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-smart-filter-header',
-  templateUrl: './smart-filter-header.component.html',
-  styleUrls: ['./smart-filter-header.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    CommonModule,
-    ButtonDirective,
-    BadgeComponent,
-    IconDirective,
-    GenericRightPanelComponent,
-    TooltipDirective,
-    TranslateModule
-  ]
+    selector: 'app-smart-filter-header',
+    templateUrl: './smart-filter-header.component.html',
+    styleUrls: ['./smart-filter-header.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ButtonDirective,
+        BadgeComponent,
+        IconDirective,
+        GenericRightPanelComponent,
+        TooltipDirective,
+        TranslateModule
+    ]
 })
 export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
   @Input() formGroup: FormGroup;

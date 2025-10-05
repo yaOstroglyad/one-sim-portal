@@ -44,31 +44,30 @@ import { UsersUtils, UsersFilterParams } from './user-list.utils';
 const ROLES_PAGE_SIZE = 100;
 
 @Component({
-	selector: 'app-user-list',
-	standalone: true,
-	imports: [
-		CommonModule,
-		ReactiveFormsModule,
-		TranslateModule,
-		GenericRightPanelComponent,
-		UserFormComponent,
-		DeleteConfirmationComponent,
-		RoleManagementFormComponent,
-		GenericTableModule,
-		HeaderModule,
-		SmartFilterHeaderComponent,
-		SearchableSelectComponent,
-		MatMenuModule,
-		MatIconModule,
-		MatButtonModule,
-		ButtonDirective,
-		FormControlDirective,
-		IconDirective
-	],
-	providers: [UsersTableService],
-	templateUrl: './user-list.component.html',
-	styleUrls: ['./user-list.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-user-list',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        GenericRightPanelComponent,
+        UserFormComponent,
+        DeleteConfirmationComponent,
+        RoleManagementFormComponent,
+        GenericTableModule,
+        HeaderModule,
+        SmartFilterHeaderComponent,
+        SearchableSelectComponent,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        ButtonDirective,
+        FormControlDirective,
+        IconDirective
+    ],
+    providers: [UsersTableService],
+    templateUrl: './user-list.component.html',
+    styleUrls: ['./user-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 	private cdr = inject(ChangeDetectorRef);

@@ -21,30 +21,29 @@ import { TariffOfferFormComponent } from '../tariff-offer-form/tariff-offer-form
 import { TariffOfferDetailsComponent } from '../tariff-offer-details/tariff-offer-details.component';
 
 @Component({
-  selector: 'app-tariff-offer-list',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    ButtonDirective,
-    IconDirective,
-    FormControlDirective,
-    BadgeComponent,
-    GenericTableModule,
-    HeaderModule,
-    GenericRightPanelComponent,
-    DeleteConfirmationComponent,
-    TariffOfferFormComponent,
-    TariffOfferDetailsComponent
-  ],
-  providers: [TariffOffersTableService],
-  templateUrl: './tariff-offer-list.component.html',
-  styleUrls: ['./tariff-offer-list.component.scss']
+    selector: 'app-tariff-offer-list',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        ButtonDirective,
+        IconDirective,
+        FormControlDirective,
+        BadgeComponent,
+        GenericTableModule,
+        HeaderModule,
+        GenericRightPanelComponent,
+        DeleteConfirmationComponent,
+        TariffOfferFormComponent,
+        TariffOfferDetailsComponent
+    ],
+    providers: [TariffOffersTableService],
+    templateUrl: './tariff-offer-list.component.html',
+    styleUrls: ['./tariff-offer-list.component.scss']
 })
 export class TariffOfferListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('priceTemplate', { static: true }) priceTemplate!: TemplateRef<any>;

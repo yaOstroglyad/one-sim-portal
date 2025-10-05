@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: 'app-color-picker',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'app-color-picker',
+    imports: [CommonModule],
+    template: `
     <div class="color-picker-container">
       <label>{{label}}</label>
       <div class="color-picker-wrapper">
@@ -27,7 +26,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .color-picker-container {
       margin-bottom: 1.5rem;
     
@@ -81,13 +80,13 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       }
     }
   `],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ColorPickerComponent),
-      multi: true
-    }
-  ]
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => ColorPickerComponent),
+            multi: true
+        }
+    ]
 })
 export class ColorPickerComponent implements ControlValueAccessor {
   @Input() label: string = '';

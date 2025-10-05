@@ -17,30 +17,29 @@ import { AccountSelectorComponent } from 'src/app/shared/components/account-sele
 import { GenericRightPanelComponent, PanelAction } from 'src/app/shared/components/generic-right-panel/generic-right-panel.component';
 
 @Component({
-	selector: 'app-payment-gateway-table',
-	templateUrl: './payment-gateway-table.component.html',
-	styleUrls: ['./payment-gateway-table.component.scss'],
-	standalone: true,
-	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [
-		CommonModule,
-		GenericTableModule,
-		TranslateModule,
-		MatIconModule,
-		MatButtonModule,
-		MatMenuModule,
-		MatFormFieldModule,
-		BadgeModule,
-		ButtonModule,
-		DropdownModule,
-		AccountSelectorComponent,
-		GenericRightPanelComponent,
-		EditPaymentGatewayComponent
-	],
-	providers: [
-		PaymentGatewayTableConfigService,
-		PaymentGatewayService
-	]
+    selector: 'app-payment-gateway-table',
+    templateUrl: './payment-gateway-table.component.html',
+    styleUrls: ['./payment-gateway-table.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        GenericTableModule,
+        TranslateModule,
+        MatIconModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatFormFieldModule,
+        BadgeModule,
+        ButtonModule,
+        DropdownModule,
+        AccountSelectorComponent,
+        GenericRightPanelComponent,
+        EditPaymentGatewayComponent
+    ],
+    providers: [
+        PaymentGatewayTableConfigService,
+        PaymentGatewayService
+    ]
 })
 export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterViewInit {
 	@ViewChild('isActiveFlag') isActiveFlagTemplate: TemplateRef<any>;

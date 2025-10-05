@@ -21,15 +21,14 @@ import {
 } from './ticket-form.utils';
 
 @Component({
-  selector: 'app-ticket-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormGeneratorComponent
-  ],
-  templateUrl: './ticket-form.component.html',
-  styleUrls: ['./ticket-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-ticket-form',
+    imports: [
+        CommonModule,
+        FormGeneratorComponent
+    ],
+    templateUrl: './ticket-form.component.html',
+    styleUrls: ['./ticket-form.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TicketFormComponent implements OnInit {
   @Input() ticket: Ticket | null = null;

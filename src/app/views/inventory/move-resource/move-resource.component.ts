@@ -8,10 +8,11 @@ import { takeUntil } from 'rxjs/operators';
 import { ProvidersDataService, OrdersDataService, CompaniesDataService, FormConfig } from '../../../shared';
 
 @Component({
-	selector: 'app-move-resource',
-	templateUrl: './move-resource.component.html',
-	styleUrls: ['./move-resource.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-move-resource',
+    templateUrl: './move-resource.component.html',
+    styleUrls: ['./move-resource.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MoveResourceComponent implements OnDestroy {
 	public unsubscribe$: Subject<void> = new Subject<void>();

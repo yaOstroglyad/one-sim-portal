@@ -20,10 +20,11 @@ import { CustomersTableService } from './customers-table.service';
 import { CustomersUtils, CustomersFilterParams } from './customers.utils';
 
 @Component({
-	selector: 'app-customers',
-	templateUrl: './customers.component.html',
-	styleUrls: ['./customers.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-customers',
+    templateUrl: './customers.component.html',
+    styleUrls: ['./customers.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CustomersComponent implements OnInit, OnDestroy {
 	private cdr = inject(ChangeDetectorRef);

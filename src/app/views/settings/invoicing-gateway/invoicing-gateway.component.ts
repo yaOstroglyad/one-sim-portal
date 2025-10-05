@@ -17,30 +17,29 @@ import { AccountSelectorComponent } from 'src/app/shared/components/account-sele
 import { GenericRightPanelComponent, PanelAction } from 'src/app/shared/components/generic-right-panel/generic-right-panel.component';
 
 @Component({
-	selector: 'app-invoicing-gateway',
-	templateUrl: './invoicing-gateway.component.html',
-	styleUrls: ['./invoicing-gateway.component.scss'],
-	standalone: true,
-	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [
-		CommonModule,
-		GenericTableModule,
-		TranslateModule,
-		MatIconModule,
-		MatButtonModule,
-		MatMenuModule,
-		MatFormFieldModule,		
-		BadgeModule,
-		ButtonModule,
-		DropdownModule,
-		AccountSelectorComponent,
-		GenericRightPanelComponent,
-		EditInvoicesComponent
-	],
-	providers: [
-		InvoicingGatewayConfigService,
-		InvoicesService
-	]
+    selector: 'app-invoicing-gateway',
+    templateUrl: './invoicing-gateway.component.html',
+    styleUrls: ['./invoicing-gateway.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        GenericTableModule,
+        TranslateModule,
+        MatIconModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatFormFieldModule,
+        BadgeModule,
+        ButtonModule,
+        DropdownModule,
+        AccountSelectorComponent,
+        GenericRightPanelComponent,
+        EditInvoicesComponent
+    ],
+    providers: [
+        InvoicingGatewayConfigService,
+        InvoicesService
+    ]
 })
 export class InvoicingGatewayComponent implements OnInit, OnDestroy, AfterViewInit {
 	@ViewChild('isActiveFlag') isActiveFlagTemplate: TemplateRef<any>;

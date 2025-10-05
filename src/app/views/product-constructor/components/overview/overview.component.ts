@@ -13,21 +13,20 @@ import { QUICK_ACTIONS, isActionEnabled } from './overview.utils';
 import { OverviewService } from '../../services';
 
 @Component({
-  selector: 'app-overview',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    RouterModule,
-    TranslateModule,
-    CardComponent,
-    BadgeComponent,
-    MetricCardComponent,
-    IconDirective,
-    IconModule
-  ],
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss']
+    selector: 'app-overview',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        RouterModule,
+        TranslateModule,
+        CardComponent,
+        BadgeComponent,
+        MetricCardComponent,
+        IconDirective,
+        IconModule
+    ],
+    templateUrl: './overview.component.html',
+    styleUrls: ['./overview.component.scss']
 })
 export class OverviewComponent implements OnInit, OnDestroy {
 

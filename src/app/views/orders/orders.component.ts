@@ -21,10 +21,11 @@ import { RevertOrderComponent } from './revert-order/revert-order.component';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-	selector: 'app-orders',
-	templateUrl: './orders.component.html',
-	styleUrls: ['./orders.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-orders',
+    templateUrl: './orders.component.html',
+    styleUrls: ['./orders.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class OrdersComponent implements OnInit, OnDestroy {
 	private unsubscribe$ = new Subject<void>();

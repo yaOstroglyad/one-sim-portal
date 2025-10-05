@@ -4,11 +4,10 @@ import { IconDirective } from '@coreui/icons-angular';
 import { ProviderProduct } from '../../../models';
 
 @Component({
-  selector: 'app-provider-product-details',
-  standalone: true,
-  imports: [CommonModule, IconDirective],
-  templateUrl: './provider-product-details.component.html',
-  styleUrls: ['./provider-product-details.component.scss']
+    selector: 'app-provider-product-details',
+    imports: [CommonModule, IconDirective],
+    templateUrl: './provider-product-details.component.html',
+    styleUrls: ['./provider-product-details.component.scss']
 })
 export class ProviderProductDetailsComponent {
   @Input() providerProduct: ProviderProduct | null = null;

@@ -11,18 +11,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-	selector: 'app-create-domain',
-	templateUrl: './create-domain.component.html',
-	styleUrls: ['./create-domain.component.scss'],
-	standalone: true,
-	imports: [
-		CommonModule,
-		ReactiveFormsModule,
-		MatDialogModule,
-		MatButtonModule,
-		TranslateModule,
-		FormGeneratorModule
-	]
+    selector: 'app-create-domain',
+    templateUrl: './create-domain.component.html',
+    styleUrls: ['./create-domain.component.scss'],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule,
+        TranslateModule,
+        FormGeneratorModule
+    ]
 })
 export class CreateDomainComponent implements OnInit {
 	formConfig: FormConfig;

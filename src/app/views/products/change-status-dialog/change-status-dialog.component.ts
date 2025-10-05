@@ -5,9 +5,10 @@ import { StatusEnum } from '../../../shared/model/package';
 import { ProductsDataService } from '../../../shared';
 
 @Component({
-  selector: 'app-change-status-dialog',
-  templateUrl: './change-status-dialog.component.html',
-  styleUrls: ['./change-status-dialog.component.scss']
+    selector: 'app-change-status-dialog',
+    templateUrl: './change-status-dialog.component.html',
+    styleUrls: ['./change-status-dialog.component.scss'],
+    standalone: false
 })
 export class ChangeStatusDialogComponent implements OnInit {
   statusForm: FormGroup;

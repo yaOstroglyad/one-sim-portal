@@ -4,11 +4,10 @@ import { IconDirective } from '@coreui/icons-angular';
 import { MobileBundle } from '../../../models';
 
 @Component({
-  selector: 'app-bundle-details',
-  standalone: true,
-  imports: [CommonModule, IconDirective],
-  templateUrl: './bundle-details.component.html',
-  styleUrls: ['./bundle-details.component.scss']
+    selector: 'app-bundle-details',
+    imports: [CommonModule, IconDirective],
+    templateUrl: './bundle-details.component.html',
+    styleUrls: ['./bundle-details.component.scss']
 })
 export class BundleDetailsComponent {
   @Input() bundle: MobileBundle | null = null;

@@ -5,10 +5,11 @@ import { take } from 'rxjs/operators';
 import { TableConfig, HeaderConfig } from '../../model';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class HeaderComponent implements OnInit {
   @Input() config: HeaderConfig;

@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
-  selector: 'app-portal-preview',
-	templateUrl: './portal-preview.component.html',
-	styleUrls: ['./portal-preview.component.scss'],
-  standalone: true,
-  imports: [CommonModule, MatFormFieldModule]
+    selector: 'app-portal-preview',
+    templateUrl: './portal-preview.component.html',
+    styleUrls: ['./portal-preview.component.scss'],
+    imports: [CommonModule, MatFormFieldModule]
 })
 export class PortalPreviewComponent implements OnChanges {
   @Input() primaryColor: string = '#f89c2e';

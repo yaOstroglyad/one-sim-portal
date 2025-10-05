@@ -22,30 +22,29 @@ import { ProviderProduct, ProviderProductSearchRequest } from '../../../models';
 import { ProviderProductsTableService } from '../provider-products-table.service';
 
 @Component({
-  selector: 'app-provider-product-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    GenericRightPanelComponent,
-    ProviderProductDetailsComponent,
-    DeleteConfirmationComponent,
-    GenericTableModule,
-    HeaderModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDialogModule,
-    ButtonDirective,
-    FormControlDirective,
-    FormSelectDirective,
-    IconDirective
-  ],
-  providers: [ProviderProductsTableService],
-  templateUrl: './provider-product-list.component.html',
-  styleUrls: ['./provider-product-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-provider-product-list',
+    imports: [
+        CommonModule,
+        RouterModule,
+        ReactiveFormsModule,
+        GenericRightPanelComponent,
+        ProviderProductDetailsComponent,
+        DeleteConfirmationComponent,
+        GenericTableModule,
+        HeaderModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        MatDialogModule,
+        ButtonDirective,
+        FormControlDirective,
+        FormSelectDirective,
+        IconDirective
+    ],
+    providers: [ProviderProductsTableService],
+    templateUrl: './provider-product-list.component.html',
+    styleUrls: ['./provider-product-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProviderProductListComponent implements OnInit, OnDestroy {
 

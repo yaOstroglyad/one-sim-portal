@@ -28,34 +28,33 @@ import { Account, Country } from '../../../../../shared';
 import { CountryService } from '../../../../../shared';
 
 @Component({
-  selector: 'app-company-product-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    GenericRightPanelComponent,
-    CompanyProductDetailsComponent,
-    CompanyProductFormComponent,
-    DeleteConfirmationComponent,
-    GenericTableModule,
-    HeaderModule,
-    AccountSelectorComponent,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDialogModule,
-    SearchableSelectComponent,
-    ButtonDirective,
-    FormControlDirective,
-    BadgeComponent,
-    IconDirective
-  ],
-  providers: [CompanyProductsTableService],
-  templateUrl: './company-product-list.component.html',
-  styleUrls: ['./company-product-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-company-product-list',
+    imports: [
+        CommonModule,
+        RouterModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        GenericRightPanelComponent,
+        CompanyProductDetailsComponent,
+        CompanyProductFormComponent,
+        DeleteConfirmationComponent,
+        GenericTableModule,
+        HeaderModule,
+        AccountSelectorComponent,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        MatDialogModule,
+        SearchableSelectComponent,
+        ButtonDirective,
+        FormControlDirective,
+        BadgeComponent,
+        IconDirective
+    ],
+    providers: [CompanyProductsTableService],
+    templateUrl: './company-product-list.component.html',
+    styleUrls: ['./company-product-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDestroy {
 

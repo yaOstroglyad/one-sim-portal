@@ -6,17 +6,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CopyToClipboardDirective } from '../../../../shared/directives/copy-to-clipboard.directive';
 
 @Component({
-  selector: 'app-show-qr-code-dialog',
-  templateUrl: './show-qr-code-dialog.component.html',
-  styleUrls: ['./show-qr-code-dialog.component.scss'],
-	imports: [
-		MatButtonModule,
-		MatDialogModule,
-		QrCodeComponent,
-		TranslateModule,
-		CopyToClipboardDirective
-	],
-  standalone: true
+    selector: 'app-show-qr-code-dialog',
+    templateUrl: './show-qr-code-dialog.component.html',
+    styleUrls: ['./show-qr-code-dialog.component.scss'],
+    imports: [
+        MatButtonModule,
+        MatDialogModule,
+        QrCodeComponent,
+        TranslateModule,
+        CopyToClipboardDirective
+    ]
 })
 export class ShowQrCodeDialogComponent {
   constructor(

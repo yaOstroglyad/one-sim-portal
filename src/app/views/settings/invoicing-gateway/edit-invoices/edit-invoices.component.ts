@@ -19,25 +19,24 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { InvoicesUtilsService } from '../invoices.utils.service';
 
 @Component({
-  selector: 'app-edit-invoices',
-  templateUrl: './edit-invoices.component.html',
-  styleUrls: ['./edit-invoices.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    TranslateModule,
-    FormGeneratorComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    MatTooltipModule
-  ]
+    selector: 'app-edit-invoices',
+    templateUrl: './edit-invoices.component.html',
+    styleUrls: ['./edit-invoices.component.scss'],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        TranslateModule,
+        FormGeneratorComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        MatTooltipModule
+    ]
 })
 export class EditInvoicesComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() invoicingMethod: InvoicingMethod | null = null;

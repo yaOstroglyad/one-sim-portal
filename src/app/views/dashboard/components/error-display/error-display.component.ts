@@ -4,12 +4,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DashboardError } from '../../models/dashboard.types';
 
 @Component({
-  selector: 'app-error-display',
-  standalone: true,
-  imports: [CommonModule, TranslateModule],
-  templateUrl: './error-display.component.html',
-  styleUrls: ['./error-display.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-error-display',
+    imports: [CommonModule, TranslateModule],
+    templateUrl: './error-display.component.html',
+    styleUrls: ['./error-display.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ErrorDisplayComponent {
   @Input() error!: DashboardError;

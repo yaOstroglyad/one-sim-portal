@@ -24,27 +24,26 @@ import { takeUntil } from 'rxjs/operators';
 import { DatePickerConfig, DateRange, DateValue } from './date-picker-wrapper.types';
 
 @Component({
-  selector: 'app-date-picker-wrapper',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    TranslateModule
-  ],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DatePickerWrapperComponent),
-      multi: true
-    }
-  ],
-  templateUrl: './date-picker-wrapper.component.html',
-  styleUrls: ['./date-picker-wrapper.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-date-picker-wrapper',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        TranslateModule
+    ],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => DatePickerWrapperComponent),
+            multi: true
+        }
+    ],
+    templateUrl: './date-picker-wrapper.component.html',
+    styleUrls: ['./date-picker-wrapper.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DatePickerWrapperComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
 

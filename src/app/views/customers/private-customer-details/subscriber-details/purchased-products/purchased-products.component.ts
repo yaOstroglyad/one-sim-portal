@@ -10,21 +10,20 @@ import { map } from 'rxjs/operators';
 import { log10 } from 'chart.js/helpers';
 
 @Component({
-	selector: 'app-purchased-products',
-	templateUrl: './purchased-products.component.html',
-	standalone: true,
-	imports: [
-		MatTableModule,
-		RouterLink,
-		DatePipe,
-		CurrencyPipe,
-		NgClass,
-		AsyncPipe,
-		NgIf,
-		EmptyStateComponent,
-		TranslateModule
-	],
-	styleUrls: ['./purchased-products.component.scss']
+    selector: 'app-purchased-products',
+    templateUrl: './purchased-products.component.html',
+    imports: [
+        MatTableModule,
+        RouterLink,
+        DatePipe,
+        CurrencyPipe,
+        NgClass,
+        AsyncPipe,
+        NgIf,
+        EmptyStateComponent,
+        TranslateModule
+    ],
+    styleUrls: ['./purchased-products.component.scss']
 })
 export class PurchasedProductsComponent implements OnInit {
 	purchasedProductsView$: Observable<ProductPurchase[]>;

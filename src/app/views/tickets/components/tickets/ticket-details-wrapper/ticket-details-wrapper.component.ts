@@ -7,16 +7,15 @@ import { TicketDetailsComponent } from '../ticket-details/ticket-details.compone
 import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsConfiguration, AttachmentsConfiguration, CreateCommentRequest, UploadAttachmentRequest } from '../../../../../shared';
 
 @Component({
-  selector: 'app-ticket-details-wrapper',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    TicketDetailsComponent,
-    CommentsComponent,
-    AttachmentsComponent
-  ],
-  template: `
+    selector: 'app-ticket-details-wrapper',
+    imports: [
+        CommonModule,
+        TranslateModule,
+        TicketDetailsComponent,
+        CommentsComponent,
+        AttachmentsComponent
+    ],
+    template: `
     <div class="ticket-details-wrapper">
       <!-- Original ticket details -->
       <app-ticket-details [ticket]="ticket"></app-ticket-details>
@@ -49,7 +48,7 @@ import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsC
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .ticket-details-wrapper {
       .comments-section,
       .attachments-section {
@@ -74,7 +73,7 @@ import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsC
       }
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TicketDetailsWrapperComponent implements OnInit {
   @Input() ticket: Ticket;

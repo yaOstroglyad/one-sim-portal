@@ -24,16 +24,15 @@ export interface FileUploadState {
 }
 
 @Component({
-  selector: 'app-file-upload',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    TranslateModule,
-    IconDirective
-  ],
-  templateUrl: './file-upload.component.html',
-  styleUrls: ['./file-upload.component.scss']
+    selector: 'app-file-upload',
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        TranslateModule,
+        IconDirective
+    ],
+    templateUrl: './file-upload.component.html',
+    styleUrls: ['./file-upload.component.scss']
 })
 export class FileUploadComponent {
   @Input() config: FileUploadConfig = {

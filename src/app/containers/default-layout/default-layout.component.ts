@@ -17,10 +17,11 @@ import { AuthService } from '../../shared';
 import { isToggleActive } from '../../shared/services/feature-toggle';
 
 @Component({
-	selector: 'app-default-layout',
-	templateUrl: './default-layout.component.html',
-	styleUrls: ['./default-layout.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-default-layout',
+    templateUrl: './default-layout.component.html',
+    styleUrls: ['./default-layout.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DefaultLayoutComponent implements OnInit, OnDestroy {
 	authService = inject(AuthService);

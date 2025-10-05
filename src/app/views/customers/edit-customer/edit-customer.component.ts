@@ -6,9 +6,10 @@ import { Subject } from 'rxjs';
 import { getCustomerCreateRequest, getEditCustomerFormConfig } from './edit-customer.utils';
 
 @Component({
-	selector: 'app-edit-customer',
-	templateUrl: './edit-customer.component.html',
-	styleUrls: ['./edit-customer.component.scss']
+    selector: 'app-edit-customer',
+    templateUrl: './edit-customer.component.html',
+    styleUrls: ['./edit-customer.component.scss'],
+    standalone: false
 })
 export class EditCustomerComponent implements OnInit, OnDestroy {
 	private unsubscribe$ = new Subject<void>();

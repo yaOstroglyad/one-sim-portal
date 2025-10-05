@@ -10,18 +10,17 @@ import { takeUntil } from 'rxjs/operators';
 import { FileUploadComponent, FileUploadConfig } from '../../../shared';
 
 @Component({
-	selector: 'app-upload-dialog',
-	templateUrl: './upload-dialog.component.html',
-	styleUrls: ['./upload-dialog.component.scss'],
-	standalone: true,
-	imports: [
-		CommonModule,
-		MatDialogModule,
-		MatButtonModule,
-		MatIconModule,
-		TranslateModule,
-		FileUploadComponent
-	]
+    selector: 'app-upload-dialog',
+    templateUrl: './upload-dialog.component.html',
+    styleUrls: ['./upload-dialog.component.scss'],
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatIconModule,
+        TranslateModule,
+        FileUploadComponent
+    ]
 })
 export class UploadDialogComponent implements OnInit, OnDestroy {
 	@ViewChild('fileUploadComponent') fileUploadComponent!: FileUploadComponent;

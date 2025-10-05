@@ -13,17 +13,16 @@ import { AccountsDataService } from 'src/app/shared/services/accounts-data.servi
 import { WhiteLabelDataService } from 'src/app/shared/services/white-label-data.service';
 
 @Component({
-  selector: 'app-general-settings',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormGeneratorModule,
-    TranslateModule,
-    MatSnackBarModule,
-    MatButtonModule,
-    MatDividerModule
-  ],
-  template: `
+    selector: 'app-general-settings',
+    imports: [
+        CommonModule,
+        FormGeneratorModule,
+        TranslateModule,
+        MatSnackBarModule,
+        MatButtonModule,
+        MatDividerModule
+    ],
+    template: `
     <div class="content-container card">
       <div class="card-header">
         {{ 'settings.general.title' | translate }}
@@ -62,7 +61,7 @@ import { WhiteLabelDataService } from 'src/app/shared/services/white-label-data.
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GeneralSettingsComponent implements OnInit {
   @ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;

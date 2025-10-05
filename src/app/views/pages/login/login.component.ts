@@ -5,10 +5,11 @@ import { LoginService } from './login.service';
 import { CacheHubService } from '../../../shared/services/cache-hub';
 
 @Component({
-	selector: 'app-login',
-	templateUrl: './login.component.html',
-	styleUrls: ['./login.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LoginComponent implements OnInit {
 	@HostListener('window:keyup', ['$event'])

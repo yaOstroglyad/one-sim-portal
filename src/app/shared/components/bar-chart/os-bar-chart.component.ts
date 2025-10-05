@@ -33,15 +33,14 @@ export interface BarChartData {
 export type BarChartOptions = ChartOptions<'bar'>;
 
 @Component({
-  selector: 'os-bar-chart',
-  templateUrl: './os-bar-chart.component.html',
-  styleUrls: ['./os-bar-chart.component.scss'],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    TranslateModule
-  ]
+    selector: 'os-bar-chart',
+    templateUrl: './os-bar-chart.component.html',
+    styleUrls: ['./os-bar-chart.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        TranslateModule
+    ]
 })
 export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('barChartCanvas') private barChartCanvas!: ElementRef<HTMLCanvasElement>;

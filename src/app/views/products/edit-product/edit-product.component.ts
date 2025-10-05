@@ -9,9 +9,10 @@ import {
 } from '../../../shared';
 
 @Component({
-	selector: 'app-edit-product',
-	templateUrl: './edit-product.component.html',
-	styleUrls: ['./edit-product.component.scss']
+    selector: 'app-edit-product',
+    templateUrl: './edit-product.component.html',
+    styleUrls: ['./edit-product.component.scss'],
+    standalone: false
 })
 export class EditProductComponent implements OnInit {
 	form: FormGroup = new FormGroup({

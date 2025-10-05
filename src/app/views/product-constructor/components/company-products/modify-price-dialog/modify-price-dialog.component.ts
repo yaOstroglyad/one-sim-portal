@@ -20,22 +20,21 @@ import { FormUtils, CurrencyOption } from './utils/form.utils';
 import { ModifyPriceDialogPresenter } from './services/modify-price-dialog.presenter';
 
 @Component({
-  selector: 'app-modify-price-dialog',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatIconModule
-  ],
-  templateUrl: './modify-price-dialog.component.html',
-  styleUrls: ['./modify-price-dialog.component.scss'],
-  providers: [ModifyPriceDialogPresenter]
+    selector: 'app-modify-price-dialog',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatIconModule
+    ],
+    templateUrl: './modify-price-dialog.component.html',
+    styleUrls: ['./modify-price-dialog.component.scss'],
+    providers: [ModifyPriceDialogPresenter]
 })
 export class ModifyPriceDialogComponent implements OnInit, OnDestroy {
   modifyForm: FormGroup;

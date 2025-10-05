@@ -19,15 +19,14 @@ import {
 } from './product-form.utils';
 
 @Component({
-  selector: 'app-product-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormGeneratorComponent,
-    IconDirective
-  ],
-  templateUrl: './product-form.component.html',
-  styleUrls: ['./product-form.component.scss']
+    selector: 'app-product-form',
+    imports: [
+        CommonModule,
+        FormGeneratorComponent,
+        IconDirective
+    ],
+    templateUrl: './product-form.component.html',
+    styleUrls: ['./product-form.component.scss']
 })
 export class ProductFormComponent implements OnInit {
   @Input() product: Product | null = null;

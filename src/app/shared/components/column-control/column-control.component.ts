@@ -15,10 +15,11 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'column-control',
-  templateUrl: './column-control.component.html',
-  styleUrls: ['./column-control.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'column-control',
+    templateUrl: './column-control.component.html',
+    styleUrls: ['./column-control.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ColumnControlComponent implements OnInit, OnChanges, OnDestroy {
   @Input() config$: Observable<TableConfig>;

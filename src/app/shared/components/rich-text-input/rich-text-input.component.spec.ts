@@ -7,14 +7,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Создаем компонент-обертку для тестирования ControlValueAccessor
 @Component({
-  template: `
+    template: `
     <app-rich-text-input
       [label]="'TEST.LABEL'"
       [placeholder]="'TEST.PLACEHOLDER'"
       [maxLength]="100"
       [(ngModel)]="value"
     ></app-rich-text-input>
-  `
+  `,
+    standalone: false
 })
 class TestHostComponent {
   @ViewChild(RichTextInputComponent) richTextInput: RichTextInputComponent;

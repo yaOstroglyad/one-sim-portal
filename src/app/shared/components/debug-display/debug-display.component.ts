@@ -2,11 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-debug-display',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './debug-display.component.html',
-  styleUrls: ['./debug-display.component.scss']
+    selector: 'app-debug-display',
+    imports: [CommonModule],
+    templateUrl: './debug-display.component.html',
+    styleUrls: ['./debug-display.component.scss']
 })
 export class DebugDisplayComponent implements OnInit {
   @Input() data: any = {};

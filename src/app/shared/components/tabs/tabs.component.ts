@@ -21,12 +21,11 @@ import { TooltipDirective } from '../tooltip';
 import { BadgeComponent } from '../badge';
 
 @Component({
-  selector: 'os-tabs',
-  standalone: true,
-  imports: [CommonModule, TooltipDirective, BadgeComponent],
-  templateUrl: './tabs.component.html',
-  styleUrls: ['./tabs.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'os-tabs',
+    imports: [CommonModule, TooltipDirective, BadgeComponent],
+    templateUrl: './tabs.component.html',
+    styleUrls: ['./tabs.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TabsComponent implements AfterContentInit, AfterViewInit, OnDestroy {
   @Input() activeTabIndex = 0;

@@ -17,22 +17,21 @@ import { OverviewService } from '../../services';
 import { QuickAction } from '../../models';
 
 @Component({
-  selector: 'app-tickets-overview',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    RouterModule,
-    TranslateModule,
-    CardComponent,
-    BadgeComponent,
-    MetricCardComponent,
-    IconDirective,
-    IconModule,
-    AccountSelectorComponent
-  ],
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss']
+    selector: 'app-tickets-overview',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        RouterModule,
+        TranslateModule,
+        CardComponent,
+        BadgeComponent,
+        MetricCardComponent,
+        IconDirective,
+        IconModule,
+        AccountSelectorComponent
+    ],
+    templateUrl: './overview.component.html',
+    styleUrls: ['./overview.component.scss']
 })
 export class OverviewComponent implements OnInit, OnDestroy {
 

@@ -16,21 +16,20 @@ import { TrafficAnalytics } from '../../models/traffic.types';
 import { DashboardError } from '../../models/dashboard.types';
 
 @Component({
-  selector: 'app-traffic-tab',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    IconModule,
-    CardComponent,
-    MetricCardComponent,
-    LoadingIndicatorComponent,
-    ErrorDisplayComponent,
-    OsBarChartComponent,
-    OsLineChartComponent
-  ],
-  templateUrl: './traffic-tab.component.html',
-  styleUrls: ['./traffic-tab.component.scss']
+    selector: 'app-traffic-tab',
+    imports: [
+        CommonModule,
+        TranslateModule,
+        IconModule,
+        CardComponent,
+        MetricCardComponent,
+        LoadingIndicatorComponent,
+        ErrorDisplayComponent,
+        OsBarChartComponent,
+        OsLineChartComponent
+    ],
+    templateUrl: './traffic-tab.component.html',
+    styleUrls: ['./traffic-tab.component.scss']
 })
 export class TrafficTabComponent implements OnInit, OnDestroy {
   data: TrafficAnalytics | null = null;

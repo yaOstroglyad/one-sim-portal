@@ -16,12 +16,11 @@ export interface PaginationConfig {
 }
 
 @Component({
-  selector: 'app-pagination',
-  standalone: true,
-  imports: [CommonModule, TranslateModule, MatIconModule],
-  templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-pagination',
+    imports: [CommonModule, TranslateModule, MatIconModule],
+    templateUrl: './pagination.component.html',
+    styleUrls: ['./pagination.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginationComponent {
   @Input() config: PaginationConfig = {

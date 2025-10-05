@@ -4,12 +4,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { CompanyProduct } from '../../../models';
 
 @Component({
-  selector: 'app-company-product-details',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MatIconModule],
-  templateUrl: './company-product-details.component.html',
-  styleUrls: ['./company-product-details.component.scss']
+    selector: 'app-company-product-details',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, MatIconModule],
+    templateUrl: './company-product-details.component.html',
+    styleUrls: ['./company-product-details.component.scss']
 })
 export class CompanyProductDetailsComponent implements OnChanges {
   @Input() companyProduct: CompanyProduct | null = null;

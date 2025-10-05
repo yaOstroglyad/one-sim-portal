@@ -10,23 +10,22 @@ import { IconDirective } from '@coreui/icons-angular';
 import { GridSelectOption, GridConfig } from '../../model';
 
 @Component({
-  selector: 'app-multiselect-grid',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    TranslateModule,
-    IconDirective
-  ],
-  templateUrl: './multiselect-grid.component.html',
-  styleUrls: ['./multiselect-grid.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => MultiselectGridComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-multiselect-grid',
+    imports: [
+        CommonModule,
+        FormsModule,
+        TranslateModule,
+        IconDirective
+    ],
+    templateUrl: './multiselect-grid.component.html',
+    styleUrls: ['./multiselect-grid.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => MultiselectGridComponent),
+            multi: true
+        }
+    ]
 })
 export class MultiselectGridComponent implements OnInit, OnDestroy, ControlValueAccessor {
   @Input() options: Observable<GridSelectOption[]> | GridSelectOption[] = [];

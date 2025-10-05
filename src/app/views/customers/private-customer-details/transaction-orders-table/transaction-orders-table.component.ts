@@ -12,20 +12,19 @@ import { Observable } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-	selector: 'app-transaction-orders-table',
-	templateUrl: './transaction-orders-table.component.html',
-	styleUrls: ['./transaction-orders-table.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [
-		MatTableModule,
-		JsonPipe,
-		DatePipe,
-		AsyncPipe,
-		NgIf,
-		EmptyStateComponent,
-		TranslateModule
-	],
-	standalone: true
+    selector: 'app-transaction-orders-table',
+    templateUrl: './transaction-orders-table.component.html',
+    styleUrls: ['./transaction-orders-table.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatTableModule,
+        JsonPipe,
+        DatePipe,
+        AsyncPipe,
+        NgIf,
+        EmptyStateComponent,
+        TranslateModule
+    ]
 })
 export class TransactionOrdersTableComponent implements OnInit {
 	transactionsView$: Observable<TransactionOrder[]>;

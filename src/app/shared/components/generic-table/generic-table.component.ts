@@ -13,10 +13,11 @@ import { map, take } from 'rxjs/operators';
 import { TableColumnConfig, TableConfig } from '../../model';
 
 @Component({
-	selector: 'generic-table',
-	templateUrl: './generic-table.component.html',
-	styleUrls: ['./generic-table.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'generic-table',
+    templateUrl: './generic-table.component.html',
+    styleUrls: ['./generic-table.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class GenericTableComponent implements OnChanges {
 	@ContentChild('[custom-toolbar]', {read: TemplateRef})

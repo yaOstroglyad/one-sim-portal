@@ -8,15 +8,14 @@ export interface TimelineEvent {
 }
 
 @Component({
-  selector: 'app-timeline',
-  templateUrl: './timeline.component.html',
-  styleUrls: ['./timeline.component.scss'],
-  imports: [
-    NgForOf,
-    NgIf,
-    DatePipe
-  ],
-  standalone: true
+    selector: 'app-timeline',
+    templateUrl: './timeline.component.html',
+    styleUrls: ['./timeline.component.scss'],
+    imports: [
+        NgForOf,
+        NgIf,
+        DatePipe
+    ]
 })
 export class TimelineComponent {
   @Input() events: TimelineEvent[] = [];

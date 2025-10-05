@@ -17,30 +17,28 @@ import { SendInviteEmailComponent } from './send-invite-email/send-invite-email.
 
 
 @Component({
-	selector: 'app-companies',
-	templateUrl: './companies.component.html',
-	styleUrls: ['./companies.component.scss'],
-	standalone: true,
-	imports: [
-		HeaderModule,
-		ReactiveFormsModule,
-		FormControlDirective,
-		TranslateModule,
-		ButtonDirective,
-		IconDirective,
-		GenericTableModule,
-		MatSnackBarModule,
-		MatDialogModule,
-		MatButtonModule,
-		MatMenuModule,
-		MatIconModule,
-
-	],
-	providers: [
-		CompaniesTableService,
-		CompaniesDataService
-	],
-	changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-companies',
+    templateUrl: './companies.component.html',
+    styleUrls: ['./companies.component.scss'],
+    imports: [
+        HeaderModule,
+        ReactiveFormsModule,
+        FormControlDirective,
+        TranslateModule,
+        ButtonDirective,
+        IconDirective,
+        GenericTableModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatIconModule,
+    ],
+    providers: [
+        CompaniesTableService,
+        CompaniesDataService
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CompaniesComponent implements OnInit, OnDestroy {
 	private unsubscribe$ = new Subject<void>();

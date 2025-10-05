@@ -8,10 +8,9 @@ import { TooltipDirective } from './tooltip.directive';
 import { TooltipPosition, TooltipVariant } from './tooltip.component';
 
 @Component({
-  selector: 'os-tooltip-wrapper',
-  standalone: true,
-  imports: [CommonModule, TooltipDirective],
-  template: `
+    selector: 'os-tooltip-wrapper',
+    imports: [CommonModule, TooltipDirective],
+    template: `
     <div 
       class="os-tooltip-wrapper"
       [osTooltip]="text"
@@ -23,12 +22,12 @@ import { TooltipPosition, TooltipVariant } from './tooltip.component';
       <ng-content></ng-content>
     </div>
   `,
-  styles: [`
+    styles: [`
     .os-tooltip-wrapper {
       display: inline-block;
     }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TooltipWrapperComponent {
   @Input() text = '';

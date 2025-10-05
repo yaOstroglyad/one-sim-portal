@@ -28,30 +28,29 @@ import { EditDomainOwnerComponent } from './edit-domain-owner/edit-domain-owner.
 import { CreateDomainComponent } from './create-domain/create-domain.component';
 
 @Component({
-  selector: 'app-domains',
-  templateUrl: './domains.component.html',
-  styleUrls: ['./domains.component.scss'],
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    FormControlDirective,
-    TranslateModule,
-    ButtonDirective,
-    IconDirective,
-    GenericTableModule,
-    MatSnackBarModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-    HeaderModule,
-    BadgeComponent
-  ],
-  providers: [
-    DomainsTableService,
-    DomainsDataService
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-domains',
+    templateUrl: './domains.component.html',
+    styleUrls: ['./domains.component.scss'],
+    imports: [
+        ReactiveFormsModule,
+        FormControlDirective,
+        TranslateModule,
+        ButtonDirective,
+        IconDirective,
+        GenericTableModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatIconModule,
+        HeaderModule,
+        BadgeComponent
+    ],
+    providers: [
+        DomainsTableService,
+        DomainsDataService
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DomainsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('activeTemplate') activeTemplate: TemplateRef<any>;

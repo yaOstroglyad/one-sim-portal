@@ -39,36 +39,35 @@ import {
 } from './sidebar.types';
 
 @Component({
-  selector: 'os-sidebar',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    'class': 'os-sidebar',
-    '[class.os-sidebar--open]': 'currentState === "open"',
-    '[class.os-sidebar--closed]': 'currentState === "closed"',
-    '[class.os-sidebar--collapsed]': 'currentState === "collapsed"',
-    '[class.os-sidebar--left]': 'config.position === "left"',
-    '[class.os-sidebar--right]': 'config.position === "right"',
-    '[class.os-sidebar--compact]': 'config.variant === "compact"',
-    '[class.os-sidebar--minimal]': 'config.variant === "minimal"',
-    '[class.os-sidebar--floating]': 'config.variant === "floating"',
-    '[class.os-sidebar--rtl]': 'config.rtl',
-    '[class.os-sidebar--dark]': 'config.theme === "dark"',
-    '[class.os-sidebar--responsive]': 'config.responsive',
-    '[class.d-print-none]': 'true',
-    '[attr.aria-label]': 'accessibility.ariaLabel',
-    '[attr.aria-labelledby]': 'accessibility.ariaLabelledBy',
-    '[attr.aria-describedby]': 'accessibility.ariaDescribedBy',
-    '[attr.role]': 'accessibility.role',
-    '[attr.tabindex]': 'accessibility.tabIndex',
-    '[style.z-index]': 'config.zIndex',
-    '[style.--sidebar-expanded-width]': 'config.expandedWidth',
-    '[style.--sidebar-collapsed-width]': 'config.collapsedWidth',
-    '[style.--sidebar-animation-duration]': 'config.animationDuration + "ms"'
-  }
+    selector: 'os-sidebar',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        'class': 'os-sidebar',
+        '[class.os-sidebar--open]': 'currentState === "open"',
+        '[class.os-sidebar--closed]': 'currentState === "closed"',
+        '[class.os-sidebar--collapsed]': 'currentState === "collapsed"',
+        '[class.os-sidebar--left]': 'config.position === "left"',
+        '[class.os-sidebar--right]': 'config.position === "right"',
+        '[class.os-sidebar--compact]': 'config.variant === "compact"',
+        '[class.os-sidebar--minimal]': 'config.variant === "minimal"',
+        '[class.os-sidebar--floating]': 'config.variant === "floating"',
+        '[class.os-sidebar--rtl]': 'config.rtl',
+        '[class.os-sidebar--dark]': 'config.theme === "dark"',
+        '[class.os-sidebar--responsive]': 'config.responsive',
+        '[class.d-print-none]': 'true',
+        '[attr.aria-label]': 'accessibility.ariaLabel',
+        '[attr.aria-labelledby]': 'accessibility.ariaLabelledBy',
+        '[attr.aria-describedby]': 'accessibility.ariaDescribedBy',
+        '[attr.role]': 'accessibility.role',
+        '[attr.tabindex]': 'accessibility.tabIndex',
+        '[style.z-index]': 'config.zIndex',
+        '[style.--sidebar-expanded-width]': 'config.expandedWidth',
+        '[style.--sidebar-collapsed-width]': 'config.collapsedWidth',
+        '[style.--sidebar-animation-duration]': 'config.animationDuration + "ms"'
+    }
 })
 export class SidebarComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('sidebarContainer', { static: true }) sidebarContainer!: ElementRef<HTMLElement>;

@@ -4,9 +4,10 @@ import { FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-	selector: 'app-register',
-	templateUrl: './register.component.html',
-	styleUrls: ['./register.component.scss']
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss'],
+    standalone: false
 })
 export class RegisterComponent {
 	RegistrationConfig = RegistrationConfig;

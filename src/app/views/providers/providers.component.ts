@@ -7,10 +7,11 @@ import { takeUntil } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-providers',
-  templateUrl: './providers.component.html',
-  styleUrls: ['./providers.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-providers',
+    templateUrl: './providers.component.html',
+    styleUrls: ['./providers.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ProvidersComponent implements OnInit, OnDestroy {
   public unsubscribe$: Subject<void> = new Subject<void>();

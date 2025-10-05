@@ -39,20 +39,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { VisualService } from 'src/app/shared/services/visual.service';
 
 @Component({
-	selector: 'app-portal',
-	templateUrl: './portal.component.html',
-	styleUrls: ['./portal.component.scss'],
-	standalone: true,
-	imports: [
-		CommonModule,
-		FormGeneratorModule,
-		PortalPreviewComponent,
-		TranslateModule,
-		MatSnackBarModule,
-		MatButtonModule,
-		MatDividerModule,
-		MatFormFieldModule
-	]
+    selector: 'app-portal',
+    templateUrl: './portal.component.html',
+    styleUrls: ['./portal.component.scss'],
+    imports: [
+        CommonModule,
+        FormGeneratorModule,
+        PortalPreviewComponent,
+        TranslateModule,
+        MatSnackBarModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatFormFieldModule
+    ]
 })
 export class PortalComponent implements OnInit {
 	@ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;

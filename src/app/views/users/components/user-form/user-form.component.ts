@@ -11,14 +11,13 @@ import { CompaniesDataService } from '../../../../shared';
 import { getUserFormConfig } from './user-form.utils';
 
 @Component({
-  selector: 'app-user-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormGeneratorComponent
-  ],
-  templateUrl: './user-form.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-user-form',
+    imports: [
+        CommonModule,
+        FormGeneratorComponent
+    ],
+    templateUrl: './user-form.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserFormComponent implements OnInit, OnDestroy {
   private userService = inject(UserService);

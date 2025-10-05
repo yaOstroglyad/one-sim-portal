@@ -8,16 +8,15 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-	selector: 'app-edit-company',
-	templateUrl: './edit-company.component.html',
-	standalone: true,
-	imports: [
-		MatDialogModule,
-		TranslateModule,
-		FormGeneratorModule,
-		MatButtonModule
-	],
-	styleUrls: ['./edit-company.component.scss']
+    selector: 'app-edit-company',
+    templateUrl: './edit-company.component.html',
+    imports: [
+        MatDialogModule,
+        TranslateModule,
+        FormGeneratorModule,
+        MatButtonModule
+    ],
+    styleUrls: ['./edit-company.component.scss']
 })
 export class EditCompanyComponent implements OnInit, OnDestroy {
 	private unsubscribe$ = new Subject<void>();

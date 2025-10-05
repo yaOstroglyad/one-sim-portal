@@ -16,20 +16,19 @@ import { tap } from 'rxjs/operators';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'app-retail',
-  templateUrl: './retail.component.html',
-  styleUrls: ['./retail.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormGeneratorModule,
-    RetailPreviewComponent,
-    TranslateModule,
-    MatSnackBarModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatInputModule
-  ]
+    selector: 'app-retail',
+    templateUrl: './retail.component.html',
+    styleUrls: ['./retail.component.scss'],
+    imports: [
+        CommonModule,
+        FormGeneratorModule,
+        RetailPreviewComponent,
+        TranslateModule,
+        MatSnackBarModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatInputModule
+    ]
 })
 export class RetailComponent implements OnInit {
   @ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;

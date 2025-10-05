@@ -9,8 +9,9 @@ import { takeUntil, filter } from 'rxjs/operators';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 
 @Component({
-	selector: 'app-root',
-	template: '<router-outlet></router-outlet>'
+    selector: 'app-root',
+    template: '<router-outlet></router-outlet>',
+    standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
 	private unsubscribe$ = new Subject<void>();

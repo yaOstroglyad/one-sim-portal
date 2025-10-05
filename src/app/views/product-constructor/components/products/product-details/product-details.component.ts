@@ -6,15 +6,14 @@ import { BadgeComponent } from '@coreui/angular';
 import { Product } from '../../../models';
 
 @Component({
-  selector: 'app-product-details',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    BadgeComponent
-  ],
-  templateUrl: './product-details.component.html',
-  styleUrls: ['./product-details.component.scss']
+    selector: 'app-product-details',
+    imports: [
+        CommonModule,
+        TranslateModule,
+        BadgeComponent
+    ],
+    templateUrl: './product-details.component.html',
+    styleUrls: ['./product-details.component.scss']
 })
 export class ProductDetailsComponent implements OnInit {
   @Input() product: Product | null = null;

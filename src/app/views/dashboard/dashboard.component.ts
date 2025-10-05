@@ -25,29 +25,28 @@ import { TrafficTabComponent } from './tabs/traffic/traffic-tab.component';
 import { FinanceTabComponent } from './tabs/finance/finance-tab.component';
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    TranslateModule,
-    IconModule,
-    CardComponent,
-    BadgeComponent,
-    OsBarChartComponent,
-    OsLineChartComponent,
-    MetricCardComponent,
-    LoadingIndicatorComponent,
-    ErrorDisplayComponent,
-    ExecutiveTabComponent,
-    SubscribersTabComponent,
-    TrafficTabComponent,
-    FinanceTabComponent
-  ],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-dashboard',
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule,
+        TranslateModule,
+        IconModule,
+        CardComponent,
+        BadgeComponent,
+        OsBarChartComponent,
+        OsLineChartComponent,
+        MetricCardComponent,
+        LoadingIndicatorComponent,
+        ErrorDisplayComponent,
+        ExecutiveTabComponent,
+        SubscribersTabComponent,
+        TrafficTabComponent,
+        FinanceTabComponent
+    ],
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();

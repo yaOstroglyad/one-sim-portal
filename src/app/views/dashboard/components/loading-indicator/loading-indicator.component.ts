@@ -4,12 +4,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LoadingStatus } from '../../models/dashboard.types';
 
 @Component({
-  selector: 'app-loading-indicator',
-  standalone: true,
-  imports: [CommonModule, TranslateModule],
-  templateUrl: './loading-indicator.component.html',
-  styleUrls: ['./loading-indicator.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-loading-indicator',
+    imports: [CommonModule, TranslateModule],
+    templateUrl: './loading-indicator.component.html',
+    styleUrls: ['./loading-indicator.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoadingIndicatorComponent {
   @Input() status: LoadingStatus = { state: 'loading' };

@@ -23,29 +23,28 @@ import { RoleFormComponent } from '../role-form/role-form.component';
 import { UserRoleService } from '../../../../shared';
 
 @Component({
-  selector: 'app-role-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    GenericRightPanelComponent,
-    RoleFormComponent,
-    DeleteConfirmationComponent,
-    GenericTableModule,
-    HeaderModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDialogModule,
-    ButtonDirective,
-    FormControlDirective,
-    IconDirective
-  ],
-  providers: [RolesTableService],
-  templateUrl: './role-list.component.html',
-  styleUrls: ['./role-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-role-list',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        GenericRightPanelComponent,
+        RoleFormComponent,
+        DeleteConfirmationComponent,
+        GenericTableModule,
+        HeaderModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        MatDialogModule,
+        ButtonDirective,
+        FormControlDirective,
+        IconDirective
+    ],
+    providers: [RolesTableService],
+    templateUrl: './role-list.component.html',
+    styleUrls: ['./role-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RoleListComponent implements OnInit, OnDestroy {
   private roleService = inject(RoleService);

@@ -16,20 +16,19 @@ import { CardComponent } from '../../../../shared/components/card/card.component
 import { OsBarChartComponent } from '../../../../shared/components/bar-chart';
 
 @Component({
-  selector: 'app-executive-tab',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    MetricCardComponent,
-    LoadingIndicatorComponent,
-    ErrorDisplayComponent,
-    CardComponent,
-    OsBarChartComponent
-  ],
-  templateUrl: './executive-tab.component.html',
-  styleUrls: ['./executive-tab.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-executive-tab',
+    imports: [
+        CommonModule,
+        TranslateModule,
+        MetricCardComponent,
+        LoadingIndicatorComponent,
+        ErrorDisplayComponent,
+        CardComponent,
+        OsBarChartComponent
+    ],
+    templateUrl: './executive-tab.component.html',
+    styleUrls: ['./executive-tab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExecutiveTabComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();

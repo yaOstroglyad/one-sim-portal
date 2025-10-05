@@ -6,10 +6,11 @@ import { HasPermissionDirective } from './has-permission.directive';
 import { of } from 'rxjs';
 
 @Component({
-  template: `
+    template: `
     <div *appHasPermission="[ADMIN_PERMISSION]">Admin Content</div>
     <div *appHasPermission="['userAccess']">User Content</div>
-  `
+  `,
+    standalone: false
 })
 class TestComponent {
   protected readonly ADMIN_PERMISSION = ADMIN_PERMISSION;

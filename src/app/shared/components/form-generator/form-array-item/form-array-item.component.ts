@@ -28,32 +28,31 @@ import {
 import { isFunction } from 'rxjs/internal/util/isFunction';
 
 @Component({
-	selector: 'app-form-array-item',
-	templateUrl: './form-array-item.component.html',
-	styleUrls: ['./form-array-item.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
-	standalone: true,
-	imports: [
-		CommonModule,
-		ReactiveFormsModule,
-		MatFormFieldModule,
-		MatInputModule,
-		MatSelectModule,
-		MatDatepickerModule,
-		MatCheckboxModule,
-		MatIconModule,
-		TranslateModule,
-		ColorPickerComponent,
-		MatButtonModule,
-		MatListModule,
-		MatNativeDateModule,
-		FlexLayoutModule,
-		ChipsInputComponent,
-		FormCheckComponent,
-		FormCheckInputDirective,
-		RichTextInputComponent,
-		MultiselectGridComponent
-	]
+    selector: 'app-form-array-item',
+    templateUrl: './form-array-item.component.html',
+    styleUrls: ['./form-array-item.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatCheckboxModule,
+        MatIconModule,
+        TranslateModule,
+        ColorPickerComponent,
+        MatButtonModule,
+        MatListModule,
+        MatNativeDateModule,
+        FlexLayoutModule,
+        ChipsInputComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        RichTextInputComponent,
+        MultiselectGridComponent
+    ]
 })
 export class FormArrayItemComponent {
 	@Input() itemFormGroup: FormGroup;

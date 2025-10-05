@@ -15,20 +15,19 @@ import { LoaderComponent } from '../loader/loader.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-	selector: 'app-refund-product',
-	templateUrl: './refund-product.component.html',
-	standalone: true,
-	imports: [
-		MatDialogModule,
-		FormGeneratorModule,
-		MatButtonModule,
-		MatFormFieldModule,
-		MatIconModule,
-		NgIf,
-		LoaderComponent,
-		TranslateModule
-	],
-	styleUrls: ['./refund-product.component.scss']
+    selector: 'app-refund-product',
+    templateUrl: './refund-product.component.html',
+    imports: [
+        MatDialogModule,
+        FormGeneratorModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        NgIf,
+        LoaderComponent,
+        TranslateModule
+    ],
+    styleUrls: ['./refund-product.component.scss']
 })
 export class RefundProductComponent implements OnInit {
 	refundProductService = inject(RefundProductService);

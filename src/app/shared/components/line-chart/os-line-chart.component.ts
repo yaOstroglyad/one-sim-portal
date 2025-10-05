@@ -39,15 +39,14 @@ export interface LineChartData {
 export type LineChartOptions = ChartOptions<'line'>;
 
 @Component({
-  selector: 'os-line-chart',
-  templateUrl: './os-line-chart.component.html',
-  styleUrls: ['./os-line-chart.component.scss'],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    TranslateModule
-  ]
+    selector: 'os-line-chart',
+    templateUrl: './os-line-chart.component.html',
+    styleUrls: ['./os-line-chart.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        TranslateModule
+    ]
 })
 export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('lineChartCanvas') private lineChartCanvas!: ElementRef<HTMLCanvasElement>;

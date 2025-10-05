@@ -9,16 +9,15 @@ import { FormGeneratorComponent, FormConfig } from '../../../../shared';
 import { getRoleFormConfig, getRoleCreateRequest, getRoleUpdateRequest } from './role-form.utils';
 
 @Component({
-  selector: 'app-role-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    FormGeneratorComponent
-  ],
-  templateUrl: './role-form.component.html',
-  styleUrls: ['./role-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-role-form',
+    imports: [
+        CommonModule,
+        TranslateModule,
+        FormGeneratorComponent
+    ],
+    templateUrl: './role-form.component.html',
+    styleUrls: ['./role-form.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RoleFormComponent implements OnInit {
   private roleService = inject(RoleService);

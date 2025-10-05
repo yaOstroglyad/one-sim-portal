@@ -14,17 +14,16 @@ export interface ProviderProductUploadDialogData {
 }
 
 @Component({
-  selector: 'app-provider-product-upload-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    TranslateModule,
-    FileUploadComponent
-  ],
-  templateUrl: './provider-product-upload-dialog.component.html',
-  styleUrls: ['./provider-product-upload-dialog.component.scss']
+    selector: 'app-provider-product-upload-dialog',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        TranslateModule,
+        FileUploadComponent
+    ],
+    templateUrl: './provider-product-upload-dialog.component.html',
+    styleUrls: ['./provider-product-upload-dialog.component.scss']
 })
 export class ProviderProductUploadDialogComponent implements OnInit, OnDestroy {
   @ViewChild('fileUploadComponent') fileUploadComponent!: FileUploadComponent;

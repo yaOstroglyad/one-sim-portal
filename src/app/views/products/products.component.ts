@@ -14,10 +14,11 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-	selector: 'app-products',
-	templateUrl: './products.component.html',
-	styleUrls: ['./products.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-products',
+    templateUrl: './products.component.html',
+    styleUrls: ['./products.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ProductsComponent implements OnInit, OnDestroy {
 	@ViewChild('usageTemplate') usageTemplate: TemplateRef<any>;

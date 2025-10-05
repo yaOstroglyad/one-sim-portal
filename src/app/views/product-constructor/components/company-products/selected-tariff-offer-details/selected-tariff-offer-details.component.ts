@@ -18,17 +18,16 @@ import {
 import { SelectedTariffOfferDetailsPresenter } from './services';
 
 @Component({
-  selector: 'app-selected-tariff-offer-details',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    ButtonDirective
-  ],
-  providers: [SelectedTariffOfferDetailsPresenter],
-  templateUrl: './selected-tariff-offer-details.component.html',
-  styleUrls: ['./selected-tariff-offer-details.component.scss']
+    selector: 'app-selected-tariff-offer-details',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        MatIconModule,
+        ButtonDirective
+    ],
+    providers: [SelectedTariffOfferDetailsPresenter],
+    templateUrl: './selected-tariff-offer-details.component.html',
+    styleUrls: ['./selected-tariff-offer-details.component.scss']
 })
 export class SelectedTariffOfferDetailsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() tariffOffer: ActiveTariffOffer | null = null;

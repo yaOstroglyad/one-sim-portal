@@ -10,18 +10,17 @@ interface Breadcrumb {
 }
 
 @Component({
-  selector: 'app-breadcrumb',
-  templateUrl: './breadcrumb.component.html',
-  styleUrls: ['./breadcrumb.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    NgClass,
-    NgForOf,
-    NgIf,
-    RouterLink,
-    TranslateModule
-  ]
+    selector: 'app-breadcrumb',
+    templateUrl: './breadcrumb.component.html',
+    styleUrls: ['./breadcrumb.component.scss'],
+    imports: [
+        CommonModule,
+        NgClass,
+        NgForOf,
+        NgIf,
+        RouterLink,
+        TranslateModule
+    ]
 })
 export class BreadcrumbComponent implements OnInit {
   router = inject(Router);

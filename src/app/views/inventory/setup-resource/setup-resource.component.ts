@@ -6,9 +6,10 @@ import { ProvidersDataService } from '../../../shared';
 import { FormConfig } from '../../../shared/model/field-config';
 
 @Component({
-  selector: 'app-setup-resource',
-  templateUrl: './setup-resource.component.html',
-  styleUrls: ['./setup-resource.component.scss']
+    selector: 'app-setup-resource',
+    templateUrl: './setup-resource.component.html',
+    styleUrls: ['./setup-resource.component.scss'],
+    standalone: false
 })
 export class SetupResourceComponent {
   setupResourceFormConfig: FormConfig;

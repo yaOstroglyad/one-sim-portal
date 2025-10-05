@@ -21,21 +21,20 @@ interface ExtendedUsageInfo extends UsageInfo {
 }
 
 @Component({
-	selector: 'app-bundles',
-	templateUrl: './bundles.component.html',
-	styleUrls: ['./bundles.component.scss'],
-	standalone: true,
-	imports: [
-		ChartComponent,
-		MatCardModule,
-		NgForOf,
-		NgIf,
-		AsyncPipe,
-		EmptyStateComponent,
-		MatButtonModule,
-		NgClass,
-		TranslateModule
-	]
+    selector: 'app-bundles',
+    templateUrl: './bundles.component.html',
+    styleUrls: ['./bundles.component.scss'],
+    imports: [
+        ChartComponent,
+        MatCardModule,
+        NgForOf,
+        NgIf,
+        AsyncPipe,
+        EmptyStateComponent,
+        MatButtonModule,
+        NgClass,
+        TranslateModule
+    ]
 })
 export class BundlesComponent implements OnInit {
 	bundlesView$: Observable<ExtendedUsageInfo[]>;

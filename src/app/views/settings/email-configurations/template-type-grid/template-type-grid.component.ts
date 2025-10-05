@@ -27,33 +27,32 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
-  selector: 'app-template-type-grid',
-  templateUrl: './template-type-grid.component.html',
-  providers: [TemplateTypeGridService],
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    MatSnackBarModule,
-    TranslateModule,
-    GenericTableModule,
-    HeaderModule,
-    EditEmailTemplateComponent,
-    ButtonDirective,
-    FormControlDirective,
-    IconDirective,
-    ReactiveFormsModule,
-    DropdownComponent,
-    DropdownItemDirective,
-    DropdownMenuDirective,
-    DropdownToggleDirective,
-    MatFormFieldModule,
-    BadgeComponent
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-template-type-grid',
+    templateUrl: './template-type-grid.component.html',
+    providers: [TemplateTypeGridService],
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        MatSnackBarModule,
+        TranslateModule,
+        GenericTableModule,
+        HeaderModule,
+        EditEmailTemplateComponent,
+        ButtonDirective,
+        FormControlDirective,
+        IconDirective,
+        ReactiveFormsModule,
+        DropdownComponent,
+        DropdownItemDirective,
+        DropdownMenuDirective,
+        DropdownToggleDirective,
+        MatFormFieldModule,
+        BadgeComponent
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TemplateTypeGridComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('isPrimaryTemplate', { static: true }) isPrimaryTemplate: TemplateRef<any>;

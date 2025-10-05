@@ -21,25 +21,24 @@ import { map, catchError } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-subscriber-details',
-  templateUrl: './subscriber-details.component.html',
-  styleUrls: ['./subscriber-details.component.scss'],
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatCardModule,
-    MatListModule,
-    TimelineComponent,
-    ChartComponent,
-    MatTableModule,
-    EventStatusComponent,
-    TransactionOrdersTableComponent,
-    PurchasedProductsComponent,
-    BundlesComponent,
-    TranslateModule
-  ],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-subscriber-details',
+    templateUrl: './subscriber-details.component.html',
+    styleUrls: ['./subscriber-details.component.scss'],
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatCardModule,
+        MatListModule,
+        TimelineComponent,
+        ChartComponent,
+        MatTableModule,
+        EventStatusComponent,
+        TransactionOrdersTableComponent,
+        PurchasedProductsComponent,
+        BundlesComponent,
+        TranslateModule
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SubscriberDetailsComponent implements OnInit {
   subscriberDataService = inject(SubscriberDataService);

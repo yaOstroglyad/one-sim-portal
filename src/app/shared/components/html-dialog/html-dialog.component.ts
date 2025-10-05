@@ -4,15 +4,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-html-dialog',
-  templateUrl: './html-dialog.component.html',
-  styleUrls: ['./html-dialog.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    MatButtonModule
-  ]
+    selector: 'app-html-dialog',
+    templateUrl: './html-dialog.component.html',
+    styleUrls: ['./html-dialog.component.scss'],
+    imports: [
+        CommonModule,
+        TranslateModule,
+        MatButtonModule
+    ]
 })
 export class HtmlDialogComponent {
   @ViewChild('htmlDialog') htmlDialog!: ElementRef<HTMLDialogElement>;

@@ -23,33 +23,32 @@ import { Country, CountryService } from '../../../../../shared';
 import { ProductsTableService } from '../products-table.service';
 
 @Component({
-  selector: 'app-product-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    GenericRightPanelComponent,
-    ProductDetailsComponent,
-    ProductFormComponent,
-    DeleteConfirmationComponent,
-    GenericTableModule,
-    HeaderModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    ButtonDirective,
-    FormControlDirective,
-    FormSelectDirective,
-    BadgeComponent,
-    IconDirective,
-    SearchableSelectComponent
-  ],
-  providers: [ProductsTableService],
-  templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-product-list',
+    imports: [
+        CommonModule,
+        RouterModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        GenericRightPanelComponent,
+        ProductDetailsComponent,
+        ProductFormComponent,
+        DeleteConfirmationComponent,
+        GenericTableModule,
+        HeaderModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        ButtonDirective,
+        FormControlDirective,
+        FormSelectDirective,
+        BadgeComponent,
+        IconDirective,
+        SearchableSelectComponent
+    ],
+    providers: [ProductsTableService],
+    templateUrl: './product-list.component.html',
+    styleUrls: ['./product-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
 

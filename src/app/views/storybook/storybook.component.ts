@@ -5,9 +5,10 @@ import { LineChartData, LineChartOptions } from '../../shared/components/line-ch
 import { PaginationConfig } from '../../shared/components/pagination/pagination.component';
 
 @Component({
-  selector: 'app-storybook',
-  templateUrl: './storybook.component.html',
-  styleUrls: ['./storybook.component.scss']
+    selector: 'app-storybook',
+    templateUrl: './storybook.component.html',
+    styleUrls: ['./storybook.component.scss'],
+    standalone: false
 })
 export class StorybookComponent implements OnInit {
   basicTabIndex = 0;

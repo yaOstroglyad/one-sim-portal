@@ -5,8 +5,8 @@ import { EmptyStateComponent } from '../empty-state/empty-state.component';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-qr-code',
-  template: `
+    selector: 'app-qr-code',
+    template: `
     <div class="text-center" [class.no-height]="!qrCodeValue">
       <canvas #qrCanvas></canvas>
     </div>
@@ -16,14 +16,13 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
       [imageSrc]="'assets/img/empty-states/file-not-found.svg'">
     </app-empty-state>
   `,
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    EmptyStateComponent,
-    NgIf,
-    TranslateModule
-  ],
-  styleUrls: ['./qr-code.component.scss']
+    imports: [
+        AsyncPipe,
+        EmptyStateComponent,
+        NgIf,
+        TranslateModule
+    ],
+    styleUrls: ['./qr-code.component.scss']
 })
 export class QrCodeComponent implements OnInit {
   @ViewChild('qrCanvas', { static: true }) qrCanvas!: ElementRef<HTMLCanvasElement>;

@@ -18,26 +18,25 @@ import { FormControlDirective, ButtonDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
-  selector: 'app-email-logs',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    DatePickerWrapperComponent,
-    TranslateModule,
-    GenericTableModule,
-    AccountSelectorComponent,
-    HeaderModule,
-    FormControlDirective,
-    ButtonDirective,
-    IconDirective
-  ],
-  providers: [EmailLogsTableConfigService],
-  templateUrl: './email-logs.component.html',
-  styleUrls: ['./email-logs.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-email-logs',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        DatePickerWrapperComponent,
+        TranslateModule,
+        GenericTableModule,
+        AccountSelectorComponent,
+        HeaderModule,
+        FormControlDirective,
+        ButtonDirective,
+        IconDirective
+    ],
+    providers: [EmailLogsTableConfigService],
+    templateUrl: './email-logs.component.html',
+    styleUrls: ['./email-logs.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmailLogsComponent implements OnInit, OnDestroy {
   @ViewChild('genericTable') genericTable: GenericTableComponent;

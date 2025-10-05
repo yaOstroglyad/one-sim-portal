@@ -4,13 +4,14 @@ import { TabComponent } from './tab.component';
 import { Component } from '@angular/core';
 
 @Component({
-  template: `
+    template: `
     <os-tabs [(activeTabIndex)]="activeTab" (tabChange)="onTabChange($event)">
       <os-tab label="Tab 1">Content 1</os-tab>
       <os-tab label="Tab 2" [disabled]="true">Content 2</os-tab>
       <os-tab label="Tab 3" [closable]="true">Content 3</os-tab>
     </os-tabs>
-  `
+  `,
+    standalone: false
 })
 class TestHostComponent {
   activeTab = 0;

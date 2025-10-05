@@ -8,20 +8,19 @@ import { IconDirective } from '@coreui/icons-angular';
 import { Comment, CommentsConfiguration, CreateCommentRequest } from '../../models';
 
 @Component({
-  selector: 'app-comments',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    ButtonDirective,
-    FormControlDirective,
-    AvatarComponent,
-    IconDirective
-  ],
-  templateUrl: './comments.component.html',
-  styleUrls: ['./comments.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-comments',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        ButtonDirective,
+        FormControlDirective,
+        AvatarComponent,
+        IconDirective
+    ],
+    templateUrl: './comments.component.html',
+    styleUrls: ['./comments.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CommentsComponent implements OnInit {
   @Input() comments: Comment[] = [];

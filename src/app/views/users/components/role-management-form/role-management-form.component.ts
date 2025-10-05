@@ -13,19 +13,18 @@ export interface RoleOption {
 }
 
 @Component({
-  selector: 'app-role-management-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormGeneratorComponent
-  ],
-  template: `
+    selector: 'app-role-management-form',
+    imports: [
+        CommonModule,
+        FormGeneratorComponent
+    ],
+    template: `
     <app-form-generator
       [config]="formConfig"
       (formChanges)="onFormChanges($event)">
     </app-form-generator>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RoleManagementFormComponent implements OnInit, OnDestroy, OnChanges {
   private cdr = inject(ChangeDetectorRef);

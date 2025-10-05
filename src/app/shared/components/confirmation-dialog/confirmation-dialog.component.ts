@@ -9,14 +9,13 @@ export interface ConfirmationDialogData {
 }
 
 @Component({
-  selector: 'app-confirmation-dialog',
-  templateUrl: './confirmation-dialog.component.html',
-  standalone: true,
-  imports: [
-    MatDialogModule,
-    MatButtonModule
-  ],
-  styleUrls: ['./confirmation-dialog.component.scss']
+    selector: 'app-confirmation-dialog',
+    templateUrl: './confirmation-dialog.component.html',
+    imports: [
+        MatDialogModule,
+        MatButtonModule
+    ],
+    styleUrls: ['./confirmation-dialog.component.scss']
 })
 export class ConfirmationDialogComponent {
   safeHtmlContent: SafeHtml;

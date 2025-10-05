@@ -9,11 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-send-registration-email',
-  standalone: true,
-  templateUrl: './send-registration-email.component.html',
-  styleUrls: ['./send-registration-email.component.scss'],
-  imports: [FormGeneratorModule, MatDialogModule, TranslateModule, ReactiveFormsModule, MatButtonModule, InfoStripComponent, CommonModule]
+    selector: 'app-send-registration-email',
+    templateUrl: './send-registration-email.component.html',
+    styleUrls: ['./send-registration-email.component.scss'],
+    imports: [FormGeneratorModule, MatDialogModule, TranslateModule, ReactiveFormsModule, MatButtonModule, InfoStripComponent, CommonModule]
 })
 export class SendRegistrationEmailComponent implements OnInit {
   formConfig: FormConfig;

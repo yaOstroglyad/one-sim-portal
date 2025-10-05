@@ -6,11 +6,10 @@ import { ThemePalette } from '@angular/material/core';
 export type InfoStripType = 'primary' | 'warning' | 'alert';
 
 @Component({
-  selector: 'app-info-strip',
-  standalone: true,
-  imports: [CommonModule, MatIconModule],
-  templateUrl: './info-strip.component.html',
-  styleUrls: ['./info-strip.component.scss']
+    selector: 'app-info-strip',
+    imports: [CommonModule, MatIconModule],
+    templateUrl: './info-strip.component.html',
+    styleUrls: ['./info-strip.component.scss']
 })
 export class InfoStripComponent {
   @Input() icon: string = 'info';

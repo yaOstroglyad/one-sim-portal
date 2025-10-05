@@ -7,17 +7,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Domain } from '../../../../shared/model/domain';
 
 @Component({
-  selector: 'app-edit-domain-name',
-  templateUrl: './edit-domain-name.component.html',
-  styleUrls: ['./edit-domain-name.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatButtonModule,
-    TranslateModule
-  ]
+    selector: 'app-edit-domain-name',
+    templateUrl: './edit-domain-name.component.html',
+    styleUrls: ['./edit-domain-name.component.scss'],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule,
+        TranslateModule
+    ]
 })
 export class EditDomainNameComponent implements OnInit {
   form: FormGroup;

@@ -18,20 +18,19 @@ import {
 } from '../../../../shared';
 
 @Component({
-  selector: 'app-add-subscriber',
-  templateUrl: './add-subscriber.component.html',
-  standalone: true,
-  imports: [
-    MatDialogModule,
-    FormGeneratorModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatIconModule,
-    NgIf,
-    LoaderComponent,
-    TranslateModule
-  ],
-  styleUrls: ['./add-subscriber.component.scss']
+    selector: 'app-add-subscriber',
+    templateUrl: './add-subscriber.component.html',
+    imports: [
+        MatDialogModule,
+        FormGeneratorModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        NgIf,
+        LoaderComponent,
+        TranslateModule
+    ],
+    styleUrls: ['./add-subscriber.component.scss']
 })
 export class AddSubscriberComponent implements OnInit {
   subscriberDataService = inject(SubscriberDataService);

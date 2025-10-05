@@ -14,11 +14,10 @@ export interface DeleteConfirmationConfig {
 }
 
 @Component({
-  selector: 'app-delete-confirmation',
-  standalone: true,
-  imports: [CommonModule, IconDirective],
-  templateUrl: './delete-confirmation.component.html',
-  styleUrls: ['./delete-confirmation.component.scss']
+    selector: 'app-delete-confirmation',
+    imports: [CommonModule, IconDirective],
+    templateUrl: './delete-confirmation.component.html',
+    styleUrls: ['./delete-confirmation.component.scss']
 })
 export class DeleteConfirmationComponent {
   @Input() config: DeleteConfirmationConfig = {

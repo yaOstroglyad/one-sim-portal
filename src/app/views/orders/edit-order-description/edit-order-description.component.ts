@@ -6,9 +6,10 @@ import { FormConfig } from '../../../shared';
 import { getEditOrderFormConfig } from './edit-order-description.utils';
 
 @Component({
-  selector: 'app-edit-order-description-resource',
-  templateUrl: './edit-order-description.component.html',
-  styleUrls: ['./edit-order-description.component.scss']
+    selector: 'app-edit-order-description-resource',
+    templateUrl: './edit-order-description.component.html',
+    styleUrls: ['./edit-order-description.component.scss'],
+    standalone: false
 })
 export class EditOrderDescriptionComponent {
   editOrderFormConfig: FormConfig;

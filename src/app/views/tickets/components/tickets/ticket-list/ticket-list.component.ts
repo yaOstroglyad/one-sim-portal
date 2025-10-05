@@ -25,35 +25,34 @@ import { AccountSelectorComponent } from '../../../../../shared/components/accou
 import { Account, AuthService, ADMIN_PERMISSION } from '../../../../../shared';
 
 @Component({
-  selector: 'app-ticket-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    GenericRightPanelComponent,
-    TicketDetailsWrapperComponent,
-    TicketFormComponent,
-    DeleteConfirmationComponent,
-    GenericTableModule,
-    HeaderModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    ButtonDirective,
-    FormControlDirective,
-    FormSelectDirective,
-    BadgeComponent,
-    IconDirective,
-    SearchableSelectComponent,
-    MatDividerModule,
-    AccountSelectorComponent
-  ],
-  providers: [TicketsTableService],
-  templateUrl: './ticket-list.component.html',
-  styleUrls: ['./ticket-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-ticket-list',
+    imports: [
+        CommonModule,
+        RouterModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        GenericRightPanelComponent,
+        TicketDetailsWrapperComponent,
+        TicketFormComponent,
+        DeleteConfirmationComponent,
+        GenericTableModule,
+        HeaderModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        ButtonDirective,
+        FormControlDirective,
+        FormSelectDirective,
+        BadgeComponent,
+        IconDirective,
+        SearchableSelectComponent,
+        MatDividerModule,
+        AccountSelectorComponent
+    ],
+    providers: [TicketsTableService],
+    templateUrl: './ticket-list.component.html',
+    styleUrls: ['./ticket-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 

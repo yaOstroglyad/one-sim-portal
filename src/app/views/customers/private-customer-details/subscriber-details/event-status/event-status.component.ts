@@ -6,20 +6,19 @@ import { Observable } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-	selector: 'app-event-status',
-	templateUrl: './event-status.component.html',
-	styleUrls: ['./event-status.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
-	standalone: true,
-	imports: [
-		MatTableModule,
-		DatePipe,
-		NgClass,
-		AsyncPipe,
-		NgIf,
-		EmptyStateComponent,
-		TranslateModule
-	]
+    selector: 'app-event-status',
+    templateUrl: './event-status.component.html',
+    styleUrls: ['./event-status.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatTableModule,
+        DatePipe,
+        NgClass,
+        AsyncPipe,
+        NgIf,
+        EmptyStateComponent,
+        TranslateModule
+    ]
 })
 export class EventStatusComponent implements OnInit {
 	subscriberDataService = inject(SubscriberDataService);

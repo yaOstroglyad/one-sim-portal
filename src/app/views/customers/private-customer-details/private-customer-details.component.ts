@@ -42,27 +42,26 @@ import { CopyToClipboardDirective } from '../../../shared/directives/copy-to-cli
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
-	selector: 'app-private-customer-details',
-	templateUrl: './private-customer-details.component.html',
-	styleUrls: ['./private-customer-details.component.scss'],
-	imports: [
-		CommonModule,
-		MatToolbarModule,
-		MatButtonModule,
-		MatIconModule,
-		MatCardModule,
-		MatListModule,
-		MatTabsModule,
-		TimelineComponent,
-		EmptyStateComponent,
-		SubscriberDetailsComponent,
-		MatTooltipModule,
-		TranslateModule,
-		BadgeComponent,
-		CopyToClipboardDirective,
-		MatMenuModule
-	],
-	standalone: true
+    selector: 'app-private-customer-details',
+    templateUrl: './private-customer-details.component.html',
+    styleUrls: ['./private-customer-details.component.scss'],
+    imports: [
+        CommonModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatCardModule,
+        MatListModule,
+        MatTabsModule,
+        TimelineComponent,
+        EmptyStateComponent,
+        SubscriberDetailsComponent,
+        MatTooltipModule,
+        TranslateModule,
+        BadgeComponent,
+        CopyToClipboardDirective,
+        MatMenuModule
+    ]
 })
 export class PrivateCustomerDetailsComponent implements OnInit {
 	@ViewChild('tabGroup', { static: false, read: ElementRef }) tabGroup: ElementRef;

@@ -6,15 +6,14 @@ import { BadgeComponent } from '@coreui/angular';
 import { TariffOffer } from '../../../models/tariff-offer.model';
 
 @Component({
-  selector: 'app-tariff-offer-details',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    BadgeComponent
-  ],
-  templateUrl: './tariff-offer-details.component.html',
-  styleUrls: ['./tariff-offer-details.component.scss']
+    selector: 'app-tariff-offer-details',
+    imports: [
+        CommonModule,
+        TranslateModule,
+        BadgeComponent
+    ],
+    templateUrl: './tariff-offer-details.component.html',
+    styleUrls: ['./tariff-offer-details.component.scss']
 })
 export class TariffOfferDetailsComponent {
   @Input() tariffOffer!: TariffOffer;

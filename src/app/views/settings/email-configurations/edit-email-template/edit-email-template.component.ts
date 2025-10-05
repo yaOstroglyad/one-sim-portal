@@ -10,17 +10,16 @@ import { getEditEmailTemplateFormConfig, getEmailTemplateRequest } from './edit-
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-edit-email-template',
-  templateUrl: './edit-email-template.component.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    FormGeneratorModule,
-    TranslateModule
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-edit-email-template',
+    templateUrl: './edit-email-template.component.html',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        FormGeneratorModule,
+        TranslateModule
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditEmailTemplateComponent implements OnInit {
   public formConfig: FormConfig;

@@ -18,17 +18,16 @@ import {
 } from './company-product-form.utils';
 
 @Component({
-  selector: 'app-company-product-form',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    FormGeneratorComponent,
-    IconDirective,
-    SelectedTariffOfferDetailsComponent
-  ],
-  templateUrl: './company-product-form.component.html',
-  styleUrls: ['./company-product-form.component.scss']
+    selector: 'app-company-product-form',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        FormGeneratorComponent,
+        IconDirective,
+        SelectedTariffOfferDetailsComponent
+    ],
+    templateUrl: './company-product-form.component.html',
+    styleUrls: ['./company-product-form.component.scss']
 })
 export class CompanyProductFormComponent implements OnInit {
 

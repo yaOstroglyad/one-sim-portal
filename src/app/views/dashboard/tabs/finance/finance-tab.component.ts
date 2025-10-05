@@ -16,21 +16,20 @@ import { FinanceAnalytics } from '../../models/finance.types';
 import { DashboardError } from '../../models/dashboard.types';
 
 @Component({
-  selector: 'app-finance-tab',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    IconModule,
-    CardComponent,
-    MetricCardComponent,
-    LoadingIndicatorComponent,
-    ErrorDisplayComponent,
-    OsBarChartComponent,
-    OsLineChartComponent
-  ],
-  templateUrl: './finance-tab.component.html',
-  styleUrls: ['./finance-tab.component.scss']
+    selector: 'app-finance-tab',
+    imports: [
+        CommonModule,
+        TranslateModule,
+        IconModule,
+        CardComponent,
+        MetricCardComponent,
+        LoadingIndicatorComponent,
+        ErrorDisplayComponent,
+        OsBarChartComponent,
+        OsLineChartComponent
+    ],
+    templateUrl: './finance-tab.component.html',
+    styleUrls: ['./finance-tab.component.scss']
 })
 export class FinanceTabComponent implements OnInit, OnDestroy {
   data: FinanceAnalytics | null = null;

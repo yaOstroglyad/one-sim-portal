@@ -17,19 +17,18 @@ import { NgForOf } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-chips-input',
-  templateUrl: './chips-input.component.html',
-  styleUrls: ['./chips-input.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ChipsInputComponent),
-      multi: true
-    }
-  ],
-  standalone: true,
-	imports: [MatFormFieldModule, MatChipsModule, MatIconModule, NgForOf, TranslateModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-chips-input',
+    templateUrl: './chips-input.component.html',
+    styleUrls: ['./chips-input.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => ChipsInputComponent),
+            multi: true
+        }
+    ],
+    imports: [MatFormFieldModule, MatChipsModule, MatIconModule, NgForOf, TranslateModule],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChipsInputComponent implements ControlValueAccessor {
   @Input() label: string = 'Tags';

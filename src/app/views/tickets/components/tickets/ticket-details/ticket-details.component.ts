@@ -8,18 +8,17 @@ import { Ticket } from '../../../models';
 import { CardComponent } from '../../../../../shared';
 
 @Component({
-  selector: 'app-ticket-details',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    BadgeComponent,
-    IconDirective,
-    CardComponent
-  ],
-  templateUrl: './ticket-details.component.html',
-  styleUrls: ['./ticket-details.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-ticket-details',
+    imports: [
+        CommonModule,
+        TranslateModule,
+        BadgeComponent,
+        IconDirective,
+        CardComponent
+    ],
+    templateUrl: './ticket-details.component.html',
+    styleUrls: ['./ticket-details.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TicketDetailsComponent {
   @Input() ticket: Ticket;

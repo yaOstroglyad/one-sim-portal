@@ -12,20 +12,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AccountSelectorComponent } from '../../../shared/components/account-selector/account-selector.component';
 
 @Component({
-  selector: 'app-email-configurations',
-  templateUrl: './email-configurations.component.html',
-  styleUrls: ['./email-configurations.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatCardModule,
-    MatIconModule,
-    TranslateModule,
-    TemplateTypeGridComponent,
-    AccountSelectorComponent
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-email-configurations',
+    templateUrl: './email-configurations.component.html',
+    styleUrls: ['./email-configurations.component.scss'],
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatCardModule,
+        MatIconModule,
+        TranslateModule,
+        TemplateTypeGridComponent,
+        AccountSelectorComponent
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmailConfigurationsComponent implements OnInit {
   public templateTypes$: Observable<string[]>;

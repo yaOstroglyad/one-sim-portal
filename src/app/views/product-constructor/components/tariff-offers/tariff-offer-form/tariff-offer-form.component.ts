@@ -17,15 +17,14 @@ import {
 } from './tariff-offer-form.utils';
 
 @Component({
-  selector: 'app-tariff-offer-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormGeneratorComponent,
-    IconDirective
-  ],
-  templateUrl: './tariff-offer-form.component.html',
-  styleUrls: ['./tariff-offer-form.component.scss']
+    selector: 'app-tariff-offer-form',
+    imports: [
+        CommonModule,
+        FormGeneratorComponent,
+        IconDirective
+    ],
+    templateUrl: './tariff-offer-form.component.html',
+    styleUrls: ['./tariff-offer-form.component.scss']
 })
 export class TariffOfferFormComponent implements OnInit, OnChanges {
   @Input() tariffOffer: TariffOffer | null = null;

@@ -10,18 +10,17 @@ import { AccountsDataService } from '../../../../shared/services/accounts-data.s
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-edit-domain-owner',
-  templateUrl: './edit-domain-owner.component.html',
-  styleUrls: ['./edit-domain-owner.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatSelectModule,
-    TranslateModule
-  ]
+    selector: 'app-edit-domain-owner',
+    templateUrl: './edit-domain-owner.component.html',
+    styleUrls: ['./edit-domain-owner.component.scss'],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatSelectModule,
+        TranslateModule
+    ]
 })
 export class EditDomainOwnerComponent implements OnInit {
   form: FormGroup;

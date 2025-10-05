@@ -18,10 +18,9 @@ export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
 export type TooltipVariant = 'default' | 'error' | 'warning' | 'info' | 'success';
 
 @Component({
-  selector: 'os-tooltip',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'os-tooltip',
+    imports: [CommonModule],
+    template: `
     <div 
       class="os-tooltip"
       [class]="tooltipClasses"
@@ -54,8 +53,8 @@ export type TooltipVariant = 'default' | 'error' | 'warning' | 'info' | 'success
       <div class="os-tooltip__arrow"></div>
     </div>
   `,
-  styleUrls: ['./tooltip.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['./tooltip.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TooltipComponent implements OnInit, OnDestroy, AfterContentInit {
   @Input() text = '';

@@ -11,11 +11,10 @@ export interface PanelAction {
 }
 
 @Component({
-  selector: 'app-generic-right-panel',
-  standalone: true,
-  imports: [CommonModule, IconDirective],
-  templateUrl: './generic-right-panel.component.html',
-  styleUrls: ['./generic-right-panel.component.scss']
+    selector: 'app-generic-right-panel',
+    imports: [CommonModule, IconDirective],
+    templateUrl: './generic-right-panel.component.html',
+    styleUrls: ['./generic-right-panel.component.scss']
 })
 export class GenericRightPanelComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() title: string = '';

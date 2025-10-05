@@ -21,28 +21,27 @@ import { MobileBundle } from '../../../models';
 import { BundlesTableService } from '../bundles-table.service';
 
 @Component({
-  selector: 'app-bundle-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    GenericRightPanelComponent,
-    BundleFormComponent,
-    BundleDetailsComponent,
-    DeleteConfirmationComponent,
-    GenericTableModule,
-    HeaderModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    ButtonDirective,
-    FormControlDirective,
-    IconDirective
-  ],
-  providers: [BundlesTableService],
-  templateUrl: './bundle-list.component.html',
-  styleUrls: ['./bundle-list.component.scss']
+    selector: 'app-bundle-list',
+    imports: [
+        CommonModule,
+        RouterModule,
+        ReactiveFormsModule,
+        GenericRightPanelComponent,
+        BundleFormComponent,
+        BundleDetailsComponent,
+        DeleteConfirmationComponent,
+        GenericTableModule,
+        HeaderModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        ButtonDirective,
+        FormControlDirective,
+        IconDirective
+    ],
+    providers: [BundlesTableService],
+    templateUrl: './bundle-list.component.html',
+    styleUrls: ['./bundle-list.component.scss']
 })
 export class BundleListComponent implements OnInit {
 

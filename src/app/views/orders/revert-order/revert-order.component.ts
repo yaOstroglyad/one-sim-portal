@@ -9,10 +9,11 @@ import { FormConfig } from '../../../shared';
 import { Order } from '../../../shared/model/order';
 
 @Component({
-	selector: 'app-revert-order',
-	templateUrl: './revert-order.component.html',
-	styleUrls: ['./revert-order.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-revert-order',
+    templateUrl: './revert-order.component.html',
+    styleUrls: ['./revert-order.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RevertOrderComponent implements OnDestroy {
 	public unsubscribe$: Subject<void> = new Subject<void>();

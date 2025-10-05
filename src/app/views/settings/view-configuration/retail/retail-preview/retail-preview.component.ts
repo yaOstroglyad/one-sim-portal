@@ -2,11 +2,10 @@ import { Component, Input, ElementRef, OnChanges, OnInit, SimpleChanges } from '
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-retail-preview',
-  templateUrl: './retail-preview.component.html',
-  styleUrls: ['./retail-preview.component.scss'],
-  standalone: true,
-  imports: [CommonModule]
+    selector: 'app-retail-preview',
+    templateUrl: './retail-preview.component.html',
+    styleUrls: ['./retail-preview.component.scss'],
+    imports: [CommonModule]
 })
 export class RetailPreviewComponent implements OnChanges, OnInit {
   @Input() primary: string = '#f9a743';

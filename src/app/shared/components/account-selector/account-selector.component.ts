@@ -20,19 +20,18 @@ import { Subject } from 'rxjs';
 import { Account } from '../../model';
 
 @Component({
-	selector: 'app-account-selector',
-	templateUrl: './account-selector.component.html',
-	styleUrls: ['./account-selector.component.scss'],
-	standalone: true,
-	imports: [
-		CommonModule,
-		TranslateModule,
-		MatIconModule,
-		MatFormFieldModule,
-		MatSelectModule,
-		ReactiveFormsModule
-	],
-	changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-account-selector',
+    templateUrl: './account-selector.component.html',
+    styleUrls: ['./account-selector.component.scss'],
+    imports: [
+        CommonModule,
+        TranslateModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        ReactiveFormsModule
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountSelectorComponent implements OnInit, OnDestroy {
 	@Input() helperText: string = 'common.selectAccountFirst';

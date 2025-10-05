@@ -19,25 +19,24 @@ import { PaymentGatewayUtilsService } from '../payment-gateway.utils.service';
 import { FormConfig } from 'src/app/shared';
 
 @Component({
-  selector: 'app-edit-payment-gateway',
-  templateUrl: './edit-payment-gateway.component.html',
-  styleUrls: ['./edit-payment-gateway.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    TranslateModule,
-    FormGeneratorComponent,
-    FormCheckComponent,
-    FormCheckInputDirective,
-    MatTooltipModule
-  ]
+    selector: 'app-edit-payment-gateway',
+    templateUrl: './edit-payment-gateway.component.html',
+    styleUrls: ['./edit-payment-gateway.component.scss'],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        TranslateModule,
+        FormGeneratorComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        MatTooltipModule
+    ]
 })
 export class EditPaymentGatewayComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() paymentStrategy: PaymentStrategy | null = null;

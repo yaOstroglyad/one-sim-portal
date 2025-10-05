@@ -12,9 +12,10 @@ import { CreateProductService } from './create-product.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-	selector: 'app-create-product',
-	templateUrl: './create-product.component.html',
-	styleUrls: ['./create-product.component.scss']
+    selector: 'app-create-product',
+    templateUrl: './create-product.component.html',
+    styleUrls: ['./create-product.component.scss'],
+    standalone: false
 })
 export class CreateProductComponent implements OnInit, OnDestroy {
 	form: FormGroup;

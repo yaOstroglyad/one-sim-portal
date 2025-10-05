@@ -7,14 +7,13 @@ import { RegionSummary, Country } from '../../../models';
 import { getRegionFormConfig, getRegionCreateRequest, getRegionUpdateRequest } from './region-form.utils';
 
 @Component({
-  selector: 'app-region-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormGeneratorComponent
-  ],
-  template: `
+    selector: 'app-region-form',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormGeneratorComponent
+    ],
+    template: `
     <div class="region-form">
       <app-form-generator 
         [config]="formConfig" 
@@ -22,7 +21,7 @@ import { getRegionFormConfig, getRegionCreateRequest, getRegionUpdateRequest } f
       </app-form-generator>
     </div>
   `,
-  styleUrls: ['./region-form.component.scss']
+    styleUrls: ['./region-form.component.scss']
 })
 export class RegionFormComponent implements OnInit, OnChanges {
   @Input() region: RegionSummary | null = null;

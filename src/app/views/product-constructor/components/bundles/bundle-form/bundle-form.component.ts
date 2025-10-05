@@ -8,14 +8,13 @@ import { MobileBundle } from '../../../models';
 import { getBundleFormConfig, getBundleCreateRequest, getBundleUpdateRequest } from './bundle-form.utils';
 
 @Component({
-  selector: 'app-bundle-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormGeneratorComponent
-  ],
-  template: `
+    selector: 'app-bundle-form',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        FormGeneratorComponent
+    ],
+    template: `
     <div class="bundle-form-container">
       <!-- Error Display -->
       <div *ngIf="error" class="error-alert">
@@ -30,7 +29,7 @@ import { getBundleFormConfig, getBundleCreateRequest, getBundleUpdateRequest } f
       </app-form-generator>
     </div>
   `,
-  styleUrls: ['./bundle-form.component.scss']
+    styleUrls: ['./bundle-form.component.scss']
 })
 export class BundleFormComponent implements OnInit {
 

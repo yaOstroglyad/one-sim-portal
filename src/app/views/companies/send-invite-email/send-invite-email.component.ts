@@ -7,16 +7,15 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-send-invite-email',
-  templateUrl: './send-invite-email.component.html',
-  standalone: true,
-  imports: [
-    MatDialogModule,
-    FormGeneratorModule,
-    TranslateModule,
-    MatButtonModule
-  ],
-  styleUrls: ['./send-invite-email.component.scss']
+    selector: 'app-send-invite-email',
+    templateUrl: './send-invite-email.component.html',
+    imports: [
+        MatDialogModule,
+        FormGeneratorModule,
+        TranslateModule,
+        MatButtonModule
+    ],
+    styleUrls: ['./send-invite-email.component.scss']
 })
 export class SendInviteEmailComponent {
   formConfig: FormConfig;

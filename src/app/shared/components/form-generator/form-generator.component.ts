@@ -46,35 +46,34 @@ import { FormArrayItemComponent } from './form-array-item';
 import { FileUploadComponent } from '../file-upload';
 
 @Component({
-	selector: 'app-form-generator',
-	templateUrl: './form-generator.component.html',
-	styleUrls: ['./form-generator.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
-	standalone: true,
-	imports: [
-		CommonModule,
-		ReactiveFormsModule,
-		MatFormFieldModule,
-		MatInputModule,
-		MatSelectModule,
-		MatDatepickerModule,
-		MatCheckboxModule,
-		MatIconModule,
-		TranslateModule,
-		ColorPickerComponent,
-		MatButtonModule,
-		MatListModule,
-		MatNativeDateModule,
-		FlexLayoutModule,
-		ChipsInputComponent,
-		FormCheckComponent,
-		FormCheckInputDirective,
-		IconDirective,
-		RichTextInputComponent,
-		MultiselectGridComponent,
-		FormArrayItemComponent,
-		FileUploadComponent
-	]
+    selector: 'app-form-generator',
+    templateUrl: './form-generator.component.html',
+    styleUrls: ['./form-generator.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatCheckboxModule,
+        MatIconModule,
+        TranslateModule,
+        ColorPickerComponent,
+        MatButtonModule,
+        MatListModule,
+        MatNativeDateModule,
+        FlexLayoutModule,
+        ChipsInputComponent,
+        FormCheckComponent,
+        FormCheckInputDirective,
+        IconDirective,
+        RichTextInputComponent,
+        MultiselectGridComponent,
+        FormArrayItemComponent,
+        FileUploadComponent
+    ]
 })
 export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 	private unsubscribe$ = new Subject<void>();

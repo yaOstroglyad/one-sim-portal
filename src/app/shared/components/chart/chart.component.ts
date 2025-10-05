@@ -13,14 +13,13 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-chart',
-  templateUrl: 'chart.component.html',
-  styleUrls: ['chart.component.scss'],
-  imports: [
-    CommonModule,
-    TranslateModule
-  ],
-  standalone: true,
+    selector: 'app-chart',
+    templateUrl: 'chart.component.html',
+    styleUrls: ['chart.component.scss'],
+    imports: [
+        CommonModule,
+        TranslateModule
+    ]
 })
 export class ChartComponent implements AfterViewInit, OnChanges {
   @ViewChild('doughnutChartCanvas') private doughnutChartCanvas: ElementRef;

@@ -22,29 +22,28 @@ import { CountryService, Country } from '../../../../../shared';
 import { RegionsTableService } from '../regions-table.service';
 
 @Component({
-  selector: 'app-region-list',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    GenericRightPanelComponent,
-    RegionFormComponent,
-    RegionDetailsComponent,
-    DeleteConfirmationComponent,
-    GenericTableModule,
-    HeaderModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    ButtonDirective,
-    FormControlDirective,
-    IconDirective
-  ],
-  providers: [RegionsTableService],
-  templateUrl: './region-list.component.html',
-  styleUrls: ['./region-list.component.scss']
+    selector: 'app-region-list',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        RouterModule,
+        ReactiveFormsModule,
+        GenericRightPanelComponent,
+        RegionFormComponent,
+        RegionDetailsComponent,
+        DeleteConfirmationComponent,
+        GenericTableModule,
+        HeaderModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        ButtonDirective,
+        FormControlDirective,
+        IconDirective
+    ],
+    providers: [RegionsTableService],
+    templateUrl: './region-list.component.html',
+    styleUrls: ['./region-list.component.scss']
 })
 export class RegionListComponent implements OnInit, OnDestroy {
 

@@ -25,19 +25,18 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SearchableSelectOption, SearchableSelectConfig, SearchableSelectChangeEvent } from './searchable-select.types';
 
 @Component({
-  selector: 'app-searchable-select',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IconDirective, MatIconModule, TranslateModule],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SearchableSelectComponent),
-      multi: true
-    }
-  ],
-  templateUrl: './searchable-select.component.html',
-  styleUrls: ['./searchable-select.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-searchable-select',
+    imports: [CommonModule, ReactiveFormsModule, IconDirective, MatIconModule, TranslateModule],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => SearchableSelectComponent),
+            multi: true
+        }
+    ],
+    templateUrl: './searchable-select.component.html',
+    styleUrls: ['./searchable-select.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
   

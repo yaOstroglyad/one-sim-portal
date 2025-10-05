@@ -7,17 +7,16 @@ import { IconDirective } from '@coreui/icons-angular';
 import { Attachment, AttachmentsConfiguration, UploadAttachmentRequest } from '../../models';
 
 @Component({
-  selector: 'app-attachments',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    ButtonDirective,
-    IconDirective
-  ],
-  templateUrl: './attachments.component.html',
-  styleUrls: ['./attachments.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-attachments',
+    imports: [
+        CommonModule,
+        TranslateModule,
+        ButtonDirective,
+        IconDirective
+    ],
+    templateUrl: './attachments.component.html',
+    styleUrls: ['./attachments.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AttachmentsComponent implements OnInit {
   @Input() attachments: Attachment[] = [];

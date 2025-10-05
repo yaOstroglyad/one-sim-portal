@@ -12,21 +12,20 @@ import { OsBarChartComponent } from '../../../../shared/components/bar-chart';
 import { OsLineChartComponent } from '../../../../shared/components/line-chart';
 
 @Component({
-  selector: 'app-subscribers-tab',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    MetricCardComponent,
-    LoadingIndicatorComponent,
-    ErrorDisplayComponent,
-    CardComponent,
-    OsBarChartComponent,
-    OsLineChartComponent
-  ],
-  templateUrl: './subscribers-tab.component.html',
-  styleUrls: ['./subscribers-tab.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-subscribers-tab',
+    imports: [
+        CommonModule,
+        TranslateModule,
+        MetricCardComponent,
+        LoadingIndicatorComponent,
+        ErrorDisplayComponent,
+        CardComponent,
+        OsBarChartComponent,
+        OsLineChartComponent
+    ],
+    templateUrl: './subscribers-tab.component.html',
+    styleUrls: ['./subscribers-tab.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SubscribersTabComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();

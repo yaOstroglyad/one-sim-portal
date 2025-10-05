@@ -7,18 +7,17 @@ export type BadgeSize = 'small' | 'medium' | 'large';
 export type BadgeShape = 'rounded' | 'pill' | 'square';
 
 @Component({
-  selector: 'os-badge',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'os-badge',
+    imports: [CommonModule],
+    template: `
     <ng-content></ng-content>
   `,
-  host: {
-    '[class]': 'badgeClasses',
-    '[attr.aria-label]': 'ariaLabel'
-  },
-  styleUrls: ['./badge.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    host: {
+        '[class]': 'badgeClasses',
+        '[attr.aria-label]': 'ariaLabel'
+    },
+    styleUrls: ['./badge.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BadgeComponent {
   @Input() variant: BadgeVariant = 'primary';

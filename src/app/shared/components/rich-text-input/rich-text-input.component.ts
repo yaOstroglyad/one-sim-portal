@@ -4,21 +4,20 @@ import { HtmlDialogComponent } from '../html-dialog';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-	selector: 'app-rich-text-input',
-	templateUrl: './rich-text-input.component.html',
-	styleUrls: ['./rich-text-input.component.scss'],
-	standalone: true,
-	imports: [
-		TranslateModule,
-		HtmlDialogComponent
-	],
-	providers: [
-		{
-			provide: NG_VALUE_ACCESSOR,
-			useExisting: forwardRef(() => RichTextInputComponent),
-			multi: true
-		}
-	]
+    selector: 'app-rich-text-input',
+    templateUrl: './rich-text-input.component.html',
+    styleUrls: ['./rich-text-input.component.scss'],
+    imports: [
+        TranslateModule,
+        HtmlDialogComponent
+    ],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => RichTextInputComponent),
+            multi: true
+        }
+    ]
 })
 export class RichTextInputComponent implements OnInit, AfterViewInit, ControlValueAccessor {
 	@Input() label = '';

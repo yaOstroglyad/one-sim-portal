@@ -14,20 +14,19 @@ import { FormConfig, FormGeneratorModule } from '../../../../shared';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
-	selector: 'app-add-subscriber-product',
-	templateUrl: './add-subscriber-product.component.html',
-	standalone: true,
-	imports: [
-		MatDialogModule,
-		FormGeneratorModule,
-		MatButtonModule,
-		MatFormFieldModule,
-		MatIconModule,
-		NgIf,
-		LoaderComponent,
-		TranslateModule
-	],
-	styleUrls: ['./add-subscriber-product.component.scss']
+    selector: 'app-add-subscriber-product',
+    templateUrl: './add-subscriber-product.component.html',
+    imports: [
+        MatDialogModule,
+        FormGeneratorModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        NgIf,
+        LoaderComponent,
+        TranslateModule
+    ],
+    styleUrls: ['./add-subscriber-product.component.scss']
 })
 export class AddSubscriberProductComponent implements OnInit {
 	addSubscriberProductService = inject(AddSubscriberProductService);
