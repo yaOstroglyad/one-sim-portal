@@ -1,10 +1,68 @@
 <app-header class="os-header-sticky"
-            [formGroup]="filterForm"
             [tableConfig$]="tableConfig$"
             (onAddAction)="createUser()"
             (columnSelectionChange)="onColumnSelectionChanged($event)">
     <ng-container header-custom-inputs>
-        <input cFormControl formControlName="searchQuery" [type]="'text'" placeholder="Search users">
+        <app-smart-filter-header
+            [formGroup]="filterForm"
+            [config]="smartFilterConfig"
+            (resetFilters)="resetForm()"
+            (filtersChanged)="onFiltersChanged($event)">
+
+            <ng-template #simpleFilters>
+                <input id="searchQuerySimple"
+                       cFormControl
+                       formControlName="searchQuery"
+                       [type]="'text'"
+                       placeholder="{{ 'users.searchPlaceholder' | translate }}">
+            </ng-template>
+
+            <ng-template #advancedFilters>
+
+                <div *ngIf="isAdmin" class="form-group">
+                    <label for="companyAccountId">{{ 'customer.company' | translate }}</label>
+                    <app-searchable-select
+                            id="companyAccountId"
+                            [options]="companyOptions$ | async"
+                            [config]="{
+                                    placeholder: ('company.name' | translate),
+                                    searchPlaceholder: ('common.search' | translate) + '...',
+                                    noResultsText: ('common.noResultsFound' | translate),
+                                    clearable: true,
+                                    searchable: true
+                                }"
+                            formControlName="companyAccountId"
+                            class="w-100">
+                    </app-searchable-select>
+                </div>
+
+                <div class="form-group">
+                    <label for="searchQueryAdvanced">{{ 'common.search' | translate }}</label>
+                    <input id="searchQueryAdvanced" cFormControl formControlName="searchQuery"
+                           [type]="'text'"
+                           placeholder="{{ 'users.searchPlaceholder' | translate }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="type">{{ 'users.type' | translate }}</label>
+                    <app-searchable-select
+                            id="type"
+                            [options]="userTypeOptions"
+                            [config]="{
+                                    placeholder: ('users.selectType' | translate),
+                                    searchPlaceholder: ('common.search' | translate) + '...',
+                                    noResultsText: ('common.noResultsFound' | translate),
+                                    clearable: true,
+                                    searchable: true
+                                }"
+                            formControlName="type"
+                            class="w-100">
+                    </app-searchable-select>
+                </div>
+            </ng-template>
+
+        </app-smart-filter-header>
+
         <button cButton
                 color="secondary"
                 [disabled]="filterForm.pristine"
@@ -24,12 +82,6 @@
     </button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item
-                (click)="editUser(item)"
-                [disabled]="!canEditUser(item)">
-            <mat-icon>edit</mat-icon>
-            <span>{{ 'common.edit' | translate }}</span>
-        </button>
-        <button mat-menu-item
                 (click)="assignRoles(item)"
                 [disabled]="!canManageRoles(item)">
             <mat-icon>add_circle</mat-icon>
@@ -41,19 +93,6 @@
             <mat-icon>remove_circle</mat-icon>
             <span>{{ 'users.removeRoles' | translate }}</span>
         </button>
-<!--        <button mat-menu-item -->
-<!--                (click)="resetPassword(item)"-->
-<!--                [disabled]="!canResetPassword(item)">-->
-<!--            <mat-icon>lock_reset</mat-icon>-->
-<!--            <span>{{ 'user.resetPassword' | translate }}</span>-->
-<!--        </button>-->
-<!--        <button mat-menu-item-->
-<!--                (click)="deleteUser(item)"-->
-<!--                [disabled]="!canDeleteUser(item)"-->
-<!--                class="text-danger">-->
-<!--            <mat-icon>delete</mat-icon>-->
-<!--            <span>{{ 'common.delete' | translate }}</span>-->
-<!--        </button>-->
     </mat-menu>
 </ng-template>
 
@@ -102,43 +141,6 @@
             <span *ngIf="createForm.loading" class="spinner-border spinner-border-sm me-2" role="status"
                   aria-hidden="true"></span>
             {{ 'users.create' | translate }}
-        </button>
-    </ng-container>
-
-</app-generic-right-panel>
-
-<!-- Edit Panel -->
-<app-generic-right-panel
-        *ngIf="showEditPanel && selectedUser"
-        title="{{ 'users.editTitle' | translate }}"
-        subtitle="{{ 'users.editSubtitle' | translate }}"
-        [isOpen]="showEditPanel"
-        [hasFooter]="true"
-        (close)="onPanelClose()">
-
-    <div panel-content>
-        <app-user-form
-            #editForm
-            [user]="selectedUser"
-            (save)="onUserSaved()">
-        </app-user-form>
-    </div>
-
-    <ng-container panel-actions>
-        <button
-                type="button"
-                class="btn btn-outline-secondary"
-                (click)="onPanelClose()">
-            {{ 'common.cancel' | translate }}
-        </button>
-        <button
-                type="button"
-                class="btn btn-primary"
-                (click)="editForm.onSubmit()"
-                [disabled]="editForm.loading || editForm.userForm?.invalid">
-            <span *ngIf="editForm.loading" class="spinner-border spinner-border-sm me-2" role="status"
-                  aria-hidden="true"></span>
-            {{ 'users.update' | translate }}
         </button>
     </ng-container>
 

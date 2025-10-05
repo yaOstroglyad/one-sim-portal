@@ -1,24 +1,33 @@
 // Base mapper interface for type safety
+// Constants for value mapper types
+export const VALUE_MAPPER_TYPES = {
+  FUNCTION: 'function',
+  STATIC: 'static',
+  OBSERVABLE: 'observable'
+} as const;
+
+export type ValueMapperType = typeof VALUE_MAPPER_TYPES[keyof typeof VALUE_MAPPER_TYPES];
+
 interface BaseValueMapper {
-  type: string;
+  type: ValueMapperType;
 }
 
 // Function-based mapper for simple transformations
 export interface FunctionValueMapper extends BaseValueMapper {
-  type: 'function';
+  type: typeof VALUE_MAPPER_TYPES.FUNCTION;
   mapper: (value: any, services?: SmartFilterServices) => string | Promise<string>;
 }
 
 // Static dictionary for predefined mappings
 export interface StaticValueMapper extends BaseValueMapper {
-  type: 'static';
+  type: typeof VALUE_MAPPER_TYPES.STATIC;
   mappings: Record<string | number, string>;
   fallback?: string; // Fallback value for unmapped keys
 }
 
 // Observable-based mapper for backend data (form-generator pattern)
 export interface ObservableValueMapper extends BaseValueMapper {
-  type: 'observable';
+  type: typeof VALUE_MAPPER_TYPES.OBSERVABLE;
   serviceKey: string; // Service key in services object
   methodName: string; // Service method name
   valueField: string; // Field to extract display value
@@ -70,6 +79,7 @@ export interface SmartFilterGlobalSettings {
   storageKey?: string; // localStorage key
   resetToDefaults?: boolean; // Reset to default values instead of clearing
   cacheTTL?: number; // Cache time-to-live in milliseconds (default: 5 minutes)
+  debounceTime?: number; // Debounce time for form changes in milliseconds (default: 700)
 }
 
 // Main smart filter configuration

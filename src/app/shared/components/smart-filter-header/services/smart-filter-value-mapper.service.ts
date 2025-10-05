@@ -5,7 +5,8 @@ import {
   SmartFilterServices,
   FunctionValueMapper,
   StaticValueMapper,
-  ObservableValueMapper
+  ObservableValueMapper,
+  VALUE_MAPPER_TYPES
 } from '../models/smart-filter.interface';
 
 // Cache entry interface
@@ -41,11 +42,11 @@ export class SmartFilterValueMapperService {
 
     try {
       switch (mapper.type) {
-        case 'function':
+        case VALUE_MAPPER_TYPES.FUNCTION:
           return await this.mapWithFunction(mapper, value, services);
-        case 'static':
+        case VALUE_MAPPER_TYPES.STATIC:
           return this.mapWithStatic(mapper, value);
-        case 'observable':
+        case VALUE_MAPPER_TYPES.OBSERVABLE:
           return await this.mapWithObservable(mapper, value, services, cacheTTL);
         default:
           console.warn(`Unknown mapper type: ${(mapper as any).type}`);

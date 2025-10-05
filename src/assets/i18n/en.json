@@ -60,6 +60,8 @@
     "inactive": "Inactive",
     "allRoles": "All Roles",
     "allStatuses": "All Statuses",
+    "type": "User Type",
+    "selectType": "Select user type",
     "create": "Create User",
     "createTitle": "Create User",
     "createSubtitle": "Add a new user to the system",

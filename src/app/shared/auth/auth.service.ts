@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { JwtHelperService } from './jwt-helper.service';
 import { Observable, of, Subject } from 'rxjs';
-import { catchError, map, takeUntil, tap } from 'rxjs/operators';
+import { catchError, map, takeUntil, tap, shareReplay } from 'rxjs/operators';
 import { LoginRequest, LoginResponse } from '../model';
 import { Router } from '@angular/router';
 
@@ -21,6 +21,7 @@ export class AuthService {
 	private $LocalStorageService = inject(LocalStorageService);
 
 	public permissions: string[] = [];
+	private permissions$: Observable<string[]> | null = null;
 	private unsubscribe$ = new Subject<void>();
 	private static AUTH_URL = '/auth/login';
 	private static RE_AUTH_URL = '/auth/refresh';
@@ -39,16 +40,24 @@ export class AuthService {
 	}
 
 	loadPermissions(): Observable<string[]> {
-		return this.http.get<{ id: string; name: string; displayName: string }[]>('/api/v1/users/roles')
+		if (this.permissions$) {
+			return this.permissions$;
+		}
+
+		this.permissions$ = this.http.get<{ id: string; name: string; displayName: string }[]>('/api/v1/users/roles')
 			.pipe(
 				map(res => res.map(role => role.name)),
-				tap(roles => this.permissions = roles)
+				tap(roles => this.permissions = roles),
+				shareReplay(1)
 			);
+
+		return this.permissions$;
 	}
 
 	hasPermission(permission: string): boolean {
-		return this.permissions.includes(permission);
+		return this.permissions?.includes(permission) || false;
 	}
+
 
 	public authorize(credentials: LoginRequest): Observable<LoginResponse> {
 		this.rememberMe = credentials.rememberMe;
@@ -150,6 +159,8 @@ export class AuthService {
 	public clearAndLogout(): void {
 		clearInterval(this.reLoginTimeout);
 		this.deleteLoginResponse();
+		this.permissions = [];
+		this.permissions$ = null;
 		this.router.navigate(['/login']);
 	}
 }

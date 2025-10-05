@@ -12,7 +12,7 @@ import {
 })
 export class UsersTableService extends TableConfigAbstractService<User> {
   userRolesTemplate: TemplateRef<any>;
-  
+
   public originalDataSubject = new BehaviorSubject<User[]>([]);
   public dataList$: Observable<User[]> = this.originalDataSubject.asObservable();
   public tableConfigSubject = new BehaviorSubject<TableConfig>({
@@ -28,11 +28,11 @@ export class UsersTableService extends TableConfigAbstractService<User> {
     showMenu: true,
     columns: [
       { visible: true, key: 'loginName', header: 'username' },
-      { visible: true, templateType: TemplateType.Text, key: 'accountInfo.externalId', header: 'externalId' },
-      { visible: true, templateType: TemplateType.Text, key: 'accountInfo.type', header: 'accountType' },
-      { visible: true, key: 'name', header: 'name' },
+      { visible: true, templateType: TemplateType.Custom, key: 'roles', header: 'roles', customTemplate: () => this.userRolesTemplate },
       { visible: true, key: 'email', header: 'email' },
-      { visible: true, templateType: TemplateType.Custom, key: 'roles', header: 'roles', customTemplate: () => this.userRolesTemplate }
+      { visible: true, key: 'name', header: 'name' },
+      { visible: true, templateType: TemplateType.Text, key: 'accountInfo.type', header: 'accountType' },
+      { visible: false, templateType: TemplateType.Text, key: 'accountInfo.externalId', header: 'externalId' }
     ]
   });
 

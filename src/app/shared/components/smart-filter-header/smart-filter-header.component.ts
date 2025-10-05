@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { ButtonDirective, BadgeComponent } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { GenericRightPanelComponent } from '../generic-right-panel';
@@ -25,6 +25,7 @@ import {
   FilterFieldConfig,
 } from './models/smart-filter.interface';
 import { SmartFilterValueMapperService } from './services/smart-filter-value-mapper.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-smart-filter-header',
@@ -38,7 +39,8 @@ import { SmartFilterValueMapperService } from './services/smart-filter-value-map
     BadgeComponent,
     IconDirective,
     GenericRightPanelComponent,
-    TooltipDirective
+    TooltipDirective,
+    TranslateModule
   ]
 })
 export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
@@ -70,6 +72,14 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
     this.determineDisplayMode();
     this.initializeDefaultFilters();
     this.watchFormChanges();
+
+    // Process initial form values to show badges for default filters
+    if (this.formGroup) {
+      const initialValues = this.formGroup.value;
+      this.updateActiveFilters(initialValues).then(() => {
+        this.cdr.markForCheck();
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -104,7 +114,10 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
     if (!this.formGroup) return;
 
     this.formGroup.valueChanges
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        debounceTime(this.config.globalSettings?.debounceTime || 700),
+        takeUntil(this.destroy$)
+      )
       .subscribe(async values => {
         await this.updateActiveFilters(values);
         this.filtersChanged.emit(values);

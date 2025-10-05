@@ -1,13 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DefaultLayoutComponent } from './default-layout.component';
-import {
-  FeatureToggleGuard,
-  permissionGuard,
-  ADMIN_PERMISSION,
-  SUPPORT_PERMISSION,
-  CUSTOMER_PERMISSION
-} from '../../shared';
+import { FeatureToggleGuard } from '../../shared';
 
 const routes: Routes = [
   {
@@ -56,16 +50,6 @@ const routes: Routes = [
             import('../../views/email-logs/email-logs.component').then((m) => m.EmailLogsComponent)
       },
       {
-        path: 'users',
-        data: {
-          title: 'nav.users',
-          permissions: [ADMIN_PERMISSION],
-        },
-        canActivate: [permissionGuard],
-        loadComponent: () =>
-          import('../../views/users/components/user-list/user-list.component').then((m) => m.UserListComponent)
-      },
-      {
         path: 'settings',
         loadChildren: () => import('../../views/settings/settings-routing').then(m => m.SettingsRouting)
       },
@@ -112,15 +96,6 @@ const routes: Routes = [
         },
         canActivate: [FeatureToggleGuard],
         loadChildren: () => import('../../views/tickets/tickets.routes').then(m => m.TICKETS_ROUTES)
-      },
-      {
-        path: 'roles',
-        data: {
-          title: 'nav.roles',
-          permissions: [ADMIN_PERMISSION],
-        },
-        loadComponent: () =>
-          import('../../views/roles/components/role-list/role-list.component').then((m) => m.RoleListComponent)
       },
     ]
   }

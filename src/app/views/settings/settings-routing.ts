@@ -76,5 +76,25 @@ export const SettingsRouting: Routes = [
       permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
     },
     canActivate: [permissionGuard]
+  },
+  {
+    path: 'users',
+    data: {
+      title: 'nav.users',
+      permissions: [ADMIN_PERMISSION],
+    },
+    canActivate: [permissionGuard],
+    loadComponent: () =>
+      import('../users/components/user-list/user-list.component').then((m) => m.UserListComponent)
+  },
+  {
+    path: 'roles',
+    data: {
+      title: 'nav.roles',
+      permissions: [ADMIN_PERMISSION],
+    },
+    canActivate: [permissionGuard],
+    loadComponent: () =>
+      import('../roles/components/role-list/role-list.component').then((m) => m.RoleListComponent)
   }
 ];

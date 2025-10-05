@@ -51,18 +51,6 @@ export const navItems: any[] = [
 		permissions: [CUSTOMER_PERMISSION]
 	},
 	{
-		name: 'nav.users',
-		url: 'users',
-		iconComponent: {name: 'cil-user'},
-		permissions: [ADMIN_PERMISSION]
-	},
-	{
-		name: 'nav.roles',
-		url: 'roles',
-		iconComponent: {name: 'cil-shield-alt'},
-		permissions: [ADMIN_PERMISSION]
-	},
-	{
 		name: 'nav.tickets',
 		url: '/home/tickets',
 		iconComponent: {name: 'cil-speech'},
@@ -129,6 +117,16 @@ export const navItems: any[] = [
 				name: 'nav.emailConfigurations',
 				url: '/home/settings/email-configurations',
 				permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
+			},
+			{
+				name: 'nav.users',
+				url: '/home/settings/users',
+				permissions: [ADMIN_PERMISSION]
+			},
+			{
+				name: 'nav.roles',
+				url: '/home/settings/roles',
+				permissions: [ADMIN_PERMISSION]
 			}
 		]
 	},

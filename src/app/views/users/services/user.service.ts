@@ -6,6 +6,7 @@ import { DataService, User } from '../../../shared';
 import { CreateUserRequest, UpdateUserRequest } from '../models';
 import { MockedService } from '../../../shared/decorators/mock.decorator';
 import { CacheHubService, DataType } from '../../../shared/services/cache-hub';
+import { USER_TYPES } from '../components/user-list/user-list.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class UserService extends DataService<User> {
 
   list(params?: any): Observable<any> {
     const cacheKey = `users:list-${JSON.stringify(params || {})}`;
-    
+
     return this.cacheHub.get(
       cacheKey,
       () => this.http.get<any>(this.apiUrl, { params }).pipe(
@@ -54,7 +55,7 @@ export class UserService extends DataService<User> {
     });
 
     const cacheKey = `users:page-${page}-${size}-${JSON.stringify(searchParams)}-${sort.join(',')}`;
-    
+
     return this.cacheHub.get(
       cacheKey,
       () => this.http.get<any>('/api/v1/users/query/all', { params }).pipe(
@@ -122,7 +123,7 @@ export class UserService extends DataService<User> {
   }
 
   removeRoles(userId: string, roleIds: string[]): Observable<void> {
-    return this.http.delete<void>(`/api/v1/users/${userId}/roles/remove`, { 
+    return this.http.delete<void>(`/api/v1/users/${userId}/roles/remove`, {
       body: { roleIds }
     }).pipe(
       tap(() => {
@@ -130,6 +131,20 @@ export class UserService extends DataService<User> {
         this.cacheHub.invalidatePattern('default:users:list-*');
         this.cacheHub.invalidate(`default:users:detail-${userId}`);
       })
+    );
+  }
+
+  getUserTypes(): Observable<string[]> {
+    const cacheKey = 'users:types';
+
+    return this.cacheHub.get(
+      cacheKey,
+      () => this.http.get<string[]>('/api/v1/users/query/types').pipe(
+        catchError(() => {
+          return of([USER_TYPES.CORPORATE, USER_TYPES.PRIVATE]); // Fallback to default types
+        })
+      ),
+      { dataType: DataType.STATIC } // Reference data that rarely changes
     );
   }
 }
