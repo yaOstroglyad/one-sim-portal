@@ -37,7 +37,7 @@
     "@coreui/utils": "^2.0.2",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
-    "chart.js": "^3.9.1",
+    "chart.js": "^4.4.2",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "ngx-cookie-service": "^16.0.0",
@@ -63,7 +63,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "sass": "^1.93.2",
+    "sass": "~1.32.0",
     "typescript": "~5.4.5"
   },
   "engines": {
