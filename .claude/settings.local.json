@@ -44,7 +44,9 @@
       "Bash(timeout 30 npm start)",
       "Bash(npx ng build:*)",
       "Bash(python3:*)",
-      "Bash(sudo xcodebuild:*)"
+      "Bash(sudo xcodebuild:*)",
+      "Bash(npm:*)",
+      "Bash(ng update:*)"
     ],
     "deny": []
   }
