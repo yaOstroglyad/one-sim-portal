@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { IconDirective } from '@coreui/icons-angular';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,6 +26,7 @@ import { SearchableSelectOption, SearchableSelectConfig, SearchableSelectChangeE
 
 @Component({
     selector: 'app-searchable-select',
+    standalone: true,
     imports: [CommonModule, ReactiveFormsModule, IconDirective, MatIconModule, TranslateModule],
     providers: [
         {
@@ -39,7 +40,7 @@ import { SearchableSelectOption, SearchableSelectConfig, SearchableSelectChangeE
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
-  
+
   @Input() options: SearchableSelectOption[] = [];
   @Input() config: SearchableSelectConfig = {};
   @Input() label?: string;
@@ -58,7 +59,7 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   filteredOptions: SearchableSelectOption[] = [];
   selectedOption: SearchableSelectOption | SearchableSelectOption[] | null = null;
   highlightedIndex = -1;
-  
+
   // Pre-computed option states for template
   optionStates: { [key: string]: { selected: boolean, highlighted: boolean, disabled: boolean } } = {};
 
@@ -91,10 +92,10 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   ngOnInit(): void {
     // Merge default config with provided config
     this.config = { ...this.defaultConfig, ...this.config };
-    
+
     // Initialize filtered options with safe fallback
     this.filteredOptions = this.options ? [...this.options] : [];
-    
+
     // Setup search
     this.searchControl.valueChanges
       .pipe(
@@ -151,25 +152,25 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   // Public methods
   toggle(): void {
     if (this.config.disabled) return;
-    
+
     this.isOpen ? this.close() : this.open();
   }
 
   open(): void {
     if (this.config.disabled) return;
-    
+
     this.isOpen = true;
     this.highlightedIndex = -1;
     this.searchControl.setValue('');
     // Safe check for options array
     this.filteredOptions = this.options ? [...this.options] : [];
-    
+
     setTimeout(() => {
       if (this.config.searchable && this.searchInput) {
         this.searchInput.nativeElement.focus();
       }
     }, 0);
-    
+
     this.cdr.markForCheck();
   }
 
@@ -208,12 +209,12 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     this.value = this.config.multiple ? [] : null;
     this.selectedOption = this.config.multiple ? [] : null;
     this.onChange(this.value);
-    
+
     const changeEvent: SearchableSelectChangeEvent = {
       value: this.value,
       option: this.selectedOption
     };
-    
+
     this.selectionChange.emit(changeEvent);
     this.cdr.markForCheck();
   }
@@ -228,16 +229,16 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     if (index > -1) {
       const newSelection = [...this.selectedOption];
       newSelection.splice(index, 1);
-      
+
       this.selectedOption = newSelection;
       this.value = newSelection.map(opt => opt.value);
       this.onChange(this.value);
-      
+
       const changeEvent: SearchableSelectChangeEvent = {
         value: this.value,
         option: this.selectedOption
       };
-      
+
       this.selectionChange.emit(changeEvent);
       this.cdr.markForCheck();
     }
@@ -302,7 +303,7 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
         option.label.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    
+
     this.highlightedIndex = -1;
     this.updateOptionStates();
     this.cdr.markForCheck();
@@ -318,7 +319,7 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
 
     if (this.config.multiple) {
       if (Array.isArray(this.value)) {
-        this.selectedOption = this.options.filter(option => 
+        this.selectedOption = this.options.filter(option =>
           this.value.includes(option.value)
         );
       } else {
@@ -327,20 +328,20 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     } else {
       this.selectedOption = this.options.find(option => option.value === this.value) || null;
     }
-    
+
     this.updateOptionStates();
   }
 
   private updateOptionStates(): void {
     this.optionStates = {};
-    
+
     if (this.filteredOptions && Array.isArray(this.filteredOptions)) {
       this.filteredOptions.forEach((option, index) => {
         if (option && option.value !== undefined) {
           const isSelected = this.isOptionSelected(option);
           const isHighlighted = index === this.highlightedIndex;
           const isDisabled = !!option.disabled;
-          
+
           this.optionStates[option.value] = {
             selected: isSelected,
             highlighted: isHighlighted,
@@ -355,12 +356,12 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     this.selectedOption = option;
     this.value = option.value;
     this.onChange(this.value);
-    
+
     const changeEvent: SearchableSelectChangeEvent = {
       value: this.value,
       option: this.selectedOption
     };
-    
+
     this.selectionChange.emit(changeEvent);
   }
 
@@ -370,21 +371,21 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     }
 
     const isSelected = this.selectedOption.some(selected => selected.value === option.value);
-    
+
     if (isSelected) {
       this.selectedOption = this.selectedOption.filter(selected => selected.value !== option.value);
     } else {
       this.selectedOption = [...this.selectedOption, option];
     }
-    
+
     this.value = this.selectedOption.map(opt => opt.value);
     this.onChange(this.value);
-    
+
     const changeEvent: SearchableSelectChangeEvent = {
       value: this.value,
       option: this.selectedOption
     };
-    
+
     this.selectionChange.emit(changeEvent);
   }
 
@@ -433,7 +434,7 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   }
 
   get showClearButton(): boolean {
-    return this.config.clearable && !this.config.disabled && 
+    return this.config.clearable && !this.config.disabled &&
            ((this.config.multiple && this.selectedMultipleOptions.length > 0) ||
             (!this.config.multiple && this.selectedSingleOption !== null));
   }
@@ -442,17 +443,17 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     if (this.config.multiple) {
       return this.selectedMultipleOptions.some(selected => selected.value === option.value);
     }
-    return this.selectedSingleOption ? 
+    return this.selectedSingleOption ?
            this.selectedSingleOption.value === option.value : false;
   }
 
   get selectedMultipleOptions(): SearchableSelectOption[] {
-    return this.config.multiple && Array.isArray(this.selectedOption) ? 
+    return this.config.multiple && Array.isArray(this.selectedOption) ?
            this.selectedOption : [];
   }
 
   get selectedSingleOption(): SearchableSelectOption | null {
-    return !this.config.multiple && this.selectedOption && !Array.isArray(this.selectedOption) ? 
+    return !this.config.multiple && this.selectedOption && !Array.isArray(this.selectedOption) ?
            this.selectedOption : null;
   }
 

@@ -1,11 +1,13 @@
-@import "./variables";
+@use "sass:map";
+@use "./variables" as vars;
+@use "./mixins" as mixins;
 
 .wrapper {
   width: 100%;
-  @include ltr-rtl("padding-left", var(--cui-sidebar-occupy-start, 0));
-  @include ltr-rtl("padding-right", var(--cui-sidebar-occupy-end, 0));
+  @include mixins.ltr-rtl("padding-left", var(--cui-sidebar-occupy-start, 0));
+  @include mixins.ltr-rtl("padding-right", var(--cui-sidebar-occupy-end, 0));
   will-change: auto;
-  @include transition(padding .15s);
+  @include mixins.transition(padding .15s);
 }
 
 .content-container {
@@ -19,9 +21,9 @@
 }
 
 .bg-primary {
-  background-color: $primary-color !important;
-  border-color: $primary-color;
+  background-color: var(--os-color-primary) !important;
+  border-color: var(--os-color-primary);
 }
 .bg-primary:hover {
-  border-color: $primary-color !important;
+  border-color: var(--os-color-primary) !important;
 }

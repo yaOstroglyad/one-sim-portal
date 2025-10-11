@@ -3,7 +3,8 @@
 // Import foundation
 // ==============================================
 
-@import "variables";
+@use "sass:map";
+@use "./variables" as vars;
 
 // ==============================================
 // AG-GRID CUSTOMIZATIONS (complete styles from _ag-grid-styles.scss)
@@ -31,8 +32,8 @@
 .ag-grid-wrapper {
   background: #fff;
   border: 1px solid var(--ag-border-color);
-  border-radius: map-get($os-border-radius, 'medium');
-  box-shadow: map-get($os-shadows, 'sm');
+  border-radius: map.get(vars.$os-border-radius, 'medium');
+  box-shadow: map.get(vars.$os-shadows, 'sm');
   display: flex;
   flex-direction: column;
   max-width: 100%;
@@ -46,26 +47,26 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: map-get($os-spacing, '2') map-get($os-spacing, '4');
+  padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '4');
   background: var(--ag-header-background-color);
   border-bottom: 1px solid var(--ag-border-color);
 
   .ag-header-buttons {
     display: flex;
-    gap: map-get($os-spacing, '2');
+    gap: map.get(vars.$os-spacing, '2');
   }
 
   .ag-grid-button {
     display: flex;
     align-items: center;
-    gap: map-get($os-spacing, '1');
-    padding: map-get($os-spacing, '1') map-get($os-spacing, '3');
-    font-size: map-get($os-font-sizes, 'sm');
+    gap: map.get(vars.$os-spacing, '1');
+    padding: map.get(vars.$os-spacing, '1') map.get(vars.$os-spacing, '3');
+    font-size: map.get(vars.$os-font-sizes, 'sm');
     font-weight: 500;
     background: var(--os-color-primary);
     color: var(--os-color-primary-contrast);
     border: none;
-    border-radius: map-get($os-border-radius, 'small');
+    border-radius: map.get(vars.$os-border-radius, 'small');
     cursor: pointer;
     transition: all 0.15s ease-in-out;
 
@@ -112,7 +113,7 @@ colgroup col {
   &-cell {
     display: table-cell;
     vertical-align: middle;
-    padding: map-get($os-spacing, '2');
+    padding: map.get(vars.$os-spacing, '2');
     font-weight: 600;
     color: var(--ag-header-foreground-color);
     border-right: 1px solid var(--ag-header-column-separator-color);
@@ -133,14 +134,14 @@ colgroup col {
     }
 
     .sort-icon {
-      margin-left: map-get($os-spacing, '1');
+      margin-left: map.get(vars.$os-spacing, '1');
       opacity: 0.6;
     }
 
     &-content {
       display: flex;
       align-items: center;
-      gap: map-get($os-spacing, '1');
+      gap: map.get(vars.$os-spacing, '1');
     }
   }
 }
@@ -179,8 +180,8 @@ colgroup col {
 }
 
 .ag-cell {
-  padding: map-get($os-spacing, '2');
-  font-size: map-get($os-font-sizes, 'sm');
+  padding: map.get(vars.$os-spacing, '2');
+  font-size: map.get(vars.$os-font-sizes, 'sm');
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -269,7 +270,7 @@ colgroup col {
 .ag-grid-pagination {
   display: flex;
   justify-content: flex-end;
-  padding: map-get($os-spacing, '3') map-get($os-spacing, '4');
+  padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '4');
 }
 
 .ag-paging-button {
@@ -280,7 +281,7 @@ colgroup col {
 }
 
 .ag-paging-description {
-  margin: 0 map-get($os-spacing, '3');
+  margin: 0 map.get(vars.$os-spacing, '3');
   color: rgba(0, 0, 0, 0.6);
 }
 
@@ -290,7 +291,7 @@ colgroup col {
   appearance: none;
   background: #fff;
   border: 1px solid #d3d3d3;
-  border-radius: map-get($os-border-radius, 'small');
+  border-radius: map.get(vars.$os-border-radius, 'small');
   width: 16px;
   height: 16px;
   cursor: pointer;
@@ -334,18 +335,18 @@ colgroup col {
 /* Loading Overlay */
 .ag-overlay-loading-center {
   background: #fff;
-  border-radius: map-get($os-border-radius, 'medium');
-  padding: map-get($os-spacing, '4') map-get($os-spacing, '6');
-  box-shadow: map-get($os-shadows, 'lg');
+  border-radius: map.get(vars.$os-border-radius, 'medium');
+  padding: map.get(vars.$os-spacing, '4') map.get(vars.$os-spacing, '6');
+  box-shadow: map.get(vars.$os-shadows, 'lg');
   display: flex;
   align-items: center;
-  gap: map-get($os-spacing, '2');
+  gap: map.get(vars.$os-spacing, '2');
 }
 
 .ag-spinner {
   display: flex;
   align-items: center;
-  gap: map-get($os-spacing, '2');
+  gap: map.get(vars.$os-spacing, '2');
 }
 
 .ag-loading-icon {
@@ -371,18 +372,18 @@ colgroup col {
 
 .ag-overlay-no-rows-center {
   background: #fff;
-  border-radius: map-get($os-border-radius, 'medium');
-  padding: map-get($os-spacing, '6');
-  box-shadow: map-get($os-shadows, 'md');
+  border-radius: map.get(vars.$os-border-radius, 'medium');
+  padding: map.get(vars.$os-spacing, '6');
+  box-shadow: map.get(vars.$os-shadows, 'md');
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: map-get($os-spacing, '2');
+  gap: map.get(vars.$os-spacing, '2');
   text-align: center;
 }
 
 .ag-overlay-no-rows-icon {
-  font-size: map-get($os-font-sizes, '2xl');
+  font-size: map.get(vars.$os-font-sizes, '2xl');
 }
 
 .ag-overlay-no-rows-text {
@@ -413,15 +414,15 @@ colgroup col {
 @media (max-width: 767px) {
   .ag-header-cell,
   .ag-cell {
-    padding: map-get($os-spacing, '2');
-    font-size: map-get($os-font-sizes, 'xs');
+    padding: map.get(vars.$os-spacing, '2');
+    font-size: map.get(vars.$os-font-sizes, 'xs');
   }
   .ag-row {
     height: auto;
   }
   .ag-grid-pagination {
     justify-content: center;
-    padding: map-get($os-spacing, '2');
+    padding: map.get(vars.$os-spacing, '2');
   }
 }
 
@@ -484,7 +485,7 @@ select,
 }
 
 .mat-button, .mat-raised-button, .mat-flat-button {
-  border-radius: map-get($os-border-radius, 'medium');
+  border-radius: map.get(vars.$os-border-radius, 'medium');
   font-family: var(--os-font-family);
   font-weight: 500;
   text-transform: none;
@@ -496,8 +497,8 @@ select,
 // ==============================================
 
 .mat-dialog-container {
-  border-radius: map-get($os-border-radius, 'large');
-  box-shadow: map-get($os-shadows, '2xl');
+  border-radius: map.get(vars.$os-border-radius, 'large');
+  box-shadow: map.get(vars.$os-shadows, '2xl');
   font-family: var(--os-font-family);
   max-width: 90vw;
   max-height: 90vh;
@@ -617,7 +618,7 @@ h6.mat-mdc-dialog-title,
   border-top: 1px solid var(--os-color-medium-subtle-bg);
   display: flex;
   justify-content: flex-end;
-  gap: map-get($os-spacing, '3');
+  gap: map.get(vars.$os-spacing, '3');
   min-height: auto;
 
   // Button spacing in actions
@@ -656,7 +657,7 @@ h6.mat-mdc-dialog-title,
     background-color: rgba(var(--os-color-danger-rgb), 0.1);
     color: var(--os-color-danger);
     border: 1px solid rgba(var(--os-color-danger-rgb), 0.2);
-    border-radius: map-get($os-border-radius, 'medium');
+    border-radius: map.get(vars.$os-border-radius, 'medium');
 
     mat-icon, svg {
       font-size: 1rem;
@@ -675,7 +676,7 @@ h6.mat-mdc-dialog-title,
     background-color: rgba(var(--os-color-success-rgb), 0.1);
     color: var(--os-color-success);
     border: 1px solid rgba(var(--os-color-success-rgb), 0.2);
-    border-radius: map-get($os-border-radius, 'medium');
+    border-radius: map.get(vars.$os-border-radius, 'medium');
 
     mat-icon, svg {
       font-size: 1rem;
@@ -688,12 +689,12 @@ h6.mat-mdc-dialog-title,
   .original-info, .info-section {
     background-color: var(--os-color-light);
     padding: 1rem;
-    border-radius: map-get($os-border-radius, 'medium');
+    border-radius: map.get(vars.$os-border-radius, 'medium');
     margin-bottom: 1.5rem;
 
     h6 {
       margin: 0 0 0.75rem 0;
-      font-size: map-get($os-font-sizes, 'sm');
+      font-size: map.get(vars.$os-font-sizes, 'sm');
       font-weight: 600;
       color: var(--os-color-medium-text);
       text-transform: uppercase;
@@ -707,12 +708,12 @@ h6.mat-mdc-dialog-title,
       padding: 0.25rem 0;
 
       .label {
-        font-size: map-get($os-font-sizes, 'sm');
+        font-size: map.get(vars.$os-font-sizes, 'sm');
         color: var(--os-color-medium-text);
       }
 
       .value {
-        font-size: map-get($os-font-sizes, 'sm');
+        font-size: map.get(vars.$os-font-sizes, 'sm');
         font-weight: 600;
         color: var(--os-color-dark-text);
       }
@@ -723,7 +724,7 @@ h6.mat-mdc-dialog-title,
   .form-section, .modify-form {
     h6 {
       margin: 0 0 1rem 0;
-      font-size: map-get($os-font-sizes, 'sm');
+      font-size: map.get(vars.$os-font-sizes, 'sm');
       font-weight: 600;
       color: var(--os-color-medium-text);
       text-transform: uppercase;
@@ -757,8 +758,8 @@ h6.mat-mdc-dialog-title,
     padding: 0.75rem;
     background-color: rgba(var(--os-color-info-rgb), 0.1);
     color: var(--os-color-info);
-    border-radius: map-get($os-border-radius, 'medium');
-    font-size: map-get($os-font-sizes, 'sm');
+    border-radius: map.get(vars.$os-border-radius, 'medium');
+    font-size: map.get(vars.$os-font-sizes, 'sm');
 
     mat-icon, svg {
       font-size: 1rem;
@@ -772,11 +773,11 @@ h6.mat-mdc-dialog-title,
     margin-bottom: 1.5rem;
     padding: 1rem;
     background-color: var(--os-color-light);
-    border-radius: map-get($os-border-radius, 'medium');
+    border-radius: map.get(vars.$os-border-radius, 'medium');
 
     p {
       margin: 0.5rem 0;
-      font-size: map-get($os-font-sizes, 'sm');
+      font-size: map.get(vars.$os-font-sizes, 'sm');
       color: var(--os-color-dark-text);
 
       strong {
@@ -794,7 +795,7 @@ h6.mat-mdc-dialog-title,
       align-items: center;
       gap: 0.5rem;
       padding: 0.75rem 1rem;
-      border-radius: map-get($os-border-radius, 'medium');
+      border-radius: map.get(vars.$os-border-radius, 'medium');
       font-weight: 500;
     }
 
@@ -823,7 +824,7 @@ h6.mat-mdc-dialog-title,
   .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: map-get($os-spacing, '5');
+    gap: map.get(vars.$os-spacing, '5');
   }
 
   .grid-item {
@@ -851,7 +852,7 @@ h6.mat-mdc-dialog-title,
   border-top: 1px solid var(--os-color-medium-subtle-bg);
   display: flex;
   justify-content: flex-end;
-  gap: map-get($os-spacing, '3');
+  gap: map.get(vars.$os-spacing, '3');
 
   button + button {
     margin-left: 0.75rem;
@@ -979,7 +980,7 @@ h6.mat-mdc-dialog-title,
 // CoreUI sidebar navigation overrides
 .sidebar-nav {
   .nav-link {
-    border-radius: map-get($os-border-radius, 'small');
+    border-radius: map.get(vars.$os-border-radius, 'small');
     transition: all 0.15s ease-in-out;
 
     &:hover {
@@ -998,7 +999,7 @@ h6.mat-mdc-dialog-title,
 
   .nav-group {
     .nav-group-toggle {
-      border-radius: map-get($os-border-radius, 'small');
+      border-radius: map.get(vars.$os-border-radius, 'small');
       transition: all 0.15s ease-in-out;
 
       &:hover {
@@ -1010,46 +1011,46 @@ h6.mat-mdc-dialog-title,
 
 // CoreUI component customizations using our design system
 .btn {
-  border-radius: map-get($os-border-radius, 'medium');
+  border-radius: map.get(vars.$os-border-radius, 'medium');
   font-family: var(--os-font-family);
   font-weight: 500;
-  padding: map-get($os-spacing, '2') map-get($os-spacing, '4');
+  padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '4');
 
   &.btn-sm {
-    padding: map-get($os-spacing, '1') map-get($os-spacing, '3');
-    font-size: map-get($os-font-sizes, 'sm');
+    padding: map.get(vars.$os-spacing, '1') map.get(vars.$os-spacing, '3');
+    font-size: map.get(vars.$os-font-sizes, 'sm');
   }
 
   &.btn-lg {
-    padding: map-get($os-spacing, '3') map-get($os-spacing, '6');
-    font-size: map-get($os-font-sizes, 'lg');
+    padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '6');
+    font-size: map.get(vars.$os-font-sizes, 'lg');
   }
 }
 
 .card {
-  border-radius: map-get($os-border-radius, 'large');
+  border-radius: map.get(vars.$os-border-radius, 'large');
   border: 1px solid var(--os-color-medium-subtle-bg);
-  box-shadow: map-get($os-shadows, 'sm');
+  box-shadow: map.get(vars.$os-shadows, 'sm');
 
   .card-header {
     background-color: var(--os-color-light);
     border-bottom: 1px solid var(--os-color-medium-subtle-bg);
-    padding: map-get($os-spacing, '4');
+    padding: map.get(vars.$os-spacing, '4');
   }
 
   .card-body {
-    padding: map-get($os-spacing, '4');
+    padding: map.get(vars.$os-spacing, '4');
   }
 }
 
 .modal-content {
-  border-radius: map-get($os-border-radius, 'large');
+  border-radius: map.get(vars.$os-border-radius, 'large');
   border: none;
-  box-shadow: map-get($os-shadows, '2xl');
+  box-shadow: map.get(vars.$os-shadows, '2xl');
 }
 
 .form-control {
-  border-radius: map-get($os-border-radius, 'medium');
+  border-radius: map.get(vars.$os-border-radius, 'medium');
   border: 1px solid var(--os-color-medium-subtle-bg);
   font-family: var(--os-font-family);
 
@@ -1066,10 +1067,10 @@ h6.mat-mdc-dialog-title,
 .chartjs-tooltip {
   background-color: var(--os-color-dark);
   color: var(--os-color-light);
-  border-radius: map-get($os-border-radius, 'medium');
-  box-shadow: map-get($os-shadows, 'lg');
+  border-radius: map.get(vars.$os-border-radius, 'medium');
+  box-shadow: map.get(vars.$os-shadows, 'lg');
   font-family: var(--os-font-family);
-  font-size: map-get($os-font-sizes, 'sm');
+  font-size: map.get(vars.$os-font-sizes, 'sm');
 }
 
 // ==============================================
@@ -1084,12 +1085,12 @@ h6.mat-mdc-dialog-title,
 
 ::-webkit-scrollbar-track {
   background: var(--os-color-light);
-  border-radius: map-get($os-border-radius, 'full');
+  border-radius: map.get(vars.$os-border-radius, 'full');
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--os-color-medium);
-  border-radius: map-get($os-border-radius, 'full');
+  border-radius: map.get(vars.$os-border-radius, 'full');
 
   &:hover {
     background: var(--os-color-medium-shade);
@@ -1145,7 +1146,7 @@ h6.mat-mdc-dialog-title,
 .mat-mdc-snack-bar-container {
   --mat-mdc-snack-bar-button-color: var(--os-color-dark-contrast);
   --mdc-snackbar-supporting-text-color: var(--os-color-dark-contrast);
-  border-radius: map-get($os-border-radius, 'medium');
+  border-radius: map.get(vars.$os-border-radius, 'medium');
   font-family: var(--os-font-family);
 
   &.app-notification-error {
@@ -1192,21 +1193,21 @@ h6.mat-mdc-dialog-title,
 .hint {
   display: flex;
   align-items: center;
-  font-size: map-get($os-font-sizes, 'xs');
+  font-size: map.get(vars.$os-font-sizes, 'xs');
   color: var(--os-color-medium-shade);
 
   mat-icon {
     font-size: 14px;
     width: auto;
     height: auto;
-    margin-right: map-get($os-spacing, '1');
-    margin-left: map-get($os-spacing, '2');
+    margin-right: map.get(vars.$os-spacing, '1');
+    margin-left: map.get(vars.$os-spacing, '2');
   }
 }
 
 .content {
   display: flex;
-  gap: map-get($os-spacing, '5');
+  gap: map.get(vars.$os-spacing, '5');
 
   .left-panel {
     width: 45%;
@@ -1260,10 +1261,10 @@ h6.mat-mdc-dialog-title,
 
 // Special padding for action cells
 .ag-cell.actions-column {
-  padding: map-get($os-spacing, '1') !important;
+  padding: map.get(vars.$os-spacing, '1') !important;
 }
 
 // Table cell padding styles
 :host .table > :not(caption) > * > * {
-  padding: map-get($os-spacing, '2') map-get($os-spacing, '2') 0 map-get($os-spacing, '2');
+  padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '2') 0 map.get(vars.$os-spacing, '2');
 }

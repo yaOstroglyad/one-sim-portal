@@ -1,11 +1,14 @@
-// ============================================== 
+// ==============================================
 // SCSS MIXINS - All project mixins consolidated
-// Import foundation (variables and maps)
+// Modern @use syntax with fallback @import compatibility
 // ==============================================
 
-@import "variables";
+@use "sass:map";
 
-// ============================================== 
+// Modern @use syntax (when used via @use)
+@use "./variables" as vars;
+
+// ==============================================
 // COLOR SYSTEM MIXINS
 // Universal mixins for color variants (can be used in any component)
 // ==============================================
@@ -16,7 +19,7 @@
     background-color: #{$bg};
     border: none;
   }
-  
+
   // Outline variant (transparent background with colored border and text)
   @if $text {
     &.#{$prefix}--outline.#{$prefix}--#{$name} {
@@ -25,7 +28,7 @@
       background-color: transparent;
     }
   }
-  
+
   // Subtle variant (low opacity background with colored text)
   @if $subtle-bg and $text {
     &.#{$prefix}--subtle.#{$prefix}--#{$name} {
@@ -38,67 +41,67 @@
 
 // Generate all color variants for any component
 @mixin generate-os-colors($prefix) {
-  @each $name, $colors in $os-colors {
+  @each $name, $colors in vars.$os-colors {
     @include os-color-variant(
       $prefix,
-      $name, 
-      map-get($colors, bg), 
-      map-get($colors, text), 
-      map-get($colors, subtle-bg),
-      map-get($colors, rgb)
+      $name,
+      map.get($colors, bg),
+      map.get($colors, text),
+      map.get($colors, subtle-bg),
+      map.get($colors, rgb)
     );
   }
 }
 
-// ============================================== 
+// ==============================================
 // ADDITIONAL COLOR MIXINS
 // Generate color variants for borders and shadows
 // ==============================================
 
 // Generate border color variants
 @mixin generate-border-colors($component-prefix: 'border') {
-  @each $color-name, $color-map in $os-colors {
+  @each $color-name, $color-map in vars.$os-colors {
     &.#{$component-prefix}-#{$color-name} {
-      border-color: map-get($color-map, 'bg') !important;
+      border-color: map.get($color-map, 'bg') !important;
     }
   }
 }
 
 // Generate colored shadow variants
 @mixin generate-shadow-colors($component-prefix: 'shadow') {
-  @each $color-name, $color-map in $os-colors {
+  @each $color-name, $color-map in vars.$os-colors {
     &.#{$component-prefix}-#{$color-name} {
-      box-shadow: 0 4px 6px rgba(#{map-get($color-map, 'rgb')}, 0.15) !important;
+      box-shadow: 0 4px 6px rgba(#{map.get($color-map, 'rgb')}, 0.15) !important;
     }
   }
 }
 
 // ==============================================
-// COMPONENT PATTERN MIXINS  
+// COMPONENT PATTERN MIXINS
 // ==============================================
 
 // Common component base styles
 @mixin component-base($component-name) {
   position: relative;
   box-sizing: border-box;
-  font-family: $primary-font;
+  font-family: vars.$primary-font;
 }
 
 // Interactive states (hover, focus, active)
 @mixin interactive-states($hover-scale: 1.02, $transition: 0.15s ease-in-out) {
   transition: all $transition;
   cursor: pointer;
-  
+
   &:hover {
     transform: scale($hover-scale);
     opacity: 0.9;
   }
-  
+
   &:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(var(--os-color-primary-rgb), 0.1);
   }
-  
+
   &:active {
     transform: scale(0.98);
   }
@@ -112,7 +115,7 @@
     opacity: 0.6;
     cursor: not-allowed;
     pointer-events: none;
-    
+
     &:hover {
       transform: none;
       opacity: 0.6;
@@ -127,7 +130,7 @@
     position: relative;
     overflow: hidden;
     pointer-events: none;
-    
+
     &::before {
       content: '';
       position: absolute;
@@ -169,15 +172,15 @@
 
 // Dynamic spacing mixin
 @mixin spacing($property, $size) {
-  #{$property}: map-get($os-spacing, $size);
+  #{$property}: map.get(vars.$os-spacing, $size);
 }
 
 // Responsive spacing
 @mixin responsive-spacing($property: 'padding', $base-size: '4', $mobile-size: '2') {
-  #{$property}: map-get($os-spacing, $base-size);
-  
+  #{$property}: map.get(vars.$os-spacing, $base-size);
+
   @media (max-width: 768px) {
-    #{$property}: map-get($os-spacing, $mobile-size);
+    #{$property}: map.get(vars.$os-spacing, $mobile-size);
   }
 }
 
@@ -206,7 +209,7 @@
   width: 100%;
   height: 100%;
   min-height: 200px;
-  
+
   &__container {
     position: relative;
     flex: 1;
@@ -215,16 +218,16 @@
     justify-content: center;
     background-color: var(--os-color-light);
     border: 1px solid var(--os-color-medium-subtle-bg);
-    border-radius: map-get($os-border-radius, 'medium');
-    padding: map-get($os-spacing, '4');
+    border-radius: map.get(vars.$os-border-radius, 'medium');
+    padding: map.get(vars.$os-spacing, '4');
     transition: all 0.15s ease-in-out;
-    
+
     &:hover {
       border-color: var(--os-color-medium);
-      box-shadow: map-get($os-shadows, 'sm');
+      box-shadow: map.get(vars.$os-shadows, 'sm');
     }
   }
-  
+
   &__canvas {
     display: block;
     max-width: 100%;
@@ -232,16 +235,16 @@
     width: 100% !important;
     height: auto !important;
   }
-  
+
   &__fallback {
     display: none;
     margin: 0;
-    padding: map-get($os-spacing, '4');
+    padding: map.get(vars.$os-spacing, '4');
     text-align: center;
     color: var(--os-color-medium-text);
-    font-size: map-get($os-font-sizes, 'sm');
+    font-size: map.get(vars.$os-font-sizes, 'sm');
     font-style: italic;
-    
+
     .#{$component-name}__canvas:not([role="img"]) + & {
       display: block;
     }
@@ -254,20 +257,20 @@
   &--responsive {
     width: 100%;
     height: auto;
-    
+
     .#{$component-name}__container {
       aspect-ratio: 16/9;
       min-height: 300px;
     }
   }
-  
+
   // Theme variants
   &--dark {
     .#{$component-name}__container {
       background-color: var(--os-color-dark);
       border-color: var(--os-color-medium);
     }
-    
+
     .#{$component-name}__fallback {
       color: var(--os-color-light-text);
     }
@@ -278,37 +281,37 @@
 @mixin chart-sizes($component-name) {
   &--small {
     min-height: 150px;
-    
+
     .#{$component-name}__container {
       min-height: 150px;
-      padding: map-get($os-spacing, '2');
+      padding: map.get(vars.$os-spacing, '2');
     }
   }
-  
+
   &--medium {
     min-height: 300px;
-    
+
     .#{$component-name}__container {
       min-height: 300px;
-      padding: map-get($os-spacing, '3');
+      padding: map.get(vars.$os-spacing, '3');
     }
   }
-  
+
   &--large {
     min-height: 400px;
-    
+
     .#{$component-name}__container {
       min-height: 400px;
-      padding: map-get($os-spacing, '4');
+      padding: map.get(vars.$os-spacing, '4');
     }
   }
-  
+
   &--xl {
     min-height: 500px;
-    
+
     .#{$component-name}__container {
       min-height: 500px;
-      padding: map-get($os-spacing, '5');
+      padding: map.get(vars.$os-spacing, '5');
     }
   }
 }
@@ -326,7 +329,7 @@
       );
       background-size: 200% 100%;
       animation: chart-loading-shimmer 2s infinite;
-      
+
       &::before {
         content: '';
         position: absolute;
@@ -341,12 +344,12 @@
         animation: chart-loading-spin 1s linear infinite;
       }
     }
-    
+
     .#{$component-name}__canvas {
       opacity: 0.3;
     }
   }
-  
+
   // Error state
   &--error {
     .#{$component-name}__container {
@@ -354,18 +357,18 @@
       border-color: var(--os-color-danger);
       color: var(--os-color-danger-text);
     }
-    
+
     .#{$component-name}__fallback {
       display: block;
       color: var(--os-color-danger-text);
-      
+
       &::before {
         content: "⚠️ ";
-        margin-right: map-get($os-spacing, '1');
+        margin-right: map.get(vars.$os-spacing, '1');
       }
     }
   }
-  
+
   // No data state
   &--no-data {
     .#{$component-name}__container {
@@ -373,13 +376,13 @@
       border-style: dashed;
       border-color: var(--os-color-medium);
     }
-    
+
     .#{$component-name}__fallback {
       display: block;
-      
+
       &::before {
         content: "#{$no-data-icon} ";
-        margin-right: map-get($os-spacing, '1');
+        margin-right: map.get(vars.$os-spacing, '1');
       }
     }
   }
@@ -390,7 +393,7 @@
   canvas.#{$component-name}__canvas {
     // Ensure proper font rendering
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    
+
     // Improve text rendering
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -459,9 +462,9 @@
   @include tablet {
     .#{$component-name} {
       &__container {
-        padding: map-get($os-spacing, '2');
+        padding: map.get(vars.$os-spacing, '2');
       }
-      
+
       &--responsive {
         .#{$component-name}__container {
           aspect-ratio: 4/3;
@@ -470,13 +473,13 @@
       }
     }
   }
-  
+
   @include mobile {
     .#{$component-name} {
       &__container {
-        padding: map-get($os-spacing, '1');
+        padding: map.get(vars.$os-spacing, '1');
       }
-      
+
       &--responsive {
         .#{$component-name}__container {
           aspect-ratio: 1/1;
@@ -496,39 +499,39 @@
         box-shadow: none;
         border: 1px solid #000;
       }
-      
+
       &__canvas {
         color-adjust: exact;
         print-color-adjust: exact;
       }
     }
   }
-  
+
   // High contrast mode
-  @media (prefers-contrast: high) {
+  @media (prefers-contrast: more) {
     .#{$component-name} {
       &__container {
         border-width: 2px;
         border-color: currentColor;
       }
-      
+
       &__fallback {
         font-weight: 600;
       }
     }
   }
-  
+
   // Reduced motion preferences
   @media (prefers-reduced-motion: reduce) {
     .#{$component-name} {
       &__container {
         transition: none;
       }
-      
+
       &--loading {
         .#{$component-name}__container {
           animation: none;
-          
+
           &::before {
             animation: none;
           }
@@ -552,7 +555,7 @@
       background-position: 200% 0;
     }
   }
-  
+
   @keyframes chart-loading-spin {
     0% {
       transform: translate(-50%, -50%) rotate(0deg);
@@ -600,7 +603,7 @@
   animation: $name $duration $timing $delay;
 }
 
-// ============================================== 
+// ==============================================
 // ELEVATION SYSTEM MIXIN (Material Design inspired)
 // ==============================================
 
@@ -608,37 +611,37 @@
   @if $level == 0 {
     box-shadow: none;
   } @else if $level == 1 {
-    box-shadow: map-get($os-shadows, 'sm');
+    box-shadow: map.get(vars.$os-shadows, 'sm');
   } @else if $level == 2 {
-    box-shadow: map-get($os-shadows, 'default');
+    box-shadow: map.get(vars.$os-shadows, 'default');
   } @else if $level == 3 {
-    box-shadow: map-get($os-shadows, 'md');
+    box-shadow: map.get(vars.$os-shadows, 'md');
   } @else if $level == 4 {
-    box-shadow: map-get($os-shadows, 'lg');
+    box-shadow: map.get(vars.$os-shadows, 'lg');
   } @else if $level == 5 {
-    box-shadow: map-get($os-shadows, 'xl');
+    box-shadow: map.get(vars.$os-shadows, 'xl');
   } @else {
-    box-shadow: map-get($os-shadows, '2xl');
+    box-shadow: map.get(vars.$os-shadows, '2xl');
   }
 }
 
-// ============================================== 
+// ==============================================
 // SPACING MIXIN HELPERS
 // ==============================================
 
 @mixin spacing($property, $size) {
-  #{$property}: map-get($os-spacing, $size);
+  #{$property}: map.get(vars.$os-spacing, $size);
 }
 
 @mixin padding($size) {
-  padding: map-get($os-spacing, $size);
+  padding: map.get(vars.$os-spacing, $size);
 }
 
 @mixin margin($size) {
-  margin: map-get($os-spacing, $size);
+  margin: map.get(vars.$os-spacing, $size);
 }
 
-// ============================================== 
+// ==============================================
 // GRADIENT MIXINS
 // ==============================================
 
@@ -653,7 +656,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-// ============================================== 
+// ==============================================
 // TEXT MIXINS
 // ==============================================
 
@@ -664,7 +667,7 @@
   text-overflow: ellipsis;
 }
 
-// ============================================== 
+// ==============================================
 // DASHBOARD COMPONENT MIXINS
 // IMPORTANT: Never duplicate styles - always reuse these mixins
 // ==============================================
@@ -687,7 +690,7 @@
 // Dashboard chart container with consistent sizing
 @mixin dashboard-chart-container($height: 300px) {
   height: $height;
-  
+
   // Ensure proper chart display
   .chart-wrapper {
     height: 100%;
@@ -830,29 +833,29 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  
+
   .breakdown-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 0;
     border-bottom: 1px solid var(--os-color-light);
-    
+
     &:last-child {
       border-bottom: none;
     }
-    
+
     .label {
       font-size: 0.875rem;
       color: var(--os-color-medium);
       font-weight: 500;
     }
-    
+
     .value {
       font-size: 1rem;
       font-weight: 600;
       color: var(--os-color-dark);
-      
+
       &.negative {
         color: var(--os-color-danger);
       }
@@ -865,12 +868,12 @@
   .table-container {
     .table-responsive {
       overflow-x: auto;
-      
+
       table {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.875rem;
-        
+
         th {
           background-color: var(--os-color-light-subtle-bg);
           color: var(--os-color-dark);
@@ -882,51 +885,51 @@
           text-transform: uppercase;
           letter-spacing: 0.05em;
         }
-        
+
         td {
           padding: 0.75rem;
           border-bottom: 1px solid var(--os-color-light);
           vertical-align: middle;
-          
+
           &.name-cell {
             font-weight: 500;
             color: var(--os-color-dark);
           }
-          
+
           &.amount-cell {
             font-weight: 600;
             color: var(--os-color-success);
           }
-          
+
           &.quantity-cell {
             text-align: center;
             font-weight: 500;
           }
-          
+
           &.date-cell {
             color: var(--os-color-medium);
             font-size: 0.8125rem;
           }
-          
+
           .status-badge {
             display: inline-block;
             padding: 0.25rem 0.5rem;
-            border-radius: map-get($os-border-radius, 'small');
+            border-radius: map.get(vars.$os-border-radius, 'small');
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            
+
             &.status-pending {
               background-color: var(--os-color-warning-subtle-bg);
               color: var(--os-color-warning-text);
             }
-            
+
             &.status-overdue {
               background-color: var(--os-color-danger-subtle-bg);
               color: var(--os-color-danger-text);
             }
-            
+
             &.status-paid,
             &.status-invoiced {
               background-color: var(--os-color-success-subtle-bg);
@@ -934,10 +937,10 @@
             }
           }
         }
-        
+
         tbody tr {
           transition: background-color 0.15s ease;
-          
+
           &:hover {
             background-color: var(--os-color-light-subtle-bg);
           }
@@ -954,18 +957,18 @@
   gap: 0.75rem;
   padding-top: 1rem;
   border-top: 1px solid var(--os-color-light);
-  
+
   .detail-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+
     .detail-label {
       font-size: 0.875rem;
       color: var(--os-color-medium);
       font-weight: 500;
     }
-    
+
     .detail-value {
       font-size: 1rem;
       font-weight: 600;
@@ -987,62 +990,62 @@
     .card-header h3 {
       color: #ffffff;
     }
-    
+
     .chart-legend .legend-item {
       color: #9ca3af;
     }
-    
+
     .metric {
       .label {
         color: #9ca3af;
       }
-      
+
       .value {
         color: #10b981;
-        
+
         &.negative {
           color: #ef4444;
         }
       }
     }
-    
+
     .reason-item {
       .reason-label {
         color: #ffffff;
       }
-      
+
       .reason-bar {
         background-color: #374151;
       }
-      
+
       .reason-value {
         color: #9ca3af;
       }
     }
-    
+
     .breakdown-item {
       border-color: #374151;
-      
+
       .label {
         color: #9ca3af;
       }
-      
+
       .value {
         color: #ffffff;
-        
+
         &.negative {
           color: #ef4444;
         }
       }
     }
-    
+
     .detail-item {
       border-color: #374151;
-      
+
       .detail-label {
         color: #9ca3af;
       }
-      
+
       .detail-value {
         color: #ffffff;
       }
@@ -1066,35 +1069,35 @@
   border: none;
   @extend .rounded-small;
   @extend .cursor-pointer;
-  background-color: $ag-grid-button-bg;
+  background-color: vars.$ag-grid-button-bg;
   color: #666;
   transition: background-color 0.15s ease;
-  
+
   svg {
     width: $size * 0.46; // proportional icon size
     height: $size * 0.46;
     fill: currentColor;
     stroke: none;
   }
-  
+
   &:hover:not(.disabled) {
-    background-color: $ag-grid-button-hover;
+    background-color: vars.$ag-grid-button-hover;
     color: #333;
   }
-  
+
   &:active:not(.disabled) {
-    background-color: $ag-grid-button-active;
+    background-color: vars.$ag-grid-button-active;
   }
-  
+
   &.disabled {
     @extend .cursor-not-allowed;
     @extend .opacity-50;
-    background-color: $ag-grid-button-bg;
-    color: $ag-grid-button-disabled;
-    
+    background-color: vars.$ag-grid-button-bg;
+    color: vars.$ag-grid-button-disabled;
+
     &:hover {
-      background-color: $ag-grid-button-bg;
-      color: $ag-grid-button-disabled;
+      background-color: vars.$ag-grid-button-bg;
+      color: vars.$ag-grid-button-disabled;
     }
   }
 }
@@ -1103,14 +1106,14 @@
 @mixin ag-grid-focus() {
   &:focus {
     outline: none;
-    box-shadow: $ag-grid-focus-shadow;
+    box-shadow: vars.$ag-grid-focus-shadow;
   }
 }
 
 // AG-Grid text styling
 @mixin ag-grid-text() {
   font-size: 14px;
-  color: $ag-grid-text-color;
+  color: vars.$ag-grid-text-color;
   font-weight: normal;
   white-space: nowrap;
 }
@@ -1119,71 +1122,71 @@
 @mixin ag-grid-select() {
   @include ag-grid-text();
   padding: 4px 8px;
-  border: 1px solid $ag-grid-border-color;
+  border: 1px solid vars.$ag-grid-border-color;
   @extend .rounded-small;
   background-color: var(--os-color-white);
   @extend .cursor-pointer;
   min-width: 60px;
-  
+
   @include ag-grid-focus();
-  
+
   &:hover {
-    border-color: $ag-grid-select-hover-border;
+    border-color: vars.$ag-grid-select-hover-border;
   }
-  
+
   &:focus {
-    border-color: $ag-grid-focus-color;
+    border-color: vars.$ag-grid-focus-color;
   }
 }
 
 // AG-Grid dark theme mixin
 @mixin ag-grid-dark-theme() {
   :host-context(.dark-theme) & {
-    border-top-color: $ag-grid-dark-border;
-    
+    border-top-color: vars.$ag-grid-dark-border;
+
     .ag-pagination-label,
     .ag-pagination-info,
     .ag-pagination-range,
     .ag-pagination-ellipsis {
-      color: $ag-grid-dark-text;
+      color: vars.$ag-grid-dark-text;
     }
-    
+
     .ag-pagination-select {
-      background-color: $ag-grid-dark-bg;
-      border-color: $ag-grid-dark-button-bg;
-      color: $ag-grid-dark-text;
-      
+      background-color: vars.$ag-grid-dark-bg;
+      border-color: vars.$ag-grid-dark-button-bg;
+      color: vars.$ag-grid-dark-text;
+
       &:hover {
-        border-color: $ag-grid-dark-border-hover;
+        border-color: vars.$ag-grid-dark-border-hover;
       }
-      
+
       &:focus {
-        border-color: $ag-grid-focus-color;
+        border-color: vars.$ag-grid-focus-color;
       }
     }
-    
+
     .ag-pagination-button {
-      background-color: $ag-grid-dark-button-bg;
-      color: $ag-grid-dark-text;
-      
+      background-color: vars.$ag-grid-dark-button-bg;
+      color: vars.$ag-grid-dark-text;
+
       &:hover:not(.disabled) {
-        background-color: $ag-grid-dark-button-hover;
+        background-color: vars.$ag-grid-dark-button-hover;
       }
-      
+
       &.disabled {
-        background-color: $ag-grid-dark-button-bg;
+        background-color: vars.$ag-grid-dark-button-bg;
       }
     }
-    
+
     .ag-pagination-number {
-      color: $ag-grid-dark-text;
-      
+      color: vars.$ag-grid-dark-text;
+
       &:hover {
-        background-color: $ag-grid-dark-button-bg;
+        background-color: vars.$ag-grid-dark-button-bg;
       }
-      
+
       &.active {
-        background-color: $ag-grid-focus-color;
+        background-color: vars.$ag-grid-focus-color;
         color: var(--os-color-white);
       }
     }
@@ -1195,23 +1198,65 @@
   [dir="rtl"] & {
     .ag-pagination-panel {
       justify-content: flex-start;
-      
+
       @media (max-width: 768px) {
         justify-content: space-between;
       }
     }
-    
+
     .ag-pagination-controls {
       flex-direction: row-reverse;
     }
-    
+
     .ag-pagination-page-size {
       flex-direction: row-reverse;
-      
+
       .ag-pagination-label {
-        margin-left: map-get($os-spacing, '2');
+        margin-left: map.get(vars.$os-spacing, '2');
         margin-right: 0;
       }
     }
   }
+}
+
+// ==============================================
+// RTL AND LAYOUT MIXINS
+// ==============================================
+
+// LTR/RTL property setter mixin
+@mixin ltr-rtl($property, $value) {
+  #{$property}: $value;
+  
+  [dir="rtl"] & {
+    @if $property == "padding-left" {
+      padding-left: 0;
+      padding-right: $value;
+    } @else if $property == "padding-right" {
+      padding-right: 0;
+      padding-left: $value;
+    } @else if $property == "margin-left" {
+      margin-left: 0;
+      margin-right: $value;
+    } @else if $property == "margin-right" {
+      margin-right: 0;
+      margin-left: $value;
+    } @else if $property == "left" {
+      left: auto;
+      right: $value;
+    } @else if $property == "right" {
+      right: auto;
+      left: $value;
+    } @else if $property == "border-left" {
+      border-left: none;
+      border-right: $value;
+    } @else if $property == "border-right" {
+      border-right: none;
+      border-left: $value;
+    }
+  }
+}
+
+// Transition mixin for smooth animations
+@mixin transition($properties: all, $duration: 0.15s, $timing: ease) {
+  transition: $properties $duration $timing;
 }

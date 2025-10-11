@@ -1,6 +1,7 @@
-@import "../../../../scss/variables";
-@import "../../../../scss/utilities";
-@import "../../../../scss/mixins";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/utilities" as utils;
+@use "../../../../scss/mixins" as mixins;
 
 .metric-card {
   background-color: var(--os-color-white);
@@ -9,7 +10,7 @@
   @extend .shadow-default;
   @extend .position-relative;
   overflow: hidden;
-  @include interactive-states();
+  @include mixins.interactive-states();
   
   // Generate color variants using mixin pattern
   @each $color in ('primary', 'success', 'danger', 'warning', 'info') {
@@ -38,14 +39,14 @@
 }
 
 .metric-icon {
-  font-size: map-get($os-font-sizes, '2xl'); // 1.5rem
+  font-size: map-get(vars.$os-font-sizes, '2xl'); // 1.5rem
   @extend .opacity-25;
 }
 
 .metric-body {
   @extend .d-flex;
   @extend .flex-column;
-  gap: map-get($os-spacing, '2'); // 0.5rem
+  gap: map-get(vars.$os-spacing, '2'); // 0.5rem
 }
 
 .metric-value {
@@ -58,14 +59,14 @@
     @extend .text-base; // 1rem
     @extend .font-normal;
     color: var(--os-color-medium);
-    margin-left: map-get($os-spacing, '1'); // 0.25rem
+    margin-left: map-get(vars.$os-spacing, '1'); // 0.25rem
   }
 }
 
 .metric-change {
   @extend .d-flex;
   @extend .align-center;
-  gap: map-get($os-spacing, '1'); // 0.25rem
+  gap: map-get(vars.$os-spacing, '1'); // 0.25rem
   @extend .text-sm; // 0.875rem
   @extend .font-medium;
   

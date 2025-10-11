@@ -1,6 +1,7 @@
-@import "../../../../scss/variables";
-@import "../../../../scss/utilities";
-@import "../../../../scss/mixins";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/utilities" as utils;
+@use "../../../../scss/mixins" as mixins;
 
 // ==============================================
 // AG-GRID STYLE PAGINATION COMPONENT
@@ -14,15 +15,15 @@
     @extend .d-flex;
     @extend .align-center;
     @extend .justify-end; // ag-grid выравнивает всё справа
-    gap: map-get($os-spacing, '4'); // 16px между элементами
-    padding: map-get($os-spacing, '3') map-get($os-spacing, '4'); // 12px vertical, 16px horizontal
+    gap: map-get(vars.$os-spacing, '4'); // 16px между элементами
+    padding: map-get(vars.$os-spacing, '3') map-get(vars.$os-spacing, '4'); // 12px vertical, 16px horizontal
     border-top: 1px solid var(--os-color-light);
     min-height: 44px; // минимальная высота для соответствия ag-grid
 
     // Responsive behavior
     @media (max-width: 768px) {
       justify-content: space-between;
-      gap: map-get($os-spacing, '2'); // 8px
+      gap: map-get(vars.$os-spacing, '2'); // 8px
     }
   }
 }
@@ -31,14 +32,14 @@
 .ag-pagination-page-size {
   @extend .d-flex;
   @extend .align-center;
-  gap: map-get($os-spacing, '2'); // 8px
+  gap: map-get(vars.$os-spacing, '2'); // 8px
 
   .ag-pagination-label {
-    @include ag-grid-text();
+    @include mixins.ag-grid-text();
   }
 
   .ag-pagination-select {
-    @include ag-grid-select();
+    @include mixins.ag-grid-select();
   }
 }
 
@@ -46,13 +47,13 @@
 .ag-pagination-controls {
   @extend .d-flex;
   @extend .align-center;
-  gap: map-get($os-spacing, '2'); // 8px между кнопками
+  gap: map-get(vars.$os-spacing, '2'); // 8px между кнопками
 }
 
 // Navigation buttons using optimized mixin
 .ag-pagination-button {
-  @include ag-grid-button(26px);
-  @include ag-grid-focus();
+  @include mixins.ag-grid-button(26px);
+  @include mixins.ag-grid-focus();
   
   mat-icon {
     font-size: 16px;
@@ -82,17 +83,17 @@
 
 // Page number buttons - similar to navigation but transparent background
 .ag-pagination-number {
-  @include ag-grid-button(26px);
-  @include ag-grid-focus();
+  @include mixins.ag-grid-button(26px);
+  @include mixins.ag-grid-focus();
   background-color: transparent;
-  color: $ag-grid-text-color;
+  color: vars.$ag-grid-text-color;
 
   &:hover {
-    background-color: $ag-grid-button-bg;
+    background-color: vars.$ag-grid-button-bg;
   }
 
   &.active {
-    background-color: $ag-grid-focus-color;
+    background-color: vars.$ag-grid-focus-color;
     color: var(--os-color-white);
 
     &:hover {
@@ -109,9 +110,9 @@
 
 // Dark theme and RTL support using optimized mixins
 .ag-pagination {
-  @include ag-grid-rtl();
+  @include mixins.ag-grid-rtl();
 }
 
 .ag-pagination-panel {
-  @include ag-grid-dark-theme();
+  @include mixins.ag-grid-dark-theme();
 }

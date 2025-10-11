@@ -1,22 +1,23 @@
-@import "../../../../scss/variables";
-@import "../../../../scss/mixins";
-@import "../../../../scss/utilities";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
+@use "../../../../scss/utilities" as utils;
 
 .comments-container {
   .loading-state {
     text-align: center;
-    padding: map-get($os-spacing, '4');
+    padding: map-get(vars.$os-spacing, '4');
     color: var(--cui-body-color-rgb);
     opacity: 0.7;
   }
 
   .comments-list {
-    margin-bottom: map-get($os-spacing, '6');
+    margin-bottom: map-get(vars.$os-spacing, '6');
     
     .comment {
       display: flex;
-      gap: map-get($os-spacing, '3');
-      margin-bottom: map-get($os-spacing, '4');
+      gap: map-get(vars.$os-spacing, '3');
+      margin-bottom: map-get(vars.$os-spacing, '4');
       
       &:last-child {
         margin-bottom: 0;
@@ -33,24 +34,24 @@
         .comment-header {
           display: flex;
           align-items: center;
-          gap: map-get($os-spacing, '2');
-          margin-bottom: map-get($os-spacing, '1');
+          gap: map-get(vars.$os-spacing, '2');
+          margin-bottom: map-get(vars.$os-spacing, '1');
           
           .comment-author {
             font-weight: 600;
-            font-size: map-get($os-font-sizes, 'sm');
+            font-size: map-get(vars.$os-font-sizes, 'sm');
             color: var(--cui-body-color);
           }
           
           .comment-date {
-            font-size: map-get($os-font-sizes, 'xs');
+            font-size: map-get(vars.$os-font-sizes, 'xs');
             color: var(--cui-body-color-rgb);
             opacity: 0.7;
           }
         }
         
         .comment-text {
-          font-size: map-get($os-font-sizes, 'sm');
+          font-size: map-get(vars.$os-font-sizes, 'sm');
           line-height: 1.5;
           color: var(--cui-body-color);
           white-space: pre-wrap;
@@ -62,44 +63,44 @@
   
   .no-comments {
     text-align: center;
-    padding: map-get($os-spacing, '8') map-get($os-spacing, '4');
+    padding: map-get(vars.$os-spacing, '8') map-get(vars.$os-spacing, '4');
     color: var(--cui-body-color-rgb);
     opacity: 0.6;
     
     svg {
-      margin-bottom: map-get($os-spacing, '2');
+      margin-bottom: map-get(vars.$os-spacing, '2');
       opacity: 0.5;
     }
     
     p {
       margin: 0;
       font-style: italic;
-      font-size: map-get($os-font-sizes, 'sm');
+      font-size: map-get(vars.$os-font-sizes, 'sm');
     }
   }
   
   .add-comment-form {
     border-top: 1px solid var(--cui-border-color);
-    padding-top: map-get($os-spacing, '4');
-    margin-top: map-get($os-spacing, '4');
+    padding-top: map-get(vars.$os-spacing, '4');
+    margin-top: map-get(vars.$os-spacing, '4');
     
     .form-group {
-      margin-bottom: map-get($os-spacing, '3');
+      margin-bottom: map-get(vars.$os-spacing, '3');
       
       label {
         display: block;
-        font-size: map-get($os-font-sizes, 'sm');
+        font-size: map-get(vars.$os-font-sizes, 'sm');
         font-weight: 600;
         color: var(--cui-body-color);
-        margin-bottom: map-get($os-spacing, '2');
+        margin-bottom: map-get(vars.$os-spacing, '2');
       }
       
       textarea.form-control {
         width: 100%;
-        padding: map-get($os-spacing, '3');
+        padding: map-get(vars.$os-spacing, '3');
         border: 1px solid var(--cui-border-color);
-        border-radius: map-get($os-border-radius, 'medium');
-        font-size: map-get($os-font-sizes, 'sm');
+        border-radius: map-get(vars.$os-border-radius, 'medium');
+        font-size: map-get(vars.$os-font-sizes, 'sm');
         line-height: 1.5;
         background-color: var(--cui-bg);
         color: var(--cui-body-color);
@@ -129,9 +130,9 @@
       
       .invalid-feedback {
         display: block;
-        font-size: map-get($os-font-sizes, 'xs');
+        font-size: map-get(vars.$os-font-sizes, 'xs');
         color: var(--cui-danger);
-        margin-top: map-get($os-spacing, '1');
+        margin-top: map-get(vars.$os-spacing, '1');
       }
     }
     
@@ -153,7 +154,7 @@
 @media (max-width: 768px) {
   .comments-container {
     .comment {
-      gap: map-get($os-spacing, '2');
+      gap: map-get(vars.$os-spacing, '2');
     }
     
     .add-comment-form {

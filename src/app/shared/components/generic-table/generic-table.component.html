@@ -3,7 +3,7 @@
          [class.clickable]="isRowClickable"
          [class.show-menu]="vm.config.showMenu"
          [style.--ag-min-rows]="getMinRows(vm.data.length)"
-         class="ag-grid-wrapper mx-3 mb-3">
+         class="ag-grid-wrapper">
 
         <ng-container *ngIf="customToolbarTpl">
             <div class="ag-header-toolbar">
@@ -141,7 +141,7 @@
 
 <!-- Нет данных -->
 <ng-template #noDataTpl>
-    <div class="ag-grid-wrapper mx-3 mb-3">
+    <div class="ag-grid-wrapper mb-3">
         <div class="ag-overlay-wrapper ag-overlay-no-rows-wrapper">
             <div class="ag-overlay-no-rows-center">
                 <span class="ag-overlay-no-rows-icon">📭</span>
@@ -153,7 +153,7 @@
 
 <!-- Загрузка -->
 <ng-template #loadingTpl>
-    <div class="ag-grid-wrapper mx-3 mb-3">
+    <div class="ag-grid-wrapper mb-3">
         <div class="ag-overlay-wrapper">
             <div class="ag-overlay-loading-center">
                 <div class="ag-spinner">

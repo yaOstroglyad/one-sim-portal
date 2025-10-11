@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconDirective } from '@coreui/icons-angular';
+import { LanguageService } from '../../services/language.service';
 
 export interface PanelAction {
   id: string;
@@ -12,6 +13,7 @@ export interface PanelAction {
 
 @Component({
     selector: 'app-generic-right-panel',
+    standalone: true,
     imports: [CommonModule, IconDirective],
     templateUrl: './generic-right-panel.component.html',
     styleUrls: ['./generic-right-panel.component.scss']
@@ -38,6 +40,12 @@ export class GenericRightPanelComponent implements OnInit, OnDestroy, AfterViewI
   currentWidth: number = 500;
   isResizing: boolean = false;
   isExpanded: boolean = false;
+
+  private languageService = inject(LanguageService);
+
+  readonly panelClasses = computed(() => ({
+    'generic-right-panel--rtl': this.languageService.isRtl()
+  }));
 
   private resizeStartX: number = 0;
   private resizeStartWidth: number = 0;

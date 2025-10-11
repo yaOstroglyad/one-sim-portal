@@ -1,33 +1,34 @@
-@import "../../../../scss/variables";
-@import "../../../../scss/mixins";
-@import "../../../../scss/utilities";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
+@use "../../../../scss/utilities" as utils;
 
 .attachments-container {
   .loading-state {
     text-align: center;
-    padding: map-get($os-spacing, '4');
+    padding: map-get(vars.$os-spacing, '4');
     color: var(--cui-body-color-rgb);
     opacity: 0.7;
   }
 
   .upload-section {
-    margin-bottom: map-get($os-spacing, '4');
-    padding: map-get($os-spacing, '4');
+    margin-bottom: map-get(vars.$os-spacing, '4');
+    padding: map-get(vars.$os-spacing, '4');
     border: 2px dashed var(--cui-border-color);
-    border-radius: map-get($os-border-radius, 'medium');
+    border-radius: map-get(vars.$os-border-radius, 'medium');
     text-align: center;
     background-color: var(--cui-tertiary-bg);
     
     button {
-      margin-bottom: map-get($os-spacing, '2');
+      margin-bottom: map-get(vars.$os-spacing, '2');
       
       svg {
-        margin-right: map-get($os-spacing, '1');
+        margin-right: map-get(vars.$os-spacing, '1');
       }
     }
     
     .upload-hint {
-      font-size: map-get($os-font-sizes, 'xs');
+      font-size: map-get(vars.$os-font-sizes, 'xs');
       color: var(--cui-body-color-rgb);
       opacity: 0.7;
     }
@@ -37,11 +38,11 @@
     .attachment {
       display: flex;
       align-items: center;
-      gap: map-get($os-spacing, '3');
-      padding: map-get($os-spacing, '3');
+      gap: map-get(vars.$os-spacing, '3');
+      padding: map-get(vars.$os-spacing, '3');
       border: 1px solid var(--cui-border-color);
-      border-radius: map-get($os-border-radius, 'medium');
-      margin-bottom: map-get($os-spacing, '2');
+      border-radius: map-get(vars.$os-border-radius, 'medium');
+      margin-bottom: map-get(vars.$os-spacing, '2');
       background-color: var(--cui-bg);
       transition: all 0.15s ease-in-out;
       
@@ -62,7 +63,7 @@
         align-items: center;
         justify-content: center;
         background-color: var(--cui-primary-bg);
-        border-radius: map-get($os-border-radius, 'medium');
+        border-radius: map-get(vars.$os-border-radius, 'medium');
         color: var(--cui-primary);
       }
       
@@ -72,19 +73,19 @@
         
         .attachment-name {
           font-weight: 500;
-          font-size: map-get($os-font-sizes, 'sm');
+          font-size: map-get(vars.$os-font-sizes, 'sm');
           color: var(--cui-body-color);
-          margin-bottom: map-get($os-spacing, '1');
-          @include truncate;
+          margin-bottom: map-get(vars.$os-spacing, '1');
+          @include mixins.truncate;
         }
         
         .attachment-meta {
-          font-size: map-get($os-font-sizes, 'xs');
+          font-size: map-get(vars.$os-font-sizes, 'xs');
           color: var(--cui-body-color-rgb);
           opacity: 0.7;
           
           .separator {
-            margin: 0 map-get($os-spacing, '1');
+            margin: 0 map-get(vars.$os-spacing, '1');
           }
         }
       }
@@ -104,19 +105,19 @@
   
   .no-attachments {
     text-align: center;
-    padding: map-get($os-spacing, '8') map-get($os-spacing, '4');
+    padding: map-get(vars.$os-spacing, '8') map-get(vars.$os-spacing, '4');
     color: var(--cui-body-color-rgb);
     opacity: 0.6;
     
     svg {
-      margin-bottom: map-get($os-spacing, '2');
+      margin-bottom: map-get(vars.$os-spacing, '2');
       opacity: 0.5;
     }
     
     p {
       margin: 0;
       font-style: italic;
-      font-size: map-get($os-font-sizes, 'sm');
+      font-size: map-get(vars.$os-font-sizes, 'sm');
     }
   }
 }
@@ -125,7 +126,7 @@
 @media (max-width: 768px) {
   .attachments-container {
     .attachment {
-      gap: map-get($os-spacing, '2');
+      gap: map-get(vars.$os-spacing, '2');
       
       .attachment-icon {
         width: 32px;

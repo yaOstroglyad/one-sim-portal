@@ -1,4 +1,4 @@
-<div class="px-3" *ngIf="customerDetailsView$ | async as customerDetailsView">
+<ng-container *ngIf="customerDetailsView$ | async as customerDetailsView">
     <div class="header">
         <div class="header-title">
             <h1>{{ customerDetailsView.customer.name }}</h1>
@@ -158,4 +158,4 @@
 
         </mat-tab-group>
     </div>
-</div>
+</ng-container>

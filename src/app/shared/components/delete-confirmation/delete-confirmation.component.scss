@@ -1,5 +1,6 @@
-@import "../../../../scss/variables";
-@import "../../../../scss/mixins";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
 
 .delete-confirmation {
   text-align: center;

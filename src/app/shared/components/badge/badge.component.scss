@@ -1,5 +1,6 @@
-@import "../../../../scss/variables";
-@import "../../../../scss/mixins";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
 
 // Using global color system - no local mixins needed!
 
@@ -78,7 +79,7 @@
   }
 
   // Generate all color variants using the global mixin
-  @include generate-os-colors('os-badge');
+  @include mixins.generate-os-colors('os-badge');
   
   // Additional outline customization (global mixin handles most cases)
   &.os-badge--outline {

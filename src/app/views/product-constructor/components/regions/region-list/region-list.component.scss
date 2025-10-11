@@ -1,10 +1,84 @@
-@import "../../../../../../scss/variables";
-@import "../../../../../../scss/mixins";
+@use "../../../../../../scss/variables" as vars;
+@use "../../../../../../scss/mixins" as mixins;
+@use "sass:map";
+
+// Spinner animation
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Reusable button styles
+%btn-base {
+  border-radius: 0.375rem;
+  border: 1px solid;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .icon {
+    font-size: 0.875rem;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .loading-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 0.5rem;
+  }
+}
+
+%btn-primary {
+  @extend %btn-base;
+  background-color: var(--os-color-primary);
+  border-color: var(--os-color-primary);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: var(--os-color-primary-shade);
+    border-color: var(--os-color-primary-shade);
+  }
+}
+
+%btn-outline-secondary {
+  @extend %btn-base;
+  background-color: transparent;
+  border-color: var(--os-color-medium);
+  color: var(--os-color-medium);
+
+  &:hover:not(:disabled) {
+    background-color: var(--os-color-medium);
+    color: white;
+  }
+}
 
 .region-list-container {
-  padding: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
+
+  &--rtl {
+    direction: rtl;
+
+    .page-header .header-actions .btn .icon {
+      transform: scaleX(-1);
+    }
+
+    .regions-list .region-item .region-actions {
+      justify-content: flex-start;
+    }
+  }
 }
 
 .page-header {
@@ -36,65 +110,21 @@
 
     .btn {
       padding: 0.5rem 1rem;
-      border-radius: 0.375rem;
-      border: 1px solid;
-      cursor: pointer;
-      font-weight: 500;
-      transition: all 0.15s ease-in-out;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-
-      .icon {
-        font-size: 0.875rem;
-      }
 
       &.btn-primary {
-        background-color: var(--os-color-primary);
-        border-color: var(--os-color-primary);
-        color: white;
-
-        &:hover:not(:disabled) {
-          background-color: var(--os-color-primary-shade);
-          border-color: var(--os-color-primary-shade);
-        }
+        @extend %btn-primary;
       }
 
       &.btn-outline-secondary {
-        background-color: transparent;
-        border-color: var(--os-color-medium);
-        color: var(--os-color-medium);
-
-        &:hover:not(:disabled) {
-          background-color: var(--os-color-medium);
-          color: white;
-        }
-      }
-
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-
-      .loading-spinner {
-        width: 1rem;
-        height: 1rem;
-        border: 2px solid transparent;
-        border-top: 2px solid currentColor;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        display: inline-block;
-        margin-right: 0.5rem;
+        @extend %btn-outline-secondary;
       }
     }
   }
 }
 
 .loading-state {
-  display: flex;
+  @include mixins.flex-center;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   padding: 3rem;
   color: var(--os-color-medium);
 
@@ -107,11 +137,6 @@
     animation: spin 1s linear infinite;
     margin-bottom: 1rem;
   }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 .error-state {
@@ -138,46 +163,15 @@
 
     .btn {
       padding: 0.5rem 1.5rem;
-      border-radius: 0.375rem;
       border: none;
-      cursor: pointer;
-      font-weight: 500;
-      transition: all 0.15s ease-in-out;
 
       &.btn-primary {
-        background-color: var(--os-color-primary);
-        color: white;
-
-        &:hover {
-          background-color: var(--os-color-primary-shade);
-        }
+        @extend %btn-primary;
       }
     }
   }
 }
 
-
-// Responsive design
-@media (max-width: 768px) {
-  .region-list-container {
-    padding: 1rem;
-  }
-
-  .page-header {
-    flex-direction: column;
-    align-items: stretch;
-
-    .header-actions {
-      justify-content: flex-end;
-    }
-  }
-
-  .page-title {
-    font-size: 1.5rem !important;
-  }
-}
-
-// Simple card styling  
 .simple-card {
   background: white;
   border-radius: 0.5rem;
@@ -185,29 +179,28 @@
   padding: 1.5rem;
 }
 
-// Regions list
 .regions-list {
   .region-item {
     padding: 1rem;
     border: 1px solid var(--os-color-light);
     border-radius: 0.375rem;
     margin-bottom: 1rem;
-    
+
     h4 {
       margin: 0 0 0.5rem 0;
       color: var(--os-color-dark);
       font-weight: 600;
     }
-    
+
     p {
       margin: 0 0 1rem 0;
       color: var(--os-color-medium);
     }
-    
+
     .region-actions {
       display: flex;
       gap: 0.5rem;
-      
+
       .btn {
         padding: 0.25rem 0.75rem;
         border-radius: 0.25rem;
@@ -215,19 +208,19 @@
         cursor: pointer;
         font-size: 0.875rem;
         transition: all 0.15s ease-in-out;
-        
+
         &.btn-primary {
           background-color: var(--os-color-primary);
           border-color: var(--os-color-primary);
           color: white;
         }
-        
+
         &.btn-secondary {
           background-color: var(--os-color-medium);
           border-color: var(--os-color-medium);
           color: white;
         }
-        
+
         &.btn-danger {
           background-color: var(--os-color-danger);
           border-color: var(--os-color-danger);
@@ -236,7 +229,7 @@
       }
     }
   }
-  
+
   .empty-state {
     text-align: center;
     padding: 2rem;
@@ -244,25 +237,106 @@
   }
 }
 
+// Responsive design
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
 
-// Dark theme support
-:host-context(.dark-theme) {
-  .page-header .header-content .page-title {
-    color: var(--os-color-light);
-  }
+    .header-actions {
+      justify-content: flex-end;
+    }
 
-  .simple-card {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .regions-list .region-item {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.1);
-    
-    h4 {
-      color: var(--os-color-light);
+    .header-content .page-title {
+      font-size: 1.5rem;
     }
   }
+}
 
+// Dark theme support
+[data-theme="dark"] {
+  .region-list-container {
+    .page-header {
+      .header-content {
+        .page-title {
+          color: var(--os-color-light);
+        }
+
+        .page-subtitle {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+
+      .header-actions .btn {
+        &.btn-outline-secondary {
+          border-color: rgba(255, 255, 255, 0.3);
+          color: rgba(255, 255, 255, 0.9);
+
+          &:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+          }
+        }
+
+        .loading-spinner {
+          border-color: rgba(255, 255, 255, 0.2);
+          border-top-color: currentColor;
+        }
+      }
+    }
+
+    .loading-state {
+      color: rgba(255, 255, 255, 0.7);
+
+      .loading-spinner {
+        border-color: rgba(255, 255, 255, 0.2);
+        border-top-color: var(--os-color-primary);
+      }
+    }
+
+    .error-state .error-content {
+      h3 {
+        color: var(--os-color-danger);
+      }
+
+      p {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+
+    .simple-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .regions-list {
+      .region-item {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+
+        h4 {
+          color: var(--os-color-light);
+        }
+
+        p {
+          color: rgba(255, 255, 255, 0.7);
+        }
+
+        .region-actions .btn.btn-secondary {
+          background-color: rgba(255, 255, 255, 0.1);
+          border-color: rgba(255, 255, 255, 0.3);
+          color: var(--os-color-light);
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+          }
+        }
+      }
+
+      .empty-state {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
 }

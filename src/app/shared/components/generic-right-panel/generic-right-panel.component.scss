@@ -1,6 +1,7 @@
-@import "../../../../scss/variables";
-@import "../../../../scss/mixins";
-@import "../../../../scss/utilities";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
+@use "../../../../scss/utilities" as utils;
 
 .panel-backdrop {
   position: fixed;
@@ -32,6 +33,20 @@
   &.open {
     transform: translateX(0);
     opacity: 1;
+  }
+  
+  // RTL Support
+  &.generic-right-panel--rtl {
+    right: auto;
+    left: 0;
+    border-left: none;
+    border-right: 1px solid var(--cui-border-color);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+    transform: translateX(-100%);
+    
+    &.open {
+      transform: translateX(0);
+    }
   }
   
   &.resizing {
@@ -70,6 +85,12 @@
   justify-content: center;
   z-index: 10;
   transition: background-color 0.2s ease;
+  
+  // RTL Support
+  .right-panel.generic-right-panel--rtl & {
+    left: auto;
+    right: -4px;
+  }
   
   &:hover {
     background-color: rgba(var(--os-color-primary-rgb), 0.05);
@@ -135,7 +156,7 @@
       font-size: 1.25rem;
       font-weight: 600;
       color: var(--cui-body-color);
-      @include truncate;
+      @include mixins.truncate;
     }
     
     .panel-subtitle {
@@ -143,7 +164,7 @@
       font-size: 0.875rem;
       color: var(--os-color-medium);
       line-height: 1.4;
-      @include truncate;
+      @include mixins.truncate;
     }
   }
   
@@ -152,6 +173,12 @@
     align-items: center;
     gap: 0.5rem;
     margin-left: 1rem;
+    
+    // RTL Support
+    .right-panel.generic-right-panel--rtl & {
+      margin-left: 0;
+      margin-right: 1rem;
+    }
     
     .action-btn {
       display: flex;
@@ -268,6 +295,12 @@
     background: var(--cui-dark-bg);
     border-left-color: var(--cui-dark-border-color);
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+    
+    // RTL Support
+    &.generic-right-panel--rtl {
+      border-right-color: var(--cui-dark-border-color);
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+    }
   }
   
   .panel-header,
@@ -354,6 +387,12 @@
     .header-actions {
       margin-left: 0.5rem;
       
+      // RTL Support
+      .right-panel.generic-right-panel--rtl & {
+        margin-left: 0;
+        margin-right: 0.5rem;
+      }
+      
       .action-btn {
         width: 36px;
         height: 36px;
@@ -380,6 +419,12 @@
 @media (prefers-contrast: high) {
   .right-panel {
     border-left-width: 2px;
+    
+    // RTL Support
+    &.generic-right-panel--rtl {
+      border-left-width: 1px;
+      border-right-width: 2px;
+    }
   }
   
   .panel-header,

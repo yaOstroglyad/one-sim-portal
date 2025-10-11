@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -18,7 +18,7 @@ import { IconDirective } from '@coreui/icons-angular';
 
 import { RegionService } from '../../../services';
 import { Region, RegionSummary } from '../../../models';
-import { CountryService, Country } from '../../../../../shared';
+import { CountryService, Country, LanguageService } from '../../../../../shared';
 import { RegionsTableService } from '../regions-table.service';
 
 @Component({
@@ -71,6 +71,12 @@ export class RegionListComponent implements OnInit, OnDestroy {
   private readonly countryService = inject(CountryService);
   private readonly tableService = inject(RegionsTableService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly languageService = inject(LanguageService);
+  
+  readonly containerClasses = computed(() => ({
+    'region-list-container': true,
+    'region-list-container--rtl': this.languageService.isRtl()
+  }));
 
   constructor() {
     // Initialize form

@@ -1,15 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Account, WhiteLabelDataService } from '../../../shared';
 import { Observable } from 'rxjs';
-import { MatDialogModule } from '@angular/material/dialog';
 import { TemplateTypeGridComponent } from './template-type-grid/template-type-grid.component';
 import { AuthService, ADMIN_PERMISSION } from '../../../shared';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AccountSelectorComponent } from '../../../shared/components/account-selector/account-selector.component';
+import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
     selector: 'app-email-configurations',
@@ -17,10 +15,8 @@ import { AccountSelectorComponent } from '../../../shared/components/account-sel
     styleUrls: ['./email-configurations.component.scss'],
     imports: [
         CommonModule,
-        MatDialogModule,
-        MatCardModule,
-        MatIconModule,
         TranslateModule,
+        IconDirective,
         TemplateTypeGridComponent,
         AccountSelectorComponent
     ],

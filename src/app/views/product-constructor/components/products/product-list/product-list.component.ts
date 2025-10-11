@@ -9,11 +9,11 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { ProductDetailsComponent } from '../product-details/product-details.component';
 import { ProductFormComponent } from '../product-form/product-form.component';
-import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
+import { GenericTableModule, HeaderModule, TableConfig, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ButtonDirective, FormControlDirective, FormSelectDirective, BadgeComponent } from '@coreui/angular';
+import { ButtonDirective, BadgeComponent } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -65,7 +65,6 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
   showEditPanel = false;
   showDetailsPanel = false;
   selectedProduct: Product | null = null;
-  selectedProductDetails: Product | null = null;
 
   // Panel actions
   detailsPanelActions: PanelAction[] = [];
@@ -244,20 +243,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onViewDetails(product: Product): void {
     this.selectedProduct = product;
-    // Show panel immediately with basic data
-    this.selectedProductDetails = product;
     this.showDetailsPanel = true;
-
-    // Then load detailed data if needed
-    this.productService.getProduct(product.id).subscribe({
-      next: (productDetails) => {
-        this.selectedProductDetails = productDetails;
-      },
-      error: (error) => {
-        console.error('Error loading product details:', error);
-        // Keep the panel open with basic data even if detailed loading fails
-      }
-    });
   }
 
   onEdit(product: Product): void {
@@ -275,7 +261,6 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showEditPanel = false;
     this.showDetailsPanel = false;
     this.selectedProduct = null;
-    this.selectedProductDetails = null;
   }
 
   onProductSaved(): void {

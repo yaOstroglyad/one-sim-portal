@@ -1,4 +1,4 @@
-@import "../../../../scss/variables";
+@use "../../../../scss/variables" as vars;
 
 .os-tabs {
   // CSS Variables for consistency
@@ -11,7 +11,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  font-family: $primary-font;
+  font-family: vars.$primary-font;
 
   // Position variants
   &--top {

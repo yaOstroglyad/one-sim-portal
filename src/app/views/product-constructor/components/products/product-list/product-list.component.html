@@ -159,7 +159,7 @@
 
 <!-- Details Panel -->
 <app-generic-right-panel
-  *ngIf="showDetailsPanel && selectedProductDetails"
+  *ngIf="showDetailsPanel && selectedProduct"
   title="Product Details"
   [isOpen]="showDetailsPanel"
   [actions]="detailsPanelActions"
@@ -169,7 +169,7 @@
   (close)="onPanelClose()">
 
   <div panel-content>
-    <app-product-details [product]="selectedProductDetails"></app-product-details>
+    <app-product-details [product]="selectedProduct"></app-product-details>
   </div>
 
 </app-generic-right-panel>

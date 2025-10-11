@@ -8,6 +8,7 @@
   [class.open]="isOpen"
   [class.resizing]="isResizing"
   [class.expanded]="isExpanded"
+  [ngClass]="panelClasses()"
   [style.top.px]="topOffset"
   [style.height]="'calc(100% - ' + topOffset + 'px)'"
   (click)="$event.stopPropagation()">

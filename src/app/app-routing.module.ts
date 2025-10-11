@@ -10,7 +10,7 @@ import { Page403Component } from './views/pages/page403/page403.component';
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./containers/default-layout/default-layout.module').then((m) => m.DefaultLayoutModule),
+    loadChildren: () => import('./containers/default-layout/default-layout.routes').then((m) => m.DEFAULT_LAYOUT_ROUTES),
     canActivate: mapToCanActivate([AuthGuardService])
   },
   {

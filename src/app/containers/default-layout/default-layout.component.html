@@ -1,37 +1,34 @@
-<c-sidebar #sidebar="cSidebar"
-           class="d-print-none sidebar sidebar-fixed sidebar-bg sidebar-narrow-unfoldable"
-           id="sidebar"
-           visible>
+<div
+  class="layout"
+  [class.layout--dark]="layoutConfig.darkTheme"
+  [class.layout--rtl]="languageService.isRtl()"
+  [class.layout--sidebar-collapsed]="layoutConfig.sidebarCollapsed">
 
-    <ng-container *ngIf="!(brandFull$ | async); else loaded">
-        <app-sidebar-skeleton [itemsCount]="8"></app-sidebar-skeleton>
-    </ng-container>
+  <!-- Sidebar -->
+  <app-sidebar
+    [navItems]="translatedNavItems"
+    [brandConfig]="brandConfig">
+  </app-sidebar>
 
-    <ng-template #loaded>
-        <c-sidebar-brand
-                [brandFull]="(brandFull$ | async)!"
-                [brandNarrow]="brandNarrow"
-                routerLink=".">
-        </c-sidebar-brand>
+  <!-- Main Content Area -->
+  <div class="layout__main">
+    <!-- Header -->
+    <app-header></app-header>
 
-        <ng-scrollbar pointerEventsMethod="scrollbar">
-            <c-sidebar-nav [navItems]="translatedNavItems"
-                           dropdownMode="path"></c-sidebar-nav>
-        </ng-scrollbar>
-        <c-sidebar-toggler *ngIf="!sidebar.narrow"
-                           toggle="unfoldable"
-                           cSidebarToggle="sidebar"></c-sidebar-toggler>
-    </ng-template>
-</c-sidebar>
+    <!-- Content -->
+    <main
+      class="layout__content"
+      [class.layout__content--with-collapsed-sidebar]="layoutConfig.sidebarCollapsed">
+      <div class="layout__container">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
 
-<div class="wrapper d-flex flex-column min-vh-100 bg-light dark:bg-transparent">
-    <app-default-header class="d-print-none header header-sticky bg-light border-0"
-                        position="sticky"
-                        sidebarId="sidebar"></app-default-header>
-    <div class="body flex-grow-1">
-        <c-container [breakpoint]="'xs'" class="h-auto">
-            <router-outlet></router-outlet>
-        </c-container>
-    </div>
-    <app-default-footer></app-default-footer>
+  <!-- Mobile Overlay -->
+  <div
+    class="layout__mobile-overlay"
+    [class.layout__mobile-overlay--visible]="isMobileSidebarOpen"
+    (click)="closeMobileSidebar()">
+  </div>
 </div>

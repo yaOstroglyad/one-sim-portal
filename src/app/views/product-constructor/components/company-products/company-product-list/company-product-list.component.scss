@@ -1,0 +1,28 @@
+@use "../../../../../../scss/variables" as vars;
+@use "../../../../../../scss/mixins" as mixins;
+
+.company-product-list-container {
+  // RTL support
+  &--rtl {
+    direction: rtl;
+    
+    .text-end {
+      text-align: left !important;
+    }
+    
+    .reset-button {
+      svg {
+        transform: scaleX(-1);
+      }
+    }
+  }
+}
+
+// Dark theme support for custom templates
+[data-theme="dark"] {
+  .company-product-list-container {
+    .text-muted {
+      color: rgba(255, 255, 255, 0.5) !important;
+    }
+  }
+}

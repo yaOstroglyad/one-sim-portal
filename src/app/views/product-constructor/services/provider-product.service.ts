@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
-  ProviderProduct,
   ProviderProductSearchRequest,
   ProviderProductResponse,
-  ProviderProductUploadRequest,
   StatusUpdate
 } from '../models';
 
@@ -41,14 +39,10 @@ export class ProviderProductService {
     return this.http.get<ProviderProductResponse>(this.baseUrl, { params });
   }
 
-  getProviderProduct(id: string): Observable<ProviderProduct> {
-    return this.http.get<ProviderProduct>(`${this.baseUrl}/${id}`);
-  }
-
   uploadProviderProducts(file: File, providerId?: string, countryId?: number, regionId?: number): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
-    
+
     if (providerId) {
       formData.append('providerId', providerId);
     }
@@ -64,9 +58,5 @@ export class ProviderProductService {
 
   updateProviderProductStatus(id: string, status: StatusUpdate): Observable<any> {
     return this.http.put(`${this.baseUrl}/${id}/status`, status);
-  }
-
-  deleteProviderProduct(id: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 }

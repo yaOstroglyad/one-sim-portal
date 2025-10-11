@@ -1,5 +1,6 @@
-@import "../../../../scss/variables";
-@import "../../../../scss/mixins";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
 
 // Base card styles using Tailwind principles
 .os-card {
@@ -27,24 +28,24 @@
   }
 
   // Border radius variants
-  &--radius-none { border-radius: map-get($os-border-radius, 'none'); }
-  &--radius-small { border-radius: map-get($os-border-radius, 'small'); }
-  &--radius-medium { border-radius: map-get($os-border-radius, 'medium'); }
-  &--radius-large { border-radius: map-get($os-border-radius, 'large'); }
-  &--radius-xl { border-radius: map-get($os-border-radius, 'xl'); }
+  &--radius-none { border-radius: map.get(vars.$os-border-radius, 'none'); }
+  &--radius-small { border-radius: map.get(vars.$os-border-radius, 'small'); }
+  &--radius-medium { border-radius: map.get(vars.$os-border-radius, 'medium'); }
+  &--radius-large { border-radius: map.get(vars.$os-border-radius, 'large'); }
+  &--radius-xl { border-radius: map.get(vars.$os-border-radius, 'xl'); }
 
   // Card variants (Tailwind-inspired)
   &--default {
     border: 1px solid var(--os-color-light-shade);
-    box-shadow: map-get($os-shadows, 'sm');
+    box-shadow: map.get(vars.$os-shadows, 'sm');
   }
 
   &--elevated {
     border: none;
-    @include elevation(2);
+    @include mixins.elevation(2);
     
     &:hover:not(.os-card--disabled) {
-      @include elevation(3);
+      @include mixins.elevation(3);
     }
   }
 
@@ -65,88 +66,88 @@
 
   &--gradient {
     border: none;
-    @include gradient-bg(var(--os-color-white), var(--os-color-primary-opacity-03));
-    box-shadow: map-get($os-shadows, 'md');
+    @include mixins.gradient-bg(var(--os-color-white), var(--os-color-primary-opacity-03));
+    box-shadow: map.get(vars.$os-shadows, 'md');
   }
 
   &--glassmorphism {
-    @include glassmorphism(12px, 0.7);
-    box-shadow: map-get($os-shadows, 'lg');
+    @include mixins.glassmorphism(12px, 0.7);
+    box-shadow: map.get(vars.$os-shadows, 'lg');
   }
 
   // Size variants using spacing scale
   &--small {
     .os-card__header {
-      padding: map-get($os-spacing, '3') map-get($os-spacing, '4') map-get($os-spacing, '2');
+      padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '4') map.get(vars.$os-spacing, '2');
     }
     
     .os-card__content {
-      padding: map-get($os-spacing, '2') map-get($os-spacing, '4');
+      padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '4');
     }
     
     .os-card__actions {
-      padding: map-get($os-spacing, '2') map-get($os-spacing, '4') map-get($os-spacing, '3');
+      padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '4') map.get(vars.$os-spacing, '3');
     }
     
     .os-card__title {
-      font-size: map-get($os-font-sizes, 'sm');
+      font-size: map.get(vars.$os-font-sizes, 'sm');
       font-weight: 600;
     }
     
     .os-card__subtitle {
-      font-size: map-get($os-font-sizes, 'xs');
+      font-size: map.get(vars.$os-font-sizes, 'xs');
     }
   }
 
   &--medium {
     .os-card__header {
-      padding: map-get($os-spacing, '4') map-get($os-spacing, '5') map-get($os-spacing, '3');
+      padding: map.get(vars.$os-spacing, '4') map.get(vars.$os-spacing, '5') map.get(vars.$os-spacing, '3');
     }
     
     .os-card__content {
-      padding: map-get($os-spacing, '3') map-get($os-spacing, '5');
+      padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '5');
     }
     
     .os-card__actions {
-      padding: map-get($os-spacing, '3') map-get($os-spacing, '5') map-get($os-spacing, '4');
+      padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '5') map.get(vars.$os-spacing, '4');
     }
     
     .os-card__title {
-      font-size: map-get($os-font-sizes, 'lg');
+      font-size: map.get(vars.$os-font-sizes, 'lg');
       font-weight: 600;
     }
     
     .os-card__subtitle {
-      font-size: map-get($os-font-sizes, 'sm');
+      font-size: map.get(vars.$os-font-sizes, 'sm');
     }
   }
 
   &--large {
     .os-card__header {
-      padding: map-get($os-spacing, '5') map-get($os-spacing, '6') map-get($os-spacing, '4');
+      padding: map.get(vars.$os-spacing, '5') map.get(vars.$os-spacing, '6') map.get(vars.$os-spacing, '4');
     }
     
     .os-card__content {
-      padding: map-get($os-spacing, '4') map-get($os-spacing, '6');
+      padding: map.get(vars.$os-spacing, '4') map.get(vars.$os-spacing, '6');
     }
     
     .os-card__actions {
-      padding: map-get($os-spacing, '4') map-get($os-spacing, '6') map-get($os-spacing, '5');
+      padding: map.get(vars.$os-spacing, '4') map.get(vars.$os-spacing, '6') map.get(vars.$os-spacing, '5');
     }
     
     .os-card__title {
-      font-size: map-get($os-font-sizes, 'xl');
+      font-size: map.get(vars.$os-font-sizes, 'xl');
       font-weight: 700;
     }
     
     .os-card__subtitle {
-      font-size: map-get($os-font-sizes, 'base');
+      font-size: map.get(vars.$os-font-sizes, 'base');
     }
   }
 
   // Interactive state
   &--interactive {
-    @include interactive-states();
+    @include mixins.interactive-states();
   }
 
   // Selected state with primary color
@@ -162,7 +163,7 @@
 
   // Disabled state
   &--disabled {
-    @include disabled-state();
+    @include mixins.disabled-state();
     
     .os-card__title,
     .os-card__subtitle,
@@ -173,7 +174,7 @@
 
   // Loading state
   &--loading {
-    @include loading-state();
+    @include mixins.loading-state();
   }
 
   // No padding modifier
@@ -186,10 +187,10 @@
   }
 
   // Generate border colors using global color system
-  @include generate-border-colors('os-card');
+  @include mixins.generate-border-colors('os-card');
   
   // Generate shadow colors
-  @include generate-shadow-colors('os-card');
+  @include mixins.generate-shadow-colors('os-card');
 
   // Card sections
   &__header {
@@ -206,34 +207,34 @@
     
     &-actions {
       flex-shrink: 0;
-      margin-left: map-get($os-spacing, '3');
+      margin-left: map.get(vars.$os-spacing, '3');
       display: flex;
-      gap: map-get($os-spacing, '2');
+      gap: map.get(vars.$os-spacing, '2');
       align-items: center;
     }
   }
 
   &__title {
-    margin: 0 0 map-get($os-spacing, '1') 0;
+    margin: 0 0 map.get(vars.$os-spacing, '1') 0;
     color: var(--os-color-dark);
-    font-family: $primary-font;
+    font-family: vars.$primary-font;
     line-height: 1.4;
-    @include truncate(1);
+    @include mixins.truncate(1);
   }
 
   &__subtitle {
     margin: 0;
     color: var(--os-color-medium);
-    font-family: $primary-font;
+    font-family: vars.$primary-font;
     font-weight: 400;
     line-height: 1.4;
-    @include truncate(2);
+    @include mixins.truncate(2);
   }
 
   &__content {
     flex: 1;
     color: var(--os-color-dark);
-    font-family: $primary-font;
+    font-family: vars.$primary-font;
     line-height: 1.5;
     
     &:empty {
@@ -245,7 +246,7 @@
     border-top: 1px solid var(--os-color-light-shade);
     background: rgba(var(--os-color-light-rgb), 0.2);
     display: flex;
-    gap: map-get($os-spacing, '2');
+    gap: map.get(vars.$os-spacing, '2');
     justify-content: flex-end;
     align-items: center;
     

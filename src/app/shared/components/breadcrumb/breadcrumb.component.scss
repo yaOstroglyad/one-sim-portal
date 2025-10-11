@@ -1,29 +1,144 @@
-@import "src/scss/variables";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
 
 .os-breadcrumb {
   display: flex;
   list-style: none;
   padding: 0;
   margin: 0;
+  align-items: center;
+
+  // RTL Support
+  &--rtl {
+    direction: rtl;
+    
+    .os-breadcrumb-item {
+      margin-right: map.get(vars.$os-spacing, '2');
+      margin-left: 0;
+      
+      &::after {
+        margin-left: 0;
+        margin-right: map.get(vars.$os-spacing, '2');
+      }
+    }
+  }
 
   .os-breadcrumb-item {
     font-size: 24px;
-    margin-right: 0.5rem;
+    margin-right: map.get(vars.$os-spacing, '2');
+    display: flex;
+    align-items: center;
 
     &::after {
       content: '/';
-      margin-left: 0.5rem;
+      margin-left: map.get(vars.$os-spacing, '2');
+    }
+
+    span {
+      text-decoration: none;
+      cursor: pointer;
+
+      &:focus {
+        outline: 2px solid var(--os-color-primary);
+        outline-offset: 2px;
+        border-radius: map.get(vars.$os-border-radius, 'small');
+      }
     }
 
     &.active {
       font-weight: bold;
-      color: $primary-color-contrast;
+      color: var(--os-color-primary-contrast);
       pointer-events: none;
       cursor: default;
     }
 
     &:last-child::after {
       content: '';
+      margin: 0;
+    }
+  }
+}
+
+// Dark theme support
+[data-theme="dark"] {
+  .os-breadcrumb {
+    .os-breadcrumb-item {
+      &.active {
+        color: var(--os-color-light);
+      }
+    }
+  }
+}
+
+// Modern dark theme support (CSS custom properties based)
+:host-context([data-theme="dark"]) {
+  .os-breadcrumb {
+    .os-breadcrumb-item {
+      &.active {
+        color: var(--os-color-light);
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .os-breadcrumb {
+    .os-breadcrumb-item {
+      font-size: 20px;
+      margin-right: map.get(vars.$os-spacing, '1');
+      
+      &::after {
+        margin-left: map.get(vars.$os-spacing, '1');
+      }
+
+      // RTL adjustments for mobile
+      .os-breadcrumb--rtl & {
+        margin-right: map.get(vars.$os-spacing, '1');
+        margin-left: 0;
+        
+        &::after {
+          margin-left: 0;
+          margin-right: map.get(vars.$os-spacing, '1');
+        }
+      }
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .os-breadcrumb {
+    .os-breadcrumb-item {
+      span {
+        border: 1px solid transparent;
+        padding: map.get(vars.$os-spacing, '1');
+        border-radius: map.get(vars.$os-border-radius, 'small');
+
+        &:focus {
+          border-color: var(--os-color-primary);
+          outline: none;
+        }
+      }
+
+      &.active {
+        font-weight: 700;
+        background: rgba(var(--os-color-primary-rgb), 0.1);
+        padding: map.get(vars.$os-spacing, '1');
+        border-radius: map.get(vars.$os-border-radius, 'small');
+      }
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .os-breadcrumb {
+    .os-breadcrumb-item {
+      span {
+        transition: none;
+      }
     }
   }
 }

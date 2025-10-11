@@ -1,4 +1,4 @@
-<div class="overview-container">
+<div class="overview-container" [ngClass]="containerClasses()">
 
   <!-- Header -->
   <div class="overview-header">
@@ -17,7 +17,7 @@
   <!-- Error State -->
   <div *ngIf="error && !loading" class="error-container">
     <div class="error-content">
-      <i class="icon cil-warning error-icon"></i>
+      <svg cIcon name="cil-warning" width="48" height="48" class="error-icon"></svg>
       <h3>Unable to load statistics</h3>
       <p>There was an error loading the overview data. Please try again later.</p>
       <button class="btn btn-primary" (click)="onRetry()">Retry</button>

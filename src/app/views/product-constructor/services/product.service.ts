@@ -78,9 +78,6 @@ export class ProductService {
            !searchRequest.searchParams.mobileBundleId;
   }
 
-  getProduct(id: string): Observable<Product> {
-    return this.http.get<Product>(`${this.baseUrl}/${id}`);
-  }
 
   createProduct(request: CreateProductRequest): Observable<any> {
     return this.http.post(this.baseUrl, request).pipe(

@@ -187,6 +187,14 @@
 
   /** transparent **/
   --os-color-transparent: transparent;
+
+  /** CoreUI layout colors **/
+  /** Layout colors using existing semantic variables **/
+  --os-sidebar-bg-dark: var(--os-color-dark);
+  --os-sidebar-text: var(--os-color-primary-contrast);
+  --os-sidebar-hover: var(--os-color-light-shade);
+  --os-sidebar-active: var(--os-color-primary);
+  --os-sidebar-text-dark: var(--os-color-dark-contrast);
 }
 
 $primary-font: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;

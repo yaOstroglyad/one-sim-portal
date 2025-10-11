@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, switchMap, catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { LanguageService } from '../../../../../shared';
 
 import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { BundleFormComponent } from '../bundle-form/bundle-form.component';
@@ -52,6 +54,14 @@ export class BundleListComponent implements OnInit {
   error = false;
 
   private refreshTrigger$ = new BehaviorSubject<void>(undefined);
+
+  // RTL and theme support
+  private readonly languageService = inject(LanguageService);
+  
+  readonly containerClasses = computed(() => ({
+    'bundle-list-container': true,
+    'bundle-list-container--rtl': this.languageService.isRtl()
+  }));
 
   // Panel states
   showCreatePanel = false;

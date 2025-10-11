@@ -11,6 +11,7 @@ import { FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-edit-email-template',
+    standalone: true,
     templateUrl: './edit-email-template.component.html',
     imports: [
         CommonModule,

@@ -1,11 +1,12 @@
-// ============================================== 
+// ==============================================
 // UTILITY CLASSES - All project utility classes
 // Import foundation (variables and maps)
 // ==============================================
 
-@import "variables";
+@use "sass:map";
+@use "./variables" as vars;
 
-// ============================================== 
+// ==============================================
 // LAYOUT UTILITIES
 // ==============================================
 
@@ -46,21 +47,21 @@
   z-index: 2;
 }
 
-// ============================================== 
+// ==============================================
 // SPACING UTILITIES
 // ==============================================
 
 // Margin utilities (using spacing scale)
 .mr-1 {
-  margin-right: map-get($os-spacing, '2'); // 8px
+  margin-right: map.get(vars.$os-spacing, '2'); // 8px
 }
 
 .mb-1 {
-  margin-bottom: map-get($os-spacing, '2'); // 8px
+  margin-bottom: map.get(vars.$os-spacing, '2'); // 8px
 }
 
 // Generate all margin utilities
-@each $size, $value in $os-spacing {
+@each $size, $value in vars.$os-spacing {
   .m-#{$size} { margin: $value; }
   .mt-#{$size} { margin-top: $value; }
   .mr-#{$size} { margin-right: $value; }
@@ -71,7 +72,7 @@
 }
 
 // Generate all padding utilities
-@each $size, $value in $os-spacing {
+@each $size, $value in vars.$os-spacing {
   .p-#{$size} { padding: $value; }
   .pt-#{$size} { padding-top: $value; }
   .pr-#{$size} { padding-right: $value; }
@@ -99,20 +100,20 @@ $font-sizes: (
 // ==============================================
 
 // Generate spacing utilities (margin, padding)
-@each $name, $value in $os-spacing {
+@each $name, $value in vars.$os-spacing {
   // Margin utilities
   .m-#{$name} { margin: $value !important; }
   .mt-#{$name} { margin-top: $value !important; }
   .mr-#{$name} { margin-right: $value !important; }
   .mb-#{$name} { margin-bottom: $value !important; }
   .ml-#{$name} { margin-left: $value !important; }
-  .mx-#{$name} { 
-    margin-left: $value !important; 
-    margin-right: $value !important; 
+  .mx-#{$name} {
+    margin-left: $value !important;
+    margin-right: $value !important;
   }
-  .my-#{$name} { 
-    margin-top: $value !important; 
-    margin-bottom: $value !important; 
+  .my-#{$name} {
+    margin-top: $value !important;
+    margin-bottom: $value !important;
   }
 
   // Padding utilities
@@ -121,13 +122,13 @@ $font-sizes: (
   .pr-#{$name} { padding-right: $value !important; }
   .pb-#{$name} { padding-bottom: $value !important; }
   .pl-#{$name} { padding-left: $value !important; }
-  .px-#{$name} { 
-    padding-left: $value !important; 
-    padding-right: $value !important; 
+  .px-#{$name} {
+    padding-left: $value !important;
+    padding-right: $value !important;
   }
-  .py-#{$name} { 
-    padding-top: $value !important; 
-    padding-bottom: $value !important; 
+  .py-#{$name} {
+    padding-top: $value !important;
+    padding-bottom: $value !important;
   }
 }
 
@@ -136,23 +137,23 @@ $font-sizes: (
 .p-0\.5 { padding: 0.125rem !important; }
 
 // Generate shadow utilities
-@each $name, $value in $os-shadows {
-  .shadow-#{$name} { 
-    box-shadow: $value !important; 
+@each $name, $value in vars.$os-shadows {
+  .shadow-#{$name} {
+    box-shadow: $value !important;
   }
 }
 
 // Generate border radius utilities
-@each $name, $value in $os-border-radius {
-  .rounded-#{$name} { 
-    border-radius: $value !important; 
+@each $name, $value in vars.$os-border-radius {
+  .rounded-#{$name} {
+    border-radius: $value !important;
   }
 }
 
 // Generate typography utilities
-@each $name, $value in $os-font-sizes {
-  .text-#{$name} { 
-    font-size: $value !important; 
+@each $name, $value in vars.$os-font-sizes {
+  .text-#{$name} {
+    font-size: $value !important;
   }
 }
 
@@ -163,41 +164,41 @@ $font-sizes: (
 // Generic component spacing (replaces card-utilities, tab-utilities)
 .os-spacing {
   &--none { gap: 0; padding: 0; margin: 0; }
-  &--xs { gap: map-get($os-spacing, '1'); padding: map-get($os-spacing, '1'); }
-  &--sm { gap: map-get($os-spacing, '2'); padding: map-get($os-spacing, '2'); }
-  &--md { gap: map-get($os-spacing, '3'); padding: map-get($os-spacing, '3'); }
-  &--lg { gap: map-get($os-spacing, '4'); padding: map-get($os-spacing, '4'); }
-  &--xl { gap: map-get($os-spacing, '5'); padding: map-get($os-spacing, '5'); }
+  &--xs { gap: map.get(vars.$os-spacing, '1'); padding: map.get(vars.$os-spacing, '1'); }
+  &--sm { gap: map.get(vars.$os-spacing, '2'); padding: map.get(vars.$os-spacing, '2'); }
+  &--md { gap: map.get(vars.$os-spacing, '3'); padding: map.get(vars.$os-spacing, '3'); }
+  &--lg { gap: map.get(vars.$os-spacing, '4'); padding: map.get(vars.$os-spacing, '4'); }
+  &--xl { gap: map.get(vars.$os-spacing, '5'); padding: map.get(vars.$os-spacing, '5'); }
 }
 
 // Component margin utilities
 .os-margin {
   &--none { margin: 0; }
-  &--xs { margin: map-get($os-spacing, '2'); }
-  &--sm { margin: map-get($os-spacing, '3'); }
-  &--md { margin: map-get($os-spacing, '4'); }
-  &--lg { margin: map-get($os-spacing, '6'); }
-  &--xl { margin: map-get($os-spacing, '8'); }
+  &--xs { margin: map.get(vars.$os-spacing, '2'); }
+  &--sm { margin: map.get(vars.$os-spacing, '3'); }
+  &--md { margin: map.get(vars.$os-spacing, '4'); }
+  &--lg { margin: map.get(vars.$os-spacing, '6'); }
+  &--xl { margin: map.get(vars.$os-spacing, '8'); }
 }
 
-// Component padding utilities  
+// Component padding utilities
 .os-padding {
   &--none { padding: 0; }
-  &--xs { padding: map-get($os-spacing, '2'); }
-  &--sm { padding: map-get($os-spacing, '3'); }
-  &--md { padding: map-get($os-spacing, '4'); }
-  &--lg { padding: map-get($os-spacing, '6'); }
-  &--xl { padding: map-get($os-spacing, '8'); }
+  &--xs { padding: map.get(vars.$os-spacing, '2'); }
+  &--sm { padding: map.get(vars.$os-spacing, '3'); }
+  &--md { padding: map.get(vars.$os-spacing, '4'); }
+  &--lg { padding: map.get(vars.$os-spacing, '6'); }
+  &--xl { padding: map.get(vars.$os-spacing, '8'); }
 }
 
 // Component shadow utilities
 .os-shadow {
   &--none { box-shadow: none; }
-  &--xs { box-shadow: map-get($os-shadows, 'sm'); }
-  &--sm { box-shadow: map-get($os-shadows, 'default'); }
-  &--md { box-shadow: map-get($os-shadows, 'md'); }
-  &--lg { box-shadow: map-get($os-shadows, 'lg'); }
-  &--xl { box-shadow: map-get($os-shadows, 'xl'); }
+  &--xs { box-shadow: map.get(vars.$os-shadows, 'sm'); }
+  &--sm { box-shadow: map.get(vars.$os-shadows, 'default'); }
+  &--md { box-shadow: map.get(vars.$os-shadows, 'md'); }
+  &--lg { box-shadow: map.get(vars.$os-shadows, 'lg'); }
+  &--xl { box-shadow: map.get(vars.$os-shadows, 'xl'); }
 }
 
 // ==============================================
@@ -376,10 +377,10 @@ $font-sizes: (
 }
 
 // Legacy margin classes
-.mr-1 { margin-right: map-get($os-spacing, '1') !important; }
-.mb-1 { margin-bottom: map-get($os-spacing, '1') !important; }
-.mr-2 { margin-right: map-get($os-spacing, '2') !important; }
-.mb-2 { margin-bottom: map-get($os-spacing, '2') !important; }
+.mr-1 { margin-right: map.get(vars.$os-spacing, '1') !important; }
+.mb-1 { margin-bottom: map.get(vars.$os-spacing, '1') !important; }
+.mr-2 { margin-right: map.get(vars.$os-spacing, '2') !important; }
+.mb-2 { margin-bottom: map.get(vars.$os-spacing, '2') !important; }
 
 // ==============================================
 // AG-GRID UTILITY CLASSES

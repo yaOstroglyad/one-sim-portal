@@ -18,7 +18,6 @@ export * from './components/badge'
 export * from './components/card'
 export * from './components/tabs'
 export * from './components/tooltip'
-export * from './components/sidebar'
 export * from './components/debug-display'
 export * from './components/pagination'
 export * from './components/date-picker-wrapper'
@@ -28,6 +27,8 @@ export * from './components/multiselect-grid'
 export * from './components/file-upload'
 export * from './components/searchable-select'
 export * from './components/smart-filter-header'
+export * from './components/user-avatar'
+export * from './components/breadcrumb/breadcrumb.component'
 
 export * from './components/header-component/header.module';
 export * from './pipes/format-time/format-time.module';
@@ -39,6 +40,7 @@ export * from './components/form-generator/form-array-item'
 export * from './components/generic-table/table-config-abstract.service';
 export * from './services/data.service';
 export * from './services/language.service';
+export { Language } from './services/language.service';
 export * from './services/providers-data.service';
 export * from './services/customers-data.service';
 export * from './services/companies-data.service';

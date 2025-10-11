@@ -2,8 +2,6 @@
 @import "../../../scss/mixins";
 
 .dashboard-container {
-  padding: 1.5rem;
-  background-color: #f8f9fa;
   min-height: calc(100vh - 56px);
 }
 
@@ -15,12 +13,12 @@
   flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 2rem;
-  
+
   .header-left {
     flex: 1;
     min-width: 250px;
   }
-  
+
   .header-right {
     display: flex;
     align-items: center;
@@ -50,7 +48,7 @@
   padding: 0.25rem;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  
+
   .period-btn {
     padding: 0.5rem 1rem;
     border: none;
@@ -62,12 +60,12 @@
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
-    
+
     &:hover {
       background-color: #f5f5f5;
       color: #2c2c2c;
     }
-    
+
     &.active {
       background-color: var(--os-color-primary);
       color: #ffffff;
@@ -79,7 +77,7 @@
 .action-buttons {
   display: flex;
   gap: 0.5rem;
-  
+
   .btn-icon {
     width: 40px;
     height: 40px;
@@ -91,12 +89,12 @@
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
-    
+
     &:hover {
       background-color: #f5f5f5;
       border-color: var(--os-color-primary);
     }
-    
+
     c-icon {
       font-size: 1.125rem;
       color: #6b7280;
@@ -111,30 +109,30 @@
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
-  
+
   .date-inputs {
     display: flex;
     align-items: center;
     gap: 1rem;
     flex-wrap: wrap;
   }
-  
+
   .date-input {
     padding: 0.5rem 1rem;
     border: 1px solid #e0e0e0;
     border-radius: 6px;
     font-size: 0.875rem;
-    
+
     &:focus {
       outline: none;
       border-color: var(--os-color-primary);
     }
   }
-  
+
   .date-separator {
     color: #6b7280;
   }
-  
+
   .btn-primary,
   .btn-secondary {
     padding: 0.5rem 1.5rem;
@@ -145,25 +143,25 @@
     cursor: pointer;
     transition: all 0.2s ease;
   }
-  
+
   .btn-primary {
     background-color: var(--os-color-primary);
     color: #ffffff;
-    
+
     &:hover:not(:disabled) {
       background-color: var(--os-color-primary-shade);
     }
-    
+
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
   }
-  
+
   .btn-secondary {
     background-color: #f5f5f5;
     color: #6b7280;
-    
+
     &:hover {
       background-color: #e0e0e0;
     }
@@ -176,7 +174,7 @@
   gap: 0.5rem;
   margin-bottom: 1.5rem;
   border-bottom: 2px solid #e0e0e0;
-  
+
   .tab-button {
     display: flex;
     align-items: center;
@@ -190,18 +188,18 @@
     cursor: pointer;
     position: relative;
     transition: all 0.2s ease;
-    
+
     c-icon {
       font-size: 1.125rem;
     }
-    
+
     &:hover {
       color: #2c2c2c;
     }
-    
+
     &.active {
       color: var(--os-color-primary);
-      
+
       &::after {
         content: '';
         position: absolute;
@@ -220,26 +218,26 @@
   .tab-pane {
     display: none;
     animation: fadeIn 0.3s ease-in-out;
-    
+
     &.active {
       display: block;
     }
   }
-  
+
   .placeholder-tab {
     text-align: center;
     padding: 4rem 2rem;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    
+
     h3 {
       font-size: 1.5rem;
       font-weight: 600;
       color: #2c2c2c;
       margin: 0 0 1rem 0;
     }
-    
+
     p {
       font-size: 1rem;
       color: #6b7280;
@@ -265,26 +263,26 @@
   .dashboard-container {
     padding: 1rem;
   }
-  
+
   .dashboard-header {
     .header-left,
     .header-right {
       width: 100%;
     }
   }
-  
+
   .period-selector {
     width: 100%;
     overflow-x: auto;
-    
+
     .period-btn {
       flex-shrink: 0;
     }
   }
-  
+
   .dashboard-tabs {
     overflow-x: auto;
-    
+
     .tab-button {
       flex-shrink: 0;
     }
@@ -294,70 +292,70 @@
 // Dark Theme Support (controlled by CSS class, not automatic)
 .dashboard-container.dark-theme {
   background-color: #1a1a1a;
-  
+
   .dashboard-title {
     color: #ffffff;
   }
-  
+
   .dashboard-subtitle {
     color: #9ca3af;
   }
-  
+
   .period-selector {
     background-color: #2c2c2c;
-    
+
     .period-btn {
       color: #9ca3af;
-      
+
       &:hover {
         background-color: #3a3a3a;
         color: #ffffff;
       }
     }
   }
-  
+
   .action-buttons .btn-icon {
     background-color: #2c2c2c;
     border-color: #3a3a3a;
-    
+
     &:hover {
       background-color: #3a3a3a;
     }
-    
+
     c-icon {
       color: #9ca3af;
     }
   }
-  
+
   .custom-date-picker {
     background-color: #2c2c2c;
-    
+
     .date-input {
       background-color: #1a1a1a;
       border-color: #3a3a3a;
       color: #ffffff;
     }
   }
-  
+
   .dashboard-tabs {
     border-color: #3a3a3a;
-    
+
     .tab-button {
       color: #9ca3af;
-      
+
       &:hover {
         color: #ffffff;
       }
     }
   }
-  
+
   .placeholder-tab {
     background-color: #2c2c2c;
-    
+
     h3 {
       color: #ffffff;
     }
-    
+
     p {
       color: #9ca3af;
     }

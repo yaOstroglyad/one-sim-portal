@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
@@ -23,7 +23,7 @@ import { CompanyProductService, RegionService } from '../../../services';
 import { CompanyProduct, CompanyProductSearchRequest, RegionSummary } from '../../../models';
 import { CompanyProductsTableService } from '../company-products-table.service';
 import { AccountSelectorComponent } from '../../../../../shared/components/account-selector/account-selector.component';
-import { UserRoleService } from '../../../../../shared';
+import { UserRoleService, LanguageService } from '../../../../../shared';
 import { Account, Country } from '../../../../../shared';
 import { CountryService } from '../../../../../shared';
 
@@ -90,6 +90,14 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   regions$: Observable<RegionSummary[]>;
   countryOptions$: Observable<SearchableSelectOption[]>;
   regionOptions$: Observable<SearchableSelectOption[]>;
+
+  // RTL support
+  private readonly languageService = inject(LanguageService);
+  
+  readonly containerClasses = computed(() => ({
+    'company-product-list-container': true,
+    'company-product-list-container--rtl': this.languageService.isRtl()
+  }));
 
   constructor(
     private companyProductService: CompanyProductService,

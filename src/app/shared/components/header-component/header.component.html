@@ -1,5 +1,5 @@
 <!-- src/app/shared/components/header-component/header.component.html -->
-<form [formGroup]="headerForm" class="pb-2 d-flex px-3 pt-3 bg-light">
+<form [formGroup]="headerForm" class="pb-2 d-flex pt-2 header-form">
     <ng-container *ngFor="let key of formKeys">
         <input *ngIf="config[key].type === 'text'" [formControlName]="key"
                [placeholder]="config[key].placeholder" cFormControl [type]="'text'">

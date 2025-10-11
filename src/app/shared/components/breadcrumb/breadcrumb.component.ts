@@ -1,67 +1,97 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
-import { filter, map } from 'rxjs/operators';
-import { CommonModule, NgClass, NgForOf, NgIf } from '@angular/common';
+import { filter } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { Subject, takeUntil } from 'rxjs';
+import { LanguageService } from '../../services/language.service';
 
 interface Breadcrumb {
-  label: string;
-  url: string;
+  readonly label: string;
+  readonly url: string;
 }
 
 @Component({
     selector: 'app-breadcrumb',
+    standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './breadcrumb.component.html',
     styleUrls: ['./breadcrumb.component.scss'],
     imports: [
         CommonModule,
-        NgClass,
-        NgForOf,
-        NgIf,
         RouterLink,
         TranslateModule
     ]
 })
-export class BreadcrumbComponent implements OnInit {
-  router = inject(Router);
-  activatedRoute = inject(ActivatedRoute);
-  public breadcrumbs: Breadcrumb[] = [];
+export class BreadcrumbComponent implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly languageService = inject(LanguageService);
+  private readonly unsubscribe$ = new Subject<void>();
+
+  // Signals
+  readonly breadcrumbs = signal<Breadcrumb[]>([]);
+
+  readonly breadcrumbClasses = computed(() => ({
+    'os-breadcrumb--rtl': this.languageService.isRtl()
+  }));
 
   ngOnInit(): void {
-    this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
+    // Initialize breadcrumbs
+    this.updateBreadcrumbs();
 
+    // Listen for route changes
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
-        map(() => this.createBreadcrumbs(this.activatedRoute.root))
+        takeUntil(this.unsubscribe$)
       )
-      .subscribe((breadcrumbs: Breadcrumb[]) => {
-        this.breadcrumbs = breadcrumbs;
+      .subscribe(() => {
+        this.updateBreadcrumbs();
       });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  private updateBreadcrumbs(): void {
+    const breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
+    this.breadcrumbs.set(breadcrumbs);
   }
 
   private createBreadcrumbs(route: ActivatedRoute,
                             url: string = '',
                             breadcrumbs: Breadcrumb[] = []): Breadcrumb[] {
-    const children: ActivatedRoute[] = route.children;
-
-    if (children.length === 0) {
+    // Get the primary outlet child
+    let child = route.firstChild;
+    
+    // If no child, return current breadcrumbs
+    if (!child) {
       return breadcrumbs;
     }
 
-    for (const child of children) {
-      const routeURL: string = child.snapshot.url.map(segment => segment.path).join('/');
-
-      if (routeURL !== '') {
-        url += `/${routeURL}`;
+    // Process all route segments
+    while (child) {
+      // Build URL path
+      if (child.snapshot.url.length > 0) {
+        const pathSegment = child.snapshot.url.map(segment => segment.path).join('/');
+        url += `/${pathSegment}`;
       }
 
-      const label = child.snapshot.data['title'];
-      if (label) {
-        breadcrumbs.push({ label, url });
+      // Check for title in route data
+      const title = child.snapshot.data['title'];
+      if (title) {
+        const breadcrumb = { 
+          label: title, 
+          url: url || '/' 
+        };
+        breadcrumbs.push(breadcrumb);
       }
 
-      return this.createBreadcrumbs(child, url, breadcrumbs);
+      // Move to next child
+      child = child.firstChild;
     }
 
     return breadcrumbs;

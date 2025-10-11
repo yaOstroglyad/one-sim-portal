@@ -28,6 +28,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
     selector: 'app-template-type-grid',
+    standalone: true,
     templateUrl: './template-type-grid.component.html',
     providers: [TemplateTypeGridService],
     imports: [

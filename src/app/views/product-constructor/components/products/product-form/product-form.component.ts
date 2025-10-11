@@ -20,6 +20,7 @@ import {
 
 @Component({
     selector: 'app-product-form',
+    standalone: true,
     imports: [
         CommonModule,
         FormGeneratorComponent,

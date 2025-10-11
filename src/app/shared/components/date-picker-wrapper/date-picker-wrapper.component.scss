@@ -1,6 +1,7 @@
-@import "../../../../scss/variables";
-@import "../../../../scss/utilities";
-@import "../../../../scss/mixins";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/utilities" as utils;
+@use "../../../../scss/mixins" as mixins;
 
 // ==============================================
 // DATE PICKER WRAPPER COMPONENT
@@ -15,7 +16,7 @@
     // Size variants using utility scale
     &.date-picker--small {
       .date-picker-field {
-        font-size: map-get($os-font-sizes, 'sm') !important;
+        font-size: map-get(vars.$os-font-sizes, 'sm') !important;
 
         ::ng-deep .mat-mdc-text-field-wrapper {
           height: 36px !important;
@@ -25,7 +26,7 @@
 
     &.date-picker--medium {
       .date-picker-field {
-        font-size: map-get($os-font-sizes, 'base') !important;
+        font-size: map-get(vars.$os-font-sizes, 'base') !important;
 
         ::ng-deep .mat-mdc-text-field-wrapper {
           height: 44px !important;
@@ -35,7 +36,7 @@
 
     &.date-picker--large {
       .date-picker-field {
-        font-size: map-get($os-font-sizes, 'lg') !important;
+        font-size: map-get(vars.$os-font-sizes, 'lg') !important;
 
         ::ng-deep .mat-mdc-text-field-wrapper {
           height: 52px !important;
@@ -210,7 +211,7 @@
     .date-range-container {
       display: flex !important;
       align-items: center !important;
-      gap: map-get($os-spacing, '3') !important; // 12px
+      gap: map-get(vars.$os-spacing, '3') !important; // 12px
 
       .date-range-start,
       .date-range-end {
@@ -220,7 +221,7 @@
 
       @media (max-width: 768px) {
         flex-direction: column !important;
-        gap: map-get($os-spacing, '4') !important; // 16px
+        gap: map-get(vars.$os-spacing, '4') !important; // 16px
 
         .date-range-start,
         .date-range-end {
@@ -231,8 +232,8 @@
 
       .range-helper-text {
         color: var(--os-color-medium) !important;
-        font-size: map-get($os-font-sizes, 'xs') !important;
-        margin-top: map-get($os-spacing, '2') !important;
+        font-size: map-get(vars.$os-font-sizes, 'xs') !important;
+        margin-top: map-get(vars.$os-spacing, '2') !important;
         text-align: center !important;
 
         @media (min-width: 768px) {
@@ -284,13 +285,13 @@
 // Global datepicker overlay styling
 ::ng-deep .mat-datepicker-popup {
   .mat-calendar {
-    border-radius: map-get($os-border-radius, 'lg') !important;
-    @include elevation(3); // Using project elevation mixin
+    border-radius: map-get(vars.$os-border-radius, 'lg') !important;
+    @include mixins.elevation(3); // Using project elevation mixin
 
     .mat-calendar-header {
       background-color: var(--os-color-primary) !important;
       color: var(--os-color-white) !important;
-      border-radius: map-get($os-border-radius, 'lg') map-get($os-border-radius, 'lg') 0 0 !important;
+      border-radius: map-get(vars.$os-border-radius, 'lg') map-get(vars.$os-border-radius, 'lg') 0 0 !important;
     }
 
     .mat-calendar-body-selected {

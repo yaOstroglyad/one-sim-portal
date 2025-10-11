@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, BehaviorSubject, Subject, of } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil, map } from 'rxjs/operators';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
+import { GenericRightPanelComponent, PanelAction, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
 import { ProviderProductDetailsComponent } from '../provider-product-details/provider-product-details.component';
 import { ProviderProductUploadDialogComponent } from '../provider-product-upload-dialog';
 import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent } from '../../../../../shared';
@@ -16,10 +16,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ButtonDirective, FormControlDirective, FormSelectDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
+import { TranslateModule } from '@ngx-translate/core';
 
-import { ProviderProductService } from '../../../services';
-import { ProviderProduct, ProviderProductSearchRequest } from '../../../models';
+import { ProviderProductService, RegionService } from '../../../services';
+import { ProviderProduct, ProviderProductSearchRequest, RegionSummary } from '../../../models';
 import { ProviderProductsTableService } from '../provider-products-table.service';
+import { CountryService } from '../../../../../shared/services/country.service';
+import { Country } from '../../../../../shared/model/country';
+import { LanguageService } from '../../../../../shared';
 
 @Component({
     selector: 'app-provider-product-list',
@@ -36,7 +40,9 @@ import { ProviderProductsTableService } from '../provider-products-table.service
         MatButtonModule,
         MatDialogModule,
         ButtonDirective,
-        IconDirective
+        IconDirective,
+        SearchableSelectComponent,
+        TranslateModule
     ],
     providers: [ProviderProductsTableService],
     templateUrl: './provider-product-list.component.html',
@@ -48,13 +54,24 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
   public providerProducts$: Observable<ProviderProduct[]>;
   public tableConfig$: BehaviorSubject<TableConfig>;
   public filterForm: FormGroup;
+  
+  // Options for searchable-select dropdowns
+  public countryOptions$: Observable<SearchableSelectOption[]>;
+  public regionOptions$: Observable<SearchableSelectOption[]>;
 
   private unsubscribe$ = new Subject<void>();
+
+  // RTL support
+  private readonly languageService = inject(LanguageService);
+  
+  readonly containerClasses = computed(() => ({
+    'provider-product-list-container': true,
+    'provider-product-list-container--rtl': this.languageService.isRtl()
+  }));
 
   // Panel states
   showDetailsPanel = false;
   selectedProviderProduct: ProviderProduct | null = null;
-  selectedProviderProductDetails: ProviderProduct | null = null;
 
   // Panel actions
   detailsPanelActions: PanelAction[] = [];
@@ -63,12 +80,15 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private providerProductService: ProviderProductService,
     private tableService: ProviderProductsTableService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private countryService: CountryService,
+    private regionService: RegionService
   ) {}
 
   public ngOnInit(): void {
     this.initFormControls();
     this.loadData();
+    this.loadOptions();
     this.setupFilters();
     this.initializePanelActions();
   }
@@ -168,15 +188,12 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
 
   onViewDetails(providerProduct: ProviderProduct): void {
     this.selectedProviderProduct = providerProduct;
-    // Mock provider product details data until API is ready
-    this.selectedProviderProductDetails = { ...providerProduct };
     this.showDetailsPanel = true;
   }
 
   onPanelClose(): void {
     this.showDetailsPanel = false;
     this.selectedProviderProduct = null;
-    this.selectedProviderProductDetails = null;
   }
 
   onToggleStatus(providerProduct: ProviderProduct): void {
@@ -190,5 +207,35 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
         console.error('Error updating provider product status:', error);
       }
     });
+  }
+
+  private loadOptions(): void {
+    // Load countries
+    this.countryOptions$ = this.countryService.getCountries().pipe(
+      map(countries => {
+        if (!countries || !Array.isArray(countries)) {
+          return [];
+        }
+        return countries.map(country => ({
+          value: country.id,
+          label: `${country.name} (${country?.isoAlphaCode3 || ''})`,
+          data: country
+        } as SearchableSelectOption));
+      })
+    );
+
+    // Load regions
+    this.regionOptions$ = this.regionService.getRegions().pipe(
+      map(regions => {
+        if (!regions || !Array.isArray(regions)) {
+          return [];
+        }
+        return regions.map(region => ({
+          value: region.id,
+          label: region.name,
+          data: region
+        } as SearchableSelectOption));
+      })
+    );
   }
 }

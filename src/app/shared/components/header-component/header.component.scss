@@ -1,7 +1,8 @@
 :host {
-  form {
+  .header-form {
     align-items: center;
     gap: 0.5rem;
+    background-color: var(--os-color-light);
 
     ::ng-deep input[type="text"] {
       flex: 1;

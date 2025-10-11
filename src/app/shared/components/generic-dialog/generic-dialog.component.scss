@@ -1,4 +1,5 @@
-@import "../../../../scss/variables";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
 
 :host {
   // Size variants
@@ -19,12 +20,12 @@
 
   // Close button styling (component-specific)
   .dialog-close {
-    padding: map-get($os-spacing, '2');
+    padding: map-get(vars.$os-spacing, '2');
     border: none;
     background: none;
     color: var(--os-color-medium);
     cursor: pointer;
-    border-radius: map-get($os-border-radius, 'small');
+    border-radius: map-get(vars.$os-border-radius, 'small');
     transition: all 0.15s ease-in-out;
 
     &:hover {

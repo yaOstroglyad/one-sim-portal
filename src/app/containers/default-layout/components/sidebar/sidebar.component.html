@@ -1,0 +1,142 @@
+<aside 
+  class="sidebar" 
+  [ngClass]="sidebarClasses()">
+  
+  <!-- Brand Section -->
+  <div class="sidebar__brand" (click)="onBrandClick()">
+    <img 
+      [src]="brandConfig.full.src" 
+      [alt]="brandConfig.full.alt"
+      [style.height.px]="brandConfig.full.height"
+      class="sidebar__brand-full">
+    <img 
+      [src]="brandConfig.narrow.src" 
+      [alt]="brandConfig.narrow.alt"
+      [style.width.px]="brandConfig.narrow.width"
+      class="sidebar__brand-narrow">
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar__nav" [class.sidebar__nav--loading]="!navItems.length">
+    @if (navItems.length) {
+      <ul class="sidebar__nav-list">
+        @for (item of navItems; track item.name) {
+          <li class="sidebar__nav-item">
+            @switch (getItemType(item)) {
+              
+              <!-- Divider -->
+              @case ('divider') {
+                <div class="sidebar__divider"></div>
+              }
+              
+              <!-- Parent with children -->
+              @case ('parent') {
+                <div class="sidebar__nav-parent">
+                  <button 
+                    class="sidebar__nav-link sidebar__nav-link--parent"
+                    [class.sidebar__nav-link--active]="isParentActive(item)"
+                    [class.sidebar__nav-link--expanded]="isExpanded(item)"
+                    (click)="toggleParent(item)">
+                    <span class="sidebar__nav-icon">
+                      <svg cIcon [name]="item.iconComponent?.name" width="20" height="20"></svg>
+                    </span>
+                    <span class="sidebar__nav-text">
+                      {{ item.name | translate }}
+                    </span>
+                    <span class="sidebar__nav-arrow">
+                      <svg cIcon name="cil-chevron-bottom" width="16" height="16"></svg>
+                    </span>
+                  </button>
+                  
+                  <!-- Children -->
+                  <ul 
+                    class="sidebar__nav-children"
+                    [class.sidebar__nav-children--expanded]="isExpanded(item)">
+                    @for (child of item.children; track child.name) {
+                      <li class="sidebar__nav-child-item">
+                        @if (!child.children) {
+                          <a 
+                            [routerLink]="child.url"
+                            class="sidebar__nav-link sidebar__nav-link--child"
+                            routerLinkActive="sidebar__nav-link--active">
+                            {{ child.name | translate }}
+                          </a>
+                        } @else {
+                          <!-- Nested children (third level) -->
+                          <div class="sidebar__nav-nested">
+                            <button 
+                              class="sidebar__nav-link sidebar__nav-link--nested"
+                              [class.sidebar__nav-link--expanded]="isExpanded(child)"
+                              (click)="toggleParent(child)">
+                              {{ child.name | translate }}
+                              <span class="sidebar__nav-arrow">
+                                <svg cIcon name="cil-chevron-bottom" width="14" height="14"></svg>
+                              </span>
+                            </button>
+                            <ul 
+                              class="sidebar__nav-nested-children"
+                              [class.sidebar__nav-nested-children--expanded]="isExpanded(child)">
+                              @for (nestedChild of child.children; track nestedChild.name) {
+                                <li>
+                                  <a 
+                                    [routerLink]="nestedChild.url"
+                                    class="sidebar__nav-link sidebar__nav-link--nested-child"
+                                    routerLinkActive="sidebar__nav-link--active">
+                                    {{ nestedChild.name | translate }}
+                                  </a>
+                                </li>
+                              }
+                            </ul>
+                          </div>
+                        }
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
+              
+              <!-- Regular link -->
+              @default {
+                <a 
+                  [routerLink]="item.url"
+                  class="sidebar__nav-link"
+                  routerLinkActive="sidebar__nav-link--active">
+                  <span class="sidebar__nav-icon">
+                    <svg cIcon [name]="item.iconComponent?.name" width="20" height="20"></svg>
+                  </span>
+                  <span class="sidebar__nav-text">
+                    {{ item.name | translate }}
+                  </span>
+                  @if (item.badge) {
+                    <span 
+                      class="sidebar__nav-badge"
+                      [attr.data-color]="item.badge.color">
+                      {{ item.badge.text }}
+                    </span>
+                  }
+                </a>
+              }
+            }
+          </li>
+        }
+      </ul>
+    } @else {
+      <!-- Loading skeleton -->
+      <div class="sidebar__skeleton">
+        @for (i of [1,2,3,4,5,6,7,8]; track i) {
+          <div class="sidebar__skeleton-item">
+            <div class="sidebar__skeleton-icon"></div>
+            <div class="sidebar__skeleton-text"></div>
+          </div>
+        }
+      </div>
+    }
+  </nav>
+
+  <!-- Toggle Button -->
+  <button 
+    class="sidebar__toggle"
+    (click)="toggleSidebar()"
+    [attr.aria-label]="layoutConfig().sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+  </button>
+</aside>

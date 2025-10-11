@@ -1,5 +1,6 @@
-@import "../../../../scss/variables";
-@import "../../../../scss/utilities";
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/utilities" as utils;
 
 :host {
   display: flex;

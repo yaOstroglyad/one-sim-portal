@@ -1,0 +1,101 @@
+import { Routes } from '@angular/router';
+import { DefaultLayoutComponent } from './default-layout.component';
+import { FeatureToggleGuard } from '../../shared';
+
+export const DEFAULT_LAYOUT_ROUTES: Routes = [
+  {
+    path: '',
+    component: DefaultLayoutComponent,
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'customers'
+      },
+      {
+        path: 'providers',
+        loadChildren: () =>
+            import('../../views/providers/providers.module').then((m) => m.ProvidersModule)
+      },
+      {
+        path: 'inventory',
+        loadChildren: () =>
+            import('../../views/inventory/inventory.module').then((m) => m.InventoryModule)
+      },
+      {
+        path: 'companies',
+        data: {
+          title: 'nav.companies'
+        },
+        loadComponent: () =>
+            import('../../views/companies/companies.component').then((m) => m.CompaniesComponent)
+      },
+      {
+        path: 'customers',
+        loadChildren: () =>
+            import('../../views/customers/customers.module').then((m) => m.CustomersModule)
+      },
+      {
+        path: 'orders',
+        loadChildren: () =>
+            import('../../views/orders/orders.module').then((m) => m.OrdersModule)
+      },
+      {
+        path: 'email-logs',
+        data: {
+          title: 'nav.emailLogs'
+        },
+        loadComponent: () =>
+            import('../../views/email-logs/email-logs.component').then((m) => m.EmailLogsComponent)
+      },
+      {
+        path: 'settings',
+        loadChildren: () => import('../../views/settings/settings-routing').then(m => m.SettingsRouting)
+      },
+      {
+        path: 'dashboard',
+        data: {
+          title: 'Dashboard',
+          featureToggle: 'dashboard'
+        },
+        canActivate: [FeatureToggleGuard],
+        loadComponent: () => import('../../views/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+      {
+        path: 'storybook',
+        data: {
+          title: 'Storybook',
+          featureToggle: 'storybook'
+        },
+        canActivate: [FeatureToggleGuard],
+        loadChildren: () => import('../../views/storybook/storybook.module').then(m => m.StorybookModule)
+      },
+      {
+        path: 'product-constructor',
+        data: {
+          title: 'Product Constructor',
+          featureToggle: 'productConstructor'
+        },
+        canActivate: [FeatureToggleGuard],
+        loadChildren: () => import('../../views/product-constructor/product-constructor.routes').then(m => m.PRODUCT_CONSTRUCTOR_ROUTES)
+      },
+      {
+        path: 'company-products',
+        data: {
+          title: 'nav.companyProducts'
+        },
+        loadComponent: () =>
+            import('../../views/product-constructor/components/company-products/company-product-list/company-product-list.component').then((m) => m.CompanyProductListComponent)
+      },
+      {
+        path: 'tickets',
+        data: {
+          title: 'Support Tickets',
+          featureToggle: 'tickets'
+        },
+        canActivate: [FeatureToggleGuard],
+        loadChildren: () => import('../../views/tickets/tickets.routes').then(m => m.TICKETS_ROUTES)
+      },
+    ]
+  }
+];
