@@ -2,7 +2,7 @@ FROM node:16-alpine as build-stage
 WORKDIR /app
 ARG project
 COPY package*.json ./
-RUN npm install --unsafe-perm=true --allow-root
+RUN npm install --unsafe-perm=true --allow-root --legacy-peer-deps
 COPY . .
 RUN npm run build-prod
 
