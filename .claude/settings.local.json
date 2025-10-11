@@ -46,7 +46,9 @@
       "Bash(python3:*)",
       "Bash(sudo xcodebuild:*)",
       "Bash(npm:*)",
-      "Bash(ng update:*)"
+      "Bash(ng update:*)",
+      "Bash(docker build:*)",
+      "Bash(docker:*)"
     ],
     "deny": []
   }
