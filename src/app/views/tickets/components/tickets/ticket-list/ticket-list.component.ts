@@ -26,6 +26,7 @@ import { Account, AuthService, ADMIN_PERMISSION } from '../../../../../shared';
 
 @Component({
     selector: 'app-ticket-list',
+    standalone: true,
     imports: [
         CommonModule,
         RouterModule,

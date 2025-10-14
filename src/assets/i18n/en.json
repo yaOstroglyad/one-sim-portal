@@ -53,7 +53,12 @@
     "email": "Email",
     "role": "Role",
     "company": "Company",
+    "tenantName": "Tenant",
     "accountType": "Account Type",
+    "name": "Full Name",
+    "accountId": "Account ID",
+    "externalId": "External ID",
+    "resetPassword": "Reset password",
     "status": "Status",
     "lastLogin": "Last Login",
     "active": "Active",
@@ -796,18 +801,6 @@
     "accountIdPlaceholder": "Enter the account ID",
     "accountType": "Account Type",
     "accountTypePlaceholder": "Enter the account type"
-  },
-  "user": {
-    "username": "Username",
-    "accountId": "Account ID",
-    "externalId": "External ID",
-    "accountType": "Account Type",
-    "name": "Full Name",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "email": "Email",
-    "roles": "Roles",
-    "resetPassword": "Reset password"
   },
   "viewConfiguration": {
     "title": "View Configuration"

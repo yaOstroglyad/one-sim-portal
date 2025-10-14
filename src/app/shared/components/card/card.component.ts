@@ -9,6 +9,7 @@ export type CardRadius = 'none' | 'small' | 'medium' | 'large' | 'xl';
 
 @Component({
     selector: 'os-card',
+    standalone: true,
     imports: [CommonModule],
     templateUrl: './card.component.html',
     styleUrls: ['./card.component.scss'],

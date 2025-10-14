@@ -16,7 +16,7 @@ import { MockedService } from '../../../shared/decorators/mock.decorator';
   endpoints: ['getTicketStats', 'getTicketCount']
 })
 export class OverviewService {
-  private readonly baseUrl = '/api/v1/tickets';
+  private readonly baseUrl = '/api-tickets/api/v1/tickets';
 
   constructor(
     private http: HttpClient,

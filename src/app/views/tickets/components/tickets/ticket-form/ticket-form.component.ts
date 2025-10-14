@@ -22,6 +22,7 @@ import {
 
 @Component({
     selector: 'app-ticket-form',
+    standalone: true,
     imports: [
         CommonModule,
         FormGeneratorComponent

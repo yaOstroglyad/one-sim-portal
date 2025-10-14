@@ -8,11 +8,13 @@ const PROXY_CONFIG = {
     }
   },
   // Route tickets API to mock server
-  "/api/v1/tickets": {
-    "target": "http://localhost:3001",
+  "/api-tickets": {
+    "target": "https://esim-tickets.dev.global-sim.app",
     "secure": false,
     "changeOrigin": true,
-    "logLevel": "debug"
+    "pathRewrite": {
+      "^/api-tickets": ""
+    }
   },
   // All other /api routes go to main server
   "/api": {

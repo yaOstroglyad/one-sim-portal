@@ -27,6 +27,7 @@ export interface MetricCard {
 
 @Component({
     selector: 'app-metric-card',
+    standalone: true,
     imports: [CommonModule, TranslateModule],
     templateUrl: './metric-card.component.html',
     styleUrls: ['./metric-card.component.scss'],

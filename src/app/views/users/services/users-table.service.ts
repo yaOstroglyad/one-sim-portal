@@ -21,7 +21,7 @@ export class UsersTableService extends TableConfigAbstractService<User> {
       serverSide: true,
       totalPages: 20
     },
-    translatePrefix: 'user.',
+    translatePrefix: 'users.',
     showCheckboxes: false,
     showEditButton: true,
     showAddButton: true,
@@ -32,7 +32,8 @@ export class UsersTableService extends TableConfigAbstractService<User> {
       { visible: true, key: 'email', header: 'email' },
       { visible: true, key: 'name', header: 'name' },
       { visible: true, templateType: TemplateType.Text, key: 'accountInfo.type', header: 'accountType' },
-      { visible: false, templateType: TemplateType.Text, key: 'accountInfo.externalId', header: 'externalId' }
+      { visible: false, templateType: TemplateType.Text, key: 'accountInfo.externalId', header: 'externalId' },
+      { visible: true, key: 'tenantName', header: 'tenantName' }
     ]
   });
 

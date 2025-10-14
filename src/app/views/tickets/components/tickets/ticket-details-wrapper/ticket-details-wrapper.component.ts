@@ -8,6 +8,7 @@ import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsC
 
 @Component({
     selector: 'app-ticket-details-wrapper',
+    standalone: true,
     imports: [
         CommonModule,
         TranslateModule,

@@ -1,29 +1,30 @@
-@import "../../../../../scss/variables";
-@import "../../../../../scss/mixins";
-@import "../../../../../scss/utilities";
+@use "sass:map";
+@use "../../../../../scss/variables" as vars;
+@use "../../../../../scss/mixins" as mixins;
+@use "../../../../../scss/utilities" as utils;
 
 .overview-container {
-  padding: map-get($os-spacing, '6');
+  padding: map.get(vars.$os-spacing, '6');
   max-width: 1400px;
   margin: 0 auto;
 
   .overview-header {
-    @include dashboard-card-header();
-    margin-bottom: map-get($os-spacing, '8');
+    @include mixins.dashboard-card-header();
+    margin-bottom: map.get(vars.$os-spacing, '8');
     text-align: center;
 
     .overview-title {
-      font-size: map-get($os-font-sizes, '3xl');
+      font-size: map.get(vars.$os-font-sizes, '3xl');
       font-weight: 600;
       color: var(--cui-body-color);
-      margin-bottom: map-get($os-spacing, '2');
+      margin-bottom: map.get(vars.$os-spacing, '2');
     }
 
     .overview-subtitle {
-      font-size: map-get($os-font-sizes, 'lg');
+      font-size: map.get(vars.$os-font-sizes, 'lg');
       color: var(--cui-body-color-rgb);
       opacity: 0.8;
-      max-width: 600px;
+      max-width: 600px; // Design-specific value
       margin: 0 auto;
     }
   }
@@ -34,20 +35,20 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 400px;
-    gap: map-get($os-spacing, '4');
+    min-height: 400px; // Design-specific value
+    gap: map.get(vars.$os-spacing, '4');
 
     .loading-spinner {
-      width: 48px;
-      height: 48px;
-      border: 4px solid var(--cui-border-color);
-      border-top: 4px solid var(--os-color-primary);
+      width: map.get(vars.$os-spacing, '12'); // 48px
+      height: map.get(vars.$os-spacing, '12'); // 48px
+      border: map.get(vars.$os-spacing, '1') solid var(--cui-border-color);
+      border-top: map.get(vars.$os-spacing, '1') solid var(--os-color-primary);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
 
     p {
-      font-size: map-get($os-font-sizes, 'lg');
+      font-size: map.get(vars.$os-font-sizes, 'lg');
       color: var(--cui-body-color-rgb);
       opacity: 0.7;
     }
@@ -58,28 +59,28 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 400px;
+    min-height: 400px; // Design-specific value
 
     .error-content {
       text-align: center;
-      max-width: 400px;
+      max-width: 400px; // Design-specific value
 
       .error-icon {
         color: var(--os-color-danger);
-        margin-bottom: map-get($os-spacing, '4');
+        margin-bottom: map.get(vars.$os-spacing, '4');
       }
 
       h3 {
-        font-size: map-get($os-font-sizes, 'xl');
+        font-size: map.get(vars.$os-font-sizes, 'xl');
         font-weight: 600;
         color: var(--cui-body-color);
-        margin-bottom: map-get($os-spacing, '3');
+        margin-bottom: map.get(vars.$os-spacing, '3');
       }
 
       p {
         color: var(--cui-body-color-rgb);
         opacity: 0.8;
-        margin-bottom: map-get($os-spacing, '6');
+        margin-bottom: map.get(vars.$os-spacing, '6');
         line-height: 1.6;
       }
     }
@@ -91,14 +92,14 @@
     .error-banner {
       background: rgba(var(--os-color-warning-rgb), 0.1);
       border: 1px solid rgba(var(--os-color-warning-rgb), 0.2);
-      border-radius: map-get($os-border-radius, 'medium');
-      margin-bottom: map-get($os-spacing, '6');
+      border-radius: map.get(vars.$os-border-radius, 'medium');
+      margin-bottom: map.get(vars.$os-spacing, '6');
       
       .error-banner-content {
         display: flex;
         align-items: center;
-        gap: map-get($os-spacing, '3');
-        padding: map-get($os-spacing, '4');
+        gap: map.get(vars.$os-spacing, '3');
+        padding: map.get(vars.$os-spacing, '4');
         
         .error-banner-icon {
           color: var(--os-color-warning);
@@ -118,28 +119,28 @@
     }
 
     .kpi-row {
-      @include dashboard-kpi-grid(4); // 4 columns for tickets metrics
-      margin-bottom: map-get($os-spacing, '8');
+      @include mixins.dashboard-kpi-grid(4); // 4 columns for tickets metrics
+      margin-bottom: map.get(vars.$os-spacing, '8');
 
       @media (max-width: 1200px) {
-        @include dashboard-kpi-grid(2); // 2 columns on medium screens
+        @include mixins.dashboard-kpi-grid(2); // 2 columns on medium screens
       }
 
       @media (max-width: 768px) {
-        @include dashboard-kpi-grid(1); // 1 column on mobile
+        @include mixins.dashboard-kpi-grid(1); // 1 column on mobile
       }
     }
 
     // Section headers
     .section-header {
-      @include dashboard-card-header();
+      @include mixins.dashboard-card-header();
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: map-get($os-spacing, '4');
+      margin-bottom: map.get(vars.$os-spacing, '4');
 
       h3 {
-        font-size: map-get($os-font-sizes, 'xl');
+        font-size: map.get(vars.$os-font-sizes, 'xl');
         font-weight: 600;
         color: var(--cui-body-color);
         margin: 0;
@@ -159,20 +160,20 @@
 
     // Quick actions
     .quick-actions-section {
-      margin-bottom: map-get($os-spacing, '8');
+      margin-bottom: map.get(vars.$os-spacing, '8');
 
       .actions-row {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: map-get($os-spacing, '4');
+        gap: map.get(vars.$os-spacing, '4');
 
         .action-card {
           transition: transform 0.2s ease, box-shadow 0.2s ease;
           cursor: pointer;
 
           &:hover:not(.disabled) {
-            transform: translateY(-2px);
-            box-shadow: map-get($os-shadows, 'lg');
+            transform: translateY(-2px); // Fixed spacing value
+            box-shadow: map.get(vars.$os-shadows, 'lg');
           }
 
           &.disabled {
@@ -184,10 +185,10 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: map-get($os-spacing, '3');
+            margin-bottom: map.get(vars.$os-spacing, '3');
 
             h4 {
-              font-size: map-get($os-font-sizes, 'lg');
+              font-size: map.get(vars.$os-font-sizes, 'lg');
               font-weight: 600;
               color: var(--cui-body-color);
               margin: 0;
@@ -196,9 +197,9 @@
             .coming-soon-badge {
               background: var(--os-color-warning);
               color: white;
-              font-size: map-get($os-font-sizes, 'xs');
-              padding: 2px 8px;
-              border-radius: map-get($os-border-radius, 'small');
+              font-size: map.get(vars.$os-font-sizes, 'xs');
+              padding: 2px map.get(vars.$os-spacing, '2'); // 2px 8px
+              border-radius: map.get(vars.$os-border-radius, 'small');
               font-weight: 500;
             }
           }
@@ -206,12 +207,12 @@
           .action-content {
             display: flex;
             align-items: center;
-            gap: map-get($os-spacing, '4');
+            gap: map.get(vars.$os-spacing, '4');
 
             .action-icon {
-              width: 48px;
-              height: 48px;
-              border-radius: map-get($os-border-radius, 'medium');
+              width: map.get(vars.$os-spacing, '12'); // 48px
+              height: map.get(vars.$os-spacing, '12'); // 48px
+              border-radius: map.get(vars.$os-border-radius, 'medium');
               display: flex;
               align-items: center;
               justify-content: center;
@@ -264,20 +265,20 @@
         .activity-summary {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: map-get($os-spacing, '6');
+          gap: map.get(vars.$os-spacing, '6');
 
           .activity-item {
             text-align: center;
 
             .activity-value {
-              font-size: map-get($os-font-sizes, '2xl');
+              font-size: map.get(vars.$os-font-sizes, '2xl');
               font-weight: 700;
               color: var(--os-color-primary);
-              margin-bottom: map-get($os-spacing, '1');
+              margin-bottom: map.get(vars.$os-spacing, '1');
             }
 
             .activity-label {
-              font-size: map-get($os-font-sizes, 'sm');
+              font-size: map.get(vars.$os-font-sizes, 'sm');
               color: var(--cui-body-color-rgb);
               opacity: 0.8;
             }

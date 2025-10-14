@@ -17,7 +17,7 @@ import { CacheHubService, DataType } from '../../../shared/services/cache-hub';
   providedIn: 'root'
 })
 export class TicketService {
-  private readonly baseUrl = '/api/v1/tickets';
+  private readonly baseUrl = '/api-tickets/api/v1/tickets';
 
   constructor(
     private http: HttpClient,

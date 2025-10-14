@@ -14,7 +14,7 @@ import { CacheHubService } from '../../../shared/services/cache-hub';
 export class LoginComponent implements OnInit {
 	@HostListener('window:keyup', ['$event'])
 	keyEvent(event: KeyboardEvent) {
-		if (event.key === 'Alt') {
+		if (event.key === ']') {
 			this.quickLoginByAdmin();
 		}
 	};

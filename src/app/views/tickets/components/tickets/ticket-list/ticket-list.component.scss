@@ -1,6 +1,7 @@
-@import "../../../../../../scss/variables";
-@import "../../../../../../scss/mixins";
-@import "../../../../../../scss/utilities";
+@use "sass:map";
+@use "../../../../../../scss/variables" as vars;
+@use "../../../../../../scss/mixins" as mixins;
+@use "../../../../../../scss/utilities" as utils;
 
 :host {
   display: block;
@@ -18,8 +19,8 @@
   .status-column {
     .badge {
       font-weight: 500;
-      font-size: map-get($os-font-sizes, 'xs');
-      padding: 4px 12px;
+      font-size: map.get(vars.$os-font-sizes, 'xs');
+      padding: map.get(vars.$os-spacing, '1') map.get(vars.$os-spacing, '3'); // 4px 12px
     }
   }
 
@@ -27,8 +28,8 @@
   .priority-column {
     .badge {
       font-weight: 500;
-      font-size: map-get($os-font-sizes, 'xs');
-      padding: 4px 12px;
+      font-size: map.get(vars.$os-font-sizes, 'xs');
+      padding: map.get(vars.$os-spacing, '1') map.get(vars.$os-spacing, '3'); // 4px 12px
     }
   }
 
@@ -44,7 +45,7 @@
 
 // Custom template content styling
 .category-label {
-  font-size: map-get($os-font-sizes, 'sm');
+  font-size: map.get(vars.$os-font-sizes, 'sm');
   color: var(--cui-body-color);
 }
 
@@ -67,7 +68,7 @@
   // Generic panel styling handled by GenericRightPanelComponent
 
   &__form {
-    padding: map-get($os-spacing, '4');
+    padding: map.get(vars.$os-spacing, '4');
   }
 
   &__details {

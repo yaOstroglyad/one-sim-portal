@@ -8,6 +8,7 @@ import { CardComponent } from '../../../../../shared';
 
 @Component({
     selector: 'app-ticket-details',
+    standalone: true,
     imports: [
         CommonModule,
         TranslateModule,

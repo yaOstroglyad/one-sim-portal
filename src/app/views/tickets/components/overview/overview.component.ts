@@ -17,6 +17,7 @@ import { QuickAction } from '../../models';
 
 @Component({
     selector: 'app-tickets-overview',
+    standalone: true,
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,

@@ -1,14 +1,15 @@
-@import "../../../../../../scss/variables";
-@import "../../../../../../scss/mixins";
-@import "../../../../../../scss/utilities";
-@import "../../../../../../scss/form-utilities";
+@use "sass:map";
+@use "../../../../../../scss/variables" as vars;
+@use "../../../../../../scss/mixins" as mixins;
+@use "../../../../../../scss/utilities" as utils;
+@use "../../../../../../scss/form-utilities" as form-utils;
 
 :host {
-  @include material-form-field-overrides();
+  @include form-utils.material-form-field-overrides();
 }
 
 .ticket-form {
-  padding: map-get($os-spacing, '4');
+  padding: map.get(vars.$os-spacing, '4');
 
   // Form generator styling is handled by the shared component
   // Add any ticket-specific form customizations here
@@ -16,7 +17,7 @@
   ::ng-deep app-form-generator {
     .form-field-grid {
       // Custom grid spacing for ticket form
-      gap: map-get($os-spacing, '4');
+      gap: map.get(vars.$os-spacing, '4');
     }
     
     .form-field {
@@ -24,7 +25,7 @@
         // Textarea specific styling
         .form-control {
           resize: vertical;
-          min-height: 120px;
+          min-height: 120px; // Design-specific for textarea
         }
       }
       
@@ -39,7 +40,7 @@
     
     // Form validation styling
     .invalid-feedback {
-      font-size: map-get($os-font-sizes, 'xs');
+      font-size: map.get(vars.$os-font-sizes, 'xs');
       color: var(--os-color-danger);
     }
     

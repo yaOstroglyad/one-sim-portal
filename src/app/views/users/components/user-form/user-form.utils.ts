@@ -43,7 +43,7 @@ export function getUserFormConfig(
       {
         type: FieldType.text,
         name: 'name',
-        label: 'user.name',
+        label: 'users.name',
         placeholder: 'users.firstNamePlaceholder',
         value: user?.name || '',
         validators: [
@@ -55,7 +55,7 @@ export function getUserFormConfig(
       {
         type: FieldType.email,
         name: 'email',
-        label: 'user.email',
+        label: 'users.email',
         placeholder: 'users.emailPlaceholder',
         value: user?.email || '',
         validators: [

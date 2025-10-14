@@ -15,7 +15,7 @@ export const TICKETS_ROUTES: Routes = [
       ),
     data: {
       title: 'nav.ticketsOverview',
-      permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION]
+      permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION, CUSTOMER_PERMISSION]
     },
     canActivate: [permissionGuard]
   },
