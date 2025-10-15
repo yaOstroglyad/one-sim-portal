@@ -38,6 +38,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { VisualService } from 'src/app/shared/services/visual.service';
 
 @Component({
+  standalone: true,
     selector: 'app-portal',
     templateUrl: './portal.component.html',
     styleUrls: ['./portal.component.scss'],

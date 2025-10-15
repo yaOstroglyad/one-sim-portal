@@ -1,27 +1,31 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { ProductPurchase, Subscriber, PurchasedProductsDataService, EmptyStateComponent } from '../../../../../shared';
+import {
+	ProductPurchase,
+	Subscriber,
+	PurchasedProductsDataService,
+	EmptyStateComponent,
+	convertUsage
+} from '../../../../../shared';
 import { MatTableModule } from '@angular/material/table';
-import { RouterLink } from '@angular/router';
-import { AsyncPipe, CurrencyPipe, DatePipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
-import { convertUsage } from '../../../../../shared/utils/utils';
 import { map } from 'rxjs/operators';
-import { log10 } from 'chart.js/helpers';
 
 @Component({
-    selector: 'app-purchased-products',
-    templateUrl: './purchased-products.component.html',
-    imports: [
-        MatTableModule,
-        DatePipe,
-        NgClass,
-        AsyncPipe,
-        NgIf,
-        EmptyStateComponent,
-        TranslateModule
-    ],
-    styleUrls: ['./purchased-products.component.scss']
+	standalone: true,
+	selector: 'app-purchased-products',
+	templateUrl: './purchased-products.component.html',
+	imports: [
+		MatTableModule,
+		DatePipe,
+		NgClass,
+		AsyncPipe,
+		NgIf,
+		EmptyStateComponent,
+		TranslateModule
+	],
+	styleUrls: ['./purchased-products.component.scss']
 })
 export class PurchasedProductsComponent implements OnInit {
 	purchasedProductsView$: Observable<ProductPurchase[]>;
@@ -41,7 +45,7 @@ export class PurchasedProductsComponent implements OnInit {
 	];
 
 	ngOnInit(): void {
-		this.purchasedProductsView$ = this.purchasedProductsDataService.getPurchasedProducts({ subscriberId: this.subscriber.id }).pipe(
+		this.purchasedProductsView$ = this.purchasedProductsDataService.getPurchasedProducts({subscriberId: this.subscriber.id}).pipe(
 			map((activeProducts: ProductPurchase[]) =>
 				activeProducts.map(product => ({
 					...product,
@@ -67,5 +71,5 @@ export class PurchasedProductsComponent implements OnInit {
 
 	public getUnitType(usage: any): string {
 		return usage.balance[0].unitType === 'Gigabyte' ? 'GB' : usage.balance[0].unitType;
- 	}
+	}
 }

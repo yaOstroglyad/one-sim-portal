@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
+  standalone: true,
     selector: 'app-send-invite-email',
     templateUrl: './send-invite-email.component.html',
     imports: [

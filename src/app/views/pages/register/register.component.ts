@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
 import { RegistrationConfig } from './registration.config';
 import { FormGroup } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { MatButtonModule } from '@angular/material/button';
+import { FormGeneratorComponent } from '../../../shared';
 
 @Component({
+    standalone: true,
     selector: 'app-register',
+    imports: [TranslateModule, MatButtonModule, FormGeneratorComponent],
     templateUrl: './register.component.html',
-    styleUrls: ['./register.component.scss'],
-    standalone: false
+    styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
 	RegistrationConfig = RegistrationConfig;

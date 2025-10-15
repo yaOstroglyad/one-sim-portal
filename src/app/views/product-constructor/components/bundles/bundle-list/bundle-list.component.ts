@@ -11,7 +11,7 @@ import { LanguageService } from '../../../../../shared';
 import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { BundleFormComponent } from '../bundle-form/bundle-form.component';
 import { BundleDetailsComponent } from '../bundle-details/bundle-details.component';
-import { GenericTableModule, HeaderModule, TableConfig, TemplateType, DeleteConfirmationComponent } from '../../../../../shared';
+import { GenericTableComponent, HeaderComponent, TableConfig, DeleteConfirmationComponent } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,6 +23,7 @@ import { MobileBundle } from '../../../models';
 import { BundlesTableService } from '../bundles-table.service';
 
 @Component({
+  standalone: true,
     selector: 'app-bundle-list',
     imports: [
         CommonModule,
@@ -32,8 +33,8 @@ import { BundlesTableService } from '../bundles-table.service';
         BundleFormComponent,
         BundleDetailsComponent,
         DeleteConfirmationComponent,
-        GenericTableModule,
-        HeaderModule,
+        GenericTableComponent,
+        HeaderComponent,
         MatMenuModule,
         MatIconModule,
         MatButtonModule,
@@ -57,7 +58,7 @@ export class BundleListComponent implements OnInit {
 
   // RTL and theme support
   private readonly languageService = inject(LanguageService);
-  
+
   readonly containerClasses = computed(() => ({
     'bundle-list-container': true,
     'bundle-list-container--rtl': this.languageService.isRtl()

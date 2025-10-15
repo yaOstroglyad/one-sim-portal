@@ -9,7 +9,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { TicketDetailsWrapperComponent } from '../ticket-details-wrapper/ticket-details-wrapper.component';
 import { TicketFormComponent } from '../ticket-form/ticket-form.component';
-import { GenericTableModule, HeaderModule, TableConfig, SearchableSelectComponent, SearchableSelectOption, SearchableSelectConfig } from '../../../../../shared';
+import { GenericTableComponent, HeaderComponent, TableConfig, SearchableSelectComponent, SearchableSelectOption, SearchableSelectConfig } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,8 +35,8 @@ import { Account, AuthService, ADMIN_PERMISSION } from '../../../../../shared';
         GenericRightPanelComponent,
         TicketDetailsWrapperComponent,
         TicketFormComponent,
-        GenericTableModule,
-        HeaderModule,
+        GenericTableComponent,
+        HeaderComponent,
         MatMenuModule,
         MatIconModule,
         MatButtonModule,
@@ -356,7 +356,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     // Listen for ticket creation
     this.ticketEventService.ticketCreated$
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(ticket => {
+      .subscribe(() => {
         console.log('[TicketList] New ticket created, refreshing list');
         this.loadData();
         // Show success message or highlight new row
@@ -365,7 +365,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     // Listen for ticket updates
     this.ticketEventService.ticketUpdated$
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(ticket => {
+      .subscribe(() => {
         console.log('[TicketList] Ticket updated, refreshing list');
         this.loadData();
       });

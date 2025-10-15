@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RichTextInputComponent } from './rich-text-input.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { HtmlDialogComponent } from '../html-dialog/html-dialog.component';
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -65,10 +64,10 @@ describe('RichTextInputComponent', () => {
     // Mock components and window.getSelection
     richTextInputComponent.htmlDialogComponent = { open: jasmine.createSpy('open') } as any;
     richTextInputComponent.editorElement = { nativeElement: { focus: jasmine.createSpy('focus') } } as any;
-    
+
     // Mock selection
     const mockRange = { cloneRange: () => ({ }) } as any;
-    const mockSelection = { 
+    const mockSelection = {
       getRangeAt: () => mockRange,
       rangeCount: 1
     } as any;
@@ -85,21 +84,21 @@ describe('RichTextInputComponent', () => {
   it('should handle HTML insertion', () => {
     // Mock necessary document methods
     spyOn(document, 'execCommand');
-    
+
     // Mock selection
     const mockRange = { } as any;
-    const mockSelection = { 
+    const mockSelection = {
       removeAllRanges: jasmine.createSpy('removeAllRanges'),
       addRange: jasmine.createSpy('addRange')
     } as any;
     spyOn(window, 'getSelection').and.returnValue(mockSelection);
-    
+
     // Setup component
-    richTextInputComponent.editorElement = { 
-      nativeElement: { innerHTML: '<p>Test</p>' } 
+    richTextInputComponent.editorElement = {
+      nativeElement: { innerHTML: '<p>Test</p>' }
     } as any;
     richTextInputComponent['currentSelection'] = mockRange;
-    
+
     // Mock internal methods
     spyOn(richTextInputComponent as any, 'sanitizeHtml').and.returnValue('<div>Sanitized HTML</div>');
     spyOn(richTextInputComponent as any, 'getPlainText').and.returnValue('Sanitized HTML');
@@ -113,4 +112,4 @@ describe('RichTextInputComponent', () => {
     expect(document.execCommand).toHaveBeenCalledWith('insertHTML', false, '<div>Sanitized HTML</div>');
     expect(richTextInputComponent['onChange']).toHaveBeenCalled();
   });
-}); 
+});

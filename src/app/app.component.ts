@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { Title } from '@angular/platform-browser';
@@ -9,9 +9,10 @@ import { takeUntil, filter } from 'rxjs/operators';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 
 @Component({
+    standalone: true,
     selector: 'app-root',
-    template: '<router-outlet></router-outlet>',
-    standalone: false
+    imports: [RouterOutlet],
+    template: '<router-outlet></router-outlet>'
 })
 export class AppComponent implements OnInit, OnDestroy {
 	private unsubscribe$ = new Subject<void>();

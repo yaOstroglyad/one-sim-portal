@@ -1,16 +1,23 @@
 import { Component, Inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TranslateService } from '@ngx-translate/core';
-import { FormConfig } from '../../../shared';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { FormConfig, FormGeneratorComponent } from '../../../shared';
 import { getEditOrderFormConfig } from './edit-order-description.utils';
 
 @Component({
+    standalone: true,
     selector: 'app-edit-order-description-resource',
+    imports: [
+        MatDialogModule,
+        MatButtonModule,
+        TranslateModule,
+        FormGeneratorComponent
+    ],
     templateUrl: './edit-order-description.component.html',
     styleUrls: ['./edit-order-description.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditOrderDescriptionComponent {
   editOrderFormConfig: FormConfig;

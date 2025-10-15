@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Package, StatusEnum } from '../../shared/model/package';
 import { Observable, Subject, of } from 'rxjs';
 import { catchError, switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -11,14 +12,90 @@ import { ChangeStatusDialogComponent } from './change-status-dialog/change-statu
 import {
 	DynamicEntityDetailsDialogComponent
 } from '../../shared/components/dynamic-entity-details-dialog/dynamic-entity-details-dialog.component';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import {
+	BadgeComponent,
+	ButtonCloseDirective,
+	ButtonDirective,
+	CardComponent,
+	ColComponent,
+	FormControlDirective,
+	FormDirective,
+	FormLabelDirective,
+	FormSelectDirective,
+	InputGroupComponent,
+	ModalBodyComponent,
+	ModalComponent,
+	ModalFooterComponent,
+	ModalHeaderComponent,
+	ModalTitleDirective,
+	RowComponent,
+	TableDirective
+} from '@coreui/angular';
+import { IconDirective } from '@coreui/icons-angular';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { GenericTableComponent, HeaderComponent } from '../../shared';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { ItemNamesPipe } from '../../shared/pipes/item-names/item-names.pipe';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { HasPermissionDirective } from '../../shared/directives/has-permission.directive';
 
 @Component({
+    standalone: true,
     selector: 'app-products',
+    imports: [
+        CommonModule,
+        TableDirective,
+        BadgeComponent,
+        CardComponent,
+        IconDirective,
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalBodyComponent,
+        ModalFooterComponent,
+        ModalTitleDirective,
+        ButtonCloseDirective,
+        ButtonDirective,
+        ReactiveFormsModule,
+        FormDirective,
+        FormLabelDirective,
+        FormControlDirective,
+        RowComponent,
+        ColComponent,
+        FormSelectDirective,
+        MatFormFieldModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatInputModule,
+        InputGroupComponent,
+        GenericTableComponent,
+        HeaderComponent,
+        MatDialogModule,
+        MatButtonModule,
+        MatSelectModule,
+        MatCheckboxModule,
+        MatIconModule,
+        ItemNamesPipe,
+        MatTooltipModule,
+        MatMenuModule,
+        HasPermissionDirective,
+        TranslateModule,
+        EditProductComponent,
+        CreateProductComponent,
+        ChangeStatusDialogComponent
+    ],
     templateUrl: './products.component.html',
     styleUrls: ['./products.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductsComponent implements OnInit, OnDestroy {
 	@ViewChild('usageTemplate') usageTemplate: TemplateRef<any>;
@@ -82,7 +159,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 		this.openDialog(DynamicEntityDetailsDialogComponent, product, '800px')
 			.pipe(
 				takeUntil(this.unsubscribe$),
-				switchMap(result => {
+				switchMap(() => {
 					return of(null);
 				})
 			).subscribe();

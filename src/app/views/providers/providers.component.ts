@@ -1,17 +1,34 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { HeaderConfig, ProvidersDataService, TableConfig, TableFilterFieldType } from '../../shared';
+import { takeUntil } from 'rxjs/operators';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { CardComponent, TableDirective } from '@coreui/angular';
+import { 
+    HeaderConfig, 
+    ProvidersDataService, 
+    TableConfig, 
+    TableFilterFieldType,
+    GenericTableComponent,
+    HeaderComponent 
+} from '../../shared';
 import { Provider } from '../../shared/model/provider';
 import { ProvidersTableService } from './providers-table.service';
-import { takeUntil } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+    standalone: true,
     selector: 'app-providers',
+    imports: [
+        CommonModule,
+        TableDirective,
+        CardComponent,
+        GenericTableComponent,
+        HeaderComponent,
+        TranslateModule
+    ],
     templateUrl: './providers.component.html',
     styleUrls: ['./providers.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProvidersComponent implements OnInit, OnDestroy {
   public unsubscribe$: Subject<void> = new Subject<void>();

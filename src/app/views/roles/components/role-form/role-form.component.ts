@@ -9,6 +9,7 @@ import { FormGeneratorComponent, FormConfig } from '../../../../shared';
 import { getRoleFormConfig, getRoleCreateRequest, getRoleUpdateRequest } from './role-form.utils';
 
 @Component({
+  standalone: true,
     selector: 'app-role-form',
     imports: [
         CommonModule,

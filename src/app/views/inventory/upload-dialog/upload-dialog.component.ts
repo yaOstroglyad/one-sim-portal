@@ -10,6 +10,7 @@ import { takeUntil } from 'rxjs/operators';
 import { FileUploadComponent, FileUploadConfig } from '../../../shared';
 
 @Component({
+  standalone: true,
     selector: 'app-upload-dialog',
     templateUrl: './upload-dialog.component.html',
     styleUrls: ['./upload-dialog.component.scss'],
@@ -24,7 +25,7 @@ import { FileUploadComponent, FileUploadConfig } from '../../../shared';
 })
 export class UploadDialogComponent implements OnInit, OnDestroy {
 	@ViewChild('fileUploadComponent') fileUploadComponent!: FileUploadComponent;
-	
+
 	public unsubscribe$: Subject<void> = new Subject<void>();
 	serviceProviderId: string;
 	orderDescription: string;
@@ -91,7 +92,7 @@ export class UploadDialogComponent implements OnInit, OnDestroy {
 		)
 		.pipe(takeUntil(this.unsubscribe$))
 		.subscribe({
-			next: (res) => {
+			next: () => {
 				this.isUploading = false;
 				this.uploadSuccess = true;
 				this.fileUploadComponent.setUploadSuccess(true);

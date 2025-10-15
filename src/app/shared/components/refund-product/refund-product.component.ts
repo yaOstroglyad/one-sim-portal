@@ -15,6 +15,7 @@ import { LoaderComponent } from '../loader/loader.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+  standalone: true,
     selector: 'app-refund-product',
     templateUrl: './refund-product.component.html',
     imports: [

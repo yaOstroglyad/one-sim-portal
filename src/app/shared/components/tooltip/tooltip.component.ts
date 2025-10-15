@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { 
-  ChangeDetectionStrategy, 
-  Component, 
-  Input, 
-  HostBinding,
-  OnInit,
-  ElementRef,
-  Renderer2,
-  OnDestroy,
-  TemplateRef,
-  ContentChild,
+import {
   AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  ContentChild,
+  ElementRef,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  TemplateRef,
   ViewChild
 } from '@angular/core';
 
@@ -19,6 +19,7 @@ export type TooltipVariant = 'default' | 'error' | 'warning' | 'info' | 'success
 
 @Component({
     selector: 'os-tooltip',
+    standalone: true,
     imports: [CommonModule],
     template: `
     <div 
@@ -85,13 +86,13 @@ export class TooltipComponent implements OnInit, OnDestroy, AfterContentInit {
     // Set up event listeners for direct component usage
     if (this.elementRef.nativeElement.parentElement) {
       const parentElement = this.elementRef.nativeElement.parentElement;
-      
+
       this.renderer.listen(parentElement, 'mouseenter', () => {
         if (!this.disabled) {
           this.show();
         }
       });
-      
+
       this.renderer.listen(parentElement, 'mouseleave', () => {
         this.hide();
       });
@@ -109,9 +110,8 @@ export class TooltipComponent implements OnInit, OnDestroy, AfterContentInit {
 
   private checkNgContent(): void {
     if (this.contentWrapper?.nativeElement) {
-      const hasContent = this.contentWrapper.nativeElement.children.length > 0 || 
-                        this.contentWrapper.nativeElement.textContent?.trim().length > 0;
-      this.hasNgContent = hasContent;
+      this.hasNgContent = this.contentWrapper.nativeElement.children.length > 0 ||
+        this.contentWrapper.nativeElement.textContent?.trim().length > 0;
     }
   }
 

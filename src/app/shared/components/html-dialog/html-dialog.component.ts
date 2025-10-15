@@ -1,9 +1,10 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
+  standalone: true,
     selector: 'app-html-dialog',
     templateUrl: './html-dialog.component.html',
     styleUrls: ['./html-dialog.component.scss'],
@@ -16,7 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class HtmlDialogComponent {
   @ViewChild('htmlDialog') htmlDialog!: ElementRef<HTMLDialogElement>;
   @ViewChild('htmlInput') htmlInput!: ElementRef<HTMLTextAreaElement>;
-  
+
   @Output() htmlInserted = new EventEmitter<string>();
   @Output() dialogCanceled = new EventEmitter<void>();
 
@@ -39,4 +40,4 @@ export class HtmlDialogComponent {
     this.dialogCanceled.emit();
     this.close();
   }
-} 
+}

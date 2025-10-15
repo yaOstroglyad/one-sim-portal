@@ -31,7 +31,7 @@ import {
 	AuthService,
 	ADMIN_PERMISSION
 } from '../../../../shared';
-import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent } from '../../../../shared';
+import { GenericTableComponent, HeaderComponent, TableConfig, DeleteConfirmationComponent } from '../../../../shared';
 import { UserService, UsersTableService } from '../../services';
 import { User } from '../../models';
 import { UserFormComponent } from '../user-form/user-form.component';
@@ -44,6 +44,7 @@ import { UsersUtils, UsersFilterParams } from './user-list.utils';
 const ROLES_PAGE_SIZE = 100;
 
 @Component({
+  standalone: true,
     selector: 'app-user-list',
     imports: [
         CommonModule,
@@ -53,8 +54,8 @@ const ROLES_PAGE_SIZE = 100;
         UserFormComponent,
         DeleteConfirmationComponent,
         RoleManagementFormComponent,
-        GenericTableModule,
-        HeaderModule,
+        GenericTableComponent,
+        HeaderComponent,
         SmartFilterHeaderComponent,
         SearchableSelectComponent,
         MatMenuModule,
@@ -262,7 +263,7 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.closeAllPanelsAndRefresh();
 	}
 
-	canManageRoles(user: User): boolean {
+	canManageRoles(): boolean {
 		return this.userRoleService.isAdmin();
 	}
 

@@ -15,12 +15,12 @@ export const DEFAULT_LAYOUT_ROUTES: Routes = [
       {
         path: 'providers',
         loadChildren: () =>
-            import('../../views/providers/providers.module').then((m) => m.ProvidersModule)
+            import('../../views/providers/providers.routes').then((m) => m.PROVIDERS_ROUTES)
       },
       {
         path: 'inventory',
         loadChildren: () =>
-            import('../../views/inventory/inventory.module').then((m) => m.InventoryModule)
+            import('../../views/inventory/inventory.routes').then((m) => m.INVENTORY_ROUTES)
       },
       {
         path: 'companies',
@@ -33,12 +33,12 @@ export const DEFAULT_LAYOUT_ROUTES: Routes = [
       {
         path: 'customers',
         loadChildren: () =>
-            import('../../views/customers/customers.module').then((m) => m.CustomersModule)
+            import('../../views/customers/customers.routes').then((m) => m.CUSTOMERS_ROUTES)
       },
       {
         path: 'orders',
         loadChildren: () =>
-            import('../../views/orders/orders.module').then((m) => m.OrdersModule)
+            import('../../views/orders/orders.routes').then((m) => m.ORDERS_ROUTES)
       },
       {
         path: 'email-logs',
@@ -68,7 +68,7 @@ export const DEFAULT_LAYOUT_ROUTES: Routes = [
           featureToggle: 'storybook'
         },
         canActivate: [FeatureToggleGuard],
-        loadChildren: () => import('../../views/storybook/storybook.module').then(m => m.StorybookModule)
+        loadChildren: () => import('../../views/storybook/storybook.routes').then(m => m.STORYBOOK_ROUTES)
       },
       {
         path: 'product-constructor',

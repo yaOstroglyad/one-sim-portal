@@ -7,6 +7,7 @@ export type BadgeSize = 'small' | 'medium' | 'large';
 export type BadgeShape = 'rounded' | 'pill' | 'square';
 
 @Component({
+    standalone: true,
     selector: 'os-badge',
     imports: [CommonModule],
     template: `
@@ -30,28 +31,28 @@ export class BadgeComponent {
 
   get badgeClasses(): string {
     const classes = ['os-badge'];
-    
+
     classes.push(`os-badge--${this.variant}`);
     classes.push(`os-badge--${this.size}`);
     classes.push(`os-badge--${this.shape}`);
-    
+
     if (this.outline) {
       classes.push('os-badge--outline');
     }
-    
+
     if (this.subtle) {
       classes.push('os-badge--subtle');
     }
-    
+
     // Add text color class based on background brightness
     if (!this.outline && !this.subtle) {
       classes.push(`os-badge--text-${this.getTextColorVariant()}`);
     }
-    
+
     if (this.customClass) {
       classes.push(this.customClass);
     }
-    
+
     return classes.join(' ');
   }
 
@@ -63,23 +64,22 @@ export class BadgeComponent {
       'lime',     // Bright green
       'amber'     // Bright orange-yellow
     ];
-    
+
     // Semi-bright colors that could benefit from dark text
     const mediumBrightBackgrounds: BadgeVariant[] = [
-      // These are on the edge but generally still work better with white text
-      // Could be customized based on specific color values
+      'cyan',
     ];
-    
+
     if (lightBackgrounds.includes(this.variant)) {
       return 'dark';
     }
-    
+
     if (mediumBrightBackgrounds.includes(this.variant)) {
       return 'dark';
     }
-    
-    // All other colors (primary, secondary, success, danger, warning, info, dark, 
-    // red, orange, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, 
+
+    // All other colors (primary, secondary, success, danger, warning, info, dark,
+    // red, orange, green, emerald, teal, cyan, sky, blue, indigo, violet, purple,
     // fuchsia, pink, rose, zinc) use light/white text
     return 'light';
   }

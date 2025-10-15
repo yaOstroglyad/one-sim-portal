@@ -1,14 +1,65 @@
 import { Component, OnInit } from '@angular/core';
-import { TabChangeEvent } from '../../shared/components/tabs/tabs.types';
-import { BarChartData, BarChartOptions } from '../../shared/components/bar-chart';
-import { LineChartData, LineChartOptions } from '../../shared/components/line-chart';
-import { PaginationConfig } from '../../shared/components/pagination/pagination.component';
+import { CommonModule } from '@angular/common';
+import { TabChangeEvent,
+  BarChartOptions,
+  LineChartOptions,
+  TabComponent,
+  TooltipComponent,
+  BarChartData,
+  LineChartData,
+  PaginationConfig,
+  BadgeComponent,
+  CardComponent,
+  TabsComponent,
+  TooltipDirective,
+  OsBarChartComponent,
+  OsLineChartComponent,
+  PaginationComponent
+} from '../../shared';
+import {
+  AvatarModule,
+  ButtonGroupModule,
+  ButtonModule,
+  CardModule,
+  FormModule,
+  GridModule,
+  NavModule,
+  ProgressModule,
+  TableModule,
+  TabsModule
+} from '@coreui/angular';
+import { IconModule } from '@coreui/icons-angular';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+    standalone: true,
     selector: 'app-storybook',
+    imports: [
+        CommonModule,
+        CardModule,
+        NavModule,
+        IconModule,
+        TabsModule,
+        GridModule,
+        ProgressModule,
+        ButtonModule,
+        FormModule,
+        ButtonGroupModule,
+        AvatarModule,
+        TableModule,
+        TranslateModule,
+        BadgeComponent,
+        CardComponent,
+        TabsComponent,
+        TabComponent,
+        TooltipDirective,
+        TooltipComponent,
+        OsBarChartComponent,
+        OsLineChartComponent,
+        PaginationComponent
+    ],
     templateUrl: './storybook.component.html',
-    styleUrls: ['./storybook.component.scss'],
-    standalone: false
+    styleUrls: ['./storybook.component.scss']
 })
 export class StorybookComponent implements OnInit {
   basicTabIndex = 0;
@@ -124,7 +175,7 @@ export class StorybookComponent implements OnInit {
       backgroundColor: [
         '#f9a743', // primary
         '#2dd36f', // success
-        '#3dc2ff', // info  
+        '#3dc2ff', // info
         '#ffc409', // warning
         '#3b82f6'  // blue
       ],
@@ -349,7 +400,7 @@ export class StorybookComponent implements OnInit {
     console.log(`Page size changed to: ${pageSize} for config:`, config);
     config.pageSize = pageSize;
     config.currentPage = 0; // Reset to first page when page size changes
-    
+
     // Recalculate total pages if totalItems is available
     if (config.totalItems) {
       config.totalPages = Math.ceil(config.totalItems / pageSize);

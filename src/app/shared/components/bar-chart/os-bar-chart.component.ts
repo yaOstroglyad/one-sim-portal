@@ -10,10 +10,10 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import Chart, { ChartConfiguration, ChartOptions } from 'chart.js/auto';
+import Chart, { ChartOptions } from 'chart.js/auto';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { LocalStorageService } from 'ngx-webstorage';
 
 export interface BarChartData {
@@ -33,6 +33,7 @@ export interface BarChartData {
 export type BarChartOptions = ChartOptions<'bar'>;
 
 @Component({
+  standalone: true,
     selector: 'os-bar-chart',
     templateUrl: './os-bar-chart.component.html',
     styleUrls: ['./os-bar-chart.component.scss'],
@@ -60,7 +61,7 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
   // Color palette from project configuration
   private colors = {
     primary: '#f9a743',
-    secondary: '#3dc2ff', 
+    secondary: '#3dc2ff',
     success: '#2dd36f',
     danger: '#eb445a',
     warning: '#ffc409',
@@ -181,7 +182,7 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (viewConfig?.primaryColor) {
       this.colors.primary = viewConfig.primaryColor;
     }
-    
+
     // Try to get colors from CSS variables if available
     this.loadColorsFromCSS();
   }
@@ -189,7 +190,7 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
   private loadColorsFromCSS(): void {
     if (typeof document !== 'undefined') {
       const style = getComputedStyle(document.documentElement);
-      
+
       // Map CSS variables to our color palette
       const cssVarMap = {
         primary: '--os-color-primary',
@@ -333,7 +334,7 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
   private getDefaultColor(index: number): string {
     const colorKeys = [
       'primary',
-      'secondary', 
+      'secondary',
       'success',
       'info',
       'warning',
@@ -361,12 +362,12 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
     const r = parseInt(hex.substr(0, 2), 16);
     const g = parseInt(hex.substr(2, 2), 16);
     const b = parseInt(hex.substr(4, 2), 16);
-    
+
     const factor = (100 - percent) / 100;
     const newR = Math.round(r * factor);
     const newG = Math.round(g * factor);
     const newB = Math.round(b * factor);
-    
+
     return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
   }
 
@@ -385,7 +386,7 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
       };
     }
 
-    // Merge scales if both exist  
+    // Merge scales if both exist
     if (defaultOptions.scales && userOptions.scales) {
       merged.scales = {
         ...defaultOptions.scales,

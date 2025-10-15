@@ -4,6 +4,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import { ProviderProduct } from '../../../models';
 
 @Component({
+  standalone: true,
     selector: 'app-provider-product-details',
     imports: [CommonModule, IconDirective],
     templateUrl: './provider-product-details.component.html',

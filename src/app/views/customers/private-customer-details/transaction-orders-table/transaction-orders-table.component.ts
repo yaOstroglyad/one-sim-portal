@@ -7,11 +7,12 @@ import {
 	EmptyStateComponent
 } from '../../../../shared';
 import { MatTableModule } from '@angular/material/table';
-import { AsyncPipe, DatePipe, JsonPipe, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+  standalone: true,
     selector: 'app-transaction-orders-table',
     templateUrl: './transaction-orders-table.component.html',
     styleUrls: ['./transaction-orders-table.component.scss'],

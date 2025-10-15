@@ -7,7 +7,7 @@ import { Subject, Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { takeUntil, map, startWith } from 'rxjs/operators';
 import { IconDirective } from '@coreui/icons-angular';
 
-import { GridSelectOption, GridConfig } from '../../model';
+import { GridSelectOption, GridConfig } from '../../../model';
 
 @Component({
     selector: 'app-multiselect-grid',
@@ -45,7 +45,7 @@ export class MultiselectGridComponent implements OnInit, OnDestroy, ControlValue
   filteredOptions: GridSelectOption[] = [];
 
   // ControlValueAccessor
-  private onChange = (value: any[]) => {};
+  private onChange = () => {};
   private onTouched = () => {};
 
   constructor(private cdr: ChangeDetectorRef) {}
@@ -167,7 +167,7 @@ export class MultiselectGridComponent implements OnInit, OnDestroy, ControlValue
 
   private emitChange(): void {
     const values = Array.from(this.selectedValues);
-    this.onChange(values);
+    this.onChange();
     this.selectionChange.emit(values);
   }
 
@@ -181,7 +181,7 @@ export class MultiselectGridComponent implements OnInit, OnDestroy, ControlValue
     this.cdr.markForCheck();
   }
 
-  registerOnChange(fn: (value: any[]) => void): void {
+  registerOnChange(fn: () => void): void {
     this.onChange = fn;
   }
 

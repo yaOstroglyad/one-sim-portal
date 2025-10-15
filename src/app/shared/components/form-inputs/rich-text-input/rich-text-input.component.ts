@@ -1,6 +1,6 @@
 import { Component, ElementRef, forwardRef, Input, OnInit, AfterViewInit, ViewChild, NgZone } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { HtmlDialogComponent } from '../html-dialog';
+import { HtmlDialogComponent } from '../../html-dialog';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -344,8 +344,6 @@ export class RichTextInputComponent implements OnInit, AfterViewInit, ControlVal
 
 		// Если нашли span, удаляем его, сохраняя содержимое
 		if (primarySpan) {
-			const parent = primarySpan.parentNode;
-
 			// Создаем новый Range, который охватывает весь span
 			const newRange = document.createRange();
 			newRange.selectNodeContents(primarySpan);
@@ -450,12 +448,10 @@ export class RichTextInputComponent implements OnInit, AfterViewInit, ControlVal
 						element.removeAttribute(attr.name);
 					} else if (attr.name === 'style') {
 						// Фильтруем стили
-						const styles = element.style;
 						const cssText = element.style.cssText;
 						element.removeAttribute('style');
 
 						// Применяем только разрешенные стили
-						const styleObj = {};
 						cssText.split(';').forEach(style => {
 							const [prop, value] = style.split(':').map(s => s.trim());
 							if (prop && value && allowedStyles.includes(prop)) {

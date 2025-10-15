@@ -9,6 +9,7 @@ import { TooltipPosition, TooltipVariant } from './tooltip.component';
 
 @Component({
     selector: 'os-tooltip-wrapper',
+    standalone: true,
     imports: [CommonModule, TooltipDirective],
     template: `
     <div 

@@ -9,13 +9,12 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { CompanyProductDetailsComponent } from '../company-product-details/company-product-details.component';
 import { CompanyProductFormComponent } from '../company-product-form/company-product-form.component';
-import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
-import { GenericTableComponent } from '../../../../../shared/components/generic-table/generic-table.component';
+import { GenericTableComponent, HeaderComponent, TableConfig, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ButtonDirective, FormControlDirective, BadgeComponent } from '@coreui/angular';
+import { ButtonDirective, BadgeComponent } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -28,6 +27,7 @@ import { Account, Country } from '../../../../../shared';
 import { CountryService } from '../../../../../shared';
 
 @Component({
+  standalone: true,
     selector: 'app-company-product-list',
     imports: [
         CommonModule,
@@ -37,8 +37,8 @@ import { CountryService } from '../../../../../shared';
         GenericRightPanelComponent,
         CompanyProductDetailsComponent,
         CompanyProductFormComponent,
-        GenericTableModule,
-        HeaderModule,
+        GenericTableComponent,
+        HeaderComponent,
         AccountSelectorComponent,
         MatMenuModule,
         MatIconModule,
@@ -93,7 +93,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
 
   // RTL support
   private readonly languageService = inject(LanguageService);
-  
+
   readonly containerClasses = computed(() => ({
     'company-product-list-container': true,
     'company-product-list-container--rtl': this.languageService.isRtl()

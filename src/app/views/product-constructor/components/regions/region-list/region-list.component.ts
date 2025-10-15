@@ -9,7 +9,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { RegionFormComponent } from '../region-form/region-form.component';
 import { RegionDetailsComponent } from '../region-details/region-details.component';
-import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent } from '../../../../../shared';
+import { GenericTableComponent, HeaderComponent, TableConfig, DeleteConfirmationComponent } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +22,7 @@ import { CountryService, Country, LanguageService } from '../../../../../shared'
 import { RegionsTableService } from '../regions-table.service';
 
 @Component({
+  standalone: true,
     selector: 'app-region-list',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
@@ -32,8 +33,8 @@ import { RegionsTableService } from '../regions-table.service';
         RegionFormComponent,
         RegionDetailsComponent,
         DeleteConfirmationComponent,
-        GenericTableModule,
-        HeaderModule,
+        GenericTableComponent,
+        HeaderComponent,
         MatMenuModule,
         MatIconModule,
         MatButtonModule,

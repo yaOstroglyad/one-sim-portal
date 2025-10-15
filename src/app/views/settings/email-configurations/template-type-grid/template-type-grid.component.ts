@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild, TemplateRef, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
-import { EmailTemplate, HeaderModule } from '../../../../shared';
+import { EmailTemplate, HeaderComponent } from '../../../../shared';
 import { WhiteLabelDataService } from '../../../../shared';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TableConfig } from '../../../../shared';
@@ -13,16 +13,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { TranslateModule } from '@ngx-translate/core';
-import { GenericTableModule } from '../../../../shared';
+import { GenericTableComponent } from '../../../../shared';
 import {
-  BadgeComponent, BadgeModule,
-  ButtonDirective,
-  DropdownComponent,
-  DropdownItemDirective,
-  DropdownMenuDirective, DropdownToggleDirective,
-  FormControlDirective
+  BadgeComponent,
 } from '@coreui/angular';
-import { IconDirective } from '@coreui/icons-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
@@ -39,8 +33,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         MatMenuModule,
         MatSnackBarModule,
         TranslateModule,
-        GenericTableModule,
-        HeaderModule,
+        GenericTableComponent,
+        HeaderComponent,
         ReactiveFormsModule,
         MatFormFieldModule,
         BadgeComponent

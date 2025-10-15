@@ -1,22 +1,64 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ButtonDirective } from '@coreui/angular';
+import { IconDirective } from '@coreui/icons-angular';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { ADMIN_PERMISSION, AuthService, HeaderConfig, TableConfig, TableFilterFieldType } from '../../shared';
+import { takeUntil } from 'rxjs/operators';
+import { 
+    ADMIN_PERMISSION, 
+    AuthService, 
+    HeaderConfig, 
+    TableConfig, 
+    TableFilterFieldType,
+    GenericTableComponent,
+    HeaderComponent,
+    FormGeneratorComponent
+} from '../../shared';
 import { Resource } from '../../shared/model/resource';
 import { InventoryDataService } from './inventory-data.service';
 import { InventoryTableService } from './inventory-table.service';
-import { MatDialog } from '@angular/material/dialog';
 import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';
 import { SetupResourceComponent } from './setup-resource/setup-resource.component';
 import { MoveResourceComponent } from './move-resource/move-resource.component';
-import { takeUntil } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+    standalone: true,
     selector: 'app-inventory',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        HeaderComponent,
+        GenericTableComponent,
+        MatDialogModule,
+        ButtonDirective,
+        IconDirective,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FormGeneratorComponent,
+        MatTooltipModule,
+        MatCardModule,
+        MatIconModule,
+        MatMenuModule,
+        TranslateModule,
+        SetupResourceComponent,
+        MoveResourceComponent
+    ],
     templateUrl: './inventory.component.html',
     styleUrls: ['./inventory.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InventoryComponent implements OnInit, OnDestroy {
 	public unsubscribe$: Subject<void> = new Subject<void>();

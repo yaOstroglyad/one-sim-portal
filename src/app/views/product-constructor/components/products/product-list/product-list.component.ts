@@ -9,7 +9,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { ProductDetailsComponent } from '../product-details/product-details.component';
 import { ProductFormComponent } from '../product-form/product-form.component';
-import { GenericTableModule, HeaderModule, TableConfig, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
+import { GenericTableComponent, HeaderComponent, TableConfig, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,6 +23,7 @@ import { Country, CountryService } from '../../../../../shared';
 import { ProductsTableService } from '../products-table.service';
 
 @Component({
+  standalone: true,
     selector: 'app-product-list',
     imports: [
         CommonModule,
@@ -32,8 +33,8 @@ import { ProductsTableService } from '../products-table.service';
         GenericRightPanelComponent,
         ProductDetailsComponent,
         ProductFormComponent,
-        GenericTableModule,
-        HeaderModule,
+        GenericTableComponent,
+        HeaderComponent,
         MatMenuModule,
         MatIconModule,
         MatButtonModule,

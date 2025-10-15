@@ -14,6 +14,7 @@ export interface ProviderProductUploadDialogData {
 }
 
 @Component({
+  standalone: true,
     selector: 'app-provider-product-upload-dialog',
     imports: [
         CommonModule,

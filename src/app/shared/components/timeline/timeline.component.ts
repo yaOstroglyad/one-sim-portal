@@ -8,6 +8,7 @@ export interface TimelineEvent {
 }
 
 @Component({
+  standalone: true,
     selector: 'app-timeline',
     templateUrl: './timeline.component.html',
     styleUrls: ['./timeline.component.scss'],

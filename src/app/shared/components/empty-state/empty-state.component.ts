@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
+  standalone: true,
     selector: 'app-empty-state',
     templateUrl: './empty-state.component.html',
     imports: [

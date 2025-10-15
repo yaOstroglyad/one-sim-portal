@@ -1,15 +1,23 @@
 import { Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 import { getSetupResourceFormConfig } from './setup-resource.utils';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ProvidersDataService } from '../../../shared';
-import { FormConfig } from '../../../shared/model/field-config';
+import { ProvidersDataService, FormGeneratorComponent } from '../../../shared';
+import { FormConfig } from '../../../shared';
 
 @Component({
+    standalone: true,
     selector: 'app-setup-resource',
+    imports: [
+        MatDialogModule,
+        MatButtonModule,
+        TranslateModule,
+        FormGeneratorComponent
+    ],
     templateUrl: './setup-resource.component.html',
-    styleUrls: ['./setup-resource.component.scss'],
-    standalone: false
+    styleUrls: ['./setup-resource.component.scss']
 })
 export class SetupResourceComponent {
   setupResourceFormConfig: FormConfig;

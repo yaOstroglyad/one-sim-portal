@@ -8,7 +8,7 @@ import { CompanyProductService, ProductService } from '../../../services';
 import { CompanyProduct, ActiveTariffOffer } from '../../../models';
 import { AccountsDataService } from '../../../../../shared';
 import { TariffOfferService } from '../../../../../shared/services/tariff-offer.service';
-import { SelectedTariffOfferDetailsComponent } from '../selected-tariff-offer-details/selected-tariff-offer-details.component';
+import { SelectedTariffOfferDetailsComponent } from '../selected-tariff-offer-details';
 import { UserRoleService } from '../../../../../shared';
 import { UIConfigFactory, CompanyProductFormConfig } from '../factories';
 import {
@@ -18,6 +18,7 @@ import {
 } from './company-product-form.utils';
 
 @Component({
+  standalone: true,
     selector: 'app-company-product-form',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [

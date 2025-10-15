@@ -92,7 +92,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class ColorPickerComponent implements ControlValueAccessor {
   @Input() label: string = '';
   value: string = '#000000';
-  
+
   private onChange: (value: string) => void = () => {};
   private onTouched: () => void = () => {};
 
@@ -116,7 +116,7 @@ export class ColorPickerComponent implements ControlValueAccessor {
   onHexInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     const newValue = input.value.trim();
-    
+
     // Разрешаем любой ввод, но обновляем значение только если это валидный HEX
     if (this.isValidHexColor(newValue)) {
       this.updateValue(newValue.startsWith('#') ? newValue : '#' + newValue);
@@ -125,10 +125,7 @@ export class ColorPickerComponent implements ControlValueAccessor {
 
   onHexPaste(event: ClipboardEvent): void {
     const pastedText = event.clipboardData?.getData('text')?.trim() || '';
-    
-    // Разрешаем вставку любого текста
-    const input = event.target as HTMLInputElement;
-    
+
     // Если это валидный HEX, обновляем значение компонента
     if (this.isValidHexColor(pastedText)) {
       const newValue = pastedText.startsWith('#') ? pastedText : '#' + pastedText;
@@ -141,7 +138,7 @@ export class ColorPickerComponent implements ControlValueAccessor {
   onBlur(event: FocusEvent): void {
     const input = event.target as HTMLInputElement;
     const newValue = input.value.trim();
-    
+
     // При потере фокуса проверяем значение
     if (this.isValidHexColor(newValue)) {
       // Если значение валидное, обновляем с # если его нет
@@ -150,7 +147,7 @@ export class ColorPickerComponent implements ControlValueAccessor {
       // Если значение невалидное, возвращаем последнее корректное
       input.value = this.value;
     }
-    
+
     this.onTouched();
   }
 

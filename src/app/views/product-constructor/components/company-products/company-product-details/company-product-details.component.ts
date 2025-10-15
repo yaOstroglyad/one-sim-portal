@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CompanyProduct } from '../../../models';
 
 @Component({
+  standalone: true,
     selector: 'app-company-product-details',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [CommonModule, MatIconModule],

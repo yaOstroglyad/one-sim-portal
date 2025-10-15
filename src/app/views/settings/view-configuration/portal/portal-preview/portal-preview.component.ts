@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
+  standalone: true,
     selector: 'app-portal-preview',
     templateUrl: './portal-preview.component.html',
     styleUrls: ['./portal-preview.component.scss'],

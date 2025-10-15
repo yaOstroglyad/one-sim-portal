@@ -10,6 +10,7 @@ import { AccountSelectorComponent } from '../../../shared/components/account-sel
 import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
+  standalone: true,
     selector: 'app-email-configurations',
     templateUrl: './email-configurations.component.html',
     styleUrls: ['./email-configurations.component.scss'],

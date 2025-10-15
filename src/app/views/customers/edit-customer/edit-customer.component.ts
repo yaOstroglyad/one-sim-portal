@@ -1,15 +1,23 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ProvidersDataService, FormConfig, ProductsDataService } from '../../../shared';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
+import { ProvidersDataService, FormConfig, ProductsDataService, FormGeneratorComponent } from '../../../shared';
 import { Subject } from 'rxjs';
 import { getCustomerCreateRequest, getEditCustomerFormConfig } from './edit-customer.utils';
 
 @Component({
+    standalone: true,
     selector: 'app-edit-customer',
+    imports: [
+        MatDialogModule,
+        MatButtonModule,
+        TranslateModule,
+        FormGeneratorComponent
+    ],
     templateUrl: './edit-customer.component.html',
-    styleUrls: ['./edit-customer.component.scss'],
-    standalone: false
+    styleUrls: ['./edit-customer.component.scss']
 })
 export class EditCustomerComponent implements OnInit, OnDestroy {
 	private unsubscribe$ = new Subject<void>();

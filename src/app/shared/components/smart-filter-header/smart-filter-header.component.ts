@@ -28,6 +28,7 @@ import { SmartFilterValueMapperService } from './services/smart-filter-value-map
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+  standalone: true,
     selector: 'app-smart-filter-header',
     templateUrl: './smart-filter-header.component.html',
     styleUrls: ['./smart-filter-header.component.scss'],
@@ -129,7 +130,7 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
       .filter(([key, value]) => this.shouldShowFilter(key, value))
       .map(async ([key, value]) => {
         const fieldConfig = this.getFieldConfig(key);
-        const displayValue = await this.formatDisplayValue(key, value, fieldConfig);
+        const displayValue = await this.formatDisplayValue(value, fieldConfig);
 
         const tooltip = this.generateTooltip(fieldConfig, value, displayValue);
 
@@ -161,11 +162,9 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
     const fieldConfig = this.getFieldConfig(key);
 
     // Скрытые фильтры не показываем
-    if (fieldConfig?.hidden) {
-      return false;
-    }
+    return !fieldConfig?.hidden;
 
-    return true;
+
   }
 
   private getFieldConfig(key: string): FilterFieldConfig | undefined {
@@ -203,7 +202,7 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
     return tooltipConfig; // Статическая строка
   }
 
-  private async formatDisplayValue(key: string, value: any, fieldConfig?: FilterFieldConfig): Promise<string> {
+  private async formatDisplayValue(value: any, fieldConfig?: FilterFieldConfig): Promise<string> {
     // Handle searchable-select format first
     if (typeof value === 'object' && value?.label) {
       return value.label;

@@ -20,14 +20,15 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { DomainsTableService } from './domains-table.service';
-import { DomainsDataService } from '../../../shared/services/domains-data.service';
+import { DomainsDataService } from '../../../shared';
 import { Domain } from '../../../shared/model/domain';
-import { GenericTableModule, HeaderModule, TableConfig } from '../../../shared';
+import { GenericTableComponent, HeaderComponent, TableConfig } from '../../../shared';
 import { EditDomainNameComponent } from './edit-domain-name/edit-domain-name.component';
 import { EditDomainOwnerComponent } from './edit-domain-owner/edit-domain-owner.component';
 import { CreateDomainComponent } from './create-domain/create-domain.component';
 
 @Component({
+  standalone: true,
     selector: 'app-domains',
     templateUrl: './domains.component.html',
     styleUrls: ['./domains.component.scss'],
@@ -37,13 +38,13 @@ import { CreateDomainComponent } from './create-domain/create-domain.component';
         TranslateModule,
         ButtonDirective,
         IconDirective,
-        GenericTableModule,
+        GenericTableComponent,
         MatSnackBarModule,
         MatDialogModule,
         MatButtonModule,
         MatMenuModule,
         MatIconModule,
-        HeaderModule,
+        HeaderComponent,
         BadgeComponent
     ],
     providers: [

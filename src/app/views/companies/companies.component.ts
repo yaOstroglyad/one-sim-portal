@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { CompaniesDataService, Company, GenericTableModule, HeaderModule, TableConfig } from '../../shared';
+import { CompaniesDataService, Company, GenericTableComponent, HeaderComponent, TableConfig } from '../../shared';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CompaniesTableService } from './companies-table.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -17,17 +17,18 @@ import { SendInviteEmailComponent } from './send-invite-email/send-invite-email.
 
 
 @Component({
+  standalone: true,
     selector: 'app-companies',
     templateUrl: './companies.component.html',
     styleUrls: ['./companies.component.scss'],
     imports: [
-        HeaderModule,
+        HeaderComponent,
         ReactiveFormsModule,
         FormControlDirective,
         TranslateModule,
         ButtonDirective,
         IconDirective,
-        GenericTableModule,
+        GenericTableComponent,
         MatSnackBarModule,
         MatDialogModule,
         MatButtonModule,

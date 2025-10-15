@@ -1,10 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as QRCode from 'qrcode';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { EmptyStateComponent } from '../empty-state/empty-state.component';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+  standalone: true,
     selector: 'app-qr-code',
     template: `
     <div class="text-center" [class.no-height]="!qrCodeValue">
@@ -26,8 +27,6 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
 export class QrCodeComponent implements OnInit {
   @ViewChild('qrCanvas', { static: true }) qrCanvas!: ElementRef<HTMLCanvasElement>;
   @Input() qrCodeValue: string = null;
-
-  constructor(private translate: TranslateService) {}
 
   ngOnInit(): void {
     if(this.qrCodeValue) {

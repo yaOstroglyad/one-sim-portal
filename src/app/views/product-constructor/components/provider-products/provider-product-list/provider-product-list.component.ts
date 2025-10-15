@@ -9,23 +9,23 @@ import { MatDialog } from '@angular/material/dialog';
 import { GenericRightPanelComponent, PanelAction, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
 import { ProviderProductDetailsComponent } from '../provider-product-details/provider-product-details.component';
 import { ProviderProductUploadDialogComponent } from '../provider-product-upload-dialog';
-import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent } from '../../../../../shared';
+import { GenericTableComponent, HeaderComponent, TableConfig } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ButtonDirective, FormControlDirective, FormSelectDirective } from '@coreui/angular';
+import { ButtonDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { ProviderProductService, RegionService } from '../../../services';
-import { ProviderProduct, ProviderProductSearchRequest, RegionSummary } from '../../../models';
+import { ProviderProduct, ProviderProductSearchRequest } from '../../../models';
 import { ProviderProductsTableService } from '../provider-products-table.service';
-import { CountryService } from '../../../../../shared/services/country.service';
-import { Country } from '../../../../../shared/model/country';
+import { CountryService } from '../../../../../shared';
 import { LanguageService } from '../../../../../shared';
 
 @Component({
+  standalone: true,
     selector: 'app-provider-product-list',
     imports: [
         CommonModule,
@@ -33,8 +33,8 @@ import { LanguageService } from '../../../../../shared';
         ReactiveFormsModule,
         GenericRightPanelComponent,
         ProviderProductDetailsComponent,
-        GenericTableModule,
-        HeaderModule,
+        GenericTableComponent,
+        HeaderComponent,
         MatMenuModule,
         MatIconModule,
         MatButtonModule,
@@ -54,7 +54,7 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
   public providerProducts$: Observable<ProviderProduct[]>;
   public tableConfig$: BehaviorSubject<TableConfig>;
   public filterForm: FormGroup;
-  
+
   // Options for searchable-select dropdowns
   public countryOptions$: Observable<SearchableSelectOption[]>;
   public regionOptions$: Observable<SearchableSelectOption[]>;
@@ -63,7 +63,7 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
 
   // RTL support
   private readonly languageService = inject(LanguageService);
-  
+
   readonly containerClasses = computed(() => ({
     'provider-product-list-container': true,
     'provider-product-list-container--rtl': this.languageService.isRtl()

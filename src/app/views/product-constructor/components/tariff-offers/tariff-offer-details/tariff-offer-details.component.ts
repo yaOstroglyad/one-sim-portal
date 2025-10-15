@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { BadgeComponent } from '@coreui/angular';
 
-import { TariffOffer } from '../../../models/tariff-offer.model';
+import { TariffOffer } from '../../../models';
 
 @Component({
+  standalone: true,
     selector: 'app-tariff-offer-details',
     imports: [
         CommonModule,
@@ -22,11 +23,11 @@ export class TariffOfferDetailsComponent {
     if (typeof unit === 'string') {
       return unit;
     }
-    
+
     if (unit.amount && unit.type) {
       return `${unit.amount} ${unit.type}`;
     }
-    
+
     return unit.name || unit.toString();
   }
 }

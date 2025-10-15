@@ -5,10 +5,10 @@ import { FieldType, FormConfig, FormGeneratorComponent, SubscriberDataService, P
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
     selector: 'app-send-registration-email',
     templateUrl: './send-registration-email.component.html',
     styleUrls: ['./send-registration-email.component.scss'],
@@ -38,7 +38,7 @@ export class SendRegistrationEmailComponent implements OnInit {
       next: (products) => {
         this.hasActiveProducts = products && products.length > 0;
         this.isLoadingProducts = false;
-        
+
         if (this.hasActiveProducts) {
           this.formConfig = this.getFormConfig();
         }

@@ -20,6 +20,7 @@ import { Subject } from 'rxjs';
 import { Account } from '../../model';
 
 @Component({
+  standalone: true,
     selector: 'app-account-selector',
     templateUrl: './account-selector.component.html',
     styleUrls: ['./account-selector.component.scss'],

@@ -4,6 +4,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import { MobileBundle } from '../../../models';
 
 @Component({
+  standalone: true,
     selector: 'app-bundle-details',
     imports: [CommonModule, IconDirective],
     templateUrl: './bundle-details.component.html',
@@ -31,7 +32,6 @@ export class BundleDetailsComponent {
   }
 
   formatUsageUnit(unit: any): string {
-    const typeDisplay = unit.type.charAt(0).toUpperCase() + unit.type.slice(1);
     return `${unit.value} ${unit.unitType}`;
   }
 }

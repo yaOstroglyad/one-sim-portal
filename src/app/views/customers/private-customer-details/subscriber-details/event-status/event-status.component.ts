@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+  standalone: true,
     selector: 'app-event-status',
     templateUrl: './event-status.component.html',
     styleUrls: ['./event-status.component.scss'],

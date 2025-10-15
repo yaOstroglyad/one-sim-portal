@@ -4,6 +4,7 @@ import { BrandFull } from '../../model/brandFull';
 import { BrandNarrow } from '../../model/brandNarrow';
 
 @Component({
+  standalone: true,
     selector: 'app-sidebar-brand',
     imports: [CommonModule],
     templateUrl: './sidebar-brand.component.html',

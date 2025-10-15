@@ -1,15 +1,31 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import { ButtonDirective, DropdownToggleDirective, FormControlDirective, FormSelectDirective } from '@coreui/angular';
+import { IconDirective } from '@coreui/icons-angular';
+import { MatIconModule } from '@angular/material/icon';
+import { ColumnControlComponent } from '../column-control/column-control.component';
 import { debounceTime, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { TableConfig, HeaderConfig } from '../../model';
 
 @Component({
+    standalone: true,
     selector: 'app-header',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        ButtonDirective,
+        IconDirective,
+        FormControlDirective,
+        FormSelectDirective,
+        ColumnControlComponent,
+        MatIconModule,
+        DropdownToggleDirective
+    ],
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit {
   @Input() config: HeaderConfig;
@@ -45,7 +61,7 @@ export class HeaderComponent implements OnInit {
   subscribeToTableConfig() {
     this.tableConfig$?.pipe(take(1)).subscribe((config: TableConfig) => {
       this.initialTableConfig = { ...config };
-      this.resetColumnSelection(true);
+      this.resetColumnSelection();
     });
   }
 
@@ -55,7 +71,7 @@ export class HeaderComponent implements OnInit {
     this.resetColumnSelection();
   }
 
-  resetColumnSelection(initial = false): void {
+  resetColumnSelection(): void {
     const resetColumns = new Set<string>();
     this.initialTableConfig?.columns.forEach(col => {
       if (col.visible) { // Add only visible columns

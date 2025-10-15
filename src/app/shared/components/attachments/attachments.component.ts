@@ -7,6 +7,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import { Attachment, AttachmentsConfiguration, UploadAttachmentRequest } from '../../models';
 
 @Component({
+  standalone: true,
     selector: 'app-attachments',
     imports: [
         CommonModule,

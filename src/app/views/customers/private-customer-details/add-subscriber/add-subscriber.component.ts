@@ -18,6 +18,7 @@ import {
 } from '../../../../shared';
 
 @Component({
+  standalone: true,
     selector: 'app-add-subscriber',
     templateUrl: './add-subscriber.component.html',
     imports: [
@@ -83,7 +84,7 @@ export class AddSubscriberComponent implements OnInit {
       };
 
       this.subscriberDataService.createSubscriber(payload).subscribe({
-        next: (response) => {
+        next: () => {
           this.snackBar.open('Subscriber created successfully', null, {
             panelClass: 'app-notification-success',
             duration: 3000

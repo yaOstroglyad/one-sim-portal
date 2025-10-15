@@ -8,8 +8,7 @@ import { Subject, BehaviorSubject, Observable, of } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { GenericTableModule, TableConfig, HeaderModule, Account } from '../../shared';
-import { GenericTableComponent } from '../../shared/components/generic-table/generic-table.component';
+import { GenericTableComponent, TableConfig, HeaderComponent, Account } from '../../shared';
 import { AccountSelectorComponent } from '../../shared/components/account-selector/account-selector.component';
 import { EmailLogsTableConfigService } from './index';
 import { AuthService, ADMIN_PERMISSION } from '../../shared';
@@ -18,6 +17,7 @@ import { FormControlDirective, ButtonDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
+  standalone: true,
     selector: 'app-email-logs',
     imports: [
         CommonModule,
@@ -26,9 +26,9 @@ import { IconDirective } from '@coreui/icons-angular';
         MatInputModule,
         DatePickerWrapperComponent,
         TranslateModule,
-        GenericTableModule,
+        GenericTableComponent,
         AccountSelectorComponent,
-        HeaderModule,
+        HeaderComponent,
         FormControlDirective,
         ButtonDirective,
         IconDirective
@@ -101,7 +101,7 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
     this.filterForm.valueChanges.pipe(
       debounceTime(700),
       takeUntil(this.unsubscribe$)
-    ).subscribe((formValues) => {
+    ).subscribe(() => {
       this.applyFilter();
     });
   }

@@ -16,6 +16,7 @@ export interface PaginationConfig {
 }
 
 @Component({
+  standalone: true,
     selector: 'app-pagination',
     imports: [CommonModule, TranslateModule, MatIconModule],
     templateUrl: './pagination.component.html',

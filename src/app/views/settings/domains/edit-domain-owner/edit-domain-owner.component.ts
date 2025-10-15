@@ -6,10 +6,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import { Domain } from '../../../../shared/model/domain';
-import { AccountsDataService } from '../../../../shared/services/accounts-data.service';
+import { AccountsDataService } from '../../../../shared';
 import { Observable } from 'rxjs';
 
 @Component({
+  standalone: true,
     selector: 'app-edit-domain-owner',
     templateUrl: './edit-domain-owner.component.html',
     styleUrls: ['./edit-domain-owner.component.scss'],
@@ -65,4 +66,4 @@ export class EditDomainOwnerComponent implements OnInit {
   onCancel(): void {
     this.dialogRef.close();
   }
-} 
+}

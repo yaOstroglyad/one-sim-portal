@@ -7,6 +7,7 @@ import { RegionSummary, Country } from '../../../models';
 import { getRegionFormConfig, getRegionCreateRequest, getRegionUpdateRequest } from './region-form.utils';
 
 @Component({
+  standalone: true,
     selector: 'app-region-form',
     imports: [
         CommonModule,

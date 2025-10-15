@@ -1,18 +1,26 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { getMoveResourceFormConfig } from './move-resource.utils';
-import { MoveResourceService } from './move-resource.service';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ProvidersDataService, OrdersDataService, CompaniesDataService, FormConfig } from '../../../shared';
+import { getMoveResourceFormConfig } from './move-resource.utils';
+import { MoveResourceService } from './move-resource.service';
+import { ProvidersDataService, OrdersDataService, CompaniesDataService, FormConfig, FormGeneratorComponent } from '../../../shared';
 
 @Component({
+    standalone: true,
     selector: 'app-move-resource',
+    imports: [
+        MatDialogModule,
+        MatButtonModule,
+        TranslateModule,
+        FormGeneratorComponent
+    ],
     templateUrl: './move-resource.component.html',
     styleUrls: ['./move-resource.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MoveResourceComponent implements OnDestroy {
 	public unsubscribe$: Subject<void> = new Subject<void>();

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ADMIN_PERMISSION, AuthService, FormGeneratorComponent } from 'src/app/shared';
 import { getGeneralSettingsFormConfig, getCompanySettingsRequest } from './general-settings.utils';
@@ -13,6 +13,7 @@ import { WhiteLabelDataService } from 'src/app/shared/services/white-label-data.
 
 @Component({
     selector: 'app-general-settings',
+    standalone: true,
     imports: [
         CommonModule,
         FormGeneratorComponent,

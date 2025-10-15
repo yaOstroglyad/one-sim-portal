@@ -48,7 +48,8 @@
       "Bash(npm:*)",
       "Bash(ng update:*)",
       "Bash(docker build:*)",
-      "Bash(docker:*)"
+      "Bash(docker:*)",
+      "Bash(chmod:*)"
     ],
     "deny": []
   }

@@ -10,21 +10,15 @@ import { DashboardTab, DashboardPeriod } from './models/dashboard.types';
 import { DashboardDataService } from './services/dashboard-data.service';
 
 // Import shared standalone components
-import { CardComponent } from '../../shared/components/card/card.component';
-import { BadgeComponent } from '../../shared/components/badge';
-import { OsBarChartComponent } from '../../shared/components/bar-chart';
-import { OsLineChartComponent } from '../../shared/components/line-chart';
 
 // Import shared components
-import { MetricCardComponent } from '../../shared/components/card';
-import { LoadingIndicatorComponent } from './components/loading-indicator/loading-indicator.component';
-import { ErrorDisplayComponent } from './components/error-display/error-display.component';
 import { ExecutiveTabComponent } from './tabs/executive/executive-tab.component';
 import { SubscribersTabComponent } from './tabs/subscribers/subscribers-tab.component';
-import { TrafficTabComponent } from './tabs/traffic/traffic-tab.component';
-import { FinanceTabComponent } from './tabs/finance/finance-tab.component';
+import { TrafficTabComponent } from './tabs/traffic';
+import { FinanceTabComponent } from './tabs/finance';
 
 @Component({
+  standalone: true,
     selector: 'app-dashboard',
     imports: [
         CommonModule,
@@ -43,7 +37,7 @@ import { FinanceTabComponent } from './tabs/finance/finance-tab.component';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  
+
   // Tab configuration
   tabs: DashboardTab[] = [
     { id: 'executive', label: 'dashboard.tabs.executive', icon: 'cilChartPie' },
@@ -51,9 +45,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     { id: 'traffic', label: 'dashboard.tabs.traffic', icon: 'cilSpeedometer' },
     { id: 'finance', label: 'dashboard.tabs.finance', icon: 'cilDollar' }
   ];
-  
+
   activeTab: DashboardTab['id'] = 'executive';
-  
+
   // Period presets
   periodPresets = [
     { label: 'dashboard.periods.today', value: 'today' },
@@ -63,7 +57,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     { label: 'dashboard.periods.lastMonth', value: 'lastMonth' },
     { label: 'dashboard.periods.custom', value: 'custom' }
   ];
-  
+
   selectedPeriod = 'last30days';
   customDateRange = { start: null, end: null };
   showCustomDatePicker = false;
@@ -81,10 +75,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Initialize theme from localStorage (will be managed by parent/global theme service)
     const savedTheme = localStorage.getItem('dashboard-theme');
     this.isDarkTheme = savedTheme === 'dark';
-    
+
     // Filter tabs based on user permissions
     this.filterTabsByPermissions();
-    
+
     // Get active tab from route
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
@@ -94,13 +88,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.activeTab = tab;
         }
       });
-    
+
     // Subscribe to period changes
     this.dashboardService.period$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(period => {
-        // Handle period updates if needed
-      });
+      .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -125,14 +117,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   onTabChange(tabId: DashboardTab['id']): void {
     this.activeTab = tabId;
-    
+
     // Update route query params
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { tab: tabId },
       queryParamsHandling: 'merge'
     });
-    
+
     // Update tab active state
     this.tabs = this.tabs.map(tab => ({
       ...tab,
@@ -145,12 +137,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
    */
   onPeriodChange(preset: string): void {
     this.selectedPeriod = preset;
-    
+
     if (preset === 'custom') {
       this.showCustomDatePicker = true;
       return;
     }
-    
+
     this.showCustomDatePicker = false;
     const period = this.createPeriodFromPreset(preset);
     this.dashboardService.setPeriod(period);
@@ -167,7 +159,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         label: 'Custom Period',
         preset: 'custom'
       };
-      
+
       this.dashboardService.setPeriod(period);
       this.showCustomDatePicker = false;
     }
@@ -186,7 +178,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         startDate.setHours(0, 0, 0, 0);
         label = 'Today';
         break;
-      
+
       case 'yesterday':
         startDate.setDate(startDate.getDate() - 1);
         startDate.setHours(0, 0, 0, 0);
@@ -194,17 +186,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
         endDate.setHours(23, 59, 59, 999);
         label = 'Yesterday';
         break;
-      
+
       case 'last7days':
         startDate.setDate(startDate.getDate() - 7);
         label = 'Last 7 Days';
         break;
-      
+
       case 'last30days':
         startDate.setDate(startDate.getDate() - 30);
         label = 'Last 30 Days';
         break;
-      
+
       case 'lastMonth':
         startDate.setMonth(startDate.getMonth() - 1);
         startDate.setDate(1);

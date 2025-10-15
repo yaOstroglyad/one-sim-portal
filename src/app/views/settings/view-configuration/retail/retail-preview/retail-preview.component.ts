@@ -2,6 +2,7 @@ import { Component, Input, ElementRef, OnChanges, OnInit, SimpleChanges } from '
 import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
     selector: 'app-retail-preview',
     templateUrl: './retail-preview.component.html',
     styleUrls: ['./retail-preview.component.scss'],

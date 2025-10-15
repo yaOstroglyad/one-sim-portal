@@ -21,6 +21,7 @@ interface ExtendedUsageInfo extends UsageInfo {
 }
 
 @Component({
+  standalone: true,
     selector: 'app-bundles',
     templateUrl: './bundles.component.html',
     styleUrls: ['./bundles.component.scss'],

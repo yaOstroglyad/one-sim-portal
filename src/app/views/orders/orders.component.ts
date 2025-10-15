@@ -5,27 +5,51 @@ import {
 	OnDestroy,
 	OnInit
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TableDirective } from '@coreui/angular';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import {
 	HeaderConfig,
 	TableConfig,
 	TableFilterFieldType,
-	OrdersDataService, ADMIN_PERMISSION, AuthService
+	OrdersDataService, 
+	ADMIN_PERMISSION, 
+	AuthService,
+	GenericTableComponent,
+	HeaderComponent,
+	FormGeneratorComponent
 } from '../../shared';
 import { OrdersTableService } from './orders-table.service';
 import { switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Order } from '../../shared/model/order';
-import { MatDialog } from '@angular/material/dialog';
 import { EditOrderDescriptionComponent } from './edit-order-description/edit-order-description.component';
 import { RevertOrderComponent } from './revert-order/revert-order.component';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+    standalone: true,
     selector: 'app-orders',
+    imports: [
+        CommonModule,
+        TableDirective,
+        GenericTableComponent,
+        HeaderComponent,
+        MatDialogModule,
+        FormGeneratorComponent,
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        TranslateModule,
+        EditOrderDescriptionComponent,
+        RevertOrderComponent
+    ],
     templateUrl: './orders.component.html',
     styleUrls: ['./orders.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrdersComponent implements OnInit, OnDestroy {
 	private unsubscribe$ = new Subject<void>();

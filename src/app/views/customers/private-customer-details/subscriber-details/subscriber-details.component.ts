@@ -1,9 +1,7 @@
 import { Component, inject, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
-  ChartComponent,
   Subscriber,
   SimInfo,
-  TimelineComponent,
   SubscriberDataService,
   SimLocations
 } from '../../../../shared';
@@ -21,6 +19,7 @@ import { map, catchError } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+  standalone: true,
     selector: 'app-subscriber-details',
     templateUrl: './subscriber-details.component.html',
     styleUrls: ['./subscriber-details.component.scss'],

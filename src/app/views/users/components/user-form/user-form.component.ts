@@ -11,6 +11,7 @@ import { CompaniesDataService } from '../../../../shared';
 import { getUserFormConfig } from './user-form.utils';
 
 @Component({
+  standalone: true,
     selector: 'app-user-form',
     imports: [
         CommonModule,

@@ -14,6 +14,7 @@ export interface DeleteConfirmationConfig {
 }
 
 @Component({
+  standalone: true,
     selector: 'app-delete-confirmation',
     imports: [CommonModule, IconDirective],
     templateUrl: './delete-confirmation.component.html',

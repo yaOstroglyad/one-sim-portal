@@ -20,6 +20,7 @@ import { FormUtils, CurrencyOption } from './utils/form.utils';
 import { ModifyPriceDialogPresenter } from './services/modify-price-dialog.presenter';
 
 @Component({
+  standalone: true,
     selector: 'app-modify-price-dialog',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [

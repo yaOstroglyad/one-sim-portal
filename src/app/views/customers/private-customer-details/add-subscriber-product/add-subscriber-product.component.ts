@@ -14,6 +14,7 @@ import { FormConfig, FormGeneratorComponent } from '../../../../shared';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
+  standalone: true,
     selector: 'app-add-subscriber-product',
     templateUrl: './add-subscriber-product.component.html',
     imports: [

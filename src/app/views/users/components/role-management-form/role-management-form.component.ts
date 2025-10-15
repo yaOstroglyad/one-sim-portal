@@ -13,6 +13,7 @@ export interface RoleOption {
 }
 
 @Component({
+  standalone: true,
     selector: 'app-role-management-form',
     imports: [
         CommonModule,

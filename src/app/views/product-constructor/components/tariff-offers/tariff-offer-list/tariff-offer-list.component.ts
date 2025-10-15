@@ -12,15 +12,16 @@ import { IconDirective } from '@coreui/icons-angular';
 import { FormControlDirective } from '@coreui/angular';
 import { BadgeComponent } from '@coreui/angular';
 
-import { TariffOffer, ActiveTariffOffer } from '../../../models/tariff-offer.model';
+import { TariffOffer, ActiveTariffOffer } from '../../../models';
 import { TariffOffersTableService } from '../tariff-offers-table.service';
 import { TariffOfferService } from '../../../../../shared/services/tariff-offer.service';
-import { GenericTableModule, HeaderModule, DeleteConfirmationComponent } from '../../../../../shared';
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared/components/generic-right-panel/generic-right-panel.component';
+import { GenericTableComponent, HeaderComponent, DeleteConfirmationComponent } from '../../../../../shared';
+import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { TariffOfferFormComponent } from '../tariff-offer-form/tariff-offer-form.component';
 import { TariffOfferDetailsComponent } from '../tariff-offer-details/tariff-offer-details.component';
 
 @Component({
+  standalone: true,
     selector: 'app-tariff-offer-list',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
@@ -34,8 +35,8 @@ import { TariffOfferDetailsComponent } from '../tariff-offer-details/tariff-offe
         IconDirective,
         FormControlDirective,
         BadgeComponent,
-        GenericTableModule,
-        HeaderModule,
+        GenericTableComponent,
+        HeaderComponent,
         GenericRightPanelComponent,
         DeleteConfirmationComponent,
         TariffOfferFormComponent,
@@ -59,7 +60,7 @@ export class TariffOfferListComponent implements OnInit, AfterViewInit, OnDestro
   showEditPanel = false;
   showDetailsPanel = false;
   showDeletePanel = false;
-  
+
   selectedTariffOffer: TariffOffer | null = null;
   selectedTariffOfferDetails: TariffOffer | null = null;
 

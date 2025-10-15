@@ -3,17 +3,17 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
-import { CardComponent } from '../../../../shared/components/card/card.component';
-import { BadgeComponent } from '../../../../shared/components/badge/badge.component';
-import { MetricCardComponent, MetricCard } from '../../../../shared/components/card/metric-card.component';
+import { CardComponent } from '../../../../shared';
+import { MetricCardComponent, MetricCard } from '../../../../shared';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconDirective, IconModule } from '@coreui/icons-angular';
-import { LanguageService } from '../../../../shared/services/language.service';
+import { LanguageService } from '../../../../shared';
 import { OverviewStats, QuickAction } from '../../models';
 import { QUICK_ACTIONS, isActionEnabled } from './overview.utils';
 import { OverviewService } from '../../services';
 
 @Component({
+  standalone: true,
     selector: 'app-overview',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
@@ -66,7 +66,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
           this.updateKpiMetrics(); // Обновляем метрики с новыми данными
           this.cdr.markForCheck(); // Помечаем компонент для проверки изменений
         },
-        error: (error) => {
+        error: () => {
           this.error = true;
           this.stats = null;
           this.loading = false;

@@ -9,6 +9,7 @@ import { getBundleFormConfig, getBundleCreateRequest, getBundleUpdateRequest } f
 
 @Component({
     selector: 'app-bundle-form',
+    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

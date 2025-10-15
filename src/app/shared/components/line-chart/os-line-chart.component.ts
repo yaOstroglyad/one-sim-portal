@@ -10,10 +10,10 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import Chart, { ChartConfiguration, ChartOptions } from 'chart.js/auto';
+import Chart, { ChartOptions } from 'chart.js/auto';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { LocalStorageService } from 'ngx-webstorage';
 
 export interface LineChartData {
@@ -39,6 +39,7 @@ export interface LineChartData {
 export type LineChartOptions = ChartOptions<'line'>;
 
 @Component({
+  standalone: true,
     selector: 'os-line-chart',
     templateUrl: './os-line-chart.component.html',
     styleUrls: ['./os-line-chart.component.scss'],
@@ -66,7 +67,7 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
   // Color palette from project configuration
   private colors = {
     primary: '#f9a743',
-    secondary: '#3dc2ff', 
+    secondary: '#3dc2ff',
     success: '#2dd36f',
     danger: '#eb445a',
     warning: '#ffc409',
@@ -199,7 +200,7 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
     if (viewConfig?.primaryColor) {
       this.colors.primary = viewConfig.primaryColor;
     }
-    
+
     // Try to get colors from CSS variables if available
     this.loadColorsFromCSS();
   }
@@ -207,7 +208,7 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
   private loadColorsFromCSS(): void {
     if (typeof document !== 'undefined') {
       const style = getComputedStyle(document.documentElement);
-      
+
       // Map CSS variables to our color palette
       const cssVarMap = {
         primary: '--os-color-primary',
@@ -329,7 +330,7 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
 
     const chartOptions = this.mergeOptions(this.defaultOptions, this.options);
     this.applySmoothnessSetting(chartOptions);
-    
+
     this.chart.options = chartOptions as any;
     this.chart.update('resize');
     this.cdr.detectChanges();
@@ -385,7 +386,7 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
   private getDefaultColor(index: number): string {
     const colorKeys = [
       'primary',
-      'secondary', 
+      'secondary',
       'success',
       'info',
       'warning',
@@ -407,7 +408,7 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
     const r = parseInt(hex.substr(0, 2), 16);
     const g = parseInt(hex.substr(2, 2), 16);
     const b = parseInt(hex.substr(4, 2), 16);
-    
+
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   }
 
@@ -426,7 +427,7 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
       };
     }
 
-    // Merge scales if both exist  
+    // Merge scales if both exist
     if (defaultOptions.scales && userOptions.scales) {
       merged.scales = {
         ...defaultOptions.scales,

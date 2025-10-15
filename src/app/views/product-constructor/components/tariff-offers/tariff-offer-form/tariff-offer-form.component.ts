@@ -7,9 +7,9 @@ import { IconDirective } from '@coreui/icons-angular';
 import { FormGeneratorComponent, FormConfig } from '../../../../../shared';
 import { TariffOffer } from '../../../models';
 import { TariffOfferService } from '../../../../../shared/services/tariff-offer.service';
-import { ProductService } from '../../../services/product.service';
-import { ProviderProductService } from '../../../services/provider-product.service';
-import { 
+import { ProductService } from '../../../services';
+import { ProviderProductService } from '../../../services';
+import {
   getTariffOfferFormConfig,
   getTariffOfferCreateRequest,
   getTariffOfferUpdateRequest,
@@ -17,6 +17,7 @@ import {
 } from './tariff-offer-form.utils';
 
 @Component({
+  standalone: true,
     selector: 'app-tariff-offer-form',
     imports: [
         CommonModule,
@@ -77,10 +78,10 @@ export class TariffOfferFormComponent implements OnInit, OnChanges {
     this.error = null;
 
     const formValue = this.tariffOfferForm.value;
-    
+
     const operation$ = this.isEditing
       ? this.tariffOfferService.updateTariffOffer(
-          this.tariffOffer!.id, 
+          this.tariffOffer!.id,
           getTariffOfferUpdateRequest(formValue)
         )
       : this.tariffOfferService.createTariffOffer(

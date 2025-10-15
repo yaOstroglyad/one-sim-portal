@@ -6,16 +6,17 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ExecutiveTabData, DashboardResponse } from '../../models/dashboard.types';
 import { DashboardDataService } from '../../services/dashboard-data.service';
 
-// Import shared components  
-import { MetricCardComponent } from '../../../../shared/components/card';
+// Import shared components
+import { MetricCardComponent } from '../../../../shared';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
 
 // Import shared components
-import { CardComponent } from '../../../../shared/components/card/card.component';
-import { OsBarChartComponent } from '../../../../shared/components/bar-chart';
+import { CardComponent } from '../../../../shared';
+import { OsBarChartComponent } from '../../../../shared';
 
 @Component({
+  standalone: true,
     selector: 'app-executive-tab',
     imports: [
         CommonModule,
@@ -32,7 +33,7 @@ import { OsBarChartComponent } from '../../../../shared/components/bar-chart';
 })
 export class ExecutiveTabComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  
+
   data: ExecutiveTabData | null = null;
   loading = true;
   error: any = null;

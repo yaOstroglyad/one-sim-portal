@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+  standalone: true,
     selector: 'app-create-domain',
     templateUrl: './create-domain.component.html',
     styleUrls: ['./create-domain.component.scss'],

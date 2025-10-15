@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+  standalone: true,
     selector: 'app-page403',
     templateUrl: './page403.component.html',
     imports: [

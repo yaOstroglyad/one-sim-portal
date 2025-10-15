@@ -1,19 +1,27 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 import { getRevertOrderFormConfig } from './revert-order.utils';
 import { RevertOrderService } from './revert-order.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FormConfig } from '../../../shared';
+import { FormConfig, FormGeneratorComponent } from '../../../shared';
 import { Order } from '../../../shared/model/order';
 
 @Component({
+    standalone: true,
     selector: 'app-revert-order',
+    imports: [
+        MatDialogModule,
+        MatButtonModule,
+        TranslateModule,
+        FormGeneratorComponent
+    ],
     templateUrl: './revert-order.component.html',
     styleUrls: ['./revert-order.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RevertOrderComponent implements OnDestroy {
 	public unsubscribe$: Subject<void> = new Subject<void>();

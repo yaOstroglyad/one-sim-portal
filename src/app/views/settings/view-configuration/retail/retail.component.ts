@@ -15,6 +15,7 @@ import { tap } from 'rxjs/operators';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
+  standalone: true,
     selector: 'app-retail',
     templateUrl: './retail.component.html',
     styleUrls: ['./retail.component.scss'],

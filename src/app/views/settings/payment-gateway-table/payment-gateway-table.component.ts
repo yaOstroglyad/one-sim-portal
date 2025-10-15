@@ -11,19 +11,20 @@ import { BehaviorSubject, switchMap, combineLatest, Observable, Subject, takeUnt
 import { PaymentGatewayService } from './payment-gateway.service';
 import { EditPaymentGatewayComponent } from './edit-payment-gateway/edit-payment-gateway.component';
 import { PaymentStrategy } from 'src/app/shared/model/payment-strategies';
-import { GenericTableModule } from 'src/app/shared/components/generic-table/generic-table.module';
+import { GenericTableComponent } from 'src/app/shared/components/generic-table/generic-table.component';
 import { ADMIN_PERMISSION, AuthService, TableConfig, Account } from 'src/app/shared';
 import { AccountSelectorComponent } from 'src/app/shared/components/account-selector/account-selector.component';
 import { GenericRightPanelComponent, PanelAction } from 'src/app/shared/components/generic-right-panel/generic-right-panel.component';
 
 @Component({
+  standalone: true,
     selector: 'app-payment-gateway-table',
     templateUrl: './payment-gateway-table.component.html',
     styleUrls: ['./payment-gateway-table.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
-        GenericTableModule,
+        GenericTableComponent,
         TranslateModule,
         MatIconModule,
         MatButtonModule,

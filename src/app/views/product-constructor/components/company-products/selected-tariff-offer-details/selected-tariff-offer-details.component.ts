@@ -18,6 +18,7 @@ import {
 import { SelectedTariffOfferDetailsPresenter } from './services';
 
 @Component({
+  standalone: true,
     selector: 'app-selected-tariff-offer-details',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [

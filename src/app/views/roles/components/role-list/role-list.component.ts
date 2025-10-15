@@ -2,13 +2,12 @@ import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy, Chang
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { map, debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { GenericRightPanelComponent, PanelAction } from '../../../../shared';
-import { GenericTableModule, HeaderModule, TableConfig, DeleteConfirmationComponent } from '../../../../shared';
-import { GenericTableComponent } from '../../../../shared/components/generic-table/generic-table.component';
+import { GenericTableComponent, HeaderComponent, TableConfig, DeleteConfirmationComponent } from '../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,9 +19,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RoleService, RolesTableService } from '../../services';
 import { Role } from '../../models';
 import { RoleFormComponent } from '../role-form/role-form.component';
-import { UserRoleService } from '../../../../shared';
 
 @Component({
+  standalone: true,
     selector: 'app-role-list',
     imports: [
         CommonModule,
@@ -31,8 +30,8 @@ import { UserRoleService } from '../../../../shared';
         GenericRightPanelComponent,
         RoleFormComponent,
         DeleteConfirmationComponent,
-        GenericTableModule,
-        HeaderModule,
+        GenericTableComponent,
+        HeaderComponent,
         MatMenuModule,
         MatIconModule,
         MatButtonModule,
@@ -223,7 +222,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Error deleting role:', error);
-          
+
           // Extract meaningful error message from backend response
           let errorMessage = 'Error deleting role';
           if (error?.error?.message) {
@@ -231,7 +230,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
           } else if (error?.message) {
             errorMessage = error.message;
           }
-          
+
           this.snackBar.open(errorMessage, null, {
             panelClass: 'app-notification-error',
             duration: 4000 // Longer duration for error messages

@@ -24,6 +24,7 @@ import { takeUntil } from 'rxjs/operators';
 import { DatePickerConfig, DateRange, DateValue } from './date-picker-wrapper.types';
 
 @Component({
+    standalone: true,
     selector: 'app-date-picker-wrapper',
     imports: [
         CommonModule,
@@ -161,8 +162,6 @@ export class DatePickerWrapperComponent implements OnInit, OnDestroy, OnChanges,
     if (this.required !== undefined) this.config.required = this.required;
     if (this.disabled !== undefined) {
       this.config.disabled = this.disabled;
-      // Update the internal disabled flag for updateControlsDisabledState
-      this.disabled = this.disabled;
     }
     if (this.error) this.config.errorMessage = this.error;
     if (this.helperText) this.config.helperText = this.helperText;

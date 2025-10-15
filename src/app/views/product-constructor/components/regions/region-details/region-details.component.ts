@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Region } from '../../../models';
 
 @Component({
+  standalone: true,
     selector: 'app-region-details',
     imports: [CommonModule],
     templateUrl: './region-details.component.html',

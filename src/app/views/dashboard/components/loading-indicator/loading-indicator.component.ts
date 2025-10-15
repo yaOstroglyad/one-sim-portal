@@ -4,6 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LoadingStatus } from '../../models/dashboard.types';
 
 @Component({
+  standalone: true,
     selector: 'app-loading-indicator',
     imports: [CommonModule, TranslateModule],
     templateUrl: './loading-indicator.component.html',

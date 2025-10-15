@@ -1,10 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
+import { ButtonDirective, CardComponent, FormControlDirective, TableDirective } from '@coreui/angular';
+import { IconDirective } from '@coreui/icons-angular';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import {
   Customer,
   CustomersDataService,
@@ -14,17 +23,51 @@ import {
   SearchableSelectOption,
   SmartFilterConfig,
   AuthService,
-  ADMIN_PERMISSION
+  ADMIN_PERMISSION,
+  GenericTableComponent,
+  HeaderComponent,
+  FormGeneratorComponent,
+  SearchableSelectComponent,
+  SmartFilterHeaderComponent,
+  ChipsInputComponent
 } from '../../shared';
+import { HasPermissionDirective } from '../../shared/directives/has-permission.directive';
 import { CustomersTableService } from './customers-table.service';
 import { CustomersUtils, CustomersFilterParams } from './customers.utils';
+import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 
 @Component({
+    standalone: true,
     selector: 'app-customers',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        TableDirective,
+        CardComponent,
+        GenericTableComponent,
+        HeaderComponent,
+        MatDialogModule,
+        MatInputModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatIconModule,
+        ChipsInputComponent,
+        MatSnackBarModule,
+        FormGeneratorComponent,
+        SearchableSelectComponent,
+        SmartFilterHeaderComponent,
+        FormControlDirective,
+        IconDirective,
+        ButtonDirective,
+        HasPermissionDirective,
+        TranslateModule,
+        EditCustomerComponent
+    ],
+    providers: [CustomersTableService],
     templateUrl: './customers.component.html',
     styleUrls: ['./customers.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomersComponent implements OnInit, OnDestroy {
 	private cdr = inject(ChangeDetectorRef);

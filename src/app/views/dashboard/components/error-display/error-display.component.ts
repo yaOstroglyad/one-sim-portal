@@ -4,6 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DashboardError } from '../../models/dashboard.types';
 
 @Component({
+  standalone: true,
     selector: 'app-error-display',
     imports: [CommonModule, TranslateModule],
     templateUrl: './error-display.component.html',

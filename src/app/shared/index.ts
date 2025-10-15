@@ -12,7 +12,7 @@ export * from './components/refund-product/refund-product.component'
 export * from './components/empty-state/empty-state.component'
 export * from './components/qr-code/qr-code.component'
 export * from './components/info-strip/info-strip.component'
-export * from './components/rich-text-input'
+export * from './components/form-inputs'
 export * from './components/html-dialog'
 export * from './components/badge'
 export * from './components/card'
@@ -23,19 +23,16 @@ export * from './components/pagination'
 export * from './components/date-picker-wrapper'
 export * from './components/generic-right-panel'
 export * from './components/delete-confirmation'
-export * from './components/multiselect-grid'
-export * from './components/file-upload'
 export * from './components/searchable-select'
 export * from './components/smart-filter-header'
 export * from './components/user-avatar'
 export * from './components/breadcrumb/breadcrumb.component'
 
-export * from './components/header-component/header.module';
-export * from './pipes/format-time/format-time.module';
-export * from './components/generic-table/generic-table.module';
-export * from './components/column-control/column-control.module'
+export * from './components/header-component/header.component';
+export * from './pipes/format-time/format-time.pipe';
+export * from './components/generic-table/generic-table.component';
+export * from './components/column-control/column-control.component'
 export * from './components/form-generator/form-generator.component'
-export * from './components/form-generator/form-array-item'
 
 export * from './components/generic-table/table-config-abstract.service';
 export * from './services/data.service';

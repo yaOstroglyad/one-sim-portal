@@ -4,28 +4,27 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	Input, OnChanges,
+	Input,
+	OnChanges,
 	OnDestroy,
 	OnInit,
 	Output,
 	SimpleChanges
 } from '@angular/core';
 import { FieldConfig, FieldType, FormConfig } from '../../model';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
 	createControl,
+	getFormFieldClass,
+	hasFieldHintOrError,
 	initDynamicOptionsForField,
 	setupDisabledState,
-	hasFieldHintOrError,
-	shouldShowError,
-	getFormFieldClass
+	shouldShowError
 } from './form-generator.utils';
 import { isFunction } from 'rxjs/internal/util/isFunction';
-import { Subject, merge, BehaviorSubject, Observable } from 'rxjs';
-import { takeUntil, startWith, map, distinctUntilChanged } from 'rxjs/operators';
-import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
+import { distinctUntilChanged, map, startWith, takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -37,13 +36,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ChipsInputComponent } from '../chips-input/chips-input.component';
 import { FormCheckComponent, FormCheckInputDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
-import { RichTextInputComponent } from '../rich-text-input';
-import { MultiselectGridComponent } from '../multiselect-grid';
-import { FormArrayItemComponent } from './form-array-item';
-import { FileUploadComponent } from '../file-upload';
+import {
+	ChipsInputComponent,
+	ColorPickerComponent,
+	FileUploadComponent,
+	FormArrayItemComponent,
+	MultiselectGridComponent,
+	RichTextInputComponent
+} from '../form-inputs';
 
 @Component({
     selector: 'app-form-generator',
@@ -126,8 +128,7 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 
 	createGroup(config: FormConfig): FormGroup {
 		const groupControls = config.fields.reduce((controls, field) => {
-			const control = createControl(field);
-			controls[field.name] = control;
+			controls[field.name] = createControl(field);
 			return controls;
 		}, {} as any);
 
@@ -291,7 +292,7 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 		return this.fb.group(groupControls);
 	}
 
-	trackByIndex(index: number, item: any): number {
+	trackByIndex(index: number): number {
 		return index;
 	}
 

@@ -1,14 +1,28 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { StatusEnum } from '../../../shared/model/package';
 import { ProductsDataService } from '../../../shared';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+    standalone: true,
     selector: 'app-change-status-dialog',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatButtonModule,
+        TranslateModule
+    ],
     templateUrl: './change-status-dialog.component.html',
-    styleUrls: ['./change-status-dialog.component.scss'],
-    standalone: false
+    styleUrls: ['./change-status-dialog.component.scss']
 })
 export class ChangeStatusDialogComponent implements OnInit {
   statusForm: FormGroup;

@@ -3,6 +3,7 @@ import { NgForOf, NgIf, TitleCasePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
+  standalone: true,
     selector: 'app-display-key-value',
     templateUrl: './display-key-value.component.html',
     imports: [

@@ -1,15 +1,17 @@
 import { ChangeDetectionStrategy, Component, HostListener, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../../shared';
 import { LoginService } from './login.service';
 import { CacheHubService } from '../../../shared/services/cache-hub';
 
 @Component({
+    standalone: true,
     selector: 'app-login',
+    imports: [ReactiveFormsModule, TranslateModule],
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
 	@HostListener('window:keyup', ['$event'])

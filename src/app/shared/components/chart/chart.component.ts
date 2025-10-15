@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+  standalone: true,
     selector: 'app-chart',
     templateUrl: 'chart.component.html',
     styleUrls: ['chart.component.scss'],

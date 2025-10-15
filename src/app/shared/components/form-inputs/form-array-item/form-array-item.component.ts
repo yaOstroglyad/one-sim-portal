@@ -19,7 +19,7 @@ import {
 	hasFieldHintOrError, 
 	shouldShowError, 
 	getFormFieldClass 
-} from '../form-generator.utils';
+} from '../../form-generator/form-generator.utils';
 import { isFunction } from 'rxjs/internal/util/isFunction';
 
 @Component({

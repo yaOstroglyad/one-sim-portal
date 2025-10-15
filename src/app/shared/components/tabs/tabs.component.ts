@@ -21,6 +21,7 @@ import { TooltipDirective } from '../tooltip';
 import { BadgeComponent } from '../badge';
 
 @Component({
+  standalone: true,
     selector: 'os-tabs',
     imports: [CommonModule, TooltipDirective, BadgeComponent],
     templateUrl: './tabs.component.html',

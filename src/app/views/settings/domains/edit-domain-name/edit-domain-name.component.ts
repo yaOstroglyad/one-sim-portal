@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Domain } from '../../../../shared/model/domain';
 
 @Component({
+  standalone: true,
     selector: 'app-edit-domain-name',
     templateUrl: './edit-domain-name.component.html',
     styleUrls: ['./edit-domain-name.component.scss'],

@@ -8,16 +8,33 @@ import {
 	OnChanges,
 	SimpleChanges, ContentChild
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { CardComponent, TableDirective } from '@coreui/angular';
+import { IconDirective } from '@coreui/icons-angular';
+import { FormatTimePipe } from '../../pipes/format-time/format-time.pipe';
+import { DisplayValueByKeyPipe } from '../../pipes/display-value-by-key/display-value-by-key.pipe';
+import { PaginationComponent } from '../pagination';
 import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { TableColumnConfig, TableConfig } from '../../model';
 
 @Component({
+    standalone: true,
     selector: 'generic-table',
+    imports: [
+        CommonModule,
+        TranslateModule,
+        TableDirective,
+        CardComponent,
+        FormatTimePipe,
+        IconDirective,
+        DisplayValueByKeyPipe,
+        PaginationComponent
+    ],
     templateUrl: './generic-table.component.html',
     styleUrls: ['./generic-table.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GenericTableComponent implements OnChanges {
 	@ContentChild('[custom-toolbar]', {read: TemplateRef})
