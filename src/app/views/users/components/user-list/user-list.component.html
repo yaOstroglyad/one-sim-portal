@@ -83,13 +83,13 @@
     <mat-menu #menu="matMenu">
         <button mat-menu-item
                 (click)="assignRoles(item)"
-                [disabled]="!canManageRoles(item)">
+                [disabled]="!canManageRoles()">
             <mat-icon>add_circle</mat-icon>
             <span>{{ 'users.assignRoles' | translate }}</span>
         </button>
         <button mat-menu-item
                 (click)="removeRoles(item)"
-                [disabled]="!canManageRoles(item)">
+                [disabled]="!canManageRoles()">
             <mat-icon>remove_circle</mat-icon>
             <span>{{ 'users.removeRoles' | translate }}</span>
         </button>
