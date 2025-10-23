@@ -6,7 +6,6 @@ import {
 	OnInit
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableDirective } from '@coreui/angular';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,8 +20,7 @@ import {
 	ADMIN_PERMISSION, 
 	AuthService,
 	GenericTableComponent,
-	HeaderComponent,
-	FormGeneratorComponent
+	HeaderComponent
 } from '../../shared';
 import { OrdersTableService } from './orders-table.service';
 import { switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -35,17 +33,13 @@ import { RevertOrderComponent } from './revert-order/revert-order.component';
     selector: 'app-orders',
     imports: [
         CommonModule,
-        TableDirective,
         GenericTableComponent,
         HeaderComponent,
         MatDialogModule,
-        FormGeneratorComponent,
         MatButtonModule,
         MatIconModule,
         MatMenuModule,
-        TranslateModule,
-        EditOrderDescriptionComponent,
-        RevertOrderComponent
+        TranslateModule
     ],
     templateUrl: './orders.component.html',
     styleUrls: ['./orders.component.scss'],

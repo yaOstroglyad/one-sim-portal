@@ -49,7 +49,8 @@
       "Bash(ng update:*)",
       "Bash(docker build:*)",
       "Bash(docker:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "WebFetch(domain:angular.dev)"
     ],
     "deny": []
   }

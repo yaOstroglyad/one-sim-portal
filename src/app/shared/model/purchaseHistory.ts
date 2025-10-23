@@ -3,15 +3,19 @@ import UsageTypeEnum = UsageInfo.UsageTypeEnum;
 import { ProviderData } from './provider';
 
 export interface TransactionOrder {
-  type: string;
+  id: string;
+  externalTransactionId: string;
   status: string;
-  data: any;
+  type: string;
+  triggerType: string;
+  paymentMethod: string;
+  price: number;
+  currency: string;
+  productName: string;
   createdAt: string;
   createdBy: string;
   updatedAt: string;
   updatedBy: string;
-  externalTransactionId: string;
-  triggerType: string;
 }
 
 export interface ProductPurchase {

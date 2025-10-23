@@ -316,6 +316,7 @@
     "status": "מצב",
     "productName": "שם המוצר",
     "productPrice": "מחיר המוצר",
+    "paymentMethod": "אמצעי תשלום",
     "createdAt": "נוצר ב-",
     "createdBy": "נוצר על ידי",
     "updatedAt": "עודכן ב-",

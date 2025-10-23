@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { CardComponent, TableDirective } from '@coreui/angular';
+import { TableDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { FormatTimePipe } from '../../pipes/format-time/format-time.pipe';
 import { DisplayValueByKeyPipe } from '../../pipes/display-value-by-key/display-value-by-key.pipe';
@@ -26,7 +26,6 @@ import { TableColumnConfig, TableConfig } from '../../model';
         CommonModule,
         TranslateModule,
         TableDirective,
-        CardComponent,
         FormatTimePipe,
         IconDirective,
         DisplayValueByKeyPipe,

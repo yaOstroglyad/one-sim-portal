@@ -22,8 +22,7 @@ import {
     TableConfig, 
     TableFilterFieldType,
     GenericTableComponent,
-    HeaderComponent,
-    FormGeneratorComponent
+    HeaderComponent
 } from '../../shared';
 import { Resource } from '../../shared/model/resource';
 import { InventoryDataService } from './inventory-data.service';
@@ -47,14 +46,11 @@ import { MoveResourceComponent } from './move-resource/move-resource.component';
         MatDatepickerModule,
         MatFormFieldModule,
         MatInputModule,
-        FormGeneratorComponent,
         MatTooltipModule,
         MatCardModule,
         MatIconModule,
         MatMenuModule,
-        TranslateModule,
-        SetupResourceComponent,
-        MoveResourceComponent
+        TranslateModule
     ],
     templateUrl: './inventory.component.html',
     styleUrls: ['./inventory.component.scss'],

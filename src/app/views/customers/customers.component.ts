@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
-import { ButtonDirective, CardComponent, FormControlDirective, TableDirective } from '@coreui/angular';
+import { ButtonDirective, FormControlDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
@@ -26,15 +26,11 @@ import {
   ADMIN_PERMISSION,
   GenericTableComponent,
   HeaderComponent,
-  FormGeneratorComponent,
   SearchableSelectComponent,
-  SmartFilterHeaderComponent,
-  ChipsInputComponent
+  SmartFilterHeaderComponent
 } from '../../shared';
-import { HasPermissionDirective } from '../../shared/directives/has-permission.directive';
 import { CustomersTableService } from './customers-table.service';
 import { CustomersUtils, CustomersFilterParams } from './customers.utils';
-import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 
 @Component({
     standalone: true,
@@ -42,8 +38,6 @@ import { EditCustomerComponent } from './edit-customer/edit-customer.component';
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        TableDirective,
-        CardComponent,
         GenericTableComponent,
         HeaderComponent,
         MatDialogModule,
@@ -52,17 +46,13 @@ import { EditCustomerComponent } from './edit-customer/edit-customer.component';
         MatButtonModule,
         MatMenuModule,
         MatIconModule,
-        ChipsInputComponent,
         MatSnackBarModule,
-        FormGeneratorComponent,
         SearchableSelectComponent,
         SmartFilterHeaderComponent,
         FormControlDirective,
         IconDirective,
         ButtonDirective,
-        HasPermissionDirective,
-        TranslateModule,
-        EditCustomerComponent
+        TranslateModule
     ],
     providers: [CustomersTableService],
     templateUrl: './customers.component.html',

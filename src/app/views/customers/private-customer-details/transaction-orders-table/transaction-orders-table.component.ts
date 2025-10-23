@@ -37,6 +37,7 @@ export class TransactionOrdersTableComponent implements OnInit {
 		'status',
 		'productName',
 		'productPrice',
+		'paymentMethod',
 		'createdAt',
 		'createdBy',
 		'updatedAt',

@@ -78,6 +78,7 @@
 
   // Brand Section
   &__brand {
+    position: relative; // Add this for skeleton positioning
     display: flex;
     align-items: center;
     justify-content: center;
@@ -492,5 +493,59 @@
     &-narrow {
       display: block;
     }
+  }
+}
+
+// Brand skeleton styles
+.sidebar__brand-skeleton {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 map.get(vars.$os-spacing, '4');
+
+  &-full,
+  &-narrow {
+    background: linear-gradient(90deg,
+      rgba(var(--os-color-medium-rgb), 0.1) 25%,
+      rgba(var(--os-color-medium-rgb), 0.2) 50%,
+      rgba(var(--os-color-medium-rgb), 0.1) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 4px;
+  }
+
+  &-full {
+    height: 32px;
+    width: 120px;
+
+    .sidebar--collapsed & {
+      display: none;
+    }
+  }
+
+  &-narrow {
+    height: 32px;
+    width: 32px;
+    display: none;
+
+    .sidebar--collapsed & {
+      display: block;
+    }
+  }
+}
+
+// Brand image transitions
+.sidebar__brand-full,
+.sidebar__brand-narrow {
+  transition: opacity 0.3s ease-in-out;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }

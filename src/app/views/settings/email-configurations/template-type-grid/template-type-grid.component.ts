@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild, TemplateRef, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
-import { EmailTemplate, HeaderComponent } from '../../../../shared';
+import { EmailTemplate } from '../../../../shared';
 import { WhiteLabelDataService } from '../../../../shared';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TableConfig } from '../../../../shared';
@@ -34,7 +34,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         MatSnackBarModule,
         TranslateModule,
         GenericTableComponent,
-        HeaderComponent,
         ReactiveFormsModule,
         MatFormFieldModule,
         BadgeComponent

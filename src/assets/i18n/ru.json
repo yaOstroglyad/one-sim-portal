@@ -435,6 +435,7 @@
     "status": "Статус",
     "productName": "Название продукта",
     "productPrice": "Цена продукта",
+    "paymentMethod": "Способ оплаты",
     "createdAt": "Создано в",
     "createdBy": "Создано пользователем",
     "updatedAt": "Обновлено в",

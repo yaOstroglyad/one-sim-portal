@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
-import { ButtonDirective, DropdownToggleDirective, FormControlDirective, FormSelectDirective } from '@coreui/angular';
+import { ButtonDirective, FormControlDirective, FormSelectDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import { MatIconModule } from '@angular/material/icon';
 import { ColumnControlComponent } from '../column-control/column-control.component';
@@ -20,8 +20,7 @@ import { TableConfig, HeaderConfig } from '../../model';
         FormControlDirective,
         FormSelectDirective,
         ColumnControlComponent,
-        MatIconModule,
-        DropdownToggleDirective
+        MatIconModule
     ],
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],

@@ -5,7 +5,7 @@ import { AppComponent } from './app/app.component';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER, ErrorHandler, importProvidersFrom } from '@angular/core';
+import { ErrorHandler, importProvidersFrom, inject, provideAppInitializer } from '@angular/core';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
@@ -19,6 +19,7 @@ import { FeatureToggleService, FEATURE_TOGGLES_SERVICE } from './app/shared';
 import { IconSetService } from '@coreui/icons-angular';
 import { Title } from '@angular/platform-browser';
 import { initializeMockMode } from './app/shared/utils/mock-init';
+import { provideFabLayout, provideFeature } from './app/shared/components/fab-layout';
 
 // Import routes
 import { Page404Component } from './app/views/pages/page404/page404.component';
@@ -71,17 +72,24 @@ export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-export function combinedInitializer(translate: TranslateService, authService: AuthService, featureToggleService: FeatureToggleService) {
-  return async (): Promise<any> => {
-    try {
-      // Initialize feature toggles first
-      await firstValueFrom(featureToggleService.refresh());
-      await firstValueFrom(translate.use('en'));
-      await firstValueFrom(authService.loadPermissions());
-    } catch (error) {
-      console.error('Error during app initialization:', error);
-    }
-  };
+// Modern Angular app initializer using provideAppInitializer
+export function provideAppInitialization() {
+  return provideAppInitializer(() => {
+    const translate = inject(TranslateService);
+    const authService = inject(AuthService);
+    const featureToggleService = inject(FeatureToggleService);
+    
+    return (async (): Promise<void> => {
+      try {
+        // Initialize feature toggles first
+        await firstValueFrom(featureToggleService.refresh());
+        await firstValueFrom(translate.use('en'));
+        await firstValueFrom(authService.loadPermissions());
+      } catch (error) {
+        console.error('Error during app initialization:', error);
+      }
+    })();
+  });
 }
 
 // Initialize mock mode before bootstrapping
@@ -122,12 +130,7 @@ bootstrapApplication(AppComponent, {
       provide: ErrorHandler,
       useClass: GlobalErrorHandlerService
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: combinedInitializer,
-      deps: [TranslateService, AuthService, FeatureToggleService],
-      multi: true
-    },
+    provideAppInitialization(),
     IconSetService,
     Title,
     FeatureToggleService,
@@ -135,6 +138,20 @@ bootstrapApplication(AppComponent, {
       provide: FEATURE_TOGGLES_SERVICE,
       useExisting: FeatureToggleService
     },
-    AuthGuardService
+    AuthGuardService,
+    
+    // FAB Layout providers
+    provideFabLayout(),
+    
+    // Register support chat feature
+    provideFeature({
+      meta: { 
+        key: 'support-chat', 
+        title: 'Support Chat', 
+        icon: '💬', 
+        order: 10 
+      },
+      load: () => import('./app/features/support-chat/support-chat.shell.component').then(m => m.SupportChatShellComponent)
+    })
   ]
 }).catch(err => console.error(err));

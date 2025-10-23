@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { CardComponent, TableDirective } from '@coreui/angular';
 import { 
     HeaderConfig, 
     ProvidersDataService, 
@@ -20,8 +19,6 @@ import { ProvidersTableService } from './providers-table.service';
     selector: 'app-providers',
     imports: [
         CommonModule,
-        TableDirective,
-        CardComponent,
         GenericTableComponent,
         HeaderComponent,
         TranslateModule

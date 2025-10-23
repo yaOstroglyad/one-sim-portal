@@ -2,10 +2,94 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 📋 Rules Version History & Navigation
+> **Document Created:** 2025-10-16 | **Last Major Update:** 2025-10-16
+
+| Priority | Rule Section | Created | Status | Location |
+|----------|--------------|---------|--------|----------|
+| 🔴 Critical | [Rule Addition Protocol](#-rule-addition-protocol) | 2025-10-16 | ✅ Active | Line 26 |
+| 🔴 Critical | [File Path Rules](#️-critical-file-path-rules-️) | 2025-10-16 | ✅ Active | Line 75 |
+| 🟡 High | [Documentation Language](#documentation-and-comments-language-rule) | 2025-10-16 | ✅ Active | Line 92 |
+| 🔵 Low | [Mock Server Rules](#mock-server-rules) | 2025-10-16 | ✅ Active | Line 100 |
+| 🟡 High | [Component Architecture](#component-architecture-rules) | 2025-10-16 | ✅ Active | Line 183 |
+| 🔵 Low | [Cache Service Rules](#cachehubservice-usage) | 2025-10-16 | ✅ Active | Line 291 |
+| 🟢 Medium | [SCSS Architecture](#scss-architecture-rules) | 2025-10-16 | ✅ Active | Line 363 |
+| 🟢 Medium | [Icon Strategy](#-icon-strategy-prefer-custom-icons) | 2025-10-16 | ✅ Active | Line 470 |
+| 🟡 High | [TypeScript Interfaces](#typescript-interface--model-organization-rules) | 2025-10-16 | ✅ Active | Line 614 |
+
+> **Maintenance Note:** Review rules quarterly for Angular version updates and best practices evolution.
+> **Priority Guide:** 🔴 Critical = Project-breaking | 🟡 High = Code quality | 🟢 Medium = Best practices | 🔵 Low = Specific cases
+
 > 🚨 **REMINDER**: Always use ABSOLUTE paths: `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/...` 
 > Never use relative paths like `../../../../` - they will fail!
 
+## 🚫 RULE ADDITION PROTOCOL
+> **Created:** 2025-10-16 | **Last Updated:** 2025-10-16 (Added update tracking requirement)
+
+### CRITICAL: Prevent Rule Duplication
+
+**Before adding ANY new rule to CLAUDE.md:**
+
+1. **🔍 Search for existing rules** using keywords related to your topic:
+   ```bash
+   # Search examples:
+   - SCSS/CSS rules: search "scss", "style", "mixin", "@use", "@import"
+   - Component rules: search "component", "standalone", "architecture"
+   - Path rules: search "path", "absolute", "relative", "file"
+   - Icon rules: search "icon", "svg", "coreui"
+   ```
+
+2. **📋 Check the navigation table above** - scan rule sections for related topics
+
+3. **⚠️ If similar rule exists:**
+   - **Option A:** Update existing rule instead of creating new one
+   - **Option B:** Merge content into existing section
+   - **Option C:** Add cross-reference to existing rule
+   - **❌ Never:** Create duplicate rule in different section
+
+4. **✅ If adding new rule:**
+   - Add to navigation table with priority and date
+   - Use proper heading hierarchy
+   - Include creation date: `> **Created:** YYYY-MM-DD`
+   - Follow existing formatting patterns
+
+5. **📝 If updating existing rule:**
+   - Update the "Last Updated" date: `> **Created:** YYYY-MM-DD | **Last Updated:** YYYY-MM-DD`
+   - Document what changed (add comment if major modification)
+   - Update navigation table "Last Updated" date if significant change
+
+6. **🔄 After adding/updating rule:**
+   - Update "Last Major Update" date in navigation table
+   - Verify no conflicts with existing rules
+   - Test that navigation links work
+
+**Examples:**
+
+**❌ What NOT to do:**
+```markdown
+❌ Adding SCSS @use rule in "Component Architecture" 
+   when "SCSS Architecture" section already exists
+❌ Adding icon usage in multiple sections
+❌ Repeating file path rules in different places
+❌ Updating rule without changing date
+```
+
+**✅ What TO do:**
+```markdown
+✅ Update existing SCSS section instead of creating new one
+✅ Add cross-reference: "See SCSS Architecture section"
+✅ Update date when modifying rule:
+   > **Created:** 2025-10-16 | **Last Updated:** 2025-10-16 (Added @use requirement)
+```
+
+**This protocol prevents:**
+- 🚫 Rule duplication
+- 🚫 Conflicting guidelines  
+- 🚫 Scattered information
+- 🚫 Maintenance overhead
+
 ## ⚠️ CRITICAL FILE PATH RULES ⚠️
+> **Created:** 2025-10-16 | **Last Updated:** 2025-10-16
 
 ### 🚨 ABSOLUTE PATHS ONLY 🚨
 
@@ -26,6 +110,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **IF YOU USE RELATIVE PATHS, THE OPERATION WILL FAIL WITH "File does not exist" ERROR!**
 
 ## Documentation and Comments Language Rule
+> **Created:** 2025-10-16 | **Last Updated:** 2025-10-16
 
 **ALL documentation, README files, code comments, and commit messages MUST be written in English.**
 - This includes inline comments, JSDoc/TSDoc comments, README files, and any other documentation
@@ -33,6 +118,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Exception: User-facing text and translations remain in their respective languages
 
 ## Mock Server Rules
+> **Created:** 2025-10-16 | **Last Updated:** 2025-10-16
 
 **Mock server has its own architecture rules** - see `/mock-server/CLAUDE-MOCK.md` for detailed guidelines when working with mock server code.
 
@@ -116,17 +202,37 @@ The application follows Angular's modular architecture with lazy-loaded feature 
 ## Important Technical Details
 
 ### Component Architecture Rules
+> **Created:** 2025-10-16 | **Last Updated:** 2025-10-16
+
 1. **Standalone Components ONLY**: All new components MUST be standalone (Angular 14+ pattern)
    - Use `standalone: true` in component decorator
    - Import dependencies explicitly in `imports` array
    - NO module-based components
    - NO NgModules for new features - use standalone components with lazy loading directly
+   - **NO HttpClientModule**: Never import HttpClientModule in standalone components - HttpClient is provided globally via provideHttpClient() in app configuration
+   - **NO Deprecated APIs**: Never use deprecated Angular APIs:
+     - ❌ `APP_INITIALIZER` - use `provideAppInitializer(() => inject(Service).init())`
+     - ❌ `ENVIRONMENT_INITIALIZER` - use `makeEnvironmentProviders` with custom tokens
+     - ❌ `HttpClientModule` - use `provideHttpClient()`
+     - Always check Angular documentation for current best practices
+   - **Modern App Initialization**: Use `provideAppInitializer` for app startup logic:
+     - ✅ `provideAppInitializer(() => inject(AuthService).loadPermissions())`
+     - ✅ Runs in injection context, supports async operations
+     - ✅ Blocks app bootstrap until completion
+   - **Provider Functions**: Correct usage of provider functions:
+     - ✅ `provideFabLayout()` - use directly in providers array (returns EnvironmentProviders)
+     - ❌ `...provideFabLayout()` - do NOT spread EnvironmentProviders
+     - ✅ `...providerArray` - only spread actual arrays of providers
 
 2. **OnPush Change Detection MANDATORY**: All new components MUST use OnPush strategy
    - Use `changeDetection: ChangeDetectionStrategy.OnPush` in component decorator
    - Inject `ChangeDetectorRef` and use `markForCheck()` when updating component state
    - Use `markForCheck()` instead of `detectChanges()` for better performance
    - NEVER mutate objects/arrays directly - use immutable patterns
+
+3. **Dependency Injection with inject() MANDATORY**: All new components and services MUST use the `inject()` function
+   - Use `inject()` function instead of constructor injection
+   - Declare injected dependencies as `private readonly` fields
    - Example:
    ```typescript
    @Component({
@@ -135,7 +241,8 @@ The application follows Angular's modular architecture with lazy-loaded feature 
      // ...
    })
    export class MyComponent {
-     constructor(private cdr: ChangeDetectorRef) {}
+     private readonly cdr = inject(ChangeDetectorRef);
+     private readonly authService = inject(AuthService);
      
      updateData(newData: any): void {
        this.data = { ...this.data, ...newData }; // Immutable update
@@ -144,16 +251,12 @@ The application follows Angular's modular architecture with lazy-loaded feature 
    }
    ```
 
-3. **Template Separation**: If HTML template contains more than one logical block, MUST extract to separate `.html` file
+4. **Template Separation**: If HTML template contains more than one logical block, MUST extract to separate `.html` file
    - Simple components with single logical block can use inline templates
    - Complex components with multiple sections MUST use `templateUrl`
    - Example: Dashboard tabs, forms with multiple sections, lists with headers/footers
-
-4. **SCSS Reusability**: ALWAYS check for existing SCSS before creating new classes
-   - Review existing mixins in `src/scss/_mixins.scss`
-   - Check global utilities in `src/scss/_utilities.scss`
-   - Use dashboard mixins in `src/scss/_mixins.scss` for dashboard-specific styles
-   - Create new SCSS only when existing patterns don't apply
+   
+   > **Note:** For SCSS styling rules, see [SCSS Architecture section](#scss-architecture-rules)
 
 ### TypeScript Configuration
 - Target: ES2022
@@ -184,12 +287,7 @@ The project uses a Tailwind-inspired design system with reusable utilities:
    - Card component: 6 variants (default, elevated, outlined, ghost, gradient, glassmorphism)
    - Both use the global color system and utilities
 
-5. **Usage Pattern**:
-   ```scss
-   @import "../../../../scss/variables";
-   @import "../../../../scss/utilities"; 
-   @import "../../../../scss/color-mixins";
-   ```
+> **SCSS Usage:** For import patterns and styling guidelines, see [SCSS Architecture section](#scss-architecture-rules)
 
 ### Routing
 - Uses `HashLocationStrategy` - all routes have `#` prefix
@@ -203,6 +301,7 @@ The HTTP interceptor automatically:
 - Located at `src/app/shared/auth/httpInspector.service.ts`
 
 ### CacheHubService Usage
+> **Created:** 2025-10-16 | **Last Updated:** 2025-10-16
 
 **CRITICAL: Cache Invalidation Pattern Rules**
 
@@ -276,6 +375,7 @@ if (this.authService.hasPermission('PERMISSION_NAME')) {
 ```
 
 ## SCSS Architecture Rules
+> **Created:** 2025-10-16 | **Last Updated:** 2025-10-16
 
 ### CRITICAL: Never Duplicate SCSS Styles
 **ALWAYS reuse existing mixins and utilities instead of duplicating code.**
@@ -296,18 +396,106 @@ Use mixins from `src/scss/_mixins.scss`:
 - `@include chart-complete($component-name, $icon)` - Full chart styling
 - Never duplicate canvas overflow fixes - use existing mixins
 
+#### SCSS Import Rules
+**CRITICAL: Always use @use instead of @import**
+
+```scss
+// ✅ CORRECT - Modern @use syntax
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
+@use "../../../../scss/utilities" as utils;
+
+// Usage with namespace
+.my-component {
+  @include mixins.interactive-states();
+  color: var(--os-color-primary);
+}
+```
+
+```scss
+// ❌ WRONG - Legacy @import syntax (deprecated)
+@import "../../../../scss/variables";
+@import "../../../../scss/mixins";
+@import "../../../../scss/utilities";
+```
+
 #### Import Order in Components
 ```scss
-@import "../../../../scss/variables";  // Always first
-@import "../../../../scss/mixins";     // Always second
-@import "../../../../scss/utilities";  // Only if using utility maps
+@use "../../../../scss/variables" as vars;  // Always first
+@use "../../../../scss/mixins" as mixins;   // Always second
+@use "../../../../scss/utilities" as utils; // Only if using utility maps
 ```
+
+#### SCSS Color System (`$os-colors`)
+A centralized color system is available in `src/scss/_variables.scss` for consistent theming across all components:
+
+```scss
+// Usage in any component:
+@use "../../../../scss/variables" as vars;
+
+:host {
+  // Generate all color variants automatically
+  @include vars.generate-os-colors('my-component');
+  
+  // This creates:
+  // .my-component--primary, .my-component--blue, etc. (solid)
+  // .my-component--outline.my-component--primary (outline)
+  // .my-component--subtle.my-component--primary (subtle)
+}
+```
+
+**Available for**: badges, buttons, alerts, notifications, cards, and any component that needs color variants.
+
+**Benefits**: 
+- Single source of truth for colors
+- Automatic generation of solid, outline, and subtle variants
+- Full CSS variable support for theming
+- Easy to add new colors globally
+
+#### Component Styling Best Practices
+- **Reusability First**: Always check for existing mixins and utilities before creating new classes
+- **Namespace Usage**: Use `vars.`, `mixins.`, `utils.` prefixes with @use imports
+- **No Duplication**: Reference existing dashboard and component mixins
 
 **Before writing new styles, check if existing mixins can be used or extended.**
 
 ## CoreUI Icons Integration
 
-### CRITICAL: How to Properly Use CoreUI Icons
+### 🎨 ICON STRATEGY: Prefer Custom Icons
+> **Created:** 2025-10-16 | **Last Updated:** 2025-10-16
+
+**ALWAYS prefer custom SVG icons over CoreUI icons when possible:**
+
+1. **Custom Icons First** - Create or use existing icons from `src/assets/icons/`
+2. **Gradual Migration** - When adding new icons, use custom SVGs instead of CoreUI
+3. **Benefits**: Better performance, consistent design, no external dependency
+
+#### Custom Icon Usage:
+```typescript
+// FAB Configuration with custom icon
+{
+  id: 'home',
+  label: 'Главная',
+  icon: '/assets/icons/home.svg',  // ✅ Custom SVG
+  action: 'route',
+  target: '/home'
+}
+
+// Icon Service with custom URL
+iconService.getIcon('/assets/icons/home.svg')
+```
+
+#### Available Custom Icons:
+- `home.svg` - Home/dashboard navigation
+- `chat.svg` - Chat/messaging features  
+- `plus.svg` - Add/create actions
+- `settings.svg` - Configuration/settings
+- `history.svg` - Historical data/logs
+- `default.svg` - Fallback icon
+
+**Create new custom icons**: Add SVG files to `src/assets/icons/` with descriptive names.
+
+### CRITICAL: How to Properly Use CoreUI Icons (Legacy)
 
 **NEVER use CSS classes like `<i class="icon cil-name">` - this will NOT work!**
 
@@ -439,33 +627,10 @@ When creating new UI components, follow **Tailwind CSS design principles**:
 
 ## Global Color System
 
-### SCSS Color Map (`$os-colors`)
-A centralized color system is available in `src/scss/_variables.scss` for consistent theming across all components:
-
-```scss
-// Usage in any component:
-@import "../../../../scss/variables";
-
-:host {
-  // Generate all color variants automatically
-  @include generate-os-colors('my-component');
-  
-  // This creates:
-  // .my-component--primary, .my-component--blue, etc. (solid)
-  // .my-component--outline.my-component--primary (outline)
-  // .my-component--subtle.my-component--primary (subtle)
-}
-```
-
-**Available for**: badges, buttons, alerts, notifications, cards, and any component that needs color variants.
-
-**Benefits**: 
-- Single source of truth for colors
-- Automatic generation of solid, outline, and subtle variants
-- Full CSS variable support for theming
-- Easy to add new colors globally
+> **SCSS Color Implementation:** See [SCSS Architecture section](#scss-architecture-rules) for complete color system usage and patterns.
 
 ## TypeScript Interface & Model Organization Rules
+> **Created:** 2025-10-16 | **Last Updated:** 2025-10-16
 
 ### MANDATORY: Interface Location Rules
 **ALL TypeScript interfaces and types MUST be defined in dedicated model files, NEVER in components.**
@@ -516,12 +681,6 @@ export * from './overview.model';
 
 ## 🚨 FINAL REMINDER: ABSOLUTE PATHS ONLY! 🚨
 
-Before using ANY file operation (Read, Edit, Write, etc.), remember:
+**Refer to the File Path Rules section above for complete guidelines.**
 
 **ROOT**: `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/`
-
-**Examples:**
-- ✅ `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/...`
-- ✅ `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/scss/...`
-- ❌ `../../../../andreyостrogляд/...` (WILL FAIL!)
-- ❌ `../../../...` (WILL FAIL!)

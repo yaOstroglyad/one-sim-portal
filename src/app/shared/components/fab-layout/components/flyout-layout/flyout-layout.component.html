@@ -1,0 +1,95 @@
+<div
+  class="flyout"
+  [class.flyout--open]="showAnimation()"
+  [class.flyout--docked-left]="dockedState() === 'left'"
+  [class.flyout--docked-right]="dockedState() === 'right'"
+  [class.flyout--floating]="dockedState() === 'floating'"
+  [class.flyout--mobile]="currentBreakpoint() === 'mobile'"
+  [class.flyout--resizing]="isResizing()"
+  [style.width.px]="width()"
+  cdkDrag
+  #flyoutDrag="cdkDrag"
+  [cdkDragDisabled]="dockedState() !== 'floating'"
+  cdkDragBoundary="body"
+  (cdkDragStarted)="onDragStarted()"
+  (cdkDragEnded)="onDragEnded($event)"
+  cdkTrapFocus
+  [cdkTrapFocusAutoCapture]="isOpen()"
+  (keydown.escape)="close()">
+  
+  <header class="flyout__header" 
+          cdkDragHandle>
+    <h2 class="flyout__title">Support & Help</h2>
+    <div class="flyout__actions">
+      <button 
+        class="flyout__action"
+        [class.active]="dockedState() === 'left'"
+        (click)="toggleDocked('left'); $event.stopPropagation()"
+        title="Dock to left">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm1 0v10h3V3H3z"/>
+        </svg>
+      </button>
+      <button 
+        class="flyout__action"
+        [class.active]="dockedState() === 'floating'"
+        (click)="toggleDocked('floating'); $event.stopPropagation()"
+        title="Float panel">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M3 2a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V3a1 1 0 00-1-1H3zm0 1h10v10H3V3z"/>
+        </svg>
+      </button>
+      <button 
+        class="flyout__action"
+        [class.active]="dockedState() === 'right'"
+        (click)="toggleDocked('right'); $event.stopPropagation()"
+        title="Dock to right">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm11 0h-3v10h3V3z"/>
+        </svg>
+      </button>
+      <button class="flyout__close" (click)="close(); $event.stopPropagation()" aria-label="Close panel">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="flyout__body">
+    <aside class="flyout__nav" *ngIf="availableFeatures().length > 1">
+      <button 
+        *ngFor="let feature of availableFeatures()"
+        class="flyout__nav-item"
+        [class.active]="activeKey() === feature.meta.key"
+        (click)="select(feature.meta.key); $event.stopPropagation()">
+        <i class="flyout__nav-icon" *ngIf="feature.meta.icon">{{ feature.meta.icon }}</i>
+        <span class="flyout__nav-title">{{ feature.meta.title }}</span>
+      </button>
+    </aside>
+
+    <main class="flyout__content">
+      <ng-container #host></ng-container>
+    </main>
+  </div>
+
+  <div 
+    class="flyout__resize flyout__resize--left"
+    *ngIf="dockedState() !== 'floating' && currentBreakpoint() !== 'mobile'"
+    (mousedown)="startResize('left', $event)"
+    (dblclick)="onResizeHandleDoubleClick()"
+    role="separator"
+    aria-orientation="vertical"
+    tabindex="0">
+  </div>
+  
+  <div 
+    class="flyout__resize flyout__resize--right"
+    *ngIf="dockedState() !== 'floating' && currentBreakpoint() !== 'mobile'"
+    (mousedown)="startResize('right', $event)"
+    (dblclick)="onResizeHandleDoubleClick()"
+    role="separator"
+    aria-orientation="vertical"
+    tabindex="0">
+  </div>
+</div>

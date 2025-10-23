@@ -574,6 +574,7 @@
     "status": "Status",
     "productName": "Product name",
     "productPrice": "Product price",
+    "paymentMethod": "Payment Method",
     "createdAt": "Created At",
     "createdBy": "Created By",
     "updatedAt": "Updated At",

@@ -16,8 +16,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
-import { NavItem, BrandConfig, LayoutConfig } from '../../models/layout.model';
-import { LayoutService } from '../../services/layout.service';
+import { NavItem, BrandConfig, LayoutConfig } from '../../models';
+import { LayoutService } from '../../services';
 import { LanguageService } from '../../../../shared';
 
 @Component({
@@ -50,6 +50,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   readonly expandedItems = signal<Set<string>>(new Set<string>());
   readonly currentRoute = signal<string>('');
+  readonly imageLoaded = signal<boolean>(false);
+  readonly isMenuLoading = signal<boolean>(true);
 
   // Computed signals
   readonly sidebarClasses = computed(() => ({
@@ -78,6 +80,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .subscribe((event: NavigationEnd) => {
         this.currentRoute.set(event.url);
       });
+
+    // Simulate loading delays to show skeletons
+    setTimeout(() => {
+      this.isMenuLoading.set(false);
+    }, 500);
+
+    setTimeout(() => {
+      this.imageLoaded.set(true);
+    }, 500);
   }
 
   ngOnDestroy(): void {
@@ -101,7 +112,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     return item.children.some(child => {
       if (child.url && currentRoute.startsWith(child.url)) return true;
       if (child.children) {
-        return child.children.some(nestedChild => 
+        return child.children.some(nestedChild =>
           nestedChild.url && currentRoute.startsWith(nestedChild.url)
         );
       }
@@ -128,4 +139,5 @@ export class SidebarComponent implements OnInit, OnDestroy {
   onBrandClick(): void {
     // Navigate to home/dashboard
   }
+
 }

@@ -230,6 +230,7 @@
     "status": "Статус",
     "productName": "Назва продукту",
     "productPrice": "Ціна продукту",
+    "paymentMethod": "Спосіб оплати",
     "createdAt": "Створено",
     "createdBy": "Створено користувачем",
     "updatedAt": "Оновлено",

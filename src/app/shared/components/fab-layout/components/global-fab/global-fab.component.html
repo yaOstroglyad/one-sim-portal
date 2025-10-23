@@ -1,0 +1,46 @@
+<div class="bottom-nav" 
+     [class.bottom-nav--expanded]="isMenuOpen()">
+  
+  <!-- Expandable menu - positioned absolutely above buttons -->
+  @if (isMenuOpen() && activeMenuItems().length > 0) {
+    <div class="bottom-nav__menu" (click)="$event.stopPropagation()">
+      @for (item of activeMenuItems(); track item.id) {
+        <a class="bottom-nav__menu-item" 
+           (click)="onMenuItemClick(item)"
+           [attr.aria-label]="item.label">
+          @if (item.icon) {
+            <div class="bottom-nav__menu-icon">
+              <app-icon [icon]="item.icon"></app-icon>
+            </div>
+          }
+          <span>{{item.label}}</span>
+          @if (item.badge) {
+            <div class="bottom-nav__menu-badge">{{item.badge}}</div>
+          }
+        </a>
+      }
+    </div>
+  }
+  
+  <!-- Dynamic buttons from configuration -->
+  @if (configuration(); as config) {
+    @for (button of config.buttons; track button.id) {
+      <button
+        class="bottom-nav__item"
+        [class.bottom-nav__item--active]="fabState().activeButtonId === button.id"
+        (click)="onButtonClick(button); $event.stopPropagation()"
+        [attr.aria-label]="button.label"
+        type="button">
+        <div class="bottom-nav__icon">
+          <app-icon [icon]="button.icon"></app-icon>
+          
+          <!-- Badge if present -->
+          @if (button.menuItems && button.menuItems.length > 0) {
+            <div class="bottom-nav__badge">{{button.menuItems.length}}</div>
+          }
+        </div>
+        <span class="bottom-nav__label">{{button.label}}</span>
+      </button>
+    }
+  }
+</div>

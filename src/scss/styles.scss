@@ -20,6 +20,7 @@
 // ==============================================
 @use "./layout";             // Layout & grid systems
 @use "./custom";             // Legacy custom styles (to be migrated)
+@use "./fab-layout";         // FAB Layout system styles
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 

@@ -17,6 +17,7 @@ import { LayoutService } from './services';
 import { VisualConfig, isToggleActive, VisualService, AuthService, LanguageService } from '../../shared';
 import { SidebarComponent } from './components';
 import { HeaderComponent } from './components';
+import { GlobalFabComponent, FlyoutLayoutComponent } from '../../shared/components/fab-layout';
 
 @Component({
   selector: 'app-default-layout',
@@ -25,7 +26,9 @@ import { HeaderComponent } from './components';
     CommonModule,
     RouterModule,
     SidebarComponent,
-    HeaderComponent
+    HeaderComponent,
+    GlobalFabComponent,
+    FlyoutLayoutComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './default-layout.component.html',
