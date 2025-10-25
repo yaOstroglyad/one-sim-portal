@@ -96,6 +96,15 @@
       "filterPlaceholder": "סנן נתוני טבלה"
     }
   },
+  "smartFilter": {
+    "filters": "מסננים",
+    "advancedFilters": "מסננים מתקדמים",
+    "configureSearchCriteria": "הגדר קריטריוני חיפוש",
+    "noActiveFilters": "אין מסננים פעילים",
+    "more": "עוד",
+    "resetAll": "אפס הכל",
+    "applyFilters": "החל מסננים"
+  },
   "product": {
     "companyName": "שם החברה",
     "productName": "שם המוצר",
@@ -175,7 +184,30 @@
     "retail": "קמעונאי",
     "retailViewConfiguration": "הגדרות תצוגת קמעונאי",
     "domains": "דומיינים",
-    "emailConfigurations": "הגדרות דואר אלקטרוני"
+    "emailConfigurations": "הגדרות דואר אלקטרוני",
+    "supportchat": "צ'אטים"
+  },
+  "flyout": {
+    "supportchattitle": "צ'אטי תמיכה"
+  },
+  "supportchat": {
+    "loading": "טוען...",
+    "searchtitle": "חיפוש שיחות עם לקוחות",
+    "searchdescription": "הזן ICCID לצפייה בשיחות תמיכה",
+    "iccidplaceholder": "הזן ICCID",
+    "searchbutton": "חיפוש",
+    "nothreadstitle": "לא נמצאו שיחות",
+    "nothreadsdescription": "לא נמצאו שיחות פעילות עבור ICCID זה. נסה ICCID אחר.",
+    "newsearch": "חיפוש חדש",
+    "conversations": "שיחות",
+    "thread": "שרשור",
+    "manualmode": "מצב ידני",
+    "botmode": "מצב בוט",
+    "takecontrol": "קח שליטה",
+    "loadingmessages": "טוען הודעות...",
+    "messageplaceholder": "הקלד את ההודעה שלך...",
+    "threadnotfound": "שרשור לא נמצא",
+    "backtothreads": "חזור לשרשורים"
   },
   "dynamicEntityDetails": {
     "title": "פרטי ישות"

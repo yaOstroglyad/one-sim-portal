@@ -50,6 +50,15 @@
       "filterPlaceholder": "Фільтрувати дані таблиці"
     }
   },
+  "smartFilter": {
+    "filters": "Фільтри",
+    "advancedFilters": "Розширені фільтри",
+    "configureSearchCriteria": "Налаштуйте критерії пошуку",
+    "noActiveFilters": "Немає активних фільтрів",
+    "more": "ще",
+    "resetAll": "Скинути все",
+    "applyFilters": "Застосувати фільтри"
+  },
   "default-header": {
     "language": "Мова",
     "english": "Англійська",
@@ -89,7 +98,30 @@
     "retail": "Роздріб",
     "retailViewConfiguration": "Конфігурація представлення роздрібу",
     "domains": "Домени",
-    "emailConfigurations": "Налаштування Email"
+    "emailConfigurations": "Налаштування Email",
+    "supportchat": "Чати"
+  },
+  "flyout": {
+    "supportchattitle": "Чати підтримки"
+  },
+  "supportchat": {
+    "loading": "Завантаження...",
+    "searchtitle": "Пошук розмов з клієнтами",
+    "searchdescription": "Введіть ICCID для перегляду розмов з підтримкою",
+    "iccidplaceholder": "Введіть ICCID",
+    "searchbutton": "Пошук",
+    "nothreadstitle": "Розмови не знайдено",
+    "nothreadsdescription": "Не знайдено активних розмов для цього ICCID. Спробуйте інший ICCID.",
+    "newsearch": "Новий пошук",
+    "conversations": "Розмови",
+    "thread": "Тред",
+    "manualmode": "Ручний режим",
+    "botmode": "Режим бота",
+    "takecontrol": "Взяти управління",
+    "loadingmessages": "Завантаження повідомлень...",
+    "messageplaceholder": "Введіть ваше повідомлення...",
+    "threadnotfound": "Тред не знайдено",
+    "backtothreads": "Назад до тредів"
   },
   "dynamicEntityDetails": {
     "title": "Деталі об'єкта"

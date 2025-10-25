@@ -12,7 +12,8 @@ import {
   HostListener,
   signal,
   computed,
-  inject
+  inject,
+  effect
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
@@ -81,6 +82,43 @@ export class FlyoutLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor() {
     this.setupBreakpointObserver();
     this.restoreState();
+
+    // Effect: Sync isOpen with GlobalFlyoutService
+    effect(() => {
+      const open = this.flyout.isOpen();
+      this.isOpen.set(open);
+
+      if (open) {
+        // Show animation after setting isOpen
+        setTimeout(() => {
+          this.showAnimation.set(true);
+        }, 10);
+      } else {
+        this.showAnimation.set(false);
+      }
+    });
+
+    // Effect: Sync activeFeatureKey with GlobalFlyoutService
+    effect(() => {
+      const key = this.flyout.activeFeatureKey();
+      this.activeKey.set(key);
+
+      if (key) {
+        this.loadFeature(key);
+      }
+    });
+
+    // Effect: Sync params with GlobalFlyoutService
+    effect(() => {
+      const params = this.flyout.params();
+      this.params.set(params);
+    });
+
+    // Effect: Sync title with GlobalFlyoutService
+    effect(() => {
+      const title = this.flyout.title();
+      this.title.set(title);
+    });
   }
 
   @HostListener('document:click', ['$event'])
@@ -114,7 +152,7 @@ export class FlyoutLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    // Effects are already initialized as field initializers
+    // Lifecycle hook - effects are initialized in constructor
   }
 
   async loadFeature(key: string) {

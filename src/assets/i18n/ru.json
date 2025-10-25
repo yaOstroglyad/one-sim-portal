@@ -175,6 +175,15 @@
       "filterPlaceholder": "Фильтровать данные таблицы"
     }
   },
+  "smartFilter": {
+    "filters": "Фильтры",
+    "advancedFilters": "Расширенные фильтры",
+    "configureSearchCriteria": "Настройте критерии поиска",
+    "noActiveFilters": "Нет активных фильтров",
+    "more": "ещё",
+    "resetAll": "Сбросить все",
+    "applyFilters": "Применить фильтры"
+  },
   "fileUpload": {
     "uploading": "Загрузка файла...",
     "uploadSuccess": "Файл успешно загружен!",
@@ -293,7 +302,30 @@
     "retail": "Розница",
     "retailViewConfiguration": "Конфигурация представления розницы",
     "domains": "Домены",
-    "emailConfigurations": "Настройки Email"
+    "emailConfigurations": "Настройки Email",
+    "supportchat": "Чаты"
+  },
+  "flyout": {
+    "supportchattitle": "Чаты поддержки"
+  },
+  "supportchat": {
+    "loading": "Загрузка...",
+    "searchtitle": "Поиск разговоров с клиентами",
+    "searchdescription": "Введите ICCID для просмотра разговоров с поддержкой",
+    "iccidplaceholder": "Введите ICCID",
+    "searchbutton": "Поиск",
+    "nothreadstitle": "Разговоры не найдены",
+    "nothreadsdescription": "Не найдено активных разговоров для этого ICCID. Попробуйте другой ICCID.",
+    "newsearch": "Новый поиск",
+    "conversations": "Разговоры",
+    "thread": "Тред",
+    "manualmode": "Ручной режим",
+    "botmode": "Режим бота",
+    "takecontrol": "Взять управление",
+    "loadingmessages": "Загрузка сообщений...",
+    "messageplaceholder": "Введите ваше сообщение...",
+    "threadnotfound": "Тред не найден",
+    "backtothreads": "Назад к тредам"
   },
   "dynamicEntityDetails": {
     "title": "Детали объекта"

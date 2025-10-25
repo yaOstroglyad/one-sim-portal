@@ -183,6 +183,15 @@
       "filterPlaceholder": "Filter table data"
     }
   },
+  "smartFilter": {
+    "filters": "Filters",
+    "advancedFilters": "Advanced Filters",
+    "configureSearchCriteria": "Configure your search criteria",
+    "noActiveFilters": "No active filters",
+    "more": "more",
+    "resetAll": "Reset All",
+    "applyFilters": "Apply Filters"
+  },
   "fileUpload": {
     "uploading": "Uploading file...",
     "uploadSuccess": "File uploaded successfully!",
@@ -430,7 +439,30 @@
     "retail": "Retail",
     "retailViewConfiguration": "Retail view configuration",
     "domains": "Domains",
-    "emailConfigurations": "Email Configurations"
+    "emailConfigurations": "Email Configurations",
+    "supportchat": "Chats"
+  },
+  "flyout": {
+    "supportchattitle": "Support Chats"
+  },
+  "supportchat": {
+    "loading": "Loading...",
+    "searchtitle": "Find Customer Conversations",
+    "searchdescription": "Enter an ICCID to view customer support conversations",
+    "iccidplaceholder": "Enter ICCID",
+    "searchbutton": "Search",
+    "nothreadstitle": "No Conversations Found",
+    "nothreadsdescription": "No active conversations found for this ICCID. Try searching for a different ICCID.",
+    "newsearch": "New Search",
+    "conversations": "Conversations",
+    "thread": "Thread",
+    "manualmode": "Manual",
+    "botmode": "Bot",
+    "takecontrol": "Take Control",
+    "loadingmessages": "Loading messages...",
+    "messageplaceholder": "Type your message...",
+    "threadnotfound": "Thread not found",
+    "backtothreads": "Back to Threads"
   },
   "dynamicEntityDetails": {
     "title": "Entity Details"
