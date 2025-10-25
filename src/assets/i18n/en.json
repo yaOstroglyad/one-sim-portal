@@ -78,7 +78,6 @@
     "deleteTitle": "Delete User",
     "deleteSubtitle": "Remove user permanently",
     "deleteMessage": "Are you sure you want to delete the user \"{{name}}\"?",
-    "resetPassword": "Reset Password",
     "assignRoles": "Assign Roles",
     "removeRoles": "Remove Roles",
     "assignRolesToUser": "Assign Roles to User",
@@ -112,7 +111,7 @@
       "firstNameMinLength": "First name must be at least 2 characters",
       "firstNameMaxLength": "First name cannot exceed 50 characters",
       "lastNameRequired": "Last name is required",
-      "lastNameMinLength": "Last name must be at least 2 characters", 
+      "lastNameMinLength": "Last name must be at least 2 characters",
       "lastNameMaxLength": "Last name cannot exceed 50 characters",
       "emailRequired": "Email is required",
       "emailInvalid": "Please enter a valid email address",
@@ -415,7 +414,6 @@
     "products": "Products",
     "inventory": "Inventory",
     "users": "Users",
-    "roles": "Roles",
     "tickets": "Tickets",
     "ticketsOverview": "Overview",
     "ticketsList": "Tickets List",
@@ -714,7 +712,6 @@
     "formInvalid": "Form is invalid"
   },
   "settings": {
-    "paymentGateway": "Payment Gateway",
     "whiteLabelConfiguration": "White Label Configuration",
     "general": {
       "title": "General Settings",
@@ -915,9 +912,9 @@
     "select_account_hint_message": "Please select an account first"
   },
   "email": {
-          "configurations": {
-        "title": "Email Configurations"
-      },
+    "configurations": {
+      "title": "Email Configurations"
+    },
     "templates": "Templates",
     "template": {
       "create": "Create Template",

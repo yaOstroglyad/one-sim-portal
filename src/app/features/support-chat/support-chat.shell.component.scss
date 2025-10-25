@@ -1,0 +1,665 @@
+@use "../../../scss/variables" as vars;
+@use "../../../scss/mixins" as mixins;
+
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.support-chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--os-color-white);
+}
+
+// ============================================
+// Search State (Initial)
+// ============================================
+
+.support-chat__search-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+}
+
+.search-state__content {
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+.search-state__illustration {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-state__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--os-color-text);
+}
+
+.search-state__description {
+  font-size: 0.875rem;
+  color: var(--os-color-medium);
+  margin: 0 0 2rem;
+}
+
+.search-state__input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.search-state__input-field {
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-state__button {
+  min-width: 160px;
+}
+
+.search-state__error {
+  padding: 0.75rem 1rem;
+  background-color: rgba(var(--os-color-danger-rgb), 0.1);
+  border: 1px solid var(--os-color-danger);
+  border-radius: var(--os-border-radius-medium);
+  color: var(--os-color-danger);
+  font-size: 0.875rem;
+}
+
+// ============================================
+// Empty State (No Threads)
+// ============================================
+
+.support-chat__empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+}
+
+.empty-state__content {
+  max-width: 400px;
+  text-align: center;
+}
+
+.empty-state__illustration {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+}
+
+.empty-state__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--os-color-text);
+}
+
+.empty-state__description {
+  font-size: 0.875rem;
+  color: var(--os-color-medium);
+  margin: 0 0 1.5rem;
+}
+
+.empty-state__button {
+  // Material button, no custom styles needed
+}
+
+// ============================================
+// Threads List
+// ============================================
+
+.support-chat__threads {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--os-color-subtle-bg);
+  overflow: hidden;
+}
+
+.threads__header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--os-color-light-shade);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--os-color-text);
+  }
+}
+
+.threads__new-search {
+  // Material stroked button, minimal custom styles
+  font-size: 0.75rem;
+}
+
+.threads__list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.thread-item {
+  padding: 0.75rem;
+  border-radius: var(--os-border-radius-medium);
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  background-color: var(--os-color-white);
+  border: 1px solid transparent;
+
+  &:hover {
+    background-color: rgba(var(--os-color-primary-rgb), 0.05);
+    border-color: var(--os-color-primary);
+  }
+}
+
+.thread-item__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.thread-item__id {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--os-color-text);
+}
+
+.thread-item__badge {
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--os-border-radius-small);
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &--manual {
+    background-color: rgba(var(--os-color-success-rgb), 0.1);
+    color: var(--os-color-success);
+  }
+
+  &--bot {
+    background-color: rgba(var(--os-color-info-rgb), 0.1);
+    color: var(--os-color-info);
+  }
+}
+
+.thread-item__status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--os-color-medium);
+  text-transform: capitalize;
+}
+
+.thread-item__status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--os-color-medium);
+
+  &--active {
+    background-color: var(--os-color-success);
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// ============================================
+// Loading Overlay
+// ============================================
+
+.support-chat__loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+.loading-overlay__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.loading-overlay__text {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--os-color-text);
+  font-weight: 500;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// ============================================
+// Thread View (Selected Thread)
+// ============================================
+
+.support-chat__thread-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--os-color-white);
+}
+
+// Thread Header
+.thread__header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--os-color-light-shade);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--os-color-subtle-bg);
+
+  h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--os-color-text);
+  }
+}
+
+.thread__back-button {
+  // Material icon button, minimal custom styles
+}
+
+.thread__header-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--os-border-radius-full);
+  font-size: 0.75rem;
+  font-weight: 500;
+
+  &--manual {
+    background-color: rgba(var(--os-color-success-rgb), 0.1);
+    color: var(--os-color-success);
+  }
+
+  &--bot {
+    background-color: rgba(var(--os-color-info-rgb), 0.1);
+    color: var(--os-color-info);
+  }
+}
+
+.thread__take-control {
+  // Material raised button with accent color, minimal custom styles
+}
+
+// Messages List
+.thread__messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background-color: var(--os-color-white);
+}
+
+.thread__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 0.75rem;
+  color: var(--os-color-medium);
+  font-size: 0.875rem;
+}
+
+.message {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  max-width: 70%;
+
+  &--operator {
+    margin-left: auto;
+    flex-direction: row-reverse;
+
+    .message__content {
+      background-color: var(--os-color-primary);
+      color: white;
+    }
+
+    .message__time {
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  &--typing {
+    .message__content {
+      padding: 1rem;
+    }
+  }
+}
+
+.message__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  app-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+// Avatar background colors for different message types
+.message--assistant .message__avatar {
+  background-color: var(--os-color-blue);
+  color: white;
+}
+
+.message--operator .message__avatar {
+  background-color: var(--os-color-success);
+  color: white;
+}
+
+.message--user .message__avatar {
+  background-color: var(--os-color-purple);
+  color: white;
+}
+
+.message__content {
+  flex: 1;
+  background-color: var(--os-color-subtle-bg);
+  padding: 0.50rem 1rem;
+  border-radius: var(--os-border-radius-medium);
+
+  &--typing {
+    padding: 0.625rem 1rem;
+  }
+}
+
+.message__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  gap: 0.75rem;
+}
+
+.message__author {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+// Unique colors for each author type
+.message--assistant .message__author {
+  color: var(--os-color-blue);
+}
+
+.message--operator .message__author {
+  color: var(--os-color-success);
+}
+
+.message--user .message__author {
+  color: var(--os-color-purple);
+}
+
+.message__text {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.message__time {
+  font-size: 0.625rem;
+  color: var(--os-color-medium);
+  white-space: nowrap;
+}
+
+// Typing indicator animation
+.typing-dots {
+  display: flex;
+  gap: 0.25rem;
+
+  span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--os-color-medium);
+    animation: typing 1.4s infinite;
+
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  }
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+// Message Input - Telegram Style
+.thread__input {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--os-color-light-shade);
+  background-color: var(--os-color-white);
+}
+
+.thread__input-field {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--os-color-light-shade);
+  border-radius: 20px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  outline: none;
+  transition: all 0.15s ease-in-out;
+  background-color: var(--os-color-subtle-bg);
+  color: var(--os-color-text);
+
+  &::placeholder {
+    color: var(--os-color-medium);
+  }
+
+  &:focus {
+    border-color: var(--os-color-primary);
+    background-color: var(--os-color-white);
+    box-shadow: 0 0 0 3px rgba(var(--os-color-primary-rgb), 0.1);
+  }
+
+  &:disabled {
+    background-color: rgba(var(--os-color-medium-rgb), 0.05);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.thread__send-button {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--os-color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  padding: 0;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: var(--os-color-primary-shade);
+    transform: scale(1.05);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    background-color: var(--os-color-medium);
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+// Not Found State
+.thread__not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  gap: 1.5rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--os-color-text);
+  }
+}
+
+// ============================================
+// Spinner
+// ============================================
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(var(--os-color-primary-rgb), 0.2);
+  border-top-color: var(--os-color-primary);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+
+  &--small {
+    width: 16px;
+    height: 16px;
+  }
+
+  &--large {
+    width: 40px;
+    height: 40px;
+    border-width: 3px;
+    border-color: rgba(var(--os-color-primary-rgb), 0.2);
+    border-top-color: var(--os-color-primary);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ============================================
+// Responsive
+// ============================================
+
+@media (max-width: 768px) {
+  .thread-item {
+    padding: 0.625rem;
+  }
+
+  .message {
+    max-width: 85%;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-state__content {
+    padding: 1rem;
+  }
+
+  .threads__header {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .message {
+    max-width: 90%;
+  }
+}

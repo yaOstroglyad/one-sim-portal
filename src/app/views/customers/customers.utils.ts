@@ -4,8 +4,8 @@ import { map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { 
-  SmartFilterConfig, 
+import {
+  SmartFilterConfig,
   SearchableSelectOption,
   Customer,
   CustomerType,
@@ -112,7 +112,7 @@ export class CustomersSmartFilterConfig {
           chipConfig: {
             color: 'warning',
             priority: 5,
-            tooltip: (_value: any, displayValue: string) => 
+            tooltip: (_value: any, displayValue: string) =>
               `Filter by company: ${displayValue}`
           }
         }] : [])
@@ -207,25 +207,25 @@ export class CustomersDataUtils {
 export class CustomersUtils {
   // Form utilities
   static readonly Form = CustomersFormUtils;
-  
+
   // Smart filter utilities
   static readonly SmartFilter = CustomersSmartFilterConfig;
-  
+
   // Company utilities
   static readonly Company = CustomersCompanyUtils;
-  
+
   // Dialog utilities
   static readonly Dialog = CustomersDialogUtils;
-  
+
   // Navigation utilities
   static readonly Navigation = CustomersNavigationUtils;
-  
+
   // Notification utilities
   static readonly Notification = CustomersNotificationUtils;
-  
+
   // Data utilities
   static readonly Data = CustomersDataUtils;
-  
+
   // Constants
   static readonly CONFIG = CUSTOMERS_CONFIG;
 }

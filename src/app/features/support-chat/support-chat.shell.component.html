@@ -1,0 +1,231 @@
+<div class="support-chat">
+  <!-- Fullscreen Loading Overlay -->
+  @if (stateService.isLoadingThreads() || stateService.isResetting()) {
+    <div class="support-chat__loading-overlay">
+      <div class="loading-overlay__content">
+        <span class="spinner spinner--large"></span>
+        <p class="loading-overlay__text">{{ 'supportchat.loading' | translate }}</p>
+      </div>
+    </div>
+  }
+
+  <!-- Initial Search State -->
+  @if (!stateService.hasSearched()) {
+    <div class="support-chat__search-state">
+      <div class="search-state__content">
+        <!-- Fun SVG Illustration -->
+        <div class="search-state__illustration">
+          <app-icon [icon]="'chat-search'"></app-icon>
+        </div>
+
+        <h2 class="search-state__title">{{ 'supportchat.searchtitle' | translate }}</h2>
+        <p class="search-state__description">{{ 'supportchat.searchdescription' | translate }}</p>
+
+        <!-- ICCID Input -->
+        <div class="search-state__input-group">
+          <mat-form-field class="search-state__input-field" appearance="outline">
+            <mat-label>{{ 'supportchat.iccidplaceholder' | translate }}</mat-label>
+            <input
+              #iccidInput
+              matInput
+              type="text"
+              (keyup.enter)="onSearch(iccidInput.value); $event.stopPropagation()">
+          </mat-form-field>
+          <button
+            mat-raised-button
+            color="primary"
+            class="search-state__button"
+            (click)="onSearch(iccidInput.value); $event.stopPropagation()"
+            [disabled]="stateService.isLoadingThreads() || stateService.isResetting()">
+            {{ 'supportchat.searchbutton' | translate }}
+          </button>
+        </div>
+
+        @if (stateService.error()) {
+          <div class="search-state__error">
+            {{ stateService.error() }}
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Empty State (No Threads Found) -->
+  @if (stateService.hasSearched() && !stateService.hasThreads() && !stateService.isLoadingThreads()) {
+    <div class="support-chat__empty-state">
+      <div class="empty-state__content">
+        <div class="empty-state__illustration">
+          <app-icon [icon]="'chat-empty'"></app-icon>
+        </div>
+
+        <h2 class="empty-state__title">{{ 'supportchat.nothreadstitle' | translate }}</h2>
+        <p class="empty-state__description">{{ 'supportchat.nothreadsdescription' | translate }}</p>
+
+        <button
+          mat-raised-button
+          color="accent"
+          class="empty-state__button"
+          (click)="stateService.reset(); $event.stopPropagation()">
+          {{ 'supportchat.newsearch' | translate }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Threads List (when no thread selected) -->
+  @if (stateService.hasThreads() && !stateService.selectedThreadId()) {
+    <div class="support-chat__threads">
+      <div class="threads__header">
+        <h3>{{ 'supportchat.conversations' | translate }}</h3>
+        <button
+          mat-stroked-button
+          color="primary"
+          class="threads__new-search"
+          (click)="stateService.reset(); $event.stopPropagation()">
+          {{ 'supportchat.newsearch' | translate }}
+        </button>
+      </div>
+
+      <div class="threads__list">
+        @for (thread of stateService.threads(); track thread.id) {
+          <div
+            class="thread-item"
+            (click)="onSelectThread(thread.id, $event)">
+            <div class="thread-item__header">
+              <span class="thread-item__id">Thread #{{ thread.id.substring(0, 8) }}</span>
+              @if (thread.isManual) {
+                <span class="thread-item__badge thread-item__badge--manual">Manual</span>
+              } @else {
+                <span class="thread-item__badge thread-item__badge--bot">Bot</span>
+              }
+            </div>
+            <div class="thread-item__status">
+              <span class="thread-item__status-dot" [class.thread-item__status-dot--active]="thread.status === 'active'"></span>
+              {{ thread.status }}
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Thread View (when thread is selected) -->
+  @if (stateService.selectedThreadId()) {
+    <div class="support-chat__thread-view">
+      @if (stateService.selectedThread(); as selectedThread) {
+        <!-- Thread Header -->
+        <div class="thread__header">
+          <button
+            mat-icon-button
+            class="thread__back-button"
+            (click)="onBackToThreads(); $event.stopPropagation()">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+
+          <div class="thread__header-info">
+            <h3>{{ 'supportchat.thread' | translate }} #{{ selectedThread.id.substring(0, 8) }}</h3>
+            <span class="thread__header-status">
+              @if (selectedThread.isManual) {
+                <span class="status-badge status-badge--manual">{{ 'supportchat.manualmode' | translate }}</span>
+              } @else {
+                <span class="status-badge status-badge--bot">{{ 'supportchat.botmode' | translate }}</span>
+              }
+            </span>
+          </div>
+
+          @if (!selectedThread.isManual) {
+            <button
+              mat-raised-button
+              color="accent"
+              class="thread__take-control"
+              (click)="onTakeControl(); $event.stopPropagation()">
+              {{ 'supportchat.takecontrol' | translate }}
+            </button>
+          }
+        </div>
+
+        <!-- Messages List -->
+        <div class="thread__messages" #messagesContainer>
+          @if (stateService.isLoadingMessages()) {
+            <div class="thread__loading">
+              <span class="spinner"></span>
+              {{ 'supportchat.loadingmessages' | translate }}
+            </div>
+          } @else {
+            @for (message of stateService.selectedThreadMessages(); track message.id) {
+              <div class="message"
+                   [class.message--operator]="message.author === 'operator'"
+                   [class.message--assistant]="message.author === 'assistant' || message.author === 'system'"
+                   [class.message--user]="message.author === 'user'">
+                <div class="message__avatar">
+                  @if (message.author === 'assistant' || message.author === 'system') {
+                    <app-icon [icon]="'avatar-assistant'"></app-icon>
+                  } @else if (message.author === 'operator') {
+                    <app-icon [icon]="'avatar-operator'"></app-icon>
+                  } @else {
+                    <app-icon [icon]="'avatar-user'"></app-icon>
+                  }
+                </div>
+                <div class="message__content">
+                  <div class="message__header">
+                    <span class="message__author">{{ message.author }}</span>
+                    <span class="message__time">{{ message.createdAt | date: 'short' }}</span>
+                  </div>
+                  <div class="message__text">{{ message.text }}</div>
+                </div>
+              </div>
+            }
+
+            <!-- Typing Indicator -->
+            @if (stateService.selectedThreadTyping().isTyping) {
+              <div class="message message--typing">
+                <div class="message__avatar">
+                  <app-icon [icon]="'avatar-user'"></app-icon>
+                </div>
+                <div class="message__content message__content--typing">
+                  <span class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </span>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <!-- Message Input - Telegram Style -->
+        <div class="thread__input">
+          <input
+            #messageInput
+            class="thread__input-field"
+            type="text"
+            [placeholder]="'supportchat.messageplaceholder' | translate"
+            [disabled]="!selectedThread.isManual || stateService.isSendingMessage()"
+            (keyup.enter)="onSendMessage(messageInput.value); messageInput.value = ''; $event.stopPropagation()">
+          <button
+            class="thread__send-button"
+            [disabled]="!selectedThread.isManual || stateService.isSendingMessage()"
+            (click)="onSendMessage(messageInput.value); messageInput.value = ''; $event.stopPropagation()">
+            @if (stateService.isSendingMessage()) {
+              <mat-icon>hourglass_empty</mat-icon>
+            } @else {
+              <mat-icon>send</mat-icon>
+            }
+          </button>
+        </div>
+      } @else {
+        <!-- No thread found -->
+        <div class="thread__not-found">
+          <h3>{{ 'supportchat.threadnotfound' | translate }}</h3>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onBackToThreads(); $event.stopPropagation()">
+            {{ 'supportchat.backtothreads' | translate }}
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

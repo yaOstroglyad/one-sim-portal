@@ -2,7 +2,6 @@ import {
 	Component,
 	ChangeDetectionStrategy,
 	signal,
-	effect,
 	inject,
 	computed,
 	HostListener,
@@ -10,6 +9,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { GlobalFlyoutService } from '../../services/global-flyout.service';
 import { FabConfigService } from '../../services/fab-config.service';
 import { FabButtonConfig, FabMenuItem } from '../../models';
@@ -18,7 +18,7 @@ import { IconComponent } from '../../../icon';
 @Component({
 	selector: 'app-global-fab',
 	standalone: true,
-	imports: [CommonModule, IconComponent],
+	imports: [CommonModule, TranslateModule, IconComponent],
 	templateUrl: './global-fab.component.html',
 	styleUrls: ['./global-fab.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
@@ -43,9 +43,11 @@ export class GlobalFabComponent {
 		return active?.menuItems?.sort((a, b) => a.order - b.order) || [];
 	});
 
-	// Effects as field initializers
-	private readonly serviceSyncEffect = effect(() => {
-		this.isOpen.set(this.flyout.isOpen());
+	// Check if there are any buttons to display
+	// If all buttons filtered out by permissions, FAB should be hidden
+	readonly hasButtons = computed(() => {
+		const config = this.configuration();
+		return config?.buttons && config.buttons.length > 0;
 	});
 
 	@HostListener('document:click', ['$event'])
@@ -73,20 +75,22 @@ export class GlobalFabComponent {
 			case 'route':
 				// Navigate to route
 				if (button.target) {
-					this.router.navigate([button.target]).catch(err => 
-						console.error('Navigation failed:', err)
+					this.router.navigate([button.target]).catch(err =>
+						console.error('[GlobalFAB] Navigation failed:', err)
 					);
 				}
 				break;
 			case 'component':
 				// Open flyout with specific component
 				if (button.target) {
-					this.flyout.open(button.target);
+					this.flyout.open({
+						featureKey: button.target,
+						title: button.title
+					});
 				}
 				break;
 			case 'callback':
 				// Execute callback function - would need to be passed in config
-				console.log('Callback action:', button.target);
 				break;
 			case 'external':
 				// Open external URL
@@ -95,7 +99,7 @@ export class GlobalFabComponent {
 				}
 				break;
 			default:
-				console.warn('Unknown action for button:', button.id);
+				console.warn('[GlobalFAB] Unknown action for button:', button.id);
 		}
 	}
 }

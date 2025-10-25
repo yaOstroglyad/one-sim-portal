@@ -56,6 +56,7 @@ export interface FabMenuItem {
 export interface FabButtonConfig {
   id: string;
   label: string;
+  title?: string; // Title for flyout header (translation key)
   icon: string;
   order: number;
   roles?: string[];
@@ -75,4 +76,10 @@ export interface FabState {
   activeButtonId: string | null;
   isMenuOpen: boolean;
   openMenuButtonId: string | null;
+}
+
+export interface FlyoutOpenConfig {
+  featureKey?: string;
+  params?: unknown;
+  title?: string;
 }

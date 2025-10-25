@@ -12,10 +12,10 @@ import {
   HostListener,
   signal,
   computed,
-  effect,
   inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { CdkDrag, CdkDragEnd, DragDropModule } from '@angular/cdk/drag-drop';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -27,7 +27,7 @@ import { DockedState, Breakpoint, ResizeConfig } from '../../models';
 @Component({
   selector: 'app-flyout-layout',
   standalone: true,
-  imports: [CommonModule, CdkTrapFocus, DragDropModule],
+  imports: [CommonModule, TranslateModule, CdkTrapFocus, DragDropModule],
   templateUrl: './flyout-layout.component.html',
   styleUrls: ['./flyout-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,6 +49,7 @@ export class FlyoutLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly activeKey = signal<string | null>(null);
   readonly isOpen = signal(false);
   readonly params = signal<unknown | null>(null);
+  readonly title = signal<string | null>(null);
 
   readonly dockedState = signal<DockedState>('right');
   readonly currentBreakpoint = signal<Breakpoint>('desktop');
@@ -65,7 +66,6 @@ export class FlyoutLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly user = computed(() => this.auth.loggedUser);
   readonly availableFeatures = computed(() => {
-    const u = this.user();
     const userPermissions = this.auth.permissions || [];
     return this.registry.features().filter(f => {
       const required = f.meta.roles;
@@ -77,33 +77,6 @@ export class FlyoutLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('host', { read: ViewContainerRef, static: true }) host!: ViewContainerRef;
   @ViewChild('flyoutDrag', { static: false }) dragRef?: CdkDrag;
-
-  // Effects as field initializers
-  private readonly serviceSyncEffect = effect(() => {
-    this.activeKey.set(this.flyout.activeFeatureKey());
-    this.isOpen.set(this.flyout.isOpen());
-    this.params.set(this.flyout.params());
-  });
-
-  private readonly featureLoadEffect = effect(async () => {
-    const key = this.activeKey();
-    if (!key) return;
-    await this.loadFeature(key);
-  });
-
-  private readonly defaultFeatureEffect = effect(() => {
-    if (!this.activeKey() && this.availableFeatures().length > 0) {
-      this.select(this.availableFeatures()[0].meta.key);
-    }
-  });
-
-  private readonly animationEffect = effect(() => {
-    if (this.isOpen()) {
-      setTimeout(() => this.showAnimation.set(true), 50);
-    } else {
-      this.showAnimation.set(false);
-    }
-  });
 
   constructor() {
     this.setupBreakpointObserver();
@@ -149,7 +122,11 @@ export class FlyoutLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     this.viewRef?.destroy();
 
     const component = await this.registry.resolveComponent(key);
-    if (!component) return;
+
+    if (!component) {
+      console.error('[FlyoutLayout] Component not found for key:', key);
+      return;
+    }
 
     this.viewRef = this.host.createComponent(component);
     this.cdr.markForCheck();
@@ -201,7 +178,7 @@ export class FlyoutLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   onDragEnded(event: CdkDragEnd) {
     const position = event.source.getFreeDragPosition();
     this.savePosition(position);
-    
+
     // Add delay before allowing close on outside click
     setTimeout(() => {
       this.isDragging.set(false);

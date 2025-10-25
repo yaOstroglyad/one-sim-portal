@@ -1,57 +1,61 @@
-<!-- Simple mode: показываем фильтры как есть -->
-<ng-container *ngIf="!isAdvancedMode">
-  <ng-container *ngTemplateOutlet="simpleFiltersTemplate"></ng-container>
-</ng-container>
+<!-- Simple mode: показываем фильтры в grid layout -->
+@if (!isAdvancedMode()) {
+  <div class="simple-filters-wrapper">
+    <ng-container *ngTemplateOutlet="simpleFiltersTemplate"></ng-container>
+  </div>
+}
 
 <!-- Advanced mode: chips слева, кнопка справа -->
-<ng-container *ngIf="isAdvancedMode">
+@if (isAdvancedMode()) {
   <!-- Left side: Active filter chips -->
-  <div class="filter-chips-container" *ngIf="hasActiveFilters; else emptyFilters">
-    <!-- Visible chips -->
-    <c-badge
-      *ngFor="let chip of visibleChips"
-      [color]="chip.color"
-      shape="rounded-pill"
-      class="filter-chip"
-      [osTooltip]="chip.tooltip"
-      [tooltipPosition]="'top'"
-      [class.non-removable]="!chip.removable">
-      <span class="chip-content">
-        <span class="chip-label">{{ chip.label | translate }}:</span>
-        <span class="chip-value">{{ chip.displayValue }}</span>
-        <button
-          *ngIf="chip.removable"
-          type="button"
-          class="chip-remove"
-          (click)="removeFilter(chip.key)"
-          aria-label="Remove filter">
-          ×
-        </button>
-      </span>
-    </c-badge>
+  @if (hasActiveFilters()) {
+    <div class="filter-chips-container">
+      <!-- Visible chips -->
+      @for (chip of visibleChips(); track chip.key) {
+        <c-badge
+          [color]="chip.color"
+          shape="rounded-pill"
+          class="filter-chip"
+          [osTooltip]="chip.tooltip"
+          [tooltipPosition]="'top'"
+          [class.non-removable]="!chip.removable">
+          <span class="chip-content">
+            <span class="chip-label">{{ chip.label | translate }}:</span>
+            <span class="chip-value">{{ chip.displayValue }}</span>
+            @if (chip.removable) {
+              <button
+                type="button"
+                class="chip-remove"
+                (click)="removeFilter(chip.key)"
+                aria-label="Remove filter">
+                ×
+              </button>
+            }
+          </span>
+        </c-badge>
+      }
 
-    <!-- Overflow chip with tooltip -->
-    <span
-      *ngIf="hasOverflowChips"
-      class="overflow-chip-wrapper"
-      [osTooltip]="hiddenChipsTooltip"
-      [tooltipPosition]="'top'"
-      [tooltipMaxWidth]="250">
-      <c-badge
-        color="secondary"
-        shape="rounded-pill"
-        class="filter-chip overflow-chip">
-        +{{ hiddenChipsCount }} more
-      </c-badge>
-    </span>
-  </div>
-
-  <!-- Empty state для левой стороны -->
-  <ng-template #emptyFilters>
-    <div class="empty-filters">
-      <span class="text-muted">No active filters</span>
+      <!-- Overflow chip with tooltip -->
+      @if (hasOverflowChips()) {
+        <span
+          class="overflow-chip-wrapper"
+          [osTooltip]="hiddenChipsTooltip()"
+          [tooltipPosition]="'top'"
+          [tooltipMaxWidth]="250">
+          <c-badge
+            color="secondary"
+            shape="rounded-pill"
+            class="filter-chip overflow-chip">
+            +{{ hiddenChipsCount() }} {{ 'smartFilter.more' | translate }}
+          </c-badge>
+        </span>
+      }
     </div>
-  </ng-template>
+  } @else {
+    <div class="empty-filters">
+      <span class="text-muted">{{ 'smartFilter.noActiveFilters' | translate }}</span>
+    </div>
+  }
 
   <!-- Right side: Filters button -->
   <div class="filters-button-container">
@@ -62,53 +66,53 @@
       (click)="openFilters()"
       class="filters-button">
       <svg cIcon name="cilFilter" class="me-1"></svg>
-      Filters
-      <c-badge
-        *ngIf="hasActiveFilters"
-        color="primary"
-        shape="rounded-pill"
-        class="ms-2">
-        {{ state.activeFilters.length }}
-      </c-badge>
+      {{ 'smartFilter.filters' | translate }}
+      @if (hasActiveFilters()) {
+        <c-badge
+          color="primary"
+          shape="rounded-pill"
+          class="ms-2">
+          {{ activeFilters().length }}
+        </c-badge>
+      }
     </button>
   </div>
-</ng-container>
 
-<!-- Right panel для advanced фильтров -->
-<app-generic-right-panel
-  *ngIf="isAdvancedMode"
-  [isOpen]="state.showFilterPanel"
-  title="Advanced Filters"
-  subtitle="Configure your search criteria"
-  [hasFooter]="true"
-  (close)="closeFilters()">
+  <!-- Right panel для advanced фильтров -->
+  <app-generic-right-panel
+    [isOpen]="showFilterPanel()"
+    [title]="'smartFilter.advancedFilters' | translate"
+    [subtitle]="'smartFilter.configureSearchCriteria' | translate"
+    [hasFooter]="true"
+    (close)="closeFilters()">
 
-  <!-- Panel content with all filters -->
-  <div panel-content class="advanced-filters-content">
-    <ng-container *ngTemplateOutlet="advancedFiltersTemplate"></ng-container>
-  </div>
+    <!-- Panel content with all filters -->
+    <div panel-content class="advanced-filters-content">
+      <ng-container *ngTemplateOutlet="advancedFiltersTemplate"></ng-container>
+    </div>
 
-  <!-- Panel actions -->
-  <ng-container panel-actions>
-    <button
-      type="button"
-      class="btn btn-outline-secondary"
-      (click)="closeFilters()">
-      Cancel
-    </button>
-    <button
-      type="button"
-      class="btn btn-outline-danger"
-      (click)="onResetFilters()"
-      [disabled]="!hasActiveFilters">
-      Reset All
-    </button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="closeFilters()">
-      Apply Filters
-    </button>
-  </ng-container>
+    <!-- Panel actions -->
+    <ng-container panel-actions>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="closeFilters()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        (click)="onResetFilters()"
+        [disabled]="!hasActiveFilters()">
+        {{ 'smartFilter.resetAll' | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="closeFilters()">
+        {{ 'smartFilter.applyFilters' | translate }}
+      </button>
+    </ng-container>
 
-</app-generic-right-panel>
+  </app-generic-right-panel>
+}

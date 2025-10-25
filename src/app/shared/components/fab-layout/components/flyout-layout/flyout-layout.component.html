@@ -17,9 +17,11 @@
   [cdkTrapFocusAutoCapture]="isOpen()"
   (keydown.escape)="close()">
   
-  <header class="flyout__header" 
+  <header class="flyout__header"
           cdkDragHandle>
-    <h2 class="flyout__title">Support & Help</h2>
+    @if (title()) {
+      <h2 class="flyout__title">{{ title() | translate }}</h2>
+    }
     <div class="flyout__actions">
       <button 
         class="flyout__action"

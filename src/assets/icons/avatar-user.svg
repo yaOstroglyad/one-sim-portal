@@ -1,0 +1,5 @@
+<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Modern Telegram-style user avatar -->
+  <circle cx="16" cy="13" r="5" fill="currentColor"/>
+  <path d="M 8 24 Q 8 19 16 19 Q 24 19 24 24 L 24 26 Q 24 28 16 28 Q 8 28 8 26 Z" fill="currentColor"/>
+</svg>

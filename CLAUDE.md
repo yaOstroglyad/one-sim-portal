@@ -3,24 +3,24 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## 📋 Rules Version History & Navigation
-> **Document Created:** 2025-10-16 | **Last Major Update:** 2025-10-16
+> **Document Created:** 2025-10-16 | **Last Major Update:** 2025-10-24
 
 | Priority | Rule Section | Created | Status | Location |
 |----------|--------------|---------|--------|----------|
-| 🔴 Critical | [Rule Addition Protocol](#-rule-addition-protocol) | 2025-10-16 | ✅ Active | Line 26 |
-| 🔴 Critical | [File Path Rules](#️-critical-file-path-rules-️) | 2025-10-16 | ✅ Active | Line 75 |
+| 🔴 Critical | [Rule Addition Protocol](#rule-addition-protocol) | 2025-10-16 | ✅ Active | Line 26 |
+| 🔴 Critical | [File Path Rules](#critical-file-path-rules) | 2025-10-16 | ✅ Active | Line 75 |
 | 🟡 High | [Documentation Language](#documentation-and-comments-language-rule) | 2025-10-16 | ✅ Active | Line 92 |
 | 🔵 Low | [Mock Server Rules](#mock-server-rules) | 2025-10-16 | ✅ Active | Line 100 |
 | 🟡 High | [Component Architecture](#component-architecture-rules) | 2025-10-16 | ✅ Active | Line 183 |
 | 🔵 Low | [Cache Service Rules](#cachehubservice-usage) | 2025-10-16 | ✅ Active | Line 291 |
 | 🟢 Medium | [SCSS Architecture](#scss-architecture-rules) | 2025-10-16 | ✅ Active | Line 363 |
-| 🟢 Medium | [Icon Strategy](#-icon-strategy-prefer-custom-icons) | 2025-10-16 | ✅ Active | Line 470 |
-| 🟡 High | [TypeScript Interfaces](#typescript-interface--model-organization-rules) | 2025-10-16 | ✅ Active | Line 614 |
+| 🔴 Critical | [SVG & Icon Usage](#icon-strategy-prefer-custom-icons) | 2025-10-16 | ✅ Active | Line 470 |
+| 🟡 High | [TypeScript Interfaces](#typescript-interface-model-organization-rules) | 2025-10-16 | ✅ Active | Line 614 |
 
 > **Maintenance Note:** Review rules quarterly for Angular version updates and best practices evolution.
 > **Priority Guide:** 🔴 Critical = Project-breaking | 🟡 High = Code quality | 🟢 Medium = Best practices | 🔵 Low = Specific cases
 
-> 🚨 **REMINDER**: Always use ABSOLUTE paths: `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/...` 
+> 🚨 **REMINDER**: Always use ABSOLUTE paths: `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/...`
 > Never use relative paths like `../../../../` - they will fail!
 
 ## 🚫 RULE ADDITION PROTOCOL
@@ -67,7 +67,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **❌ What NOT to do:**
 ```markdown
-❌ Adding SCSS @use rule in "Component Architecture" 
+❌ Adding SCSS @use rule in "Component Architecture"
    when "SCSS Architecture" section already exists
 ❌ Adding icon usage in multiple sections
 ❌ Repeating file path rules in different places
@@ -84,7 +84,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **This protocol prevents:**
 - 🚫 Rule duplication
-- 🚫 Conflicting guidelines  
+- 🚫 Conflicting guidelines
 - 🚫 Scattered information
 - 🚫 Maintenance overhead
 
@@ -93,16 +93,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### 🚨 ABSOLUTE PATHS ONLY 🚨
 
-**❌ NEVER USE RELATIVE PATHS**: `../../../../andreyостrogляд/IdeaProjects/...`
+**❌ NEVER USE RELATIVE PATHS**: `../../../../andreyostroglyad/IdeaProjects/...`
 **✅ ALWAYS USE ABSOLUTE PATHS**: `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/...`
 
 ### Examples:
 ```
-❌ WRONG: ../../../../andreyостrogляд/IdeaProjects/quantum-soft/one-sim-portal/src/app/...
+❌ WRONG: ../../../../andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/...
 ✅ CORRECT: /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/...
 
-❌ WRONG: ../../../scss/styles.scss  
-✅ CORRECT: /Users/andreyостrogляد/IdeaProjects/quantum-soft/one-sim-portal/src/scss/styles.scss
+❌ WRONG: ../../../scss/styles.scss
+✅ CORRECT: /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/scss/styles.scss
 ```
 
 ### Root Directory: `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/`
@@ -243,7 +243,7 @@ The application follows Angular's modular architecture with lazy-loaded feature 
    export class MyComponent {
      private readonly cdr = inject(ChangeDetectorRef);
      private readonly authService = inject(AuthService);
-     
+
      updateData(newData: any): void {
        this.data = { ...this.data, ...newData }; // Immutable update
        this.cdr.markForCheck(); // Trigger change detection
@@ -255,7 +255,7 @@ The application follows Angular's modular architecture with lazy-loaded feature 
    - Simple components with single logical block can use inline templates
    - Complex components with multiple sections MUST use `templateUrl`
    - Example: Dashboard tabs, forms with multiple sections, lists with headers/footers
-   
+
    > **Note:** For SCSS styling rules, see [SCSS Architecture section](#scss-architecture-rules)
 
 ### TypeScript Configuration
@@ -315,7 +315,7 @@ this.cacheHub.invalidatePattern('users:page-*'); // WON'T WORK!
 
 #### ✅ CORRECT - Include namespace:
 ```typescript
-// Cache key: "default:users:page-0-15-active"  
+// Cache key: "default:users:page-0-15-active"
 this.cacheHub.invalidatePattern('default:users:page-*'); // WORKS!
 ```
 
@@ -436,7 +436,7 @@ A centralized color system is available in `src/scss/_variables.scss` for consis
 :host {
   // Generate all color variants automatically
   @include vars.generate-os-colors('my-component');
-  
+
   // This creates:
   // .my-component--primary, .my-component--blue, etc. (solid)
   // .my-component--outline.my-component--primary (outline)
@@ -446,7 +446,7 @@ A centralized color system is available in `src/scss/_variables.scss` for consis
 
 **Available for**: badges, buttons, alerts, notifications, cards, and any component that needs color variants.
 
-**Benefits**: 
+**Benefits**:
 - Single source of truth for colors
 - Automatic generation of solid, outline, and subtle variants
 - Full CSS variable support for theming
@@ -462,7 +462,7 @@ A centralized color system is available in `src/scss/_variables.scss` for consis
 ## CoreUI Icons Integration
 
 ### 🎨 ICON STRATEGY: Prefer Custom Icons
-> **Created:** 2025-10-16 | **Last Updated:** 2025-10-16
+> **Created:** 2025-10-16 | **Last Updated:** 2025-10-24 (Added CRITICAL inline SVG rule)
 
 **ALWAYS prefer custom SVG icons over CoreUI icons when possible:**
 
@@ -485,9 +485,46 @@ A centralized color system is available in `src/scss/_variables.scss` for consis
 iconService.getIcon('/assets/icons/home.svg')
 ```
 
+#### ⚠️ CRITICAL: NEVER Use Inline SVG in HTML
+
+**ALWAYS use the `app-icon` component instead of inline SVG elements!**
+
+**❌ WRONG - Inline SVG:**
+```html
+<svg viewBox="0 0 200 200" fill="none">
+  <circle cx="100" cy="100" r="80"/>
+  <!-- ... more SVG code -->
+</svg>
+```
+
+**✅ CORRECT - app-icon component:**
+```html
+<!-- 1. Create SVG file in /src/assets/icons/my-icon.svg -->
+<!-- 2. Use app-icon component -->
+<div class="icon-container">
+  <app-icon [icon]="'my-icon'"></app-icon>
+</div>
+```
+
+**Process for adding new SVG icons:**
+1. Check if similar icon already exists in `/src/assets/icons/`
+2. If not, create new `.svg` file with descriptive name
+3. Use `app-icon` component with the filename (without extension)
+4. NEVER paste SVG code directly in HTML templates
+
+**Why?**
+- ✅ Icon reusability across the app
+- ✅ Centralized icon management
+- ✅ Built-in caching via IconService
+- ✅ Consistent sizing and styling
+- ✅ Smaller bundle size
+
 #### Available Custom Icons:
 - `home.svg` - Home/dashboard navigation
-- `chat.svg` - Chat/messaging features  
+- `chat.svg` - Chat/messaging features
+- `chat-search.svg` - Chat search state illustration
+- `chat-empty.svg` - Chat empty state illustration
+- `chat-placeholder.svg` - Chat thread selection placeholder
 - `plus.svg` - Add/create actions
 - `settings.svg` - Configuration/settings
 - `history.svg` - Historical data/logs
@@ -509,7 +546,7 @@ iconService.getIcon('/assets/icons/home.svg')
 2. **Required imports in component**:
    ```typescript
    import { IconDirective, IconModule } from '@coreui/icons-angular';
-   
+
    @Component({
      imports: [IconDirective, IconModule, ...]
    })
@@ -574,18 +611,18 @@ When creating new UI components, follow **Tailwind CSS design principles**:
 2. **Colors**:
    - **Always use project CSS variables**: `var(--os-color-primary)`, `var(--os-color-success)`, etc.
    - Follow Tailwind color palette principles but use existing project variables
-   
+
    **Semantic colors:**
    - Primary: `var(--os-color-primary)` (matches project branding)
    - Secondary: `var(--os-color-secondary)` (blue accent)
-   - Success: `var(--os-color-success)` 
+   - Success: `var(--os-color-success)`
    - Danger: `var(--os-color-danger)`
    - Warning: `var(--os-color-warning)`
    - Info: `var(--os-color-info)` (cyan-500: #06b6d4)
    - Medium: `var(--os-color-medium)` (gray tones)
    - Light: `var(--os-color-light)` with `var(--os-color-dark)` text
    - Dark: `var(--os-color-dark)`
-   
+
    **Tailwind context colors** (available for badges and other components):
    - Each color includes: base (`--os-color-{name}`), shade (`--os-color-{name}-shade`), and RGB (`--os-color-{name}-rgb`)
    - `var(--os-color-red)` (#ef4444), `var(--os-color-orange)` (#f97316), `var(--os-color-amber)` (#f59e0b)
@@ -638,7 +675,7 @@ When creating new UI components, follow **Tailwind CSS design principles**:
 #### Component Interface Rules
 1. **NEVER create interfaces inside component files** (`.component.ts`)
 2. **ALWAYS create interfaces in corresponding model files** in `models/` directory
-3. **Component-specific interfaces** → Create `{component-name}.model.ts` 
+3. **Component-specific interfaces** → Create `{component-name}.model.ts`
 4. **Shared interfaces** → Place in existing model files or `common.model.ts`
 
 #### Model File Structure
@@ -649,7 +686,7 @@ export interface OverviewStats {
 }
 
 export interface QuickAction {
-  // interface definition  
+  // interface definition
 }
 ```
 
@@ -664,7 +701,7 @@ interface OverviewStats { ... } // ❌ NEVER DO THIS
 
 #### Benefits of This Pattern
 - **Reusability**: Models can be imported by multiple components/services
-- **Type Safety**: Centralized type definitions prevent inconsistencies  
+- **Type Safety**: Centralized type definitions prevent inconsistencies
 - **Maintainability**: Single source of truth for data structures
 - **Testing**: Models can be tested independently
 - **API Contracts**: Clear separation between data models and view logic

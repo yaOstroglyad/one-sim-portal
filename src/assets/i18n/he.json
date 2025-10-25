@@ -133,7 +133,7 @@
   },
   "tariffOffer": {
     "productName": "שם המוצר",
-    "providerProductName": "שם מוצר הספק", 
+    "providerProductName": "שם מוצר הספק",
     "allCurrencies": "כל המטבעות"
   },
   "default-header": {
@@ -497,7 +497,6 @@
     "removeRolesHint": "בחר תפקידים לביטול הרשאות",
     "searchRoles": "חפש תפקידים...",
     "noRoles": "אין תפקידים מוקצים",
-    "roles": "תפקידים",
     "noRolesToAssign": "אין תפקידים זמינים להקצאה",
     "noRolesToRemove": "אין תפקידים להסרה עבור המשתמש הזה"
   },
@@ -585,9 +584,9 @@
     "noActivePackages": "אין לך חבילות פעילות לשליחת דוא\"ל עם הוראות הפעלה"
   },
   "email": {
-          "configurations": {
-        "title": "הגדרות דואר אלקטרוני"
-      },
+    "configurations": {
+      "title": "הגדרות דואר אלקטרוני"
+    },
     "templates": "תבניות",
     "template": {
       "create": "צור תבנית",
@@ -629,14 +628,14 @@
       "countryCount": "מדינות"
     },
     "bundles": {
-      "id": "מזהה", 
+      "id": "מזהה",
       "name": "שם חבילה",
       "usageUnits": "יחידות שימוש",
       "dataTotal": "סה״כ נתונים"
     },
     "providerProducts": {
       "id": "מזהה",
-      "serviceProvider": "ספק שירות", 
+      "serviceProvider": "ספק שירות",
       "serviceCoverage": "כיסוי שירות",
       "coverageType": "סוג כיסוי",
       "status": "מצב"
@@ -741,39 +740,6 @@
         "myTicketsDesc": "ראה כרטיסים שהוקצו לך או שנוצרו על ידיך"
       }
     }
-  },
-  "paymentGateway": {
-    "id": "מזהה",
-    "name": "שם",
-    "isActive": "סטטוס",
-    "isPrimary": "ראשי",
-    "paymentStrategy": "אסטרטגיית תשלום",
-    "createdDate": "תאריך יצירה",
-    "hint": "בחלק זה תוכל להגדיר את כל שערי התשלום הזמינים לך.",
-    "setupNew": "הגדר שער תשלום חדש",
-    "createNew": "צור שער תשלום חדש",
-    "setup": "הגדר",
-    "adminHint": "תצורה זו זמינה למשתמשים ללא הרשאות מנהל בלבד.",
-    "title": "הגדרות שער תשלום",
-    "edit": "עדכן",
-    "adminAccountWarning": "לא ניתן ליצור שיטות תשלום עבור חשבון מנהל. אנא בחר חשבון אחר."
-  },
-  "editPaymentGateway": {
-    "setupPaymentGateway": "הגדרת שער תשלום",
-    "title": "הגדרת שער תשלום",
-    "active": "פעיל",
-    "deactivated": "מבוטל",
-    "activate": "הפעל",
-    "deactivate": "בטל",
-    "setPrimary": "הגדר כראשי",
-    "unsetPrimary": "הסר ראשי",
-    "create": "צור",
-    "save": "שמור",
-    "primaryPaymentGatewayTooltip": "שער תשלום ראשי, לא ניתן לבטל",
-    "statusUpdated": "הסטטוס עודכן בהצלחה",
-    "configurationCreated": "התצורה נוצרה בהצלחה",
-    "configurationUpdated": "התצורה עודכנה בהצלחה",
-    "formInvalid": "הטופס אינו תקין"
   },
   "invoicingGateway": {
     "id": "מזהה",

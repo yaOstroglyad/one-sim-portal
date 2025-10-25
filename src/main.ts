@@ -19,7 +19,7 @@ import { FeatureToggleService, FEATURE_TOGGLES_SERVICE } from './app/shared';
 import { IconSetService } from '@coreui/icons-angular';
 import { Title } from '@angular/platform-browser';
 import { initializeMockMode } from './app/shared/utils/mock-init';
-import { provideFabLayout, provideFeature } from './app/shared/components/fab-layout';
+import { provideFabLayout, provideFeature, provideFabButton } from './app/shared/components/fab-layout';
 
 // Import routes
 import { Page404Component } from './app/views/pages/page404/page404.component';
@@ -139,19 +139,38 @@ bootstrapApplication(AppComponent, {
       useExisting: FeatureToggleService
     },
     AuthGuardService,
-    
-    // FAB Layout providers
+
+    // ============================================
+    // FAB Layout System (via DI Tokens)
+    // ============================================
     provideFabLayout(),
-    
-    // Register support chat feature
+
+    // Global FAB Button: Support Chat
+    // This button is always visible (provided at app level)
+    // No roles specified = visible to everyone
+    provideFabButton({
+      id: 'support-chat',
+      label: 'nav.supportchat',
+      title: 'flyout.supportchattitle',
+      icon: 'chat',
+      order: 10,
+      hasMenu: false,
+      action: 'component',
+      target: 'support-chat'
+    }),
+
+    // Global Feature: Support Chat
+    // This feature is always available (provided at app level)
+    // No roles specified = visible to everyone
     provideFeature({
-      meta: { 
-        key: 'support-chat', 
-        title: 'Support Chat', 
-        icon: '💬', 
-        order: 10 
+      meta: {
+        key: 'support-chat',
+        title: 'Support Chat',
+        icon: '💬',
+        order: 10
       },
-      load: () => import('./app/features/support-chat/support-chat.shell.component').then(m => m.SupportChatShellComponent)
+      load: () => import('./app/features/support-chat/support-chat.shell.component')
+        .then(m => m.SupportChatShellComponent)
     })
   ]
 }).catch(err => console.error(err));

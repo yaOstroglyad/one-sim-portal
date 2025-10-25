@@ -32,6 +32,13 @@ import {
 import { CustomersTableService } from './customers-table.service';
 import { CustomersUtils, CustomersFilterParams } from './customers.utils';
 
+interface FilterFieldConfig {
+	key: string;
+	label: string;
+	type: 'input' | 'searchable-select';
+	adminOnly?: boolean;
+}
+
 @Component({
     standalone: true,
     selector: 'app-customers',
@@ -77,6 +84,15 @@ export class CustomersComponent implements OnInit, OnDestroy {
 	public filterForm: FormGroup;
 	public companyOptions$: Observable<SearchableSelectOption[]>;
 	public smartFilterConfig: SmartFilterConfig;
+
+	// Filter fields configuration for template
+	public filterFieldsConfig: FilterFieldConfig[] = [
+		{ key: 'companyId', label: 'customer.company', type: 'searchable-select', adminOnly: true },
+		{ key: 'name', label: 'customer.name', type: 'input' },
+		{ key: 'iccid', label: 'customer.iccid', type: 'input' },
+		{ key: 'externalId', label: 'customer.externalId', type: 'input' },
+		{ key: 'externalTransactionId', label: 'customer.externalTransactionId', type: 'input' }
+	];
 
 	public ngOnInit(): void {
 		this.initFormControls();

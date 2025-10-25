@@ -11,7 +11,7 @@
   height: 100%;
   pointer-events: none;
   z-index: var(--flyout-z-index, 1055);
-  
+
   &.flyout-visible {
     pointer-events: auto;
   }
@@ -52,7 +52,7 @@
     border-left: none !important;
     border-top: none !important;
     border-bottom: none !important;
-    
+
     &.flyout--open {
       transform: translateX(0) !important;
     }
@@ -72,7 +72,7 @@
     transform: scale(0.9);
     box-shadow: var(--os-shadow-2xl);
     border: 1px solid var(--os-color-medium) !important;
-    
+
     &.flyout--open {
       transform: scale(1);
     }
@@ -101,7 +101,7 @@
     border-right: none !important;
     border-top: none !important;
     border-bottom: none !important;
-    
+
     &.flyout--open {
       transform: translateX(0) !important;
     }
@@ -247,7 +247,6 @@
   &__content {
     flex: 1;
     overflow-y: auto;
-    padding: 24px;
   }
 
   &__resize {

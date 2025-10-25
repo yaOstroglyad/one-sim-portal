@@ -1,14 +1,16 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ContentChild,
-  EventEmitter,
-  Input,
+  ElementRef,
   OnDestroy,
   OnInit,
-  Output,
-  TemplateRef
+  TemplateRef,
+  inject,
+  signal,
+  computed,
+  input,
+  output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
@@ -19,13 +21,14 @@ import { GenericRightPanelComponent } from '../generic-right-panel';
 import { TooltipDirective } from '../tooltip';
 import {
   SmartFilterConfig,
-  SmartFilterState,
   FilterChip,
   DEFAULT_SMART_FILTER_CONFIG,
   FilterFieldConfig,
 } from './models/smart-filter.interface';
 import { SmartFilterValueMapperService } from './services/smart-filter-value-mapper.service';
 import { TranslateModule } from '@ngx-translate/core';
+
+type DisplayMode = 'simple' | 'advanced';
 
 @Component({
   standalone: true,
@@ -44,84 +47,137 @@ import { TranslateModule } from '@ngx-translate/core';
     ]
 })
 export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
-  @Input() formGroup: FormGroup;
-  @Input() config: SmartFilterConfig = DEFAULT_SMART_FILTER_CONFIG;
+  // Inputs using signal inputs
+  formGroup = input.required<FormGroup>();
+  config = input<SmartFilterConfig>(DEFAULT_SMART_FILTER_CONFIG);
 
-  @Output() resetFilters = new EventEmitter<void>();
-  @Output() filtersChanged = new EventEmitter<any>();
+  // Outputs using output()
+  resetFilters = output<void>();
+  filtersChanged = output<any>();
 
+  // Content children
   @ContentChild('simpleFilters', { static: true }) simpleFiltersTemplate: TemplateRef<any>;
   @ContentChild('advancedFilters', { static: true }) advancedFiltersTemplate: TemplateRef<any>;
 
-  public state: SmartFilterState = {
-    mode: 'simple',
-    showFilterPanel: false,
-    activeFilters: [],
-    filterCount: 0
-  };
+  // Services
+  private readonly valueMapperService = inject(SmartFilterValueMapperService);
+  private readonly elementRef = inject(ElementRef);
 
+  // State signals
+  protected readonly mode = signal<DisplayMode>('simple');
+  protected readonly showFilterPanel = signal(false);
+  protected readonly activeFilters = signal<FilterChip[]>([]);
+  protected readonly filterCount = signal(0);
+
+  // Computed signals
+  protected readonly isAdvancedMode = computed(() => this.mode() === 'advanced');
+  protected readonly visibleChips = computed(() =>
+    this.activeFilters().slice(0, this.config().maxVisibleChips)
+  );
+  protected readonly hiddenChipsCount = computed(() =>
+    Math.max(0, this.activeFilters().length - this.config().maxVisibleChips)
+  );
+  protected readonly hasOverflowChips = computed(() => this.hiddenChipsCount() > 0);
+  protected readonly hasActiveFilters = computed(() => this.activeFilters().length > 0);
+  protected readonly hiddenChipsTooltip = computed(() => {
+    const hiddenChips = this.activeFilters().slice(this.config().maxVisibleChips);
+    return hiddenChips.map(chip => `• ${chip.label}: ${chip.displayValue}`).join('\n');
+  });
+
+  // Private state
   private destroy$ = new Subject<void>();
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private valueMapperService: SmartFilterValueMapperService
-  ) {}
+  private resizeObserver: ResizeObserver | null = null;
+  private readonly MIN_FILTER_WIDTH = 180;
+  private readonly GAP_SIZE = 16;
 
   ngOnInit(): void {
     this.calculateFilterCount();
+    this.setupResizeObserver();
     this.determineDisplayMode();
     this.initializeDefaultFilters();
     this.watchFormChanges();
 
     // Process initial form values to show badges for default filters
-    if (this.formGroup) {
-      const initialValues = this.formGroup.value;
-      this.updateActiveFilters(initialValues).then(() => {
-        this.cdr.markForCheck();
-      });
+    const formGroup = this.formGroup();
+    if (formGroup) {
+      const initialValues = formGroup.value;
+      this.updateActiveFilters(initialValues);
     }
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    // Cleanup resize observer
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
+    }
+
     // Cleanup expired cache entries on component destroy
     this.valueMapperService.cleanupExpiredCache();
   }
 
   private calculateFilterCount(): void {
-    if (!this.formGroup) return;
+    const formGroup = this.formGroup();
+    if (!formGroup) return;
 
-    this.state.filterCount = this.config.fields.length || Object.keys(this.formGroup.controls).length;
+    const count = this.config().fields.length || Object.keys(formGroup.controls).length;
+    this.filterCount.set(count);
   }
 
   private initializeDefaultFilters(): void {
-    if (!this.formGroup) return;
+    const formGroup = this.formGroup();
+    if (!formGroup) return;
 
-    this.config.fields.forEach(fieldConfig => {
-      const control = this.formGroup.controls[fieldConfig.key];
+    this.config().fields.forEach(fieldConfig => {
+      const control = formGroup.controls[fieldConfig.key];
       if (control && fieldConfig.defaultValue !== undefined && !control.value) {
         control.setValue(fieldConfig.defaultValue);
       }
     });
   }
 
-  private determineDisplayMode(): void {
-    this.state.mode = this.state.filterCount > this.config.threshold ? 'advanced' : 'simple';
+  private setupResizeObserver(): void {
+    // ResizeObserver для отслеживания изменения ширины
+    this.resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        this.determineDisplayMode(entry.contentRect.width);
+      }
+    });
+
+    this.resizeObserver.observe(this.elementRef.nativeElement);
+  }
+
+  private determineDisplayMode(containerWidth?: number): void {
+    // Если ширина не передана, получаем текущую ширину
+    if (containerWidth === undefined) {
+      containerWidth = this.elementRef.nativeElement.offsetWidth;
+    }
+
+    // Вычисляем, сколько фильтров может поместиться в одну строку
+    const availableWidth = containerWidth - this.GAP_SIZE;
+    const filterWithGap = this.MIN_FILTER_WIDTH + this.GAP_SIZE;
+    const maxFiltersPerRow = Math.floor(availableWidth / filterWithGap);
+
+    // Если все фильтры помещаются - Simple Mode, иначе Advanced
+    const newMode: DisplayMode = maxFiltersPerRow >= this.filterCount() ? 'simple' : 'advanced';
+    this.mode.set(newMode);
   }
 
   private watchFormChanges(): void {
-    if (!this.formGroup) return;
+    const formGroup = this.formGroup();
+    if (!formGroup) return;
 
-    this.formGroup.valueChanges
+    formGroup.valueChanges
       .pipe(
-        debounceTime(this.config.globalSettings?.debounceTime || 700),
+        debounceTime(this.config().globalSettings?.debounceTime || 700),
         takeUntil(this.destroy$)
       )
       .subscribe(async values => {
         await this.updateActiveFilters(values);
         this.filtersChanged.emit(values);
-        this.cdr.markForCheck();
       });
   }
 
@@ -147,10 +203,11 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
         } as FilterChip;
       });
 
-    const activeFilters = await Promise.all(activeFiltersPromises);
+    const filters = await Promise.all(activeFiltersPromises);
 
     // Сортируем по приоритету (меньше число = выше приоритет)
-    this.state.activeFilters = activeFilters.sort((a, b) => a.priority - b.priority);
+    const sortedFilters = filters.sort((a, b) => a.priority - b.priority);
+    this.activeFilters.set(sortedFilters);
   }
 
   private shouldShowFilter(key: string, value: any): boolean {
@@ -163,12 +220,10 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
 
     // Скрытые фильтры не показываем
     return !fieldConfig?.hidden;
-
-
   }
 
   private getFieldConfig(key: string): FilterFieldConfig | undefined {
-    return this.config.fields.find(field => field.key === key);
+    return this.config().fields.find(field => field.key === key);
   }
 
   private isFilterRemovable(fieldConfig?: FilterFieldConfig): boolean {
@@ -213,38 +268,39 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
       return String(value);
     }
 
-    const cacheTTL = this.config.globalSettings?.cacheTTL || 300000;
+    const cacheTTL = this.config().globalSettings?.cacheTTL || 300000;
 
     return await this.valueMapperService.mapValue(
       value,
       mapper,
-      this.config.services,
+      this.config().services,
       cacheTTL
     );
   }
 
   public openFilters(): void {
-    this.state.showFilterPanel = true;
-    this.cdr.markForCheck();
+    this.showFilterPanel.set(true);
   }
 
   public closeFilters(): void {
-    this.state.showFilterPanel = false;
-    this.cdr.markForCheck();
+    this.showFilterPanel.set(false);
   }
 
   public onResetFilters(): void {
-    if (this.config.globalSettings?.resetToDefaults) {
+    const formGroup = this.formGroup();
+    const config = this.config();
+
+    if (config.globalSettings?.resetToDefaults) {
       // Сброс к дефолтным значениям
-      this.config.fields.forEach(fieldConfig => {
-        const control = this.formGroup?.controls[fieldConfig.key];
+      config.fields.forEach(fieldConfig => {
+        const control = formGroup?.controls[fieldConfig.key];
         if (control) {
           control.setValue(fieldConfig.defaultValue || null);
         }
       });
     } else {
       // Полный сброс
-      this.formGroup?.reset();
+      formGroup?.reset();
     }
 
     this.resetFilters.emit();
@@ -258,39 +314,16 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
       return; // Не удаляем обязательные фильтры
     }
 
-    if (this.formGroup?.controls[filterKey]) {
+    const formGroup = this.formGroup();
+    const config = this.config();
+
+    if (formGroup?.controls[filterKey]) {
       // Если есть дефолтное значение и настроена опция сброса к дефолтам
-      if (fieldConfig?.defaultValue !== undefined && this.config.globalSettings?.resetToDefaults) {
-        this.formGroup.controls[filterKey].setValue(fieldConfig.defaultValue);
+      if (fieldConfig?.defaultValue !== undefined && config.globalSettings?.resetToDefaults) {
+        formGroup.controls[filterKey].setValue(fieldConfig.defaultValue);
       } else {
-        this.formGroup.controls[filterKey].setValue(null);
+        formGroup.controls[filterKey].setValue(null);
       }
     }
-  }
-
-  // Геттеры для шаблона
-  get isAdvancedMode(): boolean {
-    return this.state.mode === 'advanced';
-  }
-
-  get visibleChips(): FilterChip[] {
-    return this.state.activeFilters.slice(0, this.config.maxVisibleChips);
-  }
-
-  get hiddenChipsCount(): number {
-    return Math.max(0, this.state.activeFilters.length - this.config.maxVisibleChips);
-  }
-
-  get hasOverflowChips(): boolean {
-    return this.hiddenChipsCount > 0;
-  }
-
-  get hiddenChipsTooltip(): string {
-    const hiddenChips = this.state.activeFilters.slice(this.config.maxVisibleChips);
-    return hiddenChips.map(chip => `• ${chip.label}: ${chip.displayValue}`).join('\n');
-  }
-
-  get hasActiveFilters(): boolean {
-    return this.state.activeFilters.length > 0;
   }
 }

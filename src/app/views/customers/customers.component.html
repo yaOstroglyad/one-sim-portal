@@ -8,50 +8,76 @@
             [config]="smartFilterConfig"
             (resetFilters)="resetForm()">
 
+            <!-- Shared filter fields -->
+            <ng-template #filterFields let-mode="mode">
+                @for (field of filterFieldsConfig; track field.key) {
+                    @if (!field.adminOnly || isAdmin) {
+                        @if (mode === 'advanced') {
+                            <div class="form-group">
+                                <label [for]="field.key">{{ field.label | translate }}</label>
+
+                                @if (field.type === 'input') {
+                                    <input
+                                        [id]="field.key"
+                                        cFormControl
+                                        [formControlName]="field.key"
+                                        [placeholder]="field.label | translate">
+                                } @else if (field.type === 'searchable-select') {
+                                    <app-searchable-select
+                                        [id]="field.key"
+                                        [options]="companyOptions$ | async"
+                                        [config]="{
+                                            placeholder: (field.label | translate),
+                                            searchPlaceholder: ('common.search' | translate) + '...',
+                                            noResultsText: ('common.noResultsFound' | translate),
+                                            clearable: true,
+                                            searchable: true
+                                        }"
+                                        [formControlName]="field.key"
+                                        class="w-100">
+                                    </app-searchable-select>
+                                }
+                            </div>
+                        } @else {
+                            @if (field.type === 'input') {
+                                <input
+                                    [id]="field.key + '-simple'"
+                                    cFormControl
+                                    [formControlName]="field.key"
+                                    [placeholder]="field.label | translate">
+                            } @else if (field.type === 'searchable-select') {
+                                <app-searchable-select
+                                    [id]="field.key + '-simple'"
+                                    [options]="companyOptions$ | async"
+                                    [config]="{
+                                        placeholder: (field.label | translate),
+                                        searchPlaceholder: ('common.search' | translate) + '...',
+                                        noResultsText: ('common.noResultsFound' | translate),
+                                        clearable: true,
+                                        searchable: true
+                                    }"
+                                    [formControlName]="field.key"
+                                    class="w-100">
+                                </app-searchable-select>
+                            }
+                        }
+                    }
+                }
+            </ng-template>
+
+            <ng-template #simpleFilters>
+                <ng-container *ngTemplateOutlet="filterFields; context: { mode: 'simple' }"></ng-container>
+            </ng-template>
+
             <ng-template #advancedFilters>
-                <div *ngIf="isAdmin" class="form-group">
-                    <label for="companyId">{{ 'customer.company' | translate }}</label>
-                    <app-searchable-select
-                            id="companyId"
-                            [options]="companyOptions$ | async"
-                            [config]="{
-                                    placeholder: ('company.name' | translate),
-                                    searchPlaceholder: ('common.search' | translate) + '...',
-                                    noResultsText: ('common.noResultsFound' | translate),
-                                    clearable: true,
-                                    searchable: true
-                                }"
-                            formControlName="companyId"
-                            class="w-100">
-                    </app-searchable-select>
-                </div>
-
-                <div class="form-group">
-                    <label for="name">{{ 'customer.name' | translate }}</label>
-                    <input id="name" cFormControl formControlName="name" [type]="'text'" placeholder="{{ 'customer.name' | translate }}">
-                </div>
-
-                <div class="form-group">
-                    <label for="iccid">{{ 'customer.iccid' | translate }}</label>
-                    <input id="iccid" cFormControl formControlName="iccid" [type]="'text'" placeholder="{{ 'customer.iccid' | translate }}">
-                </div>
-
-                <div class="form-group">
-                    <label for="externalId">{{ 'customer.externalId' | translate }}</label>
-                    <input id="externalId" cFormControl formControlName="externalId" [type]="'text'" placeholder="{{ 'customer.externalId' | translate }}">
-                </div>
-
-                <div class="form-group">
-                    <label for="externalTransactionId">{{ 'customer.externalTransactionId' | translate }}</label>
-                    <input id="externalTransactionId" cFormControl formControlName="externalTransactionId" [type]="'text'" placeholder="{{ 'customer.externalTransactionId' | translate }}">
-                </div>
+                <ng-container *ngTemplateOutlet="filterFields; context: { mode: 'advanced' }"></ng-container>
             </ng-template>
 
         </app-smart-filter-header>
 
         <button cButton
                 color="secondary"
-                [disabled]="filterForm.pristine"
+                [disabled]="!filterForm?.dirty"
                 (click)="resetForm()">
             <svg cIcon name="cilReload"></svg>
         </button>

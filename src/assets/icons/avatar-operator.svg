@@ -1,0 +1,21 @@
+<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Modern Telegram-style operator avatar with headset -->
+  <!-- Head -->
+  <circle cx="16" cy="14" r="5.5" fill="currentColor"/>
+
+  <!-- Shoulders -->
+  <path d="M 8 25 Q 8 20 16 20 Q 24 20 24 25" fill="currentColor"/>
+
+  <!-- Headset band (modern thin line) -->
+  <path d="M 10 14 Q 10 9 16 9 Q 22 9 22 14" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Left earpiece (modern minimal) -->
+  <rect x="8.5" y="13" width="2.5" height="3.5" rx="1.25" fill="currentColor"/>
+
+  <!-- Right earpiece with mic -->
+  <rect x="21" y="13" width="2.5" height="3.5" rx="1.25" fill="currentColor"/>
+
+  <!-- Microphone boom -->
+  <path d="M 21 15 L 19 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="18.5" cy="17.5" r="1" fill="currentColor"/>
+</svg>

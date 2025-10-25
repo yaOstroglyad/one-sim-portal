@@ -1,0 +1,4 @@
+<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="100" r="80" fill="var(--os-color-medium-rgb, 128, 128, 128)" opacity="0.1"/>
+  <path d="M70 90c0-5.523 4.477-10 10-10s10 4.477 10 10M110 90c0-5.523 4.477-10 10-10s10 4.477 10 10M70 130c0-11.046 8.954-20 20-20h20c11.046 0 20 8.954 20 20" stroke="var(--os-color-medium)" stroke-width="4" stroke-linecap="round"/>
+</svg>
