@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { ProductPurchase } from '../model';
+import { handleArrayError } from '../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -11,10 +12,7 @@ export class PurchasedProductsDataService {
 
 	getPurchasedProducts(params: { subscriberId: string; isActive?: boolean }): Observable<ProductPurchase[]> {
 		return this.http.get<ProductPurchase[]>(`/api/v1/product-purchases/query/all`, { params }).pipe(
-			catchError(() => {
-				console.warn('Error occurred, presenting mocked data');
-				return of(null);
-			})
+			catchError(handleArrayError<ProductPurchase>('fetching purchased products'))
 		);
 	}
 }

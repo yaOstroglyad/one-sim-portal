@@ -859,6 +859,10 @@
       &.negative {
         color: var(--os-color-danger);
       }
+
+      &.positive {
+        color: var(--os-color-success);
+      }
     }
   }
 }

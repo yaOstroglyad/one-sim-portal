@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { DataService } from './data.service';
 import { Domain } from '../model/domain';
-import { SelectOption } from '../model';
-import { map } from 'rxjs/operators';
+import { handleArrayError, handleWithDefault } from '../utils';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +19,7 @@ export class DomainsDataService extends DataService<Domain> {
     let params = new HttpParams();
 
     return this.http.get<Domain[]>(this.apiUrl, {params}).pipe(
-      catchError(() => {
-        console.warn('error happened, presenting mocked data');
-        return of([]);
-      })
+      catchError(handleArrayError('fetching domains'))
     );
   }
 
@@ -43,50 +39,35 @@ export class DomainsDataService extends DataService<Domain> {
     });
 
     return this.http.get<any>('/api/v1/whitelabel/domains/query/all/page', { params }).pipe(
-      catchError(() => {
-        console.warn('error happened, presenting mocked data');
-        return of({
-          totalElements: 0,
-          totalPages: 0,
-          content: []
-        });
-      })
+      catchError(handleWithDefault('fetching paginated domains', {
+        totalElements: 0,
+        totalPages: 0,
+        content: []
+      }))
     );
   }
 
   create(domain: Domain): Observable<any> {
     return this.http.post<any>(`/api/v1/whitelabel/domains/command/create`, domain).pipe(
-      catchError(() => {
-        console.warn('error happened, presenting mocked data');
-        return of([]);
-      })
+      catchError(handleArrayError('creating domain'))
     );
   }
 
   updateDomainName(domain: { id: string, name: string }): Observable<any> {
     return this.http.patch<any>(`/api/v1/whitelabel/domains/command/update/name`, domain).pipe(
-      catchError(() => {
-        console.warn('error happened, presenting mocked data');
-        return of([]);
-      })
+      catchError(handleArrayError('updating domain name'))
     );
   }
 
   updateDomainOwner(domain: { id: string, ownerAccountId: string }): Observable<any> {
     return this.http.patch<any>(`/api/v1/whitelabel/domains/command/update/owner`, domain).pipe(
-      catchError(() => {
-        console.warn('error happened, presenting mocked data');
-        return of([]);
-      })
+      catchError(handleArrayError('updating domain owner'))
     );
   }
 
   changeDomainState(id: string, isActive: boolean): Observable<any> {
     return this.http.patch<any>(`/api/v1/whitelabel/domains/command/change/state/${id}?isActive=${isActive}`, {}).pipe(
-      catchError(() => {
-        console.warn('error happened, presenting mocked data');
-        return of([]);
-      })
+      catchError(handleArrayError('changing domain state'))
     );
   }
 }

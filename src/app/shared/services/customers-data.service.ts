@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { DataService } from './data.service';
 import { Customer, CustomerType, DataObject } from '../model';
 import { Pagination } from '../model/grid-configs';
+import { handleArrayError, handleObjectError, handleWithDefault } from '../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -22,10 +23,7 @@ export class CustomersDataService extends DataService<Customer> {
 		}
 
 		return this.http.get<Customer[]>(this.apiUrl, {params}).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
+			catchError(handleArrayError('fetching customers list'))
 		);
 	}
 
@@ -48,32 +46,23 @@ export class CustomersDataService extends DataService<Customer> {
 		});
 
 		return this.http.get<any>('/api/v1/customers/query/all/page', {params}).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of({
-					totalElements: 0,
-					totalPages: 0,
-					content: []
-				});
-			})
+			catchError(handleWithDefault('fetching paginated customers', {
+				totalElements: 0,
+				totalPages: 0,
+				content: []
+			}))
 		);
 	}
 
-	getCustomerDetails(id: Customer['id']): Observable<DataObject> {
+	getCustomerDetails(id: Customer['id']): Observable<DataObject | null> {
 		return this.http.get<DataObject>(`/api/v1/customers/query/${id}/details`).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of(null);
-			})
+			catchError(handleObjectError<DataObject>('fetching customer details'))
 		);
 	}
 
 	create(customer: Customer): Observable<any> {
 		return this.http.post<any>(`/api/v1/customers/command/create`, customer).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
+			catchError(handleObjectError('creating customer'))
 		);
 	}
 }

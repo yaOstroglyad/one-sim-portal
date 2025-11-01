@@ -413,7 +413,10 @@
     "logout": "Logout"
   },
   "nav": {
+    "analytics": "Analytics",
     "dashboard": "Dashboard",
+    "reports": "Reports",
+    "adminOverview": "Admin Overview",
     "companies": "Companies",
     "customers": "Customers",
     "customer-details": "Customer Details",
@@ -423,6 +426,7 @@
     "products": "Products",
     "inventory": "Inventory",
     "users": "Users",
+    "roles": "Roles",
     "tickets": "Tickets",
     "ticketsOverview": "Overview",
     "ticketsList": "Tickets List",
@@ -441,6 +445,16 @@
     "domains": "Domains",
     "emailConfigurations": "Email Configurations",
     "supportchat": "Chats"
+  },
+  "analytics": {
+    "reports": {
+      "title": "Reports",
+      "description": "Generate and view custom reports for your business analytics"
+    },
+    "adminOverview": {
+      "title": "Admin Overview",
+      "description": "Cross-customer analytics dashboard for administrators"
+    }
   },
   "flyout": {
     "supportchattitle": "Support Chats"
@@ -1057,7 +1071,23 @@
       "quantity": "Quantity",
       "customer": "Customer",
       "total": "Total"
-    }
+    },
+    "executive": {
+      "totalRevenue": "Total Revenue",
+      "totalCost": "Total Cost",
+      "totalMargin": "Total Margin",
+      "new": "New",
+      "recurring": "Recurring",
+      "churn": "Churn",
+      "subscribersByBundle": "Subscribers by Bundle",
+      "revenueByBundle": "Revenue by Bundle",
+      "inventoryStatus": "Inventory Status",
+      "totalEsims": "Total eSIMs"
+    },
+    "inDevelopment": "In Development",
+    "kpiMetricsComingSoon": "KPI metrics will be available soon",
+    "breakdownInDevelopment": "Revenue breakdown will be available soon",
+    "dataNotAvailable": "Data not available"
   },
   "productConstructor": {
     "overview": {

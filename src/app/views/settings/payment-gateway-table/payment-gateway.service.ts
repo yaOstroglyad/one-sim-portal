@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { PaymentStrategy } from '../../../shared';
+import { handleArrayError, handleObjectError, transformHttpError } from '../../../shared';
 
 @Injectable({
   providedIn: 'root'
@@ -14,21 +15,15 @@ export class PaymentGatewayService {
     if (accountId) {
       params = params.set('accountId', accountId);
     }
-    
+
     return this.http.post<any>('/api/v1/payment-method/command/create', paymentGatewayForm, { params }).pipe(
-      catchError(() => {
-        console.warn('error happened, presenting mocked data');
-        return of([])
-      })
+      catchError(handleObjectError('creating payment gateway'))
     );
   }
 
   update(paymentGatewayForm: PaymentStrategy): Observable<any> {
     return this.http.patch<any>('/api/v1/payment-method/command/update', paymentGatewayForm).pipe(
-      catchError(() => {
-        console.warn('error happened, presenting mocked data');
-        return of([])
-      })
+      catchError(handleObjectError('updating payment gateway'))
     );
   }
 
@@ -37,10 +32,7 @@ export class PaymentGatewayService {
     "active": boolean
   }): Observable<any> {
     return this.http.patch<any>('/api/v1/payment-method/command/update-status', status).pipe(
-      catchError(() => {
-        console.warn('error happened, presenting mocked data');
-        return of([])
-      })
+      catchError(handleObjectError('updating payment gateway status'))
     );
   }
 
@@ -49,29 +41,24 @@ export class PaymentGatewayService {
     if (accountId) {
       params = params.set('accountId', accountId);
     }
-    
+
     return this.http.get<PaymentStrategy[]>('/api/v1/payment-method/query/all', { params }).pipe(
-      catchError(() => {
-        console.warn('error happened, presenting mocked data');
-        return of([])
-      })
+      catchError(handleArrayError('fetching payment gateways'))
     );
   }
 
   getPaymentStrategyTypes(): Observable<string[]> {
     return this.http.get<string[]>('/api/v1/payment-method/payment-strategies').pipe(
-      catchError(() => {
-        console.warn('error happened, presenting mocked data');
-        return of([])
-      })
+      catchError(handleArrayError('fetching payment strategy types'))
     );
   }
 
   getFieldsByStrategyType(strategyType: string): Observable<any> {
     return this.http.get<any>(`/api/v1/payment-method/query/fields/${strategyType}`).pipe(
       catchError(error => {
-        console.error('Error fetching fields:', error);
-        return throwError(error);
+        const apiError = transformHttpError(error);
+        console.error('Error fetching payment strategy fields:', apiError);
+        return throwError(() => apiError);
       })
     );
   }

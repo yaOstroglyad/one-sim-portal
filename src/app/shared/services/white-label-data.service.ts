@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { DataService } from './data.service';
 import { EditCompanySettings } from '../model';
-import { EmailTemplate } from '../model/email-template';
+import { EmailTemplate } from '../model';
+import { handleArrayError } from '../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -17,19 +18,13 @@ export class WhiteLabelDataService extends DataService<any> {
 
 	applicationTypes(): Observable<any[]> {
 		return this.http.get<any[]>('/api/v1/whitelabel/common/application-types').pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([])
-			})
+			catchError(handleArrayError('fetching application types'))
 		);
 	}
 
 	emailTemplateTypes(): Observable<string[]> {
 		return this.http.get<any[]>('/api/v1/whitelabel/email-templates/query/template-types').pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([])
-			})
+			catchError(handleArrayError('fetching email template types'))
 		);
 	}
 
@@ -42,19 +37,13 @@ export class WhiteLabelDataService extends DataService<any> {
 		}
 
 		return this.http.get<EmailTemplate[]>('/api/v1/whitelabel/email-templates/query/all-by-type', { params }).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
+			catchError(handleArrayError('fetching email templates by type'))
 		);
 	}
 
 	allEmailTemplateLanguages(): Observable<string[]> {
 		return this.http.get<any[]>('/api/v1/whitelabel/common/languages').pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([])
-			})
+			catchError(handleArrayError('fetching email template languages'))
 		);
 	}
 
@@ -74,10 +63,7 @@ export class WhiteLabelDataService extends DataService<any> {
 		const params = accountId ? new HttpParams().set('accountId', accountId) : undefined;
 
 		return this.http.get<any[]>('/api/v1/whitelabel/account-settings/query', { params }).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
+			catchError(handleArrayError('fetching company settings'))
 		);
 	}
 

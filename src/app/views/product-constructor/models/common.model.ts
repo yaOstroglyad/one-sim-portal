@@ -1,39 +1,6 @@
 // Common interfaces used across the Product Constructor
-
-export interface PageRequest {
-  page: number;
-  size: number;
-  sort?: string[];
-}
-
-export interface PageResponse<T> {
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  content: T[];
-  number: number;
-  sort: SortInfo;
-  numberOfElements: number;
-  pageable: PageableInfo;
-  first: boolean;
-  last: boolean;
-  empty: boolean;
-}
-
-export interface SortInfo {
-  empty: boolean;
-  sorted: boolean;
-  unsorted: boolean;
-}
-
-export interface PageableInfo {
-  offset: number;
-  sort: SortInfo;
-  paged: boolean;
-  pageNumber: number;
-  pageSize: number;
-  unpaged: boolean;
-}
+// Re-export shared pagination types for backward compatibility
+export { PageRequest, PageResponse, SortInfo, PageableInfo } from '../../../shared/model/page-response';
 
 export interface Country {
   id: number;

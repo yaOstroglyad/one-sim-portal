@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { DataService } from './data.service';
+import { handleEmptyObjectError } from '../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -15,10 +16,7 @@ export class ProviderBundlesDataService extends DataService<any> {
 
 	list(): Observable<any> {
 		return this.http.get<any>('/api/v1/provider-bundles/query/all').pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of({})
-			})
+			catchError(handleEmptyObjectError('fetching provider bundles'))
 		);
 	}
 }

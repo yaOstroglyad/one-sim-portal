@@ -41,19 +41,21 @@
               <!-- Parent with children -->
               @case ('parent') {
                 <div class="sidebar__nav-parent">
-                  <button 
+                  <button
                     class="sidebar__nav-link sidebar__nav-link--parent"
                     [class.sidebar__nav-link--active]="isParentActive(item)"
                     [class.sidebar__nav-link--expanded]="isExpanded(item)"
                     (click)="toggleParent(item)">
-                    <span class="sidebar__nav-icon">
-                      <svg cIcon [name]="item.iconComponent?.name" width="20" height="20"></svg>
-                    </span>
-                    <span class="sidebar__nav-text">
-                      {{ item.name | translate }}
+                    <span class="sidebar__nav-content">
+                      <span class="sidebar__nav-icon">
+                        <svg cIcon [name]="item.iconComponent?.name" width="20" height="20"></svg>
+                      </span>
+                      <span class="sidebar__nav-text">
+                        {{ item.name | translate }}
+                      </span>
                     </span>
                     <span class="sidebar__nav-arrow">
-                      <svg cIcon name="cil-chevron-bottom" width="16" height="16"></svg>
+                      <app-icon [icon]="'chevron-down'"></app-icon>
                     </span>
                   </button>
                   
@@ -73,13 +75,15 @@
                         } @else {
                           <!-- Nested children (third level) -->
                           <div class="sidebar__nav-nested">
-                            <button 
+                            <button
                               class="sidebar__nav-link sidebar__nav-link--nested"
                               [class.sidebar__nav-link--expanded]="isExpanded(child)"
                               (click)="toggleParent(child)">
-                              {{ child.name | translate }}
+                              <span class="sidebar__nav-text">
+                                {{ child.name | translate }}
+                              </span>
                               <span class="sidebar__nav-arrow">
-                                <svg cIcon name="cil-chevron-bottom" width="14" height="14"></svg>
+                                <app-icon [icon]="'chevron-down'"></app-icon>
                               </span>
                             </button>
                             <ul 
@@ -106,18 +110,20 @@
               
               <!-- Regular link -->
               @default {
-                <a 
+                <a
                   [routerLink]="item.url"
                   class="sidebar__nav-link"
                   routerLinkActive="sidebar__nav-link--active">
-                  <span class="sidebar__nav-icon">
-                    <svg cIcon [name]="item.iconComponent?.name" width="20" height="20"></svg>
-                  </span>
-                  <span class="sidebar__nav-text">
-                    {{ item.name | translate }}
+                  <span class="sidebar__nav-content">
+                    <span class="sidebar__nav-icon">
+                      <svg cIcon [name]="item.iconComponent?.name" width="20" height="20"></svg>
+                    </span>
+                    <span class="sidebar__nav-text">
+                      {{ item.name | translate }}
+                    </span>
                   </span>
                   @if (item.badge) {
-                    <span 
+                    <span
                       class="sidebar__nav-badge"
                       [attr.data-color]="item.badge.color">
                       {{ item.badge.text }}
@@ -143,7 +149,7 @@
   </nav>
 
   <!-- Toggle Button -->
-  <button 
+  <button
     class="sidebar__toggle"
     (click)="toggleSidebar()"
     [attr.aria-label]="layoutConfig().sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'">

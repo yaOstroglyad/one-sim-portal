@@ -27,6 +27,7 @@ export * from './components/searchable-select'
 export * from './components/smart-filter-header'
 export * from './components/user-avatar'
 export * from './components/breadcrumb/breadcrumb.component'
+export * from './components/icon/icon.component'
 
 export * from './components/header-component/header.component';
 export * from './pipes/format-time/format-time.pipe';
@@ -52,6 +53,7 @@ export * from './services/products-data.service';
 export * from './services/visual.service';
 export * from './services/white-label-data.service';
 export * from './services/country.service';
+export * from './services/theme.service';
 
 export * from './services/feature-toggle';
 export * from './services/user-role.service';

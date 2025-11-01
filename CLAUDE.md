@@ -3,7 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## 📋 Rules Version History & Navigation
-> **Document Created:** 2025-10-16 | **Last Major Update:** 2025-10-24
+> **Document Created:** 2025-10-16 | **Last Major Update:** 2025-11-01
 
 | Priority | Rule Section | Created | Status | Location |
 |----------|--------------|---------|--------|----------|
@@ -12,6 +12,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 🟡 High | [Documentation Language](#documentation-and-comments-language-rule) | 2025-10-16 | ✅ Active | Line 92 |
 | 🔵 Low | [Mock Server Rules](#mock-server-rules) | 2025-10-16 | ✅ Active | Line 100 |
 | 🟡 High | [Component Architecture](#component-architecture-rules) | 2025-10-16 | ✅ Active | Line 183 |
+| 🔴 Critical | [HTTP Error Handling](#http-error-handling-rules) | 2025-11-01 | ✅ Active | Line 293 |
+| 🔴 Critical | [Utility Functions](#utility-functions-organization-rules) | 2025-11-01 | ✅ Active | Line 715 |
 | 🔵 Low | [Cache Service Rules](#cachehubservice-usage) | 2025-10-16 | ✅ Active | Line 291 |
 | 🟢 Medium | [SCSS Architecture](#scss-architecture-rules) | 2025-10-16 | ✅ Active | Line 363 |
 | 🔴 Critical | [SVG & Icon Usage](#icon-strategy-prefer-custom-icons) | 2025-10-16 | ✅ Active | Line 470 |
@@ -288,6 +290,764 @@ The project uses a Tailwind-inspired design system with reusable utilities:
    - Both use the global color system and utilities
 
 > **SCSS Usage:** For import patterns and styling guidelines, see [SCSS Architecture section](#scss-architecture-rules)
+
+## HTTP Error Handling Rules
+> **Created:** 2025-11-01 | **Last Updated:** 2025-11-01 (Added forkJoin pattern)
+
+### 🎯 Overview
+All HTTP error handling MUST use the unified utilities from `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/http/http-error.utils.ts`. This file consolidates all error handling, response wrapping, and configuration in a single location.
+
+### 🚨 Critical Rules
+
+**❌ NEVER:**
+- Create inline `catchError(() => of([]))` handlers
+- Use custom error parsing logic in services/components
+- Import from deleted files (`error-handler.utils.ts`, `response.utils.ts`, etc.)
+- Omit type parameters from error handlers
+- Return wrong type from error handlers (e.g., `handleObjectError` for arrays)
+- Add `catchError` to individual observables inside `forkJoin` (see forkJoin pattern below)
+
+**✅ ALWAYS:**
+- Import from barrel export: `import { ... } from '../utils'` or `'../../../shared/utils'`
+- Provide error context description for logging
+- Use appropriate type parameters for type safety
+- Choose correct handler for expected return type
+- Add `catchError(createErrorResponse)` ONLY after `forkJoin`, never inside it
+
+### 📦 Available Utilities
+
+#### 1. Standard Error Handlers
+
+**`handleArrayError<T>(errorContext: string): Observable<T[]>`**
+- **Use for:** API endpoints that return arrays
+- **Returns:** Empty array `[]` on error
+- **Type parameter:** Entity type in the array
+
+```typescript
+// ✅ Correct usage
+getPurchasedProducts(params: { subscriberId: string }): Observable<ProductPurchase[]> {
+  return this.http.get<ProductPurchase[]>(`/api/v1/product-purchases/query/all`, { params }).pipe(
+    catchError(handleArrayError<ProductPurchase>('fetching purchased products'))
+  );
+}
+
+// ❌ Wrong - missing type parameter
+catchError(handleArrayError('fetching products'))  // Returns Observable<unknown[]>
+
+// ❌ Wrong - using handleObjectError for array endpoint
+catchError(handleObjectError<ProductPurchase>('fetching products'))  // Returns Observable<ProductPurchase | null>
+```
+
+**`handleObjectError<T>(errorContext: string): Observable<T | null>`**
+- **Use for:** API endpoints that return single objects
+- **Returns:** `null` on error
+- **Type parameter:** Expected object type
+- **Important:** Return type must include `| null`
+
+```typescript
+// ✅ Correct usage
+getCustomerDetails(id: string): Observable<DataObject | null> {
+  return this.http.get<DataObject>(`/api/v1/customers/query/${id}/details`).pipe(
+    catchError(handleObjectError<DataObject>('fetching customer details'))
+  );
+}
+
+// ❌ Wrong - return type doesn't include null
+getCustomerDetails(id: string): Observable<DataObject> {  // TypeScript error!
+  return this.http.get<DataObject>(`/api/v1/customers/query/${id}/details`).pipe(
+    catchError(handleObjectError<DataObject>('fetching customer details'))
+  );
+}
+```
+
+**`handleWithDefault<T>(errorContext: string, defaultValue: T): Observable<T>`**
+- **Use for:** Custom fallback values (e.g., paginated responses, complex objects)
+- **Returns:** Provided default value on error
+- **Type parameter:** Type of default value
+
+```typescript
+// ✅ Correct usage - pagination with default
+paginatedCustomers(params: any, page: number = 0, size: number = 15): Observable<Pagination<Customer>> {
+  return this.http.get<Pagination<Customer>>('/api/v1/customers/query/all/page', { params }).pipe(
+    catchError(handleWithDefault('fetching paginated customers', {
+      totalElements: 0,
+      totalPages: 0,
+      content: []
+    }))
+  );
+}
+
+// ✅ Correct usage - object with default structure
+getConfig(): Observable<AppConfig> {
+  return this.http.get<AppConfig>('/api/v1/config').pipe(
+    catchError(handleWithDefault('fetching app config', { theme: 'light', locale: 'en' }))
+  );
+}
+```
+
+**`handleEmptyObjectError(errorContext: string): Observable<{}>`**
+- **Use for:** Endpoints where you need an empty object fallback
+- **Returns:** Empty object `{}` on error
+- **Rare use case:** Prefer `handleWithDefault` for most scenarios
+
+```typescript
+// ✅ Correct usage
+getOptionalMetadata(): Observable<{}> {
+  return this.http.get('/api/v1/metadata').pipe(
+    catchError(handleEmptyObjectError('fetching metadata'))
+  );
+}
+```
+
+#### 2. Error Transformation
+
+**`transformHttpError(error: HttpErrorResponse): ApiError`**
+- **Use for:** Generic HTTP errors in data services
+- **Returns:** Standardized ApiError object
+- **Handles:** Network errors, server errors, client errors
+
+```typescript
+// ✅ Standard data service error
+this.http.post('/api/v1/customers', data).pipe(
+  catchError(err => {
+    const apiError = transformHttpError(err);
+    console.error('Error creating customer:', apiError.message);
+    return throwError(() => apiError);
+  })
+);
+```
+
+**`transformAuthError(error: HttpErrorResponse): ApiError`**
+- **Use for:** OAuth/authentication errors ONLY
+- **Returns:** ApiError with parsed OAuth error_description
+- **Special handling:** Parses JSON error responses with `error_description` field
+
+```typescript
+// ✅ OAuth/Login error handling
+login(credentials: LoginRequest): Observable<LoginResponse> {
+  return this.authService.authorize(credentials).pipe(
+    catchError(err => {
+      let message = 'Authorization error';
+      if (err instanceof HttpErrorResponse) {
+        const authError = transformAuthError(err);  // Parses OAuth JSON
+        message = authError.message;
+      }
+      console.error('Login error:', err);
+      this.notify(message);
+      return EMPTY;
+    })
+  );
+}
+
+// ❌ Wrong - using transformAuthError for non-auth endpoints
+this.http.get('/api/v1/customers').pipe(
+  catchError(err => {
+    const error = transformAuthError(err);  // Don't use for regular APIs!
+    return of([]);
+  })
+);
+```
+
+#### 3. Response Wrapping (Advanced)
+
+**`wrapResponse<T>(observable: Observable<T>): Observable<ApiResponse<T>>`**
+- **Use for:** Components that need loading/error states
+- **Returns:** Observable of ApiResponse with status tracking
+- **States:** 'loading' → 'success' | 'error'
+
+```typescript
+// ✅ Component with loading state
+export class CustomerListComponent {
+  customers$: Observable<ApiResponse<Customer[]>>;
+
+  ngOnInit() {
+    this.customers$ = wrapResponse(
+      this.customerService.list()
+    );
+  }
+}
+
+// Template usage
+<div *ngIf="customers$ | async as response">
+  <spinner *ngIf="response.status === 'loading'"></spinner>
+  <error-message *ngIf="response.status === 'error'" [error]="response.error"></error-message>
+  <customer-list *ngIf="response.status === 'success'" [customers]="response.data"></customer-list>
+</div>
+```
+
+**`createErrorResponse(error: any): ApiResponse<null>`**
+- **Use for:** Manual error response creation
+- **Returns:** ApiResponse with 'error' status
+
+### 📋 Decision Tree: Which Handler to Use?
+
+```
+Does endpoint return an array?
+├─ YES → Use handleArrayError<T>('context')
+└─ NO → Does it return a single object?
+    ├─ YES → Use handleObjectError<T>('context')
+    │        Remember: return type must be Observable<T | null>
+    └─ NO → Need custom fallback?
+        ├─ YES → Use handleWithDefault<T>('context', defaultValue)
+        └─ NO → Use handleEmptyObjectError('context')
+
+Is this an OAuth/login error?
+├─ YES → Use transformAuthError(error)
+└─ NO → Use transformHttpError(error)
+
+Need loading/error states in component?
+├─ YES → Use wrapResponse(observable)
+└─ NO → Use standard handlers
+```
+
+### 🎓 Complete Examples
+
+#### Data Service (Most Common Pattern)
+
+```typescript
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Customer, Pagination } from '../model';
+import { handleArrayError, handleObjectError, handleWithDefault } from '../utils';
+
+@Injectable({ providedIn: 'root' })
+export class CustomersDataService {
+  constructor(private http: HttpClient) {}
+
+  // Array endpoint
+  list(): Observable<Customer[]> {
+    return this.http.get<Customer[]>('/api/v1/customers/query/all').pipe(
+      catchError(handleArrayError<Customer>('fetching customers list'))
+    );
+  }
+
+  // Single object endpoint
+  getById(id: string): Observable<Customer | null> {
+    return this.http.get<Customer>(`/api/v1/customers/query/${id}`).pipe(
+      catchError(handleObjectError<Customer>('fetching customer by id'))
+    );
+  }
+
+  // Paginated endpoint with custom default
+  paginated(page: number = 0, size: number = 15): Observable<Pagination<Customer>> {
+    return this.http.get<Pagination<Customer>>('/api/v1/customers/query/all/page', {
+      params: { page, size }
+    }).pipe(
+      catchError(handleWithDefault('fetching paginated customers', {
+        totalElements: 0,
+        totalPages: 0,
+        content: []
+      }))
+    );
+  }
+
+  // POST/PUT/DELETE with custom error handling
+  create(customer: Customer): Observable<Customer | null> {
+    return this.http.post<Customer>('/api/v1/customers/command/create', customer).pipe(
+      catchError(handleObjectError<Customer>('creating customer'))
+    );
+  }
+}
+```
+
+#### Component with Subscription
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { CustomersDataService } from '../services/customers-data.service';
+import { Customer } from '../model';
+
+@Component({
+  selector: 'app-customer-list',
+  standalone: true,
+  templateUrl: './customer-list.component.html'
+})
+export class CustomerListComponent implements OnInit {
+  customers: Customer[] = [];
+  loading = false;
+
+  constructor(private customerService: CustomersDataService) {}
+
+  ngOnInit() {
+    this.loading = true;
+    this.customerService.list().subscribe({
+      next: (data) => {
+        this.customers = data;  // handleArrayError ensures this is never null
+        this.loading = false;
+      },
+      error: (err) => {
+        // This won't be called if using handleArrayError
+        // Error is already logged, empty array returned
+        this.loading = false;
+      }
+    });
+  }
+}
+```
+
+#### Login/Auth Service (OAuth Errors)
+
+```typescript
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { catchError, EMPTY } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { transformAuthError } from '../utils';
+
+@Injectable({ providedIn: 'root' })
+export class LoginService {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {}
+
+  login(credentials: { username: string; password: string }) {
+    return this.http.post('/oauth/token', credentials).pipe(
+      catchError(err => {
+        let message = 'Authorization error';
+        if (err instanceof HttpErrorResponse) {
+          const authError = transformAuthError(err);  // Parses OAuth JSON
+          message = authError.message;
+        } else if (err?.message) {
+          message = err.message;
+        }
+        console.error('Login error:', err);
+        this.snackBar.open(message, '', { panelClass: 'app-notification-error', duration: 2000 });
+        return EMPTY;
+      })
+    ).subscribe({
+      next: (token) => {
+        localStorage.setItem('token', token);
+        this.router.navigate(['/home']);
+      }
+    });
+  }
+}
+```
+
+#### HTTP Interceptor (Advanced)
+
+```typescript
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
+import { transformHttpError } from '../utils';
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const router = inject(Router);
+
+  return next(req).pipe(
+    catchError(error => {
+      const apiError = transformHttpError(error);
+
+      // Handle unauthorized
+      if (error.status === 401) {
+        localStorage.removeItem('token');
+        router.navigate(['/login']);
+      }
+
+      // Log all errors
+      console.error('HTTP Error:', apiError);
+
+      return throwError(() => apiError);
+    })
+  );
+};
+```
+
+### 🔍 Import Patterns
+
+**✅ Correct imports:**
+```typescript
+// From data service (2 levels deep: services/foo.service.ts → utils/)
+import { handleArrayError, handleObjectError, transformHttpError } from '../utils';
+
+// From component (4 levels deep: views/customers/list/list.component.ts → shared/utils/)
+import { handleArrayError, wrapResponse } from '../../../shared/utils';
+
+// Never import individual files
+import { handleArrayError } from '../../../shared/utils/http/http-error.utils';  // ❌ Wrong
+```
+
+### 📝 Error Context Best Practices
+
+**Context descriptions should:**
+- Use present participle (-ing form): "fetching", "creating", "updating", "deleting"
+- Be specific about the resource: "fetching customer details", not "getting data"
+- Be lowercase (logs will capitalize)
+
+**Examples:**
+```typescript
+✅ handleArrayError<Product>('fetching products list')
+✅ handleObjectError<Order>('creating new order')
+✅ handleWithDefault('loading user preferences', defaultPrefs)
+✅ handleArrayError<Invoice>('searching invoices by date range')
+
+❌ handleArrayError('get data')  // Too vague
+❌ handleObjectError('Fetching Customer')  // Don't capitalize
+❌ handleArrayError('fetch')  // Not specific enough
+```
+
+### 🔄 forkJoin Pattern (CRITICAL)
+
+**When combining multiple HTTP requests with `forkJoin`, follow this pattern:**
+
+#### ✅ CORRECT Pattern:
+
+```typescript
+import { forkJoin } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { wrapResponse, createErrorResponse } from '../utils';
+
+getExecutiveData(): Observable<DashboardResponse<ExecutiveTabData>> {
+  // Real API: Combine both endpoints with forkJoin
+  return forkJoin({
+    bundleRevenue: this.getBundleRevenueFromApi(period),    // ✅ Clean observable
+    inventoryStatus: this.getInventoryStatusFromApi()       // ✅ Clean observable
+  }).pipe(
+    map(({ bundleRevenue, inventoryStatus }) =>
+      this.mapApiDataToExecutiveData(bundleRevenue, inventoryStatus)
+    ),
+    map(data => wrapResponse(data)),
+    catchError(error => createErrorResponse(error))  // ✅ ONLY catchError here
+  );
+}
+
+// Helper methods return clean observables WITHOUT catchError
+private getBundleRevenueFromApi(period: DashboardPeriod): Observable<BundleRevenueApiResponse> {
+  return this.http.get<BundleRevenueApiResponse>('/api/endpoint', { params }).pipe(
+    retry(2),
+    shareReplay(1)
+    // ✅ NO catchError here!
+  );
+}
+
+private getInventoryStatusFromApi(): Observable<InventoryStatusApiResponse> {
+  return this.http.get<InventoryStatusApiResponse>('/api/endpoint').pipe(
+    retry(2),
+    shareReplay(1)
+    // ✅ NO catchError here!
+  );
+}
+```
+
+#### ❌ WRONG Pattern:
+
+```typescript
+// ❌ DO NOT DO THIS
+getExecutiveData(): Observable<DashboardResponse<ExecutiveTabData>> {
+  return forkJoin({
+    bundleRevenue: this.getBundleRevenueFromApi(period),
+    inventoryStatus: this.getInventoryStatusFromApi()
+  }).pipe(
+    map(data => wrapResponse(data)),
+    catchError(error => createErrorResponse(error))
+  );
+}
+
+// ❌ PROBLEM: catchError inside individual observables
+private getBundleRevenueFromApi(period: DashboardPeriod): Observable<BundleRevenueApiResponse> {
+  return this.http.get<BundleRevenueApiResponse>('/api/endpoint', { params }).pipe(
+    retry(2),
+    catchError(err => {  // ❌ This transforms the error!
+      console.error('Bundle Revenue Error:', err);
+      throw err;  // Now this is no longer HttpErrorResponse
+    }),
+    shareReplay(1)
+  );
+}
+```
+
+**Why this matters:**
+
+1. `createErrorResponse()` needs the original `HttpErrorResponse` to parse backend error format (`{code: 400, message: "..."}`)
+2. When you add `catchError` inside forkJoin observables and re-throw, the error becomes a transformed object
+3. When `forkJoin` fails and calls the outer `catchError(createErrorResponse)`, it receives the already-transformed error
+4. `transformHttpError()` cannot parse the transformed error → returns `UNKNOWN_ERROR` instead of actual backend message
+
+**Result:**
+- ❌ Without pattern: Shows "Unexpected error occurred" with code "UNKNOWN_ERROR"
+- ✅ With pattern: Shows "Account ID must be provided by admin users" with code "400"
+
+### 🎯 Migration Checklist
+
+When updating old services to use unified error handling:
+
+- [ ] Remove inline `catchError(() => of([]))` or `catchError(() => of(null))`
+- [ ] Add import: `import { handleArrayError, handleObjectError, ... } from '../utils'`
+- [ ] Replace with appropriate handler (check decision tree above)
+- [ ] Add type parameter: `handleArrayError<EntityType>(...)`
+- [ ] Provide descriptive error context
+- [ ] For object endpoints, ensure return type includes `| null`
+- [ ] For OAuth/login, use `transformAuthError` instead of `transformHttpError`
+- [ ] Remove any custom error parsing logic (e.g., `parseErrorMessage()`)
+- [ ] **For forkJoin: Remove all `catchError` from individual observables inside forkJoin**
+- [ ] Test that errors are logged correctly with context
+
+### 📚 Related Files
+
+- **Utilities:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/http/http-error.utils.ts`
+- **Barrel Export:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/index.ts`
+- **Example Services:** See any file in `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/services/`
+- **Auth Service:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/views/pages/login/login.service.ts`
+
+## Utility Functions Organization Rules
+> **Created:** 2025-11-01 | **Last Updated:** 2025-11-01
+
+### 🎯 Critical: Check Before Creating New Utilities
+
+**ALWAYS follow this workflow when creating utility functions:**
+
+```
+1. Need a utility function?
+   ↓
+2. 🔍 SEARCH in /shared/utils first!
+   ↓
+3. Does it exist?
+   ├─ YES → ✅ Reuse existing utility
+   └─ NO  → Continue to step 4
+   ↓
+4. Is it reusable across domains?
+   ├─ YES → Create in /shared/utils (shared utility)
+   └─ NO  → Create in domain-specific utils
+```
+
+### 📂 Shared Utils Structure
+
+All shared utilities MUST be organized in domain-based folders:
+
+```
+/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/
+├── color/          # Color manipulation (hex, rgb, shading, constants)
+├── data/           # Data manipulation (search, format, transform)
+├── currency/       # Currency conversion, price calculations
+├── http/           # HTTP error handling, requests, responses
+└── testing/        # Mock utilities, test helpers
+```
+
+### 🚨 Critical Rules
+
+**❌ NEVER:**
+- Create utility without checking if it already exists in `/shared/utils`
+- Create duplicate utilities in different locations
+- Put utilities directly in `/shared/utils` root (must use folders)
+- Create domain-specific utility in `/shared/utils`
+- Create generic utility in domain folder
+
+**✅ ALWAYS:**
+- Search existing utilities before creating new ones
+- Use domain-based organization (color/, data/, http/, etc.)
+- Create barrel exports (`index.ts`) for each folder
+- Add JSDoc comments to all utility functions
+- Include usage examples in JSDoc
+
+### 📋 Decision Tree: Where to Create Utility?
+
+#### Step 1: Check Existing Utilities
+
+```bash
+# Search in shared utils
+grep -r "functionName" /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/
+
+# Search across entire codebase
+grep -r "functionName" /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/
+```
+
+#### Step 2: Determine Location
+
+**Use this decision tree:**
+
+```
+Is utility reusable across multiple domains/features?
+├─ YES → Create in /shared/utils
+│   └─ Which category?
+│       ├─ Color manipulation? → /shared/utils/color/
+│       ├─ Data formatting/search? → /shared/utils/data/
+│       ├─ Currency/pricing? → /shared/utils/currency/
+│       ├─ HTTP operations? → /shared/utils/http/
+│       ├─ Testing/mocking? → /shared/utils/testing/
+│       └─ New category? → Create new folder in /shared/utils/
+│
+└─ NO → Domain-specific
+    └─ Create in domain utils folder
+        Example: /views/dashboard/utils/
+```
+
+### 📝 Examples
+
+#### ✅ Correct: Reusable Utility in Shared
+
+**Scenario:** Need to format currency values
+
+```typescript
+// ❌ WRONG - Creating in domain folder
+// /views/orders/utils/currency-formatter.ts
+
+// ✅ CORRECT - Search first, found in shared utils
+import { formatCurrency } from '../../shared/utils/data';
+
+// Usage
+const formatted = formatCurrency(1234.56, 'USD'); // "$1,234.56"
+```
+
+#### ✅ Correct: Domain-Specific Utility
+
+**Scenario:** Calculate dashboard-specific metrics
+
+```typescript
+// ✅ CORRECT - Domain-specific, stays in domain
+// /views/dashboard/utils/metric-calculator.ts
+
+/**
+ * Calculate dashboard-specific KPIs
+ * This logic is only used in dashboard and not reusable
+ */
+export function calculateDashboardKPIs(data: DashboardData): DashboardMetrics {
+  // Dashboard-specific calculation logic
+}
+```
+
+#### ❌ Wrong: Creating Duplicate Utility
+
+**Scenario:** Need to search nested objects
+
+```typescript
+// ❌ WRONG - Not checking existing utilities
+// /views/customers/utils/object-search.ts
+export function searchInObject(obj: any, term: string): boolean {
+  // Duplicate implementation
+}
+
+// ✅ CORRECT - Reuse existing utility
+import { deepSearch } from '../../shared/utils/data';
+
+const found = deepSearch(customerData, 'search term');
+```
+
+### 🔨 Creating New Shared Utility
+
+When creating a new utility in `/shared/utils`:
+
+1. **Choose correct folder** based on domain
+2. **Create `.utils.ts` file** with descriptive name
+3. **Add JSDoc comments** with examples
+4. **Export from `index.ts`** in that folder
+5. **Update main barrel export** if needed
+
+**Example: Adding new data utility**
+
+```typescript
+// /shared/utils/data/validation.utils.ts
+
+/**
+ * Validate email format
+ *
+ * @param email - Email string to validate
+ * @returns true if valid email format
+ *
+ * @example
+ * ```typescript
+ * validateEmail('user@example.com'); // true
+ * validateEmail('invalid-email');    // false
+ * ```
+ */
+export function validateEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+```
+
+**Update barrel export:**
+
+```typescript
+// /shared/utils/data/index.ts
+export * from './search.utils';
+export * from './format.utils';
+export * from './validation.utils';  // Add new export
+```
+
+### 📦 Import Patterns
+
+**Prefer specific imports for tree-shaking:**
+
+```typescript
+// ✅ BEST - Import from specific category
+import { CHART_COLORS, shadeColor } from '@shared/utils/color';
+import { deepSearch } from '@shared/utils/data';
+
+// ✅ GOOD - Import from main barrel (convenience)
+import { CHART_COLORS, deepSearch } from '@shared/utils';
+
+// ❌ AVOID - Direct file import (bypasses barrel exports)
+import { CHART_COLORS } from '@shared/utils/color/color.constants';
+```
+
+### 🔍 Search Checklist Before Creating
+
+Before creating ANY utility, search these locations:
+
+- [ ] `/shared/utils/color/` - Color manipulation
+- [ ] `/shared/utils/data/` - Data formatting, searching, transformation
+- [ ] `/shared/utils/currency/` - Currency conversion, price calculations
+- [ ] `/shared/utils/http/` - HTTP error handling, transformations
+- [ ] `/shared/utils/testing/` - Mock utilities, test helpers
+- [ ] Domain-specific utils (e.g., `/views/dashboard/utils/`)
+
+**Search commands:**
+
+```bash
+# Search by function name
+grep -r "functionName" /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/
+
+# Search by keyword (e.g., "currency", "format", "search")
+grep -r "currency" /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/
+
+# List all utility files
+find /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/ -name "*.ts"
+```
+
+### 🏗️ Creating New Category
+
+If your utility doesn't fit existing categories:
+
+1. **Verify it's truly a new category** (not a variant of existing)
+2. **Create new folder** in `/shared/utils/` with descriptive name
+3. **Create barrel export** (`index.ts`)
+4. **Add JSDoc** at folder level explaining category
+5. **Update main barrel export** `/shared/utils/index.ts`
+6. **Document in CLAUDE.md** (this file)
+
+**Example: New "validation" category**
+
+```typescript
+// /shared/utils/validation/index.ts
+/**
+ * Validation utilities barrel export
+ *
+ * Provides validation functions for:
+ * - Email validation
+ * - Phone number validation
+ * - Form field validation
+ */
+
+export * from './email.utils';
+export * from './phone.utils';
+export * from './form.utils';
+```
+
+### 📚 Related Files
+
+- **Main barrel:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/index.ts`
+- **Color utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/color/`
+- **Data utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/data/`
+- **HTTP utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/http/`
+- **Currency utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/currency/`
+- **Testing utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/testing/`
 
 ### Routing
 - Uses `HashLocationStrategy` - all routes have `#` prefix

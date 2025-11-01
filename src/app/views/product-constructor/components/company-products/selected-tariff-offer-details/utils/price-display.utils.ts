@@ -4,8 +4,9 @@ import { ActiveTariffOffer } from '../../../../models';
 import {
   CurrencyPriceCalculatorUtils,
   CurrencyAwarePriceDifference
-} from '../../../../../../shared/utils/currency-price-calculator.utils';
+} from '../../../../../../shared';
 import { ProductsDataService } from '../../../../../../shared';
+import { createReactivePriceDifference } from '../../utils';
 
 /**
  * Interface for price display data
@@ -104,7 +105,7 @@ export class PriceDisplayUtils {
     }
 
     // Calculate currency-aware difference
-    return CurrencyPriceCalculatorUtils.createReactivePriceDifference(
+    return createReactivePriceDifference(
       originalPrice,
       currentPrice,
       productsDataService,

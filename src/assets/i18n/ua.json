@@ -72,7 +72,10 @@
     "logout": "Вийти"
   },
   "nav": {
+    "analytics": "Аналітика",
     "dashboard": "Панель керування",
+    "reports": "Звіти",
+    "adminOverview": "Огляд адміністратора",
     "companies": "Компанії",
     "customers": "Клієнти",
     "customer-details": "Деталі клієнта",
@@ -768,5 +771,47 @@
     "configurationCreated": "Конфігурацію створено успішно",
     "configurationUpdated": "Конфігурацію оновлено успішно",
     "formInvalid": "Форма заповнена невірно"
+  },
+  "dashboard": {
+    "title": "Панель аналітики",
+    "subtitle": "Дані в реальному часі про ваш eSIM бізнес",
+    "tabs": {
+      "executive": "Керівництво",
+      "subscribers": "Підписники",
+      "traffic": "Трафік",
+      "finance": "Фінанси"
+    },
+    "periods": {
+      "today": "Сьогодні",
+      "yesterday": "Вчора",
+      "last7days": "Останні 7 днів",
+      "last30days": "Останні 30 днів",
+      "lastMonth": "Останній місяць",
+      "custom": "Користувацький",
+      "startDate": "Дата початку",
+      "endDate": "Дата закінчення"
+    },
+    "actions": {
+      "refresh": "Оновити дані",
+      "export": "Експорт",
+      "apply": "Застосувати",
+      "cancel": "Скасувати"
+    },
+    "executive": {
+      "totalRevenue": "Загальний дохід",
+      "totalCost": "Загальні витрати",
+      "totalMargin": "Загальна маржа",
+      "new": "Новий",
+      "recurring": "Повторюваний",
+      "churn": "Відтік",
+      "subscribersByBundle": "Підписники за тарифами",
+      "revenueByBundle": "Дохід за тарифами",
+      "inventoryStatus": "Статус інвентарю",
+      "totalEsims": "Всього eSIM"
+    },
+    "inDevelopment": "В розробці",
+    "kpiMetricsComingSoon": "KPI метрики скоро будуть доступні",
+    "breakdownInDevelopment": "Деталізація доходу скоро буде доступна",
+    "dataNotAvailable": "Дані недоступні"
   }
 }

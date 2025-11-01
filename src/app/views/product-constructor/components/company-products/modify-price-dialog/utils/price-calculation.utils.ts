@@ -3,8 +3,9 @@ import { ActiveTariffOffer } from '../../../../models';
 import {
   CurrencyPriceCalculatorUtils,
   CurrencyAwarePriceDifference
-} from '../../../../../../shared/utils/currency-price-calculator.utils';
+} from '../../../../../../shared';
 import { ProductsDataService } from '../../../../../../shared';
+import { createReactivePriceDifference } from '../../utils';
 
 /**
  * Interface for price calculation data
@@ -68,7 +69,7 @@ export class PriceCalculationUtils {
       });
     }
 
-    return CurrencyPriceCalculatorUtils.createReactivePriceDifference(
+    return createReactivePriceDifference(
       basePrice,
       currentPrice,
       productsDataService,
@@ -105,7 +106,7 @@ export class PriceCalculationUtils {
       });
     }
 
-    return CurrencyPriceCalculatorUtils.createReactivePriceDifference(
+    return createReactivePriceDifference(
       currentPrice,
       newPrice,
       productsDataService,

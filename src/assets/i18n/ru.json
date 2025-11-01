@@ -276,7 +276,10 @@
     "logout": "Выйти"
   },
   "nav": {
+    "analytics": "Аналитика",
     "dashboard": "Панель управления",
+    "reports": "Отчеты",
+    "adminOverview": "Обзор администратора",
     "companies": "Компании",
     "customers": "Клиенты",
     "customer-details": "Детали клиента",
@@ -958,5 +961,47 @@
     "configurationCreated": "Конфигурация создана успешно",
     "configurationUpdated": "Конфигурация обновлена успешно",
     "formInvalid": "Форма заполнена неверно"
+  },
+  "dashboard": {
+    "title": "Панель аналитики",
+    "subtitle": "Данные в реальном времени о вашем eSIM бизнесе",
+    "tabs": {
+      "executive": "Руководство",
+      "subscribers": "Подписчики",
+      "traffic": "Трафик",
+      "finance": "Финансы"
+    },
+    "periods": {
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "last7days": "Последние 7 дней",
+      "last30days": "Последние 30 дней",
+      "lastMonth": "Последний месяц",
+      "custom": "Пользовательский",
+      "startDate": "Дата начала",
+      "endDate": "Дата окончания"
+    },
+    "actions": {
+      "refresh": "Обновить данные",
+      "export": "Экспорт",
+      "apply": "Применить",
+      "cancel": "Отмена"
+    },
+    "executive": {
+      "totalRevenue": "Общий доход",
+      "totalCost": "Общие затраты",
+      "totalMargin": "Общая маржа",
+      "new": "Новый",
+      "recurring": "Повторяющийся",
+      "churn": "Отток",
+      "subscribersByBundle": "Подписчики по тарифам",
+      "revenueByBundle": "Доход по тарифам",
+      "inventoryStatus": "Статус инвентаря",
+      "totalEsims": "Всего eSIM"
+    },
+    "inDevelopment": "В разработке",
+    "kpiMetricsComingSoon": "KPI метрики скоро будут доступны",
+    "breakdownInDevelopment": "Детализация дохода скоро будет доступна",
+    "dataNotAvailable": "Данные недоступны"
   }
 }

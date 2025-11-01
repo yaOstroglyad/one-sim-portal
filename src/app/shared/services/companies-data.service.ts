@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { catchError, Observable, tap } from 'rxjs';
 import { DataService } from './data.service';
 import { Company } from '../model';
 import { CacheHubService, DataType } from './cache-hub';
+import { handleArrayError, handleWithDefault } from '../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -24,10 +25,7 @@ export class CompaniesDataService extends DataService<Company> {
 			() => {
 				let params = new HttpParams();
 				return this.http.get<Company[]>(this.apiUrl, {params}).pipe(
-					catchError(() => {
-						console.warn('error happened, presenting mocked data');
-						return of([]);
-					})
+					catchError(handleArrayError('fetching companies'))
 				);
 			},
 			{ dataType: DataType.REFERENCE }
@@ -40,10 +38,7 @@ export class CompaniesDataService extends DataService<Company> {
 				// Invalidate companies list cache after creation
 				this.cacheHub.invalidate('companies:list');
 			}),
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
+			catchError(handleArrayError('creating company'))
 		);
 	}
 
@@ -63,14 +58,11 @@ export class CompaniesDataService extends DataService<Company> {
 		});
 
 		return this.http.get<any>('/api/v1/companies/query/all/page', { params }).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of({
-					totalElements: 0,
-					totalPages: 0,
-					content: []
-				});
-			})
+			catchError(handleWithDefault('fetching paginated companies', {
+				totalElements: 0,
+				totalPages: 0,
+				content: []
+			}))
 		);
 	}
 
@@ -78,10 +70,7 @@ export class CompaniesDataService extends DataService<Company> {
 		return this.http.post<any>('/api/v1/companies/send-user-registration-email', {
 			entityId, email
 		}).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
+			catchError(handleArrayError('sending invite email'))
 		);
 	}
 }

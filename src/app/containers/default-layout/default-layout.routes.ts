@@ -53,13 +53,13 @@ export const DEFAULT_LAYOUT_ROUTES: Routes = [
         loadChildren: () => import('../../views/settings/settings-routing').then(m => m.SettingsRouting)
       },
       {
-        path: 'dashboard',
+        path: 'analytics',
         data: {
-          title: 'Dashboard',
+          title: 'Analytics',
           featureToggle: 'dashboard'
         },
         canActivate: [FeatureToggleGuard],
-        loadComponent: () => import('../../views/dashboard/dashboard.component').then(m => m.DashboardComponent)
+        loadChildren: () => import('../../views/analytics/analytics.routes').then(m => m.ANALYTICS_ROUTES)
       },
       {
         path: 'storybook',

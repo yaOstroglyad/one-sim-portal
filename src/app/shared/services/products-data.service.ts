@@ -6,6 +6,7 @@ import { DataService } from '../../shared';
 import { map } from 'rxjs/operators';
 import { Pagination } from '../model/grid-configs';
 import { CacheHubService, DataType } from './cache-hub';
+import { handleArrayError, handleWithDefault, handleEmptyObjectError } from '../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -23,10 +24,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	list(): Observable<Package[]> {
 		return this.http.get<Package[]>(this.apiUrl).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
+			catchError(handleArrayError('fetching products'))
 		);
 	}
 
@@ -52,10 +50,7 @@ export class ProductsDataService extends DataService<Package> {
 			params: queryParams
 		}).pipe(
 			map(e => e?.content),
-			catchError(() => {
-				console.warn('Error occurred, returning mocked data');
-				return of([]);
-			})
+			catchError(handleArrayError('fetching filtered products'))
 		);
 	}
 
@@ -64,10 +59,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	create(product: any): Observable<any> {
 		return this.http.post<any>(`/api/v1/products/command/create`, product).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
+			catchError(handleArrayError('creating product'))
 		);
 	}
 
@@ -76,10 +68,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	update(product: any): Observable<any> {
 		return this.http.patch<any>(`/api/v1/products/command/update`, product).pipe(
-			catchError(() => {
-				console.warn('error happened, cant update');
-				return of([]);
-			})
+			catchError(handleArrayError('updating product'))
 		);
 	}
 
@@ -88,10 +77,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	updateStatus(changeStatus: any): Observable<any> {
 		return this.http.patch<any>(`/api/v1/products/command/update-status`, changeStatus).pipe(
-			catchError(() => {
-				console.warn('error happened, cant update status');
-				return of([]);
-			})
+			catchError(handleArrayError('updating product status'))
 		);
 	}
 
@@ -100,10 +86,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	getStatuses(): Observable<string[]> {
 		return this.http.get<any>(`/api/v1/products/statuses`).pipe(
-			catchError(() => {
-				console.warn('error happened, cant get statuses');
-				return of([]);
-			})
+			catchError(handleArrayError('fetching product statuses'))
 		);
 	}
 
@@ -111,10 +94,7 @@ export class ProductsDataService extends DataService<Package> {
 		return this.cacheHub.get(
 			'currencies:all-currencies',
 			() => this.http.get<string[]>(`/api-product/api/v1/esim-product/common/currency`).pipe(
-				catchError(() => {
-					console.warn('error happened, presenting mocked data');
-					return of([]);
-				})
+				catchError(handleArrayError('fetching currencies'))
 			),
 			{
 				dataType: DataType.REFERENCE,
@@ -168,10 +148,7 @@ export class ProductsDataService extends DataService<Package> {
 				};
 
 				return of(mockExchangeRates).pipe(
-					catchError(() => {
-						console.warn('Error getting exchange rates, using fallback USD rates');
-						return of({ 'USD': 1.0 });
-					})
+					catchError(handleWithDefault('fetching exchange rates', { 'USD': 1.0 }))
 				);
 			},
 			{
@@ -186,10 +163,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	getProductTemplate(params: any): Observable<any> {
 		return this.http.get<any>(`/api/v1/products/command/template`, {params}).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of({});
-			})
+			catchError(handleEmptyObjectError('fetching product template'))
 		);
 	}
 
@@ -198,10 +172,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	getParentProducts(): Observable<any> {
 		return this.http.get<any>(`/api/v1/products/query/parent`).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of({});
-			})
+			catchError(handleEmptyObjectError('fetching parent products'))
 		);
 	}
 

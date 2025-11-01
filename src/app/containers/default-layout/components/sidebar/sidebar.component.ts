@@ -18,7 +18,7 @@ import { filter } from 'rxjs/operators';
 
 import { NavItem, BrandConfig, LayoutConfig } from '../../models';
 import { LayoutService } from '../../services';
-import { LanguageService } from '../../../../shared';
+import { LanguageService, IconComponent } from '../../../../shared';
 
 @Component({
   selector: 'app-sidebar',
@@ -27,6 +27,7 @@ import { LanguageService } from '../../../../shared';
     CommonModule,
     RouterModule,
     IconDirective,
+    IconComponent,
     TranslateModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

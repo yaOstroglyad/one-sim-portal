@@ -1,12 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LayoutConfig } from '../models';
+import { ThemeService } from '../../../shared';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LayoutService {
   private readonly STORAGE_KEY = 'layout-config';
+  private readonly themeService = inject(ThemeService);
 
   private layoutConfig$ = new BehaviorSubject<LayoutConfig>({
     sidebarCollapsed: false,
@@ -16,6 +18,15 @@ export class LayoutService {
 
   constructor() {
     this.loadFromStorage();
+
+    // Sync with ThemeService
+    this.themeService.theme$.subscribe(theme => {
+      const current = this.layoutConfig$.value;
+      const isDark = theme === 'dark';
+      if (current.darkTheme !== isDark) {
+        this.layoutConfig$.next({ ...current, darkTheme: isDark });
+      }
+    });
   }
 
   getLayoutConfig(): Observable<LayoutConfig> {
@@ -28,9 +39,8 @@ export class LayoutService {
   }
 
   toggleTheme(): void {
-    const current = this.layoutConfig$.value;
-    this.updateConfig({ ...current, darkTheme: !current.darkTheme });
-    this.applyTheme(current.darkTheme);
+    // Delegate to ThemeService
+    this.themeService.toggleTheme();
   }
 
   private updateConfig(config: LayoutConfig): void {
@@ -43,8 +53,12 @@ export class LayoutService {
     if (stored) {
       try {
         const config = JSON.parse(stored);
-        this.layoutConfig$.next(config);
-        this.applyTheme(config.darkTheme);
+        // Don't load darkTheme from here - ThemeService manages it
+        this.layoutConfig$.next({
+          sidebarCollapsed: config.sidebarCollapsed || false,
+          darkTheme: this.themeService.isDarkTheme(),
+          rtlDirection: config.rtlDirection || false
+        });
         this.applyDirection(config.rtlDirection);
       } catch (e) {
         console.warn('Failed to parse stored layout config');
@@ -53,16 +67,12 @@ export class LayoutService {
   }
 
   private saveToStorage(config: LayoutConfig): void {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(config));
-  }
-
-  private applyTheme(isDark: boolean): void {
-    const htmlElement = document.documentElement;
-    if (isDark) {
-      htmlElement.classList.add('dark');
-    } else {
-      htmlElement.classList.remove('dark');
-    }
+    // Don't save darkTheme - ThemeService manages it
+    const configToSave = {
+      sidebarCollapsed: config.sidebarCollapsed,
+      rtlDirection: config.rtlDirection
+    };
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(configToSave));
   }
 
   private applyDirection(isRtl: boolean): void {

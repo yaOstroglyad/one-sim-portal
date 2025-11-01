@@ -1,12 +1,29 @@
-import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION } from '../../shared';
+import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION, SPECIAL_PERMISSION } from '../../shared';
 
 export const navItems: any[] = [
 	{
-		name: 'nav.dashboard',
-		url: 'dashboard',
+		name: 'nav.analytics',
+		url: '/home/analytics',
 		iconComponent: {name: 'cil-chart-pie'},
-		permissions: [ADMIN_PERMISSION],
-		featureToggle: 'dashboard'
+		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION, SPECIAL_PERMISSION],
+		featureToggle: 'dashboard',
+		children: [
+			{
+				name: 'nav.dashboard',
+				url: '/home/analytics/dashboard',
+				permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION, SPECIAL_PERMISSION]
+			},
+			{
+				name: 'nav.reports',
+				url: '/home/analytics/reports',
+				permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION, SPECIAL_PERMISSION]
+			},
+			{
+				name: 'nav.adminOverview',
+				url: '/home/analytics/admin-overview',
+				permissions: [ADMIN_PERMISSION]
+			}
+		]
 	},
 	{
 		name: 'nav.companies',

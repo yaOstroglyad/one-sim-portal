@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
+import { transformHttpError } from '../utils';
 
 
 @Injectable({providedIn: 'root'})
@@ -31,7 +32,9 @@ export class CustomHttpInterceptor implements HttpInterceptor {
 				if (errorResponse.status === 401) {
 					this.router.navigate(['login']);
 				}
-				return throwError(errorResponse);
+				// Transform HTTP error to structured ApiError format
+				const apiError = transformHttpError(errorResponse);
+				return throwError(() => apiError);
 			})
 		);
 	}

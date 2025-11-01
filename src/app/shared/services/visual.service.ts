@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
-import { hexRgb, rgbToHsl } from '../utils';
+import { hexToRgb, rgbToHsl } from '../utils';
 import { LocalStorageService } from 'ngx-webstorage';
 
 export interface VisualConfig {
@@ -82,7 +82,7 @@ export class VisualService {
    */
   private updateCssVariables(config: VisualConfig): void {
     if (config.primaryColor) {
-      const rgbConfig = hexRgb(config.primaryColor);
+      const rgbConfig = hexToRgb(config.primaryColor);
       const [hue, saturation, lightness] = rgbToHsl(rgbConfig.red, rgbConfig.green, rgbConfig.blue);
 
       document.documentElement.style.setProperty('--os-color-primary', config.primaryColor);

@@ -1,5 +1,8 @@
 // Common models following product-constructor pattern
 import { TicketStatus, TicketPriority, TicketCategory } from './ticket.model';
+// Re-export shared pagination types for backward compatibility
+import { PageRequest as PageRequestType } from '../../../shared/model/page-response';
+export { PageRequest, PageResponse } from '../../../shared/model/page-response';
 
 export interface TicketSearchRequest {
   searchParams: {
@@ -10,23 +13,7 @@ export interface TicketSearchRequest {
     search?: string;
     accountId?: string;
   };
-  page: PageRequest;
-}
-
-export interface PageRequest {
-  page: number;
-  size: number;
-  sort?: string[];
-}
-
-export interface PageResponse<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  last: boolean;
-  first: boolean;
-  number: number;
-  size: number;
+  page: PageRequestType;
 }
 
 

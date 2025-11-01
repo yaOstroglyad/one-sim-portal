@@ -1,10 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { DataService } from './data.service';
 import { AvailableOrders, Order } from '../model/order';
 import { ordersMock } from '../../views/orders/orders-mock';
 import { CacheHubService, DataType } from './cache-hub';
+import { handleArrayError, handleWithDefault } from '../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -21,10 +22,7 @@ export class OrdersDataService extends DataService<Order> {
 		return this.cacheHub.get(
 			'orders:all-orders',
 			() => this.http.get<Order[]>(this.apiUrl).pipe(
-				catchError(() => {
-					console.warn('error happened, presenting mocked data');
-					return of(ordersMock);
-				})
+				catchError(handleWithDefault('fetching orders', ordersMock))
 			),
 			{
 				dataType: DataType.BUSINESS,
@@ -35,19 +33,13 @@ export class OrdersDataService extends DataService<Order> {
 
 	availableOrders(): Observable<AvailableOrders[]> {
 		return this.http.get<AvailableOrders[]>('/api/v1/inventory/query/orders/available').pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of([]);
-			})
+			catchError(handleArrayError('fetching available orders'))
 		);
 	}
 
 	updateDescription(param: any): Observable<any> {
 		return this.http.patch<any>(`/api/v1/inventory/command/orders/update`, param).pipe(
-			catchError(() => {
-				console.warn('error happened, cant update status');
-				return of([])
-			})
+			catchError(handleArrayError('updating order description'))
 		);
 	}
 }

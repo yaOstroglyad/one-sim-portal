@@ -18,7 +18,7 @@ import { GlobalErrorHandlerService } from './app/shared/auth/error-handler.servi
 import { FeatureToggleService, FEATURE_TOGGLES_SERVICE } from './app/shared';
 import { IconSetService } from '@coreui/icons-angular';
 import { Title } from '@angular/platform-browser';
-import { initializeMockMode } from './app/shared/utils/mock-init';
+import { initializeMockMode } from './app/shared';
 import { provideFabLayout, provideFeature, provideFabButton } from './app/shared/components/fab-layout';
 
 // Import routes
@@ -78,7 +78,7 @@ export function provideAppInitialization() {
     const translate = inject(TranslateService);
     const authService = inject(AuthService);
     const featureToggleService = inject(FeatureToggleService);
-    
+
     return (async (): Promise<void> => {
       try {
         // Initialize feature toggles first

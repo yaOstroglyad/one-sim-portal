@@ -158,7 +158,10 @@
     "logout": "התנתק"
   },
   "nav": {
+    "analytics": "אנליטיקה",
     "dashboard": "לוח בקרה",
+    "reports": "דוחות",
+    "adminOverview": "סקירת מנהל",
     "companies": "חברות",
     "customers": "לקוחות",
     "customer-details": "פרטי לקוח",
@@ -801,5 +804,47 @@
     "configurationCreated": "התצורה נוצרה בהצלחה",
     "configurationUpdated": "התצורה עודכנה בהצלחה",
     "formInvalid": "הטופס אינו תקין"
+  },
+  "dashboard": {
+    "title": "לוח מחווני ביצועים",
+    "subtitle": "תובנות בזמן אמת על ביצועי עסק ה-eSIM שלך",
+    "tabs": {
+      "executive": "ניהול",
+      "subscribers": "מנויים",
+      "traffic": "תעבורה",
+      "finance": "כספים"
+    },
+    "periods": {
+      "today": "היום",
+      "yesterday": "אתמול",
+      "last7days": "7 ימים אחרונים",
+      "last30days": "30 ימים אחרונים",
+      "lastMonth": "חודש שעבר",
+      "custom": "מותאם אישית",
+      "startDate": "תאריך התחלה",
+      "endDate": "תאריך סיום"
+    },
+    "actions": {
+      "refresh": "רענן נתונים",
+      "export": "יצא",
+      "apply": "החל",
+      "cancel": "ביטול"
+    },
+    "executive": {
+      "totalRevenue": "הכנסה כוללת",
+      "totalCost": "עלות כוללת",
+      "totalMargin": "מרווח כולל",
+      "new": "חדש",
+      "recurring": "חוזר",
+      "churn": "נשירה",
+      "subscribersByBundle": "מנויים לפי חבילה",
+      "revenueByBundle": "הכנסה לפי חבילה",
+      "inventoryStatus": "מצב מלאי",
+      "totalEsims": "סה\"כ eSIM"
+    },
+    "inDevelopment": "בפיתוח",
+    "kpiMetricsComingSoon": "מדדי KPI יהיו זמינים בקרוב",
+    "breakdownInDevelopment": "פירוט הכנסות יהיה זמין בקרוב",
+    "dataNotAvailable": "נתונים לא זמינים"
   }
 }

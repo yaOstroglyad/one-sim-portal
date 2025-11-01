@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { TransactionOrder } from '../model';
+import { handleArrayError } from '../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -17,10 +18,7 @@ export class TransactionDataService {
 		}
 
 		return this.http.get<TransactionOrder[]>(`/api/v1/transaction-orders/query/all`, { params }).pipe(
-			catchError(() => {
-				console.warn('Error occurred, presenting mocked data');
-				return of([]);
-			})
+			catchError(handleArrayError('fetching transactions'))
 		);
 	}
 }

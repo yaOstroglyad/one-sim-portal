@@ -139,6 +139,7 @@
     &-link {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding: 0.75rem 1rem;
       color: var(--os-sidebar-text);
       text-decoration: none;
@@ -171,7 +172,6 @@
 
       &--nested {
         padding-left: map.get(vars.$os-spacing, '12');
-        justify-content: space-between;
 
         .sidebar--rtl & {
           padding-left: map.get(vars.$os-spacing, '4');
@@ -190,10 +190,17 @@
       }
 
       &--expanded {
-        .sidebar__nav-arrow svg {
+        .sidebar__nav-arrow {
           transform: rotate(180deg);
         }
       }
+    }
+
+    &-content {
+      display: flex;
+      align-items: center;
+      gap: map.get(vars.$os-spacing, '7');
+      min-width: 0;
     }
 
     &-icon {
@@ -202,13 +209,7 @@
       justify-content: center;
       width: 20px;
       height: 20px;
-      margin-right: map.get(vars.$os-spacing, '7');
       flex-shrink: 0;
-
-      .sidebar--rtl & {
-        margin-right: 0;
-        margin-left: map.get(vars.$os-spacing, '7');
-      }
 
       svg {
         width: 20px;
@@ -229,13 +230,8 @@
       justify-content: center;
       width: 16px;
       height: 16px;
-      margin-left: map.get(vars.$os-spacing, '2');
+      flex-shrink: 0;
       transition: transform 0.2s ease;
-
-      .sidebar--rtl & {
-        margin-left: 0;
-        margin-right: map.get(vars.$os-spacing, '2');
-      }
 
       svg {
         width: 16px;
@@ -254,12 +250,7 @@
       font-size: map.get(vars.$os-font-sizes, 'xs');
       font-weight: 600;
       border-radius: map.get(vars.$os-border-radius, 'full');
-      margin-left: auto;
-
-      .sidebar--rtl & {
-        margin-left: 0;
-        margin-right: auto;
-      }
+      flex-shrink: 0;
 
       &[data-color="primary"] {
         background: var(--os-color-primary);
@@ -347,27 +338,24 @@
     transition: all 0.2s ease;
     overflow: hidden;
 
-    // SVG arrow icon
+    // SVG arrow icon using ::before
     &::before {
       content: '';
       display: inline-block;
       width: 20px;
       height: 20px;
-      margin: 17px;
-      background-image: url('/assets/icons/sidebar-toggle-arrows.svg');
+      margin: 0 map.get(vars.$os-spacing, '4');
+      background-image: url('/assets/icons/chevron-down.svg');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
       transition: transform 0.2s ease;
-    }
-
-    &:hover::before {
-      opacity: 1;
+      transform: rotate(90deg); // Point left by default (chevron-down rotated 90deg = chevron-left)
     }
 
     .sidebar--collapsed & {
       &::before {
-        transform: rotate(180deg);
+        transform: rotate(-90deg); // Point right when collapsed (chevron-down rotated -90deg = chevron-right)
       }
     }
 
@@ -375,21 +363,17 @@
       border-top-color: rgba(255, 255, 255, 0.1);
     }
 
-    .sidebar--collapsed & {
-      svg {
-        transform: rotate(180deg);
-      }
-    }
-
     .sidebar--rtl & {
+      justify-content: start;
+
       &::before {
-        transform: rotate(180deg);
+        transform: rotate(-90deg); // Point right in RTL (chevron-down rotated -90deg = chevron-right)
       }
     }
 
     .sidebar--rtl.sidebar--collapsed & {
       &::before {
-        transform: rotate(0deg);
+        transform: rotate(90deg); // Point left when collapsed in RTL (chevron-down rotated 90deg = chevron-left)
       }
     }
   }

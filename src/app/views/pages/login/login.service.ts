@@ -4,6 +4,8 @@ import { first, Subject, EMPTY } from 'rxjs';
 import { takeUntil, switchMap, mapTo, tap, catchError } from 'rxjs/operators';
 import { AuthService, LoginRequest, LoginResponse } from '../../../shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpErrorResponse } from '@angular/common/http';
+import { transformAuthError } from '../../../shared';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService implements OnDestroy {
@@ -36,28 +38,20 @@ export class LoginService implements OnDestroy {
 			}),
 
 			catchError(err => {
-				const msg = this.parseErrorMessage(err);
+				// Use specialized auth error transformation for OAuth/login errors
+				let message = 'Authorization error';
+				if (err instanceof HttpErrorResponse) {
+					const authError = transformAuthError(err);
+					message = authError.message;
+				} else if (err?.message) {
+					message = err.message;
+				}
 				console.error('Login error:', err);
-				this.notify(msg);
+				this.notify(message);
 				return EMPTY;
 			})
 
 		).subscribe();
-	}
-
-	private parseErrorMessage(err: any): string {
-		// Attempt to extract a readable message from the backend format
-		try {
-			if (typeof err?.error?.message === 'string') {
-				const parsed = JSON.parse(err.error.message);
-				return parsed.error_description
-					|| parsed.error
-					|| `Authorization error (${err.status || '??'})`;
-			}
-		} catch {
-			// no-op
-		}
-		return `Authorization error (${err.status || '??'})`;
 	}
 
 	private notify(message: string, panelClass = 'app-notification-error'): void {
