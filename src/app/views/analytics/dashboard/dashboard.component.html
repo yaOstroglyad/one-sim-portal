@@ -1,6 +1,13 @@
 <div class="dashboard-container" [class.dark-theme]="isDarkTheme()">
+  <!-- Account Selector (only for admins) -->
+  <app-account-selector *ngIf="isAdmin()"
+                        [helperText]="'COMMON.select_account_hint_message'"
+                        [selectFirstByDefault]="true"
+                        (accountSelected)="onAccountSelected($event)">
+  </app-account-selector>
+
   <!-- Dashboard Header -->
-  <div class="dashboard-header">
+  <div class="dashboard-header mt-2">
     <div class="header-left">
       <h1 class="dashboard-title">{{ 'dashboard.title' | translate }}</h1>
       <p class="dashboard-subtitle">{{ 'dashboard.subtitle' | translate }}</p>

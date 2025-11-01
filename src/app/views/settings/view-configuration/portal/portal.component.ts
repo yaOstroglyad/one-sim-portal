@@ -33,9 +33,9 @@ import {
 	catchError,
 } from 'rxjs/operators';
 import { FormConfig } from 'src/app/shared';
-import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
+import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { VisualService } from 'src/app/shared/services/visual.service';
+import { VisualService } from 'src/app/shared/services/ui/visual.service';
 
 @Component({
   standalone: true,

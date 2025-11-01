@@ -1,7 +1,7 @@
 import { FieldType, FormConfig, FormGeneratorComponent, SelectOption, shadeColor } from 'src/app/shared';
 import { map } from 'rxjs';
 import { ViewConfiguration, ViewConfigurationService } from '../view-configuration.service';
-import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
+import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
 import { Validators } from '@angular/forms';
 
 export function getRetailSettingsRequest(form: any): ViewConfiguration {

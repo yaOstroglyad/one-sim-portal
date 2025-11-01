@@ -36,27 +36,16 @@ export * from './components/column-control/column-control.component'
 export * from './components/form-generator/form-generator.component'
 
 export * from './components/generic-table/table-config-abstract.service';
-export * from './services/data.service';
-export * from './services/language.service';
-export { Language } from './services/language.service';
-export * from './services/providers-data.service';
-export * from './services/customers-data.service';
-export * from './services/companies-data.service';
-export * from './services/accounts-data.service';
-export * from './services/orders-data.service';
-export * from './services/provider-bundles-data.service';
-export * from './services/purchased-products-data.service';
-export * from './services/subscriber-data.service';
-export * from './services/transaction-data.service';
-export * from './services/domains-data.service';
-export * from './services/products-data.service';
-export * from './services/visual.service';
-export * from './services/white-label-data.service';
-export * from './services/country.service';
-export * from './services/theme.service';
 
-export * from './services/feature-toggle';
-export * from './services/user-role.service';
+// Services - organized by category
+export * from './services/data';        // Data/API services
+export * from './services/ui';          // UI/UX services
+export * from './services/core';        // Core/foundational services
+export * from './services/feature-toggle';  // Feature toggle service
+export * from './services/cache-hub';   // Cache service
+
+// Named exports for specific services
+export { Language } from './services/ui/language.service';
 export * from './directives/feature-toggle.directive';
 
 export * from './auth/permission.guard';

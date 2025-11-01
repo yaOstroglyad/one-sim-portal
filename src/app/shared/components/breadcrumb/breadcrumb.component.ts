@@ -4,7 +4,7 @@ import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
-import { LanguageService } from '../../services/language.service';
+import { LanguageService } from '../../services/ui';
 
 interface Breadcrumb {
   readonly label: string;
@@ -66,7 +66,7 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
                             breadcrumbs: Breadcrumb[] = []): Breadcrumb[] {
     // Get the primary outlet child
     let child = route.firstChild;
-    
+
     // If no child, return current breadcrumbs
     if (!child) {
       return breadcrumbs;
@@ -83,9 +83,9 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
       // Check for title in route data
       const title = child.snapshot.data['title'];
       if (title) {
-        const breadcrumb = { 
-          label: title, 
-          url: url || '/' 
+        const breadcrumb = {
+          label: title,
+          url: url || '/'
         };
         breadcrumbs.push(breadcrumb);
       }

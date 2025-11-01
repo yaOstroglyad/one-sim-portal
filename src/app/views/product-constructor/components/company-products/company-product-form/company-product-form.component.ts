@@ -7,7 +7,7 @@ import { FormGeneratorComponent, FormConfig } from '../../../../../shared';
 import { CompanyProductService, ProductService } from '../../../services';
 import { CompanyProduct, ActiveTariffOffer } from '../../../models';
 import { AccountsDataService } from '../../../../../shared';
-import { TariffOfferService } from '../../../../../shared/services/tariff-offer.service';
+import { TariffOfferService } from '../../../../../shared';
 import { SelectedTariffOfferDetailsComponent } from '../selected-tariff-offer-details';
 import { UserRoleService } from '../../../../../shared';
 import { UIConfigFactory, CompanyProductFormConfig } from '../factories';

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
-import { hexToRgb, rgbToHsl } from '../utils';
+import { hexToRgb, rgbToHsl } from '../../utils';
 import { LocalStorageService } from 'ngx-webstorage';
 
 export interface VisualConfig {

@@ -128,6 +128,17 @@
     "noPermissionMessage": "You do not have permission to view this page.",
     "goHomeButton": "Go to Home"
   },
+  "noPermissions": {
+    "title": "No Permissions Configured",
+    "description": "Your account is authenticated, but doesn't have any permissions configured to access this application.",
+    "loggedInAs": "Logged in as",
+    "whatThisMeans": "What this means:",
+    "reason1": "Your account exists but no role has been assigned yet",
+    "reason2": "The administrator needs to configure your permissions",
+    "reason3": "You will not be able to access any features until permissions are granted",
+    "logout": "Logout",
+    "helpText": "If you believe this is an error, please contact your system administrator through your usual communication channel."
+  },
   "login": {
     "userNamePlaceholder": "User name / Email",
     "passwordPlaceholder": "Password",

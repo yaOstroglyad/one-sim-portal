@@ -6,10 +6,9 @@ import {
   CreateTariffOfferRequest,
   UpdateTariffOfferRequest,
   TariffOffer,
-  TariffOfferSearchRequest,
   ActiveTariffOffer
-} from '../../views/product-constructor/models';
-import { CacheHubService, DataType } from './cache-hub';
+} from '../../../views/product-constructor/models';
+import { CacheHubService, DataType } from '../cache-hub';
 
 @Injectable({
   providedIn: 'root'
@@ -75,14 +74,14 @@ export class TariffOfferService {
    */
   getActiveTariffOffers(productId?: string): Observable<ActiveTariffOffer[]> {
     let params = new HttpParams();
-    
+
     // Only add productId param if it's provided
     if (productId) {
       params = params.set('productId', productId);
     }
-    
+
     // Generate cache key based on productId
-    const cacheKey = productId 
+    const cacheKey = productId
       ? `tariff-offers:active-${productId}`
       : 'tariff-offers:active-all';
 

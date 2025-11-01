@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
-import { DataService } from './data.service';
-import { Domain } from '../model/domain';
-import { handleArrayError, handleWithDefault } from '../utils';
+import { DataService } from '../core';
+import { Domain } from '../../model/domain';
+import { handleArrayError, handleWithDefault } from '../../utils';
 
 @Injectable({
   providedIn: 'root'

@@ -15,7 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
-import { AccountsDataService } from '../../services/accounts-data.service';
+import { AccountsDataService } from '../../services/data';
 import { Subject } from 'rxjs';
 import { Account } from '../../model';
 
@@ -66,10 +66,10 @@ export class AccountSelectorComponent implements OnInit, OnDestroy {
 			.pipe(takeUntil(this.destroy$))
 			.subscribe(accounts => {
 				this.accounts = accounts;
-				
+
 				// Auto-select account with priority order
 				let accountToSelect: Account | undefined = undefined;
-				
+
 				// 1. Pre-selected account ID (from navigation)
 				if (this.preSelectedAccountId && accounts.length > 0) {
 					accountToSelect = accounts.find(account => account.id === this.preSelectedAccountId);
@@ -77,23 +77,23 @@ export class AccountSelectorComponent implements OnInit, OnDestroy {
 						console.log('[AccountSelector] Auto-selecting pre-selected account:', accountToSelect.name);
 					}
 				}
-				
+
 				// 2. Default account name (search by name)
 				if (!accountToSelect && this.defaultAccountName && accounts.length > 0) {
-					accountToSelect = accounts.find(account => 
+					accountToSelect = accounts.find(account =>
 						account.name?.toLowerCase().includes(this.defaultAccountName!.toLowerCase())
 					);
 					if (accountToSelect) {
 						console.log('[AccountSelector] Auto-selecting default account:', accountToSelect.name);
 					}
 				}
-				
+
 				// 3. First account (if selectFirstByDefault is enabled)
 				if (!accountToSelect && this.selectFirstByDefault && accounts.length > 0) {
 					accountToSelect = accounts[0];
 					console.log('[AccountSelector] Auto-selecting first account:', accountToSelect.name);
 				}
-				
+
 				if (accountToSelect) {
 					this.accountControl.setValue(accountToSelect.id, { emitEvent: false });
 					this.selectedAccountId = accountToSelect.id;
@@ -103,7 +103,7 @@ export class AccountSelectorComponent implements OnInit, OnDestroy {
 						this.accountSelected.emit(accountToSelect!);
 					}, 100);
 				}
-				
+
 				this.cdr.markForCheck();
 			});
 	}

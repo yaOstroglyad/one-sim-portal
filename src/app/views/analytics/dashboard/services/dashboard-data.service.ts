@@ -44,6 +44,10 @@ export class DashboardDataService {
   private readonly selectedPeriodSignal = signal<DashboardPeriod>(getDefaultPeriod());
   public readonly period = this.selectedPeriodSignal.asReadonly();
 
+  // Account ID for filtering data (used by admins)
+  private readonly accountIdSignal = signal<string | null>(null);
+  public readonly accountId = this.accountIdSignal.asReadonly();
+
   /**
    * Get Executive tab data
    */
@@ -81,6 +85,12 @@ export class DashboardDataService {
       dateTo: period.endDate.toISOString()
     };
 
+    // Add accountId if set (for admin filtering)
+    const currentAccountId = this.accountIdSignal();
+    if (currentAccountId) {
+      params.accountId = currentAccountId;
+    }
+
     return this.http.get<BundleRevenueApiResponse>(
       DASHBOARD_API_CONFIG.endpoints.executive.bundleRevenue,
       { params }
@@ -94,8 +104,17 @@ export class DashboardDataService {
    * Get Inventory Status from real API
    */
   private getInventoryStatusFromApi(): Observable<InventoryStatusApiResponse> {
+    const params: any = {};
+
+    // Add accountId if set (for admin filtering)
+    const currentAccountId = this.accountIdSignal();
+    if (currentAccountId) {
+      params.accountId = currentAccountId;
+    }
+
     return this.http.get<InventoryStatusApiResponse>(
-      DASHBOARD_API_CONFIG.endpoints.executive.inventoryStatus
+      DASHBOARD_API_CONFIG.endpoints.executive.inventoryStatus,
+      { params }
     ).pipe(
       retry(HTTP_RETRY_CONFIG.retries),
       shareReplay(HTTP_RETRY_CONFIG.shareReplay)
@@ -296,5 +315,19 @@ export class DashboardDataService {
    */
   getCurrentPeriod(): DashboardPeriod {
     return this.selectedPeriodSignal();
+  }
+
+  /**
+   * Set account ID for filtering (used by admins)
+   */
+  setAccountId(accountId: string | null): void {
+    this.accountIdSignal.set(accountId);
+  }
+
+  /**
+   * Get current account ID value
+   */
+  getAccountId(): string | null {
+    return this.accountIdSignal();
   }
 }

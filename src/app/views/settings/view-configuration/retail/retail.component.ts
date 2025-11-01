@@ -10,7 +10,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ViewConfigurationService } from '../view-configuration.service';
 import { Observable, catchError, map, of } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
-import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
+import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
 import { tap } from 'rxjs/operators';
 import { MatInputModule } from '@angular/material/input';
 

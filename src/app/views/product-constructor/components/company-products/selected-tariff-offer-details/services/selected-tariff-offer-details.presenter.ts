@@ -3,17 +3,17 @@ import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { map, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 import { ActiveTariffOffer } from '../../../../models';
-import { ProductsDataService } from '../../../../../../shared/services/products-data.service';
-import { 
+import { ProductsDataService } from '../../../../../../shared';
+import {
   SelectedTariffOfferDetailsData,
   SelectedTariffOfferDetailsViewModel,
   OriginalPriceState,
   PendingPriceState,
   PriceModificationResult,
   DialogConfiguration
-} from '../models/selected-tariff-offer-details.model';
-import { StateManagementUtils } from '../utils/state-management.utils';
-import { PriceDisplayUtils, CurrencyAwarePriceComparison } from '../utils/price-display.utils';
+} from '../models';
+import { StateManagementUtils } from '../utils';
+import { PriceDisplayUtils } from '../utils';
 
 /**
  * Presenter service for selected tariff offer details component
@@ -55,7 +55,7 @@ export class SelectedTariffOfferDetailsPresenter {
     this.pendingState$
   ]).pipe(
     distinctUntilChanged((a, b) => this.isViewModelEqual(a, b)),
-    switchMap(([data, originalState, pendingState]) => 
+    switchMap(([data, originalState, pendingState]) =>
       this.createViewModel(data, originalState, pendingState)
     )
   );
@@ -66,9 +66,9 @@ export class SelectedTariffOfferDetailsPresenter {
   updateData(data: Partial<SelectedTariffOfferDetailsData>): void {
     const currentData = this.dataSubject.value;
     const newData = { ...currentData, ...data };
-    
+
     // Check if tariff offer has changed
-    if (data.tariffOffer !== undefined && 
+    if (data.tariffOffer !== undefined &&
         StateManagementUtils.hasTariffOfferChanged(currentData.tariffOffer, data.tariffOffer)) {
       // Reset original state for new tariff offer
       this.resetOriginalState(data.tariffOffer);
@@ -78,7 +78,7 @@ export class SelectedTariffOfferDetailsPresenter {
       // Same tariff offer, just update price comparison
       this.updatePriceComparison();
     }
-    
+
     this.dataSubject.next(newData);
   }
 
@@ -88,17 +88,17 @@ export class SelectedTariffOfferDetailsPresenter {
   updateTariffOffer(tariffOffer: ActiveTariffOffer | null): void {
     const currentData = this.dataSubject.value;
     const originalState = this.originalStateSubject.value;
-    
+
     // Determine if we should reset original state
     if (StateManagementUtils.shouldResetOriginalState(
-      originalState, 
-      currentData.tariffOffer, 
+      originalState,
+      currentData.tariffOffer,
       tariffOffer
     )) {
       this.resetOriginalState(tariffOffer);
       this.clearPendingChanges();
     }
-    
+
     this.dataSubject.next({ ...currentData, tariffOffer });
   }
 
@@ -107,7 +107,7 @@ export class SelectedTariffOfferDetailsPresenter {
    */
   handlePriceModification(modification: PriceModificationResult): ActiveTariffOffer | null {
     const currentData = this.dataSubject.value;
-    
+
     if (!currentData.tariffOffer) {
       return null;
     }
@@ -146,7 +146,7 @@ export class SelectedTariffOfferDetailsPresenter {
   createDialogConfiguration(): DialogConfiguration | null {
     const data = this.dataSubject.value;
     const originalState = this.originalStateSubject.value;
-    
+
     if (!data.tariffOffer) {
       return null;
     }
@@ -176,7 +176,7 @@ export class SelectedTariffOfferDetailsPresenter {
     originalState: OriginalPriceState,
     pendingState: PendingPriceState
   ): Observable<SelectedTariffOfferDetailsViewModel> {
-    
+
     if (!data.tariffOffer) {
       return of(this.createEmptyViewModel(data, originalState, pendingState));
     }
@@ -198,16 +198,16 @@ export class SelectedTariffOfferDetailsPresenter {
         // Display data
         tariffOffer: data.tariffOffer,
         priceComparison,
-        
+
         // State flags
         showTitle: data.showTitle,
         showEditButton: data.showEditButton,
         infoMessage: data.infoMessage,
-        
+
         // States
         pendingState,
         originalState,
-        
+
         // UI helpers
         canEdit: StateManagementUtils.canEdit(data.tariffOffer, data.showEditButton),
         hasValidTariffOffer: StateManagementUtils.hasValidTariffOffer(data.tariffOffer)

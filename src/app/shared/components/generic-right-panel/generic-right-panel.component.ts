@@ -1,7 +1,19 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit, inject, computed } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconDirective } from '@coreui/icons-angular';
-import { LanguageService } from '../../services/language.service';
+import { LanguageService } from '../../services/ui';
 
 export interface PanelAction {
   id: string;
@@ -71,7 +83,7 @@ export class GenericRightPanelComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   get defaultActions(): PanelAction[] {
-    const defaults: PanelAction[] = [
+    return [
       {
         id: 'expand',
         icon: this.isExpanded ? 'cilArrowRight' : 'cilArrowLeft',
@@ -85,8 +97,6 @@ export class GenericRightPanelComponent implements OnInit, OnDestroy, AfterViewI
         handler: () => this.onClose()
       }
     ];
-
-    return defaults;
   }
 
   get allActions(): PanelAction[] {
@@ -133,12 +143,10 @@ export class GenericRightPanelComponent implements OnInit, OnDestroy, AfterViewI
     if (!this.isResizing) return;
 
     const deltaX = this.resizeStartX - event.clientX;
-    const newWidth = Math.max(
+    this.currentWidth = Math.max(
       this.minWidth,
       Math.min(this.maxWidth, this.resizeStartWidth + deltaX)
     );
-
-    this.currentWidth = newWidth;
     this.updatePanelWidth();
   }
 

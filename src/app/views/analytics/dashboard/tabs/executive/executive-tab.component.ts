@@ -32,11 +32,16 @@ export class ExecutiveTabComponent {
   readonly error = signal<DashboardError | null>(null);
 
   constructor() {
-    // React to period changes using effect
+    // React to period and accountId changes using effect
     effect(() => {
       const period = this.dashboardService.period(); // Track signal changes
-      // Schedule data load on next tick to avoid effect issues
-      setTimeout(() => this.loadData(), 0);
+      const accountId = this.dashboardService.accountId(); // Track accountId changes
+
+      // Only load data if accountId is set (required for API calls)
+      if (accountId) {
+        // Schedule data load on next tick to avoid effect issues
+        setTimeout(() => this.loadData(), 0);
+      }
     });
   }
 

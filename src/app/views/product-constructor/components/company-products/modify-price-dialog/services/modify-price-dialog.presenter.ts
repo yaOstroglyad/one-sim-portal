@@ -3,16 +3,16 @@ import { FormGroup } from '@angular/forms';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, startWith, switchMap } from 'rxjs/operators';
 
-import { 
-  ModifyPriceDialogData, 
-  PriceInfoViewModel, 
-  PricePreviewViewModel, 
-  ModifyPriceDialogViewModel 
+import {
+  ModifyPriceDialogData,
+  PriceInfoViewModel,
+  PricePreviewViewModel,
+  ModifyPriceDialogViewModel
 } from '../models/modify-price-dialog.model';
 import { PriceCalculationUtils, PriceData } from '../utils/price-calculation.utils';
 import { FormUtils } from '../utils/form.utils';
 import { ModifyPriceDialogConfig } from '../../factories';
-import { ProductsDataService } from '../../../../../../shared/services/products-data.service';
+import { ProductsDataService } from '../../../../../../shared';
 
 /**
  * Presenter service for modify price dialog
@@ -30,7 +30,7 @@ export class ModifyPriceDialogPresenter {
     data: ModifyPriceDialogData,
     uiConfig: ModifyPriceDialogConfig
   ): Observable<ModifyPriceDialogViewModel> {
-    
+
     // Stream of form changes
     const formChanges$ = form.valueChanges.pipe(
       startWith(form.value)
@@ -44,7 +44,7 @@ export class ModifyPriceDialogPresenter {
     return combineLatest([formChanges$, formStatus$]).pipe(
       switchMap(([formValue, formStatus]) => {
         const priceData = this.createPriceData(data, formValue);
-        
+
         return combineLatest([
           this.createPriceInfoViewModel(priceData),
           this.createPricePreviewViewModel(priceData, formStatus === 'VALID')
@@ -66,7 +66,7 @@ export class ModifyPriceDialogPresenter {
    */
   private createPriceData(data: ModifyPriceDialogData, formValue: any): PriceData {
     const baseData = PriceCalculationUtils.extractPriceData(data.tariffOffer);
-    
+
     return {
       ...baseData,
       newPrice: formValue.price,
@@ -79,8 +79,8 @@ export class ModifyPriceDialogPresenter {
    */
   private createPriceInfoViewModel(priceData: PriceData): Observable<PriceInfoViewModel> {
     return PriceCalculationUtils.calculateCurrencyAwareBasePriceDifference(
-      priceData, 
-      this.productsDataService, 
+      priceData,
+      this.productsDataService,
       'USD'
     ).pipe(
       map(difference => ({
@@ -102,8 +102,8 @@ export class ModifyPriceDialogPresenter {
    */
   private createPricePreviewViewModel(priceData: PriceData, isFormValid: boolean): Observable<PricePreviewViewModel> {
     // Check if we should show preview
-    const shouldShow = isFormValid && 
-                      priceData.newPrice !== null && 
+    const shouldShow = isFormValid &&
+                      priceData.newPrice !== null &&
                       priceData.newPrice !== undefined &&
                       priceData.newPrice !== priceData.currentPrice;
 
@@ -123,8 +123,8 @@ export class ModifyPriceDialogPresenter {
     }
 
     return PriceCalculationUtils.calculateCurrencyAwareNewPriceDifference(
-      priceData, 
-      this.productsDataService, 
+      priceData,
+      this.productsDataService,
       'USD'
     ).pipe(
       map(change => ({
@@ -147,7 +147,7 @@ export class ModifyPriceDialogPresenter {
    */
   extractResult(form: FormGroup): any | null {
     const formData = FormUtils.extractFormData(form);
-    
+
     if (!formData) {
       return null;
     }
@@ -163,7 +163,7 @@ export class ModifyPriceDialogPresenter {
    */
   validateForm(form: FormGroup): string[] {
     const errors: string[] = [];
-    
+
     if (!form.valid) {
       Object.keys(form.controls).forEach(key => {
         const errorMessage = FormUtils.getErrorMessage(form, key);
@@ -172,7 +172,7 @@ export class ModifyPriceDialogPresenter {
         }
       });
     }
-    
+
     return errors;
   }
 }

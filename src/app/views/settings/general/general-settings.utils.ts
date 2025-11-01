@@ -1,8 +1,8 @@
 import { EditCompanySettings, FieldType, FormConfig, SelectOption } from 'src/app/shared';
 import { map } from 'rxjs';
-import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
+import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
 import { Validators } from '@angular/forms';
-import { WhiteLabelDataService } from 'src/app/shared/services/white-label-data.service';
+import { WhiteLabelDataService } from 'src/app/shared/services/data/white-label-data.service';
 
 const DEFAULT_SERVICE_EMAIL = 'service@1-esim.com';
 

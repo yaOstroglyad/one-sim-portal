@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
-import { SimInfo } from '../model';
-import { SubscriberStatusEvent } from '../model';
-import { SimLocations } from '../model';
-import { handleArrayError, handleObjectError } from '../utils';
+import { SimInfo } from '../../model';
+import { SubscriberStatusEvent } from '../../model';
+import { SimLocations } from '../../model';
+import { handleArrayError, handleObjectError } from '../../utils';
 
 export interface CreateSubscriberDto {
 	customerId: string;

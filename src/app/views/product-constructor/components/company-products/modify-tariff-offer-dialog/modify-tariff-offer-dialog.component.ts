@@ -10,7 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 
 import { ActiveTariffOffer, Currency } from '../../../models';
-import { TariffOfferService } from '../../../../../shared/services/tariff-offer.service';
+import { TariffOfferService } from '../../../../../shared';
 
 export interface ModifyTariffOfferDialogData {
   tariffOffer: ActiveTariffOffer;
@@ -37,14 +37,14 @@ export class ModifyTariffOfferDialogComponent implements OnInit {
   modifyForm: FormGroup;
   loading = false;
   error: string | null = null;
-  
+
   currencyOptions = [
     { value: 'usd', label: 'USD' },
     { value: 'eur', label: 'EUR' },
     { value: 'gbp', label: 'GBP' },
     { value: 'jpy', label: 'JPY' }
   ];
-  
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ModifyTariffOfferDialogData,
     public dialogRef: MatDialogRef<ModifyTariffOfferDialogComponent>,
@@ -53,7 +53,7 @@ export class ModifyTariffOfferDialogComponent implements OnInit {
   ) {
     this.modifyForm = this.createForm();
   }
-  
+
   ngOnInit(): void {
     if (this.data.tariffOffer) {
       this.modifyForm.patchValue({
@@ -62,28 +62,28 @@ export class ModifyTariffOfferDialogComponent implements OnInit {
       });
     }
   }
-  
+
   private createForm(): FormGroup {
     return this.fb.group({
       price: [0, [Validators.required, Validators.min(0.01)]],
       currency: ['usd', [Validators.required]]
     });
   }
-  
+
   onCancel(): void {
     this.dialogRef.close();
   }
-  
+
   onSave(): void {
     if (!this.modifyForm.valid || !this.data.tariffOffer) {
       return;
     }
-    
+
     this.loading = true;
     this.error = null;
-    
+
     const formValue = this.modifyForm.value;
-    
+
     // Create new tariff offer request with updated price/currency but without ID
     const createRequest = {
       productId: this.data.tariffOffer.productId,
@@ -91,11 +91,11 @@ export class ModifyTariffOfferDialogComponent implements OnInit {
       price: formValue.price,
       currency: formValue.currency as Currency
     };
-    
+
     this.tariffOfferService.createTariffOffer(createRequest).subscribe({
       next: (response) => {
         this.loading = false;
-        
+
         // Create updated ActiveTariffOffer object
         const updatedOffer: ActiveTariffOffer = {
           ...this.data.tariffOffer,
@@ -104,7 +104,7 @@ export class ModifyTariffOfferDialogComponent implements OnInit {
           currency: formValue.currency,
           validFrom: new Date().toISOString()
         };
-        
+
         this.dialogRef.close(updatedOffer);
       },
       error: (error) => {
@@ -114,7 +114,7 @@ export class ModifyTariffOfferDialogComponent implements OnInit {
       }
     });
   }
-  
+
   private getErrorMessage(error: any): string {
     if (error.error?.message) {
       return error.error.message;
@@ -124,7 +124,7 @@ export class ModifyTariffOfferDialogComponent implements OnInit {
     }
     return 'An unexpected error occurred. Please try again.';
   }
-  
+
   get isFormValid(): boolean {
     return this.modifyForm.valid;
   }

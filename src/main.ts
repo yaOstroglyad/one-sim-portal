@@ -43,6 +43,13 @@ const routes: Routes = [
     loadComponent: () => import('./app/views/pages/register/register.component').then((m) => m.RegisterComponent)
   },
   {
+    path: 'no-permissions',
+    loadComponent: () => import('./app/views/pages/no-permissions/no-permissions.component').then((m) => m.NoPermissionsComponent),
+    data: {
+      title: 'No Permissions'
+    }
+  },
+  {
     path: '404',
     component: Page404Component,
     data: {

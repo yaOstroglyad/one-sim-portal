@@ -8,8 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { Observable, catchError, map, of } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
-import { AccountsDataService } from 'src/app/shared/services/accounts-data.service';
-import { WhiteLabelDataService } from 'src/app/shared/services/white-label-data.service';
+import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
+import { WhiteLabelDataService } from 'src/app/shared/services/data/white-label-data.service';
 
 @Component({
     selector: 'app-general-settings',

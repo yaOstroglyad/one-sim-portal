@@ -43,7 +43,8 @@ export {
   MemoryStats,
   CacheHubConfig,
   CacheMetrics,
-  SelectOption,
+  // SelectOption - excluded due to conflict with model/field-config.ts
+  // Import directly from './services/cache-hub/types' if needed
   PagedResult,
   FormValidationState,
   ValidationContext,
