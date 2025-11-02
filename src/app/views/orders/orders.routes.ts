@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { OrdersComponent } from './orders.component';
-import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, permissionGuard } from '../../shared';
+import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, permissionGuard } from '@shared';
 
 export const ORDERS_ROUTES: Routes = [
   {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormConfig, BackendFieldConfig, FieldType, PaymentMethodParameters, PaymentStrategy } from '../../../shared';
+import { FormConfig, BackendFieldConfig, FieldType, PaymentMethodParameters, PaymentStrategy } from '@shared';
 
 @Injectable({
 	providedIn: 'root'

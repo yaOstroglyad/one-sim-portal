@@ -30,12 +30,17 @@ import {
 	CompaniesDataService,
 	AuthService,
 	ADMIN_PERMISSION
-} from '../../../../shared';
-import { GenericTableComponent, HeaderComponent, TableConfig, DeleteConfirmationComponent } from '../../../../shared';
+} from '@shared';
+import {
+  GenericTableComponent,
+  HeaderComponent,
+  TableConfig,
+  DeleteConfirmationComponent,
+  UserRoleService
+} from '@shared';
 import { UserService, UsersTableService } from '../../services';
 import { User } from '../../models';
 import { UserFormComponent } from '../user-form/user-form.component';
-import { UserRoleService } from '../../../../shared';
 import { RoleManagementFormComponent, RoleOption } from '../role-management-form/role-management-form.component';
 import { RoleService } from '../../../roles';
 import { UsersUtils, UsersFilterParams } from './user-list.utils';

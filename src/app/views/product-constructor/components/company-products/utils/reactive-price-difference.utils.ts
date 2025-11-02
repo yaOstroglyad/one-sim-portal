@@ -1,11 +1,11 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ProductsDataService } from '../../../../../shared';
+import { ProductsDataService } from '@shared';
 import {
   CurrencyPriceCalculatorUtils,
   PriceWithCurrency,
   CurrencyAwarePriceDifference
-} from '../../../../../shared';
+} from '@shared';
 
 /**
  * Create reactive price difference calculation

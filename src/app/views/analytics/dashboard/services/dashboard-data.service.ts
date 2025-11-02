@@ -28,7 +28,7 @@ import {
   mapSubscriberBundles,
   mapRevenueBundles
 } from '../utils';
-import { wrapResponse, createErrorResponse } from '../../../../shared';
+import { wrapResponse, createErrorResponse } from '@shared';
 
 @Injectable({
   providedIn: 'root'

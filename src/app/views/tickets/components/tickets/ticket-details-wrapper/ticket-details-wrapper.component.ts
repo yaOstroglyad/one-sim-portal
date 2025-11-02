@@ -4,7 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { Ticket } from '../../../models';
 import { TicketDetailsComponent } from '../ticket-details/ticket-details.component';
-import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsConfiguration, AttachmentsConfiguration, CreateCommentRequest, UploadAttachmentRequest } from '../../../../../shared';
+import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsConfiguration, AttachmentsConfiguration, CreateCommentRequest, UploadAttachmentRequest } from '@shared';
 
 @Component({
     selector: 'app-ticket-details-wrapper',

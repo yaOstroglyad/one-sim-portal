@@ -7,7 +7,7 @@ import {
   TableConfig,
   TableConfigAbstractService,
   TemplateType
-} from '../../../../shared';
+} from '@shared';
 import { TariffOffer } from '../../models/tariff-offer.model';
 
 @Injectable()

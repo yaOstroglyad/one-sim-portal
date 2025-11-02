@@ -1,9 +1,16 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Package, StatusEnum } from '../../shared/model/package';
+import { Package, StatusEnum } from '@shared/model/package';
 import { Observable, Subject, of } from 'rxjs';
 import { catchError, switchMap, takeUntil, tap } from 'rxjs/operators';
-import { HeaderConfig, ProductsDataService, TableConfig, TableFilterFieldType } from '../../shared';
+import {
+  HeaderConfig,
+  ProductsDataService,
+  TableConfig,
+  TableFilterFieldType,
+  GenericTableComponent,
+  HeaderComponent
+} from '@shared';
 import { ProductsTableService } from './products-table.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EditProductComponent } from './edit-product/edit-product.component';
@@ -11,7 +18,7 @@ import { CreateProductComponent } from './create-product/create-product.componen
 import { ChangeStatusDialogComponent } from './change-status-dialog/change-status-dialog.component';
 import {
 	DynamicEntityDetailsDialogComponent
-} from '../../shared/components/dynamic-entity-details-dialog/dynamic-entity-details-dialog.component';
+} from '@shared/components/dynamic-entity-details-dialog/dynamic-entity-details-dialog.component';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import {
 	BadgeComponent,
@@ -38,16 +45,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
-import { GenericTableComponent, HeaderComponent } from '../../shared';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { ItemNamesPipe } from '../../shared/pipes/item-names/item-names.pipe';
+import { ItemNamesPipe } from '@shared/pipes/item-names/item-names.pipe';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
-import { HasPermissionDirective } from '../../shared/directives/has-permission.directive';
+import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
 
 @Component({
     standalone: true,

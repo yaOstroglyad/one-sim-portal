@@ -1,6 +1,6 @@
-import { FormConfig, FieldType, ProductsDataService } from '../../../../shared';
+import { FormConfig, FieldType, ProductsDataService } from '@shared';
 import { Observable, of } from 'rxjs';
-import { Provider } from '../../../../shared/model/provider';
+import { Provider } from '@shared/model/provider';
 import { map } from 'rxjs/operators';
 import { Validators } from '@angular/forms';
 

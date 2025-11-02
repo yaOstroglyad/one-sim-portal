@@ -5,7 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { RoleService } from '../../services';
 import { Role } from '../../models';
-import { FormGeneratorComponent, FormConfig } from '../../../../shared';
+import { FormGeneratorComponent, FormConfig } from '@shared';
 import { getRoleFormConfig, getRoleCreateRequest, getRoleUpdateRequest } from './role-form.utils';
 
 @Component({

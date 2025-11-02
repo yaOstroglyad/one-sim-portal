@@ -8,7 +8,7 @@ import {
 	CompaniesDataService,
 	ProductsDataService,
 	ProviderBundlesDataService
-} from '../../../shared';
+} from '@shared';
 import { CreateProductService } from './create-product.service';
 import { Subscription } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';

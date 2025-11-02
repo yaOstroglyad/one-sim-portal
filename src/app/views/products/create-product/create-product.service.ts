@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
-import { DataService } from '../../../shared';
+import { DataService } from '@shared';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

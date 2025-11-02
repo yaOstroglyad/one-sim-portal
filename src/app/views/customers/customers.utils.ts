@@ -11,7 +11,7 @@ import {
   CustomerType,
   CustomersDataService,
   CompaniesDataService
-} from '../../shared';
+} from '@shared';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 
 // Constants

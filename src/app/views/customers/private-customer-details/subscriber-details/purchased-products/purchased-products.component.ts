@@ -5,7 +5,7 @@ import {
 	PurchasedProductsDataService,
 	EmptyStateComponent,
 	convertUsage
-} from '../../../../../shared';
+} from '@shared';
 import { MatTableModule } from '@angular/material/table';
 import { AsyncPipe, DatePipe, NgClass, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';

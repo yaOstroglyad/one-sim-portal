@@ -1,4 +1,4 @@
-import { FieldType, FormConfig, GridSelectOption } from '../../../../shared';
+import { FieldType, FormConfig, GridSelectOption } from '@shared';
 import { RoleOption } from './role-management-form.component';
 
 /**

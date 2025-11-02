@@ -6,7 +6,7 @@ import {
 	TemplateType
 } from 'src/app/shared';
 import { CompanyProduct } from '../../models';
-import { UserRoleService } from '../../../../shared';
+import { UserRoleService } from '@shared';
 
 @Injectable()
 export class CompanyProductsTableService extends TableConfigAbstractService<CompanyProduct> {

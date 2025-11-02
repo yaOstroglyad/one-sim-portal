@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { InventoryComponent } from './inventory.component';
-import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, permissionGuard } from '../../shared';
+import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, permissionGuard } from '@shared';
 
 export const INVENTORY_ROUTES: Routes = [
   {

@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild, TemplateRef, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
-import { EmailTemplate } from '../../../../shared';
-import { WhiteLabelDataService } from '../../../../shared';
+import {
+  EmailTemplate,
+  WhiteLabelDataService,
+  TableConfig,
+  GenericTableComponent
+} from '@shared';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { TableConfig } from '../../../../shared';
 import { TemplateTypeGridService } from './template-type-grid.service';
 import { EditEmailTemplateComponent } from '../edit-email-template/edit-email-template.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -13,7 +16,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { TranslateModule } from '@ngx-translate/core';
-import { GenericTableComponent } from '../../../../shared';
 import {
   BadgeComponent,
 } from '@coreui/angular';

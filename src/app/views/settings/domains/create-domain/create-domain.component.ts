@@ -3,7 +3,7 @@ import { getDomainCreateRequest, getCreateDomainFormConfig } from './create-doma
 import {
 	FormConfig, FormGeneratorComponent, AccountsDataService,
 	WhiteLabelDataService, DomainsDataService
-} from '../../../../shared';
+} from '@shared';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';

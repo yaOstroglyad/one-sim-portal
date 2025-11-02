@@ -6,10 +6,22 @@ import { map, debounceTime, takeUntil } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
+import {
+  GenericRightPanelComponent,
+  PanelAction,
+  GenericTableComponent,
+  HeaderComponent,
+  TableConfig,
+  SearchableSelectComponent,
+  SearchableSelectOption,
+  UserRoleService,
+  LanguageService,
+  Account,
+  Country,
+  CountryService
+} from '@shared';
 import { CompanyProductDetailsComponent } from '../company-product-details/company-product-details.component';
 import { CompanyProductFormComponent } from '../company-product-form/company-product-form.component';
-import { GenericTableComponent, HeaderComponent, TableConfig, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,10 +33,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CompanyProductService, RegionService } from '../../../services';
 import { CompanyProduct, CompanyProductSearchRequest, RegionSummary } from '../../../models';
 import { CompanyProductsTableService } from '../company-products-table.service';
-import { AccountSelectorComponent } from '../../../../../shared/components/account-selector/account-selector.component';
-import { UserRoleService, LanguageService } from '../../../../../shared';
-import { Account, Country } from '../../../../../shared';
-import { CountryService } from '../../../../../shared';
+import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 
 @Component({
   standalone: true,

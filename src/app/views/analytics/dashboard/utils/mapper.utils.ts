@@ -3,7 +3,7 @@
  * Transforms API responses to UI-friendly formats
  */
 
-import { CHART_COLORS } from '../../../../shared';
+import { CHART_COLORS } from '@shared';
 
 /**
  * Bundle data with UI properties

@@ -6,10 +6,19 @@ import { map, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
+import {
+  GenericRightPanelComponent,
+  PanelAction,
+  GenericTableComponent,
+  HeaderComponent,
+  TableConfig,
+  DeleteConfirmationComponent,
+  CountryService,
+  Country,
+  LanguageService
+} from '@shared';
 import { RegionFormComponent } from '../region-form/region-form.component';
 import { RegionDetailsComponent } from '../region-details/region-details.component';
-import { GenericTableComponent, HeaderComponent, TableConfig, DeleteConfirmationComponent } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,7 +27,6 @@ import { IconDirective } from '@coreui/icons-angular';
 
 import { RegionService } from '../../../services';
 import { Region, RegionSummary } from '../../../models';
-import { CountryService, Country, LanguageService } from '../../../../../shared';
 import { RegionsTableService } from '../regions-table.service';
 
 @Component({

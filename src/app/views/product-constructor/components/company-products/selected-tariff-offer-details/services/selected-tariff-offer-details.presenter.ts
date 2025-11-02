@@ -3,7 +3,7 @@ import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { map, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 import { ActiveTariffOffer } from '../../../../models';
-import { ProductsDataService } from '../../../../../../shared';
+import { ProductsDataService } from '@shared';
 import {
   SelectedTariffOfferDetailsData,
   SelectedTariffOfferDetailsViewModel,

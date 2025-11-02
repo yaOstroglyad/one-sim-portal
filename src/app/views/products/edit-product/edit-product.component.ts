@@ -7,7 +7,7 @@ import {
 	AuthService,
 	CompaniesDataService,
 	ProductsDataService
-} from '../../../shared';
+} from '@shared';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';

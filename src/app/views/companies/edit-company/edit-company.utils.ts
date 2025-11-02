@@ -1,4 +1,4 @@
-import { Company, CustomerType, FieldType, FormConfig } from '../../../shared';
+import { Company, CustomerType, FieldType, FormConfig } from '@shared';
 import { Validators } from '@angular/forms';
 import { of } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';

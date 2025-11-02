@@ -1,5 +1,5 @@
 import { Validators } from '@angular/forms';
-import { FieldType, FormConfig } from '../../../shared';
+import { FieldType, FormConfig } from '@shared';
 
 export function getInviteEmailFormConfig(): FormConfig {
 	return {

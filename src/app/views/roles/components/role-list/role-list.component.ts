@@ -6,8 +6,14 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../shared';
-import { GenericTableComponent, HeaderComponent, TableConfig, DeleteConfirmationComponent } from '../../../../shared';
+import {
+  GenericRightPanelComponent,
+  PanelAction,
+  GenericTableComponent,
+  HeaderComponent,
+  TableConfig,
+  DeleteConfirmationComponent
+} from '@shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';

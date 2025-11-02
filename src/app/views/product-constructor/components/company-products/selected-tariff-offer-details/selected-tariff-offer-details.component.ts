@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { ActiveTariffOffer } from '../../../models';
 import { ModifyPriceDialogComponent, ModifyPriceDialogData, ModifyPriceResult } from '../modify-price-dialog';
-import { UserRoleService } from '../../../../../shared';
+import { UserRoleService } from '@shared';
 import { UIConfigFactory, TariffOfferDetailsConfig } from '../factories';
 import {
   SelectedTariffOfferDetailsViewModel,

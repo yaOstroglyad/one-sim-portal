@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgIf } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
-import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { LoaderComponent } from '@shared/components/loader/loader.component';
 import { getAddSubscriberFormConfig } from './add-subscriber.utils';
 import {
   FormConfig,
@@ -15,7 +15,7 @@ import {
   ProductsDataService,
   ProvidersDataService,
   SubscriberDataService
-} from '../../../../shared';
+} from '@shared';
 
 @Component({
   standalone: true,

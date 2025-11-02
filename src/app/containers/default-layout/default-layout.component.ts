@@ -14,10 +14,10 @@ import { Subject, takeUntil, skip } from 'rxjs';
 import { navItems } from './_nav';
 import { NavItem, BrandConfig, LayoutConfig } from './models';
 import { LayoutService } from './services';
-import { VisualConfig, isToggleActive, VisualService, AuthService, LanguageService } from '../../shared';
+import { VisualConfig, isToggleActive, VisualService, AuthService, LanguageService } from '@shared';
 import { SidebarComponent } from './components';
 import { HeaderComponent } from './components';
-import { GlobalFabComponent, FlyoutLayoutComponent } from '../../shared/components/fab-layout';
+import { GlobalFabComponent, FlyoutLayoutComponent } from '@shared/components/fab-layout';
 
 @Component({
   selector: 'app-default-layout',

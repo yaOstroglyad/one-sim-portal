@@ -3,7 +3,7 @@
  */
 
 import { ChartConfig } from '../models/dashboard.types';
-import { CHART_COLORS } from '../../../../shared';
+import { CHART_COLORS } from '@shared';
 
 /**
  * Create bar chart configuration for subscribers

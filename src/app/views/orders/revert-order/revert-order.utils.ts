@@ -2,8 +2,8 @@ import { Validators } from '@angular/forms';
 import {
 	FormConfig,
 	FieldType
-} from '../../../shared';
-import { Order } from '../../../shared/model/order';
+} from '@shared';
+import { Order } from '@shared/model/order';
 
 export function getRevertOrderFormConfig(order: Order): FormConfig {
 	return {

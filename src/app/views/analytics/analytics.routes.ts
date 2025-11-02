@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ADMIN_PERMISSION } from '../../shared';
+import { ADMIN_PERMISSION } from '@shared';
 
 export const ANALYTICS_ROUTES: Routes = [
   {

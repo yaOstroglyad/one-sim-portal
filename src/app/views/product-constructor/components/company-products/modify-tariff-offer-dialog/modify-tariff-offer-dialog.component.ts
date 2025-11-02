@@ -10,7 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 
 import { ActiveTariffOffer, Currency } from '../../../models';
-import { TariffOfferService } from '../../../../../shared';
+import { TariffOfferService } from '@shared';
 
 export interface ModifyTariffOfferDialogData {
   tariffOffer: ActiveTariffOffer;

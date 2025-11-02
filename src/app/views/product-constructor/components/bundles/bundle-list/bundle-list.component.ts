@@ -6,12 +6,18 @@ import { map, switchMap, catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { LanguageService } from '../../../../../shared';
+import {
+  LanguageService,
+  GenericRightPanelComponent,
+  PanelAction,
+  GenericTableComponent,
+  HeaderComponent,
+  TableConfig,
+  DeleteConfirmationComponent
+} from '@shared';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
 import { BundleFormComponent } from '../bundle-form/bundle-form.component';
 import { BundleDetailsComponent } from '../bundle-details/bundle-details.component';
-import { GenericTableComponent, HeaderComponent, TableConfig, DeleteConfirmationComponent } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';

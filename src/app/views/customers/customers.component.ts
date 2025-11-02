@@ -28,7 +28,7 @@ import {
   HeaderComponent,
   SearchableSelectComponent,
   SmartFilterHeaderComponent
-} from '../../shared';
+} from '@shared';
 import { CustomersTableService } from './customers-table.service';
 import { CustomersUtils, CustomersFilterParams } from './customers.utils';
 

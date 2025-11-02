@@ -1,7 +1,7 @@
 import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FormConfig, FieldType, SelectOption } from '../../../../shared';
+import { FormConfig, FieldType, SelectOption } from '@shared';
 import { User } from '../../models';
 
 export function getUserFormConfig(

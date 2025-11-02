@@ -23,8 +23,8 @@ import {
     TableFilterFieldType,
     GenericTableComponent,
     HeaderComponent
-} from '../../shared';
-import { Resource } from '../../shared/model/resource';
+} from '@shared';
+import { Resource } from '@shared/model/resource';
 import { InventoryDataService } from './inventory-data.service';
 import { InventoryTableService } from './inventory-table.service';
 import { UploadDialogComponent } from './upload-dialog/upload-dialog.component';

@@ -4,14 +4,13 @@ import { FormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { IconDirective } from '@coreui/icons-angular';
 
-import { FormGeneratorComponent, FormConfig } from '../../../../../shared';
+import { FormGeneratorComponent, FormConfig, CountryService } from '@shared';
 import { Product } from '../../../models';
 import { 
   ProductService, 
   BundleService, 
   RegionService
 } from '../../../services';
-import { CountryService } from '../../../../../shared';
 import { 
   getProductFormConfig,
   getProductCreateRequest,

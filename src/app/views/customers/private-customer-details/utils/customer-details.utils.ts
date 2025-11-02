@@ -1,4 +1,4 @@
-import { Balance, Subscriber, TimelineEvent } from '../../../../shared';
+import { Balance, Subscriber, TimelineEvent } from '@shared';
 
 export interface FinancialSummary {
 	totalSpent: number;

@@ -1,6 +1,6 @@
 import { Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { FieldType, FormConfig, SelectOption } from '../../../../shared';
+import { FieldType, FormConfig, SelectOption } from '@shared';
 
 export function getSubscriberProductsFormConfig(products: Observable<SelectOption[]>): FormConfig {
 	return {

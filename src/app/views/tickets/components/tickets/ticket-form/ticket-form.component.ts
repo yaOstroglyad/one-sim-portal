@@ -10,7 +10,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 
-import { FormConfig, FormGeneratorComponent } from '../../../../../shared';
+import { FormConfig, FormGeneratorComponent } from '@shared';
 import { Ticket } from '../../../models';
 import { TicketService, TicketEventService } from '../../../services';
 import {

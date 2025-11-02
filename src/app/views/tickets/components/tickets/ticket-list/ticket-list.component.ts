@@ -6,10 +6,21 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
+import {
+  GenericRightPanelComponent,
+  PanelAction,
+  GenericTableComponent,
+  HeaderComponent,
+  TableConfig,
+  SearchableSelectComponent,
+  SearchableSelectOption,
+  SearchableSelectConfig,
+  Account,
+  AuthService,
+  ADMIN_PERMISSION
+} from '@shared';
 import { TicketDetailsWrapperComponent } from '../ticket-details-wrapper/ticket-details-wrapper.component';
 import { TicketFormComponent } from '../ticket-form/ticket-form.component';
-import { GenericTableComponent, HeaderComponent, TableConfig, SearchableSelectComponent, SearchableSelectOption, SearchableSelectConfig } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,8 +32,7 @@ import { TicketService, TicketEventService } from '../../../services';
 import { Ticket, TicketSearchRequest, TicketStatus, TicketPriority, TicketCategory } from '../../../models';
 import { TicketsTableService } from '../tickets-table.service';
 import { MatDividerModule } from '@angular/material/divider';
-import { AccountSelectorComponent } from '../../../../../shared/components/account-selector/account-selector.component';
-import { Account, AuthService, ADMIN_PERMISSION } from '../../../../../shared';
+import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 
 @Component({
     selector: 'app-ticket-list',

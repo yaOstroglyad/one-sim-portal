@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { CompaniesDataService, Company, GenericTableComponent, HeaderComponent, TableConfig } from '../../shared';
+import { CompaniesDataService, Company, GenericTableComponent, HeaderComponent, TableConfig } from '@shared';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CompaniesTableService } from './companies-table.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';

@@ -1,6 +1,5 @@
-import { FieldType, FormConfig } from '../../../shared';
+import { FieldType, FormConfig, ProvidersDataService } from '@shared';
 import { Validators } from '@angular/forms';
-import { ProvidersDataService } from '../../../shared';
 import { map } from 'rxjs/operators';
 
 export function getSetupResourceFormConfig(dataService: ProvidersDataService): FormConfig {

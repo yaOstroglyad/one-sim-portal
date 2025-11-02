@@ -1,4 +1,4 @@
-import { FieldType, FormConfig } from '../../../shared';
+import { FieldType, FormConfig } from '@shared';
 import { FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 export const passwordMatchValidator: ValidatorFn = (formGroup: FormGroup): ValidationErrors | null => {

@@ -4,7 +4,7 @@ import {
   SimInfo,
   SubscriberDataService,
   SimLocations
-} from '../../../../shared';
+} from '@shared';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';

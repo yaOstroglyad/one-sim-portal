@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { FormGeneratorComponent, FormConfig } from '../../../../../shared';
+import { FormGeneratorComponent, FormConfig } from '@shared';
 
 import { BundleService } from '../../../services';
 import { MobileBundle } from '../../../models';

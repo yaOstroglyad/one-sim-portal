@@ -20,9 +20,13 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { DomainsTableService } from './domains-table.service';
-import { DomainsDataService } from '../../../shared';
-import { Domain } from '../../../shared/model/domain';
-import { GenericTableComponent, HeaderComponent, TableConfig } from '../../../shared';
+import {
+  DomainsDataService,
+  GenericTableComponent,
+  HeaderComponent,
+  TableConfig
+} from '@shared';
+import { Domain } from '@shared/model/domain';
 import { EditDomainNameComponent } from './edit-domain-name/edit-domain-name.component';
 import { EditDomainOwnerComponent } from './edit-domain-owner/edit-domain-owner.component';
 import { CreateDomainComponent } from './create-domain/create-domain.component';

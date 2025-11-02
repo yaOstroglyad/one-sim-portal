@@ -1,6 +1,6 @@
 import { Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { FieldType, FormConfig, SelectOption } from '../../../../../shared';
+import { FieldType, FormConfig, SelectOption } from '@shared';
 import { Ticket, CreateTicketRequest, UpdateTicketRequest, TicketPriority, TicketCategory } from '../../../models';
 
 export function getTicketFormConfig(

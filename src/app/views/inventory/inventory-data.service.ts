@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
-import { DataService } from '../../shared';
-import { Resource } from '../../shared/model/resource';
-import { handleArrayError } from '../../shared';
+import { DataService, handleArrayError } from '@shared';
+import { Resource } from '@shared/model/resource';
 
 @Injectable({
 	providedIn: 'root'

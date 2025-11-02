@@ -14,9 +14,14 @@ import { BadgeComponent } from '@coreui/angular';
 
 import { TariffOffer, ActiveTariffOffer } from '../../../models';
 import { TariffOffersTableService } from '../tariff-offers-table.service';
-import { TariffOfferService } from '../../../../../shared';
-import { GenericTableComponent, HeaderComponent, DeleteConfirmationComponent } from '../../../../../shared';
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
+import {
+  TariffOfferService,
+  GenericTableComponent,
+  HeaderComponent,
+  DeleteConfirmationComponent,
+  GenericRightPanelComponent,
+  PanelAction
+} from '@shared';
 import { TariffOfferFormComponent } from '../tariff-offer-form/tariff-offer-form.component';
 import { TariffOfferDetailsComponent } from '../tariff-offer-details/tariff-offer-details.component';
 

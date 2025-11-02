@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { IconComponent } from '../../../shared';
+import { IconComponent } from '@shared';
 
 @Component({
   standalone: true,

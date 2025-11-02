@@ -4,9 +4,8 @@ import { CommonModule } from '@angular/common';
 import { take } from 'rxjs/operators';
 import { IconDirective } from '@coreui/icons-angular';
 
-import { FormGeneratorComponent, FormConfig } from '../../../../../shared';
+import { FormGeneratorComponent, FormConfig, TariffOfferService } from '@shared';
 import { TariffOffer } from '../../../models';
-import { TariffOfferService } from '../../../../../shared';
 import { ProductService } from '../../../services';
 import { ProviderProductService } from '../../../services';
 import {

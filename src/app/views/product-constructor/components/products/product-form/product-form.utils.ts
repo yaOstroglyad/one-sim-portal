@@ -1,11 +1,10 @@
-import { FieldType, FormConfig } from '../../../../../shared';
+import { FieldType, FormConfig, CountryService } from '@shared';
 import { Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Product, CreateProductRequest, UpdateProductRequest } from '../../../models';
 import { ServiceCoverage, ValidityPeriod } from '../../../models/common.model';
 import { BundleService, RegionService } from '../../../services';
-import { CountryService } from '../../../../../shared';
 
 export function getProductFormConfig(
   product: Product | null = null,

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { ProvidersComponent } from './providers.component';
-import { ADMIN_PERMISSION, permissionGuard } from '../../shared';
+import { ADMIN_PERMISSION, permissionGuard } from '@shared';
 
 export const PROVIDERS_ROUTES: Routes = [
   {

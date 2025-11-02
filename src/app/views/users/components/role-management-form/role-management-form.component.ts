@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 
-import { FormGeneratorComponent, FormConfig } from '../../../../shared';
+import { FormGeneratorComponent, FormConfig } from '@shared';
 import { getRoleManagementFormConfig } from './role-management-form.utils';
 
 export interface RoleOption {

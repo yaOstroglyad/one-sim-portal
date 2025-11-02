@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@coreui/icons-angular';
-import { ThemeService, AuthService, ADMIN_PERMISSION, Account } from '../../../shared';
-import { AccountSelectorComponent } from '../../../shared/components/account-selector/account-selector.component';
+import { ThemeService, AuthService, ADMIN_PERMISSION, Account } from '@shared';
+import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 import { DashboardTab } from './models/dashboard.types';
 import { DashboardDataService } from './services/dashboard-data.service';
 import {

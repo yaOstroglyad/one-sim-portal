@@ -12,7 +12,7 @@ import {
 import { PriceCalculationUtils, PriceData } from '../utils/price-calculation.utils';
 import { FormUtils } from '../utils/form.utils';
 import { ModifyPriceDialogConfig } from '../../factories';
-import { ProductsDataService } from '../../../../../../shared';
+import { ProductsDataService } from '@shared';
 
 /**
  * Presenter service for modify price dialog

@@ -1,4 +1,4 @@
-import { FieldType, FormConfig } from '../../../../../shared';
+import { FieldType, FormConfig } from '@shared';
 import { Validators } from '@angular/forms';
 import { Observable, of, forkJoin } from 'rxjs';
 import { map, catchError, take } from 'rxjs/operators';

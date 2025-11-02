@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Region, RegionSummary, CreateRegionRequest, UpdateRegionRequest } from '../models';
-import { CacheHubService, DataType } from '../../../shared/services/cache-hub';
+import { CacheHubService, DataType } from '@shared/services/cache-hub';
 
 @Injectable({
   providedIn: 'root'

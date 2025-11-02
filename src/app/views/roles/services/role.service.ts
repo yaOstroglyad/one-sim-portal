@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { Role, RolesPageResponse, CreateRoleRequest, UpdateRoleRequest } from '../models';
-import { CacheHubService, DataType } from '../../../shared/services/cache-hub';
+import { CacheHubService, DataType } from '@shared/services/cache-hub';
 
 @Injectable({
   providedIn: 'root'

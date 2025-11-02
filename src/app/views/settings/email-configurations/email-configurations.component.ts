@@ -1,12 +1,16 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Account, WhiteLabelDataService } from '../../../shared';
+import {
+  Account,
+  WhiteLabelDataService,
+  AuthService,
+  ADMIN_PERMISSION
+} from '@shared';
 import { Observable } from 'rxjs';
 import { TemplateTypeGridComponent } from './template-type-grid/template-type-grid.component';
-import { AuthService, ADMIN_PERMISSION } from '../../../shared';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AccountSelectorComponent } from '../../../shared/components/account-selector/account-selector.component';
+import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 import { IconDirective } from '@coreui/icons-angular';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
-import { FormConfig, FieldConfig, FieldType, SelectOption } from '../../../../shared';
+import { FormConfig, FieldConfig, FieldType, SelectOption } from '@shared';
 import { Role, CreateRoleRequest, UpdateRoleRequest } from '../../models';
 import { RoleService } from '../../services';
 

@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
-import { ProvidersDataService, FormConfig, ProductsDataService, FormGeneratorComponent } from '../../../shared';
+import { ProvidersDataService, FormConfig, ProductsDataService, FormGeneratorComponent } from '@shared';
 import { Subject } from 'rxjs';
 import { getCustomerCreateRequest, getEditCustomerFormConfig } from './edit-customer.utils';
 

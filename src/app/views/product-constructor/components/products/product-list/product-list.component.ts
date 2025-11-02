@@ -6,10 +6,19 @@ import { map, debounceTime, takeUntil } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { GenericRightPanelComponent, PanelAction } from '../../../../../shared';
+import {
+  GenericRightPanelComponent,
+  PanelAction,
+  GenericTableComponent,
+  HeaderComponent,
+  TableConfig,
+  SearchableSelectComponent,
+  SearchableSelectOption,
+  Country,
+  CountryService
+} from '@shared';
 import { ProductDetailsComponent } from '../product-details/product-details.component';
 import { ProductFormComponent } from '../product-form/product-form.component';
-import { GenericTableComponent, HeaderComponent, TableConfig, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,7 +28,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { ProductService, RegionService } from '../../../services';
 import { Product, ProductSearchRequest, RegionSummary } from '../../../models';
-import { Country, CountryService } from '../../../../../shared';
 import { ProductsTableService } from '../products-table.service';
 
 @Component({

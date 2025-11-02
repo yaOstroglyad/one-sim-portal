@@ -8,7 +8,7 @@ import {
 	TableConfigAbstractService,
 	TemplateType
 } from 'src/app/shared';
-import { Customer } from '../../shared';
+import { Customer } from '@shared';
 
 @Injectable()
 export class CustomersTableService extends TableConfigAbstractService<Customer> {

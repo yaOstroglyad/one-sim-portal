@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ActiveTariffOffer } from '../../../../models';
-import { ProductsDataService } from '../../../../../../shared';
+import { ProductsDataService } from '@shared';
 
 /**
  * Interface for currency option

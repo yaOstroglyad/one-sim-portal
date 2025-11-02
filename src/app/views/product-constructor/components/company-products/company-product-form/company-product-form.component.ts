@@ -3,13 +3,16 @@ import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { IconDirective } from '@coreui/icons-angular';
 
-import { FormGeneratorComponent, FormConfig } from '../../../../../shared';
+import {
+  FormGeneratorComponent,
+  FormConfig,
+  AccountsDataService,
+  TariffOfferService,
+  UserRoleService
+} from '@shared';
 import { CompanyProductService, ProductService } from '../../../services';
 import { CompanyProduct, ActiveTariffOffer } from '../../../models';
-import { AccountsDataService } from '../../../../../shared';
-import { TariffOfferService } from '../../../../../shared';
 import { SelectedTariffOfferDetailsComponent } from '../selected-tariff-offer-details';
-import { UserRoleService } from '../../../../../shared';
 import { UIConfigFactory, CompanyProductFormConfig } from '../factories';
 import {
   getCompanyProductFormConfig,

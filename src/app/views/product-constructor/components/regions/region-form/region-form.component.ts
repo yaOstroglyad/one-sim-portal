@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { FormGeneratorComponent, FormConfig } from '../../../../../shared';
+import { FormGeneratorComponent, FormConfig } from '@shared';
 import { RegionService } from '../../../services';
 import { RegionSummary, Country } from '../../../models';
 import { getRegionFormConfig, getRegionCreateRequest, getRegionUpdateRequest } from './region-form.utils';

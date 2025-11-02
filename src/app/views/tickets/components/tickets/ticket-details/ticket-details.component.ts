@@ -4,7 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { BadgeComponent } from '@coreui/angular';
 
 import { Ticket } from '../../../models';
-import { CardComponent } from '../../../../../shared';
+import { CardComponent } from '@shared';
 
 @Component({
     selector: 'app-ticket-details',

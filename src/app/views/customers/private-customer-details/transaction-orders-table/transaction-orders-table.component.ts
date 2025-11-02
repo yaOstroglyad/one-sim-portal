@@ -5,7 +5,7 @@ import {
 	TransactionDataService,
 	Customer,
 	EmptyStateComponent
-} from '../../../../shared';
+} from '@shared';
 import { MatTableModule } from '@angular/material/table';
 import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';

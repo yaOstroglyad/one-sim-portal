@@ -18,7 +18,7 @@ import { filter } from 'rxjs/operators';
 
 import { NavItem, BrandConfig, LayoutConfig } from '../../models';
 import { LayoutService } from '../../services';
-import { LanguageService, IconComponent } from '../../../../shared';
+import { LanguageService, IconComponent } from '@shared';
 
 @Component({
   selector: 'app-sidebar',

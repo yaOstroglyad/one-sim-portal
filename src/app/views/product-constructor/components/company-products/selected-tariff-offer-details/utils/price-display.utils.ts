@@ -4,8 +4,8 @@ import { ActiveTariffOffer } from '../../../../models';
 import {
   CurrencyPriceCalculatorUtils,
   CurrencyAwarePriceDifference
-} from '../../../../../../shared';
-import { ProductsDataService } from '../../../../../../shared';
+} from '@shared';
+import { ProductsDataService } from '@shared';
 import { createReactivePriceDifference } from '../../utils';
 
 /**

@@ -11,7 +11,7 @@ import {
   PageResponse,
   TicketStatus
 } from '../models';
-import { CacheHubService, DataType } from '../../../shared/services/cache-hub';
+import { CacheHubService, DataType } from '@shared/services/cache-hub';
 
 @Injectable({
   providedIn: 'root'

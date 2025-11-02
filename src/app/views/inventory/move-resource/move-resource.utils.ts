@@ -8,7 +8,7 @@ import {
 	FormConfig,
 	FieldType,
 	FieldConfig
-} from '../../../shared';
+} from '@shared';
 
 export function getMoveResourceFormConfig(
 	serviceProviderDataService: ProvidersDataService,

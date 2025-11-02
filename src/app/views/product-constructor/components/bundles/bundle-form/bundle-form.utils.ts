@@ -1,4 +1,4 @@
-import { FieldType, FormConfig } from '../../../../../shared';
+import { FieldType, FormConfig } from '@shared';
 import { Validators } from '@angular/forms';
 import { of } from 'rxjs';
 import { MobileBundle, CreateBundleRequest, UpdateBundleRequest } from '../../../models';

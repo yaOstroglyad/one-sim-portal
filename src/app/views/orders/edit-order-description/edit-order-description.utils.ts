@@ -1,4 +1,4 @@
-import { FieldType, FormConfig } from '../../../shared';
+import { FieldType, FormConfig } from '@shared';
 import { Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 

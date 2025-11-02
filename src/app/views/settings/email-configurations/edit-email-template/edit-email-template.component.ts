@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { FormConfig, FormGeneratorComponent } from '../../../../shared';
+import {
+  FormConfig,
+  FormGeneratorComponent,
+  EmailTemplate,
+  WhiteLabelDataService
+} from '@shared';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-import { EmailTemplate } from '../../../../shared';
-import { WhiteLabelDataService } from '../../../../shared';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';

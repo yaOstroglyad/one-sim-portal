@@ -6,10 +6,19 @@ import { debounceTime, takeUntil, map } from 'rxjs/operators';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { GenericRightPanelComponent, PanelAction, SearchableSelectComponent, SearchableSelectOption } from '../../../../../shared';
+import {
+  GenericRightPanelComponent,
+  PanelAction,
+  SearchableSelectComponent,
+  SearchableSelectOption,
+  GenericTableComponent,
+  HeaderComponent,
+  TableConfig,
+  CountryService,
+  LanguageService
+} from '@shared';
 import { ProviderProductDetailsComponent } from '../provider-product-details/provider-product-details.component';
 import { ProviderProductUploadDialogComponent } from '../provider-product-upload-dialog';
-import { GenericTableComponent, HeaderComponent, TableConfig } from '../../../../../shared';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,8 +30,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ProviderProductService, RegionService } from '../../../services';
 import { ProviderProduct, ProviderProductSearchRequest } from '../../../models';
 import { ProviderProductsTableService } from '../provider-products-table.service';
-import { CountryService } from '../../../../../shared';
-import { LanguageService } from '../../../../../shared';
 
 @Component({
   standalone: true,

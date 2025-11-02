@@ -17,7 +17,11 @@
     ],
     "strictNullChecks": false,
     "allowSyntheticDefaultImports": true,
-    "stripInternal": true
+    "stripInternal": true,
+    "paths": {
+      "@shared": ["src/app/shared"],
+      "@shared/*": ["src/app/shared/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

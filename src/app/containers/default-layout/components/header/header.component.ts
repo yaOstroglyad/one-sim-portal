@@ -16,7 +16,7 @@ import { Subject, takeUntil } from 'rxjs';
 
 import { LayoutConfig } from '../../models';
 import { LayoutService } from '../../services';
-import { AuthService, UserAvatarComponent, BreadcrumbComponent, LanguageService, Language } from '../../../../shared';
+import { AuthService, UserAvatarComponent, BreadcrumbComponent, LanguageService, Language } from '@shared';
 
 const DEFAULT_USER_NAME = 'John Doe';
 const DEFAULT_USER_AVATAR = './assets/img/avatars/9.jpg';

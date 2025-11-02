@@ -1,7 +1,11 @@
-import { EditEmailTemplateIntegration, FieldType, FormConfig } from '../../../../shared';
+import {
+  EditEmailTemplateIntegration,
+  FieldType,
+  FormConfig,
+  WhiteLabelDataService
+} from '@shared';
 import { Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
-import { WhiteLabelDataService } from '../../../../shared';
 
 export function getEmailTemplateRequest(form: any, type: string, ownerAccountId?: string): EditEmailTemplateIntegration {
   return {

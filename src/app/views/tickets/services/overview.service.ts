@@ -6,8 +6,8 @@ import {
   TicketStats
 } from '../models';
 import { TicketCount } from '../models';
-import { CacheHubService, DataType } from '../../../shared/services/cache-hub';
-import { MockedService } from '../../../shared/decorators/mock.decorator';
+import { CacheHubService, DataType } from '@shared/services/cache-hub';
+import { MockedService } from '@shared/decorators/mock.decorator';
 
 @Injectable({
   providedIn: 'root'

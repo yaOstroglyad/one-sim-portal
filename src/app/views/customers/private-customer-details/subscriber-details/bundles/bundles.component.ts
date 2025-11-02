@@ -9,7 +9,7 @@ import {
 	Balance,
 	EmptyStateComponent,
 	convertUsage
-} from '../../../../../shared';
+} from '@shared';
 import { MatCardModule } from '@angular/material/card';
 import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { map } from 'rxjs/operators';

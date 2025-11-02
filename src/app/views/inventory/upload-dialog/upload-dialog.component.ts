@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { UploadResourceService } from './upload-resource.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FileUploadComponent, FileUploadConfig } from '../../../shared';
+import { FileUploadComponent, FileUploadConfig } from '@shared';
 
 @Component({
   standalone: true,

@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { getMoveResourceFormConfig } from './move-resource.utils';
 import { MoveResourceService } from './move-resource.service';
-import { ProvidersDataService, OrdersDataService, CompaniesDataService, FormConfig, FormGeneratorComponent } from '../../../shared';
+import { ProvidersDataService, OrdersDataService, CompaniesDataService, FormConfig, FormGeneratorComponent } from '@shared';
 
 @Component({
     standalone: true,

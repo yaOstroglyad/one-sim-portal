@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { ProviderProductService } from '../../../services';
-import { FileUploadComponent, FileUploadConfig } from '../../../../../shared';
+import { FileUploadComponent, FileUploadConfig } from '@shared';
 
 export interface ProviderProductUploadDialogData {
   // Empty interface since we don't need any input data

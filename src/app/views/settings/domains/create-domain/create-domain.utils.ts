@@ -1,4 +1,4 @@
-import { FieldType, FormConfig, AccountsDataService, WhiteLabelDataService } from '../../../../shared';
+import { FieldType, FormConfig, AccountsDataService, WhiteLabelDataService } from '@shared';
 import { Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
 

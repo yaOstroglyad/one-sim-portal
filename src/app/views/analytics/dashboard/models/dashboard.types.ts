@@ -3,7 +3,7 @@
  * Following the project's architecture patterns
  */
 
-import { ApiResponse, ApiError } from '../../../../shared';
+import { ApiResponse, ApiError } from '@shared';
 
 // Re-export shared types for dashboard use
 export type DashboardResponse<T> = ApiResponse<T>;

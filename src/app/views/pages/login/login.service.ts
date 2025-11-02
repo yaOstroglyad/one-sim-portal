@@ -2,10 +2,14 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { first, Subject, EMPTY } from 'rxjs';
 import { takeUntil, switchMap, mapTo, tap, catchError } from 'rxjs/operators';
-import { AuthService, LoginRequest, LoginResponse } from '../../../shared';
+import {
+  AuthService,
+  LoginRequest,
+  LoginResponse,
+  transformAuthError
+} from '@shared';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
-import { transformAuthError } from '../../../shared';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService implements OnDestroy {

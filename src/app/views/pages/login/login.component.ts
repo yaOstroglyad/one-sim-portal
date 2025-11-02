@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, HostListener, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { AuthService } from '../../../shared';
+import { AuthService } from '@shared';
 import { LoginService } from './login.service';
-import { CacheHubService } from '../../../shared/services/cache-hub';
+import { CacheHubService } from '@shared/services/cache-hub';
 
 @Component({
     standalone: true,

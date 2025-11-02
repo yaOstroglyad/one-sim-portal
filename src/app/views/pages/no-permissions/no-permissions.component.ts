@@ -2,9 +2,7 @@ import { Component, inject, ChangeDetectionStrategy, signal, OnInit, OnDestroy }
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { AuthService } from '../../../shared';
-import { UserRoleService } from '../../../shared';
-import { VisualService } from '../../../shared';
+import { AuthService, UserRoleService, VisualService } from '@shared';
 
 /**
  * NoPermissionsComponent - Full screen page shown when user has no valid roles

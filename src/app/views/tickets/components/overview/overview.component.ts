@@ -3,12 +3,17 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
-import { CardComponent } from '../../../../shared';
-import { MetricCardComponent, MetricCard } from '../../../../shared';
+import {
+  CardComponent,
+  MetricCardComponent,
+  MetricCard,
+  Account,
+  AuthService,
+  ADMIN_PERMISSION
+} from '@shared';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconDirective, IconModule } from '@coreui/icons-angular';
-import { AccountSelectorComponent } from '../../../../shared/components/account-selector/account-selector.component';
-import { Account, AuthService, ADMIN_PERMISSION } from '../../../../shared';
+import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 
 import { TicketStats } from '../../models';
 import { QUICK_ACTIONS } from './overview.utils';

@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { CustomersComponent } from './customers.component';
 import { PrivateCustomerDetailsComponent } from './private-customer-details/private-customer-details.component';
 import { CorporateCustomerDetailsComponent } from './corporate-customer-details/corporate-customer-details.component';
-import { provideFabButton } from '../../shared/components/fab-layout';
+import { provideFabButton } from '@shared/components/fab-layout';
 
 export const CUSTOMERS_ROUTES: Routes = [
   {

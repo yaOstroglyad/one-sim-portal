@@ -1,4 +1,4 @@
-import { FieldType, FormConfig, GridSelectOption } from '../../../../../shared';
+import { FieldType, FormConfig, GridSelectOption } from '@shared';
 import { Validators } from '@angular/forms';
 import { Country, RegionSummary } from '../../../models';
 

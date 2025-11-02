@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { InvoicingMethod } from '../../../shared';
-import { handleArrayError, handleObjectError, transformHttpError } from '../../../shared';
+import {
+  InvoicingMethod,
+  handleArrayError,
+  handleObjectError,
+  transformHttpError
+} from '@shared';
 
 @Injectable({
   providedIn: 'root'

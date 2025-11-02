@@ -14,7 +14,7 @@ import { TabChangeEvent,
   OsBarChartComponent,
   OsLineChartComponent,
   PaginationComponent
-} from '../../shared';
+} from '@shared';
 import {
   AvatarModule,
   ButtonGroupModule,

@@ -6,7 +6,7 @@ import { ExecutiveTabData, DashboardResponse, DashboardError } from '../../model
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
-import { CardComponent, OsBarChartComponent } from '../../../../../shared';
+import { CardComponent, OsBarChartComponent } from '@shared';
 
 @Component({
   standalone: true,

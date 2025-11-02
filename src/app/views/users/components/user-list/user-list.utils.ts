@@ -7,7 +7,7 @@ import {
   SearchableSelectOption,
   CompaniesDataService,
   VALUE_MAPPER_TYPES
-} from '../../../../shared';
+} from '@shared';
 
 // Constants
 export const USERS_CONFIG = {

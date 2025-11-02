@@ -9,7 +9,7 @@ import {
 	EmailLog,
 	EmailLogResponse,
 	EmailLogFilterParams
-} from '../../shared';
+} from '@shared';
 
 @Injectable()
 export class EmailLogsTableConfigService extends TableConfigAbstractService<EmailLog> {

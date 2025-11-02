@@ -3,7 +3,7 @@ import { RegistrationConfig } from './registration.config';
 import { FormGroup } from '@angular/forms';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
-import { FormGeneratorComponent } from '../../../shared';
+import { FormGeneratorComponent } from '@shared';
 
 @Component({
     standalone: true,

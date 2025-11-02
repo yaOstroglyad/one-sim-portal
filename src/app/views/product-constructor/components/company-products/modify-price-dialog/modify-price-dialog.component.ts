@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { ProductsDataService, UserRoleService } from '../../../../../shared';
+import { ProductsDataService, UserRoleService } from '@shared';
 import { UIConfigFactory, ModifyPriceDialogConfig } from '../factories';
 import { 
   ModifyPriceDialogData, 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserRole } from '../../../../../shared';
+import { UserRole } from '@shared';
 import { 
   UIConfig, 
   ModifyPriceDialogConfig, 

@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { FormConfig, FormGeneratorComponent } from '../../../shared';
+import { FormConfig, FormGeneratorComponent } from '@shared';
 import { getEditOrderFormConfig } from './edit-order-description.utils';
 
 @Component({

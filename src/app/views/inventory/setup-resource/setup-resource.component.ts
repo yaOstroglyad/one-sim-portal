@@ -4,8 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { getSetupResourceFormConfig } from './setup-resource.utils';
-import { ProvidersDataService, FormGeneratorComponent } from '../../../shared';
-import { FormConfig } from '../../../shared';
+import { ProvidersDataService, FormGeneratorComponent, FormConfig } from '@shared';
 
 @Component({
     standalone: true,

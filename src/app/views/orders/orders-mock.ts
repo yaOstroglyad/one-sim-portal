@@ -1,4 +1,4 @@
-import { Order } from '../../shared/model/order';
+import { Order } from '@shared/model/order';
 
 export const ordersMock: Order[] = [{
 		id: '123eq12-13131',

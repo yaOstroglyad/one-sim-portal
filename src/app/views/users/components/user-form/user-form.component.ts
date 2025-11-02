@@ -4,10 +4,14 @@ import { FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 
-import { FormGeneratorComponent, FormConfig, SelectOption } from '../../../../shared';
+import {
+  FormGeneratorComponent,
+  FormConfig,
+  SelectOption,
+  CompaniesDataService
+} from '@shared';
 import { User, CreateUserRequest, UpdateUserRequest } from '../../models';
 import { UserService } from '../../services';
-import { CompaniesDataService } from '../../../../shared';
 import { getUserFormConfig } from './user-form.utils';
 
 @Component({

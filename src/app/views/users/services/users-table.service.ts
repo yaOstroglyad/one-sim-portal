@@ -5,7 +5,7 @@ import {
   TableConfigAbstractService,
   TemplateType,
   User
-} from '../../../shared';
+} from '@shared';
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LayoutConfig } from '../models';
-import { ThemeService } from '../../../shared';
+import { ThemeService } from '@shared';
 
 @Injectable({
   providedIn: 'root'

@@ -1,9 +1,14 @@
-import { FieldType, FormConfig, SelectOption, FieldConfig } from '../../../../../shared';
+import {
+  FieldType,
+  FormConfig,
+  SelectOption,
+  FieldConfig,
+  AccountsDataService
+} from '@shared';
 import { Validators } from '@angular/forms';
 import { of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { CompanyProduct, CreateCompanyProductRequest, UpdateCompanyProductRequest, ActiveTariffOffer } from '../../../models';
-import { AccountsDataService } from '../../../../../shared';
 import { CompanyProductService } from '../../../services';
 
 

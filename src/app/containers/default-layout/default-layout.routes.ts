@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './default-layout.component';
-import { FeatureToggleGuard } from '../../shared';
-import { noPermissionsGuard } from '../../shared/auth/no-permissions.guard';
+import { FeatureToggleGuard } from '@shared';
+import { noPermissionsGuard } from '@shared/auth/no-permissions.guard';
 
 export const DEFAULT_LAYOUT_ROUTES: Routes = [
   {

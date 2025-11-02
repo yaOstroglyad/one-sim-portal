@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@coreui/icons-angular';
 
-import { CardComponent } from '../../../../../shared';
-import { MetricCardComponent } from '../../../../../shared';
+import {
+  CardComponent,
+  MetricCardComponent,
+  OsBarChartComponent,
+  OsLineChartComponent
+} from '@shared';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
-import { OsBarChartComponent } from '../../../../../shared';
-import { OsLineChartComponent } from '../../../../../shared';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { TrafficAnalytics } from '../../models/traffic.types';

@@ -1,9 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { QrCodeComponent } from '../../../../shared';
+import { QrCodeComponent } from '@shared';
 import { TranslateModule } from '@ngx-translate/core';
-import { CopyToClipboardDirective } from '../../../../shared/directives/copy-to-clipboard.directive';
+import { CopyToClipboardDirective } from '@shared/directives/copy-to-clipboard.directive';
 
 @Component({
   standalone: true,

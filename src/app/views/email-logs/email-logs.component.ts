@@ -3,16 +3,23 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { DatePickerWrapperComponent } from '../../shared';
+import {
+  DatePickerWrapperComponent,
+  GenericTableComponent,
+  TableConfig,
+  HeaderComponent,
+  Account,
+  AuthService,
+  ADMIN_PERMISSION,
+  EmailLog,
+  EmailLogFilterParams
+} from '@shared';
 import { Subject, BehaviorSubject, Observable, of } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { GenericTableComponent, TableConfig, HeaderComponent, Account } from '../../shared';
-import { AccountSelectorComponent } from '../../shared/components/account-selector/account-selector.component';
+import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 import { EmailLogsTableConfigService } from './index';
-import { AuthService, ADMIN_PERMISSION } from '../../shared';
-import { EmailLog, EmailLogFilterParams } from '../../shared';
 import { FormControlDirective, ButtonDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 

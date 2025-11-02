@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { DataService, User } from '../../../shared';
+import { DataService, User } from '@shared';
 import { CreateUserRequest, UpdateUserRequest } from '../models';
-import { MockedService } from '../../../shared/decorators/mock.decorator';
-import { CacheHubService, DataType } from '../../../shared/services/cache-hub';
+import { MockedService } from '@shared/decorators/mock.decorator';
+import { CacheHubService, DataType } from '@shared/services/cache-hub';
 import { USER_TYPES } from '../components/user-list/user-list.utils';
 
 @Injectable({

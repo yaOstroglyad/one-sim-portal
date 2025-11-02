@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core';
 import { AsyncPipe, DatePipe, NgClass, NgIf } from '@angular/common';
-import { Subscriber, SubscriberDataService, SubscriberStatusEvent, EmptyStateComponent } from '../../../../../shared';
+import { Subscriber, SubscriberDataService, SubscriberStatusEvent, EmptyStateComponent } from '@shared';
 import { MatTableModule } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';

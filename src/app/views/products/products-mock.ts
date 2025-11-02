@@ -1,5 +1,5 @@
-import { Package } from '../../shared/model/package';
-import { UsageInfo } from '../../shared';
+import { Package } from '@shared/model/package';
+import { UsageInfo } from '@shared';
 import UnitTypeDataEnum = UsageInfo.UnitTypeDataEnum;
 import UsageTypeEnum = UsageInfo.UsageTypeEnum;
 import UnitTypeAmountEnum = UsageInfo.UnitTypeAmountEnum;

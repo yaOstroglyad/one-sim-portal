@@ -1,7 +1,11 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { TableConfig, TableConfigAbstractService, TemplateType } from '../../../../shared';
-import { EmailTemplate } from '../../../../shared';
+import {
+  TableConfig,
+  TableConfigAbstractService,
+  TemplateType,
+  EmailTemplate
+} from '@shared';
 
 @Injectable()
 export class TemplateTypeGridService extends TableConfigAbstractService<EmailTemplate> {

@@ -10,8 +10,8 @@ import {
     TableFilterFieldType,
     GenericTableComponent,
     HeaderComponent 
-} from '../../shared';
-import { Provider } from '../../shared/model/provider';
+} from '@shared';
+import { Provider } from '@shared/model/provider';
 import { ProvidersTableService } from './providers-table.service';
 
 @Component({
