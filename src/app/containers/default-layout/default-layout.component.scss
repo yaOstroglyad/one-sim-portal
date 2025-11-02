@@ -1,6 +1,7 @@
-@import "../../../scss/variables";
-@import "../../../scss/mixins";
-@import "../../../scss/utilities";
+@use "../../../scss/variables" as vars;
+@use "../../../scss/mixins" as mixins;
+@use "../../../scss/utilities" as utils;
+@use "sass:map";
 
 .layout {
   display: flex;
@@ -71,22 +72,22 @@
 
   &__container {
     max-width: 100%;
-    padding: map-get($os-spacing, '4');
+    padding: map.get(vars.$os-spacing, '4');
     margin: 0 auto;
 
     @media (max-width: 768px) {
-      padding: map-get($os-spacing, '4');
+      padding: map.get(vars.$os-spacing, '4');
     }
 
     @media (max-width: 480px) {
-      padding: map-get($os-spacing, '3');
+      padding: map.get(vars.$os-spacing, '3');
     }
   }
 
   &__footer {
     background: var(--os-color-light);
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-    padding: map-get($os-spacing, '4') 0;
+    padding: map.get(vars.$os-spacing, '4') 0;
 
     .layout--dark & {
       background: var(--os-color-dark);
@@ -96,11 +97,11 @@
     &-text {
       margin: 0;
       color: var(--os-color-medium);
-      font-size: map-get($os-font-sizes, 'sm');
+      font-size: map.get(vars.$os-font-sizes, 'sm');
       text-align: center;
 
       @media (max-width: 768px) {
-        font-size: map-get($os-font-sizes, 'xs');
+        font-size: map.get(vars.$os-font-sizes, 'xs');
       }
     }
   }

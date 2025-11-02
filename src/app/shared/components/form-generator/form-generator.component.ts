@@ -11,7 +11,7 @@ import {
 	Output,
 	SimpleChanges
 } from '@angular/core';
-import { FieldConfig, FieldType, FormConfig } from '../../model';
+import { FieldConfig, FieldType, FormConfig } from '@shared/models';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
 	createControl,

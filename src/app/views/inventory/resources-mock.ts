@@ -1,4 +1,4 @@
-import { Resource } from '@shared/model/resource';
+import { Resource } from '@shared/models/product';
 export const resourcesMock: Resource[] = [
 	{
 		id: '893710310000088700',

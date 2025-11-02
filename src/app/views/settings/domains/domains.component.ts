@@ -26,7 +26,7 @@ import {
   HeaderComponent,
   TableConfig
 } from '@shared';
-import { Domain } from '@shared/model/domain';
+import { Domain } from '@shared/models/core';
 import { EditDomainNameComponent } from './edit-domain-name/edit-domain-name.component';
 import { EditDomainOwnerComponent } from './edit-domain-owner/edit-domain-owner.component';
 import { CreateDomainComponent } from './create-domain/create-domain.component';

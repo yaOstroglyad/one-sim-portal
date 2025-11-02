@@ -1,5 +1,5 @@
-export * from './model/index';
-export * from './models/index';
+// Models - organized by domain categories
+export * from './models';
 
 export { CommentsComponent } from './components/comments/comments.component'
 export { AttachmentsComponent } from './components/attachments/attachments.component'

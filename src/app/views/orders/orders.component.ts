@@ -24,7 +24,7 @@ import {
 } from '@shared';
 import { OrdersTableService } from './orders-table.service';
 import { switchMap, takeUntil, tap } from 'rxjs/operators';
-import { Order } from '@shared/model/order';
+import { Order } from '@shared/models/payment';
 import { EditOrderDescriptionComponent } from './edit-order-description/edit-order-description.component';
 import { RevertOrderComponent } from './revert-order/revert-order.component';
 

@@ -1,12 +1,13 @@
-@import "../../../../../../scss/variables";
-@import "../../../../../../scss/utilities";
-@import "../../../../../../scss/mixins";
+@use "../../../../../../scss/variables" as vars;
+@use "../../../../../../scss/utilities" as utils;
+@use "../../../../../../scss/mixins" as mixins;
+@use "sass:map";
 
 .loading-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: map-get($os-spacing, '8'); // 2rem
+  padding: map.get(vars.$os-spacing, '8'); // 2rem
   
   &.fullscreen {
     position: fixed;
@@ -28,7 +29,7 @@
 
 .spinner-container {
   position: relative;
-  margin-bottom: map-get($os-spacing, '6'); // 1.5rem
+  margin-bottom: map.get(vars.$os-spacing, '6'); // 1.5rem
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,7 +51,7 @@
     @extend .text-lg; // 1.125rem
     @extend .font-semibold;
     color: var(--os-color-dark);
-    margin: 0 0 map-get($os-spacing, '2') 0; // 0.5rem
+    margin: 0 0 map.get(vars.$os-spacing, '2') 0; // 0.5rem
   }
   
   p {

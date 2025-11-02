@@ -10,7 +10,7 @@ import { InvoicingGatewayConfigService } from './invoicing-gateway-config.servic
 import { BehaviorSubject, switchMap, combineLatest, Observable, Subject, takeUntil, of } from 'rxjs';
 import { InvoicesService } from './invoices.service';
 import { EditInvoicesComponent } from './edit-invoices/edit-invoices.component';
-import { InvoicingMethod } from 'src/app/shared/model/invoicing-method';
+import { InvoicingMethod } from '@shared/models/payment';
 import { GenericTableComponent } from 'src/app/shared/components/generic-table/generic-table.component';
 import { ADMIN_PERMISSION, AuthService, TableConfig, Account } from 'src/app/shared';
 import { AccountSelectorComponent } from 'src/app/shared/components/account-selector/account-selector.component';

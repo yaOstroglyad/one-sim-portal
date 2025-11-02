@@ -1,6 +1,6 @@
 // Common interfaces used across the Product Constructor
 // Re-export shared pagination types for backward compatibility
-export { PageRequest, PageResponse, SortInfo, PageableInfo } from '@shared/model/page-response';
+export { PageRequest, PageResponse, SortInfo, PageableInfo } from '@shared/models/core';
 
 export interface Country {
   id: number;

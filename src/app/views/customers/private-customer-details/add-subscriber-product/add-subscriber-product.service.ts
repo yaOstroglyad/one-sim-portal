@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { formatDate } from '@angular/common';
-import { AddSubscriberProduct, RefundableProduct, SubscriberProduct } from '@shared/model/package';
+import { AddSubscriberProduct, RefundableProduct, SubscriberProduct } from '@shared/models/product';
 import { SelectOption } from '@shared';
-import { Pagination } from '@shared/model/grid-configs';
+import { Pagination } from '@shared/models/ui';
 
 @Injectable({
 	providedIn: 'root'

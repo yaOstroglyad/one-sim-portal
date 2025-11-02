@@ -1,55 +1,55 @@
-@import "../../../../../../scss/variables";
-@import "../../../../../../scss/utilities";
-@import "../../../../../../scss/mixins";
+@use "../../../../../../scss/variables" as vars;
+@use "../../../../../../scss/utilities" as utils;
+@use "../../../../../../scss/mixins" as mixins;
 
 .finance-tab {
   .finance-content {
-    @include dashboard-content();
+    @include mixins.dashboard-content();
 
     .kpi-row {
-      @include dashboard-kpi-grid(3);
+      @include mixins.dashboard-kpi-grid(3);
     }
 
     .charts-row {
-      @include dashboard-demographics-row();
+      @include mixins.dashboard-demographics-row();
       
       .margin-card,
       .revenue-card {
         .card-header {
-          @include dashboard-card-header();
+          @include mixins.dashboard-card-header();
         }
         
         .chart-container {
-          @include dashboard-chart-container(250px);
+          @include mixins.dashboard-chart-container(250px);
         }
       }
     }
 
     .performance-row {
-      @include dashboard-demographics-row();
+      @include mixins.dashboard-demographics-row();
       
       .top-countries-card,
       .top-bundles-card {
         .card-header {
-          @include dashboard-card-header();
+          @include mixins.dashboard-card-header();
         }
         
         .chart-container {
-          @include dashboard-chart-container(300px);
+          @include mixins.dashboard-chart-container(300px);
         }
       }
     }
 
     .tables-row {
-      @include dashboard-demographics-row();
+      @include mixins.dashboard-demographics-row();
       
       .balance-invoice-card,
       .bundle-purchases-card {
         .card-header {
-          @include dashboard-card-header();
+          @include mixins.dashboard-card-header();
         }
         
-        @include dashboard-table();
+        @include mixins.dashboard-table();
         
         // Specific class mappings for finance table
         .finance-table {
@@ -78,5 +78,5 @@
     }
   }
   
-  @include dashboard-dark-theme();
+  @include mixins.dashboard-dark-theme();
 }

@@ -1,17 +1,18 @@
 @use "../../../../../../scss/variables" as vars;
 @use "../../../../../../scss/utilities" as utils;
 @use "../../../../../../scss/mixins" as mixins;
+@use "sass:map";
 
 .error-container {
   @extend .flex-center;
   @extend .text-center;
-  padding: map-get(vars.$os-spacing, '12') map-get(vars.$os-spacing, '8'); // 3rem 2rem
+  padding: map.get(vars.$os-spacing, '12') map.get(vars.$os-spacing, '8'); // 3rem 2rem
   background-color: var(--os-color-light);
-  border-radius: map-get(vars.$os-border-radius, 'medium'); // 8px
+  border-radius: map.get(vars.$os-border-radius, 'medium'); // 8px
   border: 2px dashed var(--os-color-medium);
 
   &.inline {
-    padding: map-get(vars.$os-spacing, '6'); // 1.5rem
+    padding: map.get(vars.$os-spacing, '6'); // 1.5rem
     border: 1px solid rgba(var(--os-color-danger-rgb), 0.2);
     background-color: rgba(var(--os-color-danger-rgb), 0.05);
   }
@@ -62,7 +63,7 @@
   @extend .mb-4; // 1rem
 
   i {
-    font-size: map-get(vars.$os-font-sizes, '3xl'); // 3rem
+    font-size: map.get(vars.$os-font-sizes, '3xl'); // 3rem
     color: var(--os-color-medium);
   }
 }
@@ -75,24 +76,24 @@
   @extend .text-xl; // 1.25rem
   @extend .font-semibold;
   color: var(--os-color-dark);
-  margin: 0 0 map-get(vars.$os-spacing, '2') 0; // 0.5rem
+  margin: 0 0 map.get(vars.$os-spacing, '2') 0; // 0.5rem
 }
 
 .error-details {
   @extend .text-sm; // 0.875rem
   color: var(--os-color-medium);
-  margin: 0 0 map-get(vars.$os-spacing, '2') 0; // 0.5rem
+  margin: 0 0 map.get(vars.$os-spacing, '2') 0; // 0.5rem
   line-height: 1.5;
 }
 
 .error-code {
   @extend .text-xs; // 0.75rem
   color: var(--os-color-medium);
-  margin: map-get(vars.$os-spacing, '2') 0; // 0.5rem
+  margin: map.get(vars.$os-spacing, '2') 0; // 0.5rem
   font-family: monospace;
   background-color: rgba(var(--os-color-medium-rgb), 0.1);
-  padding: map-get(vars.$os-spacing, '1') map-get(vars.$os-spacing, '2'); // 0.25rem 0.5rem
-  border-radius: map-get(vars.$os-border-radius, 'small'); // 4px
+  padding: map.get(vars.$os-spacing, '1') map.get(vars.$os-spacing, '2'); // 0.25rem 0.5rem
+  border-radius: map.get(vars.$os-border-radius, 'small'); // 4px
   display: inline-block;
 }
 
@@ -105,13 +106,13 @@
 
 .error-actions {
   @extend .flex-center;
-  gap: map-get(vars.$os-spacing, '4'); // 1rem
+  gap: map.get(vars.$os-spacing, '4'); // 1rem
 }
 
 .retry-button {
   @extend .flex-center;
-  gap: map-get(vars.$os-spacing, '2'); // 0.5rem
-  padding: map-get(vars.$os-spacing, '3') map-get(vars.$os-spacing, '6'); // 0.75rem 1.5rem
+  gap: map.get(vars.$os-spacing, '2'); // 0.5rem
+  padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '6'); // 0.75rem 1.5rem
   background-color: var(--os-color-primary);
   color: var(--os-color-light);
   border: none;
@@ -122,7 +123,7 @@
   @include mixins.interactive-states();
 
   i {
-    font-size: map-get(vars.$os-font-sizes, 'base'); // 1rem
+    font-size: map.get(vars.$os-font-sizes, 'base'); // 1rem
   }
 }
 

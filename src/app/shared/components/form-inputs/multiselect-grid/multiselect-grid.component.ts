@@ -7,7 +7,7 @@ import { Subject, Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { takeUntil, map, startWith } from 'rxjs/operators';
 import { IconDirective } from '@coreui/icons-angular';
 
-import { GridSelectOption, GridConfig } from '../../../model';
+import { GridSelectOption, GridConfig } from '@shared/models';
 
 @Component({
     selector: 'app-multiselect-grid',

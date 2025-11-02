@@ -1,38 +1,38 @@
-@import "../../../../../../scss/variables";
-@import "../../../../../../scss/utilities";
-@import "../../../../../../scss/mixins";
+@use "../../../../../../scss/variables" as vars;
+@use "../../../../../../scss/utilities" as utils;
+@use "../../../../../../scss/mixins" as mixins;
 
 .traffic-tab {
   .traffic-content {
-    @include dashboard-content();
+    @include mixins.dashboard-content();
 
     .kpi-row {
-      @include dashboard-kpi-grid(3);
+      @include mixins.dashboard-kpi-grid(3);
     }
 
     .traffic-by-country-row {
       .traffic-by-country-card {
         .card-header {
-          @include dashboard-card-header();
+          @include mixins.dashboard-card-header();
         }
         
         .chart-container {
-          @include dashboard-chart-container(300px);
+          @include mixins.dashboard-chart-container(300px);
         }
       }
     }
 
     .charts-row {
-      @include dashboard-demographics-row();
+      @include mixins.dashboard-demographics-row();
       
       .traffic-shares-card,
       .active-users-card {
         .card-header {
-          @include dashboard-card-header();
+          @include mixins.dashboard-card-header();
         }
         
         .chart-container {
-          @include dashboard-chart-container(250px);
+          @include mixins.dashboard-chart-container(250px);
         }
       }
     }
@@ -40,19 +40,19 @@
     .average-traffic-row {
       .average-traffic-card {
         .card-header {
-          @include dashboard-card-header();
+          @include mixins.dashboard-card-header();
           
           .traffic-summary {
-            @include dashboard-metric-summary();
+            @include mixins.dashboard-metric-summary();
           }
         }
         
         .traffic-details {
-          @include dashboard-detail-items();
+          @include mixins.dashboard-detail-items();
         }
       }
     }
   }
   
-  @include dashboard-dark-theme();
+  @include mixins.dashboard-dark-theme();
 }

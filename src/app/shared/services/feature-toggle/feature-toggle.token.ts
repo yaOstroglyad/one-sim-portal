@@ -1,11 +1,40 @@
 import { InjectionToken, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { FeatureToggleContract } from '@shared/models/feature';
 
-export const FEATURE_TOGGLES_SERVICE = new InjectionToken<{
-  isToggleActive(key: string): boolean;
-  isToggleActive$(key: string): Observable<boolean>;
-  readonly featureToggles: Set<string>;
-}>('FeatureTogglesService');
+/**
+ * Injection token for Feature Toggle Service
+ *
+ * Use this token to inject the feature toggle service implementation.
+ * The service must implement the FeatureToggleContract interface.
+ *
+ * @example
+ * ```typescript
+ * // In providers
+ * providers: [
+ *   {
+ *     provide: FEATURE_TOGGLES_SERVICE,
+ *     useExisting: FeatureToggleService
+ *   }
+ * ]
+ *
+ * // In component
+ * private featureService = inject(FEATURE_TOGGLES_SERVICE);
+ * ```
+ */
+export const FEATURE_TOGGLES_SERVICE = new InjectionToken<FeatureToggleContract>(
+  'FeatureTogglesService',
+  {
+    providedIn: 'root',
+    factory: () => {
+      // Lazy import to avoid circular dependencies
+      return inject(FeatureToggleService);
+    }
+  }
+);
+
+// Forward declaration to avoid circular dependency
+import { FeatureToggleService } from './feature-toggle.service';
 
 /**
  * Helper function to check if a feature toggle is active

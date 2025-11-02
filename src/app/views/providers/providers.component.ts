@@ -11,7 +11,7 @@ import {
     GenericTableComponent,
     HeaderComponent 
 } from '@shared';
-import { Provider } from '@shared/model/provider';
+import { Provider } from '@shared/models/business';
 import { ProvidersTableService } from './providers-table.service';
 
 @Component({

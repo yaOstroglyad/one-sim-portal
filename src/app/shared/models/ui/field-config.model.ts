@@ -1,7 +1,7 @@
 // field-config.model.ts
 import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { FormGeneratorComponent } from '../components/form-generator/form-generator.component';
+import { FormGeneratorComponent } from '../../components/form-generator/form-generator.component';
 
 export enum FieldType {
 	text = 'text',

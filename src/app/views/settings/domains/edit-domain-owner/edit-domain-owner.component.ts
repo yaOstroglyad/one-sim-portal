@@ -5,7 +5,7 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
-import { Domain } from '@shared/model/domain';
+import { Domain } from '@shared/models/core';
 import { AccountsDataService } from '@shared';
 import { Observable } from 'rxjs';
 

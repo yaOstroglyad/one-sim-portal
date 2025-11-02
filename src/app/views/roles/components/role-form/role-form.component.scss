@@ -1,5 +1,5 @@
-@import "../../../../../scss/variables";
-@import "../../../../../scss/utilities";
+@use "../../../../../scss/variables" as vars;
+@use "../../../../../scss/utilities" as utils;
 
 .role-form {
   padding: 0;

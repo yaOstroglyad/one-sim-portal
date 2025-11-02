@@ -119,8 +119,8 @@
     }
 
     .kpi-row {
-      @include mixins.dashboard-kpi-grid(4); // 4 columns for tickets metrics
       margin-bottom: map.get(vars.$os-spacing, '8');
+      @include mixins.dashboard-kpi-grid(4); // 4 columns for tickets metrics
 
       @media (max-width: 1200px) {
         @include mixins.dashboard-kpi-grid(2); // 2 columns on medium screens

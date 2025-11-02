@@ -1,7 +1,8 @@
 // Global dialog styles are now available from src/scss/_vendor-overrides.scss
 // Add subscriber dialog specific styles
 
-@import "../../../../../scss/variables";
+@use "../../../../../scss/variables" as vars;
+@use "sass:map";
 
 // Form generator spacing in dialog
 app-form-generator {
@@ -13,6 +14,6 @@ app-loader {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: map-get($os-spacing, '20'); // 80px
+  min-height: map.get(vars.$os-spacing, '20'); // 80px
   width: 100%;
 }

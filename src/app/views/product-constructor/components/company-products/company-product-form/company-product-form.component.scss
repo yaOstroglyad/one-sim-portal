@@ -1,9 +1,9 @@
-@import "../../../../../../scss/variables";
-@import "../../../../../../scss/mixins";
-@import "../../../../../../scss/form-utilities";
+@use "../../../../../../scss/variables" as vars;
+@use "../../../../../../scss/mixins" as mixins;
+@use "../../../../../../scss/form-utilities" as form-utils;
 
 :host {
-  @include material-form-field-overrides();
+  @include form-utils.material-form-field-overrides();
 }
 
 .company-product-form-container {

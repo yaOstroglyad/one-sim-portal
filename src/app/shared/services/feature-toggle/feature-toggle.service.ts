@@ -1,31 +1,59 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of, timer } from 'rxjs';
 import { map, catchError, tap, switchMap } from 'rxjs/operators';
-import { FeatureToggle, FeatureToggleResponse } from '../../model/feature-toggle.interface';
+import {
+  FeatureToggle,
+  FeatureToggleResponse,
+  FeatureToggleContract
+} from '@shared/models/feature';
 import { FeatureToggleStore } from './feature-toggle-store';
 import { getDefaultTogglesMap, FEATURE_TOGGLES_API_URL } from './feature-toggle.config';
 
+/**
+ * Feature Toggle Service
+ *
+ * Manages feature toggles/flags for the application.
+ * Fetches toggles from API and provides synchronous/asynchronous access.
+ *
+ * @implements {FeatureToggleContract}
+ *
+ * @example
+ * ```typescript
+ * // In component
+ * const featureService = inject(FeatureToggleService);
+ *
+ * // Synchronous check
+ * if (featureService.isToggleActive('new-ui')) {
+ *   // Show new UI
+ * }
+ *
+ * // Asynchronous check
+ * featureService.isToggleActive$('new-ui').subscribe(enabled => {
+ *   this.showNewUI = enabled;
+ * });
+ * ```
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class FeatureToggleService {
+export class FeatureToggleService implements FeatureToggleContract {
+  private readonly http = inject(HttpClient);
+  private readonly featureToggleStore = inject(FeatureToggleStore);
   private togglesSubject = new BehaviorSubject<Map<string, boolean>>(new Map());
   private toggles$ = this.togglesSubject.asObservable();
   private _featureToggles = new Set<string>();
   private isInitialized = false;
   private useMockData = true; // TODO: Set to false when API is ready
 
-  constructor(
-    private http: HttpClient,
-    private featureToggleStore: FeatureToggleStore
-  ) {
+  constructor() {
     const defaultToggles = getDefaultTogglesMap();
     this.togglesSubject.next(defaultToggles);
     this.featureToggleStore.updateToggles(defaultToggles);
 
     this.loadFeatureToggles();
 
+    // Auto-refresh every 5 minutes
     timer(300000, 300000).pipe(
       switchMap(() => this.fetchFeatureToggles())
     ).subscribe();

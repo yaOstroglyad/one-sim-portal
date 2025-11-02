@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { DataService, handleArrayError } from '@shared';
-import { Resource } from '@shared/model/resource';
+import { Resource } from '@shared/models/product';
 
 @Injectable({
 	providedIn: 'root'

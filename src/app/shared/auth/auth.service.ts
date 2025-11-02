@@ -4,7 +4,7 @@ import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { JwtHelperService } from './jwt-helper.service';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, map, takeUntil, tap, shareReplay } from 'rxjs/operators';
-import { LoginRequest, LoginResponse } from '../model';
+import { LoginRequest, LoginResponse } from '@shared/models';
 import { Router } from '@angular/router';
 
 export const ADMIN_PERMISSION = 'ADMIN';

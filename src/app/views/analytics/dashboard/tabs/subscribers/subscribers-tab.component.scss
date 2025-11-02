@@ -1,39 +1,39 @@
-@import "../../../../../../scss/variables";
-@import "../../../../../../scss/utilities";
-@import "../../../../../../scss/mixins";
+@use "../../../../../../scss/variables" as vars;
+@use "../../../../../../scss/utilities" as utils;
+@use "../../../../../../scss/mixins" as mixins;
 
 .subscribers-tab {
   .subscribers-content {
-    @include dashboard-content();
+    @include mixins.dashboard-content();
 
     .kpi-row {
-      @include dashboard-kpi-grid(4);
+      @include mixins.dashboard-kpi-grid(4);
     }
 
     .growth-row {
       .growth-card {
         .card-header {
-          @include dashboard-card-header();
-          @include dashboard-chart-legend();
+          @include mixins.dashboard-card-header();
+          @include mixins.dashboard-chart-legend();
         }
 
         .chart-container {
-          @include dashboard-chart-container(300px);
+          @include mixins.dashboard-chart-container(300px);
         }
       }
     }
 
     .demographics-row {
-      @include dashboard-demographics-row();
+      @include mixins.dashboard-demographics-row();
 
       .demographics-card,
       .lifecycle-card {
         .card-header {
-          @include dashboard-card-header();
+          @include mixins.dashboard-card-header();
         }
 
         .chart-container {
-          @include dashboard-chart-container(250px);
+          @include mixins.dashboard-chart-container(250px);
         }
       }
     }
@@ -41,7 +41,7 @@
     .retention-row {
       .retention-card {
         .card-header {
-          @include dashboard-card-header();
+          @include mixins.dashboard-card-header();
           
           // Unique exception: retention has specific metric structure
           .retention-summary {
@@ -70,7 +70,7 @@
         }
 
         .chart-container {
-          @include dashboard-chart-container(250px);
+          @include mixins.dashboard-chart-container(250px);
         }
       }
     }
@@ -78,7 +78,7 @@
     .churn-row {
       .churn-card {
         .card-header {
-          @include dashboard-card-header();
+          @include mixins.dashboard-card-header();
           
           .churn-rate {
             display: flex;
@@ -104,11 +104,11 @@
         }
 
         .churn-reasons {
-          @include dashboard-reason-bars();
+          @include mixins.dashboard-reason-bars();
         }
       }
     }
   }
   
-  @include dashboard-dark-theme();
+  @include mixins.dashboard-dark-theme();
 }

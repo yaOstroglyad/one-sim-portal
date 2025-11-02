@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { DataService } from '../core';
-import { EditCompanySettings } from '../../model';
-import { EmailTemplate } from '../../model';
+import { EditCompanySettings } from '@shared/models';
+import { EmailTemplate } from '@shared/models';
 import { handleArrayError } from '../../utils';
 
 @Injectable({

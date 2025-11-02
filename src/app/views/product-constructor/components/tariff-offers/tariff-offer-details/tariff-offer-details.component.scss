@@ -1,6 +1,6 @@
-@import "../../../../../../scss/variables";
-@import "../../../../../../scss/mixins";
-@import "../../../../../../scss/utilities";
+@use "../../../../../../scss/variables" as vars;
+@use "../../../../../../scss/mixins" as mixins;
+@use "../../../../../../scss/utilities" as utils;
 
 .tariff-offer-details {
   padding: 1.5rem;

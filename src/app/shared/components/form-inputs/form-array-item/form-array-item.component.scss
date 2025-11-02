@@ -1,8 +1,8 @@
 // FormArrayItem component styles
-@import "../../../../../scss/form-utilities";
+@use "../../../../../scss/form-utilities" as form-utils;
 
 // Apply Material Form Field overrides for this component
-@include material-form-field-overrides();
+@include form-utils.material-form-field-overrides();
 
 :host {
   display: block;

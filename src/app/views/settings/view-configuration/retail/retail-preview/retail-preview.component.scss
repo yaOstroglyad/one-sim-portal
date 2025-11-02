@@ -1,4 +1,4 @@
-@import 'src/scss/_view-configuration.scss';
+@use 'src/scss/_view-configuration.scss';
 
 :host {
   @extend .preview-component;

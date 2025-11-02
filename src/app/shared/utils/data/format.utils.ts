@@ -7,7 +7,7 @@
  * - Number formatting
  */
 
-import { Balance } from '../../model';
+import { Balance } from '@shared/models';
 
 /**
  * Convert data usage from bytes to MB/GB with proper formatting

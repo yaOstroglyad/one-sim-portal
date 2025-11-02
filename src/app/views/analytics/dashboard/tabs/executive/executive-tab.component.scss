@@ -1,6 +1,7 @@
 @use "../../../../../../scss/variables" as vars;
 @use "../../../../../../scss/utilities" as utils;
 @use "../../../../../../scss/mixins" as mixins;
+@use "sass:map";
 
 .executive-tab {
   .executive-content {
@@ -58,7 +59,7 @@
 
           .inventory-item {
             padding: 1rem;
-            border-radius: map-get(vars.$os-border-radius, 'medium');
+            border-radius: map.get(vars.$os-border-radius, 'medium');
             border: 2px solid var(--os-color-light);
             background-color: var(--os-color-light-subtle-bg);
             transition: all 0.2s ease;
@@ -114,7 +115,7 @@
   padding: 1.5rem;
   text-align: center;
   background-color: var(--os-color-light-subtle-bg);
-  border-radius: map-get(vars.$os-border-radius, 'medium');
+  border-radius: map.get(vars.$os-border-radius, 'medium');
   border: 1px dashed var(--os-color-medium);
   margin-top: 1rem;
 

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { DataService } from '../core';
-import { AvailableOrders, Order } from '../../model/order';
+import { AvailableOrders, Order } from '@shared/models/payment';
 import { ordersMock } from '../../../views/orders/orders-mock';
 import { CacheHubService, DataType } from '../cache-hub';
 import { handleArrayError, handleWithDefault } from '../../utils';

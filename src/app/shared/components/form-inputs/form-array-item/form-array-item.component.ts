@@ -1,7 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable, of, Subject, BehaviorSubject } from 'rxjs';
-import { FieldConfig, FieldType } from '../../../model';
+import { FieldConfig, FieldType } from '@shared/models';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';

@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
-import { FieldConfig, FieldType } from '../../model';
+import { FieldConfig, FieldType } from '@shared/models';
 import { combineLatest, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 

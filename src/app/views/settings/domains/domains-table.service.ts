@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TableConfig, TableConfigAbstractService, TemplateType } from '@shared';
-import { Domain } from '@shared/model/domain';
+import { Domain } from '@shared/models/core';
 
 @Injectable({
   providedIn: 'root'

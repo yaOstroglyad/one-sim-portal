@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { DataService } from '../core';
-import { Account } from '../../model';
+import { Account } from '@shared/models';
 import { handleArrayError, handleWithDefault } from '../../utils';
 
 @Injectable({

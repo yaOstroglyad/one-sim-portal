@@ -1,6 +1,7 @@
-@import "../../../../../../scss/variables";
-@import "../../../../../../scss/mixins";
-@import "../../../../../../scss/utilities"; // for $font-sizes map
+@use "../../../../../../scss/variables" as vars;
+@use "../../../../../../scss/mixins" as mixins;
+@use "../../../../../../scss/utilities" as utils;
+@use "sass:map"; // for $font-sizes map
 
 .selected-tariff-offer-details {
   margin-top: 1.5rem;
@@ -135,8 +136,8 @@
               align-items: center;
               justify-content: center;
               padding: 0.25rem 0.5rem;
-              border-radius: map-get($os-border-radius, 'small');
-              font-size: map-get($font-sizes, 'xs');
+              border-radius: map.get(vars.$os-border-radius, 'small');
+              font-size: map.get(vars.$os-font-sizes, 'xs');
               font-weight: 600;
               line-height: 1;
               margin-left: 0.5rem;
@@ -186,8 +187,8 @@
                 align-items: center;
                 justify-content: center;
                 padding: 0.125rem 0.5rem;
-                border-radius: map-get($os-border-radius, 'small');
-                font-size: map-get($font-sizes, 'xs');
+                border-radius: map.get(vars.$os-border-radius, 'small');
+                font-size: map.get(vars.$os-font-sizes, 'xs');
                 font-weight: 600;
                 background-color: var(--os-color-warning-subtle-bg);
                 color: var(--os-color-warning);
@@ -213,8 +214,8 @@
         align-items: center;
         justify-content: center;
         padding: 0.125rem 0.375rem;
-        border-radius: map-get($os-border-radius, 'small');
-        font-size: map-get($font-sizes, 'xs');
+        border-radius: map.get(vars.$os-border-radius, 'small');
+        font-size: map.get(vars.$os-font-sizes, 'xs');
         font-weight: 600;
         line-height: 1;
         margin-left: 0.5rem;

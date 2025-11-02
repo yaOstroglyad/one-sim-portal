@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ColumnControlComponent } from '../column-control/column-control.component';
 import { debounceTime, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { TableConfig, HeaderConfig } from '../../model';
+import { TableConfig, HeaderConfig } from '@shared/models';
 
 @Component({
     standalone: true,

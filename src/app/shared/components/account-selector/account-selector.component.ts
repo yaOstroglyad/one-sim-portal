@@ -17,7 +17,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { AccountsDataService } from '../../services/data';
 import { Subject } from 'rxjs';
-import { Account } from '../../model';
+import { Account } from '@shared/models';
 
 @Component({
   standalone: true,

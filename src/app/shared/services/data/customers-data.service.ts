@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { DataService } from '../core';
-import { Customer, CustomerType, DataObject } from '../../model';
-import { Pagination } from '../../model/grid-configs';
+import { Customer, CustomerType, DataObject } from '@shared/models';
+import { Pagination } from '@shared/models/ui';
 import { handleArrayError, handleObjectError, handleWithDefault } from '../../utils';
 
 @Injectable({

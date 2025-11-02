@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
-import { Provider } from '../../model/provider';
+import { Provider } from '@shared/models/business';
 import { DataService } from '../core';
 import { handleArrayError } from '../../utils';
 

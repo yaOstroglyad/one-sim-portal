@@ -1,7 +1,7 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TableConfig, TableConfigAbstractService, TemplateType } from 'src/app/shared';
-import { InvoicingMethod } from 'src/app/shared/model/invoicing-method';
+import { InvoicingMethod } from '@shared/models/payment';
 
 @Injectable({
   providedIn: 'root'

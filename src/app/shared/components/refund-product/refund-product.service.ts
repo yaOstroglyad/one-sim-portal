@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { RefundableProduct } from '../../model/package';
-import { SelectOption } from '../../model';
+import { RefundableProduct } from '@shared/models/product';
+import { SelectOption } from '@shared/models';
 import { formatDate } from '@angular/common';
 
 @Injectable({

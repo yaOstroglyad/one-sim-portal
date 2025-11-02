@@ -20,7 +20,9 @@
     "stripInternal": true,
     "paths": {
       "@shared": ["src/app/shared"],
-      "@shared/*": ["src/app/shared/*"]
+      "@shared/*": ["src/app/shared/*"],
+      "@models": ["src/app/shared/models"],
+      "@models/*": ["src/app/shared/models/*"]
     }
   },
   "angularCompilerOptions": {

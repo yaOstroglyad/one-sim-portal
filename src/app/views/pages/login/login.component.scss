@@ -1,10 +1,10 @@
-@import "src/scss/variables";
+@use "src/scss/variables" as vars;
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: $primary-font;
+  font-family: vars.$primary-font;
 }
 
 .login-container {
@@ -92,7 +92,7 @@
 
 .form-input:focus {
   outline: none;
-  border-color: $primary-color;
+  border-color: vars.$primary-color;
 }
 
 .login-button {

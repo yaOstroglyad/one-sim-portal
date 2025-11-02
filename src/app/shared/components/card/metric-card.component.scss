@@ -39,14 +39,14 @@
 }
 
 .metric-icon {
-  font-size: map-get(vars.$os-font-sizes, '2xl'); // 1.5rem
+  font-size: map.get(vars.$os-font-sizes, '2xl'); // 1.5rem
   @extend .opacity-25;
 }
 
 .metric-body {
   @extend .d-flex;
   @extend .flex-column;
-  gap: map-get(vars.$os-spacing, '2'); // 0.5rem
+  gap: map.get(vars.$os-spacing, '2'); // 0.5rem
 }
 
 .metric-value {
@@ -59,14 +59,14 @@
     @extend .text-base; // 1rem
     @extend .font-normal;
     color: var(--os-color-medium);
-    margin-left: map-get(vars.$os-spacing, '1'); // 0.25rem
+    margin-left: map.get(vars.$os-spacing, '1'); // 0.25rem
   }
 }
 
 .metric-change {
   @extend .d-flex;
   @extend .align-center;
-  gap: map-get(vars.$os-spacing, '1'); // 0.25rem
+  gap: map.get(vars.$os-spacing, '1'); // 0.25rem
   @extend .text-sm; // 0.875rem
   @extend .font-medium;
   

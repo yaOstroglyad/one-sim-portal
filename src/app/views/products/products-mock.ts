@@ -1,4 +1,4 @@
-import { Package } from '@shared/model/package';
+import { Package } from '@shared/models/product';
 import { UsageInfo } from '@shared';
 import UnitTypeDataEnum = UsageInfo.UnitTypeDataEnum;
 import UsageTypeEnum = UsageInfo.UsageTypeEnum;

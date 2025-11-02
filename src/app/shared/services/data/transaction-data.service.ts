@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
-import { TransactionOrder } from '../../model';
+import { TransactionOrder } from '@shared/models';
 import { handleArrayError } from '../../utils';
 
 @Injectable({

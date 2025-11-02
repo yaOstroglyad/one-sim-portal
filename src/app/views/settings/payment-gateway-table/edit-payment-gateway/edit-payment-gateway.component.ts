@@ -16,7 +16,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { PaymentGatewayService } from '../payment-gateway.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { PaymentStrategy } from 'src/app/shared/model/payment-strategies';
+import { PaymentStrategy } from '@shared/models/payment';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';

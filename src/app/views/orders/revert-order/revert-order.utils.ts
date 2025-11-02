@@ -3,7 +3,7 @@ import {
 	FormConfig,
 	FieldType
 } from '@shared';
-import { Order } from '@shared/model/order';
+import { Order } from '@shared/models/payment';
 
 export function getRevertOrderFormConfig(order: Order): FormConfig {
 	return {

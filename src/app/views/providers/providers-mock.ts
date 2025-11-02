@@ -1,4 +1,4 @@
-import { Provider } from '@shared/model/provider';
+import { Provider } from '@shared/models/business';
 export const providersMock: Provider[] = [
 	{
 		id: '1',

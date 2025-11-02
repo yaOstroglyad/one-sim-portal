@@ -10,7 +10,7 @@ import { PaymentGatewayTableConfigService } from './payment-gateway-table-config
 import { BehaviorSubject, switchMap, combineLatest, Observable, Subject, takeUntil, of } from 'rxjs';
 import { PaymentGatewayService } from './payment-gateway.service';
 import { EditPaymentGatewayComponent } from './edit-payment-gateway/edit-payment-gateway.component';
-import { PaymentStrategy } from 'src/app/shared/model/payment-strategies';
+import { PaymentStrategy } from '@shared/models/payment';
 import { GenericTableComponent } from 'src/app/shared/components/generic-table/generic-table.component';
 import { ADMIN_PERMISSION, AuthService, TableConfig, Account } from 'src/app/shared';
 import { AccountSelectorComponent } from 'src/app/shared/components/account-selector/account-selector.component';

@@ -1,8 +1,8 @@
 // Form Generator specific styles
-@import "../../../../scss/form-utilities";
+@use "../../../../scss/form-utilities" as form-utils;
 
 // Apply Material Form Field overrides
-@include material-form-field-overrides();
+@include form-utils.material-form-field-overrides();
 
 //mb replace it into hint component and refactor styles
 mat-icon {

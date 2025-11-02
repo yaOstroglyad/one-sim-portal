@@ -23,7 +23,7 @@
   &--sm {
     width: 24px;
     height: 24px;
-    border-radius: map-get(vars.$os-border-radius, 'small');
+    border-radius: map.get(vars.$os-border-radius, 'small');
 
     .user-avatar__image {
       width: 24px;
@@ -31,14 +31,14 @@
     }
 
     .user-avatar__fallback {
-      font-size: map-get(vars.$os-font-sizes, 'xs');
+      font-size: map.get(vars.$os-font-sizes, 'xs');
     }
   }
 
   &--md {
     width: 36px;
     height: 36px;
-    border-radius: map-get(vars.$os-border-radius, 'medium');
+    border-radius: map.get(vars.$os-border-radius, 'medium');
 
     .user-avatar__image {
       width: 36px;
@@ -46,14 +46,14 @@
     }
 
     .user-avatar__fallback {
-      font-size: map-get(vars.$os-font-sizes, 'sm');
+      font-size: map.get(vars.$os-font-sizes, 'sm');
     }
   }
 
   &--lg {
     width: 48px;
     height: 48px;
-    border-radius: map-get(vars.$os-border-radius, 'large');
+    border-radius: map.get(vars.$os-border-radius, 'large');
 
     .user-avatar__image {
       width: 48px;
@@ -61,14 +61,14 @@
     }
 
     .user-avatar__fallback {
-      font-size: map-get(vars.$os-font-sizes, 'base');
+      font-size: map.get(vars.$os-font-sizes, 'base');
     }
   }
 
   &--xl {
     width: 64px;
     height: 64px;
-    border-radius: map-get(vars.$os-border-radius, 'xl');
+    border-radius: map.get(vars.$os-border-radius, 'xl');
 
     .user-avatar__image {
       width: 64px;
@@ -76,16 +76,16 @@
     }
 
     .user-avatar__fallback {
-      font-size: map-get(vars.$os-font-sizes, 'lg');
+      font-size: map.get(vars.$os-font-sizes, 'lg');
     }
   }
 
   // Shape variants
   &--circle {
-    border-radius: map-get(vars.$os-border-radius, 'full') !important;
+    border-radius: map.get(vars.$os-border-radius, 'full') !important;
 
     .user-avatar__image {
-      border-radius: map-get(vars.$os-border-radius, 'full');
+      border-radius: map.get(vars.$os-border-radius, 'full');
     }
   }
 
@@ -105,7 +105,7 @@
   &--clickable {
     &:hover {
       transform: scale(1.05);
-      box-shadow: map-get(vars.$os-shadows, 'md');
+      box-shadow: map.get(vars.$os-shadows, 'md');
     }
 
     &:active {
@@ -171,7 +171,7 @@
     min-width: 8px;
     min-height: 8px;
     border: 2px solid white;
-    border-radius: map-get(vars.$os-border-radius, 'full');
+    border-radius: map.get(vars.$os-border-radius, 'full');
     
     &--online {
       background: var(--os-color-success);

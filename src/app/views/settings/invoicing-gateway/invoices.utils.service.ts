@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormConfig, BackendFieldConfig, FieldType } from '@shared';
-import { InvoicingMethod, InvoicingParameters } from '@shared/model/invoicing-method';
+import { InvoicingMethod, InvoicingParameters } from '@shared/models/payment';
 
 @Injectable({
 	providedIn: 'root'

@@ -15,15 +15,15 @@
     @extend .d-flex;
     @extend .align-center;
     @extend .justify-end; // ag-grid выравнивает всё справа
-    gap: map-get(vars.$os-spacing, '4'); // 16px между элементами
-    padding: map-get(vars.$os-spacing, '3') map-get(vars.$os-spacing, '4'); // 12px vertical, 16px horizontal
+    gap: map.get(vars.$os-spacing, '4'); // 16px между элементами
+    padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '4'); // 12px vertical, 16px horizontal
     border-top: 1px solid var(--os-color-light);
     min-height: 44px; // минимальная высота для соответствия ag-grid
 
     // Responsive behavior
     @media (max-width: 768px) {
       justify-content: space-between;
-      gap: map-get(vars.$os-spacing, '2'); // 8px
+      gap: map.get(vars.$os-spacing, '2'); // 8px
     }
   }
 }
@@ -32,7 +32,7 @@
 .ag-pagination-page-size {
   @extend .d-flex;
   @extend .align-center;
-  gap: map-get(vars.$os-spacing, '2'); // 8px
+  gap: map.get(vars.$os-spacing, '2'); // 8px
 
   .ag-pagination-label {
     @include mixins.ag-grid-text();
@@ -47,7 +47,7 @@
 .ag-pagination-controls {
   @extend .d-flex;
   @extend .align-center;
-  gap: map-get(vars.$os-spacing, '2'); // 8px между кнопками
+  gap: map.get(vars.$os-spacing, '2'); // 8px между кнопками
 }
 
 // Navigation buttons using optimized mixin

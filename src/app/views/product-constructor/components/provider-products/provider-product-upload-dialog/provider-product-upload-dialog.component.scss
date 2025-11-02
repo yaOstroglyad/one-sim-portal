@@ -1,4 +1,4 @@
-@import "../../../../../../scss/variables";
+@use "../../../../../../scss/variables" as vars;
 
 .dialog-header {
   border-bottom: 1px solid var(--os-color-light-shade, #f4f5f8);

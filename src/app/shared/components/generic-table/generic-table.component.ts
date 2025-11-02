@@ -17,7 +17,7 @@ import { DisplayValueByKeyPipe } from '../../pipes/display-value-by-key/display-
 import { PaginationComponent } from '../pagination';
 import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { TableColumnConfig, TableConfig } from '../../model';
+import { TableColumnConfig, TableConfig } from '@shared/models';
 
 @Component({
     standalone: true,

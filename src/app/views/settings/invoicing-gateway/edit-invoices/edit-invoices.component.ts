@@ -16,7 +16,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { InvoicesService } from '../invoices.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
-import { InvoicingMethod } from 'src/app/shared/model/invoicing-method';
+import { InvoicingMethod } from '@shared/models/payment';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';

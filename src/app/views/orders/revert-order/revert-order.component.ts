@@ -8,7 +8,7 @@ import { RevertOrderService } from './revert-order.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormConfig, FormGeneratorComponent } from '@shared';
-import { Order } from '@shared/model/order';
+import { Order } from '@shared/models/payment';
 
 @Component({
     standalone: true,

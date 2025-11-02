@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { TableConfig } from '../../model';
+import { TableConfig } from '@shared/models';
 import { map } from 'rxjs/operators';
 import { deepSearch } from '../../utils';
 

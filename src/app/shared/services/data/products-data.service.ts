@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
-import { Package } from '../../model/package';
+import { Package } from '@shared/models/product';
 import { DataService } from '../core';
 import { map } from 'rxjs/operators';
-import { Pagination } from '../../model/grid-configs';
+import { Pagination } from '@shared/models/ui';
 import { CacheHubService, DataType } from '../cache-hub';
 import { handleArrayError, handleWithDefault, handleEmptyObjectError } from '../../utils';
 
