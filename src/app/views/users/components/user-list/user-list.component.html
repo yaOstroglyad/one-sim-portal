@@ -155,12 +155,13 @@
         [hasFooter]="true"
         (close)="onPanelClose()">
 
-    <div panel-content>
+    <div panel-content (click)="onPanelContentClick()">
         <app-role-management-form
             #assignRoleForm
             [availableRoles]="availableRoles"
             [selectedRoleIds]="[]"
-            [mode]="'assign'">
+            [mode]="'assign'"
+            (selectionChange)="onAssignRolesSelectionChange($event)">
         </app-role-management-form>
     </div>
 
@@ -175,7 +176,7 @@
                 type="button"
                 class="btn btn-primary"
                 (click)="onConfirmAssignRoles()"
-                [disabled]="assignRoleForm?.loading || !assignRoleForm?.hasSelectedRoles()">
+                [disabled]="!canConfirmAssignRoles">
             <span *ngIf="assignRoleForm?.loading" class="spinner-border spinner-border-sm me-2" role="status"
                   aria-hidden="true"></span>
             {{ 'users.assignRoles' | translate }}
@@ -193,12 +194,13 @@
         [hasFooter]="true"
         (close)="onPanelClose()">
 
-    <div panel-content>
+    <div panel-content (click)="onPanelContentClick()">
         <app-role-management-form
             #removeRoleForm
             [availableRoles]="userRoles"
             [selectedRoleIds]="[]"
-            [mode]="'remove'">
+            [mode]="'remove'"
+            (selectionChange)="onRemoveRolesSelectionChange($event)">
         </app-role-management-form>
     </div>
 
@@ -213,7 +215,7 @@
                 type="button"
                 class="btn btn-danger"
                 (click)="onConfirmRemoveRoles()"
-                [disabled]="removeRoleForm?.loading || !removeRoleForm?.hasSelectedRoles()">
+                [disabled]="!canConfirmRemoveRoles">
             <span *ngIf="removeRoleForm?.loading" class="spinner-border spinner-border-sm me-2" role="status"
                   aria-hidden="true"></span>
             {{ 'users.removeRoles' | translate }}

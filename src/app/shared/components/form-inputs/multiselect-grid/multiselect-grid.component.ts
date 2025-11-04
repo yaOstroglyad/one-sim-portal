@@ -45,7 +45,7 @@ export class MultiselectGridComponent implements OnInit, OnDestroy, ControlValue
   filteredOptions: GridSelectOption[] = [];
 
   // ControlValueAccessor
-  private onChange = () => {};
+  private onChange = (value: any[]) => {};
   private onTouched = () => {};
 
   constructor(private cdr: ChangeDetectorRef) {}
@@ -167,7 +167,7 @@ export class MultiselectGridComponent implements OnInit, OnDestroy, ControlValue
 
   private emitChange(): void {
     const values = Array.from(this.selectedValues);
-    this.onChange();
+    this.onChange(values); // Pass values to Angular Forms
     this.selectionChange.emit(values);
   }
 
@@ -181,7 +181,7 @@ export class MultiselectGridComponent implements OnInit, OnDestroy, ControlValue
     this.cdr.markForCheck();
   }
 
-  registerOnChange(fn: () => void): void {
+  registerOnChange(fn: (value: any[]) => void): void {
     this.onChange = fn;
   }
 

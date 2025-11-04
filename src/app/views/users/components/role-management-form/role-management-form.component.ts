@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, S
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { FormGeneratorComponent, FormConfig } from '@shared';
 import { getRoleManagementFormConfig } from './role-management-form.utils';
@@ -70,10 +71,28 @@ export class RoleManagementFormComponent implements OnInit, OnDestroy, OnChanges
     this.roleForm = form;
     this.formChange.emit(form);
 
-    if (form && form.get('roleIds')) {
-      const selectedIds = form.get('roleIds')?.value || [];
-      this.selectionChange.emit(selectedIds);
+    // Subscribe to entire form value changes
+    if (form) {
+      // Emit initial value
+      const initialValue = form.get('roleIds')?.value || [];
+      this.selectionChange.emit(Array.isArray(initialValue) ? initialValue : []);
+
+      // Subscribe to form value changes
+      // Use setTimeout to ensure form control value is updated before reading
+      form.valueChanges.pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe(() => {
+        setTimeout(() => {
+          const selectedIds = form.get('roleIds')?.value || [];
+          const idsArray = Array.isArray(selectedIds) ? selectedIds : [];
+          this.selectionChange.emit(idsArray);
+          this.cdr.markForCheck();
+        }, 0);
+      });
     }
+
+    // Trigger change detection for parent component with OnPush strategy
+    this.cdr.markForCheck();
   }
 
   getSelectedRoleIds(): string[] {

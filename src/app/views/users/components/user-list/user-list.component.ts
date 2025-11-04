@@ -104,6 +104,19 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 	// Role management data
 	availableRoles: RoleOption[] = [];
 	userRoles: RoleOption[] = [];
+	hasAssignRolesSelected = false;
+	hasRemoveRolesSelected = false;
+
+	// Getters for button disabled state
+	get canConfirmAssignRoles(): boolean {
+		if (this.assignRoleForm?.loading) return false;
+		return this.assignRoleForm?.hasSelectedRoles() || false;
+	}
+
+	get canConfirmRemoveRoles(): boolean {
+		if (this.removeRoleForm?.loading) return false;
+		return this.removeRoleForm?.hasSelectedRoles() || false;
+	}
 
 	@ViewChild('assignRoleForm') assignRoleForm: RoleManagementFormComponent;
 	@ViewChild('removeRoleForm') removeRoleForm: RoleManagementFormComponent;
@@ -274,6 +287,7 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	assignRoles(user: User): void {
 		this.selectedUser = user;
+		this.hasAssignRolesSelected = false; // Reset flag when opening panel
 		this.loadAvailableRoles();
 		this.showAssignRolesPanel = true;
 		this.cdr.detectChanges();
@@ -281,6 +295,7 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	removeRoles(user: User): void {
 		this.selectedUser = user;
+		this.hasRemoveRolesSelected = false; // Reset flag when opening panel
 		this.loadUserRoles(user);
 		this.showRemoveRolesPanel = true;
 		this.cdr.detectChanges();
@@ -307,6 +322,22 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 	private loadUserRoles(user: User): void {
 		// Extract roles from the user object
 		this.userRoles = this.convertToRoleOptions(user.roles || []);
+		this.cdr.detectChanges();
+	}
+
+	onAssignRolesSelectionChange(selectedRoleIds: string[]): void {
+		this.hasAssignRolesSelected = selectedRoleIds && selectedRoleIds.length > 0;
+		this.cdr.detectChanges();
+	}
+
+	onRemoveRolesSelectionChange(selectedRoleIds: string[]): void {
+		this.hasRemoveRolesSelected = selectedRoleIds && selectedRoleIds.length > 0;
+		this.cdr.detectChanges();
+	}
+
+	onPanelContentClick(): void {
+		// Trigger change detection when user clicks in the panel
+		// This will re-evaluate the disabled button getters
 		this.cdr.detectChanges();
 	}
 
