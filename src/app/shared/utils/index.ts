@@ -5,9 +5,10 @@
  * - import { shadeColor, CHART_COLORS } from '@shared/utils/color'
  * - import { deepSearch } from '@shared/utils/data'
  * - import { handleArrayError } from '@shared/utils/http'
+ * - import { printQrCode } from '@shared/utils/dom'
  *
  * Or use this barrel export for convenience:
- * - import { shadeColor, deepSearch, handleArrayError } from '@shared/utils'
+ * - import { shadeColor, deepSearch, handleArrayError, printQrCode } from '@shared/utils'
  */
 
 // Color utilities
@@ -18,6 +19,9 @@ export * from './data';
 
 // Currency utilities
 export * from './currency';
+
+// DOM utilities
+export * from './dom';
 
 // HTTP utilities
 export * from './http';

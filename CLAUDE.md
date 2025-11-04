@@ -799,7 +799,7 @@ When updating old services to use unified error handling:
 - **Auth Service:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/views/pages/login/login.service.ts`
 
 ## Utility Functions Organization Rules
-> **Created:** 2025-11-01 | **Last Updated:** 2025-11-01
+> **Created:** 2025-11-01 | **Last Updated:** 2025-11-04 (Added DOM utilities category)
 
 ### 🎯 Critical: Check Before Creating New Utilities
 
@@ -828,6 +828,7 @@ All shared utilities MUST be organized in domain-based folders:
 ├── color/          # Color manipulation (hex, rgb, shading, constants)
 ├── data/           # Data manipulation (search, format, transform)
 ├── currency/       # Currency conversion, price calculations
+├── dom/            # DOM manipulation, printing, window operations
 ├── http/           # HTTP error handling, requests, responses
 └── testing/        # Mock utilities, test helpers
 ```
@@ -871,6 +872,7 @@ Is utility reusable across multiple domains/features?
 │       ├─ Color manipulation? → /shared/utils/color/
 │       ├─ Data formatting/search? → /shared/utils/data/
 │       ├─ Currency/pricing? → /shared/utils/currency/
+│       ├─ DOM/printing/window ops? → /shared/utils/dom/
 │       ├─ HTTP operations? → /shared/utils/http/
 │       ├─ Testing/mocking? → /shared/utils/testing/
 │       └─ New category? → Create new folder in /shared/utils/
@@ -996,6 +998,7 @@ Before creating ANY utility, search these locations:
 - [ ] `/shared/utils/color/` - Color manipulation
 - [ ] `/shared/utils/data/` - Data formatting, searching, transformation
 - [ ] `/shared/utils/currency/` - Currency conversion, price calculations
+- [ ] `/shared/utils/dom/` - DOM manipulation, printing, window operations
 - [ ] `/shared/utils/http/` - HTTP error handling, transformations
 - [ ] `/shared/utils/testing/` - Mock utilities, test helpers
 - [ ] Domain-specific utils (e.g., `/views/dashboard/utils/`)
@@ -1047,8 +1050,9 @@ export * from './form.utils';
 - **Main barrel:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/index.ts`
 - **Color utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/color/`
 - **Data utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/data/`
-- **HTTP utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/http/`
 - **Currency utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/currency/`
+- **DOM utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/dom/`
+- **HTTP utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/http/`
 - **Testing utils:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/testing/`
 
 ## Models & Interfaces Organization Rules
