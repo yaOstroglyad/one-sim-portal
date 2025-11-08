@@ -185,6 +185,27 @@
   --os-color-black: #000000;
   --os-color-black-rgb: 0, 0, 0;
 
+  /** gray scale (Tailwind-inspired for consistent UI elements) **/
+  --os-color-gray-50: #f9fafb;
+  --os-color-gray-100: #f3f4f6;
+  --os-color-gray-200: #e5e7eb;
+  --os-color-gray-300: #d1d5db;
+  --os-color-gray-400: #9ca3af;
+  --os-color-gray-500: #6b7280;
+  --os-color-gray-600: #4b5563;
+  --os-color-gray-700: #374151;
+  --os-color-gray-800: #1f2937;
+  --os-color-gray-900: #111827;
+
+  /** semantic gray aliases for common UI patterns **/
+  --os-color-text-primary: #2c2c2c;     // Main headings and important text
+  --os-color-text-secondary: #6b7280;    // Subtitles, labels, secondary text (gray-500)
+  --os-color-text-muted: #9ca3af;        // Disabled or very subtle text (gray-400)
+  --os-color-border: #e0e0e0;            // Default borders
+  --os-color-border-light: #f3f4f6;      // Very subtle borders (gray-100)
+  --os-color-bg-hover: #f5f5f5;          // Background on hover states
+  --os-color-bg-subtle: #f9fafb;         // Very light backgrounds (gray-50)
+
   /** transparent **/
   --os-color-transparent: transparent;
 

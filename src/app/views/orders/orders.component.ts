@@ -3,7 +3,8 @@ import {
 	ChangeDetectorRef,
 	Component,
 	OnDestroy,
-	OnInit
+	OnInit,
+	inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
@@ -46,30 +47,28 @@ import { RevertOrderComponent } from './revert-order/revert-order.component';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrdersComponent implements OnInit, OnDestroy {
+	private cdr = inject(ChangeDetectorRef);
+	private tableService = inject(OrdersTableService);
+	private ordersDataService = inject(OrdersDataService);
+	private translate = inject(TranslateService);
+	private authService = inject(AuthService);
+	private dialog = inject(MatDialog);
+
 	private unsubscribe$ = new Subject<void>();
 	public tableConfig$: BehaviorSubject<TableConfig>;
 	public dataList$: Observable<Order[]>;
 	public headerConfig: HeaderConfig = {};
 	public isAdmin: boolean;
 
-	constructor(private cdr: ChangeDetectorRef,
-							private tableService: OrdersTableService,
-							private ordersDataService: OrdersDataService,
-							private translate: TranslateService,
-							private authService: AuthService,
-							private dialog: MatDialog
-	) {
+	ngOnInit(): void {
 		this.initheaderConfig();
+		this.loadOrders();
+		this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	}
 
 	ngOnDestroy(): void {
 		this.unsubscribe$.next();
 		this.unsubscribe$.complete();
-	}
-
-	ngOnInit(): void {
-		this.loadOrders();
-		this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	}
 
 	private loadOrders(): void {

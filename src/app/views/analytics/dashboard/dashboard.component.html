@@ -9,21 +9,16 @@
   <!-- Dashboard Header -->
   <div class="dashboard-header mt-2">
     <div class="header-left">
-      <h1 class="dashboard-title">{{ 'dashboard.title' | translate }}</h1>
       <p class="dashboard-subtitle">{{ 'dashboard.subtitle' | translate }}</p>
     </div>
 
     <div class="header-right">
-      <!-- Period Selector -->
-      <div class="period-selector">
-        <button
-          *ngFor="let preset of periodPresets"
-          class="period-btn"
-          [class.active]="selectedPeriod() === preset.value"
-          (click)="onPeriodChange(preset.value)">
-          {{ preset.label | translate }}
-        </button>
-      </div>
+      <!-- Period Selector Component -->
+      <app-period-selector
+        [selectedPeriod]="selectedPeriod()"
+        [presets]="periodPresets"
+        (periodChange)="onPeriodChange($event)">
+      </app-period-selector>
 
       <!-- Action Buttons -->
       <div class="action-buttons">
@@ -34,36 +29,6 @@
           <c-icon name="cilCloudDownload"></c-icon>
         </button>
       </div>
-    </div>
-  </div>
-
-  <!-- Custom Date Picker (shown when custom period selected) -->
-  <div class="custom-date-picker" *ngIf="showCustomDatePicker()">
-    <div class="date-inputs">
-      <input
-        type="date"
-        [ngModel]="customDateRange().start"
-        (ngModelChange)="onCustomStartDateChange($event)"
-        placeholder="{{ 'dashboard.periods.startDate' | translate }}"
-        class="date-input">
-      <span class="date-separator">-</span>
-      <input
-        type="date"
-        [ngModel]="customDateRange().end"
-        (ngModelChange)="onCustomEndDateChange($event)"
-        placeholder="{{ 'dashboard.periods.endDate' | translate }}"
-        class="date-input">
-      <button
-        class="btn-primary"
-        (click)="applyCustomDateRange()"
-        [disabled]="!customDateRange().start || !customDateRange().end">
-        {{ 'dashboard.actions.apply' | translate }}
-      </button>
-      <button
-        class="btn-secondary"
-        (click)="showCustomDatePicker.set(false)">
-        {{ 'dashboard.actions.cancel' | translate }}
-      </button>
     </div>
   </div>
 

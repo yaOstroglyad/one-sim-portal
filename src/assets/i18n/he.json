@@ -76,7 +76,22 @@
     "submitButton": "שלח"
   },
   "shared": {
-    "no-data": "אין נתונים"
+    "no-data": "אין נתונים",
+    "periods": {
+      "today": "היום",
+      "yesterday": "אתמול",
+      "last7days": "7 ימים אחרונים",
+      "last30days": "30 ימים אחרונים",
+      "lastMonth": "חודש נוכחי",
+      "currentMonth": "חודש נוכחי",
+      "last3months": "3 חודשים אחרונים",
+      "custom": "מותאם אישית",
+      "startDate": "תאריך התחלה",
+      "endDate": "תאריך סיום"
+    },
+    "actions": {
+      "apply": "החל"
+    }
   },
   "table": {
     "loading": "טוען נתונים...",
@@ -202,6 +217,72 @@
     "domains": "דומיינים",
     "emailConfigurations": "הגדרות דואר אלקטרוני",
     "supportchat": "צ'אטים"
+  },
+  "analytics": {
+    "reports": {
+      "title": "דוחות",
+      "description": "צפייה בהיסטוריית רכישת חבילות עם פרטי עסקאות ומידע על מחירים",
+      "selectAccountHint": "בחר חשבון לצפייה בדוחות",
+      "export": "ייצוא ל-Excel",
+      "loading": "טוען נתוני דוח...",
+      "dateFrom": "תאריך מ",
+      "dateFromPlaceholder": "בחר תאריך התחלה",
+      "dateTo": "תאריך עד",
+      "dateToPlaceholder": "בחר תאריך סיום",
+      "loadReport": "טען דוח",
+      "tabs": {
+        "bundlePurchases": "רכישות חבילות",
+        "bundleLeftovers": "שאריות חבילות"
+      },
+      "bundlePurchases": {
+        "title": "דוח רכישות חבילות",
+        "description": "צפייה בהיסטוריית רכישת חבילות עם פרטי עסקאות ומידע על מחירים",
+        "emptyState": {
+          "title": "לא נמצאו רכישות חבילות",
+          "description": "בחר טווח תאריכים לצפייה בנתוני רכישות חבילות לתקופה שנבחרה"
+        },
+        "company": "חברה",
+        "purchaseDate": "תאריך רכישה",
+        "bundle": "חבילה",
+        "subscriber": "מנוי",
+        "purchaseId": "מזהה רכישה",
+        "bundleStatus": "סטטוס חבילה",
+        "transactionId": "מזהה עסקה",
+        "transactionStatus": "סטטוס עסקה",
+        "iccid": "ICCID",
+        "bundlePrice": "מחיר חבילה",
+        "priceCurrency": "מטבע מחיר",
+        "bundleCost": "עלות חבילה",
+        "costCurrency": "מטבע עלות"
+      },
+      "bundleLeftovers": {
+        "description": "צפייה בנתונים לא מנוצלים של חבילות ופרטי תפוגה",
+        "title": "דוח שאריות חבילות",
+        "emptyState": {
+          "title": "לא נמצאו שאריות חבילות",
+          "description": "בחר טווח תאריכים לצפייה בנתוני שאריות חבילות לתקופה שנבחרה"
+        },
+        "company": "חברה",
+        "purchaseDate": "תאריך רכישה",
+        "expirationDate": "תאריך תפוגה",
+        "bundle": "חבילה",
+        "subscriber": "מנוי",
+        "iccid": "ICCID",
+        "purchaseId": "מזהה רכישה",
+        "bundleStatus": "סטטוס חבילה",
+        "bundlePrice": "מחיר חבילה",
+        "priceCurrency": "מטבע מחיר",
+        "initialVolumeMb": "נפח ראשוני (MB)",
+        "unusedVolumeMb": "נפח לא מנוצל (MB)",
+        "percentLeftovers": "אחוז שאריות",
+        "providerPriceMb": "מחיר ספק/MB",
+        "leftovers": "ערך שאריות"
+      }
+    },
+    "adminOverview": {
+      "title": "סקירת מנהל",
+      "description": "לוח בקרה אנליטי למנהלים עם נתונים מכל הלקוחות"
+    }
   },
   "flyout": {
     "supportchattitle": "צ'אטי תמיכה"
@@ -827,16 +908,6 @@
       "traffic": "תעבורה",
       "finance": "כספים"
     },
-    "periods": {
-      "today": "היום",
-      "yesterday": "אתמול",
-      "last7days": "7 ימים אחרונים",
-      "last30days": "30 ימים אחרונים",
-      "lastMonth": "חודש שעבר",
-      "custom": "מותאם אישית",
-      "startDate": "תאריך התחלה",
-      "endDate": "תאריך סיום"
-    },
     "actions": {
       "refresh": "רענן נתונים",
       "export": "יצא",
@@ -847,6 +918,7 @@
       "totalRevenue": "הכנסה כוללת",
       "totalCost": "עלות כוללת",
       "totalMargin": "מרווח כולל",
+      "totalBundlesSold": "סה\"כ חבילות שנמכרו",
       "new": "חדש",
       "recurring": "חוזר",
       "churn": "נשירה",

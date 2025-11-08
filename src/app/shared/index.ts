@@ -1,6 +1,9 @@
 // Models - organized by domain categories
 export * from './models';
 
+// Named exports for frequently used constants
+export { PeriodPresets } from './models/ui/period-selector.model';
+
 export { CommentsComponent } from './components/comments/comments.component'
 export { AttachmentsComponent } from './components/attachments/attachments.component'
 export * from './components/confirmation-dialog/confirmation-dialog.component'
@@ -21,6 +24,7 @@ export * from './components/tooltip'
 export * from './components/debug-display'
 export * from './components/pagination'
 export * from './components/date-picker-wrapper'
+export * from './components/period-selector/period-selector.component'
 export * from './components/generic-right-panel'
 export * from './components/delete-confirmation'
 export * from './components/searchable-select'
@@ -43,6 +47,7 @@ export * from './services/ui';          // UI/UX services
 export * from './services/core';        // Core/foundational services
 export * from './services/feature-toggle';  // Feature toggle service
 export * from './services/cache-hub';   // Cache service
+export * from './services/excel-export.service';  // Excel export service
 
 // Named exports for specific services
 export { Language } from './services/ui/language.service';

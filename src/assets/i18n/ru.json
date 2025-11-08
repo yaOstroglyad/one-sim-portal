@@ -149,7 +149,22 @@
     "submitButton": "Отправить"
   },
   "shared": {
-    "no-data": "Нет данных"
+    "no-data": "Нет данных",
+    "periods": {
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "last7days": "Последние 7 дней",
+      "last30days": "Последние 30 дней",
+      "lastMonth": "Текущий месяц",
+      "currentMonth": "Текущий месяц",
+      "last3months": "Последние 3 месяца",
+      "custom": "Пользовательский",
+      "startDate": "Дата начала",
+      "endDate": "Дата окончания"
+    },
+    "actions": {
+      "apply": "Применить"
+    }
   },
   "table": {
     "loading": "Загрузка данных...",
@@ -319,6 +334,72 @@
     "domains": "Домены",
     "emailConfigurations": "Настройки Email",
     "supportchat": "Чаты"
+  },
+  "analytics": {
+    "reports": {
+      "title": "Отчеты",
+      "description": "Просмотр истории покупок бандлов с деталями транзакций и информацией о ценах",
+      "selectAccountHint": "Выберите аккаунт для просмотра отчетов",
+      "export": "Экспорт в Excel",
+      "loading": "Загрузка данных отчета...",
+      "dateFrom": "Дата с",
+      "dateFromPlaceholder": "Выберите дату начала",
+      "dateTo": "Дата по",
+      "dateToPlaceholder": "Выберите дату окончания",
+      "loadReport": "Загрузить отчет",
+      "tabs": {
+        "bundlePurchases": "Покупки бандлов",
+        "bundleLeftovers": "Остатки бандлов"
+      },
+      "bundlePurchases": {
+        "description": "Просмотр истории покупок бандлов с деталями транзакций и информацией о ценах",
+        "title": "Отчет по покупкам бандлов",
+        "emptyState": {
+          "title": "Покупки бандлов не найдены",
+          "description": "Выберите диапазон дат для просмотра данных о покупках бандлов за выбранный период"
+        },
+        "company": "Компания",
+        "purchaseDate": "Дата покупки",
+        "bundle": "Бандл",
+        "subscriber": "Подписчик",
+        "purchaseId": "ID покупки",
+        "bundleStatus": "Статус бандла",
+        "transactionId": "ID транзакции",
+        "transactionStatus": "Статус транзакции",
+        "iccid": "ICCID",
+        "bundlePrice": "Цена бандла",
+        "priceCurrency": "Валюта цены",
+        "bundleCost": "Стоимость бандла",
+        "costCurrency": "Валюта стоимости"
+      },
+      "bundleLeftovers": {
+        "description": "Просмотр неиспользованных данных бандлов и сроков истечения",
+        "title": "Отчет по остаткам бандлов",
+        "emptyState": {
+          "title": "Остатки бандлов не найдены",
+          "description": "Выберите диапазон дат для просмотра оставшихся данных бандлов за выбранный период"
+        },
+        "company": "Компания",
+        "purchaseDate": "Дата покупки",
+        "expirationDate": "Дата истечения",
+        "bundle": "Бандл",
+        "subscriber": "Подписчик",
+        "iccid": "ICCID",
+        "purchaseId": "ID покупки",
+        "bundleStatus": "Статус бандла",
+        "bundlePrice": "Цена бандла",
+        "priceCurrency": "Валюта цены",
+        "initialVolumeMb": "Начальный объем (МБ)",
+        "unusedVolumeMb": "Неиспользованный объем (МБ)",
+        "percentLeftovers": "Остаток %",
+        "providerPriceMb": "Цена провайдера/МБ",
+        "leftovers": "Стоимость остатков"
+      }
+    },
+    "adminOverview": {
+      "title": "Обзор администратора",
+      "description": "Панель аналитики для администраторов с данными по всем клиентам"
+    }
   },
   "flyout": {
     "supportchattitle": "Чаты поддержки"
@@ -983,16 +1064,6 @@
       "traffic": "Трафик",
       "finance": "Финансы"
     },
-    "periods": {
-      "today": "Сегодня",
-      "yesterday": "Вчера",
-      "last7days": "Последние 7 дней",
-      "last30days": "Последние 30 дней",
-      "lastMonth": "Последний месяц",
-      "custom": "Пользовательский",
-      "startDate": "Дата начала",
-      "endDate": "Дата окончания"
-    },
     "actions": {
       "refresh": "Обновить данные",
       "export": "Экспорт",
@@ -1003,6 +1074,7 @@
       "totalRevenue": "Общий доход",
       "totalCost": "Общие затраты",
       "totalMargin": "Общая маржа",
+      "totalBundlesSold": "Всего бандлов продано",
       "new": "Новый",
       "recurring": "Повторяющийся",
       "churn": "Отток",

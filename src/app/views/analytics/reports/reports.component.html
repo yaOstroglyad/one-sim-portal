@@ -1,0 +1,64 @@
+<!-- Account Selector (только для админов) -->
+<app-account-selector *ngIf="isAdmin()"
+                      [helperText]="'analytics.reports.selectAccountHint'"
+                      [selectFirstByDefault]="true"
+                      (accountSelected)="onAccountSelected($event)">
+</app-account-selector>
+
+<!-- Header with Description, Period Selector and Actions -->
+<div class="reports-header mt-2">
+  <div class="header-left">
+    <p class="reports-description">{{ currentDescription() | translate }}</p>
+  </div>
+
+  <div class="header-right">
+    <!-- Period Selector -->
+    <app-period-selector
+      [selectedPeriod]="selectedPeriod()"
+      (periodChange)="onPeriodChange($event)">
+    </app-period-selector>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="btn-icon"
+              (click)="exportData()"
+              [disabled]="!hasData()"
+              title="{{ 'analytics.reports.export' | translate }}">
+        <app-icon icon="download"></app-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Tab Navigation -->
+<div class="reports-tabs">
+  <button
+    *ngFor="let tab of tabs()"
+    class="tab-button"
+    [class.active]="activeTabId() === tab.id"
+    [class.disabled]="tab.disabled"
+    [disabled]="tab.disabled"
+    (click)="!tab.disabled && onTabChange(tab.id)">
+    <app-icon [icon]="tab.icon"></app-icon>
+    <span>{{ tab.label | translate }}</span>
+  </button>
+</div>
+
+<!-- Loading Indicator -->
+<div *ngIf="loading()" class="loading-state">
+  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+  {{ 'analytics.reports.loading' | translate }}
+</div>
+
+<!-- Generic Table -->
+<generic-table *ngIf="hasData()"
+               [config$]="tableConfig$"
+               [data$]="dataList$">
+</generic-table>
+
+<!-- Empty State -->
+<div *ngIf="!hasData() && !loading()" class="empty-state">
+  <app-icon icon="bars-chart-empty" size="180px" class="empty-icon"></app-icon>
+  <h3>{{ currentStrategy().getEmptyStateTitleKey() | translate }}</h3>
+  <p>{{ currentStrategy().getEmptyStateDescriptionKey() | translate }}</p>
+</div>

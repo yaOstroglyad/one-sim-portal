@@ -9,14 +9,46 @@
   transform: translateX(-50%);
   z-index: var(--fab-z-index, 1040);
   padding: 0 5px calc(5px + env(safe-area-inset-bottom)) 5px;
-  
+
   // Allow menu to overflow host bounds
   overflow: visible;
+}
+
+.fab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: 60px;
+  height: 5px;
+  background: var(--os-color-primary);
+  border-radius: 3px 3px 0 0;
+  box-shadow:
+    0 -2px 8px rgba(0, 123, 255, 0.3),
+    0 -1px 3px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px) saturate(180%);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out, box-shadow 0.3s ease-out;
+
+  &--visible {
+    opacity: 0.85;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  // Hover effect on indicator (when hovering near bottom)
+  &:hover {
+    box-shadow:
+      0 -3px 12px rgba(0, 123, 255, 0.4),
+      0 -2px 5px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .bottom-nav {
   position: relative;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -28,10 +60,23 @@
   background-color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  
-  // Remove clip-path from base state - only use when expanded
-  transition: all 0.375s ease-out;
-  
+
+  // Auto-hide animations - slide down to hide
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  will-change: transform, opacity;
+
+  &--hidden {
+    transform: translateY(calc(100% + 20px));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &--visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
   &--expanded {
     // Keep the same layout when expanded - menu is positioned absolutely
   }
@@ -218,10 +263,6 @@
     min-height: 51px;
     border-radius: 26px;
 
-    &--expanded {
-      // Keep the same layout when expanded - menu is positioned absolutely
-    }
-
     &__item {
       padding: 6px 9px;
       min-width: 51px;
@@ -240,7 +281,7 @@
       padding: 10px 14px;
       font-size: 13px;
     }
-    
+
     &__menu {
       min-width: 200px;
       max-width: calc(100vw - 32px);

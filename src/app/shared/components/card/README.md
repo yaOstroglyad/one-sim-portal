@@ -242,6 +242,6 @@ export class MyModule { }
 
 ## Dependencies
 
-- Angular 16+
+- Angular 19+
 - Project's SCSS variables and theme system
 - No external dependencies required

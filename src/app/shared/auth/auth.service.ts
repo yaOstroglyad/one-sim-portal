@@ -39,6 +39,16 @@ export class AuthService {
 		return null;
 	}
 
+	get currentUsername(): string | null {
+		const user = this.loggedUser;
+		return user?.preferred_username || user?.sub || null;
+	}
+
+	get currentUserId(): string | null {
+		const user = this.loggedUser;
+		return user?.sid || null;
+	}
+
 	loadPermissions(): Observable<string[]> {
 		if (this.permissions$) {
 			return this.permissions$;

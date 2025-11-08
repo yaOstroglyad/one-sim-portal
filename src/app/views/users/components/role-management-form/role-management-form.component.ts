@@ -4,14 +4,8 @@ import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { FormGeneratorComponent, FormConfig } from '@shared';
+import { FormGeneratorComponent, FormConfig, RoleOption } from '@shared';
 import { getRoleManagementFormConfig } from './role-management-form.utils';
-
-export interface RoleOption {
-  id: string;
-  name: string;
-  displayName?: string;
-}
 
 @Component({
   standalone: true,
@@ -34,6 +28,8 @@ export class RoleManagementFormComponent implements OnInit, OnDestroy, OnChanges
   @Input() availableRoles: RoleOption[] = [];
   @Input() selectedRoleIds: string[] = [];
   @Input() mode: 'assign' | 'remove' = 'assign';
+  @Input() userAccountType?: string;
+  @Input() currentUsername?: string | null;
   @Output() formChange = new EventEmitter<FormGroup>();
   @Output() selectionChange = new EventEmitter<string[]>();
 
@@ -48,7 +44,7 @@ export class RoleManagementFormComponent implements OnInit, OnDestroy, OnChanges
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['availableRoles'] || changes['selectedRoleIds'] || changes['mode']) {
+    if (changes['availableRoles'] || changes['selectedRoleIds'] || changes['mode'] || changes['userAccountType'] || changes['currentUsername']) {
       this.updateFormConfig();
     }
   }
@@ -57,7 +53,9 @@ export class RoleManagementFormComponent implements OnInit, OnDestroy, OnChanges
     this.formConfig = getRoleManagementFormConfig(
       this.availableRoles,
       this.mode,
-      this.selectedRoleIds
+      this.selectedRoleIds,
+      this.userAccountType,
+      this.currentUsername
     );
     this.cdr.markForCheck();
   }

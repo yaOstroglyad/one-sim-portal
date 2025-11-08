@@ -35,6 +35,10 @@
             <span class="label">{{ 'dashboard.executive.totalMargin' | translate }}</span>
             <span class="value positive">{{ data()!.revenue.totalMargin | currency:data()!.revenue.currency }}</span>
           </div>
+          <div class="breakdown-item">
+            <span class="label">{{ 'dashboard.executive.totalBundlesSold' | translate }}</span>
+            <span class="value">{{ data()!.subscribersByBundle.total | number }}</span>
+          </div>
         </div>
       </os-card>
     </div>

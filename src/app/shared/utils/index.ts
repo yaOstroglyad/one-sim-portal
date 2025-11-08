@@ -17,6 +17,9 @@ export * from './color';
 // Data utilities
 export * from './data';
 
+// Date utilities
+export * from './date';
+
 // Currency utilities
 export * from './currency';
 

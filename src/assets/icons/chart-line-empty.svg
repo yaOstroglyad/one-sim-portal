@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Axes with ticks -->
+  <line x1="60" y1="340" x2="60" y2="60" opacity="0.6"/>
+  <line x1="60" y1="340" x2="380" y2="340" opacity="0.6"/>
+
+  <!-- Y-axis ticks -->
+  <line x1="50" y1="100" x2="60" y2="100" opacity="0.5"/>
+  <line x1="50" y1="160" x2="60" y2="160" opacity="0.5"/>
+  <line x1="50" y1="220" x2="60" y2="220" opacity="0.5"/>
+  <line x1="50" y1="280" x2="60" y2="280" opacity="0.5"/>
+
+  <!-- X-axis ticks -->
+  <line x1="120" y1="340" x2="120" y2="350" opacity="0.5"/>
+  <line x1="180" y1="340" x2="180" y2="350" opacity="0.5"/>
+  <line x1="240" y1="340" x2="240" y2="350" opacity="0.5"/>
+  <line x1="300" y1="340" x2="300" y2="350" opacity="0.5"/>
+  <line x1="360" y1="340" x2="360" y2="350" opacity="0.5"/>
+
+  <!-- Dashed empty chart line -->
+  <polyline points="100,240 150,190 200,230 250,140 300,170 350,120" stroke-dasharray="16 12" opacity="0.7" stroke-width="5"/>
+
+  <!-- Grid dots -->
+  <circle cx="100" cy="240" r="10" opacity="0.6" fill="currentColor"/>
+  <circle cx="150" cy="190" r="10" opacity="0.6" fill="currentColor"/>
+  <circle cx="200" cy="230" r="10" opacity="0.6" fill="currentColor"/>
+  <circle cx="250" cy="140" r="10" opacity="0.6" fill="currentColor"/>
+  <circle cx="300" cy="170" r="10" opacity="0.6" fill="currentColor"/>
+  <circle cx="350" cy="120" r="10" opacity="0.6" fill="currentColor"/>
+
+  <!-- Background grid lines -->
+  <line x1="60" y1="100" x2="380" y2="100" opacity="0.15"/>
+  <line x1="60" y1="160" x2="380" y2="160" opacity="0.15"/>
+  <line x1="60" y1="220" x2="380" y2="220" opacity="0.15"/>
+  <line x1="60" y1="280" x2="380" y2="280" opacity="0.15"/>
+
+  <line x1="120" y1="60" x2="120" y2="340" opacity="0.15"/>
+  <line x1="180" y1="60" x2="180" y2="340" opacity="0.15"/>
+  <line x1="240" y1="60" x2="240" y2="340" opacity="0.15"/>
+  <line x1="300" y1="60" x2="300" y2="340" opacity="0.15"/>
+  <line x1="360" y1="60" x2="360" y2="340" opacity="0.15"/>
+</svg>

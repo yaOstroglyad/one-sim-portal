@@ -243,6 +243,6 @@ The tooltip component is automatically integrated with the tabs component:
 
 ## Dependencies
 
-- Angular 16+
+- Angular 19+
 - Project's SCSS variables and theme system
 - No external dependencies required

@@ -5,15 +5,17 @@ import {
 	inject,
 	computed,
 	HostListener,
-	ElementRef
+	ElementRef,
+	OnInit,
+	OnDestroy,
+	effect
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { GlobalFlyoutService } from '../../services/global-flyout.service';
-import { FabConfigService } from '../../services/fab-config.service';
+import { GlobalFlyoutService, FabConfigService } from '@shared/components/fab-layout';
 import { FabButtonConfig, FabMenuItem } from '../../models';
-import { IconComponent } from '../../../icon';
+import { IconComponent } from '@shared';
 
 @Component({
 	selector: 'app-global-fab',
@@ -23,13 +25,22 @@ import { IconComponent } from '../../../icon';
 	styleUrls: ['./global-fab.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GlobalFabComponent {
+export class GlobalFabComponent implements OnInit, OnDestroy {
 	private readonly flyout = inject(GlobalFlyoutService);
 	private readonly fabConfig = inject(FabConfigService);
 	private readonly elementRef = inject(ElementRef);
 	private readonly router = inject(Router);
 
 	readonly isOpen = signal(false);
+
+	// Auto-hide state
+	readonly isVisible = signal(false);
+	private mouseLeaveTimeout?: number;
+	private showTimeout?: number;
+	private readonly EDGE_THRESHOLD = 50; // pixels from bottom edge to trigger show
+	private readonly HIDE_THRESHOLD = 50; // pixels from bottom edge to trigger hide
+	private readonly SHOW_DELAY = 400; // ms delay before showing (to avoid accidental triggers)
+	private readonly HIDE_DELAY = 800; // ms delay before hiding (smooth miss hovers)
 
 	// Computed values from FabConfigService
 	readonly configuration = this.fabConfig.configuration;
@@ -50,12 +61,114 @@ export class GlobalFabComponent {
 		return config?.buttons && config.buttons.length > 0;
 	});
 
+	ngOnInit(): void {
+		// Initially show FAB briefly, then hide
+		this.isVisible.set(true);
+		setTimeout(() => {
+			if (!this.isMenuOpen()) {
+				this.isVisible.set(false);
+			}
+		}, 3000);
+	}
+
+	ngOnDestroy(): void {
+		if (this.mouseLeaveTimeout) {
+			clearTimeout(this.mouseLeaveTimeout);
+		}
+		if (this.showTimeout) {
+			clearTimeout(this.showTimeout);
+		}
+	}
+
+	@HostListener('document:mousemove', ['$event'])
+	onMouseMove(event: MouseEvent): void {
+		const windowHeight = window.innerHeight;
+		const distanceFromBottomEdge = windowHeight - event.clientY;
+
+		// Show FAB when mouse is near bottom edge (with delay)
+		if (distanceFromBottomEdge <= this.EDGE_THRESHOLD) {
+			this.scheduleFabShow();
+		}
+		// Hide FAB when mouse moves away from bottom edge
+		else if (distanceFromBottomEdge > this.HIDE_THRESHOLD && !this.isMenuOpen()) {
+			this.cancelFabShow();
+			this.scheduleFabHide();
+		}
+	}
+
+	@HostListener('mouseenter')
+	onMouseEnter(): void {
+		// Keep FAB visible when hovering
+		if (this.mouseLeaveTimeout) {
+			clearTimeout(this.mouseLeaveTimeout);
+			this.mouseLeaveTimeout = undefined;
+		}
+		this.showFab();
+	}
+
+	@HostListener('mouseleave')
+	onMouseLeave(): void {
+		// Hide FAB after delay when mouse leaves
+		// But keep visible if menu is open
+		if (!this.isMenuOpen()) {
+			this.scheduleFabHide();
+		}
+	}
+
 	@HostListener('document:click', ['$event'])
 	onDocumentClick(event: MouseEvent): void {
 		// Check if click was outside the component
 		if (!this.elementRef.nativeElement.contains(event.target) && this.isMenuOpen()) {
 			this.fabConfig.closeMenu();
+			// Hide FAB after menu closes
+			this.scheduleFabHide();
 		}
+	}
+
+	private scheduleFabShow(): void {
+		// Cancel hide timeout if scheduled
+		if (this.mouseLeaveTimeout) {
+			clearTimeout(this.mouseLeaveTimeout);
+			this.mouseLeaveTimeout = undefined;
+		}
+
+		// If already scheduled or visible, don't reschedule
+		if (this.showTimeout || this.isVisible()) {
+			return;
+		}
+
+		// Schedule show with delay
+		this.showTimeout = window.setTimeout(() => {
+			this.isVisible.set(true);
+			this.showTimeout = undefined;
+		}, this.SHOW_DELAY);
+	}
+
+	private cancelFabShow(): void {
+		if (this.showTimeout) {
+			clearTimeout(this.showTimeout);
+			this.showTimeout = undefined;
+		}
+	}
+
+	private showFab(): void {
+		this.cancelFabShow();
+		if (this.mouseLeaveTimeout) {
+			clearTimeout(this.mouseLeaveTimeout);
+			this.mouseLeaveTimeout = undefined;
+		}
+		this.isVisible.set(true);
+	}
+
+	private scheduleFabHide(): void {
+		if (this.mouseLeaveTimeout) {
+			clearTimeout(this.mouseLeaveTimeout);
+		}
+		this.mouseLeaveTimeout = window.setTimeout(() => {
+			if (!this.isMenuOpen()) {
+				this.isVisible.set(false);
+			}
+		}, this.HIDE_DELAY);
 	}
 
 	onButtonClick(button: FabButtonConfig): void {

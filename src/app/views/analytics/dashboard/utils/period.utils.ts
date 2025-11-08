@@ -17,12 +17,12 @@ export interface PeriodPresetConfig {
  * Default period presets for dashboard
  */
 export const DEFAULT_PERIOD_PRESETS: PeriodPresetConfig[] = [
-  { label: 'dashboard.periods.today', value: 'today' },
-  { label: 'dashboard.periods.yesterday', value: 'yesterday' },
-  { label: 'dashboard.periods.last7days', value: 'last7days' },
-  { label: 'dashboard.periods.last30days', value: 'last30days' },
-  { label: 'dashboard.periods.lastMonth', value: 'lastMonth' },
-  { label: 'dashboard.periods.custom', value: 'custom' }
+  { label: 'shared.periods.today', value: 'today' },
+  { label: 'shared.periods.yesterday', value: 'yesterday' },
+  { label: 'shared.periods.last7days', value: 'last7days' },
+  { label: 'shared.periods.last30days', value: 'last30days' },
+  { label: 'shared.periods.lastMonth', value: 'lastMonth' },
+  { label: 'shared.periods.custom', value: 'custom' }
 ];
 
 /**

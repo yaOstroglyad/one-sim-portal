@@ -1,0 +1,149 @@
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
+
+:host {
+  display: block;
+}
+
+.period-selector {
+  display: flex;
+  gap: 0.25rem;
+  background-color: #ffffff;
+  padding: 0.25rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  .period-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: #f5f5f5;
+      color: #2c2c2c;
+    }
+
+    &.active {
+      background-color: var(--os-color-primary);
+      color: #ffffff;
+    }
+  }
+}
+
+// Custom Date Picker
+.custom-date-picker {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  .date-inputs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    .date-input {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: var(--os-color-primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+    }
+
+    .date-separator {
+      color: #6b7280;
+      font-weight: 500;
+    }
+  }
+
+  .date-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+}
+
+// Dark theme support
+:host-context(.dark-theme) {
+  .period-selector {
+    background-color: #1e293b;
+
+    .period-btn {
+      color: #94a3b8;
+
+      &:hover {
+        background-color: #334155;
+        color: #f1f5f9;
+      }
+
+      &.active {
+        background-color: var(--os-color-primary);
+        color: #ffffff;
+      }
+    }
+  }
+
+  .custom-date-picker {
+    background-color: #1e293b;
+
+    .date-input {
+      background-color: #334155;
+      border-color: #475569;
+      color: #f1f5f9;
+
+      &:focus {
+        border-color: var(--os-color-primary);
+      }
+    }
+
+    .date-separator {
+      color: #94a3b8;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .period-selector {
+    width: 100%;
+    overflow-x: auto;
+
+    .period-btn {
+      flex-shrink: 0;
+    }
+  }
+
+  .custom-date-picker {
+    .date-inputs {
+      flex-direction: column;
+
+      .date-separator {
+        display: none;
+      }
+    }
+
+    .date-actions {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

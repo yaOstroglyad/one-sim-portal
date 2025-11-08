@@ -12,6 +12,7 @@ import {
 // Constants
 export const USERS_CONFIG = {
   DEFAULT_PAGE_SIZE: 15,
+  ROLES_PAGE_SIZE: 100,
   FILTER_DEBOUNCE_TIME: 700,
   NOTIFICATION_DURATION: 2000,
   SEARCH_NOTIFICATION_DURATION: 1000
@@ -204,6 +205,17 @@ export class UsersNotificationUtils {
   }
 }
 
+// Role conversion utilities
+export class UsersRoleUtils {
+  static convertToRoleOptions(roles: any[]): any[] {
+    return roles.map(role => ({
+      id: role.id,
+      name: role.name,
+      displayName: role.displayName || role.name
+    }));
+  }
+}
+
 // Data processing utilities
 export class UsersDataUtils {
   static processUsersData(data: any): { content: any[], totalPages: number, totalElements: number } {
@@ -234,6 +246,9 @@ export class UsersUtils {
 
   // Data utilities
   static readonly Data = UsersDataUtils;
+
+  // Role utilities
+  static readonly Role = UsersRoleUtils;
 
   // Constants
   static readonly CONFIG = USERS_CONFIG;

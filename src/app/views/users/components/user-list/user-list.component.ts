@@ -1,17 +1,17 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	inject,
 	OnDestroy,
 	OnInit,
-	ViewChild,
-	inject,
 	TemplateRef,
-	AfterViewInit
+	ViewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Observable, BehaviorSubject, Subject, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
@@ -22,31 +22,27 @@ import { IconDirective } from '@coreui/icons-angular';
 import { TranslateModule } from '@ngx-translate/core';
 
 import {
+	ADMIN_PERMISSION,
+	AuthService,
+	CompaniesDataService,
+	DeleteConfirmationComponent,
 	GenericRightPanelComponent,
-	SmartFilterHeaderComponent,
-	SmartFilterConfig,
+	GenericTableComponent,
+	HeaderComponent,
+	RoleOption,
 	SearchableSelectComponent,
 	SearchableSelectOption,
-	CompaniesDataService,
-	AuthService,
-	ADMIN_PERMISSION
-} from '@shared';
-import {
-  GenericTableComponent,
-  HeaderComponent,
-  TableConfig,
-  DeleteConfirmationComponent,
-  UserRoleService
+	SmartFilterConfig,
+	SmartFilterHeaderComponent,
+	TableConfig,
+	UserRoleService
 } from '@shared';
 import { UserService, UsersTableService } from '../../services';
 import { User } from '../../models';
 import { UserFormComponent } from '../user-form/user-form.component';
-import { RoleManagementFormComponent, RoleOption } from '../role-management-form/role-management-form.component';
+import { RoleManagementFormComponent } from '../role-management-form/role-management-form.component';
 import { RoleService } from '../../../roles';
-import { UsersUtils, UsersFilterParams } from './user-list.utils';
-
-// Constants
-const ROLES_PAGE_SIZE = 100;
+import { USERS_CONFIG, UsersFilterParams, UsersUtils } from './user-list.utils';
 
 @Component({
   standalone: true,
@@ -92,10 +88,10 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 	public userTypeOptions: SearchableSelectOption[] = [];
 	public smartFilterConfig: SmartFilterConfig;
 	public isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+	public currentUsername = this.authService.currentUsername;
 
 	// Panel states
 	showCreatePanel = false;
-	showEditPanel = false;
 	showDeletePanel = false;
 	showAssignRolesPanel = false;
 	showRemoveRolesPanel = false;
@@ -104,8 +100,6 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 	// Role management data
 	availableRoles: RoleOption[] = [];
 	userRoles: RoleOption[] = [];
-	hasAssignRolesSelected = false;
-	hasRemoveRolesSelected = false;
 
 	// Getters for button disabled state
 	get canConfirmAssignRoles(): boolean {
@@ -132,7 +126,6 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 		// Load data with initial filter values
 		const initialParams = UsersUtils.Form.createFilterParams(this.filterForm.getRawValue());
 		this.loadData(initialParams);
-		this.setupFilters();
 	}
 
 	public ngAfterViewInit(): void {
@@ -160,11 +153,6 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.filterForm.markAsDirty();
 	}
 
-	private setupFilters(): void {
-		// Smart filter handles its own application logic
-		// We only need to listen for explicit filter events from the smart filter component
-	}
-
 	private initializeCompanyOptions(): void {
 		if (this.isAdmin) {
 			this.companyOptions$ = UsersUtils.Company.createCompanyOptions(this.companiesDataService);
@@ -182,28 +170,6 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.userTypeOptions = UsersUtils.Type.createUserTypeOptions(types);
 			this.cdr.markForCheck();
 		});
-	}
-
-	// Helper methods for notifications
-	private showSuccessNotification(message: string, duration = UsersUtils.CONFIG.NOTIFICATION_DURATION): void {
-		UsersUtils.Notification.showSuccessNotification(this.snackBar, message, duration);
-	}
-
-	private showErrorNotification(message: string, duration = UsersUtils.CONFIG.NOTIFICATION_DURATION): void {
-		UsersUtils.Notification.showErrorNotification(this.snackBar, message, duration);
-	}
-
-	private showWarningNotification(message: string, duration = UsersUtils.CONFIG.NOTIFICATION_DURATION): void {
-		UsersUtils.Notification.showWarningNotification(this.snackBar, message, duration);
-	}
-
-	// Helper method for role conversion
-	private convertToRoleOptions(roles: any[]): RoleOption[] {
-		return roles.map(role => ({
-			id: role.id,
-			name: role.name,
-			displayName: role.displayName || role.name
-		}));
 	}
 
 	// Helper method to close panels and reset state
@@ -226,10 +192,7 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 				this.cdr.detectChanges();
 
 				if (this.filterForm.dirty) {
-					UsersUtils.Notification.showSearchResultsNotification(
-						this.snackBar,
-						processedData.totalElements
-					);
+					this.showSearchResultsNotification(processedData.totalElements);
 				}
 			});
 	}
@@ -268,7 +231,6 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	onPanelClose(): void {
 		this.showCreatePanel = false;
-		this.showEditPanel = false;
 		this.showDeletePanel = false;
 		this.showAssignRolesPanel = false;
 		this.showRemoveRolesPanel = false;
@@ -281,21 +243,55 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.closeAllPanelsAndRefresh();
 	}
 
+	private showSuccessNotification(message: string): void {
+		UsersUtils.Notification.showSuccessNotification(this.snackBar, message);
+	}
+
+	private showErrorNotification(message: string): void {
+		UsersUtils.Notification.showErrorNotification(this.snackBar, message);
+	}
+
+	private showWarningNotification(message: string): void {
+		UsersUtils.Notification.showWarningNotification(this.snackBar, message);
+	}
+
+	private showSearchResultsNotification(count: number): void {
+		UsersUtils.Notification.showSearchResultsNotification(this.snackBar, count);
+	}
+
 	canManageRoles(): boolean {
 		return this.userRoleService.isAdmin();
 	}
 
+	shouldDisableRoleButton(user: User): boolean {
+		return !this.canManageRoles() || (this.isSelfUser(user) && !this.canManageSelfRoles());
+	}
+
+	private isSelfUser(user: User): boolean {
+		return user.loginName === this.currentUsername;
+	}
+
+	private canManageSelfRoles(): boolean {
+		return this.currentUsername === 'admin';
+	}
+
 	assignRoles(user: User): void {
+		if (this.isSelfUser(user) && !this.canManageSelfRoles()) {
+			this.showWarningNotification('You cannot manage your own roles');
+			return;
+		}
 		this.selectedUser = user;
-		this.hasAssignRolesSelected = false; // Reset flag when opening panel
 		this.loadAvailableRoles();
 		this.showAssignRolesPanel = true;
 		this.cdr.detectChanges();
 	}
 
 	removeRoles(user: User): void {
+		if (this.isSelfUser(user) && !this.canManageSelfRoles()) {
+			this.showWarningNotification('You cannot manage your own roles');
+			return;
+		}
 		this.selectedUser = user;
-		this.hasRemoveRolesSelected = false; // Reset flag when opening panel
 		this.loadUserRoles(user);
 		this.showRemoveRolesPanel = true;
 		this.cdr.detectChanges();
@@ -304,40 +300,24 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 	private loadAvailableRoles(): void {
 		if (!this.selectedUser) return;
 
-		this.roleService.getRoles(undefined, 0, ROLES_PAGE_SIZE).pipe(
+		this.roleService.getRoles(undefined, 0, USERS_CONFIG.ROLES_PAGE_SIZE).pipe(
 			takeUntil(this.unsubscribe$)
 		).subscribe(response => {
 			// Get IDs of roles that user already has
-			const userRoleIds = (this.selectedUser?.roles || []).map(role => role.id);
+			const userRoleIds = this.selectedUser.roles.map(role => role.id);
 
 			const filteredRoles = response.content
 				.filter(role => role.name !== 'ADMIN') // Exclude ADMIN role
 				.filter(role => !userRoleIds.includes(role.id)); // Exclude roles user already has
 
-			this.availableRoles = this.convertToRoleOptions(filteredRoles);
+			this.availableRoles = UsersUtils.Role.convertToRoleOptions(filteredRoles);
 			this.cdr.detectChanges();
 		});
 	}
 
 	private loadUserRoles(user: User): void {
 		// Extract roles from the user object
-		this.userRoles = this.convertToRoleOptions(user.roles || []);
-		this.cdr.detectChanges();
-	}
-
-	onAssignRolesSelectionChange(selectedRoleIds: string[]): void {
-		this.hasAssignRolesSelected = selectedRoleIds && selectedRoleIds.length > 0;
-		this.cdr.detectChanges();
-	}
-
-	onRemoveRolesSelectionChange(selectedRoleIds: string[]): void {
-		this.hasRemoveRolesSelected = selectedRoleIds && selectedRoleIds.length > 0;
-		this.cdr.detectChanges();
-	}
-
-	onPanelContentClick(): void {
-		// Trigger change detection when user clicks in the panel
-		// This will re-evaluate the disabled button getters
+		this.userRoles = UsersUtils.Role.convertToRoleOptions(user.roles || []);
 		this.cdr.detectChanges();
 	}
 

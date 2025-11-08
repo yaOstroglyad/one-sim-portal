@@ -77,19 +77,19 @@
                (pageChange)="onPageChange($event)"></generic-table>
 
 <ng-template #menuTemplate let-item>
-    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item
                 (click)="assignRoles(item)"
-                [disabled]="!canManageRoles()">
+                [disabled]="shouldDisableRoleButton(item)">
             <mat-icon>add_circle</mat-icon>
             <span>{{ 'users.assignRoles' | translate }}</span>
         </button>
         <button mat-menu-item
                 (click)="removeRoles(item)"
-                [disabled]="!canManageRoles()">
+                [disabled]="shouldDisableRoleButton(item)">
             <mat-icon>remove_circle</mat-icon>
             <span>{{ 'users.removeRoles' | translate }}</span>
         </button>
@@ -155,13 +155,14 @@
         [hasFooter]="true"
         (close)="onPanelClose()">
 
-    <div panel-content (click)="onPanelContentClick()">
+    <div panel-content>
         <app-role-management-form
             #assignRoleForm
             [availableRoles]="availableRoles"
             [selectedRoleIds]="[]"
             [mode]="'assign'"
-            (selectionChange)="onAssignRolesSelectionChange($event)">
+            [userAccountType]="selectedUser?.accountInfo?.type"
+            [currentUsername]="currentUsername">
         </app-role-management-form>
     </div>
 
@@ -194,13 +195,14 @@
         [hasFooter]="true"
         (close)="onPanelClose()">
 
-    <div panel-content (click)="onPanelContentClick()">
+    <div panel-content>
         <app-role-management-form
             #removeRoleForm
             [availableRoles]="userRoles"
             [selectedRoleIds]="[]"
             [mode]="'remove'"
-            (selectionChange)="onRemoveRolesSelectionChange($event)">
+            [userAccountType]="selectedUser?.accountInfo?.type"
+            [currentUsername]="currentUsername">
         </app-role-management-form>
     </div>
 

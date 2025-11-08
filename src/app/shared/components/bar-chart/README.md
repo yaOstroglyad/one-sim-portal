@@ -264,7 +264,7 @@ The component includes:
 ## Dependencies
 
 - Chart.js v3.9.1+
-- Angular 16+
+- Angular 19+
 - TypeScript 4.9+
 
 ## Best Practices

@@ -4,15 +4,20 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@coreui/icons-angular';
-import { ThemeService, AuthService, ADMIN_PERMISSION, Account } from '@shared';
+import {
+  ThemeService,
+  AuthService,
+  ADMIN_PERMISSION,
+  Account,
+  PeriodSelectorComponent,
+  PeriodDateRange,
+  PeriodPreset,
+  PeriodPresets,
+  DEFAULT_PERIOD_PRESETS
+} from '@shared';
 import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 import { DashboardTab } from './models/dashboard.types';
 import { DashboardDataService } from './services/dashboard-data.service';
-import {
-  DEFAULT_PERIOD_PRESETS,
-  createPeriodFromPreset,
-  createCustomPeriod
-} from './utils';
 
 // Import shared components
 import { ExecutiveTabComponent } from './tabs/executive/executive-tab.component';
@@ -30,6 +35,7 @@ import { FinanceTabComponent } from './tabs/finance';
         TranslateModule,
         IconModule,
         AccountSelectorComponent,
+        PeriodSelectorComponent,
         ExecutiveTabComponent,
         SubscribersTabComponent,
         TrafficTabComponent,
@@ -59,9 +65,7 @@ export class DashboardComponent implements OnInit {
   // Period presets from utils
   periodPresets = DEFAULT_PERIOD_PRESETS;
 
-  selectedPeriod = signal<string>('last30days');
-  customDateRange = signal<{ start: any; end: any }>({ start: null, end: null });
-  showCustomDatePicker = signal<boolean>(false);
+  selectedPeriod = signal<PeriodPreset>(PeriodPresets.CURRENT_MONTH);
   isDarkTheme = signal<boolean>(false);
 
   // Account selector for admins
@@ -179,43 +183,25 @@ export class DashboardComponent implements OnInit {
   /**
    * Change period selection
    */
-  onPeriodChange(preset: string): void {
-    this.selectedPeriod.set(preset);
-
-    if (preset === 'custom') {
-      this.showCustomDatePicker.set(true);
-      return;
+  /**
+   * Handle period change from period-selector component
+   * @param period - PeriodDateRange from period-selector
+   */
+  onPeriodChange(period: PeriodDateRange): void {
+    // Update selected period for UI state
+    if (period.preset) {
+      this.selectedPeriod.set(period.preset);
     }
 
-    this.showCustomDatePicker.set(false);
-    const period = createPeriodFromPreset(preset);
-    this.dashboardService.setPeriod(period);
-  }
+    // Convert to Dashboard format and set period
+    const dashboardPeriod = {
+      startDate: period.startDate,
+      endDate: period.endDate,
+      label: period.label || '',
+      preset: period.preset
+    };
 
-  /**
-   * Apply custom date range
-   */
-  applyCustomDateRange(): void {
-    const dateRange = this.customDateRange();
-    if (dateRange.start && dateRange.end) {
-      const period = createCustomPeriod(dateRange.start, dateRange.end);
-      this.dashboardService.setPeriod(period);
-      this.showCustomDatePicker.set(false);
-    }
-  }
-
-  /**
-   * Update custom date range start
-   */
-  onCustomStartDateChange(value: any): void {
-    this.customDateRange.update(v => ({ ...v, start: value }));
-  }
-
-  /**
-   * Update custom date range end
-   */
-  onCustomEndDateChange(value: any): void {
-    this.customDateRange.update(v => ({ ...v, end: value }));
+    this.dashboardService.setPeriod(dashboardPeriod);
   }
 
   /**

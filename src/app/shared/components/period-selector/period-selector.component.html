@@ -1,0 +1,46 @@
+<!-- Period Selector Buttons -->
+<div class="period-selector">
+  <button
+    *ngFor="let preset of presets"
+    class="period-btn"
+    [class.active]="selectedPeriod === preset.value"
+    (click)="onPeriodClick(preset.value)">
+    {{ preset.label | translate }}
+  </button>
+</div>
+
+<!-- Custom Date Picker (shown when custom period selected) -->
+<div class="custom-date-picker" *ngIf="showCustomDatePicker()">
+  <div class="date-inputs">
+    <input
+      type="date"
+      [ngModel]="customDateRange().start"
+      (ngModelChange)="onStartDateChange($event)"
+      placeholder="{{ 'common.periods.startDate' | translate }}"
+      class="date-input">
+    <span class="date-separator">-</span>
+    <input
+      type="date"
+      [ngModel]="customDateRange().end"
+      (ngModelChange)="onEndDateChange($event)"
+      placeholder="{{ 'common.periods.endDate' | translate }}"
+      class="date-input">
+  </div>
+  <div class="date-actions">
+    <button
+      cButton
+      color="secondary"
+      size="sm"
+      (click)="cancelCustomRange()">
+      {{ 'common.actions.cancel' | translate }}
+    </button>
+    <button
+      cButton
+      color="primary"
+      size="sm"
+      [disabled]="!canApplyCustomRange()"
+      (click)="applyCustomRange()">
+      {{ 'common.actions.apply' | translate }}
+    </button>
+  </div>
+</div>

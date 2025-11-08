@@ -9,4 +9,5 @@
 export * from './login-request.model';
 export * from './login-response.model';
 export * from './refresh-token-request.model';
+export * from './role.model';
 export * from './user.model';

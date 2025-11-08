@@ -1,76 +1,245 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
-import { IconModule } from '@coreui/icons-angular';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import {
+  GenericTableComponent,
+  Account,
+  AuthService,
+  ADMIN_PERMISSION,
+  PeriodSelectorComponent,
+  PeriodDateRange,
+  PeriodPreset,
+  PeriodPresets,
+  formatDateForAPI,
+  createPeriodFromPreset,
+  IconComponent,
+  ExcelExportService
+} from '@shared';
+import { mapDataForExcel } from '@shared/utils/data';
+import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
+import { BundlePurchasesTableService } from './services/bundle-purchases-table.service';
+import { BundleLeftoversTableService } from './services/bundle-leftovers-table.service';
+import { DEFAULT_REPORT_TABS, ReportTab, ReportTabId } from './models/report-tab.model';
+import { ReportStrategyService } from './services/report-strategy.service';
+import { ReportStrategy } from './models/report-strategy.interface';
 
 @Component({
   standalone: true,
   selector: 'app-reports',
-  imports: [CommonModule, TranslateModule, IconModule],
-  template: `
-    <div class="reports-container">
-      <div class="placeholder-content">
-        <c-icon name="cilChart" size="4xl" class="placeholder-icon"></c-icon>
-        <h2>{{ 'analytics.reports.title' | translate }}</h2>
-        <p>{{ 'analytics.reports.description' | translate }}</p>
-        <div class="coming-soon">
-          <span class="badge">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .reports-container {
-      min-height: calc(100vh - 56px);
-    }
-
-    .placeholder-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 400px;
-      text-align: center;
-      background-color: #ffffff;
-      border-radius: 12px;
-      padding: 3rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .placeholder-icon {
-      color: var(--os-color-primary);
-      margin-bottom: 1.5rem;
-      opacity: 0.6;
-    }
-
-    h2 {
-      font-size: 1.75rem;
-      font-weight: 600;
-      color: #2c2c2c;
-      margin: 0 0 0.75rem 0;
-    }
-
-    p {
-      font-size: 1rem;
-      color: #6b7280;
-      margin: 0 0 1.5rem 0;
-      max-width: 500px;
-    }
-
-    .coming-soon {
-      margin-top: 1rem;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      background-color: var(--os-color-primary);
-      color: #ffffff;
-      border-radius: 20px;
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-  `],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    GenericTableComponent,
+    AccountSelectorComponent,
+    PeriodSelectorComponent,
+    IconComponent
+  ],
+  templateUrl: './reports.component.html',
+  styleUrls: ['./reports.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ReportsComponent {}
+export class ReportsComponent implements OnInit, OnDestroy {
+  private readonly authService = inject(AuthService);
+  private readonly bundlePurchasesTableService = inject(BundlePurchasesTableService);
+  private readonly bundleLeftoversTableService = inject(BundleLeftoversTableService);
+  private readonly excelExportService = inject(ExcelExportService);
+  private readonly translateService = inject(TranslateService);
+  private readonly strategyService = inject(ReportStrategyService);
+  private readonly unsubscribe$ = new Subject<void>();
+
+  // Tab Management
+  private readonly allTabs = signal<ReportTab[]>(DEFAULT_REPORT_TABS);
+  public readonly activeTabId = signal<string>(ReportTabId.BUNDLE_PURCHASES);
+
+  // Computed signals - filter tabs based on admin permission
+  public readonly tabs = computed(() => {
+    const allTabs = this.allTabs();
+    if (this.isAdmin()) {
+      return allTabs;
+    }
+    // Non-admins see only Bundle Purchases tab
+    return allTabs.filter(tab => tab.id === ReportTabId.BUNDLE_PURCHASES);
+  });
+
+  public readonly activeTab = computed(() =>
+    this.tabs().find(tab => tab.id === this.activeTabId())
+  );
+
+  public readonly currentStrategy = computed(() =>
+    this.strategyService.getStrategy(this.activeTabId())
+  );
+
+  public readonly currentDescription = computed(() =>
+    this.currentStrategy().getDescriptionKey()
+  );
+
+  public readonly currentTableService = computed(() => {
+    const tabId = this.activeTabId();
+    switch (tabId) {
+      case ReportTabId.BUNDLE_PURCHASES:
+        return this.bundlePurchasesTableService;
+      case ReportTabId.BUNDLE_LEFTOVERS:
+        return this.bundleLeftoversTableService;
+      default:
+        return this.bundlePurchasesTableService;
+    }
+  });
+
+  // General Signals
+  public readonly isAdmin = signal(false);
+  public readonly selectedAccountId = signal<string | null>(null);
+  public readonly selectedPeriod = signal<PeriodPreset>(PeriodPresets.CURRENT_MONTH);
+  public readonly loading = signal(false);
+  public readonly hasData = signal(false);
+  public readonly currentPeriod = signal<PeriodDateRange | null>(null);
+
+  // Table Configuration (dynamic based on active tab)
+  public get tableConfig$(): BehaviorSubject<any> {
+    return this.currentTableService().getTableConfig();
+  }
+
+  public get dataList$(): Observable<any[]> {
+    return this.currentTableService().dataList$;
+  }
+
+  ngOnInit(): void {
+    this.checkPermissions();
+    this.initializeAccount();
+    this.initializePeriod();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  private checkPermissions(): void {
+    this.isAdmin.set(this.authService.hasPermission(ADMIN_PERMISSION));
+  }
+
+  private initializeAccount(): void {
+    if (!this.isAdmin()) {
+      const loggedUser = this.authService.loggedUser;
+      if (loggedUser?.accountId) {
+        this.selectedAccountId.set(loggedUser.accountId);
+      }
+    }
+  }
+
+  private initializePeriod(): void {
+    // Load default period (current month) on component init
+    const defaultPeriod = createPeriodFromPreset(PeriodPresets.CURRENT_MONTH);
+    this.currentPeriod.set(defaultPeriod);
+
+    // Auto-load data if account is already set (for non-admins)
+    // For admins, wait until account is selected
+    if (!this.isAdmin() || this.selectedAccountId()) {
+      this.loadReport();
+    }
+  }
+
+  public onAccountSelected(account: Account): void {
+    this.selectedAccountId.set(account.id);
+    // Reload data with new account if period is already selected
+    if (this.currentPeriod()) {
+      this.loadReport();
+    }
+  }
+
+  public onTabChange(tabId: string): void {
+    // Don't switch to disabled tabs
+    const tab = this.tabs().find(t => t.id === tabId);
+    if (tab?.disabled) {
+      return;
+    }
+
+    this.activeTabId.set(tabId);
+
+    // Reload data for the new tab
+    if (this.currentPeriod()) {
+      this.loadReport();
+    }
+  }
+
+  public onPeriodChange(period: PeriodDateRange): void {
+    this.currentPeriod.set(period);
+    if (period.preset) {
+      this.selectedPeriod.set(period.preset);
+    }
+    // Automatically load report when period changes
+    this.loadReport();
+  }
+
+  private loadReport(): void {
+    const period = this.currentPeriod();
+    if (!period) {
+      return;
+    }
+
+    // For admins, require account selection
+    if (this.isAdmin() && !this.selectedAccountId()) {
+      return;
+    }
+
+    this.loading.set(true);
+
+    // Use current strategy to load data
+    const strategy = this.currentStrategy();
+    const params = {
+      period,
+      accountId: this.selectedAccountId() || undefined
+    };
+
+    strategy.loadData(params)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data) => {
+          this.currentTableService().originalDataSubject.next(data);
+          this.hasData.set(data.length > 0);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.currentTableService().originalDataSubject.next([]);
+          this.hasData.set(false);
+          this.loading.set(false);
+        }
+      });
+  }
+
+  /**
+   * Export report data to Excel
+   * Uses current strategy to determine mapping and transformers
+   */
+  public exportData(): void {
+    const currentData = this.currentTableService().originalDataSubject.value;
+
+    if (!currentData || currentData.length === 0) {
+      console.warn('No data to export');
+      return;
+    }
+
+    // Get current strategy for export configuration
+    const strategy = this.currentStrategy();
+
+    // Transform data using strategy's mapping and transformers
+    const exportData = mapDataForExcel(
+      currentData as any[],
+      strategy.getExportMapping() as any,
+      this.translateService,
+      strategy.getExportTransformers?.() || {}
+    );
+
+    // Generate filename with current date and strategy prefix
+    const period = this.currentPeriod();
+    const dateStr = period
+      ? `${formatDateForAPI(period.startDate)}_${formatDateForAPI(period.endDate)}`
+      : new Date().toISOString().split('T')[0];
+
+    const fileName = `${strategy.getExportFilePrefix()}_${dateStr}`;
+    const sheetName = this.translateService.instant(strategy.getSheetNameKey());
+
+    this.excelExportService.exportToExcel(exportData, fileName, sheetName);
+  }
+}

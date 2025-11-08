@@ -193,6 +193,21 @@
     "viewAll": "View All",
     "table": {
       "filterPlaceholder": "Filter table data"
+    },
+    "periods": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "last7days": "Last 7 Days",
+      "last30days": "Last 30 Days",
+      "lastMonth": "Last Month",
+      "currentMonth": "Current Month",
+      "last3months": "Last 3 Months",
+      "custom": "Custom",
+      "startDate": "Start Date",
+      "endDate": "End Date"
+    },
+    "actions": {
+      "apply": "Apply"
     }
   },
   "smartFilter": {
@@ -461,7 +476,63 @@
   "analytics": {
     "reports": {
       "title": "Reports",
-      "description": "Generate and view custom reports for your business analytics"
+      "description": "View bundle purchase history with transaction details and pricing information",
+      "selectAccountHint": "Select an account to view reports",
+      "export": "Export to Excel",
+      "loading": "Loading report data...",
+      "dateFrom": "Date From",
+      "dateFromPlaceholder": "Select start date",
+      "dateTo": "Date To",
+      "dateToPlaceholder": "Select end date",
+      "loadReport": "Load Report",
+      "tabs": {
+        "bundlePurchases": "Bundle Purchases",
+        "bundleLeftovers": "Bundle Leftovers"
+      },
+      "bundlePurchases": {
+        "description": "View bundle purchase history with transaction details and pricing information",
+        "title": "Bundle Purchases Report",
+        "emptyState": {
+          "title": "No Bundle Purchases Found",
+          "description": "Select a date range to view bundle purchase data for the selected period"
+        },
+        "company": "Company",
+        "purchaseDate": "Purchase Date",
+        "bundle": "Bundle",
+        "subscriber": "Subscriber",
+        "purchaseId": "Purchase ID",
+        "bundleStatus": "Bundle Status",
+        "transactionId": "Transaction ID",
+        "transactionStatus": "Transaction Status",
+        "iccid": "ICCID",
+        "bundlePrice": "Bundle Price",
+        "priceCurrency": "Price Currency",
+        "bundleCost": "Bundle Cost",
+        "costCurrency": "Cost Currency"
+      },
+      "bundleLeftovers": {
+        "description": "View unused bundle data and expiration details",
+        "title": "Bundle Leftovers Report",
+        "emptyState": {
+          "title": "No Bundle Leftovers Found",
+          "description": "Select a date range to view remaining bundle data for the selected period"
+        },
+        "company": "Company",
+        "purchaseDate": "Purchase Date",
+        "expirationDate": "Expiration Date",
+        "bundle": "Bundle",
+        "subscriber": "Subscriber",
+        "iccid": "ICCID",
+        "purchaseId": "Purchase ID",
+        "bundleStatus": "Bundle Status",
+        "bundlePrice": "Bundle Price",
+        "priceCurrency": "Price Currency",
+        "initialVolumeMb": "Initial Volume (MB)",
+        "unusedVolumeMb": "Unused Volume (MB)",
+        "percentLeftovers": "Leftover %",
+        "providerPriceMb": "Provider Price/MB",
+        "leftovers": "Leftovers Value"
+      }
     },
     "adminOverview": {
       "title": "Admin Overview",
@@ -1011,16 +1082,6 @@
       "traffic": "Traffic",
       "finance": "Finance"
     },
-    "periods": {
-      "today": "Today",
-      "yesterday": "Yesterday",
-      "last7days": "Last 7 Days",
-      "last30days": "Last 30 Days",
-      "lastMonth": "Last Month",
-      "custom": "Custom",
-      "startDate": "Start Date",
-      "endDate": "End Date"
-    },
     "actions": {
       "refresh": "Refresh Data",
       "export": "Export",
@@ -1088,6 +1149,7 @@
       "totalRevenue": "Total Revenue",
       "totalCost": "Total Cost",
       "totalMargin": "Total Margin",
+      "totalBundlesSold": "Total Bundles Sold",
       "new": "New",
       "recurring": "Recurring",
       "churn": "Churn",

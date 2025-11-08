@@ -35,7 +35,22 @@
     "submitButton": "Надіслати"
   },
   "shared": {
-    "no-data": "Немає даних"
+    "no-data": "Немає даних",
+    "periods": {
+      "today": "Сьогодні",
+      "yesterday": "Вчора",
+      "last7days": "Останні 7 днів",
+      "last30days": "Останні 30 днів",
+      "lastMonth": "Поточний місяць",
+      "currentMonth": "Поточний місяць",
+      "last3months": "Останні 3 місяці",
+      "custom": "Користувацький",
+      "startDate": "Дата початку",
+      "endDate": "Дата закінчення"
+    },
+    "actions": {
+      "apply": "Застосувати"
+    }
   },
   "table": {
     "loading": "Завантаження даних...",
@@ -116,6 +131,72 @@
     "domains": "Домени",
     "emailConfigurations": "Налаштування Email",
     "supportchat": "Чати"
+  },
+  "analytics": {
+    "reports": {
+      "title": "Звіти",
+      "description": "Перегляд історії покупок бандлів з деталями транзакцій та інформацією про ціни",
+      "selectAccountHint": "Виберіть акаунт для перегляду звітів",
+      "export": "Експорт в Excel",
+      "loading": "Завантаження даних звіту...",
+      "dateFrom": "Дата з",
+      "dateFromPlaceholder": "Виберіть дату початку",
+      "dateTo": "Дата по",
+      "dateToPlaceholder": "Виберіть дату закінчення",
+      "loadReport": "Завантажити звіт",
+      "tabs": {
+        "bundlePurchases": "Покупки бандлів",
+        "bundleLeftovers": "Залишки бандлів"
+      },
+      "bundlePurchases": {
+        "title": "Звіт по покупках бандлів",
+        "description": "Перегляд історії покупок бандлів з деталями транзакцій та інформацією про ціни",
+        "emptyState": {
+          "title": "Покупки бандлів не знайдено",
+          "description": "Виберіть діапазон дат для перегляду даних про покупки бандлів за вибраний період"
+        },
+        "company": "Компанія",
+        "purchaseDate": "Дата покупки",
+        "bundle": "Бандл",
+        "subscriber": "Підписник",
+        "purchaseId": "ID покупки",
+        "bundleStatus": "Статус бандла",
+        "transactionId": "ID транзакції",
+        "transactionStatus": "Статус транзакції",
+        "iccid": "ICCID",
+        "bundlePrice": "Ціна бандла",
+        "priceCurrency": "Валюта ціни",
+        "bundleCost": "Вартість бандла",
+        "costCurrency": "Валюта вартості"
+      },
+      "bundleLeftovers": {
+        "description": "Перегляд невикористаних даних бандлів та термінів закінчення",
+        "title": "Звіт по залишках бандлів",
+        "emptyState": {
+          "title": "Залишки бандлів не знайдено",
+          "description": "Виберіть діапазон дат для перегляду залишкових даних бандлів за вибраний період"
+        },
+        "company": "Компанія",
+        "purchaseDate": "Дата покупки",
+        "expirationDate": "Дата закінчення",
+        "bundle": "Бандл",
+        "subscriber": "Підписник",
+        "iccid": "ICCID",
+        "purchaseId": "ID покупки",
+        "bundleStatus": "Статус бандла",
+        "bundlePrice": "Ціна бандла",
+        "priceCurrency": "Валюта ціни",
+        "initialVolumeMb": "Початковий обсяг (МБ)",
+        "unusedVolumeMb": "Невикористаний обсяг (МБ)",
+        "percentLeftovers": "Залишок %",
+        "providerPriceMb": "Ціна провайдера/МБ",
+        "leftovers": "Вартість залишків"
+      }
+    },
+    "adminOverview": {
+      "title": "Огляд адміністратора",
+      "description": "Панель аналітики для адміністраторів з даними по всіх клієнтах"
+    }
   },
   "flyout": {
     "supportchattitle": "Чати підтримки"
@@ -794,16 +875,6 @@
       "traffic": "Трафік",
       "finance": "Фінанси"
     },
-    "periods": {
-      "today": "Сьогодні",
-      "yesterday": "Вчора",
-      "last7days": "Останні 7 днів",
-      "last30days": "Останні 30 днів",
-      "lastMonth": "Останній місяць",
-      "custom": "Користувацький",
-      "startDate": "Дата початку",
-      "endDate": "Дата закінчення"
-    },
     "actions": {
       "refresh": "Оновити дані",
       "export": "Експорт",
@@ -814,6 +885,7 @@
       "totalRevenue": "Загальний дохід",
       "totalCost": "Загальні витрати",
       "totalMargin": "Загальна маржа",
+      "totalBundlesSold": "Всього бандлів продано",
       "new": "Новий",
       "recurring": "Повторюваний",
       "churn": "Відтік",

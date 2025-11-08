@@ -1,6 +1,12 @@
 @if (hasButtons()) {
+  <!-- Thin indicator when FAB is hidden -->
+  <div class="fab-indicator"
+       [class.fab-indicator--visible]="!isVisible()"></div>
+
   <div class="bottom-nav"
-       [class.bottom-nav--expanded]="isMenuOpen()">
+       [class.bottom-nav--expanded]="isMenuOpen()"
+       [class.bottom-nav--visible]="isVisible()"
+       [class.bottom-nav--hidden]="!isVisible()">
 
     <!-- Expandable menu - positioned absolutely above buttons -->
     @if (isMenuOpen() && activeMenuItems().length > 0) {
