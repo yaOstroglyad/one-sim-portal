@@ -31,6 +31,29 @@ export interface TableConfig {
 		showPageSizeSelector?: boolean;
 		pageSizeOptions?: number[];
 	};
+	footer?: TableFooterConfig;
+}
+
+export interface TableFooterConfig {
+	enabled: boolean;
+	aggregations?: AggregationConfig[]; // Simple aggregations (sum, avg, etc.)
+	customValues?: Record<string, string>; // Pre-calculated values from strategy
+	customTooltips?: Record<string, string>; // Tooltip text for custom values (e.g., currency breakdown)
+	label?: string; // Label for first column (e.g., "Total:")
+}
+
+export interface AggregationConfig {
+	columnKey: string;
+	type: AggregationType;
+	formatFn?: (value: number) => string; // Custom formatting function
+}
+
+export enum AggregationType {
+	Sum = 'sum',
+	Average = 'avg',
+	Count = 'count',
+	Min = 'min',
+	Max = 'max'
 }
 
 export enum TemplateType {

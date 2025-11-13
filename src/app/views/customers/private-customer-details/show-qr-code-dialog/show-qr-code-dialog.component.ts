@@ -2,9 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { QrCodeComponent } from '@shared';
+import { QrCodeComponent, CopyToClipboardDirective } from '@shared';
 import { TranslateModule } from '@ngx-translate/core';
-import { CopyToClipboardDirective } from '@shared/directives/copy-to-clipboard.directive';
 import { printQrCode } from '@shared/utils/dom';
 
 @Component({

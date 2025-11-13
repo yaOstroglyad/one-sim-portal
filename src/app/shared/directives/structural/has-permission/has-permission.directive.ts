@@ -1,5 +1,5 @@
 import { Directive, inject, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { AuthService } from '../auth';
+import { AuthService } from '@shared/auth';
 
 @Directive({
   standalone: true,

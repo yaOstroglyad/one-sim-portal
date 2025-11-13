@@ -38,7 +38,7 @@ import { AddSubscriberProductComponent } from './add-subscriber-product/add-subs
 import { AddSubscriberComponent } from './add-subscriber/add-subscriber.component';
 import { SendRegistrationEmailComponent } from './send-registration-email/send-registration-email.component';
 import { BadgeComponent } from '@coreui/angular';
-import { CopyToClipboardDirective } from '@shared/directives/copy-to-clipboard.directive';
+import { CopyToClipboardDirective } from '@shared';
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({

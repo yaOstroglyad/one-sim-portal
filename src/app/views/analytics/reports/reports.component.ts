@@ -133,11 +133,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
     const defaultPeriod = createPeriodFromPreset(PeriodPresets.CURRENT_MONTH);
     this.currentPeriod.set(defaultPeriod);
 
-    // Auto-load data if account is already set (for non-admins)
-    // For admins, wait until account is selected
-    if (!this.isAdmin() || this.selectedAccountId()) {
-      this.loadReport();
-    }
+    // Auto-load data with default period
+    // For admins: load data for all accounts (without accountId)
+    // For non-admins: load data for their account
+    this.loadReport();
   }
 
   public onAccountSelected(account: Account): void {
@@ -178,17 +177,15 @@ export class ReportsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // For admins, require account selection
-    if (this.isAdmin() && !this.selectedAccountId()) {
-      return;
-    }
-
     this.loading.set(true);
 
     // Use current strategy to load data
     const strategy = this.currentStrategy();
     const params = {
       period,
+      // Pass accountId only if explicitly selected
+      // For admins without selection: undefined (get data for all accounts)
+      // For non-admins: their accountId
       accountId: this.selectedAccountId() || undefined
     };
 
@@ -199,6 +196,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
           this.currentTableService().originalDataSubject.next(data);
           this.hasData.set(data.length > 0);
           this.loading.set(false);
+
+          // Update footer with custom values if strategy provides calculateFooterValues
+          this.updateFooterValues(data);
         },
         error: () => {
           this.currentTableService().originalDataSubject.next([]);
@@ -206,6 +206,30 @@ export class ReportsComponent implements OnInit, OnDestroy {
           this.loading.set(false);
         }
       });
+  }
+
+  /**
+   * Update footer values using strategy's calculateFooterValues method
+   * This allows strategies to implement complex footer logic (e.g., currency conversion with tooltips)
+   */
+  private updateFooterValues(data: any[]): void {
+    const strategy = this.currentStrategy();
+
+    // Check if strategy has custom footer calculation
+    if (!strategy.calculateFooterValues) {
+      return;
+    }
+
+    // Calculate custom footer values and tooltips
+    const result = strategy.calculateFooterValues(data);
+
+    // Update table config with custom values and tooltips
+    const currentConfig = this.currentTableService().tableConfigSubject.value;
+    if (currentConfig.footer) {
+      currentConfig.footer.customValues = result.values;
+      currentConfig.footer.customTooltips = result.tooltips;
+      this.currentTableService().tableConfigSubject.next({...currentConfig});
+    }
   }
 
   /**

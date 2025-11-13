@@ -116,6 +116,28 @@
                     </td>
                 </tr>
                 </tbody>
+
+                <!-- Footer with aggregations -->
+                <tfoot *ngIf="vm.config.footer?.enabled" class="ag-footer">
+                <tr class="ag-footer-row">
+                    <td *ngIf="vm.config.showCheckboxes" class="ag-footer-cell"></td>
+                    <ng-container *ngFor="let col of vm.config.columns; let colIndex = index">
+                        <td *ngIf="col.visible" [ngClass]="[col.class||'', 'ag-footer-cell']">
+                            <div class="ag-footer-cell-content"
+                                 [title]="getAggregationTooltip(col.key, vm.config) || ''">
+                                <ng-container *ngIf="colIndex === 0">
+                                    <strong>{{ vm.config.footer.label || 'Total' }}</strong>
+                                </ng-container>
+                                <ng-container *ngIf="colIndex > 0">
+                                    <strong>{{ getAggregationValue(vm.data, col.key, vm.config) }}</strong>
+                                </ng-container>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <td *ngIf="vm.config.showEditButton && !vm.config.showMenu" class="ag-footer-cell"></td>
+                    <td *ngIf="vm.config.showMenu" class="ag-footer-cell"></td>
+                </tr>
+                </tfoot>
             </table>
         </div>
 

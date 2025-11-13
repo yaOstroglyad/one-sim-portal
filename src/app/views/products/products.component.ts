@@ -53,7 +53,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ItemNamesPipe } from '@shared/pipes/item-names/item-names.pipe';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
-import { HasPermissionDirective } from '@shared/directives/has-permission.directive';
+import { HasPermissionDirective } from '@shared';
 
 @Component({
     standalone: true,

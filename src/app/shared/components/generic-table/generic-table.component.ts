@@ -1,161 +1,167 @@
 import {
-	Component,
-	ChangeDetectionStrategy,
-	Input,
-	Output,
-	EventEmitter,
-	TemplateRef,
-	OnChanges,
-	SimpleChanges, ContentChild
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter,
+  TemplateRef,
+  OnChanges,
+  SimpleChanges,
+  ContentChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { TableDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
+import { Observable, combineLatest } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+
 import { FormatTimePipe } from '../../pipes/format-time/format-time.pipe';
 import { DisplayValueByKeyPipe } from '../../pipes/display-value-by-key/display-value-by-key.pipe';
 import { PaginationComponent } from '../pagination';
-import { Observable, combineLatest } from 'rxjs';
-import { map, take } from 'rxjs/operators';
 import { TableColumnConfig, TableConfig } from '@shared/models';
+import { TableFooterAggregationHelper } from './helpers/table-footer-aggregation.helper';
+import { TableUtils } from './helpers/table.utils';
+import { TableRow, PageChangeEvent, SortChangeEvent } from './models/table-row.interface';
 
+/**
+ * Generic reusable table with pagination, sorting, and footer aggregations
+ */
 @Component({
-    standalone: true,
-    selector: 'generic-table',
-    imports: [
-        CommonModule,
-        TranslateModule,
-        TableDirective,
-        FormatTimePipe,
-        IconDirective,
-        DisplayValueByKeyPipe,
-        PaginationComponent
-    ],
-    templateUrl: './generic-table.component.html',
-    styleUrls: ['./generic-table.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: true,
+  selector: 'generic-table',
+  imports: [
+    CommonModule,
+    TranslateModule,
+    TableDirective,
+    FormatTimePipe,
+    IconDirective,
+    DisplayValueByKeyPipe,
+    PaginationComponent
+  ],
+  templateUrl: './generic-table.component.html',
+  styleUrls: ['./generic-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GenericTableComponent implements OnChanges {
-	@ContentChild('[custom-toolbar]', {read: TemplateRef})
-	public customToolbarTpl?: TemplateRef<any>;
+export class GenericTableComponent<T extends TableRow = TableRow> implements OnChanges {
+  // Inputs
+  @Input() config$!: Observable<TableConfig>;
+  @Input() data$!: Observable<T[]>;
+  @Input() menu!: TemplateRef<any>;
+  @Input() isRowClickable = false;
 
-	@Input() config$!: Observable<TableConfig>;
-	@Input() data$!: Observable<any[]>;
-	@Input() menu!: TemplateRef<any>;
-	@Input() isRowClickable = false;
+  @ContentChild('[custom-toolbar]', { read: TemplateRef })
+  public customToolbarTpl?: TemplateRef<any>;
 
-	@Output() selectedItemsChange = new EventEmitter<any[]>();
-	@Output() onRowClickEvent = new EventEmitter<any>();
-	@Output() toggleAction = new EventEmitter<any>();
-	@Output() pageChange = new EventEmitter<{ page: number; size: number; isServerSide?: boolean }>();
-	@Output() sortChange = new EventEmitter<{ column: string; direction: 'asc' | 'desc' }>();
+  // Outputs
+  @Output() selectedItemsChange = new EventEmitter<T[]>();
+  @Output() onRowClickEvent = new EventEmitter<T>();
+  @Output() toggleAction = new EventEmitter<T>();
+  @Output() pageChange = new EventEmitter<PageChangeEvent>();
+  @Output() sortChange = new EventEmitter<SortChangeEvent>();
 
-	public viewModel$!: Observable<{ config: TableConfig; data: any[] }>;
-	public currentPage = 0;
-	public pageSize = 15;
-	public totalPages = 0;
-	public selectedItems = new Set<any>();
+  // State
+  public viewModel$!: Observable<{ config: TableConfig; data: T[] }>;
+  public currentPage = 0;
+  public pageSize = 15;
+  public totalPages = 0;
+  public selectedItems = new Set<T>();
 
-	ngOnChanges(changes: SimpleChanges): void {
-		if ((changes.config$ || changes.data$) && this.config$ && this.data$) {
-			this.createViewModel();
-		}
-	}
+  // Lifecycle
+  ngOnChanges(changes: SimpleChanges): void {
+    if ((changes['config$'] || changes['data$']) && this.config$ && this.data$) {
+      this.createViewModel();
+    }
+  }
 
-	private createViewModel(): void {
-		this.viewModel$ = combineLatest([this.config$, this.data$]).pipe(
-			map(([config, data]) => {
-				this.setSortDirection(config.columns);
+  // View Model
+  private createViewModel(): void {
+    this.viewModel$ = combineLatest([this.config$, this.data$]).pipe(
+      map(([config, data]) => {
+        TableUtils.setSortDirection(config.columns);
+        if (config.pagination?.totalPages != null) {
+          this.totalPages = config.pagination.totalPages;
+        }
+        return { config, data };
+      })
+    );
+  }
 
-				if (config.pagination?.totalPages != null) {
-					this.totalPages = config.pagination.totalPages;
-				}
-				return {config, data};
-			})
-		);
-	}
+  // Pagination
+  public changePage(newPage: number, isServerSide?: boolean): void {
+    this.currentPage = newPage;
+    this.pageChange.emit({ page: this.currentPage, size: this.pageSize, isServerSide });
+  }
 
-	public trackById(_: number, item: any): any {
-		return item.id ?? _;
-	}
+  public onPageSizeChange(newSize: number): void {
+    this.pageSize = newSize;
+    this.currentPage = 0;
+    this.config$.pipe(take(1)).subscribe(config => {
+      const isServerSide = config.pagination?.serverSide;
+      this.pageChange.emit({ page: this.currentPage, size: this.pageSize, isServerSide });
+    });
+  }
 
-	public changePage(newPage: number, isServerSide?: boolean): void {
-		this.currentPage = newPage;
-		this.pageChange.emit({page: this.currentPage, size: this.pageSize, isServerSide});
-	}
+  // Selection
+  public toggleAll(event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    this.data$.pipe(take(1)).subscribe(data => {
+      if (checkbox.checked) {
+        data.forEach(item => this.selectedItems.add(item));
+      } else {
+        this.selectedItems.clear();
+      }
+      this.selectedItemsChange.emit(Array.from(this.selectedItems));
+    });
+  }
 
-	public onPageSizeChange(newSize: number): void {
-		this.pageSize = newSize;
-		this.currentPage = 0; // Reset to first page when page size changes
-		this.config$.pipe(take(1)).subscribe(config => {
-			const isServerSide = config.pagination?.serverSide;
-			this.pageChange.emit({page: this.currentPage, size: this.pageSize, isServerSide});
-		});
-	}
+  public toggleItemSelection(item: T, event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.selectedItems.add(item);
+    } else {
+      this.selectedItems.delete(item);
+    }
+    this.selectedItemsChange.emit(Array.from(this.selectedItems));
+  }
 
-	public toggleAll(event: any): void {
-		this.data$.pipe(take(1)).subscribe(data => {
-			if (event.target.checked) {
-				data.forEach(item => this.selectedItems.add(item));
-			} else {
-				this.selectedItems.clear();
-			}
-			this.selectedItemsChange.emit(Array.from(this.selectedItems));
-		});
-	}
+  public isSelected(item: T): boolean {
+    return this.selectedItems.has(item);
+  }
 
-	public toggleItemSelection(item: any, event: any): void {
-		if (event.target.checked) {
-			this.selectedItems.add(item);
-		} else {
-			this.selectedItems.delete(item);
-		}
-		this.selectedItemsChange.emit(Array.from(this.selectedItems));
-	}
+  // Sorting
+  public onSortColumn(column: TableColumnConfig): void {
+    if (!column.sortable) return;
+    this.config$.pipe(take(1)).subscribe(config => {
+      config.columns.forEach(col => {
+        if (col !== column) col.sortDirection = null;
+      });
+      column.sortDirection = column.sortDirection === 'asc' ? 'desc' : 'asc';
+      this.sortChange.emit({ column: column.key, direction: column.sortDirection });
+    });
+  }
 
-	public isSelected(item: any): boolean {
-		return this.selectedItems.has(item);
-	}
+  // Row Actions
+  public onEdit(item: T): void {
+    this.toggleAction.emit(item);
+  }
 
-	public onEdit(item: any): void {
-		this.toggleAction.emit(item);
-	}
+  public onRowClick(item: T): void {
+    this.onRowClickEvent.emit(item);
+  }
 
-	public onRowClick(item: any): void {
-		this.onRowClickEvent.emit(item);
-	}
+  // Footer Aggregations
+  public getAggregationValue(data: T[], columnKey: string, config: TableConfig): string {
+    return TableFooterAggregationHelper.getAggregationValue(data, columnKey, config);
+  }
 
-	public onSortColumn(column: any): void {
-		if (!column.sortable) return;
-		this.config$.pipe(take(1)).subscribe(cfg => {
-			cfg.columns.forEach(col => {
-				if (col !== column) col.sortDirection = null;
-			});
-			column.sortDirection = column.sortDirection === 'asc' ? 'desc' : 'asc';
-			this.sortChange.emit({column: column.key, direction: column.sortDirection});
-		});
-	}
+  public getAggregationTooltip(columnKey: string, config: TableConfig): string | undefined {
+    return TableFooterAggregationHelper.getAggregationTooltip(columnKey, config);
+  }
 
-	public isEven(i: number): boolean {
-		return i % 2 === 0;
-	}
-
-	public isOdd(i: number): boolean {
-		return !this.isEven(i);
-	}
-
-	public getMinRows(dataLength: number): number {
-		// Return the actual number of rows if less than 10, otherwise return 10
-		// This ensures the table shows actual size for small datasets
-		// but maintains a minimum height for larger datasets
-		return Math.min(dataLength || 0, 10);
-	}
-
-	private setSortDirection(columns: TableColumnConfig[]) {
-		columns.forEach(column => {
-			if (column?.sortable && !column.sortDirection) {
-				column.sortDirection = 'asc';
-			}
-		})
-	}
+  // Utilities
+  public trackById = TableUtils.trackById;
+  public isEven = TableUtils.isEven;
+  public isOdd = TableUtils.isOdd;
+  public getMinRows = TableUtils.getMinRows;
 }

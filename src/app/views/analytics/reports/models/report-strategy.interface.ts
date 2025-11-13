@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { PeriodDateRange } from '@shared';
+import { PeriodDateRange, TableFooterConfig } from '@shared';
 
 /**
  * Parameters for loading report data
@@ -72,4 +72,43 @@ export interface ReportStrategy<T = any> {
    * @returns Translation key for the empty state description
    */
   getEmptyStateDescriptionKey(): string;
+
+  /**
+   * Get footer configuration for table aggregations
+   * @returns Footer configuration or undefined if no footer needed
+   */
+  getFooterConfig?(): TableFooterConfig | undefined;
+
+  /**
+   * Calculate custom footer values from data
+   * Use this for complex cases like currency conversion, custom formatting, etc.
+   * If this method is implemented, it takes precedence over simple aggregations
+   *
+   * @param data - Array of data items to calculate footer from
+   * @returns Object with values and optional tooltips for detailed breakdown
+   *
+   * @example
+   * // Group by currency and show totals with tooltip breakdown
+   * calculateFooterValues(data: BundlePurchase[]): { values: Record<string, string>, tooltips?: Record<string, string> } {
+   *   const totals = data.reduce((acc, item) => {
+   *     const currency = item.priceCurrency;
+   *     acc[currency] = (acc[currency] || 0) + parseFloat(item.bundlePrice);
+   *     return acc;
+   *   }, {} as Record<string, number>);
+   *
+   *   const breakdown = Object.entries(totals)
+   *     .map(([curr, val]) => `${val.toFixed(2)} ${curr}`)
+   *     .join(' + ');
+   *
+   *   return {
+   *     values: {
+   *       bundlePrice: '€123.45' // Converted total
+   *     },
+   *     tooltips: {
+   *       bundlePrice: breakdown // Original currencies
+   *     }
+   *   };
+   * }
+   */
+  calculateFooterValues?(data: T[]): { values: Record<string, string>, tooltips?: Record<string, string> };
 }

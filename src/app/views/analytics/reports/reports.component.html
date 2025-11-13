@@ -1,7 +1,6 @@
 <!-- Account Selector (только для админов) -->
 <app-account-selector *ngIf="isAdmin()"
                       [helperText]="'analytics.reports.selectAccountHint'"
-                      [selectFirstByDefault]="true"
                       (accountSelected)="onAccountSelected($event)">
 </app-account-selector>
 

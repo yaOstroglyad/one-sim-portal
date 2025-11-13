@@ -205,9 +205,6 @@
       "custom": "Custom",
       "startDate": "Start Date",
       "endDate": "End Date"
-    },
-    "actions": {
-      "apply": "Apply"
     }
   },
   "smartFilter": {

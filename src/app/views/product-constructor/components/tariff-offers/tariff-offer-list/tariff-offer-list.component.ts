@@ -68,13 +68,14 @@ export class TariffOfferListComponent implements OnInit, AfterViewInit, OnDestro
 
   selectedTariffOffer: TariffOffer | null = null;
   selectedTariffOfferDetails: TariffOffer | null = null;
+  selectedTariffOfferIdForDelete: string | null = null;
 
   detailsPanelActions: PanelAction[] = [
     {
       id: 'edit',
       label: 'Edit',
       icon: 'edit',
-      handler: () => this.onEdit(this.selectedTariffOfferDetails!)
+      handler: () => this.onEditFromDetails(this.selectedTariffOfferDetails!)
     }
   ];
 
@@ -143,13 +144,32 @@ export class TariffOfferListComponent implements OnInit, AfterViewInit, OnDestro
     this.showCreatePanel = true;
   }
 
-  onEdit(tariffOffer: TariffOffer): void {
+  onEdit(tariffOffer: ActiveTariffOffer): void {
+    if (!tariffOffer.id) {
+      console.error('Cannot edit tariff offer without ID');
+      return;
+    }
+
+    this.tariffOfferService.getTariffOfferById(tariffOffer.id)
+      .pipe(take(1))
+      .subscribe({
+        next: (details) => {
+          this.selectedTariffOffer = details;
+          this.showEditPanel = true;
+        },
+        error: (error) => {
+          console.error('Error loading tariff offer for edit:', error);
+        }
+      });
+  }
+
+  onEditFromDetails(tariffOffer: TariffOffer): void {
     this.selectedTariffOffer = tariffOffer;
     this.showEditPanel = true;
   }
 
-  onViewDetails(tariffOffer: TariffOffer): void {
-    this.tariffOfferService.getTariffOfferById(tariffOffer.id)
+  onViewDetails(tariffOffer: ActiveTariffOffer): void {
+    this.tariffOfferService.getTariffOfferById(tariffOffer.id!)
       .pipe(take(1))
       .subscribe({
         next: (details) => {
@@ -162,14 +182,18 @@ export class TariffOfferListComponent implements OnInit, AfterViewInit, OnDestro
       });
   }
 
-  onDelete(tariffOffer: TariffOffer): void {
-    this.selectedTariffOffer = tariffOffer;
+  onDelete(tariffOffer: ActiveTariffOffer): void {
+    if (!tariffOffer.id) {
+      console.error('Cannot delete tariff offer without ID');
+      return;
+    }
+    this.selectedTariffOfferIdForDelete = tariffOffer.id;
     this.showDeletePanel = true;
   }
 
   onConfirmDelete(): void {
-    if (this.selectedTariffOffer) {
-      this.tariffOfferService.deleteTariffOffer(this.selectedTariffOffer.id)
+    if (this.selectedTariffOfferIdForDelete) {
+      this.tariffOfferService.deleteTariffOffer(this.selectedTariffOfferIdForDelete)
         .pipe(take(1))
         .subscribe({
           next: () => {
@@ -195,5 +219,6 @@ export class TariffOfferListComponent implements OnInit, AfterViewInit, OnDestro
     this.showDeletePanel = false;
     this.selectedTariffOffer = null;
     this.selectedTariffOfferDetails = null;
+    this.selectedTariffOfferIdForDelete = null;
   }
 }

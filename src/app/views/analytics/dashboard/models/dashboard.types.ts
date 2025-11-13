@@ -4,19 +4,14 @@
  */
 
 import { ApiResponse, ApiError } from '@shared';
-import { PeriodPreset } from '@shared/models/ui/period-selector.model';
+import { PeriodDateRange } from '@shared/models/ui/period-selector.model';
 
 // Re-export shared types for dashboard use
 export type DashboardResponse<T> = ApiResponse<T>;
 export type DashboardError = ApiError;
 
-// Time period selection
-export interface DashboardPeriod {
-  startDate: Date;
-  endDate: Date;
-  label: string;
-  preset?: PeriodPreset;
-}
+// Time period selection - use shared PeriodDateRange type
+export type DashboardPeriod = PeriodDateRange;
 
 // Chart configuration interfaces
 export interface ChartConfig {

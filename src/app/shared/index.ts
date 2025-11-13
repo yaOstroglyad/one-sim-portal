@@ -51,7 +51,9 @@ export * from './services/excel-export.service';  // Excel export service
 
 // Named exports for specific services
 export { Language } from './services/ui/language.service';
-export * from './directives/feature-toggle.directive';
+
+// Directives
+export * from './directives';
 
 export * from './auth/permission.guard';
 export * from './auth/auth.service';

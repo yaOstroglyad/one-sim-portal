@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TableConfig, TableConfigAbstractService, TemplateType } from '@shared';
 import { BundleLeftover } from '../models/bundle-leftover.model';
+import { BundleLeftoversStrategy } from '../strategies/bundle-leftovers.strategy';
 
 /**
  * Table configuration service for Bundle Leftovers Report
@@ -11,6 +12,8 @@ import { BundleLeftover } from '../models/bundle-leftover.model';
   providedIn: 'root'
 })
 export class BundleLeftoversTableService extends TableConfigAbstractService<BundleLeftover> {
+  private readonly strategy = inject(BundleLeftoversStrategy);
+
   public originalDataSubject = new BehaviorSubject<BundleLeftover[]>([]);
   public dataList$: Observable<BundleLeftover[]> = this.originalDataSubject.asObservable();
 
@@ -19,6 +22,7 @@ export class BundleLeftoversTableService extends TableConfigAbstractService<Bund
     showCheckboxes: false,
     showEditButton: false,
     showMenu: false,
+    footer: this.strategy.getFooterConfig?.() || undefined,
     columns: [
       {
         visible: true,

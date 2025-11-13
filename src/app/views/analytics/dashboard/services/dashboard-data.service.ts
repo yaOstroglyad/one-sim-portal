@@ -18,7 +18,6 @@ import { TrafficAnalytics } from '../models/traffic.types';
 import { FinanceAnalytics } from '../models/finance.types';
 import { MockDataService } from './mock-data.service';
 import {
-  getDefaultPeriod,
   DASHBOARD_API_CONFIG,
   DEFAULT_MOCK_CONFIG,
   MOCK_DELAYS,
@@ -28,7 +27,7 @@ import {
   mapSubscriberBundles,
   mapRevenueBundles
 } from '../utils';
-import { wrapResponse, createErrorResponse } from '@shared';
+import { wrapResponse, createErrorResponse, getDefaultPeriod } from '@shared';
 
 @Injectable({
   providedIn: 'root'

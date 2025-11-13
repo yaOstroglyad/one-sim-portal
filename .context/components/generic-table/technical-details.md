@@ -5,30 +5,36 @@
 ### Class Structure Analysis
 
 ```typescript
-class GenericTableComponent implements OnChanges {
+export class GenericTableComponent<T extends TableRow = TableRow> implements OnChanges {
   // Content Projection
-  @ContentChild('[custom-toolbar]', {read: TemplateRef})
+  @ContentChild('[custom-toolbar]', { read: TemplateRef })
   public customToolbarTpl?: TemplateRef<any>;
 
   // Input Properties
   @Input() config$!: Observable<TableConfig>;     // Configuration stream
-  @Input() data$!: Observable<any[]>;            // Data stream  
+  @Input() data$!: Observable<T[]>;              // Generic data stream
   @Input() menu!: TemplateRef<any>;              // Action menu template
   @Input() isRowClickable = false;               // Row interaction flag
 
   // Output Events
-  @Output() selectedItemsChange = new EventEmitter<any[]>();
-  @Output() onRowClickEvent = new EventEmitter<any>();
-  @Output() toggleAction = new EventEmitter<any>();
+  @Output() selectedItemsChange = new EventEmitter<T[]>();
+  @Output() onRowClickEvent = new EventEmitter<T>();
+  @Output() toggleAction = new EventEmitter<T>();
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
   @Output() sortChange = new EventEmitter<SortChangeEvent>();
 
   // State Management
-  public viewModel$!: Observable<ViewModel>;      // Combined config + data
-  public currentPage = 0;                        // Pagination state
-  public pageSize = 10;                          // Page size
+  public viewModel$!: Observable<{ config: TableConfig; data: T[] }>;
+  public currentPage = 0;                        // Pagination state (default: 0)
+  public pageSize = 15;                          // Page size (default: 15)
   public totalPages = 0;                         // Total pages
-  public selectedItems = new Set<any>();         // Selection state
+  public selectedItems = new Set<T>();           // Selection state (O(1) operations)
+
+  // Utilities (delegated to helpers)
+  public trackById = TableUtils.trackById;
+  public isEven = TableUtils.isEven;
+  public isOdd = TableUtils.isOdd;
+  public getMinRows = TableUtils.getMinRows;
 }
 ```
 
@@ -57,11 +63,12 @@ graph TD
 ### Selection Management
 ```typescript
 // Efficient selection using Set for O(1) operations
-public selectedItems = new Set<any>();
+public selectedItems = new Set<T>();
 
 // Toggle individual item
-public toggleItemSelection(item: any, event: any): void {
-  if (event.target.checked) {
+public toggleItemSelection(item: T, event: Event): void {
+  const checkbox = event.target as HTMLInputElement;
+  if (checkbox.checked) {
     this.selectedItems.add(item);      // O(1) add
   } else {
     this.selectedItems.delete(item);   // O(1) delete
@@ -70,14 +77,15 @@ public toggleItemSelection(item: any, event: any): void {
 }
 
 // Check if item is selected
-public isSelected(item: any): boolean {
+public isSelected(item: T): boolean {
   return this.selectedItems.has(item); // O(1) lookup
 }
 
 // Toggle all items
-public toggleAll(event: any): void {
+public toggleAll(event: Event): void {
+  const checkbox = event.target as HTMLInputElement;
   this.data$.pipe(take(1)).subscribe(data => {
-    if (event.target.checked) {
+    if (checkbox.checked) {
       data.forEach(item => this.selectedItems.add(item));
     } else {
       this.selectedItems.clear();
@@ -91,28 +99,22 @@ public toggleAll(event: any): void {
 ```typescript
 // Pagination properties
 public currentPage = 0;
-public pageSize = 10;
+public pageSize = 15;  // Default: 15 items per page
 public totalPages = 0;
 
 // Page change handler with server-side support
 public changePage(newPage: number, isServerSide?: boolean): void {
   this.currentPage = newPage;
-  this.pageChange.emit({
-    page: this.currentPage,
-    size: this.pageSize,
-    isServerSide
-  });
+  this.pageChange.emit({ page: this.currentPage, size: this.pageSize, isServerSide });
 }
 
-// Configuration update for total pages
-private updatePagination(totalPages: number): void {
-  const currentConfig = this.tableConfig$.value;
-  this.tableConfig$.next({
-    ...currentConfig,
-    pagination: {
-      ...currentConfig.pagination,
-      totalPages
-    }
+// Page size change handler
+public onPageSizeChange(newSize: number): void {
+  this.pageSize = newSize;
+  this.currentPage = 0;  // Reset to first page
+  this.config$.pipe(take(1)).subscribe(config => {
+    const isServerSide = config.pagination?.serverSide;
+    this.pageChange.emit({ page: this.currentPage, size: this.pageSize, isServerSide });
   });
 }
 ```
@@ -120,33 +122,154 @@ private updatePagination(totalPages: number): void {
 ### Sorting State Management
 ```typescript
 // Column sorting with direction management
-public onSortColumn(column: any): void {
+public onSortColumn(column: TableColumnConfig): void {
   if (!column.sortable) return;
-  
-  this.config$.pipe(take(1)).subscribe(cfg => {
+
+  this.config$.pipe(take(1)).subscribe(config => {
     // Reset other columns
-    cfg.columns.forEach(col => {
+    config.columns.forEach(col => {
       if (col !== column) col.sortDirection = null;
     });
-    
+
     // Toggle current column
     column.sortDirection = column.sortDirection === 'asc' ? 'desc' : 'asc';
-    
+
     // Emit sort event
-    this.sortChange.emit({
-      column: column.key,
-      direction: column.sortDirection
-    });
+    this.sortChange.emit({ column: column.key, direction: column.sortDirection });
   });
 }
 
-// Initialize sort directions
-private setSortDirection(columns: TableColumnConfig[]): void {
-  columns.forEach(column => {
-    if (column?.sortable && !column.sortDirection) {
-      column.sortDirection = 'asc';
+// Initialize sort directions (delegated to TableUtils)
+// Called in createViewModel()
+TableUtils.setSortDirection(config.columns);
+```
+
+### Footer Aggregation Management
+
+```typescript
+// Footer aggregation methods (delegated to TableFooterAggregationHelper)
+public getAggregationValue(data: T[], columnKey: string, config: TableConfig): string {
+  return TableFooterAggregationHelper.getAggregationValue(data, columnKey, config);
+}
+
+public getAggregationTooltip(columnKey: string, config: TableConfig): string | undefined {
+  return TableFooterAggregationHelper.getAggregationTooltip(columnKey, config);
+}
+```
+
+### TableFooterAggregationHelper
+
+```typescript
+export class TableFooterAggregationHelper {
+  /**
+   * Calculate aggregation value for a specific column
+   */
+  static calculateAggregation(
+    data: any[],
+    columnKey: string,
+    type: AggregationType
+  ): number {
+    if (!data || data.length === 0) return 0;
+
+    const values = data
+      .map(item => {
+        const value = item[columnKey];
+        // Handle string numbers (like "10.25")
+        return typeof value === 'string' ? parseFloat(value) : (value || 0);
+      })
+      .filter(v => !isNaN(v));
+
+    switch (type) {
+      case AggregationType.Sum:
+        return values.reduce((sum, val) => sum + val, 0);
+      case AggregationType.Average:
+        return values.length > 0 ? values.reduce((sum, val) => sum + val, 0) / values.length : 0;
+      case AggregationType.Count:
+        return values.length;
+      case AggregationType.Min:
+        return values.length > 0 ? Math.min(...values) : 0;
+      case AggregationType.Max:
+        return values.length > 0 ? Math.max(...values) : 0;
+      default:
+        return 0;
     }
-  });
+  }
+
+  /**
+   * Get aggregation value for display in footer
+   * Hybrid approach: Uses customValues if provided, otherwise calculates aggregations
+   */
+  static getAggregationValue(data: any[], columnKey: string, config: TableConfig): string {
+    if (!config.footer?.enabled) return '';
+
+    // Priority 1: Use custom values if provided (for complex cases like currency conversion)
+    if (config.footer.customValues && config.footer.customValues[columnKey]) {
+      return config.footer.customValues[columnKey];
+    }
+
+    // Priority 2: Calculate simple aggregations
+    if (!config.footer.aggregations) return '';
+
+    const aggregation = config.footer.aggregations.find(agg => agg.columnKey === columnKey);
+    if (!aggregation) return '';
+
+    const value = this.calculateAggregation(data, columnKey, aggregation.type);
+    return aggregation.formatFn ? aggregation.formatFn(value) : value.toString();
+  }
+
+  /**
+   * Get tooltip text for footer cell
+   */
+  static getAggregationTooltip(columnKey: string, config: TableConfig): string | undefined {
+    if (!config.footer?.enabled || !config.footer.customTooltips) return undefined;
+    return config.footer.customTooltips[columnKey];
+  }
+}
+```
+
+### TableUtils
+
+```typescript
+export class TableUtils {
+  /**
+   * Check if index is even
+   */
+  static isEven(index: number): boolean {
+    return index % 2 === 0;
+  }
+
+  /**
+   * Check if index is odd
+   */
+  static isOdd(index: number): boolean {
+    return !this.isEven(index);
+  }
+
+  /**
+   * Get minimum number of rows for table display
+   * Returns actual length if less than 10, otherwise returns 10
+   */
+  static getMinRows(dataLength: number): number {
+    return Math.min(dataLength || 0, 10);
+  }
+
+  /**
+   * Track by function for ngFor optimization
+   */
+  static trackById(index: number, item: any): any {
+    return item.id ?? index;
+  }
+
+  /**
+   * Set default sort direction for sortable columns
+   */
+  static setSortDirection(columns: TableColumnConfig[]): void {
+    columns.forEach(column => {
+      if (column?.sortable && !column.sortDirection) {
+        column.sortDirection = 'asc';
+      }
+    });
+  }
 }
 ```
 
@@ -156,7 +279,7 @@ private setSortDirection(columns: TableColumnConfig[]): void {
 ```html
 <!-- Root Container -->
 <div class="ag-grid-wrapper">
-  
+
   <!-- Optional Custom Toolbar -->
   <div class="ag-header-toolbar" *ngIf="customToolbarTpl">
     <div class="ag-header-buttons">
@@ -167,12 +290,12 @@ private setSortDirection(columns: TableColumnConfig[]): void {
   <!-- Table Container -->
   <div class="ag-grid-table-container">
     <table class="ag-grid-table">
-      
+
       <!-- Column Group Definitions -->
       <colgroup>
         <col *ngIf="showCheckboxes" style="width:3rem">
-        <col *ngFor="let col of columns" 
-             [style.width]="col.width" 
+        <col *ngFor="let col of columns"
+             [style.width]="col.width"
              [style.min-width]="col.minWidth">
         <col *ngIf="showActions" style="width:45px">
       </colgroup>
@@ -194,6 +317,24 @@ private setSortDirection(columns: TableColumnConfig[]): void {
           </td>
         </tr>
       </tbody>
+
+      <!-- Table Footer (NEW) -->
+      <tfoot *ngIf="config.footer?.enabled" class="ag-footer">
+        <tr class="ag-footer-row">
+          <td *ngFor="let col of columns; let colIndex = index"
+              [ngClass]="[col.class||'', 'ag-footer-cell']">
+            <div class="ag-footer-cell-content"
+                 [title]="getAggregationTooltip(col.key, config) || ''">
+              <ng-container *ngIf="colIndex === 0">
+                <strong>{{ config.footer.label || 'Total' }}</strong>
+              </ng-container>
+              <ng-container *ngIf="colIndex > 0">
+                <strong>{{ getAggregationValue(data, col.key, config) }}</strong>
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 
@@ -536,21 +677,51 @@ export function migrateTableConfig(oldConfig: any): TableConfig {
 }
 ```
 
+### Footer Styling (CSS)
+```scss
+.ag-footer {
+  background-color: var(--ag-header-background-color);
+  font-weight: 500;
+  border-top: 2px solid var(--ag-row-border-color);
+
+  .ag-footer-row {
+    height: var(--ag-header-height);
+  }
+
+  .ag-footer-cell {
+    padding: 0.5rem 0.5rem;
+    border-bottom: var(--ag-cell-horizontal-border);
+    vertical-align: middle;
+  }
+
+  .ag-footer-cell-content {
+    // Tooltip indicator
+    &[title]:not([title=""]) {
+      cursor: help;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-decoration-color: var(--os-color-border);
+      text-underline-offset: 2px;
+    }
+  }
+}
+```
+
 ### Performance Monitoring
 ```typescript
 // Performance monitoring decorator
 export function MonitorTablePerformance(target: any, propertyName: string, descriptor: PropertyDescriptor) {
   const method = descriptor.value;
-  
+
   descriptor.value = function (...args: any[]) {
     const start = performance.now();
     const result = method.apply(this, args);
     const end = performance.now();
-    
+
     console.log(`${propertyName} took ${end - start} milliseconds`);
     return result;
   };
-  
+
   return descriptor;
 }
 
@@ -561,4 +732,33 @@ export class GenericTableComponent {
     // Method implementation
   }
 }
-``` 
+```
+
+## Recent Refactoring (2025-11-13)
+
+### Code Organization
+The component was refactored to improve maintainability:
+
+1. **Extracted Helpers**:
+   - `TableFooterAggregationHelper` - All footer calculation logic
+   - `TableUtils` - Utility functions (trackBy, sorting, row styling)
+
+2. **Type Definitions**:
+   - `TableRow` - Base interface for table data
+   - `PageChangeEvent` - Pagination event interface
+   - `SortChangeEvent` - Sorting event interface
+
+3. **Generic Type Support**:
+   - Component is now `GenericTableComponent<T extends TableRow>`
+   - All inputs/outputs properly typed with generic `T`
+   - Improved type safety throughout
+
+4. **Section Organization**:
+   - Clear comments separating: Inputs, Outputs, State, Lifecycle, View Model, Pagination, Selection, Sorting, Row Actions, Footer Aggregations, Utilities
+
+### Benefits
+- **Testability**: Helper classes use static methods, easy to unit test
+- **Reusability**: Footer logic can be used elsewhere
+- **Type Safety**: Generic type parameter ensures type consistency
+- **Maintainability**: Clear separation of concerns
+- **Performance**: No change in performance, same O(1) operations for selection 

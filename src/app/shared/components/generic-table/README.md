@@ -1,67 +1,97 @@
-# Компонент Generic Table в стиле AG-Grid
+# Generic Table Component (AG-Grid Style)
 
-Компонент `generic-table` был обновлен для визуального сходства с AG-Grid, сохраняя при этом простоту использования оригинального компонента.
+Reusable Angular table component with AG-Grid visual styling, reactive data handling, and advanced features.
 
-## Особенности
+## Features
 
-- Визуальный стиль, идентичный AG-Grid
-- Структура DOM, аналогичная AG-Grid
-- Поддержка сортировки колонок
-- Чередующиеся цвета строк
-- Выделение выбранной строки
-- Подсветка при наведении на строку
-- Панель инструментов с кнопкой добавления
-- Адаптивный дизайн для мобильных устройств
-- Поддержка RTL
-- Индикатор загрузки
-- Горизонтальный скролл для таблиц с большим количеством колонок
-- Настраиваемая ширина колонок
+- **AG-Grid Visual Style**: Identical look and feel to AG-Grid
+- **Generic TypeScript**: Type-safe with `GenericTableComponent<T extends TableRow>`
+- **Column Sorting**: Multi-column sorting with visual indicators
+- **Footer Aggregations**: Sum, average, count, min, max with currency conversion support
+- **Custom Tooltips**: Detailed breakdowns on footer values
+- **Row Selection**: Single/multiple selection with checkboxes
+- **Pagination**: Server-side and client-side support
+- **Custom Templates**: Cell templates and toolbar customization
+- **Responsive Design**: Mobile-friendly with horizontal scroll
+- **RTL Support**: Right-to-left language support
+- **Loading States**: Built-in spinner and empty state handling
+- **OnPush Change Detection**: Optimized performance
 
-## Использование
+## Architecture
+
+### Component Structure
+```
+generic-table/
+├── generic-table.component.ts     # Main component with generic type support
+├── generic-table.component.html   # Template with AG-Grid structure
+├── generic-table.component.scss   # Styles (footer-specific)
+├── helpers/
+│   ├── table-footer-aggregation.helper.ts  # Footer calculations
+│   └── table.utils.ts                      # Utility functions
+└── models/
+    └── table-row.interface.ts              # Type definitions
+```
+
+## Basic Usage
 
 ```typescript
-// В вашем компоненте
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { TableConfig, TemplateType } from '../../model/table-column-config.interface';
+import { TableConfig, AggregationType } from '@shared/models';
+
+interface MyData {
+  id: string;
+  name: string;
+  price: number;
+  currency: string;
+  createdAt: Date;
+}
 
 @Component({
-  selector: 'your-component',
-  templateUrl: './your-component.component.html',
+  selector: 'my-table',
+  template: `
+    <generic-table
+      [config$]="tableConfig$"
+      [data$]="tableData$"
+      [isRowClickable]="true"
+      (sortChange)="onSort($event)"
+      (pageChange)="onPageChange($event)"
+      (onRowClickEvent)="onRowClick($event)">
+    </generic-table>
+  `
 })
-export class YourComponent implements OnInit {
-  public tableConfig$ = new BehaviorSubject<TableConfig>({
+export class MyTableComponent {
+  tableConfig$ = new BehaviorSubject<TableConfig>({
     columns: [
       {
         key: 'id',
         header: 'ID',
         visible: true,
-        sortable: true, // Включить сортировку
-        width: '80px', // Фиксированная ширина
-        minWidth: '50px' // Минимальная ширина
+        sortable: true,
+        width: '80px'
       },
       {
         key: 'name',
         header: 'Name',
         visible: true,
-        templateType: TemplateType.Text,
         sortable: true,
-        width: '200px'
+        templateType: TemplateType.Text
+      },
+      {
+        key: 'price',
+        header: 'Price',
+        visible: true,
+        sortable: true,
+        width: '120px'
       },
       {
         key: 'createdAt',
         header: 'Created',
         visible: true,
         templateType: TemplateType.Date,
-        dateFormat: 'dd/MM/yyyy',
-        sortable: true,
-        minWidth: '120px'
+        dateFormat: 'dd/MM/yyyy'
       }
     ],
-    translatePrefix: 'your.translation.prefix.',
-    showCheckboxes: true,
-    showEditButton: true,
-    showAddButton: true, // Показать кнопку добавления
     pagination: {
       enabled: true,
       serverSide: true,
@@ -69,108 +99,165 @@ export class YourComponent implements OnInit {
     }
   });
 
-  public tableData$ = new BehaviorSubject<any[]>([
-    { id: 1, name: 'Item 1', createdAt: new Date() },
-    { id: 2, name: 'Item 2', createdAt: new Date() },
-    // ...
+  tableData$ = new BehaviorSubject<MyData[]>([
+    { id: '1', name: 'Item 1', price: 100, currency: 'USD', createdAt: new Date() },
+    { id: '2', name: 'Item 2', price: 200, currency: 'EUR', createdAt: new Date() }
   ]);
 
-  onSort(event: any): void {
-    console.log('Sort event:', event);
-    // Обработка сортировки
+  onSort(event: SortChangeEvent): void {
+    console.log('Sort:', event);
   }
 
-  onPageChange(event: any): void {
-    console.log('Page change:', event);
-    // Обработка смены страницы
+  onPageChange(event: PageChangeEvent): void {
+    console.log('Page:', event);
   }
 
-  onRowClick(item: any): void {
-    console.log('Row clicked:', item);
-    // Обработка клика на строку
-  }
-  
-  onAddButtonClick(): void {
-    console.log('Add button clicked');
-    // Обработка нажатия кнопки добавления
+  onRowClick(item: MyData): void {
+    console.log('Clicked:', item);
   }
 }
 ```
 
+## Footer Aggregations
+
+### Simple Aggregations
+
+```typescript
+tableConfig$ = new BehaviorSubject<TableConfig>({
+  columns: [
+    { key: 'quantity', header: 'Quantity', visible: true },
+    { key: 'price', header: 'Price', visible: true }
+  ],
+  footer: {
+    enabled: true,
+    label: 'Total',
+    aggregations: [
+      {
+        columnKey: 'quantity',
+        type: AggregationType.Sum
+      },
+      {
+        columnKey: 'price',
+        type: AggregationType.Sum,
+        formatFn: (value) => `$${value.toFixed(2)}`
+      }
+    ]
+  }
+});
+```
+
+### Advanced: Currency Conversion with Tooltips
+
+For complex scenarios like multi-currency totals, use `customValues` and `customTooltips`:
+
+```typescript
+// In your component
+private updateFooterValues(data: MyData[]): void {
+  const result = this.calculateWithCurrencyConversion(data);
+
+  const currentConfig = this.tableConfig$.value;
+  if (currentConfig.footer) {
+    currentConfig.footer.customValues = result.values;
+    currentConfig.footer.customTooltips = result.tooltips;
+    this.tableConfig$.next({...currentConfig});
+  }
+}
+
+private calculateWithCurrencyConversion(data: MyData[]): {
+  values: Record<string, string>,
+  tooltips?: Record<string, string>
+} {
+  // Group by currency
+  const priceByCurrency: Record<string, number> = {};
+  let totalInBaseCurrency = 0;
+
+  data.forEach(item => {
+    const price = parseFloat(item.price) || 0;
+    const currency = item.currency;
+
+    priceByCurrency[currency] = (priceByCurrency[currency] || 0) + price;
+
+    // Convert to EUR
+    const converted = CurrencyPriceCalculatorUtils.convertCurrency(
+      price, currency, 'EUR', exchangeRates
+    );
+    totalInBaseCurrency += converted.convertedAmount;
+  });
+
+  return {
+    values: {
+      price: `€${totalInBaseCurrency.toFixed(2)}`
+    },
+    tooltips: {
+      price: Object.entries(priceByCurrency)
+        .map(([curr, val]) => `${val.toFixed(2)} ${curr}`)
+        .join(' + ')
+    }
+  };
+}
+```
+
+See `bundle-purchases.strategy.ts` for real-world example.
+
+## Custom Toolbar
+
 ```html
-<!-- В вашем шаблоне -->
 <generic-table
   [config$]="tableConfig$"
-  [data$]="tableData$"
-  [isRowClickable]="true"
-  (sortChange)="onSort($event)"
-  (pageChange)="onPageChange($event)"
-  (onRowClickEvent)="onRowClick($event)"
-  (addButtonClick)="onAddButtonClick()">
-  <!-- Опционально: кастомный контент для панели инструментов -->
+  [data$]="tableData$">
   <ng-container custom-toolbar>
-    <button class="ag-grid-button">Дополнительная кнопка</button>
+    <button class="ag-grid-button" (click)="onExport()">
+      Export
+    </button>
   </ng-container>
 </generic-table>
 ```
 
-## Настройка ширины колонок
+## Generic Type Support
 
-Для настройки ширины колонок используйте свойства `width` и `minWidth` в конфигурации колонки:
+Component is fully generic for type safety:
 
 ```typescript
-{
-  key: 'name',
-  header: 'Name',
-  visible: true,
-  width: '200px', // Установка фиксированной ширины
-  minWidth: '100px' // Установка минимальной ширины
+export class GenericTableComponent<T extends TableRow = TableRow> {
+  @Input() data$!: Observable<T[]>;
+  @Output() selectedItemsChange = new EventEmitter<T[]>();
+  @Output() onRowClickEvent = new EventEmitter<T>();
 }
 ```
 
-Значения могут быть указаны в пикселях (`px`), процентах (`%`) или других CSS единицах измерения.
-
-Если колонок много, таблица будет иметь горизонтальный скролл.
-
-## Настройка сортировки
-
-Для включения сортировки колонки, добавьте `sortable: true` в конфигурацию колонки. Компонент будет эмитить событие `sortChange` при клике на заголовок колонки, которое можно обработать в родительском компоненте.
-
-## Состояние загрузки
-
-Компонент поддерживает индикатор загрузки, который можно активировать, установив свойство `loading`:
-
+Usage:
 ```typescript
-@ViewChild(GenericTableComponent) table: GenericTableComponent;
-
-loadData() {
-  this.table.loading = true;
-  this.dataService.fetchData().subscribe(
-    data => {
-      this.tableData$.next(data);
-      this.table.loading = false;
-    }
-  );
-}
+@ViewChild(GenericTableComponent) table!: GenericTableComponent<MyData>;
 ```
 
-## Стилизация
+## Helper Classes
 
-Таблица использует CSS-переменные в формате AG-Grid. Вы можете настроить внешний вид таблицы, изменяя CSS переменные в файле `_ag-grid-styles.scss` или переопределяя их в ваших компонентах.
+### TableUtils
+Utility functions used internally:
+- `trackById()` - TrackBy function for ngFor
+- `isEven()`, `isOdd()` - Row styling helpers
+- `getMinRows()` - Calculate minimum rows to display
+- `setSortDirection()` - Initialize sort directions
 
-Основные переменные:
+### TableFooterAggregationHelper
+Footer calculation logic:
+- `calculateAggregation()` - Perform aggregation calculation
+- `getAggregationValue()` - Get formatted aggregation value
+- `getAggregationTooltip()` - Get tooltip text
+
+## CSS Variables
 
 ```scss
 :root {
   --ag-header-height: 42px;
   --ag-row-height: 36px;
-  --ag-header-foreground-color: rgba(0, 0, 0, 0.7);
   --ag-header-background-color: #f8f8f8;
   --ag-odd-row-background-color: #f9f9f9;
   --ag-row-border-color: #e2e2e2;
-  --ag-cell-horizontal-border: #e2e2e2;
   --ag-selected-row-background-color: rgba(var(--os-color-primary-rgb), 0.1);
   --ag-row-hover-color: rgba(var(--os-color-primary-rgb), 0.05);
-  --ag-row-even-background-color: #ffffff;
+
+  // Footer
+  --os-color-border: #e2e2e2;
 }
 ``` 

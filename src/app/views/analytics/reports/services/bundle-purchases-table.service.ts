@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TableConfig, TableConfigAbstractService, TemplateType } from '@shared';
 import { BundlePurchase } from '../models/bundle-purchase.model';
+import { BundlePurchasesStrategy } from '../strategies/bundle-purchases.strategy';
 
 /**
  * Table configuration service for Bundle Purchases Report
@@ -11,6 +12,8 @@ import { BundlePurchase } from '../models/bundle-purchase.model';
   providedIn: 'root'
 })
 export class BundlePurchasesTableService extends TableConfigAbstractService<BundlePurchase> {
+  private readonly strategy = inject(BundlePurchasesStrategy);
+
   public originalDataSubject = new BehaviorSubject<BundlePurchase[]>([]);
   public dataList$: Observable<BundlePurchase[]> = this.originalDataSubject.asObservable();
 
@@ -19,6 +22,7 @@ export class BundlePurchasesTableService extends TableConfigAbstractService<Bund
     showCheckboxes: false,
     showEditButton: false,
     showMenu: false,
+    footer: this.strategy.getFooterConfig?.() || undefined,
     columns: [
       {
         visible: true,

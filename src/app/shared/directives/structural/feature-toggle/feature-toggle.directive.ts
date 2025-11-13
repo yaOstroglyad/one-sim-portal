@@ -1,6 +1,6 @@
 import { Directive, Input, TemplateRef, ViewContainerRef, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { isToggleActive, isToggleActive$ } from '../services/feature-toggle';
+import { isToggleActive, isToggleActive$ } from '@shared/services/feature-toggle';
 
 /**
  * Structural directive for conditionally displaying elements based on feature toggles

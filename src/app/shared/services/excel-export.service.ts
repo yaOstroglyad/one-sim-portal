@@ -9,7 +9,7 @@ import * as XLSX from 'xlsx';
 })
 export class ExcelExportService {
   /**
-   * Export data to Excel file
+   * Export data to Excel file with proper number formatting
    * @param data Array of objects to export
    * @param fileName Name of the file (without extension)
    * @param sheetName Name of the worksheet
@@ -20,11 +20,17 @@ export class ExcelExportService {
       return;
     }
 
+    // Convert data to ensure numbers are not strings
+    const processedData = this.convertStringNumbersToNumbers(data);
+
     // Create worksheet from data
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(processedData);
+
+    // Apply number format to numeric cells
+    this.applyNumberFormats(worksheet, processedData);
 
     // Auto-size columns based on content
-    const columnWidths = this.calculateColumnWidths(data);
+    const columnWidths = this.calculateColumnWidths(processedData);
     worksheet['!cols'] = columnWidths;
 
     // Create workbook and add worksheet
@@ -36,6 +42,85 @@ export class ExcelExportService {
     // Generate file and trigger download
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(excelBuffer, fileName);
+  }
+
+  /**
+   * Convert string numbers to actual numbers for proper Excel formatting
+   * Detects numeric strings and converts them to numbers
+   */
+  private convertStringNumbersToNumbers(data: any[]): any[] {
+    return data.map(row => {
+      const newRow: any = {};
+
+      for (const [key, value] of Object.entries(row)) {
+        // Skip null/undefined
+        if (value === null || value === undefined) {
+          newRow[key] = value;
+          continue;
+        }
+
+        // If it's a string that looks like a number, convert it
+        if (typeof value === 'string') {
+          const trimmed = value.trim();
+
+          // Check if it's a numeric string (including decimals and negatives)
+          // But exclude strings that start with 0 (like phone numbers, IDs)
+          if (trimmed && !isNaN(Number(trimmed)) && trimmed !== '' && !trimmed.startsWith('0')) {
+            const numValue = Number(trimmed);
+            // Only convert if it's a valid finite number
+            if (isFinite(numValue)) {
+              newRow[key] = numValue;
+              continue;
+            }
+          }
+        }
+
+        // Keep original value
+        newRow[key] = value;
+      }
+
+      return newRow;
+    });
+  }
+
+  /**
+   * Apply number formats to numeric cells
+   * Sets Excel cell format for proper number display
+   */
+  private applyNumberFormats(worksheet: XLSX.WorkSheet, data: any[]): void {
+    if (!data || data.length === 0) return;
+
+    const headers = Object.keys(data[0]);
+
+    // Start from row 2 (row 1 is headers)
+    for (let rowIndex = 0; rowIndex < data.length; rowIndex++) {
+      const row = data[rowIndex];
+
+      headers.forEach((header, colIndex) => {
+        const value = row[header];
+
+        // Skip non-numeric values
+        if (typeof value !== 'number' || !isFinite(value)) {
+          return;
+        }
+
+        // Calculate cell reference (A2, B2, etc.)
+        const cellRef = XLSX.utils.encode_cell({ r: rowIndex + 1, c: colIndex });
+        const cell = worksheet[cellRef];
+
+        if (cell) {
+          // Set number format
+          // Check if it's a decimal number
+          if (value % 1 !== 0) {
+            // Decimal number - use 2 decimal places
+            cell.z = '0.00';
+          } else {
+            // Integer - no decimal places
+            cell.z = '0';
+          }
+        }
+      });
+    }
   }
 
   /**

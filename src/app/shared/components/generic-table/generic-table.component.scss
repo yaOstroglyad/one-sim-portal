@@ -1,0 +1,28 @@
+// Footer styling
+.ag-footer {
+  .ag-footer-row {
+    background-color: var(--os-color-background-secondary);
+    border-top: 2px solid var(--os-color-border);
+  }
+
+  .ag-footer-cell {
+    padding: 0.5rem 0.5rem;
+    font-weight: 600;
+    color: var(--os-color-text-primary);
+  }
+
+  .ag-footer-cell-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    // Show pointer cursor when tooltip is present
+    &[title]:not([title=""]) {
+      cursor: help;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-decoration-color: var(--os-color-border);
+      text-underline-offset: 2px;
+    }
+  }
+}

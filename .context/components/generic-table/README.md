@@ -7,17 +7,21 @@ The `generic-table` component is a powerful, reusable Angular table component de
 ## Component Architecture
 
 ### Core Files
-- `generic-table.component.ts` - Main component logic (129 lines)
-- `generic-table.component.html` - Template with AG-Grid-like structure (176 lines)
-- `generic-table.component.scss` - Styling (empty, uses global AG-Grid styles)
+- `generic-table.component.ts` - Main component with generic type support (167 lines)
+- `generic-table.component.html` - Template with AG-Grid structure and footer support
+- `generic-table.component.scss` - Footer-specific styles
+- `helpers/table-footer-aggregation.helper.ts` - Footer calculations and aggregations
+- `helpers/table.utils.ts` - Utility functions (trackBy, sorting, etc.)
+- `models/table-row.interface.ts` - Type definitions (TableRow, PageChangeEvent, SortChangeEvent)
 - `table-config-abstract.service.ts` - Abstract service for table configuration
-- `generic-table.module.ts` - Angular module with dependencies
 
 ### Key Dependencies
-- CoreUI Angular (Table, Pagination, Card components)
-- Angular Translation (ngx-translate)
+- Angular 19.2.15 (standalone components, OnPush change detection)
+- CoreUI Angular (Table, Pagination directives)
+- Angular Translation (@ngx-translate/core)
 - Custom pipes (FormatTime, DisplayValueByKey)
 - Icon support (@coreui/icons-angular)
+- RxJS (combineLatest, Observable, BehaviorSubject)
 
 ## Features
 
@@ -34,10 +38,13 @@ The `generic-table` component is a powerful, reusable Angular table component de
 
 ### Table Features
 - **Column Configuration**: Highly configurable columns with visibility, width, and type settings
-- **Sorting**: Client-side column sorting with visual indicators
-- **Selection**: Row selection with checkboxes (single/multiple)
-- **Pagination**: Server-side and client-side pagination support
-- **Custom Templates**: Support for custom cell templates and toolbar content
+- **Sorting**: Client-side and server-side column sorting with visual indicators
+- **Selection**: Row selection with checkboxes (single/multiple) using Set for O(1) operations
+- **Pagination**: Server-side and client-side pagination support with page size configuration
+- **Custom Templates**: Support for custom cell templates and toolbar content projection
+- **Footer Aggregations**: Sum, average, count, min, max with custom formatting
+- **Advanced Footer**: Currency conversion with multi-currency tooltips
+- **Generic Types**: Full TypeScript type safety with `GenericTableComponent<T extends TableRow>`
 
 ### Interactive Elements
 - **Row Actions**: Edit buttons and custom menus
@@ -49,16 +56,31 @@ The `generic-table` component is a powerful, reusable Angular table component de
 ### Component Interface
 
 ```typescript
-@Input() config$: Observable<TableConfig>        // Table configuration
-@Input() data$: Observable<any[]>               // Table data
-@Input() menu: TemplateRef<any>                 // Custom menu template
-@Input() isRowClickable: boolean = false        // Enable row clicking
+export class GenericTableComponent<T extends TableRow = TableRow> implements OnChanges {
+  // Inputs
+  @Input() config$!: Observable<TableConfig>;
+  @Input() data$!: Observable<T[]>;
+  @Input() menu!: TemplateRef<any>;
+  @Input() isRowClickable = false;
 
-@Output() selectedItemsChange: EventEmitter<any[]>          // Selection changes
-@Output() onRowClickEvent: EventEmitter<any>                // Row click events
-@Output() toggleAction: EventEmitter<any>                   // Edit actions
-@Output() pageChange: EventEmitter<PageChangeEvent>         // Pagination
-@Output() sortChange: EventEmitter<SortChangeEvent>         // Sorting
+  // Content Projection
+  @ContentChild('[custom-toolbar]', { read: TemplateRef })
+  public customToolbarTpl?: TemplateRef<any>;
+
+  // Outputs
+  @Output() selectedItemsChange = new EventEmitter<T[]>();
+  @Output() onRowClickEvent = new EventEmitter<T>();
+  @Output() toggleAction = new EventEmitter<T>();
+  @Output() pageChange = new EventEmitter<PageChangeEvent>();
+  @Output() sortChange = new EventEmitter<SortChangeEvent>();
+
+  // State
+  public viewModel$!: Observable<{ config: TableConfig; data: T[] }>;
+  public currentPage = 0;
+  public pageSize = 15;
+  public totalPages = 0;
+  public selectedItems = new Set<T>();
+}
 ```
 
 ### Column Configuration
@@ -66,17 +88,19 @@ The `generic-table` component is a powerful, reusable Angular table component de
 The component uses a `TableConfig` interface that defines:
 - Column visibility and headers
 - Data types (text, date, time, custom)
-- Sorting capabilities
+- Sorting capabilities (sortable, sortDirection)
 - Width and minimum width settings
 - Custom templates
 - Translation prefixes
+- Footer configuration (aggregations, customValues, customTooltips)
 
 ### State Management
 
-- **Selection State**: Uses Set<any> for efficient selection tracking
-- **Pagination State**: Tracks current page, page size, and total pages
-- **Sort State**: Maintains sort direction per column
-- **View Model**: Combines configuration and data using RxJS combineLatest
+- **Selection State**: Uses `Set<T>` for O(1) add/delete/lookup operations
+- **Pagination State**: Tracks current page (default 0), page size (default 15), and total pages
+- **Sort State**: Maintains sort direction per column ('asc' | 'desc' | null)
+- **View Model**: Combines configuration and data using RxJS `combineLatest`
+- **Footer State**: Dynamic updates via config subject for custom values and tooltips
 
 ## Usage Patterns
 
@@ -140,20 +164,43 @@ Uses CSS custom properties for theming:
 --ag-selected-row-background-color: rgba(primary, 0.1)
 ```
 
+## Recent Updates (2025-11-13)
+
+### Refactoring
+- Extracted footer logic to `TableFooterAggregationHelper`
+- Extracted utilities to `TableUtils`
+- Created type definitions in `table-row.interface.ts`
+- Made component fully generic: `GenericTableComponent<T extends TableRow>`
+- Improved code organization with clear section comments
+
+### Footer Aggregations
+- Added `AggregationType` enum (Sum, Average, Count, Min, Max)
+- Support for simple aggregations via config
+- Hybrid approach: `customValues` for complex calculations (like currency conversion)
+- Tooltip support via `customTooltips` for detailed breakdowns
+- Visual indicators (dotted underline, help cursor) for cells with tooltips
+
+### Type Safety Improvements
+- All event emitters now use proper generic types
+- Created `PageChangeEvent` and `SortChangeEvent` interfaces
+- Table data properly typed as `Observable<T[]>`
+- Selection state uses `Set<T>` instead of `Set<any>`
+
 ## Future Enhancements
 
 Potential improvements identified:
 - Virtual scrolling for large datasets
 - Column resizing functionality
-- Advanced filtering capabilities
-- Export functionality
-- Cell editing capabilities
+- Advanced filtering capabilities (search, multi-filter)
+- Cell editing capabilities (inline editing)
 - Group headers support
+- Column pinning (freeze columns)
 
 ## Maintenance Notes
 
-- Component follows Angular best practices
-- Comprehensive type safety with TypeScript
-- Reactive programming patterns throughout
-- Clean separation of concerns
-- Extensible architecture for future features 
+- Component follows Angular 19 best practices (standalone, inject(), OnPush)
+- Comprehensive type safety with generic TypeScript
+- Reactive programming patterns throughout (Observables, BehaviorSubject)
+- Clean separation of concerns (helpers, models, component)
+- Extensible architecture for future features
+- Helper classes are stateless with static methods for testability 

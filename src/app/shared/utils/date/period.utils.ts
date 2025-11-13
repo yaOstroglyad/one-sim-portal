@@ -1,6 +1,28 @@
 import { PeriodPreset, PeriodPresets, PeriodDateRange } from '@models';
 
 /**
+ * Create Date in UTC with specified components
+ * This ensures consistent date handling across timezones
+ */
+function createUTCDate(year: number, month: number, day: number, hours = 0, minutes = 0, seconds = 0, ms = 0): Date {
+  return new Date(Date.UTC(year, month, day, hours, minutes, seconds, ms));
+}
+
+/**
+ * Get start of day in UTC for a given date
+ */
+function getUTCStartOfDay(date: Date): Date {
+  return createUTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0);
+}
+
+/**
+ * Get end of day in UTC for a given date
+ */
+function getUTCEndOfDay(date: Date): Date {
+  return createUTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 23, 59, 59, 999);
+}
+
+/**
  * Create PeriodDateRange from preset string
  *
  * @param preset - Period preset identifier
@@ -13,43 +35,44 @@ import { PeriodPreset, PeriodPresets, PeriodDateRange } from '@models';
  * ```
  */
 export function createPeriodFromPreset(preset: PeriodPreset | string): PeriodDateRange {
-  const endDate = new Date();
-  const startDate = new Date();
+  const now = new Date();
+  let startDate: Date;
+  let endDate: Date = now;
   let label = '';
 
   switch (preset) {
     case PeriodPresets.TODAY:
-      // Today: 00:00:00 to 23:59:59
-      startDate.setHours(0, 0, 0, 0);
-      endDate.setHours(23, 59, 59, 999);
+      // Today: 00:00:00 to 23:59:59 UTC
+      startDate = getUTCStartOfDay(now);
+      endDate = getUTCEndOfDay(now);
       label = 'Today';
       break;
 
     case PeriodPresets.LAST_7_DAYS:
-      // Last 7 days: 7 days ago 00:00:00 to now
-      startDate.setDate(startDate.getDate() - 7);
-      startDate.setHours(0, 0, 0, 0);
+      // Last 7 days: 7 days ago 00:00:00 UTC to now
+      const sevenDaysAgo = new Date(now);
+      sevenDaysAgo.setUTCDate(now.getUTCDate() - 7);
+      startDate = getUTCStartOfDay(sevenDaysAgo);
       label = 'Last 7 Days';
       break;
 
     case PeriodPresets.CURRENT_MONTH:
-      // Current Month: from 1st of current month 00:00:00 to now
-      startDate.setDate(1);
-      startDate.setHours(0, 0, 0, 0);
+      // Current Month: from 1st of current month 00:00:00 UTC to now
+      startDate = createUTCDate(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0);
       label = 'Current Month';
       break;
 
     case PeriodPresets.LAST_3_MONTHS:
-      // Last 3 months: 3 months ago 00:00:00 to now
-      startDate.setMonth(startDate.getMonth() - 3);
-      startDate.setHours(0, 0, 0, 0);
+      // Last 3 months: 3 months ago 00:00:00 UTC to now
+      const threeMonthsAgo = new Date(now);
+      threeMonthsAgo.setUTCMonth(now.getUTCMonth() - 3);
+      startDate = getUTCStartOfDay(threeMonthsAgo);
       label = 'Last 3 Months';
       break;
 
     default:
       // Default to current month if unknown preset
-      startDate.setDate(1);
-      startDate.setHours(0, 0, 0, 0);
+      startDate = createUTCDate(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0);
       label = 'Current Month';
   }
 
