@@ -16,6 +16,8 @@
       type="date"
       [ngModel]="customDateRange().start"
       (ngModelChange)="onStartDateChange($event)"
+      [min]="minDate"
+      [max]="maxDate"
       placeholder="{{ 'common.periods.startDate' | translate }}"
       class="date-input">
     <span class="date-separator">-</span>
@@ -23,6 +25,8 @@
       type="date"
       [ngModel]="customDateRange().end"
       (ngModelChange)="onEndDateChange($event)"
+      [min]="minDate"
+      [max]="maxDate"
       placeholder="{{ 'common.periods.endDate' | translate }}"
       class="date-input">
   </div>

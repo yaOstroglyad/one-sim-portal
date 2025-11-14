@@ -17,6 +17,7 @@
       <app-period-selector
         [selectedPeriod]="selectedPeriod()"
         [presets]="periodPresets"
+        [minDate]="'2025-08-01'"
         (periodChange)="onPeriodChange($event)">
       </app-period-selector>
 

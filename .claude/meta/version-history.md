@@ -3,6 +3,87 @@
 > **Purpose:** Track all significant changes to the documentation system
 > **Maintenance:** Update when rules change, structure changes, or new files added
 
+## 2025-11-14 - Reports Footer Aggregations & Period Selector Enhancements
+
+**Type:** Feature Enhancement
+
+**Summary:**
+- Implemented footer aggregations for Bundle Purchases and Bundle Leftovers reports
+- Refactored Generic Table component with helper classes and generic types
+- Added date range restrictions to Period Selector component
+- Fixed TypeScript errors in tariff-offer-list component
+
+**Components Modified:**
+1. **Generic Table Component** (`src/app/shared/components/generic-table/`)
+   - Created `helpers/table-footer-aggregation.helper.ts` - Footer calculation logic
+   - Created `helpers/table.utils.ts` - Utility functions (trackBy, sorting, row styling)
+   - Created `models/table-row.interface.ts` - Type definitions (TableRow, PageChangeEvent, SortChangeEvent)
+   - Refactored `generic-table.component.ts` - Generic type support `<T extends TableRow>`
+   - Updated documentation in `.context/components/generic-table/`
+
+2. **Reports Feature** (`src/app/views/analytics/reports/`)
+   - Updated `reports.component.ts` - Conditional footer visibility based on role and account selection
+   - Updated `strategies/bundle-purchases.strategy.ts` - Calculate totals in original currency, exclude REFUNDED
+   - Updated `strategies/bundle-leftovers.strategy.ts` - Calculate totals in original currency, exclude REFUNDED
+   - Removed currency conversion logic (no longer converting to EUR)
+
+3. **Period Selector Component** (`src/app/shared/components/period-selector/`)
+   - Added `@Input() minDate?: string` - Minimum selectable date for custom picker
+   - Added `@Input() maxDate?: string` - Maximum selectable date for custom picker
+   - Updated template with `[min]` and `[max]` attributes on date inputs
+   - Applied `minDate="2025-08-01"` in Reports and Dashboard
+
+**Key Changes:**
+- ✅ Footer shows totals only when single account selected (admin) or always (non-admin)
+- ✅ Footer displays amounts in original currency (USD, EUR, GBP, etc.) without conversion
+- ✅ REFUNDED transactions excluded from footer calculations
+- ✅ Custom date picker in Reports/Dashboard cannot select dates before 2025-08-01
+- ✅ Generic Table now fully type-safe with generic parameter
+- ✅ Improved code organization and maintainability
+
+**Files Modified:**
+```
+src/app/shared/components/generic-table/
+  ├── generic-table.component.ts (refactored)
+  ├── helpers/table-footer-aggregation.helper.ts (created)
+  ├── helpers/table.utils.ts (created)
+  └── models/table-row.interface.ts (created)
+
+src/app/shared/components/period-selector/
+  ├── period-selector.component.ts (enhanced)
+  └── period-selector.component.html (updated)
+
+src/app/views/analytics/reports/
+  ├── reports.component.ts (updated footer logic)
+  ├── reports.component.html (added minDate)
+  ├── strategies/bundle-purchases.strategy.ts (simplified)
+  └── strategies/bundle-leftovers.strategy.ts (simplified)
+
+src/app/views/analytics/dashboard/
+  └── dashboard.component.html (added minDate)
+
+src/app/views/product-constructor/components/tariff-offers/
+  └── tariff-offer-list/tariff-offer-list.component.ts (fixed type error)
+
+.context/components/generic-table/
+  ├── README.md (updated)
+  └── technical-details.md (updated)
+```
+
+**Breaking Changes:** None
+- All changes are backward compatible
+- Generic Table maintains same API
+- Period Selector's minDate/maxDate are optional parameters
+
+**Benefits:**
+- 📊 Accurate financial reporting with original currency display
+- 🔒 Date restrictions prevent invalid report periods
+- 🎯 Type-safe table component with improved developer experience
+- 📈 Better code organization and maintainability
+- ⚡ Simplified footer logic (no currency conversion overhead)
+
+---
+
 ## 2025-11-15 - Major Restructuring: Modular Documentation System
 
 **Type:** Structure Change (Breaking)

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { formatDateForAPI, TableFooterConfig, ProductsDataService, CurrencyPriceCalculatorUtils } from '@shared';
+import { formatDateForAPI, TableFooterConfig, CurrencyPriceCalculatorUtils } from '@shared';
 import { BundlePurchase } from '../models/bundle-purchase.model';
 import { ReportStrategy, ReportLoadParams } from '../models/report-strategy.interface';
 import { BundlePurchasesDataService } from '../services/bundle-purchases-data.service';
@@ -16,8 +16,6 @@ import { formatDateForExcel } from '@shared/utils/data';
 })
 export class BundlePurchasesStrategy implements ReportStrategy<BundlePurchase> {
   private readonly dataService = inject(BundlePurchasesDataService);
-  private readonly productsDataService = inject(ProductsDataService);
-  private readonly baseCurrency = 'EUR'; // Base currency for reports
 
   /**
    * Load bundle purchases data from API
@@ -96,86 +94,60 @@ export class BundlePurchasesStrategy implements ReportStrategy<BundlePurchase> {
   }
 
   /**
-   * Calculate footer values with currency conversion and detailed breakdown
-   * Converts all amounts to base currency (EUR) for consistent totals
-   * Returns both converted totals and original currency breakdown for tooltips
+   * Calculate footer values in original currencies
    * Excludes REFUNDED items from calculations
+   * Since each account uses single currency, no conversion needed
    */
   calculateFooterValues(data: BundlePurchase[]): { values: Record<string, string>, tooltips?: Record<string, string> } {
     // Filter out REFUNDED items
     const activeData = data.filter(item => item.bundleStatus !== 'REFUNDED');
 
-    // Get exchange rates synchronously from cache (ProductsDataService uses cache)
-    let exchangeRates: Record<string, number> = {};
+    if (activeData.length === 0) {
+      return {
+        values: {
+          bundlePrice: '0.00',
+          bundleCost: '0.00'
+        }
+      };
+    }
 
-    this.productsDataService.getExchangeRates().subscribe(rates => {
-      exchangeRates = rates;
-    });
-
-    // Group and sum prices by original currency
-    const priceByCurrency: Record<string, number> = {};
-    let totalPriceInBaseCurrency = 0;
+    // Sum bundle prices in original currency
+    let totalPrice = 0;
+    let priceCurrency = '';
 
     activeData.forEach(item => {
       const price = parseFloat(item.bundlePrice) || 0;
-      const currency = item.priceCurrency;
+      totalPrice += price;
 
-      // Track original currency totals
-      priceByCurrency[currency] = (priceByCurrency[currency] || 0) + price;
-
-      // Convert to base currency
-      const conversion = CurrencyPriceCalculatorUtils.convertCurrency(
-        price,
-        currency,
-        this.baseCurrency,
-        exchangeRates
-      );
-
-      totalPriceInBaseCurrency += conversion.convertedAmount;
+      // Get currency from first item
+      if (!priceCurrency && item.priceCurrency) {
+        priceCurrency = item.priceCurrency;
+      }
     });
 
-    // Group and sum costs by original currency
-    const costByCurrency: Record<string, number> = {};
-    let totalCostInBaseCurrency = 0;
+    // Sum bundle costs in original currency
+    let totalCost = 0;
+    let costCurrency = '';
 
     activeData.forEach(item => {
       const cost = parseFloat(item.bundleCost) || 0;
-      const currency = item.costCurrency;
+      totalCost += cost;
 
-      // Track original currency totals
-      costByCurrency[currency] = (costByCurrency[currency] || 0) + cost;
-
-      // Convert to base currency
-      const conversion = CurrencyPriceCalculatorUtils.convertCurrency(
-        cost,
-        currency,
-        this.baseCurrency,
-        exchangeRates
-      );
-
-      totalCostInBaseCurrency += conversion.convertedAmount;
+      // Get currency from first item
+      if (!costCurrency && item.costCurrency) {
+        costCurrency = item.costCurrency;
+      }
     });
 
-    // Format totals in base currency
-    const formatTotal = (amount: number): string => {
-      return CurrencyPriceCalculatorUtils.formatPrice(amount, this.baseCurrency);
-    };
-
-    // Create breakdown tooltips
-    const createBreakdown = (totals: Record<string, number>): string => {
-      return Object.entries(totals)
-        .map(([currency, value]) => `${value.toFixed(2)} ${currency}`)
-        .join(' + ');
+    // Format with currency symbol
+    const formatWithCurrency = (amount: number, currency: string): string => {
+      return CurrencyPriceCalculatorUtils.formatPrice(amount, currency);
     };
 
     return {
       values: {
-        bundlePrice: formatTotal(totalPriceInBaseCurrency),
-        bundleCost: formatTotal(totalCostInBaseCurrency)
-      },
-      tooltips: {
-        bundlePrice: createBreakdown(priceByCurrency),
-        bundleCost: createBreakdown(costByCurrency)
+        bundlePrice: formatWithCurrency(totalPrice, priceCurrency),
+        bundleCost: formatWithCurrency(totalCost, costCurrency)
       }
     };
   }

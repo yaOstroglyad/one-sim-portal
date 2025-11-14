@@ -57,6 +57,18 @@ export class PeriodSelectorComponent {
   @Input() showCustomPicker: boolean = false;
 
   /**
+   * Minimum selectable date for custom picker (ISO string format: YYYY-MM-DD)
+   * @example '2025-08-01'
+   */
+  @Input() minDate?: string;
+
+  /**
+   * Maximum selectable date for custom picker (ISO string format: YYYY-MM-DD)
+   * @example '2025-12-31'
+   */
+  @Input() maxDate?: string;
+
+  /**
    * Emits when period changes
    * Returns PeriodDateRange with startDate and endDate
    */

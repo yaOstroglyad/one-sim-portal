@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { formatDateForAPI, TableFooterConfig, AggregationType, ProductsDataService, CurrencyPriceCalculatorUtils } from '@shared';
+import { formatDateForAPI, TableFooterConfig, CurrencyPriceCalculatorUtils } from '@shared';
 import { BundleLeftover } from '../models/bundle-leftover.model';
 import { ReportStrategy, ReportLoadParams } from '../models/report-strategy.interface';
 import { BundleLeftoversDataService } from '../services/bundle-leftovers-data.service';
@@ -16,8 +16,6 @@ import { formatDateForExcel } from '@shared/utils/data';
 })
 export class BundleLeftoversStrategy implements ReportStrategy<BundleLeftover> {
   private readonly dataService = inject(BundleLeftoversDataService);
-  private readonly productsDataService = inject(ProductsDataService);
-  private readonly baseCurrency = 'EUR'; // Base currency for reports
 
   /**
    * Load bundle leftovers data from API
@@ -96,86 +94,54 @@ export class BundleLeftoversStrategy implements ReportStrategy<BundleLeftover> {
   }
 
   /**
-   * Calculate footer values with currency conversion and detailed breakdown
-   * Converts all amounts to base currency (EUR) for consistent totals
-   * Returns both converted totals and original currency breakdown for tooltips
+   * Calculate footer values in original currencies
    * Excludes REFUNDED items from calculations
+   * Since each account uses single currency, no conversion needed
    */
   calculateFooterValues(data: BundleLeftover[]): { values: Record<string, string>, tooltips?: Record<string, string> } {
     // Filter out REFUNDED items
     const activeData = data.filter(item => item.bundleStatus !== 'REFUNDED');
 
-    // Get exchange rates synchronously from cache (ProductsDataService uses cache)
-    let exchangeRates: Record<string, number> = {};
+    if (activeData.length === 0) {
+      return {
+        values: {
+          bundlePrice: '0.00',
+          leftovers: '0.00'
+        }
+      };
+    }
 
-    this.productsDataService.getExchangeRates().subscribe(rates => {
-      exchangeRates = rates;
-    });
-
-    // Group and sum prices by original currency
-    const priceByCurrency: Record<string, number> = {};
-    let totalPriceInBaseCurrency = 0;
+    // Sum bundle prices in original currency
+    let totalPrice = 0;
+    let priceCurrency = '';
 
     activeData.forEach(item => {
       const price = parseFloat(item.bundlePrice) || 0;
-      const currency = item.priceCurrency;
+      totalPrice += price;
 
-      // Track original currency totals
-      priceByCurrency[currency] = (priceByCurrency[currency] || 0) + price;
-
-      // Convert to base currency
-      const conversion = CurrencyPriceCalculatorUtils.convertCurrency(
-        price,
-        currency,
-        this.baseCurrency,
-        exchangeRates
-      );
-
-      totalPriceInBaseCurrency += conversion.convertedAmount;
+      // Get currency from first item
+      if (!priceCurrency && item.priceCurrency) {
+        priceCurrency = item.priceCurrency;
+      }
     });
 
-    // Group and sum leftovers by original currency
-    const leftoversByCurrency: Record<string, number> = {};
-    let totalLeftoversInBaseCurrency = 0;
+    // Sum leftovers in original currency
+    let totalLeftovers = 0;
 
     activeData.forEach(item => {
       const leftovers = parseFloat(item.leftovers) || 0;
-      const currency = item.priceCurrency; // Leftovers use same currency as price
-
-      // Track original currency totals
-      leftoversByCurrency[currency] = (leftoversByCurrency[currency] || 0) + leftovers;
-
-      // Convert to base currency
-      const conversion = CurrencyPriceCalculatorUtils.convertCurrency(
-        leftovers,
-        currency,
-        this.baseCurrency,
-        exchangeRates
-      );
-
-      totalLeftoversInBaseCurrency += conversion.convertedAmount;
+      totalLeftovers += leftovers;
     });
 
-    // Format totals in base currency
-    const formatTotal = (amount: number): string => {
-      return CurrencyPriceCalculatorUtils.formatPrice(amount, this.baseCurrency);
-    };
-
-    // Create breakdown tooltips
-    const createBreakdown = (totals: Record<string, number>): string => {
-      return Object.entries(totals)
-        .map(([currency, value]) => `${value.toFixed(2)} ${currency}`)
-        .join(' + ');
+    // Format with currency symbol
+    const formatWithCurrency = (amount: number, currency: string): string => {
+      return CurrencyPriceCalculatorUtils.formatPrice(amount, currency);
     };
 
     return {
       values: {
-        bundlePrice: formatTotal(totalPriceInBaseCurrency),
-        leftovers: formatTotal(totalLeftoversInBaseCurrency)
-      },
-      tooltips: {
-        bundlePrice: createBreakdown(priceByCurrency),
-        leftovers: createBreakdown(leftoversByCurrency)
+        bundlePrice: formatWithCurrency(totalPrice, priceCurrency),
+        leftovers: formatWithCurrency(totalLeftovers, priceCurrency)
       }
     };
   }

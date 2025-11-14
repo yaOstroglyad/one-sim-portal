@@ -210,13 +210,34 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   /**
    * Update footer values using strategy's calculateFooterValues method
-   * This allows strategies to implement complex footer logic (e.g., currency conversion with tooltips)
+   * Footer visibility logic:
+   * - Admin with no account selected: hide footer (data from all accounts)
+   * - Admin with account selected: show footer
+   * - Non-admin: always show footer (data only from their account)
    */
   private updateFooterValues(data: any[]): void {
     const strategy = this.currentStrategy();
+    const currentConfig = this.currentTableService().tableConfigSubject.value;
+
+    if (!currentConfig.footer) {
+      return;
+    }
+
+    // Determine footer visibility based on role and account selection
+    const shouldShowFooter = !this.isAdmin() || this.selectedAccountId() !== null;
+    currentConfig.footer.enabled = shouldShowFooter;
+
+    // If footer is disabled, clear values and skip calculation
+    if (!shouldShowFooter) {
+      currentConfig.footer.customValues = undefined;
+      currentConfig.footer.customTooltips = undefined;
+      this.currentTableService().tableConfigSubject.next({...currentConfig});
+      return;
+    }
 
     // Check if strategy has custom footer calculation
     if (!strategy.calculateFooterValues) {
+      this.currentTableService().tableConfigSubject.next({...currentConfig});
       return;
     }
 
@@ -224,12 +245,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
     const result = strategy.calculateFooterValues(data);
 
     // Update table config with custom values and tooltips
-    const currentConfig = this.currentTableService().tableConfigSubject.value;
-    if (currentConfig.footer) {
-      currentConfig.footer.customValues = result.values;
-      currentConfig.footer.customTooltips = result.tooltips;
-      this.currentTableService().tableConfigSubject.next({...currentConfig});
-    }
+    currentConfig.footer.customValues = result.values;
+    currentConfig.footer.customTooltips = result.tooltips;
+    this.currentTableService().tableConfigSubject.next({...currentConfig});
   }
 
   /**
