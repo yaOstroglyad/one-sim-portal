@@ -11,6 +11,7 @@ import {
   DEFAULT_PERIOD_PRESETS
 } from '@models';
 import { createPeriodFromPreset, createCustomPeriod } from '@shared/utils';
+import { DatepickerComponent } from '../datepicker/datepicker.component';
 
 /**
  * Period Selector Component
@@ -34,7 +35,8 @@ import { createPeriodFromPreset, createCustomPeriod } from '@shared/utils';
     CommonModule,
     FormsModule,
     TranslateModule,
-    ButtonDirective
+    ButtonDirective,
+    DatepickerComponent
   ],
   templateUrl: './period-selector.component.html',
   styleUrls: ['./period-selector.component.scss'],

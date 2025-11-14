@@ -1,0 +1,125 @@
+<div class="datepicker-container">
+  <!-- Input Field -->
+  <div class="datepicker-input" [class.disabled]="disabled()" [class.open]="isOpen()">
+    <input
+      type="text"
+      [value]="displayValue()"
+      [placeholder]="placeholder() | translate"
+      [disabled]="disabled()"
+      (click)="openCalendar()"
+      readonly
+      class="datepicker-field">
+    <button
+      type="button"
+      class="datepicker-toggle"
+      [disabled]="disabled()"
+      (click)="toggleCalendar()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 1V3M11 1V3M2 5H14M3 3H13C13.5523 3 14 3.44772 14 4V13C14 13.5523 13.5523 14 13 14H3C2.44772 14 2 13.5523 2 13V4C2 3.44772 2.44772 3 3 3Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Calendar Popup -->
+  @if (isOpen()) {
+  <div class="datepicker-popup">
+    <!-- Calendar Header -->
+    <div class="calendar-header">
+      <button type="button" class="calendar-nav-btn" (click)="previousMonth()" [hidden]="showYearPicker()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.5 9L4.5 6L7.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <button type="button" class="calendar-nav-btn" (click)="previousDecade()" [hidden]="!showYearPicker()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.5 9L4.5 6L7.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="calendar-title">
+        @if (!showYearPicker()) {
+          <span class="calendar-month">{{ displayMonth() }}</span>
+          <span class="calendar-year" (click)="toggleYearPicker($event)">{{ displayYear() }}</span>
+        } @else {
+          <span class="calendar-year-range">{{ yearPickerRange() }}</span>
+        }
+      </div>
+
+      <button type="button" class="calendar-nav-btn" (click)="nextMonth()" [hidden]="showYearPicker()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.5 9L7.5 6L4.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <button type="button" class="calendar-nav-btn" (click)="nextDecade()" [hidden]="!showYearPicker()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.5 9L7.5 6L4.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Calendar View (Days) -->
+    @if (!showYearPicker()) {
+      <!-- Weekday Labels -->
+      <div class="calendar-weekdays">
+        @for (day of weekDays(); track day) {
+        <div class="calendar-weekday">
+          {{ day }}
+        </div>
+        }
+      </div>
+
+      <!-- Calendar Days -->
+      <div class="calendar-days">
+        @for (day of calendarDays(); track day.uniqueId) {
+        <button
+          type="button"
+          class="calendar-day"
+          [class.other-month]="!day.currentMonth"
+          [class.disabled]="day.disabled"
+          [class.today]="day.isToday"
+          [class.selected]="day.isSelected"
+          [disabled]="day.disabled || !day.currentMonth"
+          (click)="selectDate(day)">
+          {{ day.day }}
+        </button>
+        }
+      </div>
+    }
+
+    <!-- Year Picker View -->
+    @if (showYearPicker()) {
+      <div class="calendar-years">
+        @for (year of yearPickerYears(); track year) {
+        <button
+          type="button"
+          class="calendar-year-btn"
+          [class.current]="year === currentYear()"
+          (click)="selectYear(year, $event)">
+          {{ year }}
+        </button>
+        }
+      </div>
+    }
+
+    <!-- Calendar Footer (Actions) -->
+    @if (!showYearPicker()) {
+      <div class="calendar-footer">
+        <button
+          type="button"
+          class="calendar-footer-btn"
+          (click)="clearDate()">
+          {{ 'common.clear' | translate }}
+        </button>
+        <button
+          type="button"
+          class="calendar-footer-btn calendar-footer-btn-primary"
+          (click)="selectToday()">
+          {{ 'common.today' | translate }}
+        </button>
+      </div>
+    }
+  </div>
+  }
+</div>

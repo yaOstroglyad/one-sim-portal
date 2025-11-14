@@ -1,6 +1,6 @@
 # Critical Project Rules
 
-> **Created:** 2025-10-16 | **Last Updated:** 2025-11-15 (Updated to Angular 19)
+> **Created:** 2025-10-16 | **Last Updated:** 2025-11-14 (Added Signal APIs & Control Flow rules)
 > **Context Tags:** `@creating-new` `@component` `@critical`
 > **Read when:** Before creating ANY component or working with file paths
 
@@ -244,7 +244,200 @@ Modern `inject()` syntax is:
 
 ---
 
-## 🚨 CRITICAL RULE #5: Template Separation
+## 🚨 CRITICAL RULE #5: Signal Inputs and Outputs (Angular 19+)
+
+### The Rule
+
+**ALL new components MUST use signal-based inputs and outputs**
+
+### Requirements
+
+1. **Use `input()` for component inputs** instead of `@Input()` decorator
+2. **Use `output()` for component outputs** instead of `@Output()` decorator
+3. **Use `effect()` for input synchronization** when needed
+
+### Signal Inputs
+
+```typescript
+import { Component, input, output, signal, computed, effect } from '@angular/core';
+
+@Component({
+  selector: 'app-my-component',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class MyComponent {
+  // ✅ Signal inputs
+  public readonly value = input<string>();                    // Optional input
+  public readonly minDate = input<string>();                  // Optional input
+  public readonly maxDate = input<string>();                  // Optional input
+  public readonly placeholder = input<string>('Select date'); // With default value
+  public readonly disabled = input<boolean>(false);           // Boolean with default
+
+  // ❌ DON'T use @Input() in new code
+  // @Input() value?: string;
+  // @Input() disabled: boolean = false;
+}
+```
+
+### Signal Outputs
+
+```typescript
+@Component({
+  selector: 'app-my-component',
+  standalone: true
+})
+export class MyComponent {
+  // ✅ Signal output
+  public readonly dateChange = output<string>();
+
+  // ❌ DON'T use @Output() in new code
+  // @Output() dateChange = new EventEmitter<string>();
+
+  selectDate(date: string): void {
+    this.dateChange.emit(date); // Works the same way
+  }
+}
+```
+
+### Synchronizing Inputs with Effect
+
+```typescript
+@Component({
+  selector: 'app-datepicker',
+  standalone: true
+})
+export class DatepickerComponent {
+  // Signal input
+  public readonly value = input<string>();
+
+  // Internal state
+  public readonly selectedDate = signal<Date | null>(null);
+
+  constructor() {
+    // ✅ Sync input with internal state
+    effect(() => {
+      const inputValue = this.value();
+      if (inputValue) {
+        this.setDateFromString(inputValue);
+      }
+    });
+  }
+}
+```
+
+### Template Usage
+
+```html
+<!-- Access signal inputs as functions in template -->
+<input
+  [value]="displayValue()"
+  [placeholder]="placeholder() | translate"
+  [disabled]="disabled()"
+  (click)="openCalendar()">
+```
+
+### Why Signal Inputs/Outputs?
+
+- **Better performance**: Fine-grained reactivity
+- **Type safety**: Better TypeScript inference
+- **Composability**: Works seamlessly with signals, computed, effect
+- **Future-proof**: Angular's recommended approach for modern apps
+
+---
+
+## 🚨 CRITICAL RULE #6: Control Flow Syntax (@if, @for)
+
+### The Rule
+
+**ALL new templates MUST use new control flow syntax instead of structural directives**
+
+### @if instead of *ngIf
+
+```html
+<!-- ❌ OLD WAY - Don't use in new code -->
+<div *ngIf="isVisible">Content</div>
+<div *ngIf="user; else loading">{{ user.name }}</div>
+
+<!-- ✅ NEW WAY - Use this -->
+@if (isVisible()) {
+  <div>Content</div>
+}
+
+@if (user()) {
+  <div>{{ user().name }}</div>
+} @else {
+  <ng-container>
+    <div>Loading...</div>
+  </ng-container>
+}
+```
+
+### @for instead of *ngFor
+
+```html
+<!-- ❌ OLD WAY - Don't use in new code -->
+<div *ngFor="let item of items; trackBy: trackByFn">
+  {{ item.name }}
+</div>
+
+<!-- ✅ NEW WAY - Use this -->
+@for (item of items(); track item.id) {
+  <div>{{ item.name }}</div>
+}
+
+<!-- With index -->
+@for (item of items(); track item.id; let idx = $index) {
+  <div>{{ idx }}: {{ item.name }}</div>
+}
+
+<!-- With empty state -->
+@for (item of items(); track item.id) {
+  <div>{{ item.name }}</div>
+} @empty {
+  <div>No items found</div>
+}
+```
+
+### @switch instead of *ngSwitch
+
+```html
+<!-- ❌ OLD WAY - Don't use in new code -->
+<div [ngSwitch]="status">
+  <div *ngSwitchCase="'pending'">Pending</div>
+  <div *ngSwitchCase="'approved'">Approved</div>
+  <div *ngSwitchDefault>Unknown</div>
+</div>
+
+<!-- ✅ NEW WAY - Use this -->
+@switch (status()) {
+  @case ('pending') {
+    <div>Pending</div>
+  }
+  @case ('approved') {
+    <div>Approved</div>
+  }
+  @default {
+    <div>Unknown</div>
+  }
+}
+```
+
+### Why New Control Flow?
+
+- **Better performance**: Built-in to Angular compiler
+- **Better type checking**: TypeScript understands the flow
+- **Less verbose**: No need for `ng-container` or `ng-template`
+- **More readable**: Cleaner syntax
+- **Required imports**: Structural directives needed CommonModule, new syntax doesn't
+
+### Migration Note
+
+Existing components using `*ngIf/*ngFor/*ngSwitch` can remain as-is. Only new components should use `@if/@for/@switch`.
+
+---
+
+## 🚨 CRITICAL RULE #7: Template Separation
 
 ### The Rule
 
@@ -276,7 +469,7 @@ Examples requiring external templates:
 
 ---
 
-## 🚨 CRITICAL RULE #6: Component Selector Prefix
+## 🚨 CRITICAL RULE #8: Component Selector Prefix
 
 ### The Rule
 
@@ -315,7 +508,7 @@ The `os-` prefix:
 
 ---
 
-## 🚨 CRITICAL RULE #7: No Automatic Dark Mode
+## 🚨 CRITICAL RULE #9: No Automatic Dark Mode
 
 ### The Rule
 
@@ -347,7 +540,7 @@ The `os-` prefix:
 
 ---
 
-## 🚨 CRITICAL RULE #8: Documentation Language
+## 🚨 CRITICAL RULE #10: Documentation Language
 
 ### The Rule
 
@@ -391,16 +584,16 @@ fetchCustomer(customerId: string): Observable<Customer> {
 Here's what a properly structured component looks like:
 
 ```typescript
-import { Component, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, input, output, signal, computed, effect, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-example',
+  selector: 'os-example',                              // ✅ Rule #8 - os- prefix
   standalone: true,                                    // ✅ Rule #2
   changeDetection: ChangeDetectionStrategy.OnPush,    // ✅ Rule #3
   imports: [CommonModule],                            // ✅ Rule #2
-  templateUrl: './example.component.html',            // ✅ Rule #5 (if complex)
+  templateUrl: './example.component.html',            // ✅ Rule #7 (if complex)
   styleUrl: './example.component.scss'
 })
 export class ExampleComponent {
@@ -408,13 +601,44 @@ export class ExampleComponent {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly http = inject(HttpClient);
 
-  data: any = {};
+  // ✅ Rule #5 - Signal inputs
+  public readonly value = input<string>();
+  public readonly disabled = input<boolean>(false);
+
+  // ✅ Rule #5 - Signal outputs
+  public readonly valueChange = output<string>();
+
+  // Internal state
+  public readonly data = signal<any>({});
+
+  constructor() {
+    // ✅ Rule #5 - Sync inputs with effect
+    effect(() => {
+      const val = this.value();
+      if (val) {
+        this.data.set({ value: val });
+      }
+    });
+  }
 
   updateData(newData: any): void {
     // ✅ Rule #3 - Immutable update + markForCheck()
-    this.data = { ...this.data, ...newData };
+    this.data.update(current => ({ ...current, ...newData }));
     this.cdr.markForCheck();
   }
+}
+```
+
+**Template (example.component.html):**
+
+```html
+<!-- ✅ Rule #6 - Use @if/@for instead of *ngIf/*ngFor -->
+@if (data()) {
+  <div class="content">
+    @for (item of items(); track item.id) {
+      <div>{{ item.name }}</div>
+    }
+  </div>
 }
 ```
 
@@ -428,10 +652,13 @@ Before creating any component, verify:
 - [ ] Component is standalone (Rule #2)
 - [ ] OnPush change detection enabled (Rule #3)
 - [ ] Using inject() for dependencies (Rule #4)
-- [ ] External template if complex (Rule #5)
-- [ ] Component selector uses `os-` prefix (Rule #6)
-- [ ] No `@media (prefers-color-scheme: dark)` (Rule #7)
-- [ ] All comments in English (Rule #8)
+- [ ] Using signal inputs (`input()`) instead of `@Input()` (Rule #5)
+- [ ] Using signal outputs (`output()`) instead of `@Output()` (Rule #5)
+- [ ] Using `@if/@for/@switch` instead of `*ngIf/*ngFor/*ngSwitch` (Rule #6)
+- [ ] External template if complex (Rule #7)
+- [ ] Component selector uses `os-` prefix (Rule #8)
+- [ ] No `@media (prefers-color-scheme: dark)` (Rule #9)
+- [ ] All comments in English (Rule #10)
 - [ ] No HttpClientModule import
 - [ ] No deprecated Angular APIs
 - [ ] No hardcoded colors (use CSS variables - see SCSS rules)
@@ -469,5 +696,10 @@ The project uses a Tailwind-inspired design system:
 
 ---
 
-**Last Updated:** 2025-11-15
+**Last Updated:** 2025-11-14
 **Priority:** 🔴 Critical - Project-breaking if violated
+
+**Recent Changes:**
+- 2025-11-14: Added Signal APIs (Rule #5) and Control Flow (Rule #6) rules
+- 2025-11-14: Renumbered subsequent rules (#7-10)
+- 2025-11-15: Updated to Angular 19

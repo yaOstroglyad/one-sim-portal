@@ -33,6 +33,7 @@ All shared utilities MUST be organized in domain-based folders:
 /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/utils/
 ├── color/          # Color manipulation (hex, rgb, shading, constants)
 ├── data/           # Data manipulation (search, format, transform)
+├── date/           # Date manipulation (parsing, formatting, comparison, periods)
 ├── currency/       # Currency conversion, price calculations
 ├── dom/            # DOM manipulation, printing, window operations
 ├── http/           # HTTP error handling, requests, responses
@@ -77,6 +78,7 @@ Is utility reusable across multiple domains/features?
 │   └─ Which category?
 │       ├─ Color manipulation? → /shared/utils/color/
 │       ├─ Data formatting/search? → /shared/utils/data/
+│       ├─ Date parsing/formatting/comparison/periods? → /shared/utils/date/
 │       ├─ Currency/pricing? → /shared/utils/currency/
 │       ├─ DOM/printing/window ops? → /shared/utils/dom/
 │       ├─ HTTP operations? → /shared/utils/http/

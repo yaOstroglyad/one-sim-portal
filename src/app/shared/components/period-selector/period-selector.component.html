@@ -12,23 +12,23 @@
 <!-- Custom Date Picker (shown when custom period selected) -->
 <div class="custom-date-picker" *ngIf="showCustomDatePicker()">
   <div class="date-inputs">
-    <input
-      type="date"
-      [ngModel]="customDateRange().start"
-      (ngModelChange)="onStartDateChange($event)"
-      [min]="minDate"
-      [max]="maxDate"
-      placeholder="{{ 'common.periods.startDate' | translate }}"
+    <app-datepicker
+      [value]="customDateRange().start"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [placeholder]="'common.periods.startDate'"
+      (dateChange)="onStartDateChange($event)"
       class="date-input">
+    </app-datepicker>
     <span class="date-separator">-</span>
-    <input
-      type="date"
-      [ngModel]="customDateRange().end"
-      (ngModelChange)="onEndDateChange($event)"
-      [min]="minDate"
-      [max]="maxDate"
-      placeholder="{{ 'common.periods.endDate' | translate }}"
+    <app-datepicker
+      [value]="customDateRange().end"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [placeholder]="'common.periods.endDate'"
+      (dateChange)="onEndDateChange($event)"
       class="date-input">
+    </app-datepicker>
   </div>
   <div class="date-actions">
     <button

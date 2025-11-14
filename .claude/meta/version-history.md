@@ -3,6 +3,138 @@
 > **Purpose:** Track all significant changes to the documentation system
 > **Maintenance:** Update when rules change, structure changes, or new files added
 
+## 2025-11-14 - Updated Critical Rules: Signal APIs & Control Flow
+
+**Type:** Rule Update
+
+**Summary:**
+- Added CRITICAL RULE #5: Signal Inputs and Outputs (Angular 19+)
+- Added CRITICAL RULE #6: Control Flow Syntax (@if, @for, @switch)
+- Updated all subsequent rule numbers (#7-10)
+- Updated component template examples
+- Updated checklist for new components
+
+**Files Modified:**
+- `.claude/rules/01-CRITICAL.md` - Added comprehensive signal APIs and control flow rules
+
+**New Rules:**
+
+1. **Signal Inputs and Outputs (Rule #5):**
+   - Use `input()` instead of `@Input()` decorator
+   - Use `output()` instead of `@Output()` decorator
+   - Use `effect()` for input synchronization
+   - Access signal inputs as functions in templates: `placeholder()`
+
+2. **Control Flow Syntax (Rule #6):**
+   - Use `@if` instead of `*ngIf`
+   - Use `@for` instead of `*ngFor` (with track expression)
+   - Use `@switch/@case/@default` instead of `*ngSwitch/*ngSwitchCase/*ngSwitchDefault`
+
+**Updated Examples:**
+- Complete component template now shows signal inputs/outputs
+- Template example demonstrates @if/@for syntax
+- Checklist includes signal APIs and control flow checks
+
+**Renumbered Rules:**
+- Rule #5 (was Template Separation) → Rule #7
+- Rule #6 (was Component Selector Prefix) → Rule #8
+- Rule #7 (was No Automatic Dark Mode) → Rule #9
+- Rule #8 (was Documentation Language) → Rule #10
+
+**Benefits:**
+- ✅ Enforces modern Angular 19+ patterns
+- ✅ Better performance with signals
+- ✅ Improved type safety
+- ✅ Cleaner template syntax
+- ✅ Future-proof codebase
+
+**Breaking Changes:** None
+- Only applies to new components
+- Existing components can remain with @Input/@Output and *ngIf/*ngFor
+
+---
+
+## 2025-11-14 - Custom DatePicker Component
+
+**Type:** Feature Addition
+
+**Summary:**
+- Created custom datepicker component without Material Design dependencies
+- Replaced native HTML date input with modern calendar popup
+- Fully standalone implementation with signal-based state management
+
+**Components Created:**
+1. **DatePicker Component** (`src/app/shared/components/datepicker/`)
+   - Created `datepicker.component.ts` - Component logic with signals, calendar generation, date validation
+   - Created `datepicker.component.html` - Template with calendar popup, month/year navigation
+   - Created `datepicker.component.scss` - Modern styling following project SCSS rules
+   - Created `README.md` - Comprehensive documentation with examples and API reference
+
+**Components Modified:**
+1. **Period Selector Component** (`src/app/shared/components/period-selector/`)
+   - Updated `period-selector.component.ts` - Added DatepickerComponent import
+   - Updated `period-selector.component.html` - Replaced native `<input type="date">` with `<app-datepicker>`
+
+**Key Features:**
+- ✅ Calendar popup with month/year navigation (arrows)
+- ✅ Min/max date restrictions (respects minDate="2025-08-01")
+- ✅ Modern design matching CoreUI theme
+- ✅ Click outside to close
+- ✅ Keyboard support (ESC to close)
+- ✅ Today indicator (blue dot)
+- ✅ Selected date highlighting
+- ✅ Disabled dates (outside min/max range)
+- ✅ Dark theme support
+- ✅ Responsive mobile design
+- ✅ Signal-based state management
+- ✅ OnPush change detection
+- ✅ No external dependencies (no Material Design)
+
+**Files Created:**
+```
+src/app/shared/components/datepicker/
+  ├── datepicker.component.ts
+  ├── datepicker.component.html
+  ├── datepicker.component.scss
+  └── README.md
+```
+
+**Files Modified:**
+```
+src/app/shared/components/period-selector/
+  ├── period-selector.component.ts
+  └── period-selector.component.html
+```
+
+**Breaking Changes:** None
+- Backward compatible - same API as native input
+- Date format remains ISO 8601 (YYYY-MM-DD)
+- Period selector maintains same functionality
+
+**Benefits:**
+- 🎨 Modern, customizable design (no Material Design styling conflicts)
+- 📦 No external dependencies (smaller bundle size)
+- 🎯 Better UX with calendar popup vs. native browser picker
+- 🌍 Consistent cross-browser experience
+- 🔧 Full control over styling and behavior
+- ⚡ Signal-based reactivity for performance
+- 🎭 Seamless dark theme support
+
+**Technical Implementation:**
+- **Standalone component** with no module dependencies
+- **Signal inputs**: Using Angular 19+ `input()` for all inputs (value, minDate, maxDate, placeholder, disabled)
+- **Signal outputs**: Using Angular 19+ `output()` for event emissions
+- **Signal-based state**: `isOpen`, `selectedDate`, `displayValue`, `currentMonth`, `currentYear`
+- **Computed values**: `displayMonth`, `displayYear`, `calendarDays`
+- **Effect**: Syncs value input with internal state using `effect()`
+- **Calendar generation**: 6×7 grid (42 days) with previous/next month overflow
+- **Date validation**: Automatic disable for dates outside min/max range
+- **Event handling**: `@HostListener` for click outside and keyboard events
+- **Template syntax**: Using new `@if` and `@for` control flow instead of `*ngIf/*ngFor`
+- **SCSS architecture**: `@use` imports, CSS custom properties, no hardcoded values
+
+---
+
 ## 2025-11-14 - Reports Footer Aggregations & Period Selector Enhancements
 
 **Type:** Feature Enhancement

@@ -112,11 +112,48 @@
     "save": "שמור",
     "apply": "החל",
     "submit": "שלח",
+    "clear": "נקה",
+    "today": "היום",
     "selectAll": "בחר הכל",
     "deselectAll": "בטל בחירת הכל",
     "noResultsFound": "לא נמצאו תוצאות עבור",
     "noItemsAvailable": "אין פריטים זמינים",
     "select_account_hint_message": "אנא בחר חשבון תחילה",
+    "months": {
+      "january": "ינואר",
+      "february": "פברואר",
+      "march": "מרץ",
+      "april": "אפריל",
+      "may": "מאי",
+      "june": "יוני",
+      "july": "יולי",
+      "august": "אוגוסט",
+      "september": "ספטמבר",
+      "october": "אוקטובר",
+      "november": "נובמבר",
+      "december": "דצמבר"
+    },
+    "weekdays": {
+      "su": "א",
+      "mo": "ב",
+      "tu": "ג",
+      "we": "ד",
+      "th": "ה",
+      "fr": "ו",
+      "sa": "ש"
+    },
+    "periods": {
+      "today": "היום",
+      "yesterday": "אתמול",
+      "last7days": "7 ימים אחרונים",
+      "last30days": "30 ימים אחרונים",
+      "lastMonth": "חודש נוכחי",
+      "currentMonth": "חודש נוכחי",
+      "last3months": "3 חודשים אחרונים",
+      "custom": "מותאם אישית",
+      "startDate": "תאריך התחלה",
+      "endDate": "תאריך סיום"
+    },
     "table": {
       "filterPlaceholder": "סנן נתוני טבלה"
     }
