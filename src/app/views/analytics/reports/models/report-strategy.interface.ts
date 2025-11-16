@@ -111,4 +111,18 @@ export interface ReportStrategy<T = any> {
    * }
    */
   calculateFooterValues?(data: T[]): { values: Record<string, string>, tooltips?: Record<string, string> };
+
+  /**
+   * Get list of fields that should be converted to numbers during Excel export
+   * Only fields listed here will be converted from strings to numbers.
+   * This prevents accidental conversion of ID fields like ICCID which can lose precision.
+   *
+   * @returns Array of field keys that should be treated as numeric
+   *
+   * @example
+   * getNumericFields(): (keyof BundlePurchase)[] {
+   *   return ['bundlePrice', 'bundleCost'];
+   * }
+   */
+  getNumericFields?(): (keyof T)[];
 }

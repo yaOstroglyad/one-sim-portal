@@ -265,12 +265,13 @@ export class ReportsComponent implements OnInit, OnDestroy {
     // Get current strategy for export configuration
     const strategy = this.currentStrategy();
 
-    // Transform data using strategy's mapping and transformers
+    // Transform data using strategy's mapping, transformers, and numeric fields
     const exportData = mapDataForExcel(
       currentData as any[],
       strategy.getExportMapping() as any,
       this.translateService,
-      strategy.getExportTransformers?.() || {}
+      strategy.getExportTransformers?.() || {},
+      strategy.getNumericFields?.() || []
     );
 
     // Generate filename with current date and strategy prefix

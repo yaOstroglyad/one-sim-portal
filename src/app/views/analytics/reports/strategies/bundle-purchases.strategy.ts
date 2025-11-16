@@ -151,4 +151,12 @@ export class BundlePurchasesStrategy implements ReportStrategy<BundlePurchase> {
       }
     };
   }
+
+  /**
+   * Get list of numeric fields for Excel export
+   * Only these fields will be converted from strings to numbers
+   */
+  getNumericFields(): (keyof BundlePurchase)[] {
+    return ['bundlePrice', 'bundleCost'];
+  }
 }

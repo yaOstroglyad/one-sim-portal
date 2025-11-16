@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
  * @param columnMapping - Mapping of data keys to translation keys
  * @param translateService - Translation service instance
  * @param transformers - Optional transformers for specific columns
+ * @param numericFields - Optional list of fields that should be converted to numbers
  * @returns Array of objects with translated keys and transformed values
  *
  * @example
@@ -14,18 +15,22 @@ import { TranslateService } from '@ngx-translate/core';
  * const columnMapping = {
  *   name: 'customers.name',
  *   email: 'customers.email',
- *   createdAt: 'customers.createdDate'
+ *   createdAt: 'customers.createdDate',
+ *   price: 'customers.price'
  * };
  *
  * const transformers = {
  *   createdAt: (value: string) => new Date(value).toLocaleDateString()
  * };
  *
+ * const numericFields = ['price'];
+ *
  * const exportData = mapDataForExcel(
  *   customers,
  *   columnMapping,
  *   translateService,
- *   transformers
+ *   transformers,
+ *   numericFields
  * );
  * ```
  */
@@ -33,18 +38,35 @@ export function mapDataForExcel<T extends Record<string, any>>(
   data: T[],
   columnMapping: Record<keyof T, string>,
   translateService: TranslateService,
-  transformers?: Partial<Record<keyof T, (value: any) => any>>
+  transformers?: Partial<Record<keyof T, (value: any) => any>>,
+  numericFields?: (keyof T)[]
 ): Record<string, any>[] {
+  const numericFieldsSet = new Set(numericFields || []);
+
   return data.map(item => {
     const mappedItem: Record<string, any> = {};
 
     for (const [dataKey, translationKey] of Object.entries(columnMapping)) {
       const translatedHeader = translateService.instant(translationKey as string);
-      const value = item[dataKey];
+      let value = item[dataKey];
 
       // Apply transformer if exists
       const transformer = transformers?.[dataKey as keyof T];
-      mappedItem[translatedHeader] = transformer ? transformer(value) : (value ?? '');
+      if (transformer) {
+        value = transformer(value);
+      }
+
+      // Convert to number if field is in numericFields list
+      if (numericFieldsSet.has(dataKey as keyof T) && !transformer) {
+        if (typeof value === 'string' && value.trim() !== '') {
+          const numValue = Number(value);
+          if (!isNaN(numValue) && isFinite(numValue)) {
+            value = numValue;
+          }
+        }
+      }
+
+      mappedItem[translatedHeader] = value ?? '';
     }
 
     return mappedItem;

@@ -145,4 +145,13 @@ export class BundleLeftoversStrategy implements ReportStrategy<BundleLeftover> {
       }
     };
   }
+
+  /**
+   * Get list of numeric fields for Excel export
+   * Only these fields will be converted from strings to numbers
+   * Note: initialVolumeMb, unusedVolumeMb, percentLeftovers are already numbers in the model
+   */
+  getNumericFields(): (keyof BundleLeftover)[] {
+    return ['bundlePrice', 'initialVolumeMb', 'unusedVolumeMb', 'percentLeftovers', 'providerPriceMb', 'leftovers'];
+  }
 }

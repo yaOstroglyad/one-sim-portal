@@ -20,17 +20,17 @@ export class ExcelExportService {
       return;
     }
 
-    // Convert data to ensure numbers are not strings
-    const processedData = this.convertStringNumbersToNumbers(data);
+    // Data should already have proper types from mapDataForExcel
+    // No automatic string-to-number conversion to avoid precision loss for long numeric strings like ICCID
 
     // Create worksheet from data
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(processedData);
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
 
     // Apply number format to numeric cells
-    this.applyNumberFormats(worksheet, processedData);
+    this.applyNumberFormats(worksheet, data);
 
     // Auto-size columns based on content
-    const columnWidths = this.calculateColumnWidths(processedData);
+    const columnWidths = this.calculateColumnWidths(data);
     worksheet['!cols'] = columnWidths;
 
     // Create workbook and add worksheet
@@ -42,45 +42,6 @@ export class ExcelExportService {
     // Generate file and trigger download
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(excelBuffer, fileName);
-  }
-
-  /**
-   * Convert string numbers to actual numbers for proper Excel formatting
-   * Detects numeric strings and converts them to numbers
-   */
-  private convertStringNumbersToNumbers(data: any[]): any[] {
-    return data.map(row => {
-      const newRow: any = {};
-
-      for (const [key, value] of Object.entries(row)) {
-        // Skip null/undefined
-        if (value === null || value === undefined) {
-          newRow[key] = value;
-          continue;
-        }
-
-        // If it's a string that looks like a number, convert it
-        if (typeof value === 'string') {
-          const trimmed = value.trim();
-
-          // Check if it's a numeric string (including decimals and negatives)
-          // But exclude strings that start with 0 (like phone numbers, IDs)
-          if (trimmed && !isNaN(Number(trimmed)) && trimmed !== '' && !trimmed.startsWith('0')) {
-            const numValue = Number(trimmed);
-            // Only convert if it's a valid finite number
-            if (isFinite(numValue)) {
-              newRow[key] = numValue;
-              continue;
-            }
-          }
-        }
-
-        // Keep original value
-        newRow[key] = value;
-      }
-
-      return newRow;
-    });
   }
 
   /**
