@@ -15,7 +15,7 @@
       <div class="search-state__content">
         <!-- Fun SVG Illustration -->
         <div class="search-state__illustration">
-          <app-icon [icon]="'chat-search'"></app-icon>
+          <app-icon [icon]="'chat-search'" [size]="'150px'"></app-icon>
         </div>
 
         <h2 class="search-state__title">{{ 'supportchat.searchtitle' | translate }}</h2>
@@ -55,7 +55,7 @@
     <div class="support-chat__empty-state">
       <div class="empty-state__content">
         <div class="empty-state__illustration">
-          <app-icon [icon]="'chat-empty'"></app-icon>
+          <app-icon [icon]="'chat-empty'" [size]="'120px'"></app-icon>
         </div>
 
         <h2 class="empty-state__title">{{ 'supportchat.nothreadstitle' | translate }}</h2>
@@ -133,15 +133,14 @@
             </span>
           </div>
 
-          @if (!selectedThread.isManual) {
-            <button
-              mat-raised-button
-              color="accent"
-              class="thread__take-control"
-              (click)="onTakeControl(); $event.stopPropagation()">
-              {{ 'supportchat.takecontrol' | translate }}
-            </button>
-          }
+          <button
+            mat-raised-button
+            color="accent"
+            class="thread__toggle-control"
+            [disabled]="selectedThread.status === 'expired'"
+            (click)="onToggleControl(); $event.stopPropagation()">
+            {{ (selectedThread.isManual ? 'supportchat.returntobot' : 'supportchat.takecontrol') | translate }}
+          </button>
         </div>
 
         <!-- Messages List -->
@@ -201,11 +200,11 @@
             class="thread__input-field"
             type="text"
             [placeholder]="'supportchat.messageplaceholder' | translate"
-            [disabled]="!selectedThread.isManual || stateService.isSendingMessage()"
+            [disabled]="!selectedThread.isManual || stateService.isSendingMessage() || selectedThread.status === 'expired'"
             (keyup.enter)="onSendMessage(messageInput.value); messageInput.value = ''; $event.stopPropagation()">
           <button
             class="thread__send-button"
-            [disabled]="!selectedThread.isManual || stateService.isSendingMessage()"
+            [disabled]="!selectedThread.isManual || stateService.isSendingMessage() || selectedThread.status === 'expired'"
             (click)="onSendMessage(messageInput.value); messageInput.value = ''; $event.stopPropagation()">
             @if (stateService.isSendingMessage()) {
               <mat-icon>hourglass_empty</mat-icon>

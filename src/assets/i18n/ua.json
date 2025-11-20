@@ -249,6 +249,7 @@
     "manualmode": "Ручний режим",
     "botmode": "Режим бота",
     "takecontrol": "Взяти управління",
+    "returntobot": "Повернути боту",
     "loadingmessages": "Завантаження повідомлень...",
     "messageplaceholder": "Введіть ваше повідомлення...",
     "threadnotfound": "Тред не знайдено",

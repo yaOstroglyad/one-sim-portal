@@ -3,9 +3,11 @@ import {
 	ChangeDetectionStrategy,
 	OnDestroy,
 	inject,
-	ViewChild,
+	viewChild,
+	effect,
+	signal,
+	untracked,
 	ElementRef,
-	AfterViewChecked,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
@@ -15,10 +17,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { IconComponent } from '@shared/components/icon';
 import { ChatbotApiService, ChatbotStateService, ChatbotPollingService } from './services';
+import { GlobalFlyoutService } from '@shared/components/fab-layout';
 
 /**
  * Support Chat Shell Component
  *
+ * Fully signals-based implementation.
  * Main container component for support chat feature.
  * Manages overall chat state and coordinates between child components.
  * Handles state-based navigation between thread list and thread view.
@@ -39,21 +43,42 @@ import { ChatbotApiService, ChatbotStateService, ChatbotPollingService } from '.
 	styleUrls: ['./support-chat.shell.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SupportChatShellComponent implements OnDestroy, AfterViewChecked {
+export class SupportChatShellComponent implements OnDestroy {
 	private readonly apiService = inject(ChatbotApiService);
 	private readonly pollingService = inject(ChatbotPollingService);
+	private readonly flyoutService = inject(GlobalFlyoutService);
 	readonly stateService = inject(ChatbotStateService);
 
-	@ViewChild('messagesContainer') messagesContainer?: ElementRef<HTMLDivElement>;
-	private lastMessageCount = 0;
+	// ViewChild as signal
+	readonly messagesContainer = viewChild<ElementRef<HTMLDivElement>>('messagesContainer');
 
-	ngAfterViewChecked(): void {
-		// Auto-scroll to bottom when new messages arrive
-		const currentMessageCount = this.stateService.selectedThreadMessages().length;
-		if (this.messagesContainer && currentMessageCount > this.lastMessageCount) {
-			this.scrollToBottom();
-			this.lastMessageCount = currentMessageCount;
-		}
+	// Track last message count for auto-scroll
+	private readonly lastMessageCount = signal(0);
+
+	constructor() {
+		// Auto-scroll effect when messages change
+		effect(() => {
+			const container = this.messagesContainer();
+			const currentMessages = this.stateService.selectedThreadMessages();
+			const currentCount = currentMessages.length;
+
+			// Use untracked to avoid infinite loops
+			const lastCount = untracked(() => this.lastMessageCount());
+
+			if (container && currentCount > lastCount) {
+				this.scrollToBottom(container.nativeElement);
+				this.lastMessageCount.set(currentCount);
+			}
+		});
+
+		// Effect: Auto-search when ICCID is passed via params
+		effect(() => {
+			const params = this.flyoutService.params() as { iccid?: string } | null;
+			if (params?.iccid) {
+				// Auto-trigger search with the provided ICCID
+				this.onSearch(params.iccid);
+			}
+		});
 	}
 
 	ngOnDestroy(): void {
@@ -77,7 +102,7 @@ export class SupportChatShellComponent implements OnDestroy, AfterViewChecked {
 		this.stateService.setLoadingThreads(true);
 
 		// Load threads
-		this.apiService.getThreads({iccid: iccid.trim(), status: 'active'}).subscribe({
+		this.apiService.getThreads({iccid: iccid.trim()}).subscribe({
 			next: (threads) => {
 				this.stateService.setThreads(threads);
 				this.stateService.setLoadingThreads(false);
@@ -101,7 +126,7 @@ export class SupportChatShellComponent implements OnDestroy, AfterViewChecked {
 
 		this.stateService.setSelectedThreadId(threadId);
 		this.pollingService.startPolling(threadId);
-		this.lastMessageCount = this.stateService.selectedThreadMessages().length;
+		this.lastMessageCount.set(this.stateService.selectedThreadMessages().length);
 	}
 
 	/**
@@ -110,25 +135,30 @@ export class SupportChatShellComponent implements OnDestroy, AfterViewChecked {
 	onBackToThreads(): void {
 		this.pollingService.stopPolling();
 		this.stateService.setSelectedThreadId(null);
-		this.lastMessageCount = 0;
+		this.lastMessageCount.set(0);
 	}
 
 	/**
-	 * Handle take control action
+	 * Handle toggle control action (take control / return to bot)
 	 */
-	onTakeControl(): void {
+	onToggleControl(): void {
 		const selectedThread = this.stateService.selectedThread();
-		if (!selectedThread || selectedThread.isManual) {
+		if (!selectedThread || selectedThread.status === 'expired') {
 			return;
 		}
 
-		this.apiService.updateThread(selectedThread.id, {isManual: true}).subscribe({
-			next: () => {
-				// Polling will pick up the updated thread state
+		// Toggle isManual flag
+		const newIsManual = !selectedThread.isManual;
+
+		this.apiService.updateThread(selectedThread.id, {isManual: newIsManual}).subscribe({
+			next: (updatedThread) => {
+				// Update the thread in state immediately
+				this.stateService.updateThread(updatedThread);
 			},
 			error: (error) => {
-				console.error('[SupportChatShell] Failed to take control:', error);
-				this.stateService.setError('Failed to take control of conversation');
+				console.error('[SupportChatShell] Failed to toggle control:', error);
+				const action = newIsManual ? 'take control of' : 'return to bot';
+				this.stateService.setError(`Failed to ${action} conversation`);
 			}
 		});
 	}
@@ -172,10 +202,7 @@ export class SupportChatShellComponent implements OnDestroy, AfterViewChecked {
 	/**
 	 * Scroll messages container to bottom
 	 */
-	private scrollToBottom(): void {
-		if (this.messagesContainer) {
-			const element = this.messagesContainer.nativeElement;
-			element.scrollTop = element.scrollHeight;
-		}
+	private scrollToBottom(element: HTMLDivElement): void {
+		element.scrollTop = element.scrollHeight;
 	}
 }

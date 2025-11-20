@@ -1,0 +1,123 @@
+@use "sass:map";
+@use "../../../../../scss/variables" as vars;
+@use "../../../../../scss/mixins" as mixins;
+
+.os-dropdown {
+  position: relative;
+  display: inline-block;
+
+  &__trigger {
+    display: inline-block;
+  }
+
+  // Backdrop overlay
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 998;
+    opacity: 0;
+    animation: fadeIn 0.2s ease forwards;
+
+    .layout--dark & {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  // Dropdown panel
+  &__panel {
+    position: absolute;
+    background: var(--os-color-light);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: map.get(vars.$os-border-radius, 'large');
+    box-shadow: map.get(vars.$os-shadows, 'lg');
+    z-index: 1000;
+    opacity: 0;
+    animation: slideDown 0.2s ease forwards;
+
+    // Dark theme
+    .layout--dark & {
+      background: var(--os-color-dark);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    // Positioning variants - using CSS logical properties for automatic RTL support
+    &--bottom-right {
+      top: calc(100% + 8px);
+      inset-inline-end: 0;
+      transform-origin: top end;
+    }
+
+    &--bottom-left {
+      top: calc(100% + 8px);
+      inset-inline-start: 0;
+      transform-origin: top start;
+    }
+
+    &--top-right {
+      bottom: calc(100% + 8px);
+      inset-inline-end: 0;
+      transform-origin: bottom end;
+      animation: slideUp 0.2s ease forwards;
+    }
+
+    &--top-left {
+      bottom: calc(100% + 8px);
+      inset-inline-start: 0;
+      transform-origin: bottom start;
+      animation: slideUp 0.2s ease forwards;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    &__panel {
+      // On mobile, make sure dropdown doesn't overflow viewport
+      max-width: calc(100vw - map.get(vars.$os-spacing, '8'));
+
+      &--bottom-right,
+      &--top-right,
+      &--bottom-left,
+      &--top-left {
+        inset-inline-start: 50%;
+        inset-inline-end: auto;
+        transform: translateX(-50%);
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

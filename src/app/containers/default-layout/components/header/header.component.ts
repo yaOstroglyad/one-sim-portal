@@ -16,7 +16,16 @@ import { Subject, takeUntil } from 'rxjs';
 
 import { LayoutConfig } from '../../models';
 import { LayoutService } from '../../services';
-import { AuthService, UserAvatarComponent, BreadcrumbComponent, LanguageService, Language } from '@shared';
+import {
+  AuthService,
+  UserAvatarComponent,
+  BreadcrumbComponent,
+  LanguageService,
+  Language,
+  OsMenuComponent,
+  OsMenuItem,
+  OsMenuSection
+} from '@shared';
 
 const DEFAULT_USER_NAME = 'John Doe';
 const DEFAULT_USER_AVATAR = './assets/img/avatars/9.jpg';
@@ -31,7 +40,8 @@ const DEFAULT_NOTIFICATION_COUNT = 3;
     IconDirective,
     TranslateModule,
     UserAvatarComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    OsMenuComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './header.component.html',
@@ -52,7 +62,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // UI state signals
   readonly isUserDropdownOpen = signal(false);
-  readonly isNotificationsOpen = signal(false);
   readonly notificationCount = signal(DEFAULT_NOTIFICATION_COUNT);
 
   // User data signals
@@ -65,8 +74,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   });
 
-  readonly hasNotifications = computed(() => this.notificationCount() > 0);
-
   readonly headerClasses = computed(() => ({
     'header--dark': this.layoutConfig().darkTheme,
     'header--rtl': this.languageService.isRtl(),
@@ -77,12 +84,59 @@ export class HeaderComponent implements OnInit, OnDestroy {
   readonly languages = computed(() => this.languageService.supportedLanguages());
   readonly currentLanguage = computed(() => this.languageService.currentLanguage());
 
-  private unsubscribe$ = new Subject<void>();
+  // Menu sections for os-menu
+  readonly userMenuSections = computed<OsMenuSection[]>(() => {
+    const langs = this.languages();
+    const currentLang = this.currentLanguage();
+    const notifCount = this.notificationCount();
 
-  @HostListener('document:keydown.escape')
-  onEscapeKey(): void {
-    this.closeAllDropdowns();
-  }
+    return [
+      {
+        title: 'default-header.language',
+        items: langs.map(lang => ({
+          id: `lang-${lang.code}`,
+          label: lang.name,
+          active: currentLang === lang.code,
+          action: () => this.changeLang(lang.code)
+        }))
+      },
+      {
+        title: 'default-header.account',
+        items: [
+          {
+            id: 'profile',
+            label: 'default-header.profile',
+            action: () => this.goToProfile()
+          },
+          {
+            id: 'notifications',
+            label: 'default-header.notifications',
+            badge: notifCount > 0 ? notifCount : undefined,
+            action: () => this.goToNotifications()
+          }
+        ]
+      },
+      {
+        title: 'default-header.settings',
+        items: [
+          {
+            id: 'settings',
+            label: 'default-header.settings',
+            icon: 'settings',
+            action: () => this.goToSettings()
+          },
+          {
+            id: 'logout',
+            label: 'default-header.logout',
+            danger: true,
+            action: () => this.logout()
+          }
+        ]
+      }
+    ];
+  });
+
+  private unsubscribe$ = new Subject<void>();
 
   ngOnInit(): void {
     this.initializeLayoutConfig();
@@ -112,59 +166,35 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.layoutService.toggleSidebar();
   }
 
-  onUserAvatarClick(event: Event): void {
-    event.stopPropagation();
-    this.toggleUserDropdown();
-  }
-
-  toggleUserDropdown(): void {
+  toggleUserMenu(): void {
     this.isUserDropdownOpen.update(value => !value);
-    if (this.isUserDropdownOpen()) {
-      this.isNotificationsOpen.set(false);
-    }
   }
 
-  onBackdropClick(): void {
-    this.closeAllDropdowns();
-  }
-
-  closeAllDropdowns(): void {
+  closeUserMenu(): void {
     this.isUserDropdownOpen.set(false);
-    this.isNotificationsOpen.set(false);
   }
 
   changeLang(lang: string): void {
     this.languageService.setLanguage(lang); // This will handle translation, RTL, and storage
-    this.closeAllDropdowns();
-  }
-
-  private executeWithDropdownClose(action: () => void): void {
-    this.closeAllDropdowns();
-    action();
   }
 
   goToProfile(): void {
-    this.executeWithDropdownClose(() => {
-      // Navigate to profile
-    });
+    // Navigate to profile
+    console.log('Navigate to profile');
   }
 
   goToNotifications(): void {
-    this.executeWithDropdownClose(() => {
-      // Navigate to notifications
-    });
+    // Navigate to notifications
+    console.log('Navigate to notifications');
   }
 
   goToSettings(): void {
-    this.executeWithDropdownClose(() => {
-      // Navigate to settings
-    });
+    // Navigate to settings
+    console.log('Navigate to settings');
   }
 
   logout(): void {
-    this.executeWithDropdownClose(() => {
-      this.authService.clearAndLogout();
-    });
+    this.authService.clearAndLogout();
   }
 
 }

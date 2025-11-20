@@ -1,0 +1,111 @@
+<os-dropdown
+  [isOpen]="isOpen()"
+  [position]="position()"
+  [width]="width()"
+  (closed)="closed.emit()">
+
+  <!-- Pass through trigger -->
+  <ng-content select="[menuTrigger]" dropdownTrigger></ng-content>
+
+  <!-- Menu content -->
+  <div
+    dropdownContent
+    role="menu"
+    class="os-menu"
+    [attr.aria-label]="'Menu'">
+
+    <!-- Flat menu items -->
+    @if (items()) {
+      @for (item of items(); track trackByItemId($index, item)) {
+        <button
+          #menuItem
+          role="menuitem"
+          type="button"
+          class="os-menu__item"
+          [class.os-menu__item--active]="item.active"
+          [class.os-menu__item--danger]="item.danger"
+          [ngClass]="item.cssClass"
+          [disabled]="item.disabled"
+          [attr.aria-disabled]="item.disabled"
+          (click)="onItemClick(item, $event)">
+
+          @if (item.icon) {
+            <app-icon
+              [icon]="item.icon"
+              size="16px"
+              class="os-menu__item-icon">
+            </app-icon>
+          }
+
+          <span class="os-menu__item-label">
+            {{ item.label | translate }}
+          </span>
+
+          @if (item.badge) {
+            <span class="os-menu__badge">
+              {{ item.badge }}
+            </span>
+          }
+        </button>
+
+        @if (item.divider) {
+          <div class="os-menu__divider" role="separator"></div>
+        }
+      }
+    }
+
+    <!-- Structured menu with sections -->
+    @if (sections()) {
+      @for (section of sections(); track trackBySectionTitle($index, section)) {
+        <div class="os-menu__section">
+          @if (section.title) {
+            <h6 class="os-menu__title">
+              {{ section.title | translate }}
+            </h6>
+          }
+
+          @for (item of section.items; track trackByItemId($index, item)) {
+            <button
+              #menuItem
+              role="menuitem"
+              type="button"
+              class="os-menu__item"
+              [class.os-menu__item--active]="item.active"
+              [class.os-menu__item--danger]="item.danger"
+              [ngClass]="item.cssClass"
+              [disabled]="item.disabled"
+              [attr.aria-disabled]="item.disabled"
+              (click)="onItemClick(item, $event)">
+
+              @if (item.icon) {
+                <app-icon
+                  [icon]="item.icon"
+                  size="16px"
+                  class="os-menu__item-icon">
+                </app-icon>
+              }
+
+              <span class="os-menu__item-label">
+                {{ item.label | translate }}
+              </span>
+
+              @if (item.badge) {
+                <span class="os-menu__badge">
+                  {{ item.badge }}
+                </span>
+              }
+            </button>
+
+            @if (item.divider) {
+              <div class="os-menu__divider" role="separator"></div>
+            }
+          }
+        </div>
+
+        @if (!$last) {
+          <div class="os-menu__divider os-menu__divider--section" role="separator"></div>
+        }
+      }
+    }
+  </div>
+</os-dropdown>

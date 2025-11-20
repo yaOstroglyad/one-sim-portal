@@ -1,15 +1,42 @@
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  input,
+  output,
+  signal,
+  computed
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarVariant = 'circle' | 'rounded' | 'square';
 
+/**
+ * User Avatar Component
+ *
+ * Displays a user avatar with fallback support and customizable appearance.
+ * Fully signals-based implementation.
+ *
+ * Features:
+ * - Multiple sizes (sm, md, lg, xl)
+ * - Multiple shapes (circle, rounded, square)
+ * - Cascading fallback: src → fallbackSrc → initials
+ * - Clickable with disabled state
+ * - Interactive hover effects
+ * - Dark theme support
+ *
+ * @example
+ * ```html
+ * <app-user-avatar
+ *   [src]="userAvatar()"
+ *   [alt]="userName()"
+ *   [initials]="userInitials()"
+ *   size="md"
+ *   variant="circle"
+ *   (click)="onUserAvatarClick($event)">
+ * </app-user-avatar>
+ * ```
+ */
 @Component({
   selector: 'app-user-avatar',
   standalone: true,
@@ -18,71 +45,125 @@ export type AvatarVariant = 'circle' | 'rounded' | 'square';
   template: `
     <button
       class="user-avatar"
-      [class]="avatarClasses"
-      [disabled]="disabled"
-      [attr.aria-label]="ariaLabel"
+      [class]="avatarClasses()"
+      [disabled]="disabled()"
+      [attr.aria-label]="ariaLabel()"
       (click)="handleClick($event)"
       (error)="onImageError($event)">
       <img
         class="user-avatar__image"
-        [src]="src"
-        [alt]="alt"
+        [src]="src()"
+        [alt]="alt()"
         (error)="onImageError($event)">
-      <div class="user-avatar__fallback" *ngIf="showFallback">
-        {{ initials }}
+      <div class="user-avatar__fallback" *ngIf="showFallback()">
+        {{ initials() }}
       </div>
     </button>
   `,
   styleUrls: ['./user-avatar.component.scss']
 })
 export class UserAvatarComponent {
-  @Input() src: string = '';
-  @Input() alt: string = 'User avatar';
-  @Input() ariaLabel: string = 'User avatar';
-  @Input() size: AvatarSize = 'md';
-  @Input() variant: AvatarVariant = 'circle';
-  @Input() disabled: boolean = false;
-  @Input() clickable: boolean = true;
-  @Input() initials: string = '';
-  @Input() fallbackSrc: string = './assets/img/avatars/default.jpg';
-  
-  @Output() click = new EventEmitter<Event>();
-  @Output() imageError = new EventEmitter<Event>();
+  /**
+   * Image source URL
+   */
+  readonly src = input<string>('');
 
-  showFallback = false;
+  /**
+   * Image alt text
+   */
+  readonly alt = input<string>('User avatar');
 
-  get avatarClasses(): string {
+  /**
+   * Accessibility label
+   */
+  readonly ariaLabel = input<string>('User avatar');
+
+  /**
+   * Avatar size
+   */
+  readonly size = input<AvatarSize>('md');
+
+  /**
+   * Avatar shape variant
+   */
+  readonly variant = input<AvatarVariant>('circle');
+
+  /**
+   * Disabled state
+   */
+  readonly disabled = input<boolean>(false);
+
+  /**
+   * Whether avatar is clickable
+   */
+  readonly clickable = input<boolean>(true);
+
+  /**
+   * User initials for text fallback
+   */
+  readonly initials = input<string>('');
+
+  /**
+   * Fallback image source
+   */
+  readonly fallbackSrc = input<string>('./assets/img/avatars/default.jpg');
+
+  /**
+   * Click event
+   */
+  readonly click = output<Event>();
+
+  /**
+   * Image error event
+   */
+  readonly imageError = output<Event>();
+
+  /**
+   * Track if fallback should be shown
+   */
+  readonly showFallback = signal(false);
+
+  /**
+   * Computed CSS classes based on inputs
+   */
+  readonly avatarClasses = computed(() => {
     const classes = [
-      `user-avatar--${this.size}`,
-      `user-avatar--${this.variant}`
+      `user-avatar--${this.size()}`,
+      `user-avatar--${this.variant()}`
     ];
-    
-    if (this.clickable && !this.disabled) {
+
+    if (this.clickable() && !this.disabled()) {
       classes.push('user-avatar--clickable');
     }
-    
-    if (this.disabled) {
+
+    if (this.disabled()) {
       classes.push('user-avatar--disabled');
     }
-    
-    return classes.join(' ');
-  }
 
+    return classes.join(' ');
+  });
+
+  /**
+   * Handle click event
+   */
   handleClick(event: Event): void {
-    if (!this.disabled && this.clickable) {
+    if (!this.disabled() && this.clickable()) {
       this.click.emit(event);
     }
   }
 
+  /**
+   * Handle image error with cascading fallback
+   */
   onImageError(event: Event): void {
     const target = event.target as HTMLImageElement;
-    
-    if (this.fallbackSrc && target.src !== this.fallbackSrc) {
-      target.src = this.fallbackSrc;
+
+    if (this.fallbackSrc() && target.src !== this.fallbackSrc()) {
+      target.src = this.fallbackSrc();
     } else {
-      this.showFallback = true;
+      this.showFallback.set(true);
     }
-    
+
     this.imageError.emit(event);
   }
 }

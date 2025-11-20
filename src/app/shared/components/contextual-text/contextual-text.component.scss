@@ -1,0 +1,12 @@
+:host {
+  display: inline;
+}
+
+// Make os-menu display inline
+::ng-deep os-menu {
+  display: inline;
+
+  .os-dropdown {
+    display: inline;
+  }
+}

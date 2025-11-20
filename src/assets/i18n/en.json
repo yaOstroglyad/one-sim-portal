@@ -589,6 +589,7 @@
     "manualmode": "Manual",
     "botmode": "Bot",
     "takecontrol": "Take Control",
+    "returntobot": "Return to Bot",
     "loadingmessages": "Loading messages...",
     "messageplaceholder": "Type your message...",
     "threadnotfound": "Thread not found",

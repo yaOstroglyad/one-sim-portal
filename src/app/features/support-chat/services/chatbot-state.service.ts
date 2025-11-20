@@ -16,7 +16,31 @@ export class ChatbotStateService {
 
   // Threads list
   private readonly _threads = signal<Thread[]>([]);
-  readonly threads = this._threads.asReadonly();
+
+  // Computed: Sorted threads (active first, then by expiredAt desc)
+  readonly threads = computed(() => {
+    const threads = this._threads();
+    return [...threads].sort((a, b) => {
+      // 1. Active threads first
+      if (a.status === 'active' && b.status !== 'active') return -1;
+      if (a.status !== 'active' && b.status === 'active') return 1;
+
+      // 2. Manual threads before bot threads (within same status)
+      if (a.isManual && !b.isManual) return -1;
+      if (!a.isManual && b.isManual) return 1;
+
+      // 3. Sort by expiredAt (most recent first) for expired threads
+      if (a.expiredAt && b.expiredAt) {
+        return new Date(b.expiredAt).getTime() - new Date(a.expiredAt).getTime();
+      }
+
+      // 4. Threads with expiredAt before those without
+      if (a.expiredAt && !b.expiredAt) return -1;
+      if (!a.expiredAt && b.expiredAt) return 1;
+
+      return 0;
+    });
+  });
 
   // Selected thread ID
   private readonly _selectedThreadId = signal<string | null>(null);
@@ -84,6 +108,20 @@ export class ChatbotStateService {
    */
   setThreads(threads: Thread[]): void {
     this._threads.set(threads);
+  }
+
+  /**
+   * Update a specific thread in the list
+   */
+  updateThread(updatedThread: Thread): void {
+    const current = this._threads();
+    const index = current.findIndex(t => t.id === updatedThread.id);
+
+    if (index !== -1) {
+      const updated = [...current];
+      updated[index] = updatedThread;
+      this._threads.set(updated);
+    }
   }
 
   /**

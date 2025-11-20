@@ -451,6 +451,7 @@
     "manualmode": "Ручной режим",
     "botmode": "Режим бота",
     "takecontrol": "Взять управление",
+    "returntobot": "Вернуть боту",
     "loadingmessages": "Загрузка сообщений...",
     "messageplaceholder": "Введите ваше сообщение...",
     "threadnotfound": "Тред не найден",

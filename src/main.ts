@@ -169,12 +169,14 @@ bootstrapApplication(AppComponent, {
     // Global Feature: Support Chat
     // This feature is always available (provided at app level)
     // No roles specified = visible to everyone
+    // destroyOnClose: true = clear state and reload fresh data on each open
     provideFeature({
       meta: {
         key: 'support-chat',
         title: 'Support Chat',
         icon: '💬',
-        order: 10
+        order: 10,
+        destroyOnClose: true // Always start fresh with clean state
       },
       load: () => import('./app/features/support-chat/support-chat.shell.component')
         .then(m => m.SupportChatShellComponent)

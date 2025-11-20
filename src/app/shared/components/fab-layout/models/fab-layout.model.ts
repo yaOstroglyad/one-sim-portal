@@ -6,6 +6,7 @@ export interface FeatureMeta {
   icon?: string;
   roles?: string[];
   order?: number;
+  destroyOnClose?: boolean; // Default: true - destroy component when flyout closes
 }
 
 export interface FeatureEntry {
@@ -82,4 +83,5 @@ export interface FlyoutOpenConfig {
   featureKey?: string;
   params?: unknown;
   title?: string;
+  destroyOnClose?: boolean; // Runtime override for destroyOnClose behavior
 }

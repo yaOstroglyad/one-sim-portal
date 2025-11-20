@@ -77,7 +77,7 @@ export class TariffOfferService {
 
     // Only add productId param if it's provided
     if (productId) {
-      params = params.set('productId', productId);
+      params = params.set('coreProductId', productId);
     }
 
     // Generate cache key based on productId

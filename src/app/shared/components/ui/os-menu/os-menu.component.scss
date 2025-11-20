@@ -1,0 +1,175 @@
+@use "sass:map";
+@use "../../../../../scss/variables" as vars;
+@use "../../../../../scss/mixins" as mixins;
+
+.os-menu {
+  padding: map.get(vars.$os-spacing, '2');
+  min-width: 280px;
+  outline: none;
+
+  &__section {
+    margin-bottom: map.get(vars.$os-spacing, '2');
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__title {
+    font-size: map.get(vars.$os-font-sizes, 'xs');
+    font-weight: 600;
+    color: var(--os-color-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 map.get(vars.$os-spacing, '2') 0;
+    padding: 0 map.get(vars.$os-spacing, '3');
+    user-select: none;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '3');
+    border: none;
+    background: none;
+    text-align: start;
+    font-size: map.get(vars.$os-font-sizes, 'sm');
+    color: inherit;
+    border-radius: map.get(vars.$os-border-radius, 'medium');
+    cursor: pointer;
+    transition: all 0.2s ease;
+    gap: map.get(vars.$os-spacing, '2');
+    user-select: none;
+
+    &:hover:not(:disabled) {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    &:focus {
+      outline: 2px solid var(--os-color-primary);
+      outline-offset: -2px;
+    }
+
+    .layout--dark &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &--active {
+      background: rgba(var(--os-color-primary-rgb), 0.1);
+      color: var(--os-color-primary);
+      font-weight: 500;
+
+      &:hover:not(:disabled) {
+        background: rgba(var(--os-color-primary-rgb), 0.15);
+      }
+    }
+
+    &--danger {
+      color: var(--os-color-danger);
+
+      &:hover:not(:disabled) {
+        background: rgba(var(--os-color-danger-rgb), 0.1);
+      }
+
+      &:focus {
+        outline-color: var(--os-color-danger);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    &-icon {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-label {
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__badge {
+    margin-inline-start: auto;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 map.get(vars.$os-spacing, '1');
+    font-size: map.get(vars.$os-font-sizes, 'xs');
+    font-weight: 600;
+    background: var(--os-color-primary);
+    color: white;
+    border-radius: map.get(vars.$os-border-radius, 'full');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+
+    .os-menu__item--danger & {
+      background: var(--os-color-danger);
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: map.get(vars.$os-spacing, '2') 0;
+
+    .layout--dark & {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    &--section {
+      margin: map.get(vars.$os-spacing, '2') 0;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    min-width: 240px;
+    padding: map.get(vars.$os-spacing, '1');
+
+    &__item {
+      padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '2');
+      font-size: map.get(vars.$os-font-sizes, 'sm');
+    }
+
+    &__title {
+      padding: 0 map.get(vars.$os-spacing, '2');
+      font-size: map.get(vars.$os-font-sizes, 'xs');
+    }
+  }
+}
+
+// Text trigger styles (for inline text that opens menu)
+::ng-deep os-menu {
+  // Target text elements used as menu triggers
+  [menuTrigger] {
+    &:not(app-user-avatar):not(button):not(a) {
+      cursor: pointer;
+      color: var(--os-color-primary);
+      transition: all 0.2s ease;
+      padding: 2px 4px;
+      border-radius: map.get(vars.$os-border-radius, 'small');
+
+      &:hover {
+        background: rgba(var(--os-color-primary-rgb), 0.08);
+        text-decoration: underline;
+        text-decoration-style: dotted;
+      }
+
+      &:active {
+        background: rgba(var(--os-color-primary-rgb), 0.12);
+      }
+    }
+  }
+}

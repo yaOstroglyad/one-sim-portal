@@ -1,0 +1,25 @@
+<div class="os-dropdown" [class.os-dropdown--open]="isOpenState()">
+  <!-- Trigger wrapper -->
+  <div class="os-dropdown__trigger" #trigger>
+    <ng-content select="[dropdownTrigger]"></ng-content>
+  </div>
+
+  <!-- Backdrop -->
+  @if (isOpenState() && showBackdrop()) {
+    <div
+      class="os-dropdown__backdrop"
+      (click)="onBackdropClick()">
+    </div>
+  }
+
+  <!-- Dropdown Panel -->
+  @if (isOpenState()) {
+    <div
+      class="os-dropdown__panel"
+      [ngClass]="panelClasses()"
+      [ngStyle]="panelStyles()"
+      #panel>
+      <ng-content select="[dropdownContent]"></ng-content>
+    </div>
+  }
+</div>

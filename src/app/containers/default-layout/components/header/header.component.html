@@ -21,76 +21,23 @@
 
     <!-- Right side: User actions -->
     <div class="header__right">
-      <!-- User dropdown -->
-      <div class="header__user-dropdown" [class.header__user-dropdown--open]="isUserDropdownOpen()">
+      <!-- User menu with os-menu -->
+      <os-menu
+        [isOpen]="isUserDropdownOpen()"
+        [sections]="userMenuSections()"
+        position="bottom-right"
+        (closed)="closeUserMenu()">
         <app-user-avatar
+          menuTrigger
           [src]="userAvatar()"
           [alt]="userName()"
           [ariaLabel]="'User menu'"
           [initials]="userInitials()"
           size="md"
           variant="circle"
-          (click)="onUserAvatarClick($event)">
+          (click)="toggleUserMenu(); $event.stopPropagation()">
         </app-user-avatar>
-
-        <!-- Dropdown menu -->
-        @if (isUserDropdownOpen()) {
-          <div class="header__dropdown-menu">
-            <div class="header__dropdown-section">
-              <h6 class="header__dropdown-title">{{ 'default-header.language' | translate }}</h6>
-              @for (lang of languages(); track lang.code) {
-                <button
-                  class="header__dropdown-item"
-                  [class.header__dropdown-item--active]="currentLanguage() === lang.code"
-                  (click)="changeLang(lang.code)">
-                  <span class="header__dropdown-item-flag">{{ lang.flag }}</span>
-                  {{ lang.name }}
-                </button>
-              }
-            </div>
-
-            <div class="header__dropdown-divider"></div>
-
-            <div class="header__dropdown-section">
-              <h6 class="header__dropdown-title">{{ 'default-header.account' | translate }}</h6>
-              <button class="header__dropdown-item" (click)="goToProfile()">
-                <svg cIcon class="header__dropdown-item-icon" name="cil-user" width="16" height="16"></svg>
-                {{ 'default-header.profile' | translate }}
-              </button>
-              <button class="header__dropdown-item" (click)="goToNotifications()">
-                <svg cIcon class="header__dropdown-item-icon" name="cil-bell" width="16" height="16"></svg>
-                {{ 'default-header.notifications' | translate }}
-                @if (hasNotifications()) {
-                  <span class="header__dropdown-badge">
-                    {{ notificationCount() }}
-                  </span>
-                }
-              </button>
-            </div>
-
-            <div class="header__dropdown-divider"></div>
-
-            <div class="header__dropdown-section">
-              <h6 class="header__dropdown-title">{{ 'default-header.settings' | translate }}</h6>
-              <button class="header__dropdown-item" (click)="goToSettings()">
-                <svg cIcon class="header__dropdown-item-icon" name="cil-settings" width="16" height="16"></svg>
-                {{ 'default-header.settings' | translate }}
-              </button>
-              <button class="header__dropdown-item header__dropdown-item--danger" (click)="logout()">
-                <svg cIcon class="header__dropdown-item-icon" name="cil-arrow-thick-to-right" width="16" height="16"></svg>
-                {{ 'default-header.logout' | translate }}
-              </button>
-            </div>
-          </div>
-        }
-      </div>
+      </os-menu>
     </div>
-  </div>
-
-  <!-- Backdrop -->
-  <div
-    class="header__backdrop"
-    [class.header__backdrop--visible]="isUserDropdownOpen()"
-    (click)="onBackdropClick()">
   </div>
 </header>

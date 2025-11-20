@@ -175,6 +175,144 @@ This file lists ALL reusable components, SCSS mixins, and UI elements available 
 
 ---
 
+### UI Components
+
+#### **OsDropdownComponent**
+- **Location:** `/src/app/shared/components/ui/os-dropdown/`
+- **Use for:** Generic dropdown/popover container
+- **Features:**
+  - Content projection for trigger and content
+  - Positions: `bottom-right`, `bottom-left`, `top-right`, `top-left`
+  - Automatic RTL support via CSS logical properties
+  - Backdrop with click-outside-to-close
+  - Smooth animations (slide down/up, fade in)
+  - Customizable width
+  - Dark theme support
+- **Usage:**
+  ```html
+  <os-dropdown
+    [isOpen]="isOpen()"
+    [position]="'bottom-right'"
+    [width]="'280px'"
+    (closed)="onClose()">
+
+    <button dropdownTrigger>Click me</button>
+
+    <div dropdownContent>
+      <!-- Your dropdown content -->
+    </div>
+  </os-dropdown>
+  ```
+- **Key Features:**
+  - Uses `inset-inline-start`/`inset-inline-end` for RTL support
+  - Backdrop prevents interaction with page content
+  - Responsive: centers on mobile devices
+- **Similar to:** Material Menu, Bootstrap Dropdown
+
+#### **OsMenuComponent**
+- **Location:** `/src/app/shared/components/ui/os-menu/`
+- **Use for:** Context menus, action menus, dropdown menus
+- **Features:**
+  - Built on top of `os-dropdown`
+  - Flat items or structured sections
+  - Keyboard navigation (Arrow Up/Down, Enter, Escape, Home, End)
+  - ARIA accessibility attributes
+  - Icons, badges, active/disabled/danger states
+  - Automatic text trigger styling (primary color)
+  - Dividers between items
+  - Click-to-close configurable
+- **Usage:**
+  ```html
+  <!-- Simple menu with flat items -->
+  <os-menu
+    [isOpen]="isMenuOpen()"
+    [items]="menuItems()"
+    [position]="'bottom-right'"
+    (closed)="closeMenu()"
+    (itemClick)="onItemClick($event)">
+
+    <button menuTrigger>Actions</button>
+  </os-menu>
+
+  <!-- Menu with sections -->
+  <os-menu
+    [isOpen]="isMenuOpen()"
+    [sections]="menuSections()"
+    (closed)="closeMenu()">
+
+    <!-- Text triggers get automatic primary color styling -->
+    <span menuTrigger>{{ iccid }}</span>
+  </os-menu>
+  ```
+- **Item Structure:**
+  ```typescript
+  interface OsMenuItem {
+    id: string;
+    label: string;
+    icon?: string;              // Icon name from assets
+    badge?: string | number;    // Badge with count/text
+    disabled?: boolean;         // Disabled state
+    danger?: boolean;           // Danger/destructive action
+    active?: boolean;           // Currently active item
+    divider?: boolean;          // Show divider after item
+    action?: () => void;        // Action callback
+    cssClass?: string;          // Custom CSS class
+  }
+
+  interface OsMenuSection {
+    title?: string;             // Section title
+    items: OsMenuItem[];        // Items in section
+  }
+  ```
+- **Text Trigger Styling:**
+  - Text elements with `menuTrigger` automatically get primary color
+  - Hover: background + dotted underline
+  - Excludes buttons, links, avatars (have their own styles)
+- **Keyboard Navigation:**
+  - `Arrow Down` - Next item
+  - `Arrow Up` - Previous item
+  - `Enter/Space` - Select item
+  - `Escape` - Close menu
+  - `Home` - First item
+  - `End` - Last item
+- **Similar to:** Material Menu, context menus in header/tables
+
+#### **ContextualTextComponent**
+- **Location:** `/src/app/shared/components/contextual-text/`
+- **Use for:** Text values with quick actions (ICCID, email, ID)
+- **Features:**
+  - Built on `os-menu`
+  - Displays text with context menu of actions
+  - Automatic primary color styling
+  - Tooltip support
+- **Usage:**
+  ```html
+  <app-contextual-text
+    [text]="iccid"
+    [actions]="iccidActions"
+    [tooltip]="'Click for actions'">
+  </app-contextual-text>
+  ```
+- **Actions Structure:**
+  ```typescript
+  const iccidActions: ContextMenuItem[] = [
+    {
+      id: 'copy',
+      label: 'Copy ICCID',
+      icon: 'copy',
+      action: () => copyToClipboard(iccid)
+    },
+    {
+      id: 'search',
+      label: 'Search',
+      action: () => searchIccid(iccid)
+    }
+  ];
+  ```
+- **Similar to:** Clickable IDs, interactive text values
+
+---
+
 ## 🎨 Available SCSS Mixins
 
 ### Dashboard Mixins (`/src/scss/_mixins.scss`)
@@ -472,8 +610,8 @@ import { FormGeneratorComponent } from '@shared/components/form-generator';
 
 ---
 
-**Last Updated:** 2025-11-15
-**Total Reusable Components:** 16+
+**Last Updated:** 2025-11-20
+**Total Reusable Components:** 19+
 **Total Reusable Services:** 2+
 **Total SCSS Mixins:** 15+
 **Total Custom Icons:** 9

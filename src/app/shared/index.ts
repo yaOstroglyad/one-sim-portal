@@ -32,6 +32,11 @@ export * from './components/smart-filter-header'
 export * from './components/user-avatar'
 export * from './components/breadcrumb/breadcrumb.component'
 export * from './components/icon/icon.component'
+export * from './components/contextual-text'
+
+// UI Components - New organized structure
+export * from './components/ui/os-dropdown'
+export * from './components/ui/os-menu'
 
 export * from './components/header-component/header.component';
 export * from './pipes/format-time/format-time.pipe';

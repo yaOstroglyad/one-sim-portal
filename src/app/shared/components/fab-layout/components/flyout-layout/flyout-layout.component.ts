@@ -20,9 +20,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { CdkDrag, CdkDragEnd, DragDropModule } from '@angular/cdk/drag-drop';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AuthService } from '../../../../auth';
-import { GlobalFlyoutService } from '../../services/global-flyout.service';
-import { FeatureRegistryService } from '../../services/feature-registry.service';
+import { AuthService } from '@shared';
+import { GlobalFlyoutService } from '@shared/components/fab-layout';
+import { FeatureRegistryService } from '@shared/components/fab-layout';
 import { DockedState, Breakpoint, ResizeConfig } from '../../models';
 
 @Component({
@@ -101,9 +101,12 @@ export class FlyoutLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     // Effect: Sync activeFeatureKey with GlobalFlyoutService
     effect(() => {
       const key = this.flyout.activeFeatureKey();
+      const isOpenNow = this.flyout.isOpen();
       this.activeKey.set(key);
 
-      if (key) {
+      // Load feature when key is set AND flyout is open
+      // This ensures component is recreated when reopening
+      if (key && isOpenNow) {
         this.loadFeature(key);
       }
     });
@@ -175,7 +178,43 @@ export class FlyoutLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   close() {
+    // Determine if component should be destroyed on close
+    const shouldDestroy = this.shouldDestroyOnClose();
+
+    if (shouldDestroy) {
+      // Destroy current component to trigger ngOnDestroy
+      this.host.clear();
+      this.viewRef?.destroy();
+      this.viewRef = undefined;
+    }
+
+    // Reset runtime override for next open
+    this.flyout.destroyOnClose.set(undefined);
     this.flyout.close();
+  }
+
+  /**
+   * Determine if component should be destroyed when flyout closes
+   * Priority: runtime override > feature meta config > default (true)
+   */
+  private shouldDestroyOnClose(): boolean {
+    // 1. Check runtime override from flyout.open({ destroyOnClose: ... })
+    const runtimeOverride = this.flyout.destroyOnClose();
+    if (runtimeOverride !== undefined) {
+      return runtimeOverride;
+    }
+
+    // 2. Check feature meta configuration
+    const activeKey = this.activeKey();
+    if (activeKey) {
+      const feature = this.registry.features().find(f => f.meta.key === activeKey);
+      if (feature?.meta.destroyOnClose !== undefined) {
+        return feature.meta.destroyOnClose;
+      }
+    }
+
+    // 3. Default behavior: destroy on close
+    return true;
   }
 
   toggleDocked(state: DockedState) {

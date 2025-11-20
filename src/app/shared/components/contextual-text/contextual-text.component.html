@@ -1,0 +1,13 @@
+<os-menu
+  [isOpen]="isMenuOpen()"
+  [items]="menuItems()"
+  position="bottom-left"
+  (closed)="closeMenu()">
+
+  <span
+    menuTrigger
+    [matTooltip]="tooltip()"
+    (click)="toggleMenu()">
+    {{ text() }}
+  </span>
+</os-menu>
