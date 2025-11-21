@@ -153,10 +153,6 @@ export class IconService {
   private processSvgContent(svgContent: string): string {
     let processed = svgContent;
 
-    // Remove fixed width and height attributes to allow CSS sizing
-    processed = processed.replace(/\s+width="[^"]*"/g, '');
-    processed = processed.replace(/\s+height="[^"]*"/g, '');
-
     // Ensure viewBox exists for proper scaling
     if (!processed.includes('viewBox=')) {
       // If no viewBox, add a default one

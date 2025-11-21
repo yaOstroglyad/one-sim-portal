@@ -1,17 +1,18 @@
+@use "sass:map";
 @use "variables" as vars;
 
 .price-info {
   background-color: var(--os-color-gray-50);
-  border-radius: map-get(vars.$os-border-radius, 'medium'); // 0.375rem
-  padding: map-get(vars.$os-spacing, '3'); // 0.75rem
-  margin-bottom: map-get(vars.$os-spacing, '4'); // 1rem
+  border-radius: map.get(vars.$os-border-radius, 'medium'); // 0.375rem
+  padding: map.get(vars.$os-spacing, '3'); // 0.75rem
+  margin-bottom: map.get(vars.$os-spacing, '4'); // 1rem
 }
 
 .info-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: map-get(vars.$os-spacing, '2') 0; // 0.5rem
+  padding: map.get(vars.$os-spacing, '2') 0; // 0.5rem
 
   &:first-child {
     padding-top: 0;
@@ -22,12 +23,12 @@
   }
 
   .label {
-    font-size: map-get(vars.$os-font-sizes, 'sm'); // 0.875rem
+    font-size: map.get(vars.$os-font-sizes, 'sm'); // 0.875rem
     color: var(--os-color-text-secondary);
   }
 
   .value {
-    font-size: map-get(vars.$os-font-sizes, 'sm'); // 0.875rem
+    font-size: map.get(vars.$os-font-sizes, 'sm'); // 0.875rem
     color: var(--os-color-text-primary);
     font-weight: 500;
   }

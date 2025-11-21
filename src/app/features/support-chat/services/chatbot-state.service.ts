@@ -76,11 +76,18 @@ export class ChatbotStateService {
     return threads.find(t => t.id === threadId) || null;
   });
 
-  // Computed: Messages for selected thread
+  // Computed: Messages for selected thread (sorted by createdAt ascending)
   readonly selectedThreadMessages = computed(() => {
     const threadId = this._selectedThreadId();
     if (!threadId) return [];
-    return this._messagesByThread()[threadId] || [];
+    const messages = this._messagesByThread()[threadId] || [];
+
+    // Sort messages by createdAt (oldest first, newest last)
+    return [...messages].sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return dateA - dateB;
+    });
   });
 
   // Computed: Typing indicator for selected thread
@@ -136,6 +143,7 @@ export class ChatbotStateService {
    */
   setMessages(threadId: string, messages: Message[]): void {
     const current = this._messagesByThread();
+
     this._messagesByThread.set({
       ...current,
       [threadId]: messages

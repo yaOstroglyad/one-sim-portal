@@ -1,7 +1,7 @@
-<aside 
-  class="sidebar" 
+<aside
+  class="sidebar"
   [ngClass]="sidebarClasses()">
-  
+
   <!-- Brand Section -->
   <div class="sidebar__brand" (click)="onBrandClick()">
     @if (!imageLoaded()) {
@@ -12,13 +12,13 @@
       </div>
     } @else {
       <!-- Actual images (only render after skeleton) -->
-      <img 
-        [src]="brandConfig.full.src" 
+      <img
+        [src]="brandConfig.full.src"
         [alt]="brandConfig.full.alt"
         [style.height.px]="brandConfig.full.height"
         class="sidebar__brand-full">
-      <img 
-        [src]="brandConfig.narrow.src" 
+      <img
+        [src]="brandConfig.narrow.src"
         [alt]="brandConfig.narrow.alt"
         [style.width.px]="brandConfig.narrow.width"
         class="sidebar__brand-narrow">
@@ -32,12 +32,12 @@
         @for (item of navItems; track item.name) {
           <li class="sidebar__nav-item">
             @switch (getItemType(item)) {
-              
+
               <!-- Divider -->
               @case ('divider') {
                 <div class="sidebar__divider"></div>
               }
-              
+
               <!-- Parent with children -->
               @case ('parent') {
                 <div class="sidebar__nav-parent">
@@ -55,18 +55,18 @@
                       </span>
                     </span>
                     <span class="sidebar__nav-arrow">
-                      <app-icon [icon]="'chevron-down'"></app-icon>
+                      <app-icon [icon]="'chevron-down'" [size]="'sm'"></app-icon>
                     </span>
                   </button>
-                  
+
                   <!-- Children -->
-                  <ul 
+                  <ul
                     class="sidebar__nav-children"
                     [class.sidebar__nav-children--expanded]="isExpanded(item)">
                     @for (child of item.children; track child.name) {
                       <li class="sidebar__nav-child-item">
                         @if (!child.children) {
-                          <a 
+                          <a
                             [routerLink]="child.url"
                             class="sidebar__nav-link sidebar__nav-link--child"
                             routerLinkActive="sidebar__nav-link--active">
@@ -86,12 +86,12 @@
                                 <app-icon [icon]="'chevron-down'"></app-icon>
                               </span>
                             </button>
-                            <ul 
+                            <ul
                               class="sidebar__nav-nested-children"
                               [class.sidebar__nav-nested-children--expanded]="isExpanded(child)">
                               @for (nestedChild of child.children; track nestedChild.name) {
                                 <li>
-                                  <a 
+                                  <a
                                     [routerLink]="nestedChild.url"
                                     class="sidebar__nav-link sidebar__nav-link--nested-child"
                                     routerLinkActive="sidebar__nav-link--active">
@@ -107,7 +107,7 @@
                   </ul>
                 </div>
               }
-              
+
               <!-- Regular link -->
               @default {
                 <a

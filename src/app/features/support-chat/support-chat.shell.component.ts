@@ -1,6 +1,7 @@
 import {
 	Component,
 	ChangeDetectionStrategy,
+	ChangeDetectorRef,
 	OnDestroy,
 	inject,
 	viewChild,
@@ -47,6 +48,7 @@ export class SupportChatShellComponent implements OnDestroy {
 	private readonly apiService = inject(ChatbotApiService);
 	private readonly pollingService = inject(ChatbotPollingService);
 	private readonly flyoutService = inject(GlobalFlyoutService);
+	private readonly cdr = inject(ChangeDetectorRef);
 	readonly stateService = inject(ChatbotStateService);
 
 	// ViewChild as signal
@@ -126,7 +128,9 @@ export class SupportChatShellComponent implements OnDestroy {
 
 		this.stateService.setSelectedThreadId(threadId);
 		this.pollingService.startPolling(threadId);
-		this.lastMessageCount.set(this.stateService.selectedThreadMessages().length);
+
+		const currentMessages = this.stateService.selectedThreadMessages();
+		this.lastMessageCount.set(currentMessages.length);
 	}
 
 	/**
@@ -143,6 +147,7 @@ export class SupportChatShellComponent implements OnDestroy {
 	 */
 	onToggleControl(): void {
 		const selectedThread = this.stateService.selectedThread();
+
 		if (!selectedThread || selectedThread.status === 'expired') {
 			return;
 		}
@@ -156,7 +161,7 @@ export class SupportChatShellComponent implements OnDestroy {
 				this.stateService.updateThread(updatedThread);
 			},
 			error: (error) => {
-				console.error('[SupportChatShell] Failed to toggle control:', error);
+				console.error('[SupportChatShell] Failed to update thread:', error);
 				const action = newIsManual ? 'take control of' : 'return to bot';
 				this.stateService.setError(`Failed to ${action} conversation`);
 			}
@@ -172,19 +177,30 @@ export class SupportChatShellComponent implements OnDestroy {
 		}
 
 		const selectedThread = this.stateService.selectedThread();
-		if (!selectedThread || !selectedThread.isManual) {
+
+		if (!selectedThread) {
+			return;
+		}
+
+		if (!selectedThread.isManual) {
 			return;
 		}
 
 		this.stateService.setSendingMessage(true);
 
-		this.apiService.createMessage(selectedThread.id, {text: text.trim()}).subscribe({
-			next: () => {
+		const trimmedText = text.trim();
+
+		this.apiService.createMessage(selectedThread.id, {text: trimmedText}).subscribe({
+			next: (createdMessage) => {
 				this.stateService.setSendingMessage(false);
+
 				// Immediately fetch updated messages
 				this.apiService.getMessages(selectedThread.id).subscribe({
 					next: (messages) => {
 						this.stateService.setMessages(selectedThread.id, messages);
+
+						// Force change detection to update UI
+						this.cdr.markForCheck();
 					},
 					error: (error) => {
 						console.error('[SupportChatShell] Failed to fetch messages after send:', error);

@@ -1,6 +1,6 @@
 # SCSS Architecture Rules
 
-> **Created:** 2025-10-16 | **Last Updated:** 2025-11-20
+> **Created:** 2025-10-16 | **Last Updated:** 2025-11-21
 > **Context Tags:** `@styling` `@creating-new` `@learn-patterns`
 > **Read when:** Writing SCSS/CSS or styling components
 
@@ -112,20 +112,33 @@ src/scss/
 }
 ```
 
-**ALWAYS use @use with simple alias (no relative paths needed):**
+### 🚨 CRITICAL: ALWAYS Import sass:map First
+
+**When using `map.get()`, you MUST import `sass:map` module first:**
 
 ```scss
-// ✅ CORRECT - Simple alias import (PREFERRED)
+// ✅ CORRECT - Import sass:map FIRST (MANDATORY if using map.get)
+@use "sass:map";
 @use "variables" as vars;
 @use "mixins" as mixins;
 
-// Usage with namespace and map-get
+// ✅ CORRECT - Use map.get() (modern syntax)
 .my-component {
   @include mixins.interactive-states();
   color: var(--os-color-primary);
-  padding: map-get(vars.$os-spacing, '4');      // Use map-get for maps
-  font-size: map-get(vars.$os-font-sizes, 'sm'); // Use map-get for maps
-  border-radius: map-get(vars.$os-border-radius, 'medium');
+  padding: map.get(vars.$os-spacing, '4');              // ✅ Modern
+  font-size: map.get(vars.$os-font-sizes, 'sm');        // ✅ Modern
+  border-radius: map.get(vars.$os-border-radius, 'medium'); // ✅ Modern
+  box-shadow: map.get(vars.$os-shadows, 'lg');          // ✅ Modern
+}
+```
+
+```scss
+// ❌ WRONG - Global map-get() is deprecated in Dart Sass 3.0
+@use "variables" as vars;
+
+.my-component {
+  padding: map-get(vars.$os-spacing, '4');  // ❌ Deprecated!
 }
 ```
 
@@ -138,9 +151,20 @@ src/scss/
 @use "../../../../scss/variables" as vars;
 ```
 
+### Import Order Template (COPY THIS)
+
+```scss
+// ✅ CORRECT - Standard import order for ALL component SCSS files
+@use "sass:map";           // FIRST (if using map.get())
+@use "variables" as vars;  // SECOND (always needed)
+@use "mixins" as mixins;   // THIRD (if using mixins)
+
+// Your styles here
+```
+
 ### Available SCSS Maps in _variables.scss
 
-**CRITICAL: These are MAPS, not direct variables. Use `map-get()` to access:**
+**CRITICAL: These are MAPS, not direct variables. Use `map.get()` to access:**
 
 ```scss
 // Spacing map (Tailwind-inspired)
@@ -188,11 +212,17 @@ $os-shadows: (
 );
 ```
 
-### Import Order in Component Files
+### Import Order in Component Files (MANDATORY)
 ```scss
-@use "variables" as vars;  // ALWAYS first
-@use "mixins" as mixins;   // ALWAYS second (if needed)
+@use "sass:map";           // ALWAYS FIRST (if using map.get())
+@use "variables" as vars;  // ALWAYS SECOND
+@use "mixins" as mixins;   // ALWAYS THIRD (if needed)
 ```
+
+**Why this order?**
+- `sass:map` provides the `map.get()` function (replaces deprecated global `map-get()`)
+- `variables` contains all maps that you'll access with `map.get()`
+- `mixins` may depend on variables, so comes last
 
 ---
 
@@ -293,9 +323,12 @@ Need new style?
 
 1. **Check _variables.scss** - Is there a map value?
    ```scss
-   // ✅ CORRECT - Use existing map values
-   padding: map-get(vars.$os-spacing, '4');  // 1rem
-   font-size: map-get(vars.$os-font-sizes, 'sm'); // 0.875rem
+   // ✅ CORRECT - Use existing map values (with sass:map import)
+   @use "sass:map";
+   @use "variables" as vars;
+
+   padding: map.get(vars.$os-spacing, '4');  // 1rem - Modern syntax
+   font-size: map.get(vars.$os-font-sizes, 'sm'); // 0.875rem - Modern syntax
    ```
 
 2. **Check _mixins.scss** - Is there a mixin for this?
@@ -319,11 +352,12 @@ Need new style?
    ```
 
 **Quick Checklist (MANDATORY):**
-1. ✅ Does similar value/pattern already exist in variables/mixins?
-2. ✅ Am I using `map-get()` for spacing, fonts, border-radius?
-3. ✅ Am I using CSS variables (var(--os-color-*)) for colors?
-4. ✅ If this is reusable, did I add it to shared files?
-5. ✅ Am I following the design system (no magic numbers)?
+1. ✅ Did I import `@use "sass:map";` FIRST (before other imports)?
+2. ✅ Does similar value/pattern already exist in variables/mixins?
+3. ✅ Am I using `map.get()` (NOT `map-get()`) for spacing, fonts, border-radius?
+4. ✅ Am I using CSS variables (var(--os-color-*)) for colors?
+5. ✅ If this is reusable, did I add it to shared files?
+6. ✅ Am I following the design system (no magic numbers)?
 
 ---
 
@@ -486,26 +520,27 @@ Need new style?
 
 ### ✅ GOOD Component SCSS
 ```scss
-// ✅ CORRECT - Simple alias import (no long paths)
-@use "variables" as vars;
-@use "mixins" as mixins;
+// ✅ CORRECT - Import sass:map FIRST, then simple alias imports
+@use "sass:map";           // FIRST - Required for map.get()
+@use "variables" as vars;  // SECOND
+@use "mixins" as mixins;   // THIRD
 
 .os-my-component {
   @include mixins.generate-os-colors('my-component');
   @include mixins.responsive-spacing();
 
-  // ✅ Using map-get for spacing, border-radius, shadows
-  padding: map-get(vars.$os-spacing, '4');           // 1rem
-  border-radius: map-get(vars.$os-border-radius, 'medium'); // 0.375rem
+  // ✅ Using map.get() for spacing, border-radius, shadows
+  padding: map.get(vars.$os-spacing, '4');                  // 1rem
+  border-radius: map.get(vars.$os-border-radius, 'medium'); // 0.375rem
   color: var(--os-color-text-primary);
 
   &__element {
-    font-size: map-get(vars.$os-font-sizes, 'sm');   // 0.875rem
+    font-size: map.get(vars.$os-font-sizes, 'sm');   // 0.875rem
     color: var(--os-color-text-secondary);
   }
 
   &--variant {
-    box-shadow: map-get(vars.$os-shadows, 'lg');
+    box-shadow: map.get(vars.$os-shadows, 'lg');
     background-color: var(--os-color-gray-50);       // CSS variable
   }
 }
@@ -514,18 +549,20 @@ Need new style?
 ### ❌ BAD Component SCSS
 ```scss
 // Multiple issues here:
-@import "../../../../scss/variables"; // ❌ Using @import (deprecated)
-@use "../../../../scss/variables" as vars; // ❌ Long relative path
+@import "../../../../scss/variables";          // ❌ Using @import (deprecated)
+@use "../../../../scss/variables" as vars;     // ❌ Long relative path
+// ❌ MISSING: @use "sass:map";
 
 .my-component { // ❌ No 'os-' prefix
-  padding: 16px; // ❌ Hardcoded value (should use map-get)
-  margin: 8px 12px 16px 4px; // ❌ Inconsistent spacing
-  background: #f9a743; // ❌ Hardcoded color
-  border-radius: 6px; // ❌ Magic number
-  color: #2c2c2c; // ❌ Should use var(--os-color-text-primary)
+  padding: 16px;                  // ❌ Hardcoded value (should use map.get)
+  margin: 8px 12px 16px 4px;      // ❌ Inconsistent spacing
+  background: #f9a743;            // ❌ Hardcoded color
+  border-radius: 6px;             // ❌ Magic number
+  color: #2c2c2c;                 // ❌ Should use var(--os-color-text-primary)
+  padding: map-get(vars.$os-spacing, '4'); // ❌ Deprecated map-get() (should use map.get)
 
   .element { // ❌ Not using BEM
-    font-size: 14px; // ❌ Magic number (should use map-get)
+    font-size: 14px; // ❌ Magic number (should use map.get)
   }
 }
 ```
@@ -536,24 +573,26 @@ Need new style?
 
 ### Before Adding Styles - MANDATORY Checks:
 
-1. ❓ Does a similar value/pattern already exist in _variables.scss or _mixins.scss?
-2. ❓ Can I use an existing mixin instead of writing custom CSS?
-3. ❓ Am I using `map-get()` for spacing, fonts, border-radius, shadows?
-4. ❓ Am I using CSS variables (var(--os-color-*)) instead of hardcoded colors?
-5. ❓ If this is reusable, did I add it to _variables.scss map?
-6. ❓ Is this component-specific or should it be in shared files?
-7. ❓ Am I using simple alias import (@use "variables" as vars)?
+1. ❓ Did I add `@use "sass:map";` as the FIRST import?
+2. ❓ Does a similar value/pattern already exist in _variables.scss or _mixins.scss?
+3. ❓ Can I use an existing mixin instead of writing custom CSS?
+4. ❓ Am I using `map.get()` (NOT `map-get()`) for spacing, fonts, border-radius, shadows?
+5. ❓ Am I using CSS variables (var(--os-color-*)) instead of hardcoded colors?
+6. ❓ If this is reusable, did I add it to _variables.scss map?
+7. ❓ Is this component-specific or should it be in shared files?
+8. ❓ Am I using simple alias import (@use "variables" as vars)?
 
 ### Code Review Checklist (STRICT ENFORCEMENT):
 
+- [ ] ✅ **CRITICAL**: `@use "sass:map";` imported FIRST (before all other imports)
 - [ ] ✅ Simple alias import: `@use "variables" as vars;` (not long relative paths)
-- [ ] ✅ Using `map-get()` for all spacing, fonts, border-radius, shadows
+- [ ] ✅ Using `map.get()` (NOT `map-get()`) for all spacing, fonts, border-radius, shadows
 - [ ] ✅ CSS variables (var(--os-color-*)) used for ALL colors
 - [ ] ✅ No hardcoded values (16px, 14px, #2c2c2c, etc.)
 - [ ] ✅ No duplication of existing utilities/mixins
 - [ ] ✅ BEM methodology followed for component classes
 - [ ] ✅ @use syntax (NEVER @import)
-- [ ] ✅ Imports in correct order (variables first, mixins second)
+- [ ] ✅ Imports in correct order (sass:map → variables → mixins)
 - [ ] ✅ Dashboard mixins used (if dashboard component)
 - [ ] ✅ No deep nesting (max 3 levels)
 - [ ] ✅ Reusable values added to _variables.scss maps
@@ -568,17 +607,24 @@ Need new style?
 **Core Principles:**
 1. **DRY (Don't Repeat Yourself)** - If a style is used twice, it belongs in shared files
 2. **Single Source of Truth** - All reusable values in _variables.scss maps
-3. **Simple Aliases** - Use `@use "variables" as vars;` (no long relative paths)
-4. **Design System First** - Use map-get() and CSS variables, never hardcode
+3. **Modern SCSS Modules** - Use `@use "sass:map"` FIRST, then `@use "variables" as vars`
+4. **Design System First** - Use `map.get()` and CSS variables, never hardcode
 5. **Maximize Reusability** - Add new values to maps if they might be reused
 
 **Result**: Faster development, easier maintenance, consistent UI, zero duplication
 
-**Quick Reference:**
-- Import: `@use "variables" as vars;` (simple alias)
-- Spacing: `map-get(vars.$os-spacing, '4')` (not `16px`)
-- Fonts: `map-get(vars.$os-font-sizes, 'sm')` (not `14px`)
-- Border: `map-get(vars.$os-border-radius, 'medium')` (not `6px`)
-- Colors: `var(--os-color-text-primary)` (not `#2c2c2c`)
-- Shadows: `map-get(vars.$os-shadows, 'lg')` (not custom shadow)
+**Quick Reference (Copy-Paste Template):**
+```scss
+// Standard imports (MANDATORY ORDER)
+@use "sass:map";           // FIRST - Required for map.get()
+@use "variables" as vars;  // SECOND
+@use "mixins" as mixins;   // THIRD (if needed)
+
+// Values (use design system)
+padding: map.get(vars.$os-spacing, '4');              // ✅ Not 16px
+font-size: map.get(vars.$os-font-sizes, 'sm');        // ✅ Not 14px
+border-radius: map.get(vars.$os-border-radius, 'medium'); // ✅ Not 6px
+box-shadow: map.get(vars.$os-shadows, 'lg');          // ✅ Not custom
+color: var(--os-color-text-primary);                  // ✅ Not #2c2c2c
+```
 

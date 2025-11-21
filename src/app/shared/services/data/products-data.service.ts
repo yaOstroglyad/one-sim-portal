@@ -114,37 +114,37 @@ export class ProductsDataService extends DataService<Package> {
 				// Mock data with current exchange rates (December 2024)
 				// Base currency: USD
 				const mockExchangeRates: Record<string, number> = {
-					'USD': 1.0,      // Base currency
-					'EUR': 0.93,     // US Dollar to Euro
-					'GBP': 0.79,     // US Dollar to British Pound
-					'JPY': 149.50,   // US Dollar to Japanese Yen
-					'CAD': 1.39,     // US Dollar to Canadian Dollar
-					'AUD': 1.52,     // US Dollar to Australian Dollar
-					'CHF': 0.88,     // US Dollar to Swiss Franc
-					'CNY': 7.25,     // US Dollar to Chinese Yuan
-					'SEK': 10.85,    // US Dollar to Swedish Krona
-					'NOK': 11.15,    // US Dollar to Norwegian Krone
-					'DKK': 6.95,     // US Dollar to Danish Krone
-					'PLN': 4.05,     // US Dollar to Polish Zloty
-					'CZK': 23.50,    // US Dollar to Czech Koruna
-					'HUF': 385.0,    // US Dollar to Hungarian Forint
-					'RUB': 95.0,     // US Dollar to Russian Ruble
-					'UAH': 41.0,     // US Dollar to Ukrainian Hryvnia
-					'ILS': 3.65,     // US Dollar to Israeli Shekel
-					'TRY': 34.0,     // US Dollar to Turkish Lira
-					'INR': 84.0,     // US Dollar to Indian Rupee
-					'BRL': 6.10,     // US Dollar to Brazilian Real
-					'KRW': 1380.0,   // US Dollar to South Korean Won
-					'SGD': 1.35,     // US Dollar to Singapore Dollar
-					'HKD': 7.80,     // US Dollar to Hong Kong Dollar
-					'NZD': 1.67,     // US Dollar to New Zealand Dollar
-					'MXN': 20.15,    // US Dollar to Mexican Peso
-					'ZAR': 18.50,    // US Dollar to South African Rand
-					'THB': 35.0,     // US Dollar to Thai Baht
-					'MYR': 4.48,     // US Dollar to Malaysian Ringgit
-					'IDR': 15800.0,  // US Dollar to Indonesian Rupiah
-					'PHP': 57.0,     // US Dollar to Philippine Peso
-					'VND': 24500.0   // US Dollar to Vietnamese Dong
+					'USD': 1.0,      // базовая валюта
+					'EUR': 0.868,     // USD → EUR (1 USD ≈ 0.868 EUR) :contentReference[oaicite:0]{index=0}
+					'GBP': 0.79,      // без точных свежих данных, оставлено прежнее
+					'JPY': 154.4,     // USD → JPY около 154.4 :contentReference[oaicite:1]{index=1}
+					'CAD': 1.40,      // USD → CAD около 1.400 :contentReference[oaicite:2]{index=2}
+					'AUD': 0.6549,    // USD → AUD ≈ 0.6549 :contentReference[oaicite:3]{index=3}
+					'CHF': 0.7933,    // USD → CHF ≈ 0.7933 :contentReference[oaicite:4]{index=4}
+					'CNY': 7.10,      // USD → CNY ≈ 7.10 :contentReference[oaicite:5]{index=5}
+					'SEK': 9.4485,    // USD → SEK ≈ 9.4485 :contentReference[oaicite:6]{index=6}
+					'NOK': 10.0932,   // USD → NOK ≈10.0932 :contentReference[oaicite:7]{index=7}
+					'DKK': 6.4280,    // USD → DKK ≈6.4280 :contentReference[oaicite:8]{index=8}
+					'PLN': 4.05,      // без точных свежих данных — оставлено прежнее
+					'CZK': 23.50,     // без точных свежих данных — прежний
+					'HUF': 385.0,     // без точных свежих данных
+					'RUB': 95.0,      // без точных свежих данных
+					'UAH': 41.0,      // без точных свежих данных
+					'ILS': 3.285,     // USD → ILS ≈ 3.285 :contentReference[oaicite:9]{index=9}
+					'TRY': 34.0,      // без точных свежих данных
+					'INR': 88.64,     // USD → INR ≈ 88.64 :contentReference[oaicite:10]{index=10}
+					'BRL': 5.29,      // USD → BRL ≈ 5.29 (из H.10: 5.2858 на 12 ноября) :contentReference[oaicite:11]{index=11}
+					'KRW': 1453.2,    // USD → KRW ≈ 1453.2 :contentReference[oaicite:12]{index=12}
+					'SGD': 1.2984,    // USD → SGD ≈ 1.2984 :contentReference[oaicite:13]{index=13}
+					'HKD': 7.7716,    // USD → HKD ≈ 7.7716 :contentReference[oaicite:14]{index=14}
+					'NZD': 0.5685,    // USD → NZD ≈ 0.5685 :contentReference[oaicite:15]{index=15}
+					'MXN': 18.33,     // USD → MXN ≈ 18.3299 :contentReference[oaicite:16]{index=16}
+					'ZAR': 17.1235,   // USD → ZAR ≈ 17.1235 :contentReference[oaicite:17]{index=17}
+					'THB': 32.42,     // USD → THB ≈ 32.4200 :contentReference[oaicite:18]{index=18}
+					'MYR': 4.13,      // USD → MYR ≈ 4.13 :contentReference[oaicite:19]{index=19}
+					'IDR': 15800.0,   // без точных свежих данных
+					'PHP': 57.0,      // без точных свежих данных
+					'VND': 24500.0    // без точных свежих данных
 				};
 
 				return of(mockExchangeRates).pipe(

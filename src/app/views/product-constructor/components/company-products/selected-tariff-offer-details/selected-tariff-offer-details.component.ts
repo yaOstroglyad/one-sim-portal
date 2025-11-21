@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, computed, input, output, inject, signal, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, input, output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonModule } from '@coreui/angular';
@@ -129,13 +129,11 @@ export class SelectedTariffOfferDetailsComponent {
   });
 
   constructor() {
-    // Load exchange rates
-    effect(() => {
-      this.productsDataService.getExchangeRates().subscribe({
-        next: (rates) => this.exchangeRates.set(rates),
-        error: () => {} // Silently handle error
-      });
-    }, { allowSignalWrites: true });
+    // Load exchange rates once on initialization
+    this.productsDataService.getExchangeRates().subscribe({
+      next: (rates) => this.exchangeRates.set(rates),
+      error: () => {} // Silently handle error
+    });
   }
 
   /**

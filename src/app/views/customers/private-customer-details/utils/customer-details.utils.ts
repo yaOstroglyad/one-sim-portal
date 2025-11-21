@@ -27,13 +27,14 @@ export function calculateFinancialSummary(purchasedProducts: any[]): FinancialSu
 
 		if (product.usage?.balance) {
 			product.usage.balance.forEach((balance: Balance) => {
-				const conversionFactor = balance.unitType === 'Gigabyte' ? 1024 * 1024 * 1024 : 1;
-				totalUsedBytes += (balance.used || 0) / conversionFactor;
+				// Backend returns data in BYTES already, unitType is just a label for display
+				// No conversion needed - just sum up the bytes
+				totalUsedBytes += balance.used || 0;
 			});
 		}
 	}
 
-	const totalUsedGB = Math.round(totalUsedBytes * 100) / 100;
+	const totalUsedGB = Math.round((totalUsedBytes / (1024 * 1024 * 1024)) * 100) / 100;
 	totalSpent = Math.round(totalSpent * 100) / 100;
 
 	return { totalSpent, totalUsedGB, currency };

@@ -48,7 +48,8 @@ export class ChatbotApiService {
    * @returns Observable<Message[]>
    */
   getMessages(threadId: string): Observable<Message[]> {
-    return this.http.get<Message[]>(`${this.baseUrl}/threads/${threadId}/messages`);
+    const url = `${this.baseUrl}/threads/${threadId}/messages`;
+    return this.http.get<Message[]>(url);
   }
 
   /**
@@ -60,7 +61,8 @@ export class ChatbotApiService {
    * @returns Observable<Thread>
    */
   updateThread(threadId: string, request: UpdateThreadRequest): Observable<Thread> {
-    return this.http.put<Thread>(`${this.baseUrl}/threads/${threadId}/update`, request);
+    const url = `${this.baseUrl}/threads/${threadId}/update`;
+    return this.http.put<Thread>(url, request);
   }
 
   /**
@@ -72,7 +74,8 @@ export class ChatbotApiService {
    * @returns Observable<Message>
    */
   createMessage(threadId: string, request: CreateMessageRequest): Observable<Message> {
-    return this.http.post<Message>(`${this.baseUrl}/threads/${threadId}/messages/create`, request);
+    const url = `${this.baseUrl}/threads/${threadId}/messages/create`;
+    return this.http.post<Message>(url, request);
   }
 
   /**

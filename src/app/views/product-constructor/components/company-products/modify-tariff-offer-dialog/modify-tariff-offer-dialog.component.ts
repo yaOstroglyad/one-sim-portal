@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, signal, computed, effect, Signal } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, signal, computed, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
@@ -157,13 +157,11 @@ export class ModifyTariffOfferDialogComponent implements OnInit {
   });
 
   constructor() {
-    // Load exchange rates
-    effect(() => {
-      this.productsDataService.getExchangeRates().subscribe({
-        next: (rates) => this.exchangeRates.set(rates),
-        error: () => {} // Silently handle error
-      });
-    }, { allowSignalWrites: true });
+    // Load exchange rates once on initialization
+    this.productsDataService.getExchangeRates().subscribe({
+      next: (rates) => this.exchangeRates.set(rates),
+      error: () => {} // Silently handle error
+    });
   }
 
   ngOnInit(): void {
