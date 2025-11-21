@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal, effect } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LayoutConfig } from '../models';
 import { ThemeService } from '@shared';
@@ -16,6 +16,9 @@ export class LayoutService {
     rtlDirection: false
   });
 
+  // Mobile sidebar state (signal-based)
+  readonly isMobileSidebarOpen = signal<boolean>(false);
+
   constructor() {
     this.loadFromStorage();
 
@@ -25,6 +28,18 @@ export class LayoutService {
       const isDark = theme === 'dark';
       if (current.darkTheme !== isDark) {
         this.layoutConfig$.next({ ...current, darkTheme: isDark });
+      }
+    });
+
+    // Body scroll lock when mobile sidebar is open
+    effect(() => {
+      const isOpen = this.isMobileSidebarOpen();
+      if (typeof document !== 'undefined') {
+        if (isOpen) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+        }
       }
     });
   }
@@ -41,6 +56,24 @@ export class LayoutService {
   toggleTheme(): void {
     // Delegate to ThemeService
     this.themeService.toggleTheme();
+  }
+
+  // Mobile sidebar methods
+  toggleMobileSidebar(): void {
+    console.log('[LayoutService] toggleMobileSidebar called, current state:', this.isMobileSidebarOpen());
+    this.isMobileSidebarOpen.update(v => {
+      console.log('[LayoutService] updating from', v, 'to', !v);
+      return !v;
+    });
+    console.log('[LayoutService] new state:', this.isMobileSidebarOpen());
+  }
+
+  openMobileSidebar(): void {
+    this.isMobileSidebarOpen.set(true);
+  }
+
+  closeMobileSidebar(): void {
+    this.isMobileSidebarOpen.set(false);
   }
 
   private updateConfig(config: LayoutConfig): void {

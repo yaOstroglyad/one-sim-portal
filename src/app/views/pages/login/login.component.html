@@ -1,33 +1,33 @@
-<div class="login-container">
-    <div class="login-content">
-        <div class="logo-container">
-            <img src="assets/img/brand/1esim-logo.png" alt="One eSIM" class="logo">
+<div class="os-login-container">
+    <div class="os-login-content">
+        <div class="os-login-logo-container">
+            <img src="assets/img/brand/1esim-logo.png" alt="One eSIM" class="os-login-logo">
         </div>
-        <h1 class="login-title">Log in</h1>
-        <form class="login-form" [formGroup]="form" (ngSubmit)="login()">
-            <div class="form-field">
+        <h1 class="os-login-title">Log in</h1>
+        <form class="os-login-form" [formGroup]="form" (ngSubmit)="login()">
+            <div class="os-login-form-field">
                 <input
                     id="loginName"
                     formControlName="loginName"
                     type="text"
-                    class="form-input"
+                    class="os-login-form-input"
                     placeholder="{{ 'login.userNamePlaceholder' | translate }}">
             </div>
-            <div class="form-field">
+            <div class="os-login-form-field">
                 <input
                     id="password"
                     formControlName="password"
                     type="password"
-                    class="form-input"
+                    class="os-login-form-input"
                     placeholder="{{ 'login.passwordPlaceholder' | translate }}">
             </div>
-            <button type="submit" class="login-button">
+            <button type="submit" class="os-login-button">
                 {{ 'login.loginButton' | translate }}
             </button>
         </form>
-        <div class="tagline mobile-only">
+        <div class="os-login-tagline os-login-mobile-only">
             Enabling new revenue and connectivity solutions for travel & tech players
         </div>
     </div>
-    <div class="background-waves" aria-hidden="true"></div>
+    <div class="os-login-background-waves" aria-hidden="true"></div>
 </div>

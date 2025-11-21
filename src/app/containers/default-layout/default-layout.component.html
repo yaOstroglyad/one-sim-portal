@@ -28,8 +28,9 @@
   <!-- Mobile Overlay -->
   <div
     class="layout__mobile-overlay"
-    [class.layout__mobile-overlay--visible]="isMobileSidebarOpen"
-    (click)="closeMobileSidebar()">
+    [class.layout__mobile-overlay--visible]="isMobileSidebarOpen()"
+    (click)="closeMobileSidebar()"
+    [attr.aria-hidden]="!isMobileSidebarOpen()">
   </div>
 
   <!-- Global FAB -->

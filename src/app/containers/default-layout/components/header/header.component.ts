@@ -162,8 +162,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleMobileSidebar(): void {
-    // This would communicate with a mobile sidebar service
-    this.layoutService.toggleSidebar();
+    console.log('[Header] toggleMobileSidebar called');
+    this.layoutService.toggleMobileSidebar();
   }
 
   toggleUserMenu(): void {

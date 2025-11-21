@@ -424,15 +424,22 @@
 // Responsive behavior
 @media (max-width: 768px) {
   .sidebar {
-    transform: translateX(-100%);
+    left: -260px; // Hide sidebar off-screen (256px width + 3px border + 1px safe margin)
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001; // Above overlay
+  }
 
-    &--rtl {
-      transform: translateX(100%);
-    }
+  .sidebar.sidebar--rtl {
+    left: auto;
+    right: -260px; // Hide sidebar off-screen in RTL (256px width + 3px border + 1px safe margin)
+  }
 
-    &.sidebar--mobile-open {
-      transform: translateX(0);
-    }
+  .sidebar.sidebar--rtl.sidebar--mobile-open {
+    right: 260px !important; // Show sidebar in RTL
+  }
+
+  .sidebar.sidebar--mobile-open {
+    left: 260px !important; // Show sidebar - higher specificity
   }
 }
 

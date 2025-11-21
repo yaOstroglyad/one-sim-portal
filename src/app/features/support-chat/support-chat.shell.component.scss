@@ -299,17 +299,23 @@
   align-items: center;
   gap: 1rem;
   background-color: var(--os-color-subtle-bg);
+  min-height: 64px;
 
   h3 {
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
     color: var(--os-color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
 .thread__back-button {
-  // Material icon button, minimal custom styles
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
 }
 
 .thread__header-info {
@@ -317,6 +323,8 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .status-badge {
@@ -324,6 +332,8 @@
   border-radius: var(--os-border-radius-full);
   font-size: 0.75rem;
   font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
 
   &--manual {
     background-color: rgba(var(--os-color-success-rgb), 0.1);
@@ -337,7 +347,8 @@
 }
 
 .thread__toggle-control {
-  // Material raised button with accent color, minimal custom styles
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 // Messages List
@@ -362,7 +373,6 @@
   display: flex;
   gap: 0.75rem;
   margin-bottom: 1rem;
-  max-width: 70%;
 
   &--operator {
     margin-left: auto;
@@ -438,15 +448,21 @@
 .message__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin-bottom: 0.5rem;
-  gap: 0.75rem;
+  width: 100%;
 }
 
 .message__author {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: capitalize;
+  flex: 0 0 auto;
+  margin-right: 0.5rem;
+
+  [dir="rtl"] & {
+    margin-right: 0;
+    margin-left: 0.5rem;
+  }
 }
 
 // Unique colors for each author type
@@ -472,6 +488,15 @@
   font-size: 0.625rem;
   color: var(--os-color-medium);
   white-space: nowrap;
+  flex: 0 0 auto;
+  margin-left: auto;
+  text-align: right;
+
+  [dir="rtl"] & {
+    margin-left: 0;
+    margin-right: auto;
+    text-align: left;
+  }
 }
 
 // Typing indicator animation
@@ -643,8 +668,44 @@
     padding: 0.625rem;
   }
 
-  .message {
-    max-width: 85%;
+  // Mobile-optimized thread header
+  .thread__header {
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    min-height: auto;
+
+    h3 {
+      font-size: 1rem;
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  .thread__back-button {
+    width: 36px;
+    height: 36px;
+    margin-right: -0.25rem;
+  }
+
+  .thread__header-info {
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-wrap: nowrap;
+  }
+
+  .status-badge {
+    font-size: 0.625rem;
+    padding: 0.125rem 0.5rem;
+  }
+
+  .thread__toggle-control {
+    order: 3;
+    width: 100%;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    min-height: 40px;
   }
 }
 
@@ -659,7 +720,57 @@
     align-items: stretch;
   }
 
-  .message {
-    max-width: 90%;
+  // Extra compact for very small screens
+  .thread__header {
+    padding: 0.625rem 0.75rem;
+
+    h3 {
+      font-size: 0.875rem;
+      line-height: 1.3;
+    }
+  }
+
+  .thread__back-button {
+    width: 32px;
+    height: 32px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .status-badge {
+    font-size: 0.625rem;
+    padding: 0.125rem 0.375rem;
+  }
+
+  .thread__toggle-control {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.75rem;
+    min-height: 36px;
+  }
+
+  // Compact message input
+  .thread__input {
+    padding: 0.5rem 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .thread__input-field {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.875rem;
+  }
+
+  .thread__send-button {
+    width: 36px;
+    height: 36px;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
   }
 }

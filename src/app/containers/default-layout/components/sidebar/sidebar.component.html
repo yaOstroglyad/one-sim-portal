@@ -1,6 +1,9 @@
 <aside
   class="sidebar"
-  [ngClass]="sidebarClasses()">
+  [ngClass]="sidebarClasses()"
+  role="navigation"
+  [attr.aria-label]="'Main navigation'"
+  [attr.aria-hidden]="!layoutService.isMobileSidebarOpen() ? 'true' : null">
 
   <!-- Brand Section -->
   <div class="sidebar__brand" (click)="onBrandClick()">

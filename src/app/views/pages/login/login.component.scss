@@ -1,4 +1,5 @@
-@use "src/scss/variables" as vars;
+@use "sass:map";
+@use "variables" as vars;
 
 * {
   box-sizing: border-box;
@@ -7,50 +8,50 @@
   font-family: vars.$primary-font;
 }
 
-.login-container {
+.os-login-container {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   width: 100%;
-  background-color: #fafafa;
+  background-color: var(--os-color-gray-50);
   position: relative;
   overflow: hidden;
 }
 
-.login-content {
+.os-login-content {
   width: 100%;
   max-width: 550px;
   padding: 3.5rem;
   z-index: 10;
   position: relative;
   background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  margin: 2rem;
+  border-radius: map.get(vars.$os-border-radius, 'large');
+  box-shadow: map.get(vars.$os-shadows, 'lg');
+  margin: map.get(vars.$os-spacing, '8');
 }
 
-.logo-container {
+.os-login-logo-container {
   display: flex;
   justify-content: center;
   margin-bottom: 3rem;
 }
 
-.logo {
+.os-login-logo {
   width: auto;
   height: 65px;
 }
 
-.login-title {
+.os-login-title {
   font-size: 3.5rem;
   font-weight: 600;
   margin-bottom: 3.5rem;
-  color: #212121;
+  color: var(--os-color-text-primary);
   letter-spacing: -0.03em;
   line-height: 1;
 }
 
-.login-form {
+.os-login-form {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -58,89 +59,85 @@
   z-index: 15;
 }
 
-.form-field {
+.os-login-form-field {
   margin-bottom: 2.5rem;
   position: relative;
 }
 
-.form-field label {
+.os-login-form-field label {
   font-size: 1.125rem;
-  color: #212121;
+  color: var(--os-color-text-primary);
   display: block;
   margin-bottom: 0.75rem;
   font-weight: 500;
 }
 
-.form-input {
+.os-login-form-input {
   width: 100%;
   padding: 0.75rem 0;
   border: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--os-color-border);
   font-size: 1.25rem;
   background: transparent;
   transition: border-color 0.3s;
   font-weight: 500;
-  color: #212121;
+  color: var(--os-color-text-primary);
 }
 
-.form-input::placeholder {
-  color: #9e9e9e;
+.os-login-form-input::placeholder {
+  color: var(--os-color-text-muted);
   opacity: 1;
   letter-spacing: -0.01em;
   font-weight: 400;
 }
 
-.form-input:focus {
+.os-login-form-input:focus {
   outline: none;
   border-color: vars.$primary-color;
 }
 
-.login-button {
-  background-color: #1c1c1c;
+.os-login-button {
+  background-color: var(--os-color-gray-900);
   color: white;
   border: none;
-  border-radius: 2rem;
+  border-radius: map.get(vars.$os-border-radius, 'full');
   padding: 1rem 3.5rem;
-  font-size: 1rem;
+  font-size: map.get(vars.$os-font-sizes, 'base');
   font-weight: 600;
   margin-top: 3rem;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
   width: auto;
   align-self: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: map.get(vars.$os-shadows, 'md');
   letter-spacing: 0.01em;
   position: relative;
   z-index: 20;
 }
 
-.login-button:hover {
-  background-color: #333;
+.os-login-button:hover {
+  background-color: var(--os-color-gray-700);
   transform: translateY(-2px);
 }
 
-.login-button:active {
+.os-login-button:active {
   transform: translateY(0);
 }
 
-.background-waves {
+.os-login-background-waves {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  /* убираем обычный фон */
   background-image: none;
-  /* сам цвет «заливки» волны: берём вашу переменную */
   background-color: var(--os-color-primary);
 
-  /* стандартная маска */
   mask-image: url('/assets/img/brand/login-bg-image-large.svg');
   mask-repeat: no-repeat;
   mask-position: bottom right;
   mask-size: contain;
 
-  /* для Safari/WebKit */
   -webkit-mask-image: url('/assets/img/brand/login-bg-image-large.svg');
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: bottom right;
@@ -150,9 +147,9 @@
   z-index: 1;
 }
 
-.tagline {
+.os-login-tagline {
   margin-top: 2rem;
-  color: #555;
+  color: var(--os-color-text-secondary);
   font-size: 0.9rem;
   text-align: center;
   max-width: 250px;
@@ -163,13 +160,12 @@
   z-index: 15;
 }
 
-// Мобильная версия
-.mobile-only {
+.os-login-mobile-only {
   display: none;
 }
 
 @media (max-width: 768px) {
-  .login-content {
+  .os-login-content {
     padding: 2rem 1.5rem;
     box-shadow: none;
     margin: 0;
@@ -184,88 +180,84 @@
     backdrop-filter: blur(4px);
   }
 
-  .login-container {
+  .os-login-container {
     background-color: white;
     overflow: hidden;
   }
 
-  .background-waves {
+  .os-login-background-waves {
     position: absolute;
     left: 0;
     width: 100%;
     height: 100%;
     bottom: -150px;
-    /* задаём цвет обводки/заливки через вашу переменную */
     background-color: var(--os-color-primary);
     opacity: 0.7;
-    z-index: 11;
+    z-index: 1;
 
-    /* собственно маска из SVG */
     mask-image: url('/assets/img/brand/login-bg-image-small.svg');
     mask-repeat: no-repeat;
     mask-position: bottom center;
     mask-size: cover;
 
-    /* WebKit-префиксы для Safari */
     -webkit-mask-image: url('/assets/img/brand/login-bg-image-small.svg');
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: bottom center;
     -webkit-mask-size: cover;
   }
 
-
-  .logo-container {
+  .os-login-logo-container {
     margin-bottom: 3rem;
     position: absolute;
     top: 2rem;
     justify-content: flex-end;
   }
 
-  .logo {
+  .os-login-logo {
     height: 50px;
   }
 
-  .login-title {
+  .os-login-title {
     font-size: 2.5rem;
     margin-bottom: 2.5rem;
   }
 
-  .form-field {
+  .os-login-form-field {
     margin-bottom: 2rem;
   }
 
-  .login-button {
+  .os-login-button {
     margin-top: 2rem;
     width: 100%;
     max-width: 100%;
   }
 
-  .mobile-only {
+  .os-login-mobile-only {
     display: block;
     margin-top: 3rem;
   }
 }
 
 @media (max-width: 480px) {
-  .login-content {
+  .os-login-content {
     padding: 1.5rem 1.25rem;
     padding-top: 12vh;
   }
 
-  .logo-container {
+  .os-login-logo-container {
     top: 1.5rem;
   }
 
-  .logo {
+  .os-login-logo {
     height: 50px;
   }
 
-  .login-title {
+  .os-login-title {
     font-size: 2rem;
     margin-bottom: 2rem;
   }
 
-  .form-input {
+  .os-login-form-input {
     font-size: 1.125rem;
   }
 }

@@ -5,6 +5,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  HostListener,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -64,7 +65,8 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
     rtlDirection: false
   };
 
-  isMobileSidebarOpen = false;
+  // Use signal from service instead of local state
+  readonly isMobileSidebarOpen = this.layoutService.isMobileSidebarOpen;
   currentYear = new Date().getFullYear();
 
   ngOnDestroy(): void {
@@ -152,6 +154,15 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
   }
 
   closeMobileSidebar(): void {
-    this.isMobileSidebarOpen = false;
+    this.layoutService.closeMobileSidebar();
+  }
+
+  // Close mobile sidebar on ESC key
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscapeKey(event: KeyboardEvent): void {
+    if (this.isMobileSidebarOpen()) {
+      event.preventDefault();
+      this.closeMobileSidebar();
+    }
   }
 }

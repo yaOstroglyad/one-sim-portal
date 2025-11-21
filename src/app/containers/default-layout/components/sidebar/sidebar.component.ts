@@ -55,11 +55,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
   readonly isMenuLoading = signal<boolean>(true);
 
   // Computed signals
-  readonly sidebarClasses = computed(() => ({
-    'sidebar--collapsed': this.layoutConfig().sidebarCollapsed,
-    'sidebar--dark': this.layoutConfig().darkTheme,
-    'sidebar--rtl': this.languageService.isRtl()
-  }));
+  readonly sidebarClasses = computed(() => {
+    const classes = {
+      'sidebar--collapsed': this.layoutConfig().sidebarCollapsed,
+      'sidebar--dark': this.layoutConfig().darkTheme,
+      'sidebar--rtl': this.languageService.isRtl(),
+      'sidebar--mobile-open': this.layoutService.isMobileSidebarOpen()
+    };
+    console.log('[Sidebar] sidebarClasses computed:', classes);
+    return classes;
+  });
 
   private unsubscribe$ = new Subject<void>();
 
