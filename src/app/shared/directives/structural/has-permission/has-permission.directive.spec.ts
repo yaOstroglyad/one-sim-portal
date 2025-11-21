@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ADMIN_PERMISSION, AuthService } from '../auth';
-import { HasPermissionDirective } from './has-permission.directive';
+import { ADMIN_PERMISSION, AuthService } from '@shared/auth';
 import { of } from 'rxjs';
+import { HasPermissionDirective } from '@shared';
 
 @Component({
     template: `

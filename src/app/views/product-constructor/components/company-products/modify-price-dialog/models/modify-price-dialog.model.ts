@@ -1,18 +1,27 @@
-import { ActiveTariffOffer } from '../../../../models';
+import { ActiveTariffOffer, CompanyProductPrice } from '../../../../models';
 
 /**
  * Data interface for modify price dialog
+ * Supports both create and edit modes for company retail tariffs
  */
 export interface ModifyPriceDialogData {
-  tariffOffer: ActiveTariffOffer;
+  mode: 'create' | 'edit';
+  companyProductId: string;
+  tariffOffer: ActiveTariffOffer; // For display context
+  existingTariff?: CompanyProductPrice; // For edit mode
+  existingTariffs?: CompanyProductPrice[]; // For validFrom validation
+  minValidFromDate?: string; // Calculated from tariffOffer.validFrom
 }
 
 /**
  * Result interface for modify price dialog
+ * Includes validFrom for company retail tariff management
  */
 export interface ModifyPriceResult {
   price: number;
   currency: string; // Using string instead of Currency enum for API compatibility
+  validFrom: string; // ISO date string "2025-11-20"
+  tariffOfferId?: string; // Only for create mode
 }
 
 /**

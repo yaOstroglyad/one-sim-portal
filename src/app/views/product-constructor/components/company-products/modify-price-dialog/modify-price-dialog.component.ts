@@ -1,65 +1,93 @@
-import { Component, Inject, OnInit, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject, signal, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable, Subject } from 'rxjs';
+import { FormGroup, FormControl } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ButtonModule } from '@coreui/angular';
 
-import { ProductsDataService, UserRoleService } from '@shared';
+import {
+  ProductsDataService,
+  UserRoleService,
+  FormGeneratorComponent,
+  FormConfig,
+  InfoStripComponent,
+  PriceInfoDisplayComponent,
+  PricePreviewComponent
+} from '@shared';
+import { LoaderComponent } from '@shared/components/loader/loader.component';
 import { UIConfigFactory, ModifyPriceDialogConfig } from '../factories';
-import { 
-  ModifyPriceDialogData, 
-  ModifyPriceDialogViewModel 
+import {
+  ModifyPriceDialogData,
+  ModifyPriceDialogViewModel,
 } from './models/modify-price-dialog.model';
-import { FormUtils, CurrencyOption } from './utils/form.utils';
 import { ModifyPriceDialogPresenter } from './services/modify-price-dialog.presenter';
+import { DialogMode, getDialogMode, getDialogTitle, getSaveButtonText, getInfoMessage } from './models/dialog-mode.model';
+import { DialogSaveStrategy, createDialogSaveStrategy } from './services/dialog-save.strategy';
+import { PriceFormConfigUtils, PriceFormValidators } from '../utils';
+import { CompanyProductPriceService } from '../../../services';
 
 @Component({
   standalone: true,
-    selector: 'app-modify-price-dialog',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatIconModule
-    ],
-    templateUrl: './modify-price-dialog.component.html',
-    styleUrls: ['./modify-price-dialog.component.scss'],
-    providers: [ModifyPriceDialogPresenter]
+  selector: 'app-modify-price-dialog',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    ButtonModule,
+    FormGeneratorComponent,
+    InfoStripComponent,
+    LoaderComponent,
+    PriceInfoDisplayComponent,
+    PricePreviewComponent
+  ],
+  templateUrl: './modify-price-dialog.component.html',
+  styleUrls: ['./modify-price-dialog.component.scss'],
+  providers: [
+    ModifyPriceDialogPresenter
+  ]
 })
 export class ModifyPriceDialogComponent implements OnInit, OnDestroy {
   modifyForm: FormGroup;
-  currencyOptions$: Observable<CurrencyOption[]>;
-  viewModel$: Observable<ModifyPriceDialogViewModel>;
+  formConfig: FormConfig;
+  viewModel: Signal<ModifyPriceDialogViewModel> | null = null;
   uiConfig: ModifyPriceDialogConfig;
 
+  // Dialog mode and derived values
+  mode: DialogMode;
+  dialogTitle: string;
+  saveButtonText: string;
+  infoMessage: string;
+
+  // Signals for loading/error states
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
+
+  // Strategy for save operation
+  private saveStrategy: DialogSaveStrategy;
+
+  // Injected dependencies
   private readonly destroy$ = new Subject<void>();
+  private readonly data = inject<ModifyPriceDialogData>(MAT_DIALOG_DATA);
+  readonly dialogRef = inject(MatDialogRef<ModifyPriceDialogComponent>);
+  private readonly productsDataService = inject(ProductsDataService);
+  private readonly priceService = inject(CompanyProductPriceService);
+  private readonly presenter = inject(ModifyPriceDialogPresenter);
   private readonly uiConfigFactory = inject(UIConfigFactory);
   private readonly userRoleService = inject(UserRoleService);
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: ModifyPriceDialogData,
-    public dialogRef: MatDialogRef<ModifyPriceDialogComponent>,
-    private readonly fb: FormBuilder,
-    private readonly productsDataService: ProductsDataService,
-    private readonly presenter: ModifyPriceDialogPresenter
-  ) {
-    this.initializeComponent();
-  }
-
   ngOnInit(): void {
-    this.initializeForm();
-    this.setupViewModel();
+    this.mode = getDialogMode(this.data.mode);
+    this.dialogTitle = getDialogTitle(this.mode);
+    this.saveButtonText = getSaveButtonText(this.mode);
+    this.infoMessage = getInfoMessage(this.mode);
+
+    const userRole = this.userRoleService.getCurrentUserRole();
+    this.uiConfig = this.uiConfigFactory.createModifyPriceDialogConfig(userRole);
+
+    this.saveStrategy = createDialogSaveStrategy(this.mode, this.priceService);
+
+    this.createFormConfig();
   }
 
   ngOnDestroy(): void {
@@ -67,38 +95,54 @@ export class ModifyPriceDialogComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private initializeComponent(): void {
-    this.createForm();
-    this.loadCurrencyOptions();
-    this.initializeUIConfig();
+  private createFormConfig(): void {
+    const excludeTariffId = this.data.existingTariff?.id;
+    const defaultCurrency = this.data.tariffOffer?.currency || 'USD';
+    const defaultPrice = 0;
+
+    // Get currencies from ProductsDataService using unified utils
+    const currencyOptions$ = PriceFormConfigUtils.createCurrencyOptions(this.productsDataService);
+
+    this.formConfig = PriceFormConfigUtils.createModifyPriceFormConfig(
+      this.data.minValidFromDate,
+      this.data.existingTariffs || [],
+      excludeTariffId,
+      defaultPrice,
+      defaultCurrency,
+      currencyOptions$,
+      true // includeValidFrom (non-legacy mode)
+    );
+
+    if (this.mode === DialogMode.Edit && this.data.existingTariff) {
+      const initialValues = PriceFormConfigUtils.getInitialValuesFromTariff(this.data.existingTariff);
+      this.formConfig.fields.forEach(field => {
+        if (initialValues[field.name] !== undefined) {
+          field.value = initialValues[field.name];
+        }
+      });
+    }
   }
 
-  private createForm(): void {
-    this.modifyForm = FormUtils.createModifyPriceForm(this.fb);
-  }
+  onFormChanges(form: FormGroup): void {
+    const isFirstInit = !this.modifyForm;
+    this.modifyForm = form;
 
-  private loadCurrencyOptions(): void {
-    this.currencyOptions$ = FormUtils.loadCurrencyOptions(this.productsDataService);
-  }
+    if (this.mode === DialogMode.Create && this.data.tariffOffer && isFirstInit) {
+      if (!this.modifyForm.contains('tariffOfferId')) {
+        this.modifyForm.addControl('tariffOfferId', new FormControl(this.data.tariffOffer.id));
+      }
+    }
 
-  private initializeUIConfig(): void {
-    const userRole = this.userRoleService.getCurrentUserRole();
-    this.uiConfig = this.uiConfigFactory.createModifyPriceDialogConfig(userRole);
-  }
-
-  private initializeForm(): void {
-    if (this.data.tariffOffer) {
-      FormUtils.initializeFormWithTariffOffer(this.modifyForm, this.data.tariffOffer);
+    if (isFirstInit) {
+      this.setupViewModel();
     }
   }
 
   private setupViewModel(): void {
-    this.viewModel$ = this.presenter.createViewModel(
-      this.modifyForm, 
-      this.data, 
+    this.viewModel = this.presenter.createViewModel(
+      this.modifyForm,
+      this.data,
       this.uiConfig
-    ).pipe(
-      takeUntil(this.destroy$)
     );
   }
 
@@ -107,14 +151,38 @@ export class ModifyPriceDialogComponent implements OnInit, OnDestroy {
   }
 
   onSave(): void {
-    const result = this.presenter.extractResult(this.modifyForm);
-    
-    if (result) {
-      this.dialogRef.close(result);
+    if (!this.modifyForm?.valid) {
+      PriceFormValidators.markFormGroupTouched(this.modifyForm);
+      return;
     }
+
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.saveStrategy(this.modifyForm, this.data)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (result) => {
+          this.loading.set(false);
+
+          // Close dialog with result (even if empty/null - backend may return 200 with no body)
+          // The parent component will refresh the table regardless
+          this.dialogRef.close(result || {});
+        },
+        error: (error) => {
+          this.loading.set(false);
+          this.error.set(this.getErrorMessage(error));
+        }
+      });
   }
 
-  get isFormValid(): boolean {
-    return this.modifyForm.valid;
+  private getErrorMessage(error: any): string {
+    if (error.error?.message) {
+      return error.error.message;
+    }
+    if (error.message) {
+      return error.message;
+    }
+    return 'An unexpected error occurred. Please try again.';
   }
 }

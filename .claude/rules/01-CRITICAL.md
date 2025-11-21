@@ -1,6 +1,6 @@
 # Critical Project Rules
 
-> **Created:** 2025-10-16 | **Last Updated:** 2025-11-14 (Added Signal APIs & Control Flow rules)
+> **Created:** 2025-10-16 | **Last Updated:** 2025-11-20 (Added inject() requirement)
 > **Context Tags:** `@creating-new` `@component` `@critical`
 > **Read when:** Before creating ANY component or working with file paths
 
@@ -182,21 +182,53 @@ this.user = { ...this.user, name: 'John' };
 
 ---
 
-## 🚨 CRITICAL RULE #4: Dependency Injection with inject()
+## 🚨 CRITICAL RULE #4: Dependency Injection with inject() (MANDATORY)
 
 ### The Rule
 
-**ALL new components and services MUST use the `inject()` function**
+**🚫 NEVER USE CONSTRUCTOR INJECTION IN COMPONENTS**
 
-### Requirements
+**ALL components and services MUST use the `inject()` function for dependency injection**
 
-- Use `inject()` function instead of constructor injection
-- Declare injected dependencies as `private readonly` fields
+### Strict Requirements
 
-### Example
+1. **NEW Components**: ALWAYS use `inject()` from the start
+2. **EXISTING Components**: If you see a constructor with dependencies, REFACTOR it to use `inject()` immediately
+3. **NO Exceptions**: This rule applies to ALL components without exception
+
+### Migration Required
+
+**When working with existing code that uses constructor injection:**
 
 ```typescript
-import { Component, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+// ❌ WRONG - OLD PATTERN (constructor injection)
+export class MyComponent {
+  constructor(
+    private readonly myService: MyService,
+    private readonly http: HttpClient,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {
+    // initialization logic here
+  }
+}
+
+// ✅ CORRECT - MODERN PATTERN (inject function)
+export class MyComponent implements OnInit {
+  // Inject all dependencies as fields
+  private readonly myService = inject(MyService);
+  private readonly http = inject(HttpClient);
+  private readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+
+  ngOnInit(): void {
+    // Move initialization logic here
+  }
+}
+```
+
+### Complete Example
+
+```typescript
+import { Component, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '@shared/services';
 
@@ -220,27 +252,43 @@ export class MyComponent {
 }
 ```
 
-### Why Not Constructor?
+### Why inject() Instead of Constructor?
 
+Modern `inject()` function provides:
+- ✅ **More concise** - no constructor boilerplate
+- ✅ **Easier to test** - better mocking support
+- ✅ **Better TypeScript inference** - improved type safety
+- ✅ **Functional approach** - aligns with modern Angular patterns
+- ✅ **Cleaner code** - dependencies declared at field level
+
+### Special Cases
+
+**Dialog/Modal Data:**
 ```typescript
-// ❌ OLD WAY (don't use for new code)
-constructor(
-  private cdr: ChangeDetectorRef,
-  private http: HttpClient,
-  private authService: AuthService
-) {}
+// ❌ OLD - Constructor with @Inject
+constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
-// ✅ NEW WAY (use this)
-private readonly cdr = inject(ChangeDetectorRef);
-private readonly http = inject(HttpClient);
-private readonly authService = inject(AuthService);
+// ✅ NEW - inject() with generic
+private readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+readonly dialogRef = inject(MatDialogRef<MyComponent>);
 ```
 
-Modern `inject()` syntax is:
-- More concise
-- Easier to test
-- Better TypeScript inference
-- Angular's recommended approach
+**Optional Dependencies:**
+```typescript
+// ✅ Optional injection
+private readonly config = inject(CONFIG_TOKEN, { optional: true });
+```
+
+### Refactoring Checklist
+
+When refactoring existing component with constructor:
+
+- [ ] Remove constructor completely if it only has dependency injection
+- [ ] Convert each constructor parameter to `inject()` field
+- [ ] Move initialization logic from constructor to `ngOnInit()`
+- [ ] Update access modifiers (use `private readonly` for services)
+- [ ] Remove unused `@Inject`, `Inject` imports
+- [ ] Test that component still works correctly
 
 ---
 

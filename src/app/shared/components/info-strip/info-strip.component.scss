@@ -19,32 +19,36 @@
     line-height: 1.4;
   }
 
-  // Primary type (default blue)
+  // Primary type (info - cyan/blue)
   &--primary {
-    background-color: #e3f2fd;
-    border-left-color: #2196f3;
-    color: #1565c0;
+    background-color: rgba(var(--os-color-info-rgb), 0.1);
+    border-left-color: var(--os-color-info);
+    color: var(--os-color-info-shade);
+
+    mat-icon {
+      color: var(--os-color-info);
+    }
   }
 
   // Warning type (orange/yellow)
   &--warning {
-    background-color: #fff3e0;
-    border-left-color: #ff9800;
-    color: #ef6c00;
+    background-color: rgba(var(--os-color-warning-rgb), 0.1);
+    border-left-color: var(--os-color-warning);
+    color: var(--os-color-warning-shade);
 
     mat-icon {
-      color: #ff9800;
+      color: var(--os-color-warning);
     }
   }
 
-  // Alert type (red)
+  // Alert type (red/danger)
   &--alert {
-    background-color: #ffebee;
-    border-left-color: #f44336;
-    color: #c62828;
+    background-color: rgba(var(--os-color-danger-rgb), 0.1);
+    border-left-color: var(--os-color-danger);
+    color: var(--os-color-danger-shade);
 
     mat-icon {
-      color: #f44336;
+      color: var(--os-color-danger);
     }
   }
 }

@@ -1,0 +1,92 @@
+<div class="tariff-table-container">
+  @if (showHeader()) {
+    <div class="tariff-table-header">
+      <h4>Pricing Schedule</h4>
+      @if (editable()) {
+        <button
+          cButton
+          color="primary"
+          (click)="onAdd()"
+          [disabled]="loading()">
+          <app-icon icon="plus" size="sm"></app-icon>
+          Add Price
+        </button>
+      }
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading prices...</p>
+    </div>
+  } @else if (!hasPrices()) {
+    <div class="empty-state">
+      <mat-icon>calendar_today</mat-icon>
+      <p>No pricing schedule defined</p>
+      @if (editable()) {
+        <p class="empty-hint">Click "Add Price" to create your first price</p>
+      }
+    </div>
+  } @else {
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="displayedPrices()" class="tariff-table">
+
+        <!-- Valid From Column -->
+        <ng-container matColumnDef="validFrom">
+          <th mat-header-cell *matHeaderCellDef>Valid From</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="date-cell">{{ row.formattedDate }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Price Column -->
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Price</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="price-cell">{{ row.price }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Currency Column -->
+        <ng-container matColumnDef="currency">
+          <th mat-header-cell *matHeaderCellDef>Currency</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="currency-cell">{{ row.currency | uppercase }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let row" class="actions-cell">
+            @if (row.isEditable) {
+              <button
+                cButton
+                size="sm"
+                color="primary"
+                variant="ghost"
+                [osTooltip]="row.editTooltip"
+                (click)="onEdit(row)">
+                <app-icon icon="edit" size="sm"></app-icon>
+              </button>
+            } @else if (row.isCurrentPrice) {
+              <os-badge variant="primary" size="small" shape="pill" [subtle]="true">
+                Current
+              </os-badge>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns()"
+          [class.disabled-row]="!row.isEditable"
+          [class.current-price-row]="row.isCurrentPrice"
+          [osTooltip]="!row.isEditable ? row.editTooltip : ''"
+          tooltipPosition="left"></tr>
+      </table>
+    </div>
+  }
+</div>

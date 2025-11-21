@@ -33,6 +33,8 @@ export * from './components/user-avatar'
 export * from './components/breadcrumb/breadcrumb.component'
 export * from './components/icon/icon.component'
 export * from './components/contextual-text'
+export * from './components/detail-row'
+export * from './components/price-comparison'
 
 // UI Components - New organized structure
 export * from './components/ui/os-dropdown'

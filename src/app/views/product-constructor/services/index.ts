@@ -4,4 +4,5 @@ export * from './bundle.service';
 export * from './provider-product.service';
 export * from './product.service';
 export * from './company-product.service';
+export * from './company-product-price.service';
 export * from './overview.service';

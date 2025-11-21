@@ -151,9 +151,8 @@
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
 
-                    <mat-error *ngIf="shouldShowError(field.name) && form.controls[field.name].hasError('required')"
-                               class="error">
-                        The field is required
+                    <mat-error *ngIf="shouldShowError(field.name)" class="error">
+                        {{ getErrorMessage(field) }}
                     </mat-error>
                 </mat-form-field>
 

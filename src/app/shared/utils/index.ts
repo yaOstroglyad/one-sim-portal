@@ -29,5 +29,8 @@ export * from './dom';
 // HTTP utilities
 export * from './http';
 
+// Pricing utilities
+export * from './pricing';
+
 // Testing utilities (development/test only)
 export * from './testing';

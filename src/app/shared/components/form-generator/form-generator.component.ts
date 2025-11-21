@@ -359,4 +359,35 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 		return false;
 	}
 
+	/**
+	 * Get error message for a field
+	 * Uses custom error messages from field config if available
+	 */
+	getErrorMessage(field: FieldConfig): string | null {
+		const control = this.form.get(field.name);
+		if (!control || !control.errors) {
+			return null;
+		}
+
+		// Get the first error key
+		const errorKey = Object.keys(control.errors)[0];
+
+		// Check if field has custom error messages
+		if (field.errorMessages && field.errorMessages[errorKey]) {
+			return field.errorMessages[errorKey];
+		}
+
+		// Fallback to default messages
+		const defaultMessages: { [key: string]: string } = {
+			required: 'This field is required',
+			email: 'Please enter a valid email',
+			min: 'Value is too small',
+			max: 'Value is too large',
+			minlength: 'Value is too short',
+			maxlength: 'Value is too long'
+		};
+
+		return defaultMessages[errorKey] || 'Invalid value';
+	}
+
 }

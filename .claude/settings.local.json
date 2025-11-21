@@ -50,7 +50,9 @@
       "Bash(docker build:*)",
       "Bash(docker:*)",
       "Bash(chmod:*)",
-      "WebFetch(domain:angular.dev)"
+      "WebFetch(domain:angular.dev)",
+      "Bash(cat:*)",
+      "Bash(git config:*)"
     ],
     "deny": []
   }

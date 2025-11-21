@@ -1,73 +1,202 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Component, OnInit, ChangeDetectionStrategy, inject, signal, computed, effect, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { ButtonModule } from '@coreui/angular';
 
 import { ActiveTariffOffer, Currency } from '../../../models';
-import { TariffOfferService } from '@shared';
+import {
+  ProductsDataService,
+  FormGeneratorComponent,
+  FormConfig,
+  InfoStripComponent,
+  PriceComparisonUtils,
+  PricePreviewViewModel,
+  PriceInfoViewModel,
+  PricePreviewComponent,
+  PriceInfoDisplayComponent
+} from '@shared';
+import { PriceFormConfigUtils } from '../utils';
 
 export interface ModifyTariffOfferDialogData {
   tariffOffer: ActiveTariffOffer;
 }
 
+export interface ModifyTariffOfferResult {
+  tariffOfferId: string;
+  price: number;
+  currency: Currency;
+  validFrom: string; // ISO date string "2025-11-21"
+}
+
+/**
+ * Dialog component for modifying tariff offer price
+ * Uses signal-based architecture with OnPush change detection
+ */
 @Component({
   selector: 'app-modify-tariff-offer-dialog',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     MatDialogModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatIconModule,
-    MatProgressSpinnerModule
+    ButtonModule,
+    FormGeneratorComponent,
+    InfoStripComponent,
+    PricePreviewComponent,
+    PriceInfoDisplayComponent
   ],
   templateUrl: './modify-tariff-offer-dialog.component.html',
   styleUrls: ['./modify-tariff-offer-dialog.component.scss']
 })
 export class ModifyTariffOfferDialogComponent implements OnInit {
+  // Form
   modifyForm: FormGroup;
-  loading = false;
-  error: string | null = null;
+  formConfig: FormConfig;
+  viewModel: Signal<{
+    priceInfo: PriceInfoViewModel;
+    pricePreview: PricePreviewViewModel;
+    isFormValid: boolean;
+  }> | null = null;
 
-  currencyOptions = [
-    { value: 'usd', label: 'USD' },
-    { value: 'eur', label: 'EUR' },
-    { value: 'gbp', label: 'GBP' },
-    { value: 'jpy', label: 'JPY' }
-  ];
+  // Injected dependencies
+  private readonly dialogData = inject<ModifyTariffOfferDialogData>(MAT_DIALOG_DATA);
+  private readonly dialogRef = inject(MatDialogRef<ModifyTariffOfferDialogComponent>);
+  private readonly productsDataService = inject(ProductsDataService);
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: ModifyTariffOfferDialogData,
-    public dialogRef: MatDialogRef<ModifyTariffOfferDialogComponent>,
-    private fb: FormBuilder,
-    private tariffOfferService: TariffOfferService
-  ) {
-    this.modifyForm = this.createForm();
+  // Exchange rates signal
+  readonly exchangeRates = signal<Record<string, number>>({});
+
+  // Form state
+  private formData = signal<any>(null);
+
+  // Computed signals for display data
+  readonly tariffOffer = computed(() => this.dialogData.tariffOffer);
+
+  readonly serviceProviderName = computed(() => {
+    const offer = this.tariffOffer();
+    if (!offer) return 'N/A';
+
+    // Check both old and new API response structures
+    return offer.serviceProvider?.name ||
+           offer.providerProductInfo?.serviceProvider?.name ||
+           'N/A';
+  });
+
+  readonly hasCurrentPrice = computed(() => {
+    const offer = this.tariffOffer();
+    return offer?.price != null && !!offer?.currency;
+  });
+
+  // Form value signals
+  readonly formPrice = computed(() => this.formData()?.price || 0);
+  readonly formCurrency = computed(() => this.formData()?.currency || 'usd');
+
+  // Form validity
+  readonly isFormValid = computed(() => {
+    const data = this.formData();
+    return data?.price > 0 && !!data?.currency;
+  });
+
+  // Price info view model
+  readonly priceInfo = computed<PriceInfoViewModel>(() => {
+    const offer = this.tariffOffer();
+    if (!offer || offer.price == null || !offer.currency) {
+      return {
+        basePrice: null,
+        baseCurrency: null,
+        currentPrice: null,
+        currentCurrency: null,
+        formattedBasePrice: 'N/A',
+        formattedCurrentPrice: 'N/A',
+        priceDifference: 0,
+        priceDifferencePercentage: 0,
+        hasPriceDifference: false
+      };
+    }
+
+    return PriceComparisonUtils.createPriceInfoViewModel(
+      offer.price,
+      offer.currency,
+      offer.price,
+      offer.currency,
+      this.exchangeRates(),
+      'USD'
+    );
+  });
+
+  // Price preview view model (old price → new price)
+  readonly pricePreview = computed<PricePreviewViewModel>(() => {
+    const offer = this.tariffOffer();
+    const newPrice = this.formPrice();
+    const newCurrency = this.formCurrency();
+
+    if (!offer || offer.price == null || !offer.currency || !this.isFormValid()) {
+      return {
+        oldPrice: offer?.price || null,
+        oldCurrency: offer?.currency || null,
+        newPrice: null,
+        newCurrency: null,
+        formattedOldPrice: 'N/A',
+        formattedNewPrice: 'N/A',
+        changePercentage: 0,
+        isIncrease: false,
+        isDecrease: false,
+        isVisible: false
+      };
+    }
+
+    return PriceComparisonUtils.createPricePreviewViewModel(
+      offer.price,
+      offer.currency,
+      newPrice,
+      newCurrency,
+      this.exchangeRates(),
+      'USD'
+    );
+  });
+
+  constructor() {
+    // Load exchange rates
+    effect(() => {
+      this.productsDataService.getExchangeRates().subscribe({
+        next: (rates) => this.exchangeRates.set(rates),
+        error: () => {} // Silently handle error
+      });
+    }, { allowSignalWrites: true });
   }
 
   ngOnInit(): void {
-    if (this.data.tariffOffer) {
-      this.modifyForm.patchValue({
-        price: this.data.tariffOffer.price,
-        currency: this.data.tariffOffer.currency
-      });
-    }
+    this.createFormConfig();
   }
 
-  private createForm(): FormGroup {
-    return this.fb.group({
-      price: [0, [Validators.required, Validators.min(0.01)]],
-      currency: ['usd', [Validators.required]]
-    });
+  private createFormConfig(): void {
+    const offer = this.dialogData.tariffOffer;
+    const { price, currency } = PriceFormConfigUtils.getInitialValuesFromTariffOffer(offer);
+    const currencyOptions$ = PriceFormConfigUtils.createCurrencyOptions(this.productsDataService);
+
+    this.formConfig = PriceFormConfigUtils.createModifyTariffOfferFormConfig(
+      price,
+      currency,
+      currencyOptions$
+    );
+  }
+
+  onFormChanges(form: FormGroup): void {
+    const isFirstInit = !this.modifyForm;
+    this.modifyForm = form;
+
+    // Update form data signal
+    if (this.modifyForm) {
+      this.formData.set(this.modifyForm.value);
+
+      // Subscribe to value changes
+      if (isFirstInit) {
+        this.modifyForm.valueChanges.subscribe(value => {
+          this.formData.set(value);
+        });
+      }
+    }
   }
 
   onCancel(): void {
@@ -75,57 +204,22 @@ export class ModifyTariffOfferDialogComponent implements OnInit {
   }
 
   onSave(): void {
-    if (!this.modifyForm.valid || !this.data.tariffOffer) {
+    if (!this.isFormValid() || !this.tariffOffer()) {
       return;
     }
 
-    this.loading = true;
-    this.error = null;
+    const formValue = this.formData();
+    const offer = this.tariffOffer();
 
-    const formValue = this.modifyForm.value;
-
-    // Create new tariff offer request with updated price/currency but without ID
-    const createRequest = {
-      productId: this.data.tariffOffer.productId,
-      providerProductId: this.data.tariffOffer.serviceProvider.id,
-      price: formValue.price,
-      currency: formValue.currency as Currency
+    // Return modified price data for retailPrice object
+    // The actual API call will be made when creating/updating the company product
+    const result: ModifyTariffOfferResult = {
+      tariffOfferId: offer.id,
+      price: Number(formValue.price),
+      currency: formValue.currency as Currency,
+      validFrom: new Date().toISOString().split('T')[0] // Format: "2025-11-21"
     };
 
-    this.tariffOfferService.createTariffOffer(createRequest).subscribe({
-      next: (response) => {
-        this.loading = false;
-
-        // Create updated ActiveTariffOffer object
-        const updatedOffer: ActiveTariffOffer = {
-          ...this.data.tariffOffer,
-          id: response.id, // New ID from backend
-          price: formValue.price,
-          currency: formValue.currency,
-          validFrom: new Date().toISOString()
-        };
-
-        this.dialogRef.close(updatedOffer);
-      },
-      error: (error) => {
-        this.loading = false;
-        this.error = this.getErrorMessage(error);
-        console.error('Error creating modified tariff offer:', error);
-      }
-    });
-  }
-
-  private getErrorMessage(error: any): string {
-    if (error.error?.message) {
-      return error.error.message;
-    }
-    if (error.message) {
-      return error.message;
-    }
-    return 'An unexpected error occurred. Please try again.';
-  }
-
-  get isFormValid(): boolean {
-    return this.modifyForm.valid;
+    this.dialogRef.close(result);
   }
 }

@@ -1,0 +1,19 @@
+@if (preview().isVisible) {
+  <div class="price-preview">
+    <h6>Price Preview:</h6>
+    <div class="preview-row">
+      <span class="old-price">{{ preview().formattedOldPrice }}</span>
+      <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+      <span class="new-price"
+            [class.price-increase]="preview().isIncrease"
+            [class.price-decrease]="preview().isDecrease">
+        {{ preview().formattedNewPrice }}
+      </span>
+      <span class="price-change"
+            [class.increase]="preview().isIncrease"
+            [class.decrease]="preview().isDecrease">
+        ({{ preview().changePercentage > 0 ? '+' : '' }}{{ preview().changePercentage | number:'1.1-1' }}%)
+      </span>
+    </div>
+  </div>
+}

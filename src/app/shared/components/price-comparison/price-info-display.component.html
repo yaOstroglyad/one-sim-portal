@@ -1,0 +1,13 @@
+<div class="price-info">
+  @if (showServiceProvider() && serviceProviderName()) {
+    <div class="info-row">
+      <span class="label">Service Provider:</span>
+      <span class="value">{{ serviceProviderName() }}</span>
+    </div>
+  }
+
+  <div class="info-row">
+    <span class="label">{{ currentPriceLabel() }}:</span>
+    <span class="value">{{ priceInfo().formattedCurrentPrice }}</span>
+  </div>
+</div>

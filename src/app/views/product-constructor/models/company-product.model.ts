@@ -29,22 +29,23 @@ export interface CompanyProduct {
   active: boolean;
 }
 
-export interface RetailTariff {
+export interface RetailPrice {
   tariffOfferId: string;
   price: number;
   currency: string;
+  validFrom: string;
 }
 
 export interface CreateCompanyProductRequest {
   companyAccountId: string;
   productId: string;
-  retailTariff: RetailTariff;
+  retailPrice: RetailPrice;
   description: string;
   validityPeriod: ValidityPeriod;
 }
 
 export interface UpdateCompanyProductRequest {
-  retailTariff?: RetailTariff;
+  retailPrice?: RetailPrice;
   description?: string;
   validityPeriod?: ValidityPeriod;
 }

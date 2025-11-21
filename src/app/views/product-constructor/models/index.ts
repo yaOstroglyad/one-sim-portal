@@ -6,11 +6,11 @@ export * from './provider-product.model';
 export * from './product.model';
 
 // Export specific types from company-product.model to avoid conflicts
-export { 
+export {
   CompanyProduct,
   CompanyProductTariffOffer,
   CompanyProductServiceProvider,
-  RetailTariff,
+  RetailPrice,
   CreateCompanyProductRequest,
   UpdateCompanyProductRequest,
   CompanyProductStatusRequest,
@@ -19,4 +19,5 @@ export {
 } from './company-product.model';
 
 export * from './tariff-offer.model';
+export * from './company-product-prices.model';
 export * from './overview.model';

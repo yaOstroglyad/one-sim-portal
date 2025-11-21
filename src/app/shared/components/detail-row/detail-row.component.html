@@ -1,0 +1,8 @@
+<div class="detail-row"
+     [class]="customClass()"
+     [class.no-border]="!showBorder()">
+  <span class="detail-label" [class]="labelClass()">{{ label() }}</span>
+  <div class="detail-value" [class]="valueClass()">
+    <ng-content></ng-content>
+  </div>
+</div>

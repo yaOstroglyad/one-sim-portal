@@ -1,121 +1,80 @@
-<h2 mat-dialog-title class="dialog-header">{{ uiConfig.texts.dialogTitle }}</h2>
+<h2 mat-dialog-title class="dialog-header">{{ dialogTitle }}</h2>
 
 <mat-dialog-content class="mat-typography dialog-content">
-  <!-- Price Information Section -->
-  <ng-container *ngIf="viewModel$ | async as vm">
-    
-    <!-- Current Tariff Info for Admin/Full View -->
-    <div class="original-info" *ngIf="uiConfig.showCurrentTariffInfo && vm.priceInfo">
-      <h6>Current Tariff Offer:</h6>
-      
-      <div class="info-row" *ngIf="vm.showServiceProvider && vm.serviceProviderName">
-        <span class="label">Service Provider:</span>
-        <span class="value">{{ vm.serviceProviderName }}</span>
-      </div>
-      
-      <div class="info-row">
-        <span class="label">{{ uiConfig.texts.labels.basePrice }}:</span>
-        <span class="value">{{ vm.priceInfo.formattedBasePrice }}</span>
-      </div>
-      
-      <div class="info-row" *ngIf="vm.priceInfo.hasPriceDifference">
-        <span class="label">{{ uiConfig.texts.labels.customerPrice }}:</span>
-        <span class="value">
-          {{ vm.priceInfo.formattedCurrentPrice }}
-          <span class="price-difference" *ngIf="vm.priceInfo.priceDifference !== 0">
-            ({{ vm.priceInfo.priceDifference > 0 ? '+' : '' }}{{ vm.priceInfo.priceDifferencePercentage | number:'1.1-1' }}%)
-          </span>
-        </span>
-      </div>
-    </div>
+  <!-- Loading State -->
+  @if (loading()) {
+    <app-loader></app-loader>
+  }
 
-    <!-- Simplified Price Info for Regular Users -->
-    <div class="original-info" *ngIf="!uiConfig.showCurrentTariffInfo && vm.priceInfo">
-      <div class="info-row" *ngIf="vm.priceInfo.hasPriceDifference">
-        <span class="label">{{ uiConfig.texts.labels.basePrice }}:</span>
-        <span class="value">{{ vm.priceInfo.formattedBasePrice }}</span>
-      </div>
-      
-      <div class="info-row">
-        <span class="label">{{ uiConfig.texts.labels.currentPrice }}:</span>
-        <span class="value">
-          {{ vm.priceInfo.formattedCurrentPrice }}
-          <span class="price-difference" *ngIf="vm.priceInfo.priceDifference !== 0">
-            ({{ vm.priceInfo.priceDifference > 0 ? '+' : '' }}{{ vm.priceInfo.priceDifferencePercentage | number:'1.1-1' }}%)
-          </span>
-        </span>
-      </div>
-    </div>
+  <!-- Price Information & Preview (only when viewModel is available) -->
+  @if (viewModel; as vm) {
+    @let vmValue = vm();
 
-    <!-- Modify Form -->
-    <form [formGroup]="modifyForm" class="modify-form">
-      <h6>{{ uiConfig.texts.labels.newPrice }}:</h6>
+    <!-- Price Info Display Component -->
+    @if (vmValue.priceInfo) {
+      <app-price-info-display
+        [priceInfo]="vmValue.priceInfo"
+        [basePriceLabel]="uiConfig.texts.labels.basePrice"
+        [currentPriceLabel]="uiConfig.showCurrentTariffInfo ? uiConfig.texts.labels.customerPrice : uiConfig.texts.labels.currentPrice"
+        [serviceProviderName]="vmValue.serviceProviderName"
+        [showServiceProvider]="vmValue.showServiceProvider && uiConfig.showCurrentTariffInfo"
+        [showBasePriceIfDifferent]="true">
+      </app-price-info-display>
+    }
 
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="price-field">
-          <mat-label>Price</mat-label>
-          <input
-            matInput
-            type="number"
-            step="0.01"
-            min="0.01"
-            formControlName="price"
-            placeholder="0.00">
-          <mat-error *ngIf="modifyForm.get('price')?.hasError('required')">
-            Price is required
-          </mat-error>
-          <mat-error *ngIf="modifyForm.get('price')?.hasError('min')">
-            Price must be greater than 0
-          </mat-error>
-        </mat-form-field>
+    <!-- Price Preview Component -->
+    @if (vmValue.pricePreview) {
+      <app-price-preview [preview]="vmValue.pricePreview"></app-price-preview>
+    }
+  }
 
-        <mat-form-field appearance="outline" class="currency-field">
-          <mat-label>Currency</mat-label>
-          <mat-select formControlName="currency">
-            <mat-option *ngFor="let currency of currencyOptions$ | async" [value]="currency.value">
-              {{ currency.label }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </form>
+  <!-- Form Section -->
+  <div class="modify-form">
+    <h6>{{ uiConfig.texts.labels.newPrice }}:</h6>
 
-    <!-- Price Preview Section -->
-    <div class="price-preview" *ngIf="vm.pricePreview.isVisible">
-      <h6>Price Preview:</h6>
-      <div class="preview-row">
-        <span class="old-price">{{ vm.pricePreview.formattedOldPrice }}</span>
-        <mat-icon class="arrow-icon">arrow_forward</mat-icon>
-        <span class="new-price">{{ vm.pricePreview.formattedNewPrice }}</span>
-        <span class="price-change" 
-              [class.increase]="vm.pricePreview.isIncrease" 
-              [class.decrease]="vm.pricePreview.isDecrease">
-          ({{ vm.pricePreview.changePercentage > 0 ? '+' : '' }}{{ vm.pricePreview.changePercentage | number:'1.1-1' }}%)
-        </span>
-      </div>
-    </div>
+    <app-form-generator
+      [config]="formConfig"
+      (formChanges)="onFormChanges($event)">
+    </app-form-generator>
+  </div>
 
-  </ng-container>
+  <!-- Error Message -->
+  @if (error()) {
+    <app-info-strip
+      type="alert"
+      icon="error"
+      [text]="error()!">
+    </app-info-strip>
+  }
 
   <!-- Info Message -->
-  <div class="info-note">
-    <mat-icon>info</mat-icon>
-    <span>{{ uiConfig.texts.infoMessages.dialogInfo }}</span>
-  </div>
+  <app-info-strip
+    type="primary"
+    icon="info"
+    [text]="infoMessage">
+  </app-info-strip>
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog-footer" align="end">
-  <button mat-button (click)="onCancel()">
+  <button
+    cButton
+    color="secondary"
+    variant="outline"
+    (click)="onCancel()"
+    [disabled]="loading()">
     Cancel
   </button>
 
-  <ng-container *ngIf="viewModel$ | async as vm">
-    <button
-      mat-button
-      color="primary"
-      (click)="onSave()"
-      [disabled]="!isFormValid">
-      {{ vm.pricePreview.isVisible ? 'Apply Price Change' : uiConfig.texts.buttonTexts.update }}
-    </button>
-  </ng-container>
+  <button
+    cButton
+    color="primary"
+    (click)="onSave()"
+    [disabled]="!modifyForm?.valid || loading()">
+    @if (loading()) {
+      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      <span>Saving...</span>
+    } @else {
+      <span>{{ saveButtonText }}</span>
+    }
+  </button>
 </mat-dialog-actions>

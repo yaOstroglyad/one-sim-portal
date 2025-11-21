@@ -1,18 +1,33 @@
-import { Component, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { CompanyProduct } from '../../../models';
+import { Subject, takeUntil } from 'rxjs';
+
+import { CompanyProduct, CompanyProductPrice } from '../../../models';
+import { CompanyProductPriceService } from '../../../services';
+import { CompanyProductPricesTableComponent } from '../company-product-prices-table';
 
 @Component({
   standalone: true,
     selector: 'app-company-product-details',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [CommonModule, MatIconModule],
+    imports: [
+      CommonModule,
+      MatIconModule,
+      CompanyProductPricesTableComponent
+    ],
     templateUrl: './company-product-details.component.html',
     styleUrls: ['./company-product-details.component.scss']
 })
-export class CompanyProductDetailsComponent implements OnChanges {
+export class CompanyProductDetailsComponent implements OnChanges, OnDestroy {
   @Input() companyProduct: CompanyProduct | null = null;
+
+  // Signals for retail prices
+  readonly prices = signal<CompanyProductPrice[]>([]);
+  readonly pricesLoading = signal(false);
+
+  private readonly destroy$ = new Subject<void>();
+  private readonly companyProductPriceService = inject(CompanyProductPriceService);
 
   // Pre-computed values for template
   statusColor: string = '';
@@ -31,7 +46,31 @@ export class CompanyProductDetailsComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['companyProduct'] && this.companyProduct) {
       this.precomputeValues();
+      // Load retail prices when company product changes
+      this.loadPrices(this.companyProduct.id);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private loadPrices(companyProductId: string): void {
+    this.pricesLoading.set(true);
+
+    this.companyProductPriceService.getPrices(companyProductId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (prices) => {
+          this.prices.set(prices);
+          this.pricesLoading.set(false);
+        },
+        error: (error) => {
+          console.error('Error loading prices:', error);
+          this.pricesLoading.set(false);
+        }
+      });
   }
 
   private precomputeValues(): void {

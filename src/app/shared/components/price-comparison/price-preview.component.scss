@@ -1,0 +1,77 @@
+@use "variables" as vars;
+
+.price-preview {
+  background-color: var(--os-color-surface-tertiary);
+  border: 1px solid var(--os-color-border-default);
+  border-radius: map-get(vars.$os-border-radius, 'medium'); // 0.375rem
+  padding: map-get(vars.$os-spacing, '4'); // 1rem
+  margin-bottom: map-get(vars.$os-spacing, '4'); // 1rem
+
+  h6 {
+    margin: 0 0 map-get(vars.$os-spacing, '3') 0; // 0.75rem
+    font-size: map-get(vars.$os-font-sizes, 'sm'); // 0.875rem
+    font-weight: 600;
+    color: var(--os-color-text-secondary);
+  }
+}
+
+.preview-row {
+  display: flex;
+  align-items: center;
+  gap: map-get(vars.$os-spacing, '3'); // 0.75rem
+  font-size: map-get(vars.$os-font-sizes, 'base'); // 1rem
+
+  .old-price {
+    color: var(--os-color-text-secondary);
+    text-decoration: line-through;
+    font-weight: 500;
+  }
+
+  .arrow-icon {
+    color: var(--os-color-text-tertiary);
+    font-size: 1.125rem;
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .new-price {
+    font-weight: 700;
+    transition: color 0.2s ease;
+
+    // Default color (neutral)
+    color: var(--os-color-text-primary);
+
+    // Price increase (good for company - more profit - green)
+    &.price-increase {
+      color: var(--os-color-success);
+    }
+
+    // Price decrease (bad for company - less profit - red)
+    &.price-decrease {
+      color: var(--os-color-danger);
+    }
+  }
+
+  .price-change {
+    margin-left: map-get(vars.$os-spacing, '2'); // 0.5rem
+    font-size: map-get(vars.$os-font-sizes, 'sm'); // 0.875rem
+    font-weight: 600;
+    padding: 2px map-get(vars.$os-spacing, '2'); // 0.5rem
+    border-radius: map-get(vars.$os-border-radius, 'medium'); // 0.375rem
+    transition: all 0.2s ease;
+
+    // Price increase (good for company - more profit - green badge)
+    &.increase {
+      color: var(--os-color-success-shade);
+      background-color: rgba(var(--os-color-success-rgb), 0.1);
+      border: 1px solid rgba(var(--os-color-success-rgb), 0.2);
+    }
+
+    // Price decrease (bad for company - less profit - red badge)
+    &.decrease {
+      color: var(--os-color-danger-shade);
+      background-color: rgba(var(--os-color-danger-rgb), 0.1);
+      border: 1px solid rgba(var(--os-color-danger-rgb), 0.2);
+    }
+  }
+}

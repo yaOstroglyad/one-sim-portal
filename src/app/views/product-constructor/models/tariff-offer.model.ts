@@ -38,11 +38,25 @@ export interface TariffOfferSearchRequest {
   page: PageRequest;
 }
 
+export interface ProviderProductInfo {
+  id: string;
+  serviceProvider: ServiceProvider;
+  providerData?: {
+    extensionId?: string;
+    [key: string]: any;
+  };
+  price: number;
+  currency: Currency;
+  validFrom: string;
+}
+
 export interface ActiveTariffOffer {
   id?: string; // Optional for now, will be required when backend adds it
   productId: string;
   productName: string;
-  serviceProvider: ServiceProvider;
+  // Support both old and new API response structures
+  serviceProvider?: ServiceProvider; // Old structure
+  providerProductInfo?: ProviderProductInfo; // New structure
   price: number | null;
   currency: Currency | null;
   validFrom: Date | string;

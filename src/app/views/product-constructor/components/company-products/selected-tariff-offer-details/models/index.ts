@@ -1,1 +1,0 @@
-export * from './selected-tariff-offer-details.model';

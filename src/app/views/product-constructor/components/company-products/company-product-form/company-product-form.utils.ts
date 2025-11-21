@@ -141,19 +141,36 @@ function createTariffOfferSelectionField(tariffOfferService: any): FieldConfig {
     placeholder: 'Select a tariff offer',
     validators: [Validators.required],
     dependsOnValue: ['productId'],
-    disabled: true,
+    // Don't set disabled property - let FormGenerator manage it automatically based on dependsOnValue
     options: (values: any) => {
       const { productId } = values;
       if (!productId || !tariffOfferService) return of([]);
 
       return tariffOfferService.getActiveTariffOffers(productId).pipe(
-        map((offers: ActiveTariffOffer[]) =>
-          offers.map((offer, index) => ({
-            value: offer.id || `${offer.productId}_${index}`,
-            displayValue: `${offer.serviceProvider.name} - ${offer.price} ${offer.currency.toUpperCase()}`
-          } as SelectOption))
-        ),
-        catchError(() => of([]))
+        map((offers: ActiveTariffOffer[] | null) => {
+          // Handle null or undefined response
+          if (!offers || !Array.isArray(offers)) {
+            return [];
+          }
+
+          return offers.map((offer, index) => {
+            // Handle both old and new API response structures
+            const serviceProviderName = offer.providerProductInfo?.serviceProvider?.name ||
+                                       offer.serviceProvider?.name ||
+                                       'Unknown Provider';
+            const price = offer.price || offer.providerProductInfo?.price || 0;
+            const currency = offer.currency || offer.providerProductInfo?.currency || 'USD';
+
+            return {
+              value: offer.id || `${offer.productId}_${index}`,
+              displayValue: `${serviceProviderName} - ${price} ${currency.toUpperCase()}`
+            } as SelectOption;
+          });
+        }),
+        catchError((error) => {
+          console.error('Error loading tariff offers:', error);
+          return of([]);
+        })
       );
     }
   };
@@ -207,6 +224,17 @@ export function getCompanyProductFormConfig(
   // Tariff offer field (only for create mode)
   if (mode === 'admin-create') {
     formFields.push(createTariffOfferSelectionField(tariffOfferService));
+
+    // Valid From field (required for tariff offer)
+    formFields.push({
+      type: FieldType.datepicker,
+      name: 'validFrom',
+      label: 'Valid From',
+      placeholder: 'Select start date',
+      validators: [Validators.required],
+      value: new Date().toISOString().split('T')[0], // Default to today
+      hintMessage: 'The date from which this tariff offer becomes valid'
+    });
   }
 
   formFields.push(...[
@@ -267,20 +295,29 @@ export function getCompanyProductFormConfig(
 
 // Note: productId resolution is handled in the component via API product matching
 
-export function getCompanyProductCreateRequest(formValue: any, selectedTariffOffer: ActiveTariffOffer | null): CreateCompanyProductRequest {
+export function getCompanyProductCreateRequest(
+  formValue: any,
+  selectedTariffOffer: ActiveTariffOffer | null,
+  modifiedRetailPrice?: { tariffOfferId: string; price: number; currency: string; validFrom: string } | null
+): CreateCompanyProductRequest {
   if (!selectedTariffOffer) {
     throw new Error('Tariff offer must be selected');
   }
 
+  // Use modified retail price if available, otherwise use default tariff offer data
+  const retailPrice = modifiedRetailPrice || {
+    tariffOfferId: selectedTariffOffer.id || `${selectedTariffOffer.productId}_${selectedTariffOffer.serviceProvider.id}`,
+    price: selectedTariffOffer.price,
+    currency: selectedTariffOffer.currency,
+    validFrom: formValue.validFrom
+      ? (typeof formValue.validFrom === 'string' ? formValue.validFrom : new Date(formValue.validFrom).toISOString().split('T')[0])
+      : new Date().toISOString().split('T')[0]
+  };
+
   return {
     companyAccountId: formValue.companyId || '',
     productId: formValue.productId,
-    retailTariff: {
-      tariffOfferId: selectedTariffOffer.id || `${selectedTariffOffer.productId}_${selectedTariffOffer.serviceProvider.id}`,
-      // Use the potentially modified price and currency from selectedTariffOffer
-      price: selectedTariffOffer.price,
-      currency: selectedTariffOffer.currency
-    },
+    retailPrice,
     description: formValue.description || '',
     validityPeriod: {
       period: parseInt(formValue.period) || 30,
@@ -298,12 +335,17 @@ export function getCompanyProductUpdateRequest(formValue: any, selectedTariffOff
     }
   };
 
-  // Include retailTariff only if tariffOffer is provided (price was modified)
+  // Include retailPrice only if tariffOffer is provided (price was modified)
   if (selectedTariffOffer) {
-    request.retailTariff = {
+    const validFromDate = selectedTariffOffer.validFrom
+      ? (typeof selectedTariffOffer.validFrom === 'string' ? selectedTariffOffer.validFrom : new Date(selectedTariffOffer.validFrom).toISOString().split('T')[0])
+      : new Date().toISOString().split('T')[0];
+
+    request.retailPrice = {
       tariffOfferId: selectedTariffOffer.id || `${selectedTariffOffer.productId}_${selectedTariffOffer.serviceProvider.id}`,
       price: selectedTariffOffer.price,
-      currency: selectedTariffOffer.currency
+      currency: selectedTariffOffer.currency,
+      validFrom: validFromDate
     };
   }
 

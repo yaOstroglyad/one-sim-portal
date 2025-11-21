@@ -86,6 +86,20 @@
     </div>
   </div>
 
+  <!-- Pricing Schedule -->
+  <div class="detail-section">
+    <h6 class="section-title">
+      <mat-icon>event</mat-icon>
+      Pricing Schedule
+    </h6>
+    <app-company-product-prices-table
+      [prices]="prices()"
+      [loading]="pricesLoading()"
+      [editable]="false"
+      [showHeader]="false">
+    </app-company-product-prices-table>
+  </div>
+
   <!-- Metadata -->
   <div class="detail-section">
     <h6 class="section-title">

@@ -1,7 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, computed, Injector, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
-import { Observable, combineLatest, of } from 'rxjs';
-import { map, startWith, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import {
   ModifyPriceDialogData,
@@ -9,170 +9,133 @@ import {
   PricePreviewViewModel,
   ModifyPriceDialogViewModel
 } from '../models/modify-price-dialog.model';
-import { PriceCalculationUtils, PriceData } from '../utils/price-calculation.utils';
-import { FormUtils } from '../utils/form.utils';
+import { PriceFormConfigUtils, PriceData } from '../../utils';
 import { ModifyPriceDialogConfig } from '../../factories';
-import { ProductsDataService } from '@shared';
+import { ProductsDataService, PriceComparisonUtils } from '@shared';
 
 /**
  * Presenter service for modify price dialog
- * Handles business logic and view model creation
+ * Handles business logic and view model creation using signals
  */
 @Injectable()
 export class ModifyPriceDialogPresenter {
   private readonly productsDataService = inject(ProductsDataService);
+  private readonly injector = inject(Injector);
+
+  // Cache exchange rates as signal
+  private readonly exchangeRates = toSignal(
+    this.productsDataService.getExchangeRates(),
+    { initialValue: {}, injector: this.injector }
+  );
 
   /**
-   * Create view model stream from form and data
+   * Create view model signals from form and data
    */
   createViewModel(
     form: FormGroup,
     data: ModifyPriceDialogData,
     uiConfig: ModifyPriceDialogConfig
-  ): Observable<ModifyPriceDialogViewModel> {
+  ): Signal<ModifyPriceDialogViewModel> {
 
-    // Stream of form changes
-    const formChanges$ = form.valueChanges.pipe(
-      startWith(form.value)
+    // Convert form value changes to signal with debounce
+    const formValue = toSignal(
+      form.valueChanges.pipe(
+        debounceTime(300),
+        distinctUntilChanged((prev, curr) =>
+          prev.price === curr.price && prev.currency === curr.currency
+        )
+      ),
+      { initialValue: form.value, injector: this.injector }
     );
 
-    // Stream of form status changes
-    const formStatus$ = form.statusChanges.pipe(
-      startWith(form.status)
+    // Convert form status to signal
+    const formStatus = toSignal(
+      form.statusChanges,
+      { initialValue: form.status, injector: this.injector }
     );
 
-    return combineLatest([formChanges$, formStatus$]).pipe(
-      switchMap(([formValue, formStatus]) => {
-        const priceData = this.createPriceData(data, formValue);
+    // Computed price data based on form changes
+    const priceData = computed(() => {
+      const baseData = PriceFormConfigUtils.extractPriceData(data.tariffOffer);
+      const value = formValue();
 
-        return combineLatest([
-          this.createPriceInfoViewModel(priceData),
-          this.createPricePreviewViewModel(priceData, formStatus === 'VALID')
-        ]).pipe(
-          map(([priceInfo, pricePreview]) => ({
-            priceInfo,
-            pricePreview,
-            isFormValid: formStatus === 'VALID',
-            showServiceProvider: uiConfig.visibility.showServiceProvider,
-            serviceProviderName: data.tariffOffer?.serviceProvider?.name || null
-          }))
-        );
-      })
+      // Handle null case when valueChanges hasn't emitted yet
+      if (!value) {
+        return {
+          ...baseData,
+          newPrice: null,
+          newCurrency: null
+        };
+      }
+
+      return {
+        ...baseData,
+        newPrice: value.price,
+        newCurrency: value.currency
+      };
+    });
+
+    // Computed price info
+    const priceInfo = computed(() =>
+      this.calculatePriceInfo(priceData(), this.exchangeRates())
     );
+
+    // Computed price preview
+    const pricePreview = computed(() =>
+      this.calculatePricePreview(priceData(), formStatus() === 'VALID', this.exchangeRates())
+    );
+
+    // Final view model
+    return computed(() => ({
+      priceInfo: priceInfo(),
+      pricePreview: pricePreview(),
+      isFormValid: formStatus() === 'VALID',
+      showServiceProvider: uiConfig.visibility.showServiceProvider,
+      serviceProviderName: data.tariffOffer?.serviceProvider?.name || null
+    }));
   }
 
   /**
-   * Create price data object from dialog data and form value
+   * Calculate price info view model (synchronous with cached exchange rates)
    */
-  private createPriceData(data: ModifyPriceDialogData, formValue: any): PriceData {
-    const baseData = PriceCalculationUtils.extractPriceData(data.tariffOffer);
-
-    return {
-      ...baseData,
-      newPrice: formValue.price,
-      newCurrency: formValue.currency
-    };
-  }
-
-  /**
-   * Create price info view model
-   */
-  private createPriceInfoViewModel(priceData: PriceData): Observable<PriceInfoViewModel> {
-    return PriceCalculationUtils.calculateCurrencyAwareBasePriceDifference(
-      priceData,
-      this.productsDataService,
+  private calculatePriceInfo(priceData: PriceData, exchangeRates: Record<string, number>): PriceInfoViewModel {
+    return PriceComparisonUtils.createPriceInfoViewModel(
+      priceData.basePrice,
+      priceData.baseCurrency,
+      priceData.currentPrice,
+      priceData.currentCurrency,
+      exchangeRates,
       'USD'
-    ).pipe(
-      map(difference => ({
-        basePrice: priceData.basePrice,
-        baseCurrency: priceData.baseCurrency,
-        currentPrice: priceData.currentPrice,
-        currentCurrency: priceData.currentCurrency,
-        formattedBasePrice: PriceCalculationUtils.formatCurrencyPrice(priceData.basePrice, priceData.baseCurrency),
-        formattedCurrentPrice: PriceCalculationUtils.formatCurrencyPrice(priceData.currentPrice, priceData.currentCurrency),
-        priceDifference: difference.absoluteDifference,
-        priceDifferencePercentage: difference.percentageDifference,
-        hasPriceDifference: difference.absoluteDifference !== 0
-      }))
     );
   }
 
   /**
-   * Create price preview view model
+   * Calculate price preview view model (synchronous with cached exchange rates)
    */
-  private createPricePreviewViewModel(priceData: PriceData, isFormValid: boolean): Observable<PricePreviewViewModel> {
-    // Check if we should show preview
-    const shouldShow = isFormValid &&
-                      priceData.newPrice !== null &&
-                      priceData.newPrice !== undefined &&
-                      priceData.newPrice !== priceData.currentPrice;
-
-    if (!shouldShow) {
-      return of({
-        oldPrice: priceData.currentPrice,
-        oldCurrency: priceData.currentCurrency,
-        newPrice: priceData.newPrice,
-        newCurrency: priceData.newCurrency,
-        formattedOldPrice: PriceCalculationUtils.formatCurrencyPrice(priceData.currentPrice, priceData.currentCurrency),
-        formattedNewPrice: PriceCalculationUtils.formatCurrencyPrice(priceData.newPrice, priceData.newCurrency),
-        changePercentage: 0,
-        isIncrease: false,
-        isDecrease: false,
-        isVisible: false
-      });
+  private calculatePricePreview(
+    priceData: PriceData,
+    isFormValid: boolean,
+    exchangeRates: Record<string, number>
+  ): PricePreviewViewModel {
+    // Only show preview if form is valid
+    if (!isFormValid) {
+      return PriceComparisonUtils.createPricePreviewViewModel(
+        priceData.currentPrice,
+        priceData.currentCurrency,
+        null,
+        null,
+        exchangeRates,
+        'USD'
+      );
     }
 
-    return PriceCalculationUtils.calculateCurrencyAwareNewPriceDifference(
-      priceData,
-      this.productsDataService,
+    return PriceComparisonUtils.createPricePreviewViewModel(
+      priceData.currentPrice,
+      priceData.currentCurrency,
+      priceData.newPrice,
+      priceData.newCurrency,
+      exchangeRates,
       'USD'
-    ).pipe(
-      map(change => ({
-        oldPrice: priceData.currentPrice,
-        oldCurrency: priceData.currentCurrency,
-        newPrice: priceData.newPrice,
-        newCurrency: priceData.newCurrency,
-        formattedOldPrice: PriceCalculationUtils.formatCurrencyPrice(priceData.currentPrice, priceData.currentCurrency),
-        formattedNewPrice: PriceCalculationUtils.formatCurrencyPrice(priceData.newPrice, priceData.newCurrency),
-        changePercentage: change.percentageDifference,
-        isIncrease: change.isIncrease,
-        isDecrease: change.isDecrease,
-        isVisible: true
-      }))
     );
-  }
-
-  /**
-   * Extract result from form data
-   */
-  extractResult(form: FormGroup): any | null {
-    const formData = FormUtils.extractFormData(form);
-
-    if (!formData) {
-      return null;
-    }
-
-    return {
-      price: formData.price,
-      currency: formData.currency
-    };
-  }
-
-  /**
-   * Validate form and return error messages
-   */
-  validateForm(form: FormGroup): string[] {
-    const errors: string[] = [];
-
-    if (!form.valid) {
-      Object.keys(form.controls).forEach(key => {
-        const errorMessage = FormUtils.getErrorMessage(form, key);
-        if (errorMessage) {
-          errors.push(errorMessage);
-        }
-      });
-    }
-
-    return errors;
   }
 }

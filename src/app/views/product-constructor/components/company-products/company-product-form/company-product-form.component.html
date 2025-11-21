@@ -11,13 +11,26 @@
     (formChanges)="onFormChanges($event)">
   </app-form-generator>
 
-  <!-- Selected Tariff Offer Details -->
-  <app-selected-tariff-offer-details
-    *ngIf="selectedTariffOffer"
-    [tariffOffer]="selectedTariffOffer"
-    [showEditButton]="true"
-    [showTitle]="!isEditing"
-    [infoMessage]="infoMessage"
-    (tariffOfferUpdated)="onTariffOfferUpdated($event)">
-  </app-selected-tariff-offer-details>
+  <!-- Create Mode: Show Selected Tariff Offer Details -->
+  @if (!isEditing && selectedTariffOffer) {
+    <app-selected-tariff-offer-details
+      [tariffOffer]="selectedTariffOffer"
+      [modifiedRetailPrice]="modifiedRetailPrice"
+      [showTitle]="true"
+      [infoMessage]="infoMessage"
+      [editable]="true"
+      (modifyPrice)="onModifyTariffOfferPrice($event)">
+    </app-selected-tariff-offer-details>
+  }
+
+  <!-- Edit Mode: Show Product Prices Table -->
+  @if (isEditing) {
+    <app-company-product-prices-table
+      [prices]="prices()"
+      [loading]="pricesLoading()"
+      [editable]="true"
+      (editPrice)="onEditPrice($event)"
+      (addPrice)="onAddPrice()">
+    </app-company-product-prices-table>
+  }
 </div>

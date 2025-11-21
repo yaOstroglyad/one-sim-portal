@@ -82,6 +82,7 @@ export interface FieldConfig {
 
 	validators?: ValidatorFn | ValidatorFn[];
 	asyncValidators?: AsyncValidatorFn | AsyncValidatorFn[];
+	errorMessages?: { [key: string]: string }; // Custom error messages for validators
 	multiple?: boolean;
 
 	//chips
