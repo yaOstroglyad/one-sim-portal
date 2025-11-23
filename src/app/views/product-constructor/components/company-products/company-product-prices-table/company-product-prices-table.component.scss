@@ -95,9 +95,13 @@
   td {
     padding: 1rem;
     color: var(--os-color-text-primary);
+    min-height: 3.5rem; // Ensure consistent row height
+    height: 3.5rem; // Fixed height for all cells
   }
 
   tr.mat-mdc-row {
+    height: 3.5rem; // Fixed row height
+
     &:hover {
       background: var(--os-color-background-secondary);
     }
@@ -158,6 +162,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 3rem; // Ensures consistent height even when empty
 
     button {
       display: inline-flex;
