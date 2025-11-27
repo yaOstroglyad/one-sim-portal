@@ -15,164 +15,107 @@
   }
 
   <!-- Data Content -->
-  @if (data() && !loading() && !error()) {
-    <div class="executive-content">
+  @if (data(); as execData) {
+    @if (!loading() && !error()) {
+      <div class="executive-content">
 
-    <!-- Revenue Row (Full Width) -->
-    <div class="revenue-row">
-      <os-card class="revenue-card" variant="default">
-        <div class="card-header">
-          <h3>{{ 'dashboard.executive.totalRevenue' | translate }}</h3>
-          <div class="revenue-amount">
-            {{ data()!.revenue.total | currency:data()!.revenue.currency }}
-          </div>
-        </div>
-
-        <!-- Revenue Breakdown -->
-        <div class="revenue-breakdown">
-          <div class="breakdown-item">
-            <span class="label">{{ 'dashboard.executive.totalCost' | translate }}</span>
-            <span class="value">{{ data()!.revenue.totalCost | currency:data()!.revenue.currency }}</span>
-          </div>
-          <div class="breakdown-item">
-            <span class="label">{{ 'dashboard.executive.totalMargin' | translate }}</span>
-            <span class="value positive">{{ data()!.revenue.totalMargin | currency:data()!.revenue.currency }}</span>
-          </div>
-          <div class="breakdown-item">
-            <span class="label">{{ 'dashboard.executive.totalBundlesSold' | translate }}</span>
-            <span class="value">{{ data()!.subscribersByBundle.total | number }}</span>
-          </div>
-        </div>
-
-        <!-- Refunds Section (Always visible, collapsible when has data) -->
-        <div class="refunds-section"
-             [class.expanded]="refundsExpanded()"
-             [class.empty]="!data()!.revenue.refunds || data()!.revenue.refunds!.totalCount === 0">
-
-          @if (data()!.revenue.refunds && data()!.revenue.refunds!.totalCount > 0) {
-            <!-- Has refunds - clickable header -->
-            <button
-              type="button"
-              class="refunds-header"
-              (click)="toggleRefunds()"
-              [attr.aria-expanded]="refundsExpanded()">
-              <div class="refunds-summary">
-                <span class="refunds-icon">↩</span>
-                <span class="refunds-title">{{ 'dashboard.executive.refunds' | translate }}</span>
-                <span class="refunds-badge">{{ data()!.revenue.refunds!.totalCount }}</span>
-                @if (!refundsExpanded()) {
-                  <span class="refunds-amount negative">
-                    -{{ data()!.revenue.refunds!.totalRevenue | currency:data()!.revenue.currency }}
-                  </span>
-                }
+        <!-- Revenue Row (Full Width) -->
+        <div class="revenue-row">
+          <os-card class="revenue-card" variant="default">
+            <div class="card-header">
+              <h3>{{ 'dashboard.executive.totalRevenue' | translate }}</h3>
+              <div class="revenue-amount">
+                {{ execData.revenue.total | currency:currency() }}
               </div>
-              <app-icon
-                class="expand-icon"
-                [class.rotated]="refundsExpanded()"
-                [icon]="'chevron-down'"
-                [size]="'sm'">
-              </app-icon>
-            </button>
+            </div>
 
-            <!-- Expanded Content -->
-            @if (refundsExpanded()) {
-              <div class="refunds-content">
-                <div class="revenue-breakdown">
-                  <div class="breakdown-item">
-                    <span class="label">{{ 'dashboard.executive.refundsRevenue' | translate }}</span>
-                    <span class="value negative">{{ data()!.revenue.refunds!.totalRevenue | currency:data()!.revenue.currency }}</span>
-                  </div>
-                  <div class="breakdown-item">
-                    <span class="label">{{ 'dashboard.executive.refundsCost' | translate }}</span>
-                    <span class="value">{{ data()!.revenue.refunds!.totalCost | currency:data()!.revenue.currency }}</span>
-                  </div>
-                  <div class="breakdown-item">
-                    <span class="label">{{ 'dashboard.executive.refundsMargin' | translate }}</span>
-                    <span class="value negative">{{ data()!.revenue.refunds!.totalMargin | currency:data()!.revenue.currency }}</span>
-                  </div>
-                  <div class="breakdown-item">
-                    <span class="label">{{ 'dashboard.executive.refundsCount' | translate }}</span>
-                    <span class="value">{{ data()!.revenue.refunds!.totalCount | number }}</span>
-                  </div>
+            <!-- Revenue Breakdown -->
+            <div class="revenue-breakdown">
+              <div class="breakdown-item">
+                <span class="label">{{ 'dashboard.executive.totalCost' | translate }}</span>
+                <span class="value">{{ execData.revenue.totalCost | currency:currency() }}</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="label">{{ 'dashboard.executive.totalMargin' | translate }}</span>
+                <span class="value positive">{{ execData.revenue.totalMargin | currency:currency() }}</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="label">{{ 'dashboard.executive.totalBundlesSold' | translate }}</span>
+                <span class="value">{{ execData.subscribersByBundle.total | number }}</span>
+              </div>
+            </div>
+
+            <!-- Refunds Section -->
+            <app-refunds-summary
+              [refunds]="execData.revenue.refunds"
+              [currency]="currency()">
+            </app-refunds-summary>
+          </os-card>
+        </div>
+
+        <!-- Charts Row - Conditional -->
+        @if (execData.availableSections?.bundleCharts) {
+          <div class="charts-row">
+            <!-- Subscribers by Bundle Chart -->
+            <os-card class="chart-card" variant="default">
+              <div class="card-header">
+                <h3>{{ 'dashboard.executive.subscribersByBundle' | translate }}</h3>
+              </div>
+              <div class="chart-container">
+                <os-bar-chart
+                  [data]="execData.subscribersByBundle.chartConfig?.data || {labels: [], datasets: []}"
+                  [options]="execData.subscribersByBundle.chartConfig?.options || {}">
+                </os-bar-chart>
+              </div>
+            </os-card>
+
+            <!-- Revenue by Bundle Chart -->
+            <os-card class="chart-card" variant="default">
+              <div class="card-header">
+                <h3>{{ 'dashboard.executive.revenueByBundle' | translate }}</h3>
+              </div>
+              <div class="chart-container">
+                <os-bar-chart
+                  [data]="execData.revenueByBundle.chartConfig?.data || {labels: [], datasets: []}"
+                  [options]="execData.revenueByBundle.chartConfig?.options || {}">
+                </os-bar-chart>
+              </div>
+            </os-card>
+          </div>
+        }
+
+        <!-- Inventory Status - Conditional -->
+        @if (execData.availableSections?.inventory) {
+          <div class="inventory-row">
+            <os-card class="inventory-card" variant="default">
+              <div class="card-header">
+                <h3>{{ 'dashboard.executive.inventoryStatus' | translate }}</h3>
+                <div class="total-esims">
+                  {{ execData.inventoryStatus.totalESIMs | number }} {{ 'dashboard.executive.totalEsims' | translate }}
                 </div>
               </div>
-            }
-          } @else {
-            <!-- No refunds - static empty state -->
-            <div class="refunds-header empty-state">
-              <div class="refunds-summary">
-                <span class="refunds-icon">↩</span>
-                <span class="refunds-title">{{ 'dashboard.executive.refunds' | translate }}</span>
-                <span class="refunds-badge empty">0</span>
+              <div class="inventory-grid">
+                @for (item of execData.inventoryStatus.breakdown; track item.label) {
+                  <div
+                    class="inventory-item"
+                    [class]="'status-' + item.status">
+                    <div class="item-label">{{ item.label }}</div>
+                    <div class="item-value">{{ item.value | number }}</div>
+                    <div class="item-percentage">{{ item.percentage | number:'1.0-1' }}%</div>
+                  </div>
+                }
+
+                <!-- Note about missing "Expired" data -->
+                <div class="inventory-item status-disabled">
+                  <div class="item-label">{{ 'dashboard.executive.expired' | translate }}</div>
+                  <div class="item-value">—</div>
+                  <div class="item-note">{{ 'dashboard.dataNotAvailable' | translate }}</div>
+                </div>
               </div>
-            </div>
-          }
-        </div>
-      </os-card>
-    </div>
-
-    <!-- Charts Row - Conditional -->
-    @if (data()!.availableSections?.bundleCharts) {
-      <div class="charts-row">
-        <!-- Subscribers by Bundle Chart -->
-        <os-card class="chart-card" variant="default">
-          <div class="card-header">
-            <h3>{{ 'dashboard.executive.subscribersByBundle' | translate }}</h3>
+            </os-card>
           </div>
-          <div class="chart-container">
-            <os-bar-chart
-              [data]="data()!.subscribersByBundle.chartConfig?.data || {labels: [], datasets: []}"
-              [options]="data()!.subscribersByBundle.chartConfig?.options || {}">
-            </os-bar-chart>
-          </div>
-        </os-card>
-
-        <!-- Revenue by Bundle Chart -->
-        <os-card class="chart-card" variant="default">
-          <div class="card-header">
-            <h3>{{ 'dashboard.executive.revenueByBundle' | translate }}</h3>
-          </div>
-          <div class="chart-container">
-            <os-bar-chart
-              [data]="data()!.revenueByBundle.chartConfig?.data || {labels: [], datasets: []}"
-              [options]="data()!.revenueByBundle.chartConfig?.options || {}">
-            </os-bar-chart>
-          </div>
-        </os-card>
+        }
       </div>
     }
-
-    <!-- Inventory Status - Conditional -->
-    @if (data()!.availableSections?.inventory) {
-      <div class="inventory-row">
-        <os-card class="inventory-card" variant="default">
-          <div class="card-header">
-            <h3>{{ 'dashboard.executive.inventoryStatus' | translate }}</h3>
-            <div class="total-esims">
-              {{ data()!.inventoryStatus.totalESIMs | number }} {{ 'dashboard.executive.totalEsims' | translate }}
-            </div>
-          </div>
-          <div class="inventory-grid">
-            @for (item of data()!.inventoryStatus.breakdown; track item.label) {
-              <div
-                class="inventory-item"
-                [class]="'status-' + item.status">
-                <div class="item-label">{{ item.label }}</div>
-                <div class="item-value">{{ item.value | number }}</div>
-                <div class="item-percentage">{{ item.percentage | number:'1.0-1' }}%</div>
-              </div>
-            }
-
-            <!-- Note about missing "Expired" data -->
-            <div class="inventory-item status-disabled">
-              <div class="item-label">Expired</div>
-              <div class="item-value">—</div>
-              <div class="item-note">{{ 'dashboard.dataNotAvailable' | translate }}</div>
-            </div>
-          </div>
-        </os-card>
-      </div>
-    }
-    </div>
   }
 </div>

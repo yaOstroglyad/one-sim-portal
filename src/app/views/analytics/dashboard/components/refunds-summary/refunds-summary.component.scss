@@ -1,0 +1,151 @@
+@use "variables" as vars;
+@use "mixins" as mixins;
+@use "sass:map";
+
+// Animation keyframes
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.refunds-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--os-color-border);
+
+  .refunds-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--os-color-danger-subtle-bg, rgba(239, 68, 68, 0.08));
+    border: 1px solid var(--os-color-danger-subtle, rgba(239, 68, 68, 0.2));
+    border-radius: map.get(vars.$os-border-radius, 'medium');
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--os-color-danger-subtle-bg-hover, rgba(239, 68, 68, 0.12));
+      border-color: var(--os-color-danger);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 1px var(--os-color-danger-subtle, rgba(239, 68, 68, 0.3));
+    }
+
+    .refunds-summary {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .refunds-icon {
+        font-size: 1.25rem;
+        color: var(--os-color-danger);
+      }
+
+      .refunds-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--os-color-text-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .refunds-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.5rem;
+        height: 1.5rem;
+        padding: 0 0.5rem;
+        background: var(--os-color-danger);
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 999px;
+
+        &.empty {
+          background: var(--os-color-medium);
+          opacity: 0.6;
+        }
+      }
+
+      .refunds-amount {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+
+        &.negative {
+          color: var(--os-color-danger);
+        }
+      }
+    }
+
+    .expand-icon {
+      color: var(--os-color-medium);
+      transition: transform 0.2s ease;
+
+      &.rotated {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .refunds-content {
+    margin-top: 1rem;
+    padding: 0 0.5rem;
+    animation: slideDown 0.2s ease-out;
+
+    .revenue-breakdown {
+      @include mixins.dashboard-breakdown-items();
+
+      .value.negative {
+        color: var(--os-color-danger);
+      }
+    }
+  }
+
+  &.expanded {
+    .refunds-header {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom-color: transparent;
+    }
+
+    .refunds-content {
+      background: var(--os-color-danger-subtle-bg, rgba(239, 68, 68, 0.04));
+      border: 1px solid var(--os-color-danger-subtle, rgba(239, 68, 68, 0.2));
+      border-top: none;
+      border-radius: 0 0 map.get(vars.$os-border-radius, 'medium') map.get(vars.$os-border-radius, 'medium');
+      padding: 1rem;
+      margin-top: 0;
+    }
+  }
+
+  // Empty state - no refunds
+  &.empty .refunds-header.empty-state {
+    background: var(--os-color-light-subtle-bg, rgba(128, 128, 128, 0.05));
+    border-color: var(--os-color-border, rgba(128, 128, 128, 0.2));
+    cursor: default;
+
+    &:hover {
+      background: var(--os-color-light-subtle-bg, rgba(128, 128, 128, 0.05));
+      border-color: var(--os-color-border, rgba(128, 128, 128, 0.2));
+    }
+
+    .refunds-summary {
+      .refunds-icon,
+      .refunds-title {
+        color: var(--os-color-medium);
+      }
+    }
+  }
+}

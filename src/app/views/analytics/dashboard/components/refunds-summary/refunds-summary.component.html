@@ -1,0 +1,67 @@
+<div class="refunds-section"
+     [class.expanded]="expanded()"
+     [class.empty]="!hasRefunds()"
+     role="region"
+     [attr.aria-label]="'dashboard.executive.refunds' | translate">
+
+  @if (hasRefunds()) {
+    <!-- Has refunds - clickable header -->
+    <button
+      type="button"
+      class="refunds-header"
+      (click)="toggle()"
+      [attr.aria-expanded]="expanded()"
+      [attr.aria-controls]="'refunds-content'">
+      <div class="refunds-summary">
+        <span class="refunds-icon" aria-hidden="true">↩</span>
+        <span class="refunds-title">{{ 'dashboard.executive.refunds' | translate }}</span>
+        <span class="refunds-badge">{{ refunds()!.totalCount }}</span>
+        @if (!expanded()) {
+          <span class="refunds-amount negative">
+            -{{ refunds()!.totalRevenue | currency:currency() }}
+          </span>
+        }
+      </div>
+      <app-icon
+        class="expand-icon"
+        [class.rotated]="expanded()"
+        [icon]="'chevron-down'"
+        [size]="'sm'"
+        aria-hidden="true">
+      </app-icon>
+    </button>
+
+    <!-- Expanded Content -->
+    @if (expanded()) {
+      <div class="refunds-content" id="refunds-content">
+        <div class="revenue-breakdown">
+          <div class="breakdown-item">
+            <span class="label">{{ 'dashboard.executive.refundsRevenue' | translate }}</span>
+            <span class="value negative">{{ refunds()!.totalRevenue | currency:currency() }}</span>
+          </div>
+          <div class="breakdown-item">
+            <span class="label">{{ 'dashboard.executive.refundsCost' | translate }}</span>
+            <span class="value">{{ refunds()!.totalCost | currency:currency() }}</span>
+          </div>
+          <div class="breakdown-item">
+            <span class="label">{{ 'dashboard.executive.refundsMargin' | translate }}</span>
+            <span class="value negative">{{ refunds()!.totalMargin | currency:currency() }}</span>
+          </div>
+          <div class="breakdown-item">
+            <span class="label">{{ 'dashboard.executive.refundsCount' | translate }}</span>
+            <span class="value">{{ refunds()!.totalCount | number }}</span>
+          </div>
+        </div>
+      </div>
+    }
+  } @else {
+    <!-- No refunds - static empty state -->
+    <div class="refunds-header empty-state">
+      <div class="refunds-summary">
+        <span class="refunds-icon" aria-hidden="true">↩</span>
+        <span class="refunds-title">{{ 'dashboard.executive.refunds' | translate }}</span>
+        <span class="refunds-badge empty">0</span>
+      </div>
+    </div>
+  }
+</div>

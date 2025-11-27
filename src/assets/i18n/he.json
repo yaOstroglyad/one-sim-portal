@@ -965,7 +965,8 @@
       "refundsRevenue": "הכנסה שהוחזרה",
       "refundsCost": "עלות שהוחזרה",
       "refundsMargin": "מרווח שהוחזר",
-      "refundsCount": "מספר החזרים"
+      "refundsCount": "מספר החזרים",
+      "expired": "פג תוקף"
     },
     "inDevelopment": "בפיתוח",
     "kpiMetricsComingSoon": "מדדי KPI יהיו זמינים בקרוב",

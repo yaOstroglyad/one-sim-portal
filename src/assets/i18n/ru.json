@@ -1120,7 +1120,8 @@
       "refundsRevenue": "Возвращённый доход",
       "refundsCost": "Возвращённые затраты",
       "refundsMargin": "Возвращённая маржа",
-      "refundsCount": "Количество возвратов"
+      "refundsCount": "Количество возвратов",
+      "expired": "Истёкшие"
     },
     "inDevelopment": "В разработке",
     "kpiMetricsComingSoon": "KPI метрики скоро будут доступны",

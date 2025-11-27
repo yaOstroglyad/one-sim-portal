@@ -1195,7 +1195,8 @@
       "refundsRevenue": "Refunded Revenue",
       "refundsCost": "Refunded Cost",
       "refundsMargin": "Refunded Margin",
-      "refundsCount": "Refunds Count"
+      "refundsCount": "Refunds Count",
+      "expired": "Expired"
     },
     "inDevelopment": "In Development",
     "kpiMetricsComingSoon": "KPI metrics will be available soon",

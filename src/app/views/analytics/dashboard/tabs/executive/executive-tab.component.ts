@@ -1,13 +1,23 @@
-import { Component, ChangeDetectionStrategy, effect, inject, signal } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  DestroyRef,
+  computed,
+  effect,
+  inject,
+  signal,
+  untracked
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ExecutiveTabData, DashboardResponse, DashboardError } from '../../models/dashboard.types';
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
+import { RefundsSummaryComponent } from '../../components/refunds-summary/refunds-summary.component';
 import { CardComponent, OsBarChartComponent } from '@shared';
-import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
   standalone: true,
@@ -17,9 +27,9 @@ import { IconComponent } from '@shared/components/icon/icon.component';
     TranslateModule,
     LoadingIndicatorComponent,
     ErrorDisplayComponent,
+    RefundsSummaryComponent,
     CardComponent,
-    OsBarChartComponent,
-    IconComponent
+    OsBarChartComponent
   ],
   templateUrl: './executive-tab.component.html',
   styleUrls: ['./executive-tab.component.scss'],
@@ -27,29 +37,23 @@ import { IconComponent } from '@shared/components/icon/icon.component';
 })
 export class ExecutiveTabComponent {
   private readonly dashboardService = inject(DashboardDataService);
+  private readonly destroyRef = inject(DestroyRef);
 
   // Signals for reactive state
   readonly data = signal<ExecutiveTabData | null>(null);
   readonly loading = signal(true);
   readonly error = signal<DashboardError | null>(null);
 
-  // UI state
-  readonly refundsExpanded = signal(false);
-
-  toggleRefunds(): void {
-    this.refundsExpanded.update(v => !v);
-  }
+  // Computed signals for template optimization
+  readonly currency = computed(() => this.data()?.revenue?.currency || 'EUR');
 
   constructor() {
-    // React to period and accountId changes using effect
     effect(() => {
-      const period = this.dashboardService.period(); // Track signal changes
-      const accountId = this.dashboardService.accountId(); // Track accountId changes
+      const period = this.dashboardService.period();
+      const accountId = this.dashboardService.accountId();
 
-      // Only load data if accountId is set (required for API calls)
       if (accountId) {
-        // Schedule data load on next tick to avoid effect issues
-        setTimeout(() => this.loadData(), 0);
+        untracked(() => this.loadData());
       }
     });
   }
@@ -59,39 +63,33 @@ export class ExecutiveTabComponent {
     this.error.set(null);
 
     this.dashboardService.getExecutiveData()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response: DashboardResponse<ExecutiveTabData>) => {
           if (response.status === 'success') {
             this.data.set(response.data);
-            this.loading.set(false);
           } else {
-            // Error response from createErrorResponse - use the full error object
-            const errorToSet = response.error || {
-              code: '500',
-              message: response.message || 'Failed to load executive data',
-              timestamp: new Date()
-            };
-            this.error.set(errorToSet);
-            this.loading.set(false);
+            this.error.set(this.parseError(response.error, response.message));
           }
+          this.loading.set(false);
         },
         error: (error) => {
-          // Check if this is an ApiResponse with error status
-          if (error && error.status === 'error' && error.error) {
-            // Error wrapped in ApiResponse format from createErrorResponse
-            this.error.set(error.error);
-          } else {
-            // Raw error (not wrapped in ApiResponse)
-            this.error.set({
-              code: error?.code || error?.status?.toString() || '500',
-              message: error?.message || 'An unexpected error occurred',
-              details: error?.details,
-              timestamp: new Date()
-            });
-          }
+          this.error.set(this.parseError(error?.error || error));
           this.loading.set(false);
         }
       });
+  }
+
+  private parseError(error: any, fallbackMessage?: string): DashboardError {
+    if (error && typeof error === 'object' && error.code) {
+      return error;
+    }
+    return {
+      code: error?.code || error?.status?.toString() || '500',
+      message: error?.message || fallbackMessage || 'An unexpected error occurred',
+      details: error?.details,
+      timestamp: new Date()
+    };
   }
 
   onRetry(): void {

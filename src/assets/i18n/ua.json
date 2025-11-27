@@ -932,7 +932,8 @@
       "refundsRevenue": "Повернений дохід",
       "refundsCost": "Повернені витрати",
       "refundsMargin": "Повернена маржа",
-      "refundsCount": "Кількість повернень"
+      "refundsCount": "Кількість повернень",
+      "expired": "Прострочені"
     },
     "inDevelopment": "В розробці",
     "kpiMetricsComingSoon": "KPI метрики скоро будуть доступні",
