@@ -2,12 +2,16 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { handleArrayError } from '@shared/utils';
-import { BundlePurchase, BundlePurchaseFilterParams } from '../models/bundle-purchase.model';
+import { handleObjectError } from '@shared/utils';
+import {
+  BundlePurchaseFilterParams,
+  BundlePurchasesResponse
+} from '../models/bundle-purchase.model';
 
 /**
  * Data service for Bundle Purchases Report
  * Handles API communication for bundle purchases data
+ * Updated: 2025-11-26 - API now returns wrapped response with totals
  */
 @Injectable({
   providedIn: 'root'
@@ -17,11 +21,11 @@ export class BundlePurchasesDataService {
   private readonly baseUrl = '/api/v1/reports/tables/bundle-purchases';
 
   /**
-   * Get bundle purchases report
+   * Get bundle purchases report with totals
    * @param params Filter parameters (dateFrom, dateTo, accountId)
-   * @returns Observable of bundle purchases array
+   * @returns Observable of bundle purchases response (records + totals)
    */
-  getBundlePurchases(params: BundlePurchaseFilterParams): Observable<BundlePurchase[]> {
+  getBundlePurchases(params: BundlePurchaseFilterParams): Observable<BundlePurchasesResponse> {
     let httpParams = new HttpParams()
       .set('dateFrom', params.dateFrom)
       .set('dateTo', params.dateTo);
@@ -30,8 +34,8 @@ export class BundlePurchasesDataService {
       httpParams = httpParams.set('accountId', params.accountId);
     }
 
-    return this.http.get<BundlePurchase[]>(this.baseUrl, { params: httpParams }).pipe(
-      catchError(handleArrayError<BundlePurchase>('fetching bundle purchases report'))
+    return this.http.get<BundlePurchasesResponse>(this.baseUrl, { params: httpParams }).pipe(
+      catchError(handleObjectError<BundlePurchasesResponse>('fetching bundle purchases report'))
     );
   }
 }

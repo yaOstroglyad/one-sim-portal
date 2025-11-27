@@ -10,20 +10,37 @@ import { ChartConfig, TabData } from './dashboard.types';
  */
 
 // API #1: Bundle Revenue Report
+// Updated: 2025-11-26 - API now returns purchaseSummary and refundSummary
 export interface BundleRevenueApiResponse {
   dateFrom: string;
   dateTo: string;
   currency: string;
-  totalRevenue: number;
-  totalCost: number;
-  totalMargin: number;
+
+  // Purchase summary (previously root-level fields)
+  purchaseSummary: {
+    totalRevenue: number;
+    totalCost: number;
+    totalMargin: number;
+    totalCount: number;
+  };
+
+  // Refund summary (new)
+  refundSummary: {
+    totalRevenue: number;
+    totalCost: number;
+    totalMargin: number;
+    totalCount: number;
+  };
+
   subscribersByBundle: Array<{
     bundle: string;
     subscribers: number;
+    refunds: number;
   }>;
   revenueByBundle: Array<{
     bundle: string;
     revenue: number;
+    refund: number;
   }>;
 }
 
@@ -57,6 +74,15 @@ export interface RevenueMetrics {
   currency: string;
   totalCost: number;
   totalMargin: number;
+
+  // Refund metrics (new - from API)
+  refunds?: {
+    totalRevenue: number;
+    totalCost: number;
+    totalMargin: number;
+    totalCount: number;
+  };
+
   breakdown: {
     new: number;
     recurring: number;

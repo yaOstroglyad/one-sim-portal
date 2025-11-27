@@ -122,6 +122,7 @@ export class DashboardDataService {
 
   /**
    * Map combined API data to ExecutiveTabData
+   * Updated: 2025-11-26 - Use purchaseSummary and refundSummary from API
    */
   private mapApiDataToExecutiveData(
     bundleRevenue: BundleRevenueApiResponse,
@@ -129,7 +130,7 @@ export class DashboardDataService {
     period: DashboardPeriod
   ): ExecutiveTabData {
     const totalSubscribers = bundleRevenue.subscribersByBundle.reduce((sum, b) => sum + b.subscribers, 0);
-    const totalRevenue = bundleRevenue.totalRevenue;
+    const totalRevenue = bundleRevenue.purchaseSummary.totalRevenue;
 
     return {
       period,
@@ -137,21 +138,29 @@ export class DashboardDataService {
       loading: { state: 'success' },
       isRealData: true,
       availableSections: {
-        revenueBreakdown: false,   // ❌ Not available from API
-        bundleCharts: true,        // ✅ From bundle-revenue API
-        inventory: true            // ✅ From inventory-status API (partial)
+        revenueBreakdown: false,
+        bundleCharts: true,
+        inventory: true
       },
 
-      // Revenue from API
+      // Revenue from API (updated to use purchaseSummary)
       revenue: {
         total: totalRevenue,
         currency: bundleRevenue.currency,
-        totalCost: bundleRevenue.totalCost,
-        totalMargin: bundleRevenue.totalMargin,
+        totalCost: bundleRevenue.purchaseSummary.totalCost,
+        totalMargin: bundleRevenue.purchaseSummary.totalMargin,
+
+        refunds: {
+          totalRevenue: bundleRevenue.refundSummary.totalRevenue,
+          totalCost: bundleRevenue.refundSummary.totalCost,
+          totalMargin: bundleRevenue.refundSummary.totalMargin,
+          totalCount: bundleRevenue.refundSummary.totalCount
+        },
+
         breakdown: {
-          new: 0,       // Disabled
-          recurring: 0, // Disabled
-          churn: 0      // Disabled
+          new: 0,
+          recurring: 0,
+          churn: 0
         },
         trend: {
           daily: [],
@@ -178,7 +187,7 @@ export class DashboardDataService {
         totalESIMs: inventoryStatus.total,
         available: inventoryStatus.available,
         allocated: inventoryStatus.allocated,
-        expired: 0, // ❌ Not provided by API
+        expired: 0,
         breakdown: [
           {
             label: 'Available',
@@ -321,12 +330,5 @@ export class DashboardDataService {
    */
   setAccountId(accountId: string | null): void {
     this.accountIdSignal.set(accountId);
-  }
-
-  /**
-   * Get current account ID value
-   */
-  getAccountId(): string | null {
-    return this.accountIdSignal();
   }
 }

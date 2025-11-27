@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { formatDateForAPI, TableFooterConfig, CurrencyPriceCalculatorUtils } from '@shared';
-import { BundlePurchase } from '../models/bundle-purchase.model';
+import { BundlePurchase, BundlePurchaseWithMetadata } from '../models/bundle-purchase.model';
 import { ReportStrategy, ReportLoadParams } from '../models/report-strategy.interface';
 import { BundlePurchasesDataService } from '../services/bundle-purchases-data.service';
 import { BUNDLE_PURCHASES_EXCEL_MAPPING } from '../utils';
@@ -10,6 +11,7 @@ import { formatDateForExcel } from '@shared/utils/data';
 /**
  * Strategy for Bundle Purchases Report
  * Handles data loading, export configuration for bundle purchases
+ * Updated: 2025-11-26 - Use API totals attached to data array
  */
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,8 @@ export class BundlePurchasesStrategy implements ReportStrategy<BundlePurchase> {
 
   /**
    * Load bundle purchases data from API
+   * Returns records array with metadata attached containing API totals
+   * Updated: 2025-11-26 - Attach API totals to array instead of storing in strategy state
    */
   loadData(params: ReportLoadParams): Observable<BundlePurchase[]> {
     const apiParams = {
@@ -27,7 +31,18 @@ export class BundlePurchasesStrategy implements ReportStrategy<BundlePurchase> {
       accountId: params.accountId
     };
 
-    return this.dataService.getBundlePurchases(apiParams);
+    // Get full response and attach metadata to records array
+    return this.dataService.getBundlePurchases(apiParams).pipe(
+      map(response => {
+        // Create enhanced array with metadata
+        const enhancedData: BundlePurchaseWithMetadata = response.records as BundlePurchaseWithMetadata;
+        enhancedData.__metadata = {
+          totalRevenue: response.totalRevenue,
+          totalCost: response.totalCost
+        };
+        return enhancedData;
+      })
+    );
   }
 
   /**
@@ -94,60 +109,44 @@ export class BundlePurchasesStrategy implements ReportStrategy<BundlePurchase> {
   }
 
   /**
-   * Calculate footer values in original currencies
-   * Excludes REFUNDED items from calculations
-   * Since each account uses single currency, no conversion needed
+   * Calculate footer values using API totals from metadata
+   * Updated: 2025-11-26 - Use API totals attached to data array (no mutable state)
+   * API already excludes REFUNDED items from totals
    */
   calculateFooterValues(data: BundlePurchase[]): { values: Record<string, string>, tooltips?: Record<string, string> } {
-    // Filter out REFUNDED items
-    const activeData = data.filter(item => item.bundleStatus !== 'REFUNDED');
+    // Extract metadata from enhanced array
+    const metadata = (data as BundlePurchaseWithMetadata).__metadata;
 
-    if (activeData.length === 0) {
+    // Use API totals from metadata if available
+    if (metadata) {
+      const formatWithCurrency = (amount: number, currency: string): string => {
+        return CurrencyPriceCalculatorUtils.formatPrice(amount, currency);
+      };
+
       return {
         values: {
-          bundlePrice: '0.00',
-          bundleCost: '0.00'
+          bundlePrice: formatWithCurrency(
+            metadata.totalRevenue.amount,
+            metadata.totalRevenue.currency
+          ),
+          bundleCost: formatWithCurrency(
+            metadata.totalCost.amount,
+            metadata.totalCost.currency
+          )
+        },
+        tooltips: {
+          bundlePrice: 'Total from API (excludes refunds)',
+          bundleCost: 'Total from API (excludes refunds)'
         }
       };
     }
 
-    // Sum bundle prices in original currency
-    let totalPrice = 0;
-    let priceCurrency = '';
-
-    activeData.forEach(item => {
-      const price = parseFloat(item.bundlePrice) || 0;
-      totalPrice += price;
-
-      // Get currency from first item
-      if (!priceCurrency && item.priceCurrency) {
-        priceCurrency = item.priceCurrency;
-      }
-    });
-
-    // Sum bundle costs in original currency
-    let totalCost = 0;
-    let costCurrency = '';
-
-    activeData.forEach(item => {
-      const cost = parseFloat(item.bundleCost) || 0;
-      totalCost += cost;
-
-      // Get currency from first item
-      if (!costCurrency && item.costCurrency) {
-        costCurrency = item.costCurrency;
-      }
-    });
-
-    // Format with currency symbol
-    const formatWithCurrency = (amount: number, currency: string): string => {
-      return CurrencyPriceCalculatorUtils.formatPrice(amount, currency);
-    };
-
+    // Fallback: if API totals not available (shouldn't happen in normal flow)
+    console.warn('API totals metadata not found in data array, using empty values');
     return {
       values: {
-        bundlePrice: formatWithCurrency(totalPrice, priceCurrency),
-        bundleCost: formatWithCurrency(totalCost, costCurrency)
+        bundlePrice: '0.00',
+        bundleCost: '0.00'
       }
     };
   }

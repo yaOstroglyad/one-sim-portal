@@ -1,4 +1,15 @@
 /**
+ * Status values for [Entity]
+ * Use this const for runtime checks and type derivation
+ */
+export const ExampleStatus = {
+  Active: 'active',
+  Inactive: 'inactive',
+} as const;
+
+export type ExampleStatus = (typeof ExampleStatus)[keyof typeof ExampleStatus];
+
+/**
  * [Model Description]
  *
  * @example
@@ -6,7 +17,7 @@
  * const example: ExampleModel = {
  *   id: '123',
  *   name: 'Example',
- *   status: 'active'
+ *   status: ExampleStatus.Active
  * };
  * ```
  */
@@ -18,7 +29,7 @@ export interface ExampleModel {
   name: string;
 
   /** Current status */
-  status: 'active' | 'inactive';
+  status: ExampleStatus;
 
   /** Creation timestamp */
   createdAt?: Date;
@@ -32,7 +43,7 @@ export interface ExampleModel {
  */
 export interface CreateExampleRequest {
   name: string;
-  status?: 'active' | 'inactive';
+  status?: ExampleStatus;
 }
 
 /**

@@ -960,7 +960,12 @@
       "subscribersByBundle": "מנויים לפי חבילה",
       "revenueByBundle": "הכנסה לפי חבילה",
       "inventoryStatus": "מצב מלאי",
-      "totalEsims": "סה\"כ eSIM"
+      "totalEsims": "סה\"כ eSIM",
+      "refunds": "החזרים",
+      "refundsRevenue": "הכנסה שהוחזרה",
+      "refundsCost": "עלות שהוחזרה",
+      "refundsMargin": "מרווח שהוחזר",
+      "refundsCount": "מספר החזרים"
     },
     "inDevelopment": "בפיתוח",
     "kpiMetricsComingSoon": "מדדי KPI יהיו זמינים בקרוב",

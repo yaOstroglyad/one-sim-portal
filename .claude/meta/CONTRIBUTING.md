@@ -1,9 +1,9 @@
 # Contributing to Project Rules
 
-> **Last Updated:** 2025-11-15
+> **Last Updated:** 2025-11-26
 > **Maintainers:** Development Team
 
-This document explains how to add, update, and maintain the project's rule documentation system.
+This document explains how to add, update, and maintain the project's documentation system.
 
 ## 🎯 Philosophy
 
@@ -13,53 +13,121 @@ Our documentation system is designed to:
 - ✅ **Stay maintainable** - Clear structure, no duplication
 - ✅ **Remain up-to-date** - Easy to update, version tracked
 
+## 📁 Documentation Structure
+
+```
+.claude/                        # Auto-loaded by Claude at startup
+├── rules/                      # Project-wide rules (MUST follow)
+├── context/                    # Inventory, patterns, business domain
+├── guides/                     # Step-by-step how-tos
+├── templates/                  # Code templates
+└── meta/                       # Documentation about documentation
+
+docs/                           # Detailed documentation (loaded on demand)
+├── features/                   # Feature HLDs and business logic
+├── components/                 # Component deep-dives
+├── architecture/               # Architecture decisions
+└── optimizations/              # Performance documentation
+```
+
+**Key Principle:**
+- `.claude/` = project-wide rules, patterns, inventory (Claude reads at startup)
+- `docs/` = feature-specific details, HLDs, deep-dives (read when needed)
+
+---
+
+## 📋 Where to Put Documentation
+
+### Master Decision Tree
+
+```
+Need to document something?
+│
+├─► Project-wide rule or pattern?
+│   │
+│   ├─► Critical rule (project breaks if violated)?
+│   │   └─► .claude/rules/01-CRITICAL.md
+│   │
+│   ├─► HTTP/API patterns?
+│   │   └─► .claude/rules/02-http-errors.md
+│   │
+│   ├─► Models/Interfaces organization?
+│   │   └─► .claude/rules/03-models.md
+│   │
+│   ├─► Services organization?
+│   │   └─► .claude/rules/04-services.md
+│   │
+│   ├─► Utilities?
+│   │   └─► .claude/rules/05-utils.md
+│   │
+│   ├─► SCSS/Styling?
+│   │   └─► .claude/rules/06-scss.md
+│   │
+│   ├─► Icons/SVG?
+│   │   └─► .claude/rules/07-icons.md
+│   │
+│   ├─► Reusable component exists?
+│   │   └─► .claude/context/reusable-components.md
+│   │
+│   ├─► Code pattern (Table, Cache, etc.)?
+│   │   └─► .claude/context/common-patterns.md
+│   │
+│   └─► Real implementation example?
+│       └─► .claude/context/similar-features.md
+│
+└─► Feature-specific documentation?
+    │
+    ├─► Feature HLD (architecture, models, API)?
+    │   └─► docs/features/{feature-name}.md
+    │
+    ├─► Component deep-dive (technical details, examples)?
+    │   └─► docs/components/{component-name}.md
+    │
+    ├─► Architecture decision?
+    │   └─► docs/architecture/{decision-name}.md
+    │
+    └─► Performance optimization?
+        └─► docs/optimizations/{optimization-name}.md
+```
+
+### Quick Reference Table
+
+| Content Type | Location | Example |
+|--------------|----------|---------|
+| Critical rule | `.claude/rules/01-CRITICAL.md` | "Use standalone components" |
+| HTTP pattern | `.claude/rules/02-http-errors.md` | "Use handleArrayError" |
+| Component inventory | `.claude/context/reusable-components.md` | "GenericTableComponent exists" |
+| Code pattern | `.claude/context/common-patterns.md` | "Table Pattern with unsubscribe$" |
+| Business domain | `.claude/context/business-domain.md` | "Product Constructor hierarchy" |
+| Feature HLD | `docs/features/{name}.md` | Product Constructor architecture |
+| Component deep-dive | `docs/components/{name}.md` | GenericTable technical details |
+| Architecture decision | `docs/architecture/{name}.md` | Mock server implementation |
+
+---
+
 ## 📋 Before Adding/Updating Rules
 
-### Step 1: Determine Rule Type
+### Step 1: Determine Location
 
-Ask yourself:
-
-1. **Is this a modification to existing rule?**
-   - YES → [Update Existing Rule](#updating-existing-rules)
-   - NO → Continue to step 2
-
-2. **Is this rule critical (project-breaking if violated)?**
-   - YES → Add to `.claude/rules/01-CRITICAL.md`
-   - NO → Continue to step 3
-
-3. **What category does it belong to?**
-   - HTTP/API → `.claude/rules/02-http-errors.md`
-   - Models/Interfaces → `.claude/rules/03-models.md`
-   - Services → `.claude/rules/04-services.md`
-   - Utilities → `.claude/rules/05-utils.md`
-   - SCSS/Styling → `.claude/rules/06-scss.md`
-   - Icons/SVG → `.claude/rules/07-icons.md`
-   - New category? → [Create New Rule Category](#creating-new-rule-category)
-
-4. **Is this an example/pattern (not a rule)?**
-   - YES → Add to `.claude/context/similar-features.md`
-   - NO → It's a rule
-
-5. **Is this project inventory (what exists)?**
-   - YES → Add to `.claude/context/reusable-components.md` or `.claude/context/common-patterns.md`
+Use the decision tree above to find the right location.
 
 ### Step 2: Check for Duplicates
 
 **ALWAYS search before adding:**
 
 ```bash
-# Search in all rule files
-grep -r "keyword" /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/.claude/rules/
+# Search in all .claude files
+grep -r "keyword" /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/.claude/
 
-# Search in context files
-grep -r "keyword" /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/.claude/context/
+# Search in docs
+grep -r "keyword" /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/docs/
 
 # Search in main file
 grep "keyword" /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/CLAUDE.md
 ```
 
 **If found:**
-- Update existing rule instead
+- Update existing content instead
 - Add cross-reference if needed
 - DO NOT duplicate
 
@@ -463,11 +531,8 @@ When combining multiple HTTP requests with `forkJoin`:
 **Questions about:**
 - Which file to update? → Check decision tree in this file
 - How to structure rule? → See templates above
-- Context tags unclear? → Read `.claude/meta/context-tags-guide.md`
-- Breaking change? → Document in version-history.md first
 
-## 📚 Related Meta-Documentation
+## 📚 Related Documentation
 
-- [File Structure Guide](./.claude/meta/file-structure.md) - Detailed explanation of file organization
-- [Context Tags Guide](./.claude/meta/context-tags-guide.md) - Deep dive into tag system
-- [Version History](./.claude/meta/version-history.md) - Complete change log
+- [CLAUDE.md](../../CLAUDE.md) - Main navigation hub
+- [docs/README.md](../../docs/README.md) - Feature documentation navigation

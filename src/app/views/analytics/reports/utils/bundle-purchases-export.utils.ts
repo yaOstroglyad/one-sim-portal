@@ -3,7 +3,7 @@ import { BundlePurchase } from '../models/bundle-purchase.model';
 /**
  * Column mapping for Bundle Purchases Excel export
  * Maps BundlePurchase model keys to translation keys
- * Updated: 2025-11-08 - API now uses camelCase
+ * Updated: 2025-11-26 - Added transactionType field
  */
 export const BUNDLE_PURCHASES_EXCEL_MAPPING: Record<keyof BundlePurchase, string> = {
   company: 'analytics.reports.bundlePurchases.company',
@@ -14,6 +14,7 @@ export const BUNDLE_PURCHASES_EXCEL_MAPPING: Record<keyof BundlePurchase, string
   bundleStatus: 'analytics.reports.bundlePurchases.bundleStatus',
   transactionId: 'analytics.reports.bundlePurchases.transactionId',
   transactionStatus: 'analytics.reports.bundlePurchases.transactionStatus',
+  transactionType: 'analytics.reports.bundlePurchases.transactionType', // NEW
   iccid: 'analytics.reports.bundlePurchases.iccid',
   bundlePrice: 'analytics.reports.bundlePurchases.bundlePrice',
   priceCurrency: 'analytics.reports.bundlePurchases.priceCurrency',

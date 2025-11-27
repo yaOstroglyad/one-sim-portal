@@ -64,11 +64,8 @@ Code boilerplate for consistency:
 - **model.template.ts** - TypeScript interface template
 
 ### Meta (`./meta/`)
-Documentation maintenance guides:
-- **CONTRIBUTING.md** - How to add/update documentation
-- **file-structure.md** - Directory organization guide
-- **context-tags-guide.md** - Context tags system explained
-- **version-history.md** - Change log
+Documentation maintenance:
+- **contributing.md** - How to add/update documentation (includes decision tree, templates, maintenance schedule)
 
 ---
 
@@ -88,11 +85,10 @@ Documentation maintenance guides:
 ## 🔧 Maintenance
 
 ### Adding New Rules
-1. Read [meta/CONTRIBUTING.md](./meta/CONTRIBUTING.md) for decision tree
+1. Read [meta/contributing.md](./meta/contributing.md) for decision tree
 2. Choose appropriate file (rules vs context vs guides)
 3. Follow existing format and examples
-4. Update [meta/version-history.md](./meta/version-history.md)
-5. Update [/CLAUDE.md](../CLAUDE.md) if needed
+4. Update [/CLAUDE.md](../CLAUDE.md) if needed
 
 ### Organization Principles
 - **rules/** - Project-wide requirements (must follow)
@@ -113,9 +109,7 @@ Documentation maintenance guides:
 ## 📞 Quick Links
 
 - **Main Hub:** [/CLAUDE.md](../CLAUDE.md)
-- **How to maintain:** [meta/CONTRIBUTING.md](./meta/CONTRIBUTING.md)
-- **Context tags guide:** [meta/context-tags-guide.md](./meta/context-tags-guide.md)
-- **Change log:** [meta/version-history.md](./meta/version-history.md)
+- **How to maintain:** [meta/contributing.md](./meta/contributing.md)
 
 ---
 

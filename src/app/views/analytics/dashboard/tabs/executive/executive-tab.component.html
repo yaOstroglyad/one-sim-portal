@@ -1,19 +1,22 @@
 <div class="executive-tab">
   <!-- Loading State -->
-  <app-loading-indicator
-    *ngIf="loading()"
-    [status]="{ state: 'loading', message: 'Fetching executive data...' }">
-  </app-loading-indicator>
+  @if (loading()) {
+    <app-loading-indicator
+      [status]="{ state: 'loading', message: 'Fetching executive data...' }">
+    </app-loading-indicator>
+  }
 
   <!-- Error State -->
-  <app-error-display
-    *ngIf="error() && !loading()"
-    [error]="error()"
-    (retry)="onRetry()">
-  </app-error-display>
+  @if (error() && !loading()) {
+    <app-error-display
+      [error]="error()"
+      (retry)="onRetry()">
+    </app-error-display>
+  }
 
   <!-- Data Content -->
-  <div *ngIf="data() && !loading() && !error()" class="executive-content">
+  @if (data() && !loading() && !error()) {
+    <div class="executive-content">
 
     <!-- Revenue Row (Full Width) -->
     <div class="revenue-row">
@@ -40,65 +43,136 @@
             <span class="value">{{ data()!.subscribersByBundle.total | number }}</span>
           </div>
         </div>
+
+        <!-- Refunds Section (Always visible, collapsible when has data) -->
+        <div class="refunds-section"
+             [class.expanded]="refundsExpanded()"
+             [class.empty]="!data()!.revenue.refunds || data()!.revenue.refunds!.totalCount === 0">
+
+          @if (data()!.revenue.refunds && data()!.revenue.refunds!.totalCount > 0) {
+            <!-- Has refunds - clickable header -->
+            <button
+              type="button"
+              class="refunds-header"
+              (click)="toggleRefunds()"
+              [attr.aria-expanded]="refundsExpanded()">
+              <div class="refunds-summary">
+                <span class="refunds-icon">↩</span>
+                <span class="refunds-title">{{ 'dashboard.executive.refunds' | translate }}</span>
+                <span class="refunds-badge">{{ data()!.revenue.refunds!.totalCount }}</span>
+                @if (!refundsExpanded()) {
+                  <span class="refunds-amount negative">
+                    -{{ data()!.revenue.refunds!.totalRevenue | currency:data()!.revenue.currency }}
+                  </span>
+                }
+              </div>
+              <app-icon
+                class="expand-icon"
+                [class.rotated]="refundsExpanded()"
+                [icon]="'chevron-down'"
+                [size]="'sm'">
+              </app-icon>
+            </button>
+
+            <!-- Expanded Content -->
+            @if (refundsExpanded()) {
+              <div class="refunds-content">
+                <div class="revenue-breakdown">
+                  <div class="breakdown-item">
+                    <span class="label">{{ 'dashboard.executive.refundsRevenue' | translate }}</span>
+                    <span class="value negative">{{ data()!.revenue.refunds!.totalRevenue | currency:data()!.revenue.currency }}</span>
+                  </div>
+                  <div class="breakdown-item">
+                    <span class="label">{{ 'dashboard.executive.refundsCost' | translate }}</span>
+                    <span class="value">{{ data()!.revenue.refunds!.totalCost | currency:data()!.revenue.currency }}</span>
+                  </div>
+                  <div class="breakdown-item">
+                    <span class="label">{{ 'dashboard.executive.refundsMargin' | translate }}</span>
+                    <span class="value negative">{{ data()!.revenue.refunds!.totalMargin | currency:data()!.revenue.currency }}</span>
+                  </div>
+                  <div class="breakdown-item">
+                    <span class="label">{{ 'dashboard.executive.refundsCount' | translate }}</span>
+                    <span class="value">{{ data()!.revenue.refunds!.totalCount | number }}</span>
+                  </div>
+                </div>
+              </div>
+            }
+          } @else {
+            <!-- No refunds - static empty state -->
+            <div class="refunds-header empty-state">
+              <div class="refunds-summary">
+                <span class="refunds-icon">↩</span>
+                <span class="refunds-title">{{ 'dashboard.executive.refunds' | translate }}</span>
+                <span class="refunds-badge empty">0</span>
+              </div>
+            </div>
+          }
+        </div>
       </os-card>
     </div>
 
     <!-- Charts Row - Conditional -->
-    <div *ngIf="data()!.availableSections?.bundleCharts" class="charts-row">
-      <!-- Subscribers by Bundle Chart -->
-      <os-card class="chart-card" variant="default">
-        <div class="card-header">
-          <h3>{{ 'dashboard.executive.subscribersByBundle' | translate }}</h3>
-        </div>
-        <div class="chart-container">
-          <os-bar-chart
-            [data]="data()!.subscribersByBundle.chartConfig?.data || {labels: [], datasets: []}"
-            [options]="data()!.subscribersByBundle.chartConfig?.options || {}">
-          </os-bar-chart>
-        </div>
-      </os-card>
+    @if (data()!.availableSections?.bundleCharts) {
+      <div class="charts-row">
+        <!-- Subscribers by Bundle Chart -->
+        <os-card class="chart-card" variant="default">
+          <div class="card-header">
+            <h3>{{ 'dashboard.executive.subscribersByBundle' | translate }}</h3>
+          </div>
+          <div class="chart-container">
+            <os-bar-chart
+              [data]="data()!.subscribersByBundle.chartConfig?.data || {labels: [], datasets: []}"
+              [options]="data()!.subscribersByBundle.chartConfig?.options || {}">
+            </os-bar-chart>
+          </div>
+        </os-card>
 
-      <!-- Revenue by Bundle Chart -->
-      <os-card class="chart-card" variant="default">
-        <div class="card-header">
-          <h3>{{ 'dashboard.executive.revenueByBundle' | translate }}</h3>
-        </div>
-        <div class="chart-container">
-          <os-bar-chart
-            [data]="data()!.revenueByBundle.chartConfig?.data || {labels: [], datasets: []}"
-            [options]="data()!.revenueByBundle.chartConfig?.options || {}">
-          </os-bar-chart>
-        </div>
-      </os-card>
-    </div>
+        <!-- Revenue by Bundle Chart -->
+        <os-card class="chart-card" variant="default">
+          <div class="card-header">
+            <h3>{{ 'dashboard.executive.revenueByBundle' | translate }}</h3>
+          </div>
+          <div class="chart-container">
+            <os-bar-chart
+              [data]="data()!.revenueByBundle.chartConfig?.data || {labels: [], datasets: []}"
+              [options]="data()!.revenueByBundle.chartConfig?.options || {}">
+            </os-bar-chart>
+          </div>
+        </os-card>
+      </div>
+    }
 
     <!-- Inventory Status - Conditional -->
-    <div *ngIf="data()!.availableSections?.inventory" class="inventory-row">
-      <os-card class="inventory-card" variant="default">
-        <div class="card-header">
-          <h3>{{ 'dashboard.executive.inventoryStatus' | translate }}</h3>
-          <div class="total-esims">
-            {{ data()!.inventoryStatus.totalESIMs | number }} {{ 'dashboard.executive.totalEsims' | translate }}
+    @if (data()!.availableSections?.inventory) {
+      <div class="inventory-row">
+        <os-card class="inventory-card" variant="default">
+          <div class="card-header">
+            <h3>{{ 'dashboard.executive.inventoryStatus' | translate }}</h3>
+            <div class="total-esims">
+              {{ data()!.inventoryStatus.totalESIMs | number }} {{ 'dashboard.executive.totalEsims' | translate }}
+            </div>
           </div>
-        </div>
-        <div class="inventory-grid">
-          <div
-            *ngFor="let item of data()!.inventoryStatus.breakdown"
-            class="inventory-item"
-            [class]="'status-' + item.status">
-            <div class="item-label">{{ item.label }}</div>
-            <div class="item-value">{{ item.value | number }}</div>
-            <div class="item-percentage">{{ item.percentage | number:'1.0-1' }}%</div>
-          </div>
+          <div class="inventory-grid">
+            @for (item of data()!.inventoryStatus.breakdown; track item.label) {
+              <div
+                class="inventory-item"
+                [class]="'status-' + item.status">
+                <div class="item-label">{{ item.label }}</div>
+                <div class="item-value">{{ item.value | number }}</div>
+                <div class="item-percentage">{{ item.percentage | number:'1.0-1' }}%</div>
+              </div>
+            }
 
-          <!-- Note about missing "Expired" data -->
-          <div class="inventory-item status-disabled">
-            <div class="item-label">Expired</div>
-            <div class="item-value">—</div>
-            <div class="item-note">{{ 'dashboard.dataNotAvailable' | translate }}</div>
+            <!-- Note about missing "Expired" data -->
+            <div class="inventory-item status-disabled">
+              <div class="item-label">Expired</div>
+              <div class="item-value">—</div>
+              <div class="item-note">{{ 'dashboard.dataNotAvailable' | translate }}</div>
+            </div>
           </div>
-        </div>
-      </os-card>
+        </os-card>
+      </div>
+    }
     </div>
-  </div>
+  }
 </div>

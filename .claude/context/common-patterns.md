@@ -323,13 +323,210 @@ const routes: Routes = [
 
 ---
 
+## 📋 Generic Table Pattern
+
+**Pattern:** Standard table implementation using `GenericTableComponent` + `TableConfigAbstractService`
+
+**Use for:** Any list view with server-side pagination, sorting, filtering
+
+### Required Component Structure
+
+```typescript
+export class EntityListComponent implements OnInit, OnDestroy {
+  // REQUIRED: Memory cleanup
+  private unsubscribe$ = new Subject<void>();
+
+  // REQUIRED: Table configuration
+  public tableConfig$: BehaviorSubject<TableConfig>;
+  public dataList$: Observable<Entity[]>;
+  public filterForm: FormGroup;
+
+  // REQUIRED: Injections
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly tableService = inject(EntityTableService);
+  private readonly dataService = inject(EntityDataService);
+
+  ngOnInit(): void {
+    this.initFormControls();
+    this.loadData();
+    this.setupFilters();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  // REQUIRED: Filter setup with debounce
+  private setupFilters(): void {
+    this.filterForm.valueChanges.pipe(
+      debounceTime(700),                    // STANDARD: 700ms debounce
+      takeUntil(this.unsubscribe$)          // REQUIRED: Memory cleanup
+    ).subscribe(() => this.applyFilter());
+  }
+
+  // REQUIRED: Pagination handler
+  onPageChange({ page, size }: { page: number; size: number }): void {
+    this.loadData({ page, size, ...this.filterForm.getRawValue() });
+  }
+
+  // REQUIRED: Data loading with fallbacks
+  private loadData(params = { page: 0, size: 10 }): void {
+    this.dataService.paginated(params, params.page, params.size)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        this.tableService.updateConfigData(data?.totalPages || 20);  // Fallback!
+        this.tableConfig$ = this.tableService.getTableConfig();
+        this.dataList$ = of(data.content);
+        this.cdr.detectChanges();            // REQUIRED: Manual change detection
+      });
+  }
+}
+```
+
+### Required Service Structure
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class EntityTableService extends TableConfigAbstractService<Entity> {
+  private authService = inject(AuthService);
+  private isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+
+  public tableConfigSubject = new BehaviorSubject<TableConfig>({
+    pagination: {
+      enabled: true,
+      serverSide: true,
+      totalPages: 20              // REQUIRED: Default fallback
+    },
+    translatePrefix: 'entity.',   // REQUIRED: Match translation keys
+    showCheckboxes: false,
+    showEditButton: true,
+    showAddButton: this.isAdmin,  // Permission-based
+    showMenu: true,
+    columns: [
+      { visible: false, key: 'id', header: 'id' },  // REQUIRED: Hidden ID
+      { visible: true, key: 'name', header: 'name' },
+      { visible: true, key: 'createdDate', header: 'createdDate',
+        templateType: TemplateType.Date, dateFormat: 'dd/MM/YYYY' }
+    ]
+  });
+}
+```
+
+### Standard Template
+
+```html
+<!-- Header with filters -->
+<app-header class="os-header-sticky"
+            [formGroup]="filterForm"
+            [tableConfig$]="tableConfig$"
+            (onAddAction)="createEntity()"
+            (columnSelectionChange)="onColumnSelectionChanged($event)">
+  <ng-container header-custom-inputs>
+    <input cFormControl formControlName="name" type="text"
+           placeholder="{{ 'entity.name' | translate }}">
+  </ng-container>
+</app-header>
+
+<!-- Generic table -->
+<generic-table [config$]="tableConfig$"
+               [menu]="menuTemplate"
+               [data$]="dataList$"
+               (pageChange)="onPageChange($event)">
+</generic-table>
+
+<!-- Menu template -->
+<ng-template #menuTemplate let-item>
+  <button mat-icon-button [matMenuTriggerFor]="menu"
+          (click)="$event.stopPropagation();">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="editEntity(item)">Edit</button>
+  </mat-menu>
+</ng-template>
+```
+
+### Translation Prefixes (Must Match)
+
+| Entity | Prefix |
+|--------|--------|
+| Companies | `'company.'` |
+| Customers | `'customer.'` |
+| Orders | `'order.'` |
+| Products | `'package.'` |
+| Users | `'user.'` |
+| Inventory | `'inventory.'` |
+
+### Common Mistakes to Avoid
+
+- ❌ Forgetting `takeUntil()` in subscriptions → memory leak
+- ❌ Not calling `cdr.detectChanges()` after data updates → UI not updating
+- ❌ Missing `$event.stopPropagation()` in menu buttons → row click triggers
+- ❌ Incorrect translation prefix → missing translations
+- ❌ Not providing fallback values (`data?.totalPages || 20`)
+- ❌ Missing `unsubscribe$` cleanup in `ngOnDestroy`
+
+---
+
+## 🎚️ Feature Toggles Pattern
+
+**Pattern:** Dynamic feature flags without app restart
+
+**Location:** `/src/app/shared/services/feature-toggle/`
+
+### Quick Usage
+
+```typescript
+import { isToggleActive } from '@shared/services/feature-toggle';
+
+// In component
+export class MyComponent {
+  isToggleActive = isToggleActive;  // Make available in template
+
+  doSomething() {
+    if (isToggleActive('new-feature')) {
+      // New feature code
+    }
+  }
+}
+```
+
+```html
+<!-- In template -->
+<button *ngIf="isToggleActive('bulk-operations')">
+  Bulk Delete
+</button>
+```
+
+### Available Toggles
+
+Defined in `feature-toggle.config.ts`:
+- `new-ui` — New UI design (default: false)
+- `advanced-search` — Advanced search (default: false)
+- `bulk-operations` — Bulk operations (default: false)
+- `addSubscriberButtonToggle` — Add subscriber button (default: true)
+
+### Best Practices
+
+1. **Naming:** Use kebab-case (`new-payment-flow`)
+2. **Defaults:** Always use safe defaults (usually `false`)
+3. **Cleanup:** Remove unused toggles from code and config
+4. **Combine with permissions:**
+   ```html
+   <button *ngIf="isAdmin && isToggleActive('admin-feature')">
+   ```
+
+---
+
 ## 📚 Related Documentation
 
 - **Data Services:** [.claude/rules/04-services.md](../rules/04-services.md)
 - **HTTP Errors:** [.claude/rules/02-http-errors.md](../rules/02-http-errors.md)
 - **Components:** [.claude/rules/01-CRITICAL.md](../rules/01-CRITICAL.md)
 - **Similar Features:** [.claude/context/similar-features.md](./similar-features.md)
+- **Business Domain:** [.claude/context/business-domain.md](./business-domain.md)
 
 ---
 
-**Last Updated:** 2025-11-15
+**Last Updated:** 2025-11-26

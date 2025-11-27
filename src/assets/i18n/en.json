@@ -1190,7 +1190,12 @@
       "subscribersByBundle": "Subscribers by Bundle",
       "revenueByBundle": "Revenue by Bundle",
       "inventoryStatus": "Inventory Status",
-      "totalEsims": "Total eSIMs"
+      "totalEsims": "Total eSIMs",
+      "refunds": "Refunds",
+      "refundsRevenue": "Refunded Revenue",
+      "refundsCost": "Refunded Cost",
+      "refundsMargin": "Refunded Margin",
+      "refundsCount": "Refunds Count"
     },
     "inDevelopment": "In Development",
     "kpiMetricsComingSoon": "KPI metrics will be available soon",

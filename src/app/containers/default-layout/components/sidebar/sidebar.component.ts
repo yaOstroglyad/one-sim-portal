@@ -1,24 +1,14 @@
-import {
-  Component,
-  Input,
-  ChangeDetectionStrategy,
-  OnInit,
-  OnDestroy,
-  inject,
-  signal,
-  computed
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { IconDirective } from '@coreui/icons-angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil } from 'rxjs';
-import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
-import { NavItem, BrandConfig, LayoutConfig } from '../../models';
+import { BrandConfig, LayoutConfig, NavItem } from '../../models';
 import { LayoutService } from '../../services';
-import { LanguageService, IconComponent } from '@shared';
+import { IconComponent, LanguageService } from '@shared';
 
 @Component({
   selector: 'app-sidebar',
@@ -56,14 +46,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   // Computed signals
   readonly sidebarClasses = computed(() => {
-    const classes = {
+    return {
       'sidebar--collapsed': this.layoutConfig().sidebarCollapsed,
       'sidebar--dark': this.layoutConfig().darkTheme,
       'sidebar--rtl': this.languageService.isRtl(),
       'sidebar--mobile-open': this.layoutService.isMobileSidebarOpen()
     };
-    console.log('[Sidebar] sidebarClasses computed:', classes);
-    return classes;
   });
 
   private unsubscribe$ = new Subject<void>();

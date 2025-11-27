@@ -1,6 +1,6 @@
 # CLAUDE.md - Smart Context Navigation
 
-> **Last Updated:** 2025-11-15
+> **Last Updated:** 2025-11-26
 > **Documentation System:** Modular, context-aware, token-optimized
 > **Quick Start:** Read critical rules below, then use tags to find what you need
 
@@ -134,7 +134,8 @@
 | File | Purpose | When to Read |
 |------|---------|--------------|
 | [reusable-components.md](./.claude/context/reusable-components.md) | What components/mixins exist | Before creating components |
-| [common-patterns.md](./.claude/context/common-patterns.md) | Established code patterns | Looking for how we do X |
+| [common-patterns.md](./.claude/context/common-patterns.md) | Established code patterns (Table, Cache, Feature Toggles) | Looking for how we do X |
+| [business-domain.md](./.claude/context/business-domain.md) | Business entities (Company, Customer, Product, Order) | Understanding business logic |
 | [similar-features.md](./.claude/context/similar-features.md) | Real code examples | Building something similar |
 | [architecture-map.md](./.claude/context/architecture-map.md) | High-level architecture | Understanding project structure |
 
@@ -151,13 +152,26 @@
 
 ---
 
+## 📚 Detailed Documentation (`docs/`)
+
+For in-depth feature documentation, HLDs, and component deep-dives:
+
+| Category | Location | Content |
+|----------|----------|---------|
+| **Feature HLDs** | `docs/features/` | Product Constructor, Tickets, Dashboard, FAB Layout, CacheHub |
+| **Component Guides** | `docs/components/` | GenericTable, AccountSelector, EmailLogs deep-dives |
+| **Architecture** | `docs/architecture/` | Mock Server, Table Menu decisions |
+| **Optimizations** | `docs/optimizations/` | Form Generator hints |
+
+> **Rule:** Project-wide patterns go in `.claude/`, feature-specific docs go in `docs/`
+> **See:** [docs/README.md](./docs/README.md) for full navigation
+
+---
+
 ## 🛠️ Maintaining Documentation
 
 **Want to add/update rules?** Read:
-- [.claude/meta/CONTRIBUTING.md](./.claude/meta/CONTRIBUTING.md) - How to maintain rules
-- [.claude/meta/file-structure.md](./.claude/meta/file-structure.md) - File organization
-- [.claude/meta/context-tags-guide.md](./.claude/meta/context-tags-guide.md) - Tag system
-- [.claude/meta/version-history.md](./.claude/meta/version-history.md) - Change log
+- [.claude/meta/contributing.md](./.claude/meta/contributing.md) - How to maintain rules (includes decision tree for `.claude/` vs `docs/`)
 
 ---
 
@@ -212,12 +226,11 @@
 ## 📞 Need Help?
 
 - **Can't find rule?** Use context tags above
-- **Adding new rule?** Read [CONTRIBUTING.md](./.claude/meta/CONTRIBUTING.md)
-- **Confused about tags?** Read [context-tags-guide.md](./.claude/meta/context-tags-guide.md)
+- **Adding new rule?** Read [contributing.md](./.claude/meta/contributing.md)
 
 ---
 
-**Documentation System Version:** 2.0
-**Last Major Update:** 2025-11-15 (Modular restructuring)
-**Total Documentation:** ~5,500 lines across 24 files
+**Documentation System Version:** 3.0
+**Last Major Update:** 2025-11-26 (Consolidated docs/, added business-domain.md)
+**Total Documentation:** ~8,500 lines across 28 files
 **Maintenance:** See [.claude/README.md](./.claude/README.md)

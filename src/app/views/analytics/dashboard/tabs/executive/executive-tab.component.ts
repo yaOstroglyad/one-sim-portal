@@ -7,6 +7,7 @@ import { DashboardDataService } from '../../services/dashboard-data.service';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
 import { CardComponent, OsBarChartComponent } from '@shared';
+import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
   standalone: true,
@@ -17,7 +18,8 @@ import { CardComponent, OsBarChartComponent } from '@shared';
     LoadingIndicatorComponent,
     ErrorDisplayComponent,
     CardComponent,
-    OsBarChartComponent
+    OsBarChartComponent,
+    IconComponent
   ],
   templateUrl: './executive-tab.component.html',
   styleUrls: ['./executive-tab.component.scss'],
@@ -30,6 +32,13 @@ export class ExecutiveTabComponent {
   readonly data = signal<ExecutiveTabData | null>(null);
   readonly loading = signal(true);
   readonly error = signal<DashboardError | null>(null);
+
+  // UI state
+  readonly refundsExpanded = signal(false);
+
+  toggleRefunds(): void {
+    this.refundsExpanded.update(v => !v);
+  }
 
   constructor() {
     // React to period and accountId changes using effect

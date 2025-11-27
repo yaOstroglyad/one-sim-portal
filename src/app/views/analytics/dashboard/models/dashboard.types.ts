@@ -31,24 +31,39 @@ export interface ChartDataset {
   backgroundColor?: string | string[];
   borderColor?: string | string[];
   borderWidth?: number;
-  borderRadius?: number;
+  borderRadius?: number | { topLeft?: number; topRight?: number; bottomLeft?: number; bottomRight?: number };
   barThickness?: number;
   maxBarThickness?: number;
   fill?: boolean;
+  stack?: string;
 }
 
 export interface ChartOptions {
   responsive?: boolean;
   maintainAspectRatio?: boolean;
-  indexAxis?: 'x' | 'y'; // For horizontal/vertical bar charts
+  indexAxis?: 'x' | 'y';
   plugins?: {
     legend?: {
       display?: boolean;
       position?: 'top' | 'bottom' | 'left' | 'right';
+      labels?: {
+        usePointStyle?: boolean;
+        padding?: number;
+      };
     };
     title?: {
       display?: boolean;
       text?: string;
+    };
+    tooltip?: {
+      enabled?: boolean;
+      mode?: 'index' | 'nearest' | 'point' | 'dataset';
+      intersect?: boolean;
+      callbacks?: {
+        title?: (items: any) => string;
+        label?: (context: any) => string;
+        footer?: (items: any) => string;
+      };
     };
   };
   scales?: {

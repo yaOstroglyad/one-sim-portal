@@ -927,7 +927,12 @@
       "subscribersByBundle": "Підписники за тарифами",
       "revenueByBundle": "Дохід за тарифами",
       "inventoryStatus": "Статус інвентарю",
-      "totalEsims": "Всього eSIM"
+      "totalEsims": "Всього eSIM",
+      "refunds": "Повернення",
+      "refundsRevenue": "Повернений дохід",
+      "refundsCost": "Повернені витрати",
+      "refundsMargin": "Повернена маржа",
+      "refundsCount": "Кількість повернень"
     },
     "inDevelopment": "В розробці",
     "kpiMetricsComingSoon": "KPI метрики скоро будуть доступні",

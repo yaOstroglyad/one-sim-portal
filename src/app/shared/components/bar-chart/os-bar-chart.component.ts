@@ -24,9 +24,10 @@ export interface BarChartData {
     backgroundColor?: string | string[];
     borderColor?: string | string[];
     borderWidth?: number;
-    borderRadius?: number;
+    borderRadius?: number | { topLeft?: number; topRight?: number; bottomLeft?: number; bottomRight?: number };
     barThickness?: number;
     maxBarThickness?: number;
+    stack?: string;
   }[];
 }
 
@@ -325,6 +326,7 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
       if (dataset.borderWidth === undefined) {
         dataset.borderWidth = 1;
       }
+      // Only apply default borderRadius if not already set (preserve object values for stacked charts)
       if (dataset.borderRadius === undefined) {
         dataset.borderRadius = 4;
       }
