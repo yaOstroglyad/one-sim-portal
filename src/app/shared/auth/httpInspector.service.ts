@@ -29,7 +29,9 @@ export class CustomHttpInterceptor implements HttpInterceptor {
 
 		return next.handle(req).pipe(
 			catchError((errorResponse: HttpErrorResponse) => {
+				console.log('[HttpInterceptor] Error:', errorResponse.status, errorResponse.url);
 				if (errorResponse.status === 401) {
+					console.log('[HttpInterceptor] 401 detected, redirecting to login. URL:', errorResponse.url);
 					this.router.navigate(['login']);
 				}
 				// Transform HTTP error to structured ApiError format

@@ -1,22 +1,22 @@
-import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION, SPECIAL_PERMISSION } from '@shared';
+import { ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION, ANALYTICS_PERMISSION } from '@shared';
 
 export const navItems: any[] = [
 	{
 		name: 'nav.analytics',
 		url: '/home/analytics',
 		iconComponent: {name: 'cil-chart-pie'},
-		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION, SPECIAL_PERMISSION],
+		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, ANALYTICS_PERMISSION],
 		featureToggle: 'dashboard',
 		children: [
 			{
 				name: 'nav.dashboard',
 				url: '/home/analytics/dashboard',
-				permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION, SPECIAL_PERMISSION]
+				permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, ANALYTICS_PERMISSION]
 			},
 			{
 				name: 'nav.reports',
 				url: '/home/analytics/reports',
-				permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION, SPECIAL_PERMISSION]
+				permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, ANALYTICS_PERMISSION]
 			},
 			{
 				name: 'nav.adminOverview',
@@ -71,20 +71,8 @@ export const navItems: any[] = [
 		name: 'nav.tickets',
 		url: '/home/tickets',
 		iconComponent: {name: 'cil-speech'},
-		permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION, CUSTOMER_PERMISSION],
 		featureToggle: 'tickets',
-		children: [
-			{
-				name: 'nav.ticketsOverview',
-				url: '/home/tickets/overview',
-				permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION]
-			},
-			{
-				name: 'nav.ticketsList',
-				url: '/home/tickets/list',
-				permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION, CUSTOMER_PERMISSION]
-			}
-		]
+		permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION, CUSTOMER_PERMISSION]
 	},
 	{
 		name: 'nav.productconstructor',

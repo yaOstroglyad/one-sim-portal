@@ -4,3 +4,4 @@ export * from './cookie-helper.service';
 export * from './httpInspector.service';
 export * from './jwt-helper.service';
 export * from './feature-toggle.guard';
+export * from './role-redirect.guard';

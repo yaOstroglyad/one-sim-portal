@@ -35,6 +35,7 @@ export interface CreateUserRequest {
   loginName: string;
   email: string;
   phone?: string;
+  password: string;
   accountId: string;
 }
 

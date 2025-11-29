@@ -198,6 +198,7 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	public createUser(): void {
+		console.log('[UserList] createUser called');
 		this.selectedUser = null;
 		this.showCreatePanel = true;
 		this.cdr.detectChanges();

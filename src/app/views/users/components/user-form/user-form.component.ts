@@ -45,12 +45,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Prepare company options
     const companyOptions = this.companiesDataService.list().pipe(
-      map((companies: any[]) =>
-        companies.map(company => ({
-          value: company.accountId,
-          displayValue: company.name
-        } as SelectOption))
-      )
+      map((companies: any[]) => companies.map(company => ({
+        value: company.accountId,
+        displayValue: company.name
+      } as SelectOption)))
     );
 
     // Prepare email async validator
@@ -85,7 +83,9 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    if (!this.userForm || this.userForm.invalid || this.loading) return;
+    if (!this.userForm || this.userForm.invalid || this.loading) {
+      return;
+    }
 
     this.loading = true;
     const formData = this.userForm.getRawValue();
@@ -101,6 +101,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
           loginName: formData.loginName,
           email: formData.email,
           phone: formData.phone,
+          password: formData.password,
           accountId: formData.accountId
         } as CreateUserRequest;
 
@@ -115,9 +116,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.save.emit(result);
       },
-      error: (error) => {
+      error: () => {
         this.loading = false;
-        console.error('Error saving user:', error);
       }
     });
   }

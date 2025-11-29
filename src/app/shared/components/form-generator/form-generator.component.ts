@@ -112,9 +112,7 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['config']) {
-			console.log('Form config received in form generator:', this.config);
-		}
+		// Handle config changes if needed
 	}
 
 	public ngAfterViewInit(): void {

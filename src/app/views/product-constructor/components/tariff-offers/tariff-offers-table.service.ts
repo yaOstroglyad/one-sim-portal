@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
   ADMIN_PERMISSION,
   AuthService,
-  SPECIAL_PERMISSION,
   TableConfig,
   TableConfigAbstractService,
   TemplateType
@@ -13,7 +12,6 @@ import { TariffOffer } from '../../models/tariff-offer.model';
 @Injectable()
 export class TariffOffersTableService extends TableConfigAbstractService<TariffOffer> {
   private authService = inject(AuthService);
-  private isSpecial = this.authService.hasPermission(SPECIAL_PERMISSION);
   private isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 
   // Template references
@@ -30,7 +28,7 @@ export class TariffOffersTableService extends TableConfigAbstractService<TariffO
     translatePrefix: 'productConstructor.tariffOffers.',
     showCheckboxes: false,
     showEditButton: false,
-    showAddButton: this.isAdmin || this.isSpecial,
+    showAddButton: this.isAdmin,
     showMenu: true,
     columns: [
       {

@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
 	ADMIN_PERMISSION,
 	AuthService,
-	SPECIAL_PERMISSION,
 	TableConfig,
 	TableConfigAbstractService,
 	TemplateType
@@ -13,7 +12,6 @@ import { ProviderProduct } from '../../models';
 @Injectable()
 export class ProviderProductsTableService extends TableConfigAbstractService<ProviderProduct> {
 	private authService = inject(AuthService);
-	private isSpecial = this.authService.hasPermission(SPECIAL_PERMISSION);
 	private isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 
 	public originalDataSubject = new BehaviorSubject<ProviderProduct[]>([]);
@@ -27,7 +25,7 @@ export class ProviderProductsTableService extends TableConfigAbstractService<Pro
 		translatePrefix: 'productConstructor.providerProducts.',
 		showCheckboxes: false,
 		showEditButton: false,
-		showAddButton: this.isAdmin || this.isSpecial,
+		showAddButton: this.isAdmin,
 		showMenu: true,
 		columns: [
 			{

@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
 	ADMIN_PERMISSION,
 	AuthService,
-	SPECIAL_PERMISSION,
 	TableConfig,
 	TableConfigAbstractService,
 	TemplateType
@@ -13,7 +12,6 @@ import { RegionSummary } from '../../models';
 @Injectable()
 export class RegionsTableService extends TableConfigAbstractService<RegionSummary> {
 	private authService = inject(AuthService);
-	private isSpecial = this.authService.hasPermission(SPECIAL_PERMISSION);
 	private isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 
 	public originalDataSubject = new BehaviorSubject<RegionSummary[]>([]);
@@ -26,7 +24,7 @@ export class RegionsTableService extends TableConfigAbstractService<RegionSummar
 		translatePrefix: 'productConstructor.regions.',
 		showCheckboxes: false,
 		showEditButton: false,
-		showAddButton: this.isAdmin || this.isSpecial,
+		showAddButton: this.isAdmin,
 		showMenu: true,
 		columns: [
 			{

@@ -52,7 +52,9 @@
       "Bash(chmod:*)",
       "WebFetch(domain:angular.dev)",
       "Bash(cat:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill -9)"
     ],
     "deny": []
   }

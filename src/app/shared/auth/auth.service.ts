@@ -8,9 +8,9 @@ import { LoginRequest, LoginResponse } from '@shared/models';
 import { Router } from '@angular/router';
 
 export const ADMIN_PERMISSION = 'ADMIN';
-export const SPECIAL_PERMISSION = 'SPECIAL';
 export const CUSTOMER_PERMISSION = 'CUSTOMER';
 export const SUPPORT_PERMISSION = 'SUPPORT';
+export const ANALYTICS_PERMISSION = 'ANALYTICS';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {

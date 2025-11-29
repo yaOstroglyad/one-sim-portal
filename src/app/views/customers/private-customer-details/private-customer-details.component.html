@@ -8,7 +8,7 @@
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button *ngIf="isAdmin || isSpecial"
+                <button *ngIf="isAdmin"
                         mat-menu-item
                         (click)="addSubscriber()">
                     <mat-icon>person_add</mat-icon>
@@ -27,7 +27,7 @@
                     <span>{{ 'customer.private-customer-details.sendRegistrationEmail' | translate }}</span>
                 </button>
                 <button mat-menu-item
-                        *ngIf="isAdmin || isSpecial"
+                        *ngIf="isAdmin"
                         [disabled]="!selectedSubscriber"
                         [matTooltipDisabled]="!!selectedSubscriber"
                         matTooltip="{{ 'customer.private-customer-details.add-product-action-tooltip' | translate }}"

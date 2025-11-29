@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './default-layout.component';
 import { FeatureToggleGuard } from '@shared';
 import { noPermissionsGuard } from '@shared/auth/no-permissions.guard';
+import { roleRedirectGuard } from '@shared/auth/role-redirect.guard';
 
 export const DEFAULT_LAYOUT_ROUTES: Routes = [
   {
@@ -12,7 +13,8 @@ export const DEFAULT_LAYOUT_ROUTES: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'customers'
+        canActivate: [roleRedirectGuard],
+        component: DefaultLayoutComponent // dummy, guard always redirects
       },
       {
         path: 'providers',
@@ -92,10 +94,8 @@ export const DEFAULT_LAYOUT_ROUTES: Routes = [
       {
         path: 'tickets',
         data: {
-          title: 'Support Tickets',
-          featureToggle: 'tickets'
+          title: 'Support Tickets'
         },
-        canActivate: [FeatureToggleGuard],
         loadChildren: () => import('../../views/tickets/tickets.routes').then(m => m.TICKETS_ROUTES)
       },
     ]

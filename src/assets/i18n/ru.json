@@ -99,6 +99,11 @@
     "companyHint": "Компания, к которой принадлежит пользователь",
     "rolePlaceholder": "Выберите роль",
     "roleHint": "Роль пользователя определяет права доступа",
+    "password": "Пароль",
+    "passwordPlaceholder": "Введите пароль",
+    "passwordHint": "Минимум 8 символов",
+    "confirmPassword": "Подтверждение пароля",
+    "confirmPasswordPlaceholder": "Повторите пароль",
     "errors": {
       "usernameRequired": "Имя пользователя обязательно",
       "usernamePattern": "Имя пользователя должно содержать только буквы, цифры, точки, дефисы и подчеркивания",
@@ -114,7 +119,12 @@
       "emailRequired": "Email обязателен",
       "emailInvalid": "Введите корректный email адрес",
       "companyRequired": "Компания обязательна",
-      "roleRequired": "Роль обязательна"
+      "roleRequired": "Роль обязательна",
+      "passwordRequired": "Пароль обязателен",
+      "passwordMinLength": "Пароль должен быть не менее 8 символов",
+      "passwordMaxLength": "Пароль не может превышать 128 символов",
+      "confirmPasswordRequired": "Подтвердите пароль",
+      "passwordMismatch": "Пароли не совпадают"
     }
   },
   "page404": {

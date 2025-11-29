@@ -101,6 +101,11 @@
     "companyHint": "Company the user belongs to",
     "rolePlaceholder": "Select role",
     "roleHint": "User's role determines permissions",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password",
+    "passwordHint": "Minimum 8 characters",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter password",
     "errors": {
       "usernameRequired": "Username is required",
       "usernamePattern": "Username must contain only letters, numbers, dots, hyphens, and underscores",
@@ -116,7 +121,12 @@
       "emailRequired": "Email is required",
       "emailInvalid": "Please enter a valid email address",
       "companyRequired": "Company is required",
-      "roleRequired": "Role is required"
+      "roleRequired": "Role is required",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "passwordMaxLength": "Password cannot exceed 128 characters",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match"
     }
   },
   "page404": {

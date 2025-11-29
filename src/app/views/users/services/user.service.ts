@@ -73,7 +73,6 @@ export class UserService extends DataService<User> {
   }
 
   createUser(user: User | CreateUserRequest): Observable<User> {
-    console.log('user', user);
     return this.http.post<User>(`/api/v1/users/command/create?accountId=${user.accountId}`, user).pipe(
       tap(() => {
         this.cacheHub.invalidatePattern('default:users:page-*');
