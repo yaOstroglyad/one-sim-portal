@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { AuthService, ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION, ANALYTICS_PERMISSION } from '../../auth';
+import { AuthService, ADMIN_PERMISSION, SPECIAL_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION, ANALYTICS_PERMISSION } from '../../auth';
 
 export enum UserRole {
   ADMIN = 'admin',
   CUSTOMER = 'customer',
   SUPPORT = 'support',
+  SPECIAL = 'special',
   ANALYTICS = 'analytics'
 }
 
 // List of all valid/known permissions in the system
 const VALID_PERMISSIONS = [
   ADMIN_PERMISSION,
+  SPECIAL_PERMISSION,
   CUSTOMER_PERMISSION,
   SUPPORT_PERMISSION,
   ANALYTICS_PERMISSION
@@ -52,6 +54,10 @@ export class UserRoleService {
       return UserRole.ADMIN;
     }
 
+    if (this.authService.hasPermission(SPECIAL_PERMISSION)) {
+      return UserRole.SPECIAL;
+    }
+
     if (this.authService.hasPermission(SUPPORT_PERMISSION)) {
       return UserRole.SUPPORT;
     }
@@ -74,6 +80,10 @@ export class UserRoleService {
 
   isSupport(): boolean {
     return this.getCurrentUserRole() === UserRole.SUPPORT;
+  }
+
+  isSpecial(): boolean {
+    return this.getCurrentUserRole() === UserRole.SPECIAL;
   }
 
   isAnalytics(): boolean {

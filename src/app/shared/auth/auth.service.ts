@@ -8,6 +8,8 @@ import { LoginRequest, LoginResponse } from '@shared/models';
 import { Router } from '@angular/router';
 
 export const ADMIN_PERMISSION = 'ADMIN';
+// TODO: SPECIAL is a workaround role - consider reviewing and refactoring in the future
+export const SPECIAL_PERMISSION = 'SPECIAL';
 export const CUSTOMER_PERMISSION = 'CUSTOMER';
 export const SUPPORT_PERMISSION = 'SUPPORT';
 export const ANALYTICS_PERMISSION = 'ANALYTICS';

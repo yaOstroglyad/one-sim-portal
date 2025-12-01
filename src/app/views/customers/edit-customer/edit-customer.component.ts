@@ -1,59 +1,74 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
-import { ProvidersDataService, FormConfig, ProductsDataService, FormGeneratorComponent } from '@shared';
+import {
+  ProvidersDataService,
+  FormConfig,
+  ProductsDataService,
+  FormGeneratorComponent,
+  AccountsDataService,
+  UserRoleService
+} from '@shared';
 import { Subject } from 'rxjs';
 import { getCustomerCreateRequest, getEditCustomerFormConfig } from './edit-customer.utils';
 
 @Component({
-    standalone: true,
-    selector: 'app-edit-customer',
-    imports: [
-        MatDialogModule,
-        MatButtonModule,
-        TranslateModule,
-        FormGeneratorComponent
-    ],
-    templateUrl: './edit-customer.component.html',
-    styleUrls: ['./edit-customer.component.scss']
+  standalone: true,
+  selector: 'app-edit-customer',
+  imports: [
+    MatDialogModule,
+    MatButtonModule,
+    TranslateModule,
+    FormGeneratorComponent
+  ],
+  templateUrl: './edit-customer.component.html',
+  styleUrls: ['./edit-customer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditCustomerComponent implements OnInit, OnDestroy {
-	private unsubscribe$ = new Subject<void>();
-	public formConfig: FormConfig;
-	public form: FormGroup;
-	public isFormValid: boolean = false;
+  private readonly dialogRef = inject(MatDialogRef<EditCustomerComponent>);
+  private readonly providersDataService = inject(ProvidersDataService);
+  private readonly productsDataService = inject(ProductsDataService);
+  private readonly accountsDataService = inject(AccountsDataService);
+  private readonly userRoleService = inject(UserRoleService);
+  readonly data = inject(MAT_DIALOG_DATA);
 
-	constructor(
-		public dialogRef: MatDialogRef<EditCustomerComponent>,
-		private providersDataService: ProvidersDataService,
-		private productsDataService: ProductsDataService,
-		@Inject(MAT_DIALOG_DATA) public data: any
-	) {
-	}
+  private readonly destroy$ = new Subject<void>();
 
-	ngOnInit(): void {
-		this.formConfig = getEditCustomerFormConfig(this.providersDataService, this.productsDataService, this.data);
-	}
+  formConfig: FormConfig;
+  form: FormGroup;
+  isFormValid = false;
+  isAdmin = this.userRoleService.isAdmin();
 
-	handleFormChanges(form: FormGroup): void {
-		this.form = form;
-		this.isFormValid = form.valid;
-	}
+  ngOnInit(): void {
+    this.formConfig = getEditCustomerFormConfig(
+      this.providersDataService,
+      this.productsDataService,
+      this.data,
+      this.isAdmin,
+      this.accountsDataService
+    );
+  }
 
-	close(): void {
-		this.dialogRef.close();
-	}
+  handleFormChanges(form: FormGroup): void {
+    this.form = form;
+    this.isFormValid = form.valid;
+  }
 
-	submit(): void {
-		if (this.form.valid) {
-			this.dialogRef.close(getCustomerCreateRequest(this.form.value));
-		}
-	}
+  close(): void {
+    this.dialogRef.close();
+  }
 
-	ngOnDestroy(): void {
-		this.unsubscribe$.next();
-		this.unsubscribe$.complete();
-	}
+  submit(): void {
+    if (this.form.valid) {
+      this.dialogRef.close(getCustomerCreateRequest(this.form.value, this.isAdmin));
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

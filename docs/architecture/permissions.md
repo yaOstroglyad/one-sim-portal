@@ -9,6 +9,7 @@ The OneSim Portal uses a role-based access control (RBAC) system with permission
 | Permission | Constant | Description |
 |------------|----------|-------------|
 | **ADMIN** | `ADMIN_PERMISSION` | Full system access, all features available |
+| **SPECIAL** | `SPECIAL_PERMISSION` | Special access with extended capabilities (add customers, products). **Note:** This is a workaround role, consider reviewing and refactoring in the future |
 | **CUSTOMER** | `CUSTOMER_PERMISSION` | Company customer access, limited to company-specific data |
 | **SUPPORT** | `SUPPORT_PERMISSION` | Support team access, customer management and tickets |
 | **ANALYTICS** | `ANALYTICS_PERMISSION` | Analytics-only access, dashboards and reports |
@@ -19,6 +20,7 @@ Defined in `src/app/shared/auth/auth.service.ts`:
 
 ```typescript
 export const ADMIN_PERMISSION = 'ADMIN';
+export const SPECIAL_PERMISSION = 'SPECIAL';
 export const CUSTOMER_PERMISSION = 'CUSTOMER';
 export const SUPPORT_PERMISSION = 'SUPPORT';
 export const ANALYTICS_PERMISSION = 'ANALYTICS';
@@ -26,22 +28,23 @@ export const ANALYTICS_PERMISSION = 'ANALYTICS';
 
 ## Access Matrix by Section
 
-| Section                   | ADMIN | CUSTOMER | SUPPORT | ANALYTICS |
-|---------------------------|-------|----------|---------|-----------|
-| Analytics (Dashboard)     | Yes   | Yes      | -       | Yes       |
-| Analytics (Reports)       | Yes   | Yes      | -       | Yes       |
-| Analytics (Admin Overview)| Yes   | -        | -       | -         |
-| Companies                 | Yes   | -        | -       | -         |
-| Customers                 | Yes   | Yes      | Yes     | -         |
-| Providers                 | Yes   | -        | -       | -         |
-| Orders                    | Yes   | Yes      | -       | -         |
-| Email Logs                | Yes   | Yes      | -       | -         |
-| Inventory                 | Yes   | Yes      | -       | -         |
-| Products (Company)        | -     | Yes      | -       | -         |
-| Tickets                   | Yes   | Yes      | Yes     | -         |
-| Product Constructor       | Yes   | -        | -       | -         |
-| Settings                  | Yes   | -        | -       | -         |
-| Settings (Email Config)   | Yes   | Yes      | -       | -         |
+| Section                   | ADMIN | SPECIAL | CUSTOMER | SUPPORT | ANALYTICS |
+|---------------------------|-------|---------|----------|---------|-----------|
+| Analytics (Dashboard)     | Yes   | Yes     | Yes      | Yes     | Yes       |
+| Analytics (Reports)       | Yes   | Yes     | Yes      | Yes     | Yes       |
+| Analytics (Admin Overview)| Yes   | -       | -        | -       | -         |
+| Companies                 | Yes   | -       | -        | -       | -         |
+| Customers                 | Yes   | Yes     | Yes      | Yes     | -         |
+| Customers (Add)           | Yes   | Yes     | -        | -       | -         |
+| Providers                 | Yes   | -       | -        | -       | -         |
+| Orders                    | Yes   | -       | Yes      | -       | -         |
+| Email Logs                | Yes   | -       | Yes      | -       | -         |
+| Inventory                 | Yes   | -       | Yes      | -       | -         |
+| Products (Company)        | -     | -       | Yes      | -       | -         |
+| Tickets                   | Yes   | -       | Yes      | Yes     | -         |
+| Product Constructor       | Yes   | Yes     | -        | -       | -         |
+| Settings                  | Yes   | -       | -        | -       | -         |
+| Settings (Email Config)   | Yes   | -       | Yes      | -       | -         |
 
 ## Usage
 
@@ -107,6 +110,10 @@ export class MyComponent {
       // Support logic
     }
 
+    if (this.userRoleService.isSpecial()) {
+      // Special logic
+    }
+
     if (this.userRoleService.isAnalytics()) {
       // Analytics logic
     }
@@ -132,9 +139,10 @@ Permissions are configured in `src/app/containers/default-layout/_nav.ts`:
 The system checks permissions in order of precedence (in `UserRoleService.getCurrentUserRole()`):
 
 1. ADMIN (highest)
-2. SUPPORT
-3. ANALYTICS
-4. CUSTOMER (default)
+2. SPECIAL
+3. SUPPORT
+4. ANALYTICS
+5. CUSTOMER (default)
 
 A user with multiple permissions will be assigned the highest role.
 
@@ -145,6 +153,7 @@ After login, users are redirected to their default route based on role (handled 
 | Role | Default Route | Reason |
 |------|---------------|--------|
 | ADMIN | `/home/customers` | Full access, customers is primary view |
+| SPECIAL | `/home/customers` | Extended access, customers is primary view |
 | CUSTOMER | `/home/customers` | Primary business view |
 | SUPPORT | `/home/customers` | Support works with customers and tickets |
 | ANALYTICS | `/home/analytics` | Only has access to analytics section |

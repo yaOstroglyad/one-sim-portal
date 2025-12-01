@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
 	ADMIN_PERMISSION,
 	AuthService,
+	SPECIAL_PERMISSION,
 	TableConfig,
 	TableConfigAbstractService,
 	TemplateType
@@ -12,6 +13,7 @@ import { MobileBundle } from '../../models';
 @Injectable()
 export class BundlesTableService extends TableConfigAbstractService<MobileBundle> {
 	private authService = inject(AuthService);
+	private isSpecial = this.authService.hasPermission(SPECIAL_PERMISSION);
 	private isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 
 	public originalDataSubject = new BehaviorSubject<MobileBundle[]>([]);
@@ -24,7 +26,7 @@ export class BundlesTableService extends TableConfigAbstractService<MobileBundle
 		translatePrefix: 'productConstructor.bundles.',
 		showCheckboxes: false,
 		showEditButton: false,
-		showAddButton: this.isAdmin,
+		showAddButton: this.isAdmin || this.isSpecial,
 		showMenu: true,
 		columns: [
 			{

@@ -10,6 +10,7 @@ import {
 import { AdminUIConfig } from './configs/admin.config';
 import { CustomerUIConfig } from './configs/customer.config';
 import { SupportUIConfig } from './configs/support.config';
+import { SpecialUIConfig } from './configs/special.config';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +46,7 @@ export class UIConfigFactory {
     const baseConfig = this.getBaseConfig(userRole);
     return {
       ...baseConfig,
-      showAddButton: userRole === UserRole.ADMIN,
+      showAddButton: userRole === UserRole.ADMIN || userRole === UserRole.SPECIAL,
       showEditButton: false, // Handled via menu
       showMenu: true
     };
@@ -59,6 +60,8 @@ export class UIConfigFactory {
         return new CustomerUIConfig();
       case UserRole.SUPPORT:
         return new SupportUIConfig();
+      case UserRole.SPECIAL:
+        return new SpecialUIConfig();
       default:
         return new CustomerUIConfig(); // Default fallback
     }

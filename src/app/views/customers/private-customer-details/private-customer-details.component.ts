@@ -17,7 +17,7 @@ import {
 	SimLocations,
 	EmptyStateComponent,
 	RefundProductComponent,
-	Subscriber, ADMIN_PERMISSION, AuthService
+	Subscriber, ADMIN_PERMISSION, AuthService, SPECIAL_PERMISSION
 } from '@shared';
 import { forkJoin, Observable, of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -84,6 +84,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	totalUsedGB: number = 0;
 	currency: string = 'USD';
 	simLocations: SimLocations[];
+	isSpecial = this.authService.hasPermission(SPECIAL_PERMISSION);
 	isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 	customerId: string;
 	subscribers: Subscriber[];

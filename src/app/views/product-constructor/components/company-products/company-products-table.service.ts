@@ -12,6 +12,7 @@ import { UserRoleService } from '@shared';
 export class CompanyProductsTableService extends TableConfigAbstractService<CompanyProduct> {
 	private userRoleService = inject(UserRoleService);
 	private isAdmin = this.userRoleService.isAdmin();
+	private isSpecial = this.userRoleService.isSpecial();
 
 	// Template references
 	public priceTemplate: TemplateRef<any>;

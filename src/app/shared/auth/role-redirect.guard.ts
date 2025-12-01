@@ -6,7 +6,7 @@ import { UserRoleService, UserRole } from '../services/core';
  * Guard that redirects to the appropriate default route based on user role
  *
  * Route mapping:
- * - ADMIN, CUSTOMER → customers
+ * - ADMIN, CUSTOMER, SPECIAL → customers
  * - SUPPORT → customers (has access to customers and tickets)
  * - ANALYTICS → analytics (only has access to analytics)
  */
@@ -25,6 +25,7 @@ export const roleRedirectGuard: CanActivateFn = () => {
     case UserRole.ADMIN:
     case UserRole.CUSTOMER:
     case UserRole.SUPPORT:
+    case UserRole.SPECIAL:
     default:
       redirectTo = '/home/customers';
       break;
