@@ -124,15 +124,19 @@ export function getEditCustomerFormConfig(
       label: 'customer.product',
       placeholder: 'customer.productPlaceholder',
       validators: [],
-      dependsOnValue: ['serviceProviderId'],
+      dependsOnValue: isAdmin ? ['serviceProviderId', 'accountId'] : ['serviceProviderId'],
       disabled: true,
       options: (values) => {
-        const { serviceProviderId } = values;
+        const { serviceProviderId, accountId } = values;
         if (!serviceProviderId) return of([]);
 
-        return productsDataService.listFiltered({
-          serviceProviderId: serviceProviderId
-        }).pipe(
+        // For admin, pass accountId as customerId to get products available for that company
+        const filterParams: any = { serviceProviderId };
+        if (isAdmin && accountId) {
+          filterParams.accountId = accountId;
+        }
+
+        return productsDataService.listFiltered(filterParams).pipe(
           map(products => products.map(p => ({
             value: p.id,
             displayValue: p.name
