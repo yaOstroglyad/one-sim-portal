@@ -2,7 +2,7 @@ import { Response, Application } from 'express';
 import { BaseController } from '../../shared/base.controller';
 import { TicketsService } from './tickets.service';
 import { MockRequest } from '../../types';
-import { CreateTicketRequest, UpdateTicketRequest, CreateCommentRequest, UploadAttachmentRequest } from './ticket';
+import { CreateTicketRequest, UpdateTicketRequest, UpdateTicketStatusRequest, CreateCommentRequest, UploadAttachmentRequest } from './ticket';
 
 export class TicketsController extends BaseController {
   private ticketsService: TicketsService;
@@ -50,18 +50,33 @@ export class TicketsController extends BaseController {
     }
   }
 
-  // PATCH /api/v1/tickets/{id} - Update ticket
+  // PUT /api/v1/tickets/{id} - Update ticket
   private updateTicket = (req: MockRequest, res: Response): void => {
     try {
-      this.logRequest('PATCH', `/api/v1/tickets/${req.params.id}`, { params: req.params, body: req.body });
-      
+      this.logRequest('PUT', `/api/v1/tickets/${req.params.id}`, { params: req.params, body: req.body });
+
       this.validateRequiredParams(req.params, ['id']);
-      
+
       const updateData: UpdateTicketRequest = req.body;
       const updatedTicket = this.ticketsService.updateTicket(req.params.id, updateData);
       this.successResponse(res, updatedTicket);
     } catch (error) {
       this.handleError(res, error, 'Failed to update ticket');
+    }
+  }
+
+  // PUT /api/v1/tickets/{id}/status - Update ticket status only
+  private updateTicketStatus = (req: MockRequest, res: Response): void => {
+    try {
+      this.logRequest('PUT', `/api/v1/tickets/${req.params.id}/status`, { params: req.params, body: req.body });
+
+      this.validateRequiredParams(req.params, ['id']);
+
+      const { status }: UpdateTicketStatusRequest = req.body;
+      const updatedTicket = this.ticketsService.updateTicketStatus(req.params.id, status);
+      this.successResponse(res, updatedTicket);
+    } catch (error) {
+      this.handleError(res, error, 'Failed to update ticket status');
     }
   }
 
@@ -198,7 +213,8 @@ export class TicketsController extends BaseController {
     
     // Individual ticket operations (with :id parameter)
     app.get('/api/v1/tickets/:id', this.getTicketById);
-    app.patch('/api/v1/tickets/:id', this.updateTicket);
+    app.put('/api/v1/tickets/:id/status', this.updateTicketStatus);
+    app.put('/api/v1/tickets/:id', this.updateTicket);
     app.delete('/api/v1/tickets/:id', this.deleteTicket);
     
     // Comments

@@ -1,10 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { PaginatedResponse, ServiceError } from '../../types';
-import { 
-  Ticket, 
-  TicketListItem, 
-  CreateTicketRequest, 
+import {
+  Ticket,
+  TicketListItem,
+  TicketStatus,
+  CreateTicketRequest,
   UpdateTicketRequest,
   GetTicketsParams,
   GetRecentTicketsParams,
@@ -13,7 +14,7 @@ import {
   Comment,
   CreateCommentRequest,
   Attachment,
-  UploadAttachmentRequest 
+  UploadAttachmentRequest
 } from './ticket';
 
 interface TicketsListData {
@@ -135,10 +136,10 @@ export class TicketsService {
     return ticket;
   }
 
-  // PATCH /api/v1/tickets/{id} - Update ticket
+  // PUT /api/v1/tickets/{id} - Update ticket
   public updateTicket(id: string, updateData: UpdateTicketRequest): Ticket {
     const ticket = this.getTicketById(id); // This will throw if not found
-    
+
     const updatedTicket: Ticket = {
       ...ticket,
       ...updateData,
@@ -147,8 +148,24 @@ export class TicketsService {
       resolvedAt: updateData.status === 'RESOLVED' ? new Date().toISOString() : ticket.resolvedAt,
       closedAt: updateData.status === 'CLOSED' ? new Date().toISOString() : ticket.closedAt
     };
-    
+
     console.log('[MOCK] Updated ticket:', updatedTicket);
+    return updatedTicket;
+  }
+
+  // PUT /api/v1/tickets/{id}/status - Update ticket status only
+  public updateTicketStatus(id: string, status: TicketStatus): Ticket {
+    const ticket = this.getTicketById(id); // This will throw if not found
+
+    const updatedTicket: Ticket = {
+      ...ticket,
+      status,
+      updatedAt: new Date().toISOString(),
+      resolvedAt: status === 'RESOLVED' ? new Date().toISOString() : ticket.resolvedAt,
+      closedAt: status === 'CLOSED' ? new Date().toISOString() : ticket.closedAt
+    };
+
+    console.log('[MOCK] Updated ticket status:', { id, status });
     return updatedTicket;
   }
 

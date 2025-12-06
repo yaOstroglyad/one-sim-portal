@@ -1,12 +1,21 @@
-# CLAUDE.md - Smart Context Navigation
+# CLAUDE.md - Spec-Kit Integration
 
-> **Last Updated:** 2025-11-26
-> **Documentation System:** Modular, context-aware, token-optimized
-> **Quick Start:** Read critical rules below, then use tags to find what you need
+> **Last Updated:** 2025-12-03
+> **Documentation System:** Spec-Kit (Spec-Driven Development)
 
 ---
 
-## 🚨 CRITICAL RULES (Always Apply)
+## 🚀 Session Start
+
+**Before starting any task, read:**
+```
+.specify/memory/project-map.md
+```
+This gives you complete project knowledge without iterative exploration.
+
+---
+
+## 🚨 CRITICAL RULES (Quick Reference)
 
 ### 1. Absolute Paths ONLY
 ```
@@ -31,147 +40,97 @@
 ### 5. Documentation Language
 - **English only** for all code, comments, commit messages
 
-📖 **Full details:** [.claude/rules/01-CRITICAL.md](./.claude/rules/01-CRITICAL.md)
+📖 **Full rules:** [.specify/memory/constitution.md](./.specify/memory/constitution.md)
 
 ---
 
-## 🏷️ Find What You Need by Context
+## 📂 Spec-Kit Structure
 
-### 🆕 Creating Something New (`@creating-new`)
+```
+.specify/
+├── memory/
+│   ├── constitution.md     # All project rules
+│   └── project-map.md      # Project structure & components (READ FIRST)
+├── templates/              # Spec-Kit templates
+├── scripts/                # Spec-Kit scripts
+├── plans/                  # Implementation plans
+└── tasks/                  # Task breakdowns
 
-**"I need to create a new component"** → `@creating-new + @component`
-- 📖 Check inventory: [.claude/context/reusable-components.md](./.claude/context/reusable-components.md)
-- 📖 Read rules: [.claude/rules/01-CRITICAL.md](./.claude/rules/01-CRITICAL.md)
-- 📖 Step-by-step: [.claude/guides/creating-component.md](./.claude/guides/creating-component.md)
-- 💻 Template: [.claude/templates/component.template.ts](./.claude/templates/component.template.ts)
-
-**"I need to create a new service"** → `@creating-new + @service`
-- 📖 Check existing: [.claude/rules/04-services.md](./.claude/rules/04-services.md)
-- 📖 Patterns: [.claude/context/common-patterns.md](./.claude/context/common-patterns.md#data-service-pattern)
-- 📖 Step-by-step: [.claude/guides/creating-service.md](./.claude/guides/creating-service.md)
-- 💻 Template: [.claude/templates/service.template.ts](./.claude/templates/service.template.ts)
-
-**"I need to create a new model/interface"** → `@creating-new + @model`
-- 📖 Check existing: [.claude/rules/03-models.md](./.claude/rules/03-models.md)
-- 💻 Template: [.claude/templates/model.template.ts](./.claude/templates/model.template.ts)
-
-**"I need to create a utility function"** → `@creating-new + @utils`
-- 📖 Check existing: [.claude/rules/05-utils.md](./.claude/rules/05-utils.md)
-
-**"I need to style a component"** → `@creating-new + @styling`
-- 📖 SCSS rules: [.claude/rules/06-scss.md](./.claude/rules/06-scss.md)
-- 📖 Available mixins: [.claude/context/reusable-components.md](./.claude/context/reusable-components.md#available-scss-mixins)
-- 📖 Guide: [.claude/guides/styling-guide.md](./.claude/guides/styling-guide.md)
+specs/                      # Feature specifications
+├── 001-tickets/spec.md
+├── 002-product-constructor/spec.md
+├── 003-dashboard/spec.md
+├── 004-fab-layout/spec.md
+└── 005-data-cache/spec.md
+```
 
 ---
 
-### 🔧 Extending Existing Code (`@extending`)
+## 🔄 Spec-Kit Commands Cheatsheet
 
-**"Adding HTTP endpoint to service"** → `@extending + @http`
-- 📖 Error handling: [.claude/rules/02-http-errors.md](./.claude/rules/02-http-errors.md)
-- 📖 Quick guide: [.claude/guides/http-integration.md](./.claude/guides/http-integration.md)
-- 📖 Examples: [.claude/context/similar-features.md](./.claude/context/similar-features.md#data-management-features)
+**Copy-paste these commands (no autocomplete available):**
 
-**"Extending existing component"** → `@extending + @component`
-- 📖 Similar features: [.claude/context/similar-features.md](./.claude/context/similar-features.md)
-- 📖 Component rules: [.claude/rules/01-CRITICAL.md](./.claude/rules/01-CRITICAL.md)
+### Core Workflow (in order)
+```
+/speckit.specify      # 1. Create spec.md from requirements
+/speckit.clarify      # 2. (Optional) Clarify ambiguities
+/speckit.plan         # 3. Create plan.md with architecture
+/speckit.tasks        # 4. Generate tasks.md with task list
+/speckit.analyze      # 5. (Optional) Check consistency
+/speckit.checklist    # 6. (Optional) Validate requirements
+/speckit.implement    # 7. Execute tasks, write code
+```
 
----
+### Auxiliary Commands
+```
+/speckit.constitution    # View/edit project rules
+/speckit.taskstoissues   # Convert tasks to GitHub Issues
+```
 
-### 🐛 Fixing Issues (`@fixing-bug`)
+### Quick Reference
+| Step | Command | Creates |
+|------|---------|---------|
+| 1 | `/speckit.specify` | `spec.md` |
+| 2 | `/speckit.clarify` | updates `spec.md` |
+| 3 | `/speckit.plan` | `plan.md` |
+| 4 | `/speckit.tasks` | `tasks.md` |
+| 5 | `/speckit.analyze` | report (stdout) |
+| 6 | `/speckit.checklist` | `checklists/*.md` |
+| 7 | `/speckit.implement` | code files |
 
-**"HTTP error not showing correctly"** → `@fixing-bug + @http`
-- 📖 Error patterns: [.claude/rules/02-http-errors.md](./.claude/rules/02-http-errors.md)
-
-**"Styles not applying"** → `@fixing-bug + @styling`
-- 📖 SCSS rules: [.claude/rules/06-scss.md](./.claude/rules/06-scss.md)
-- 📖 Common issues: [.claude/guides/styling-guide.md](./.claude/guides/styling-guide.md)
-
----
-
-### 📚 Learning Project (`@learn-project`)
-
-**"What reusable components exist?"** → `@learn-project + @component`
-- 📖 Full inventory: [.claude/context/reusable-components.md](./.claude/context/reusable-components.md)
-
-**"How is the project architected?"** → `@learn-project`
-- 📖 Architecture: [.claude/context/architecture-map.md](./.claude/context/architecture-map.md)
-- 📖 Patterns: [.claude/context/common-patterns.md](./.claude/context/common-patterns.md)
-
-**"Show me similar features"** → `@learn-patterns`
-- 📖 Code examples: [.claude/context/similar-features.md](./.claude/context/similar-features.md)
+> **Note:** Claude will remind you of the next command during development.
 
 ---
 
-## 📋 Quick Reference by File Type
+## 📋 Available Specifications
 
-| Creating... | Check Exists | Read Rules | See Patterns | Template |
-|-------------|--------------|------------|--------------|----------|
-| Component | [reusable-components.md](./.claude/context/reusable-components.md) | [01-CRITICAL.md](./.claude/rules/01-CRITICAL.md) | [similar-features.md](./.claude/context/similar-features.md) | [component.template.ts](./.claude/templates/component.template.ts) |
-| Service | [common-patterns.md](./.claude/context/common-patterns.md) | [04-services.md](./.claude/rules/04-services.md) | [similar-features.md](./.claude/context/similar-features.md) | [service.template.ts](./.claude/templates/service.template.ts) |
-| Model | `/shared/models/` | [03-models.md](./.claude/rules/03-models.md) | - | [model.template.ts](./.claude/templates/model.template.ts) |
-| Utility | `/shared/utils/` | [05-utils.md](./.claude/rules/05-utils.md) | [common-patterns.md](./.claude/context/common-patterns.md) | - |
-| HTTP call | [similar-features.md](./.claude/context/similar-features.md) | [02-http-errors.md](./.claude/rules/02-http-errors.md) | [http-integration.md](./.claude/guides/http-integration.md) | - |
-
----
-
-## 📚 All Detailed Rules
-
-| Priority | Topic | File | When to Read |
-|----------|-------|------|--------------|
-| 🔴 Critical | Component Architecture | [01-CRITICAL.md](./.claude/rules/01-CRITICAL.md) | Before creating components |
-| 🔴 Critical | HTTP Error Handling | [02-http-errors.md](./.claude/rules/02-http-errors.md) | Before HTTP calls |
-| 🔴 Critical | Models Organization | [03-models.md](./.claude/rules/03-models.md) | Before creating interfaces |
-| 🔴 Critical | Services Organization | [04-services.md](./.claude/rules/04-services.md) | Before creating services |
-| 🔴 Critical | Utils Organization | [05-utils.md](./.claude/rules/05-utils.md) | Before creating utilities |
-| 🔴 Critical | SCSS Architecture | [06-scss.md](./.claude/rules/06-scss.md) | Before writing styles |
-| 🟡 High | Icons & SVG | [07-icons.md](./.claude/rules/07-icons.md) | When using icons |
+| Feature | Spec File | Status |
+|---------|-----------|--------|
+| **Tickets** | [specs/001-tickets/spec.md](./specs/001-tickets/spec.md) | Implemented |
+| **Product Constructor** | [specs/002-product-constructor/spec.md](./specs/002-product-constructor/spec.md) | Implemented |
+| **Dashboard** | [specs/003-dashboard/spec.md](./specs/003-dashboard/spec.md) | Implemented |
+| **FAB Layout** | [specs/004-fab-layout/spec.md](./specs/004-fab-layout/spec.md) | Implemented |
+| **CacheHub** | [specs/005-data-cache/spec.md](./specs/005-data-cache/spec.md) | Implemented |
 
 ---
 
-## 🗂️ Context Files (Project Inventory)
+## 💻 Templates
 
-| File | Purpose | When to Read |
-|------|---------|--------------|
-| [reusable-components.md](./.claude/context/reusable-components.md) | What components/mixins exist | Before creating components |
-| [common-patterns.md](./.claude/context/common-patterns.md) | Established code patterns (Table, Cache, Feature Toggles) | Looking for how we do X |
-| [business-domain.md](./.claude/context/business-domain.md) | Business entities (Company, Customer, Product, Order) | Understanding business logic |
-| [similar-features.md](./.claude/context/similar-features.md) | Real code examples | Building something similar |
-| [architecture-map.md](./.claude/context/architecture-map.md) | High-level architecture | Understanding project structure |
+| Template | Purpose |
+|----------|---------|
+| [component.template.ts](./.claude/templates/component.template.ts) | New component scaffold |
+| [service.template.ts](./.claude/templates/service.template.ts) | New service scaffold |
+| [model.template.ts](./.claude/templates/model.template.ts) | New model/interface scaffold |
 
 ---
 
-## 📖 Step-by-Step Guides
-
-| Guide | Purpose | When to Read |
-|-------|---------|--------------|
-| [creating-component.md](./.claude/guides/creating-component.md) | Component creation workflow | Creating new component |
-| [creating-service.md](./.claude/guides/creating-service.md) | Service creation workflow | Creating new service |
-| [http-integration.md](./.claude/guides/http-integration.md) | Adding HTTP endpoints | Adding API calls |
-| [styling-guide.md](./.claude/guides/styling-guide.md) | Styling workflow | Styling components |
-
----
-
-## 📚 Detailed Documentation (`docs/`)
-
-For in-depth feature documentation, HLDs, and component deep-dives:
+## 📚 Additional Documentation (`docs/`)
 
 | Category | Location | Content |
 |----------|----------|---------|
-| **Feature HLDs** | `docs/features/` | Product Constructor, Tickets, Dashboard, FAB Layout, CacheHub |
-| **Component Guides** | `docs/components/` | GenericTable, AccountSelector, EmailLogs deep-dives |
+| **Component Guides** | `docs/components/` | GenericTable, AccountSelector, EmailLogs |
 | **Architecture** | `docs/architecture/` | Mock Server, Table Menu decisions |
 | **Optimizations** | `docs/optimizations/` | Form Generator hints |
-
-> **Rule:** Project-wide patterns go in `.claude/`, feature-specific docs go in `docs/`
-> **See:** [docs/README.md](./docs/README.md) for full navigation
-
----
-
-## 🛠️ Maintaining Documentation
-
-**Want to add/update rules?** Read:
-- [.claude/meta/contributing.md](./.claude/meta/contributing.md) - How to maintain rules (includes decision tree for `.claude/` vs `docs/`)
 
 ---
 
@@ -193,44 +152,19 @@ For in-depth feature documentation, HLDs, and component deep-dives:
 
 ---
 
-## 🎯 Token Optimization
+## 🛠️ Maintaining Documentation
 
-**This modular system saves ~48-55% tokens compared to monolithic CLAUDE.md**
+**Adding new feature?**
+1. Create spec: `/speckit.specify`
+2. Generate plan: `/speckit.plan`
 
-**Typical usage:**
-- Creating component: ~15,000 tokens (vs 26,865)
-- Fixing HTTP error: ~12,000 tokens (vs 26,865)
-- Learning project: ~12,500 tokens (vs 26,865)
+**Updating rules?**
+- Edit [.specify/memory/constitution.md](./.specify/memory/constitution.md)
 
-**Always loaded:**
-- This file (~5,500 tokens)
-
-**Loaded on demand:**
-- Rule files (3,000-8,000 tokens each)
-- Context files (2,500-5,000 tokens each)
-- Guides (2,000-3,000 tokens each)
+**Updating project map?**
+- Edit [.specify/memory/project-map.md](./.specify/memory/project-map.md)
 
 ---
 
-## 🔍 Search Before Creating
-
-**Before creating anything:**
-
-1. **Components:** Check [reusable-components.md](./.claude/context/reusable-components.md)
-2. **Services:** Check [services.md](./.claude/rules/04-services.md)
-3. **Models:** Check [models.md](./.claude/rules/03-models.md)
-4. **Utils:** Check [utils.md](./.claude/rules/05-utils.md)
-
----
-
-## 📞 Need Help?
-
-- **Can't find rule?** Use context tags above
-- **Adding new rule?** Read [contributing.md](./.claude/meta/contributing.md)
-
----
-
-**Documentation System Version:** 3.0
-**Last Major Update:** 2025-11-26 (Consolidated docs/, added business-domain.md)
-**Total Documentation:** ~8,500 lines across 28 files
-**Maintenance:** See [.claude/README.md](./.claude/README.md)
+**Documentation System Version:** 4.1 (Spec-Kit)
+**Last Major Update:** 2025-12-03 (Migrated to Spec-Kit format)

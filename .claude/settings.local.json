@@ -54,7 +54,17 @@
       "Bash(cat:*)",
       "Bash(git config:*)",
       "Bash(lsof:*)",
-      "Bash(xargs kill -9)"
+      "Bash(xargs kill -9)",
+      "WebFetch(domain:github.com)",
+      "Bash(wc:*)",
+      "Bash(sh)",
+      "Bash(brew install:*)",
+      "Bash(uv:*)",
+      "Bash(sudo mkdir:*)",
+      "Bash(sudo chown:*)",
+      "Bash(export PATH=\"/Users/andreyostroglyad/.local/bin:$PATH\")",
+      "Bash(specify:*)",
+      "Bash(./.specify/scripts/bash/check-prerequisites.sh:*)"
     ],
     "deny": []
   }

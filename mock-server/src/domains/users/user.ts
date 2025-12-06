@@ -1,5 +1,10 @@
 // User domain model and related interfaces
 
+export interface UserRole {
+  id: string;
+  name: string;
+}
+
 export interface User {
   id?: string;
   username: string;
@@ -8,9 +13,27 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  phone?: string;
   status?: 'ACTIVE' | 'INACTIVE';
+  roles?: UserRole[];
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface UpdateUserRequest {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  status?: 'ACTIVE' | 'INACTIVE';
+}
+
+export interface AssignRolesRequest {
+  roleIds: string[];
+}
+
+export interface RemoveRolesRequest {
+  roleIds: string[];
 }
 
 export interface GetUsersParams {

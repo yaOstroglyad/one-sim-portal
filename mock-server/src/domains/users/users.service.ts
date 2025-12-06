@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { PaginatedResponse, ServiceError } from '../../types';
-import { User, GetUsersParams, UsersListData, VerifyEmailData, VerifyEmailResponse } from './user';
+import { User, UserRole, GetUsersParams, UsersListData, VerifyEmailData, VerifyEmailResponse, UpdateUserRequest } from './user';
 
 export class UsersService {
   private dataPath: string;
@@ -98,13 +98,99 @@ export class UsersService {
   // Verify if email exists
   public verifyEmail(email: string): VerifyEmailResponse {
     const verifyData = this.readJsonFile<VerifyEmailData>('verify-email.json');
-    
+
     if (!verifyData) {
       throw new ServiceError('Failed to load verify data', 500);
     }
-    
+
     const isExist = verifyData.existingEmails.includes(email);
-    
+
     return { isExist };
+  }
+
+  // Get user by ID
+  private getUserById(id: string): User {
+    const allUsers = this.readJsonFile<UsersListData>('list.json');
+    const user = allUsers.content.find(u => u.id === id);
+
+    if (!user) {
+      throw new ServiceError(`User with ID ${id} not found`, 404);
+    }
+
+    return user;
+  }
+
+  // Update user
+  public updateUser(id: string, data: UpdateUserRequest): User {
+    const user = this.getUserById(id);
+
+    const updatedUser: User = {
+      ...user,
+      ...data,
+      updatedAt: new Date().toISOString()
+    };
+
+    console.log('[MOCK] Updated user:', { id, changes: data });
+    return updatedUser;
+  }
+
+  // Delete user
+  public deleteUser(id: string): void {
+    const user = this.getUserById(id);
+    console.log('[MOCK] Deleted user:', { id, username: user.username });
+  }
+
+  // Reset password
+  public resetPassword(id: string): { message: string } {
+    const user = this.getUserById(id);
+    console.log('[MOCK] Reset password for user:', { id, email: user.email });
+    return { message: `Password reset email sent to ${user.email}` };
+  }
+
+  // Assign roles to user
+  public assignRoles(userId: string, roleIds: string[]): User {
+    const user = this.getUserById(userId);
+
+    // Create role objects from IDs
+    const newRoles: UserRole[] = roleIds.map(id => ({
+      id,
+      name: `Role-${id}`
+    }));
+
+    const existingRoles = user.roles || [];
+    const allRoles = [...existingRoles, ...newRoles.filter(nr =>
+      !existingRoles.some(er => er.id === nr.id)
+    )];
+
+    const updatedUser: User = {
+      ...user,
+      roles: allRoles,
+      updatedAt: new Date().toISOString()
+    };
+
+    console.log('[MOCK] Assigned roles to user:', { userId, roleIds });
+    return updatedUser;
+  }
+
+  // Remove roles from user
+  public removeRoles(userId: string, roleIds: string[]): User {
+    const user = this.getUserById(userId);
+
+    const existingRoles = user.roles || [];
+    const remainingRoles = existingRoles.filter(r => !roleIds.includes(r.id));
+
+    const updatedUser: User = {
+      ...user,
+      roles: remainingRoles,
+      updatedAt: new Date().toISOString()
+    };
+
+    console.log('[MOCK] Removed roles from user:', { userId, roleIds });
+    return updatedUser;
+  }
+
+  // Get user types
+  public getUserTypes(): string[] {
+    return ['CORPORATE', 'PRIVATE'];
   }
 }

@@ -141,3 +141,8 @@ export interface Attachment {
 export interface UploadAttachmentRequest {
   file: string; // base64 or file path in mock
 }
+
+// Update ticket status request
+export interface UpdateTicketStatusRequest {
+  status: TicketStatus;
+}
