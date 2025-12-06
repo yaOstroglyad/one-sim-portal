@@ -71,7 +71,6 @@ export const navItems: any[] = [
 		name: 'nav.tickets',
 		url: '/home/tickets',
 		iconComponent: {name: 'cil-speech'},
-		featureToggle: 'tickets',
 		permissions: [ADMIN_PERMISSION, SUPPORT_PERMISSION, CUSTOMER_PERMISSION]
 	},
 	{

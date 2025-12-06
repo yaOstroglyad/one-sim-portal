@@ -1,16 +1,16 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, input, signal, computed, inject, effect, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { Ticket } from '../../../models';
+import { Ticket, TicketComment, TicketAttachment, TICKET_ALLOWED_MIME_TYPES, TICKET_MAX_FILE_SIZE } from '../../../models';
+import { TicketService } from '../../../services';
 import { TicketDetailsComponent } from '../ticket-details/ticket-details.component';
-import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsConfiguration, AttachmentsConfiguration, CreateCommentRequest, UploadAttachmentRequest } from '@shared';
+import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsConfiguration, AttachmentsConfiguration } from '@shared';
 
 @Component({
     selector: 'app-ticket-details-wrapper',
     standalone: true,
     imports: [
-        CommonModule,
         TranslateModule,
         TicketDetailsComponent,
         CommentsComponent,
@@ -19,34 +19,34 @@ import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsC
     template: `
     <div class="ticket-details-wrapper">
       <!-- Original ticket details -->
-      <app-ticket-details [ticket]="ticket"></app-ticket-details>
-      
-      <!-- Comments Section -->
-      <div class="comments-section" *ngIf="ticket">
-        <div class="section-header">
-          <h4>{{ 'tickets.comments' | translate }} ({{ commentsData.length }})</h4>
-        </div>
-        <app-comments 
-          [comments]="commentsData"
-          [config]="commentsConfig"
-          [loading]="commentsLoading"
-          (commentAdded)="onCommentAdded($event)">
-        </app-comments>
-      </div>
+      <app-ticket-details [ticket]="ticket()"></app-ticket-details>
 
-      <!-- Attachments Section -->
-      <div class="attachments-section" *ngIf="ticket">
-        <div class="section-header">
-          <h4>{{ 'tickets.attachments' | translate }} ({{ attachmentsData.length }})</h4>
+      <!-- Comments Section (read-only in details view) -->
+      @if (ticket()) {
+        <div class="comments-section">
+          <div class="section-header">
+            <h4>{{ 'tickets.comments' | translate }} ({{ commentsData().length }})</h4>
+          </div>
+          <app-comments
+            [comments]="commentsData()"
+            [config]="commentsConfig()"
+            [loading]="commentsLoading()">
+          </app-comments>
         </div>
-        <app-attachments
-          [attachments]="attachmentsData"
-          [config]="attachmentsConfig"
-          [loading]="attachmentsLoading"
-          (fileUploaded)="onFileUploaded($event)"
-          (fileDownloaded)="onFileDownloaded($event)">
-        </app-attachments>
-      </div>
+
+        <!-- Attachments Section (download only in details view) -->
+        <div class="attachments-section">
+          <div class="section-header">
+            <h4>{{ 'tickets.attachments' | translate }} ({{ attachmentsData().length }})</h4>
+          </div>
+          <app-attachments
+            [attachments]="attachmentsData()"
+            [config]="attachmentsConfig()"
+            [loading]="attachmentsLoading()"
+            (fileDownloaded)="onFileDownloaded($event)">
+          </app-attachments>
+        </div>
+      }
     </div>
   `,
     styles: [`
@@ -58,12 +58,12 @@ import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsC
         border: 1px solid var(--cui-border-color);
         border-radius: 0.375rem;
         background-color: var(--cui-bg);
-        
+
         .section-header {
           margin-bottom: 1rem;
           padding-bottom: 0.75rem;
           border-bottom: 1px solid var(--cui-border-color);
-          
+
           h4 {
             margin: 0;
             font-size: 1.125rem;
@@ -76,193 +76,125 @@ import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsC
   `],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TicketDetailsWrapperComponent implements OnInit {
-  @Input() ticket: Ticket;
+export class TicketDetailsWrapperComponent {
+  // Input
+  ticket = input.required<Ticket>();
 
-  // Comments data
-  commentsData: Comment[] = [];
-  commentsConfig: CommentsConfiguration;
-  commentsLoading = false;
+  // Services
+  private ticketService = inject(TicketService);
+  private destroyRef = inject(DestroyRef);
 
-  // Attachments data
-  attachmentsData: Attachment[] = [];
-  attachmentsConfig: AttachmentsConfiguration;
-  attachmentsLoading = false;
+  // State signals
+  commentsData = signal<Comment[]>([]);
+  commentsLoading = signal(false);
+  attachmentsData = signal<Attachment[]>([]);
+  attachmentsLoading = signal(false);
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  // Computed configurations (read-only mode for details view)
+  commentsConfig = computed<CommentsConfiguration>(() => ({
+    entityId: this.ticket().id,
+    entityType: 'ticket',
+    allowAddComments: false,
+    placeholder: 'comments.placeholder',
+    minLength: 3,
+    maxLength: 1000
+  }));
 
-  ngOnInit(): void {
-    if (this.ticket) {
-      this.initializeConfigurations();
-      this.loadCommentsData();
-      this.loadAttachmentsData();
-    }
-  }
+  attachmentsConfig = computed<AttachmentsConfiguration>(() => ({
+    entityId: this.ticket().id,
+    entityType: 'ticket',
+    allowUpload: false,
+    allowDownload: true,
+    maxFileSize: TICKET_MAX_FILE_SIZE,
+    allowedMimeTypes: TICKET_ALLOWED_MIME_TYPES,
+    uploadHint: 'attachments.uploadHint'
+  }));
 
-  private initializeConfigurations(): void {
-    // Comments configuration
-    this.commentsConfig = {
-      entityId: this.ticket.id,
-      entityType: 'ticket',
-      allowAddComments: true,
-      placeholder: 'comments.placeholder',
-      minLength: 3,
-      maxLength: 1000
-    };
-
-    // Attachments configuration
-    this.attachmentsConfig = {
-      entityId: this.ticket.id,
-      entityType: 'ticket',
-      allowUpload: true,
-      allowDownload: true,
-      maxFileSize: 10 * 1024 * 1024, // 10MB
-      allowedMimeTypes: [
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'application/vnd.ms-excel',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'text/plain',
-        'image/png',
-        'image/jpeg',
-        'image/gif'
-      ],
-      uploadHint: 'attachments.uploadHint'
-    };
+  constructor() {
+    // React to ticket input changes
+    effect(() => {
+      const ticket = this.ticket();
+      if (ticket) {
+        this.loadCommentsData();
+        this.loadAttachmentsData();
+      }
+    });
   }
 
   private loadCommentsData(): void {
-    this.commentsLoading = true;
-    
-    // Mock comments data - in real app this would come from a service
-    setTimeout(() => {
-      this.commentsData = [
-        {
-          id: 'comment-1',
-          entityId: this.ticket.id,
-          entityType: 'ticket',
-          content: 'I have checked the authentication logs and found that the issue occurs during peak hours when the authentication server is under heavy load.',
-          authorName: 'Sarah Wilson',
-          authorAvatar: null,
-          createdAt: new Date('2024-01-15T13:45:00'),
-          updatedAt: new Date('2024-01-15T13:45:00')
+    this.commentsLoading.set(true);
+
+    this.ticketService.getComments(this.ticket().id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (comments) => {
+          this.commentsData.set(comments.map(c => this.mapToComment(c)));
+          this.commentsLoading.set(false);
         },
-        {
-          id: 'comment-2',
-          entityId: this.ticket.id,
-          entityType: 'ticket',
-          content: 'We are working on implementing a load balancer to distribute the authentication requests. This should resolve the intermittent login failures.',
-          authorName: 'John Doe',
-          authorAvatar: null,
-          createdAt: new Date('2024-01-15T14:30:00'),
-          updatedAt: new Date('2024-01-15T14:30:00')
-        },
-        {
-          id: 'comment-3',
-          entityId: this.ticket.id,
-          entityType: 'ticket',
-          content: 'The load balancer has been deployed to production. Can you please test the login functionality and confirm if the issue is resolved?',
-          authorName: 'Sarah Wilson',
-          authorAvatar: null,
-          createdAt: new Date('2024-01-15T16:15:00'),
-          updatedAt: new Date('2024-01-15T16:15:00')
+        error: (error) => {
+          console.error('Failed to load comments:', error);
+          this.commentsData.set([]);
+          this.commentsLoading.set(false);
         }
-      ];
-      
-      this.commentsLoading = false;
-      this.cdr.markForCheck();
-    }, 500);
+      });
   }
 
   private loadAttachmentsData(): void {
-    this.attachmentsLoading = true;
-    
-    // Mock attachments data - in real app this would come from a service
-    setTimeout(() => {
-      this.attachmentsData = [
-        {
-          id: 'attachment-1',
-          entityId: this.ticket.id,
-          entityType: 'ticket',
-          fileName: 'error_screenshot.png',
-          originalFileName: 'Login Error Screenshot.png',
-          fileSize: 245760, // 240 KB
-          mimeType: 'image/png',
-          downloadUrl: '/api/v1/attachments/attachment-1/download',
-          uploadedByName: 'John Doe',
-          createdAt: new Date('2024-01-15T12:30:00')
+    this.attachmentsLoading.set(true);
+
+    this.ticketService.getAttachments(this.ticket().id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (attachments) => {
+          this.attachmentsData.set(attachments.map(a => this.mapToAttachment(a)));
+          this.attachmentsLoading.set(false);
         },
-        {
-          id: 'attachment-2',
-          entityId: this.ticket.id,
-          entityType: 'ticket',
-          fileName: 'auth_logs.txt',
-          originalFileName: 'Authentication Logs.txt',
-          fileSize: 12800, // 12.5 KB
-          mimeType: 'text/plain',
-          downloadUrl: '/api/v1/attachments/attachment-2/download',
-          uploadedByName: 'Sarah Wilson',
-          createdAt: new Date('2024-01-15T13:45:00')
+        error: (error) => {
+          console.error('Failed to load attachments:', error);
+          this.attachmentsData.set([]);
+          this.attachmentsLoading.set(false);
         }
-      ];
-      
-      this.attachmentsLoading = false;
-      this.cdr.markForCheck();
-    }, 300);
+      });
   }
 
-  onCommentAdded(request: CreateCommentRequest): void {
-    console.log('Adding comment:', request);
-    
-    // Simulate API call
-    setTimeout(() => {
-      const newComment: Comment = {
-        id: `comment-${Date.now()}`,
-        entityId: request.entityId,
-        entityType: request.entityType,
-        content: request.content,
-        authorName: 'Current User', // In real app, get from auth service
-        authorAvatar: null,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      };
-
-      this.commentsData = [...this.commentsData, newComment];
-      this.cdr.markForCheck();
-    }, 500);
+  private mapToComment(apiComment: TicketComment): Comment {
+    return {
+      id: apiComment.id,
+      entityId: apiComment.ticketId,
+      entityType: 'ticket',
+      content: apiComment.content,
+      authorName: apiComment.authorName,
+      authorAvatar: null,
+      createdAt: new Date(apiComment.createdAt),
+      updatedAt: new Date(apiComment.updatedAt)
+    };
   }
 
-  onFileUploaded(request: UploadAttachmentRequest): void {
-    console.log('Uploading file:', request);
-    
-    // Simulate API call
-    setTimeout(() => {
-      const newAttachment: Attachment = {
-        id: `attachment-${Date.now()}`,
-        entityId: request.entityId,
-        entityType: request.entityType,
-        fileName: request.file.name.toLowerCase().replace(/\s+/g, '_'),
-        originalFileName: request.file.name,
-        fileSize: request.file.size,
-        mimeType: request.file.type,
-        downloadUrl: `/api/v1/attachments/attachment-${Date.now()}/download`,
-        uploadedByName: 'Current User', // In real app, get from auth service
-        createdAt: new Date()
-      };
-
-      this.attachmentsData = [...this.attachmentsData, newAttachment];
-      this.cdr.markForCheck();
-    }, 1000);
+  private mapToAttachment(apiAttachment: TicketAttachment): Attachment {
+    return {
+      id: apiAttachment.id,
+      entityId: apiAttachment.ticketId,
+      entityType: 'ticket',
+      fileName: apiAttachment.filename,
+      originalFileName: apiAttachment.filename,
+      fileSize: apiAttachment.size,
+      mimeType: apiAttachment.contentType,
+      downloadUrl: '',
+      uploadedByName: apiAttachment.uploadedByName,
+      createdAt: new Date(apiAttachment.uploadedAt)
+    };
   }
 
   onFileDownloaded(attachment: Attachment): void {
-    console.log('Downloading attachment:', attachment.originalFileName);
-    
-    // In real app, this would trigger file download
-    const link = document.createElement('a');
-    link.href = attachment.downloadUrl;
-    link.download = attachment.originalFileName;
-    link.click();
+    this.ticketService.getAttachmentDownloadUrl(attachment.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          window.open(response.url, '_blank');
+        },
+        error: (error) => {
+          console.error('Failed to get download URL:', error);
+        }
+      });
   }
 }

@@ -362,6 +362,9 @@
     "attachments": "Attachments",
     "company": "Company",
     "unassigned": "Unassigned",
+    "customerName": "Customer Name",
+    "customerEmail": "Customer Email",
+    "iccid": "ICCID",
     "commentsWillBeImplemented": "Comments functionality will be implemented soon",
     "attachmentsWillBeImplemented": "Attachments functionality will be implemented soon",
     "form": {
@@ -420,6 +423,9 @@
     },
     "details": {
       "title": "Ticket Details"
+    },
+    "pending": {
+      "author": "You (pending)"
     },
     "actions": {
       "createTicket": "Create Ticket",

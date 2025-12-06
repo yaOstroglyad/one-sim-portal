@@ -9,10 +9,14 @@ mock-server/
 ├── src/                     # TypeScript source code
 │   ├── server.ts           # Main server entry point
 │   ├── domains/            # Domain-based modules
-│   │   └── users/          # Users domain
-│   │       ├── users.controller.ts # Users request handler
-│   │       ├── users.service.ts    # Users business logic
-│   │       └── user.ts             # User domain types
+│   │   ├── users/          # Users domain
+│   │   │   ├── users.controller.ts # Users request handler
+│   │   │   ├── users.service.ts    # Users business logic
+│   │   │   └── user.ts             # User domain types
+│   │   └── tickets/        # Tickets domain
+│   │       ├── tickets.controller.ts # Tickets request handler
+│   │       ├── tickets.service.ts    # Tickets business logic
+│   │       └── ticket.ts             # Ticket domain types
 │   ├── shared/             # Shared classes and utilities
 │   │   └── base.controller.ts # Abstract base controller
 │   ├── middleware/         # Express middleware
@@ -26,9 +30,16 @@ mock-server/
 │       └── server.config.ts # Server settings
 ├── dist/                   # Compiled JavaScript output
 ├── data/                   # Mock JSON data
-│   └── users/
-│       ├── list.json       # Users data
-│       └── verify-email.json # Email verification data
+│   ├── users/
+│   │   ├── list.json       # Users data
+│   │   └── verify-email.json # Email verification data
+│   └── tickets/
+│       ├── list.json       # Paginated tickets list
+│       ├── details.json    # Full ticket details
+│       ├── comments.json   # Ticket comments with avatars
+│       ├── attachments.json # Ticket attachments
+│       ├── count.json      # Ticket count by status
+│       └── recent.json     # Recent tickets
 ├── CLAUDE-MOCK.md          # Development rules and guidelines
 ├── package.json            # Dependencies and scripts
 ├── tsconfig.json           # TypeScript configuration
@@ -88,6 +99,53 @@ npm run start:mock   # Start mock + Angular with proxy
 **GET /api/v1/users/query/verify-user?email={email}**
 - Verify email existence
 - Returns: `{ isExist: boolean }`
+
+### Tickets Domain
+
+**GET /api/v1/tickets**
+- Paginated tickets with filtering
+- Parameters: `page`, `size`, `status`, `priority`, `category`, `search`, `accountId`
+- Supports comma-separated values for multiple filter values
+
+**POST /api/v1/tickets**
+- Create new ticket
+- Body: `{ subject, description, priority, category, iccid?, customerEmail?, customerName? }`
+
+**GET /api/v1/tickets/{id}**
+- Get ticket details by ID
+- Returns full ticket with customer information
+
+**PATCH /api/v1/tickets/{id}**
+- Update ticket (including status changes)
+- Body: `{ status?, priority?, category?, subject?, description?, assignedToId? }`
+
+**DELETE /api/v1/tickets/{id}**
+- Delete ticket (soft delete)
+
+**GET /api/v1/tickets/recent**
+- Get recent tickets
+- Parameters: `limit` (default: 5)
+
+**GET /api/v1/tickets/count**
+- Get ticket count by status
+
+**GET /api/v1/tickets/stats**
+- Get ticket statistics for dashboard
+
+**GET /api/v1/tickets/{ticketId}/comments**
+- Get comments for a ticket
+- Returns comments with `authorAvatar` field
+
+**POST /api/v1/tickets/{ticketId}/comments**
+- Add comment to ticket
+- Body: `{ content, isInternal? }`
+
+**GET /api/v1/tickets/{ticketId}/attachments**
+- Get attachments for a ticket
+
+**POST /api/v1/tickets/{ticketId}/attachments**
+- Upload attachment to ticket
+- Body: multipart/form-data with `file` field
 
 ## Special Features
 

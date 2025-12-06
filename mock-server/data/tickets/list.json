@@ -9,8 +9,11 @@
       "category": "TECHNICAL_ISSUE",
       "createdByName": "John Doe",
       "assignedToName": "Sarah Wilson",
+      "companyName": "TechCorp Solutions",
       "createdAt": "2024-01-15T10:30:00Z",
-      "updatedAt": "2024-01-15T14:22:00Z"
+      "updatedAt": "2024-01-15T14:22:00Z",
+      "commentsCount": 3,
+      "attachmentsCount": 2
     },
     {
       "id": "ticket-002",
@@ -21,8 +24,11 @@
       "category": "BILLING_QUESTION",
       "createdByName": "Jane Smith",
       "assignedToName": "Mike Johnson",
+      "companyName": "Global Communications Ltd",
       "createdAt": "2024-01-14T09:15:00Z",
-      "updatedAt": "2024-01-15T11:45:00Z"
+      "updatedAt": "2024-01-15T11:45:00Z",
+      "commentsCount": 5,
+      "attachmentsCount": 1
     },
     {
       "id": "ticket-003",
@@ -33,8 +39,11 @@
       "category": "FEATURE_REQUEST",
       "createdByName": "Robert Brown",
       "assignedToName": "Alex Chen",
+      "companyName": "Enterprise Mobility Inc",
       "createdAt": "2024-01-12T16:20:00Z",
-      "updatedAt": "2024-01-14T13:30:00Z"
+      "updatedAt": "2024-01-14T13:30:00Z",
+      "commentsCount": 8,
+      "attachmentsCount": 0
     },
     {
       "id": "ticket-004",
@@ -44,8 +53,11 @@
       "priority": "MEDIUM",
       "category": "INTEGRATION_SUPPORT",
       "createdByName": "Emily Davis",
+      "companyName": "SmartConnect Systems",
       "createdAt": "2024-01-13T08:45:00Z",
-      "updatedAt": "2024-01-13T08:45:00Z"
+      "updatedAt": "2024-01-13T08:45:00Z",
+      "commentsCount": 1,
+      "attachmentsCount": 0
     },
     {
       "id": "ticket-005",
@@ -56,20 +68,11 @@
       "category": "PERFORMANCE_ISSUE",
       "createdByName": "Michael Wilson",
       "assignedToName": "Lisa Anderson",
+      "companyName": "FastTrack Logistics",
       "createdAt": "2024-01-11T14:15:00Z",
-      "updatedAt": "2024-01-15T09:20:00Z"
-    },
-    {
-      "id": "ticket-007",
-      "ticketNumber": "TK-000007",
-      "subject": "Critical: Production server down",
-      "status": "OPEN",
-      "priority": "URGENT",
-      "category": "CRITICAL_ISSUE",
-      "createdByName": "System Alert",
-      "assignedToName": "DevOps Team",
-      "createdAt": "2024-01-15T16:00:00Z",
-      "updatedAt": "2024-01-15T16:00:00Z"
+      "updatedAt": "2024-01-15T09:20:00Z",
+      "commentsCount": 12,
+      "attachmentsCount": 3
     },
     {
       "id": "ticket-006",
@@ -80,14 +83,148 @@
       "category": "ACCOUNT_ISSUE",
       "createdByName": "David Martinez",
       "assignedToName": "Tom Rodriguez",
+      "companyName": "SecureNet Solutions",
       "createdAt": "2024-01-10T11:30:00Z",
-      "updatedAt": "2024-01-12T16:45:00Z"
+      "updatedAt": "2024-01-12T16:45:00Z",
+      "commentsCount": 6,
+      "attachmentsCount": 1
+    },
+    {
+      "id": "ticket-007",
+      "ticketNumber": "TK-000007",
+      "subject": "Critical: Production server down",
+      "status": "OPEN",
+      "priority": "URGENT",
+      "category": "TECHNICAL_ISSUE",
+      "createdByName": "System Alert",
+      "assignedToName": "DevOps Team",
+      "companyName": "TechCorp Solutions",
+      "createdAt": "2024-01-15T16:00:00Z",
+      "updatedAt": "2024-01-15T16:00:00Z",
+      "commentsCount": 0,
+      "attachmentsCount": 0
+    },
+    {
+      "id": "ticket-008",
+      "ticketNumber": "TK-000008",
+      "subject": "Request for data export functionality",
+      "status": "OPEN",
+      "priority": "LOW",
+      "category": "DATA_REQUEST",
+      "createdByName": "Amanda Clark",
+      "companyName": "DataFirst Analytics",
+      "createdAt": "2024-01-14T15:30:00Z",
+      "updatedAt": "2024-01-14T15:30:00Z",
+      "commentsCount": 0,
+      "attachmentsCount": 0
+    },
+    {
+      "id": "ticket-009",
+      "ticketNumber": "TK-000009",
+      "subject": "Security audit request for API access",
+      "status": "IN_PROGRESS",
+      "priority": "HIGH",
+      "category": "SECURITY_CONCERN",
+      "createdByName": "James Thompson",
+      "assignedToName": "Security Team",
+      "companyName": "SafeGuard Inc",
+      "createdAt": "2024-01-13T11:00:00Z",
+      "updatedAt": "2024-01-15T10:00:00Z",
+      "commentsCount": 4,
+      "attachmentsCount": 2
+    },
+    {
+      "id": "ticket-010",
+      "ticketNumber": "TK-000010",
+      "subject": "GDPR compliance inquiry",
+      "status": "RESOLVED",
+      "priority": "MEDIUM",
+      "category": "COMPLIANCE_INQUIRY",
+      "createdByName": "Sophie Martin",
+      "assignedToName": "Legal Team",
+      "companyName": "EuroConnect GmbH",
+      "createdAt": "2024-01-12T09:00:00Z",
+      "updatedAt": "2024-01-14T16:00:00Z",
+      "commentsCount": 3,
+      "attachmentsCount": 1
+    },
+    {
+      "id": "ticket-011",
+      "ticketNumber": "TK-000011",
+      "subject": "General question about pricing tiers",
+      "status": "CLOSED",
+      "priority": "LOW",
+      "category": "GENERAL_INQUIRY",
+      "createdByName": "Kevin Lee",
+      "assignedToName": "Sales Team",
+      "companyName": "StartupXYZ",
+      "createdAt": "2024-01-11T08:00:00Z",
+      "updatedAt": "2024-01-11T14:00:00Z",
+      "commentsCount": 2,
+      "attachmentsCount": 0
+    },
+    {
+      "id": "ticket-012",
+      "ticketNumber": "TK-000012",
+      "subject": "Bug: Duplicate entries in inventory report",
+      "status": "OPEN",
+      "priority": "HIGH",
+      "category": "BUG_REPORT",
+      "createdByName": "Rachel Green",
+      "companyName": "TelcoMax",
+      "createdAt": "2024-01-15T13:45:00Z",
+      "updatedAt": "2024-01-15T13:45:00Z",
+      "commentsCount": 0,
+      "attachmentsCount": 1
+    },
+    {
+      "id": "ticket-013",
+      "ticketNumber": "TK-000013",
+      "subject": "Other: Partnership inquiry",
+      "status": "OPEN",
+      "priority": "MEDIUM",
+      "category": "OTHER",
+      "createdByName": "Mark Williams",
+      "companyName": "ConnectAll Partners",
+      "createdAt": "2024-01-15T11:20:00Z",
+      "updatedAt": "2024-01-15T11:20:00Z",
+      "commentsCount": 0,
+      "attachmentsCount": 0
+    },
+    {
+      "id": "ticket-014",
+      "ticketNumber": "TK-000014",
+      "subject": "Cancelled subscription refund request",
+      "status": "CANCELLED",
+      "priority": "LOW",
+      "category": "BILLING_QUESTION",
+      "createdByName": "Laura White",
+      "companyName": "MobileFirst LLC",
+      "createdAt": "2024-01-10T14:00:00Z",
+      "updatedAt": "2024-01-11T09:00:00Z",
+      "commentsCount": 1,
+      "attachmentsCount": 0
+    },
+    {
+      "id": "ticket-015",
+      "ticketNumber": "TK-000015",
+      "subject": "eSIM activation failure for multiple devices",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "category": "TECHNICAL_ISSUE",
+      "createdByName": "Chris Evans",
+      "assignedToName": "Technical Support",
+      "companyName": "DeviceCorp",
+      "createdAt": "2024-01-15T15:00:00Z",
+      "updatedAt": "2024-01-15T15:30:00Z",
+      "commentsCount": 2,
+      "attachmentsCount": 3
     }
   ],
   "totalElements": 150,
-  "totalPages": 25,
+  "totalPages": 10,
   "number": 0,
-  "size": 6,
+  "size": 15,
   "sort": {
     "sorted": false,
     "unsorted": true,
@@ -95,6 +232,6 @@
   },
   "first": true,
   "last": false,
-  "numberOfElements": 6,
+  "numberOfElements": 15,
   "empty": false
 }

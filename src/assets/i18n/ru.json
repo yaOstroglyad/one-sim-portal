@@ -984,6 +984,9 @@
     "attachments": "Вложения",
     "company": "Компания",
     "unassigned": "Не назначен",
+    "customerName": "Имя клиента",
+    "customerEmail": "Email клиента",
+    "iccid": "ICCID",
     "commentsWillBeImplemented": "Функционал комментариев будет реализован в ближайшее время",
     "attachmentsWillBeImplemented": "Функционал вложений будет реализован в ближайшее время",
     "filter": {
@@ -1042,6 +1045,9 @@
     },
     "details": {
       "title": "Детали тикета"
+    },
+    "pending": {
+      "author": "Вы (ожидает)"
     },
     "actions": {
       "createTicket": "Создать тикет",

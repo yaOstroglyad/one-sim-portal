@@ -39,6 +39,10 @@ export interface Ticket {
   closedAt?: string;
   commentsCount: number;
   attachmentsCount: number;
+  // Customer information
+  iccid?: string;
+  customerEmail?: string;
+  customerName?: string;
 }
 
 // Simplified ticket model for list views
@@ -51,8 +55,11 @@ export interface TicketListItem {
   category: TicketCategory;
   createdByName: string;
   assignedToName?: string;
+  companyName?: string;
   createdAt: string;
   updatedAt: string;
+  commentsCount?: number;
+  attachmentsCount?: number;
 }
 
 // Create ticket request
@@ -61,6 +68,9 @@ export interface CreateTicketRequest {
   description: string;
   priority: TicketPriority;
   category: TicketCategory;
+  iccid?: string;
+  customerEmail?: string;
+  customerName?: string;
 }
 
 // Update ticket request
@@ -81,6 +91,8 @@ export interface GetTicketsParams {
   status?: TicketStatus;
   priority?: TicketPriority;
   category?: TicketCategory;
+  search?: string;
+  accountId?: string;
 }
 
 // Get recent tickets parameters
@@ -114,6 +126,7 @@ export interface Comment {
   ticketId: string;
   authorId: string;
   authorName: string;
+  authorAvatar?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -140,9 +153,4 @@ export interface Attachment {
 // Upload attachment request
 export interface UploadAttachmentRequest {
   file: string; // base64 or file path in mock
-}
-
-// Update ticket status request
-export interface UpdateTicketStatusRequest {
-  status: TicketStatus;
 }

@@ -1,6 +1,6 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { DatePipe } from '@angular/common';
 import { BadgeComponent } from '@coreui/angular';
 
 import { Ticket } from '../../../models';
@@ -10,8 +10,8 @@ import { CardComponent } from '@shared';
     selector: 'app-ticket-details',
     standalone: true,
     imports: [
-        CommonModule,
         TranslateModule,
+        DatePipe,
         BadgeComponent,
         CardComponent
     ],
@@ -20,7 +20,7 @@ import { CardComponent } from '@shared';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TicketDetailsComponent {
-  @Input() ticket: Ticket;
+  ticket = input.required<Ticket>();
 
   getStatusColor(status: string): string {
     switch (status) {

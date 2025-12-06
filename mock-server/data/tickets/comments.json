@@ -7,6 +7,7 @@
       "ticketId": "ticket-001",
       "authorId": "support-001",
       "authorName": "Sarah Wilson",
+      "authorAvatar": "https://i.pravatar.cc/150?u=sarah.wilson",
       "createdAt": "2024-01-15T11:15:00Z",
       "updatedAt": "2024-01-15T11:15:00Z"
     },
@@ -17,6 +18,7 @@
       "ticketId": "ticket-001",
       "authorId": "user-001",
       "authorName": "John Doe",
+      "authorAvatar": "https://i.pravatar.cc/150?u=john.doe",
       "createdAt": "2024-01-15T12:30:00Z",
       "updatedAt": "2024-01-15T12:30:00Z"
     },
@@ -27,6 +29,7 @@
       "ticketId": "ticket-001",
       "authorId": "support-001",
       "authorName": "Sarah Wilson",
+      "authorAvatar": "https://i.pravatar.cc/150?u=sarah.wilson",
       "createdAt": "2024-01-15T13:45:00Z",
       "updatedAt": "2024-01-15T13:45:00Z"
     },
@@ -37,6 +40,7 @@
       "ticketId": "ticket-002",
       "authorId": "billing-001",
       "authorName": "Mike Johnson",
+      "authorAvatar": "https://i.pravatar.cc/150?u=mike.johnson",
       "createdAt": "2024-01-15T10:20:00Z",
       "updatedAt": "2024-01-15T10:20:00Z"
     },
@@ -47,8 +51,42 @@
       "ticketId": "ticket-002",
       "authorId": "user-002",
       "authorName": "Jane Smith",
+      "authorAvatar": null,
       "createdAt": "2024-01-15T11:45:00Z",
       "updatedAt": "2024-01-15T11:45:00Z"
+    },
+    {
+      "id": "comment-006",
+      "content": "Yes, we will issue a credit of $450 for the 150 test activations. This will be applied to your next invoice.",
+      "isInternal": false,
+      "ticketId": "ticket-002",
+      "authorId": "billing-001",
+      "authorName": "Mike Johnson",
+      "authorAvatar": "https://i.pravatar.cc/150?u=mike.johnson",
+      "createdAt": "2024-01-15T14:00:00Z",
+      "updatedAt": "2024-01-15T14:00:00Z"
+    },
+    {
+      "id": "comment-007",
+      "content": "Great news! The bulk activation feature has been added to our roadmap for Q2. We'll notify you when it's available.",
+      "isInternal": false,
+      "ticketId": "ticket-003",
+      "authorId": "product-001",
+      "authorName": "Alex Chen",
+      "authorAvatar": "https://i.pravatar.cc/150?u=alex.chen",
+      "createdAt": "2024-01-14T13:30:00Z",
+      "updatedAt": "2024-01-14T13:30:00Z"
+    },
+    {
+      "id": "comment-008",
+      "content": "We've identified the performance bottleneck. The dashboard was making redundant API calls. A fix will be deployed in the next release.",
+      "isInternal": false,
+      "ticketId": "ticket-005",
+      "authorId": "tech-001",
+      "authorName": "Lisa Anderson",
+      "authorAvatar": "https://i.pravatar.cc/150?u=lisa.anderson",
+      "createdAt": "2024-01-15T09:20:00Z",
+      "updatedAt": "2024-01-15T09:20:00Z"
     }
   ]
 }

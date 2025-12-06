@@ -1,46 +1,9 @@
 @use "sass:map";
-@use "../../../../../../scss/variables" as vars;
-@use "../../../../../../scss/mixins" as mixins;
-@use "../../../../../../scss/utilities" as utils;
+@use "variables" as vars;
 
 :host {
   display: block;
   height: 100%;
-}
-
-// Header customizations
-.os-header-sticky {
-  // Use existing header styling from shared components
-}
-
-// Table customizations
-::ng-deep generic-table {
-  // Status column styling
-  .status-column {
-    .badge {
-      font-weight: 500;
-      font-size: map.get(vars.$os-font-sizes, 'xs');
-      padding: map.get(vars.$os-spacing, '1') map.get(vars.$os-spacing, '3'); // 4px 12px
-    }
-  }
-
-  // Priority column styling
-  .priority-column {
-    .badge {
-      font-weight: 500;
-      font-size: map.get(vars.$os-font-sizes, 'xs');
-      padding: map.get(vars.$os-spacing, '1') map.get(vars.$os-spacing, '3'); // 4px 12px
-    }
-  }
-
-  // Custom table cell styling
-  td {
-    vertical-align: middle;
-
-    &.font-weight-bold {
-      font-weight: 600;
-    }
-  }
 }
 
 // Custom template content styling
@@ -64,25 +27,7 @@
 
 // Panel styling
 .tickets-panel {
-  // Panel content specific styling only
-  // Generic panel styling handled by GenericRightPanelComponent
-
   &__form {
     padding: map.get(vars.$os-spacing, '4');
-  }
-
-  &__details {
-    // Details panel specific styling
-  }
-}
-
-// Responsive adjustments
-@media (max-width: 768px) {
-  ::ng-deep generic-table {
-    // Mobile-specific table adjustments
-    .table-responsive {
-      // Allow horizontal scroll on mobile
-      overflow-x: auto;
-    }
   }
 }

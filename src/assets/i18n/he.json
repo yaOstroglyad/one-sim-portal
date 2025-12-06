@@ -845,6 +845,9 @@
     "attachments": "קבצים מצורפים",
     "company": "חברה",
     "unassigned": "לא מוקצה",
+    "customerName": "שם לקוח",
+    "customerEmail": "אימייל לקוח",
+    "iccid": "ICCID",
     "commentsWillBeImplemented": "פונקציונליות התגובות תיושם בקרוב",
     "attachmentsWillBeImplemented": "פונקציונליות הקבצים המצורפים תיושם בקרוב",
     "filter": {
@@ -878,6 +881,9 @@
       "dataRequest": "בקשת נתונים",
       "complianceInquiry": "פניית ציות",
       "other": "אחר"
+    },
+    "pending": {
+      "author": "אתה (בהמתנה)"
     },
     "overview": {
       "title": "סקירה של כרטיסי תמיכה",

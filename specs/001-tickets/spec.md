@@ -164,24 +164,52 @@ interface Ticket {
   closedAt?: string;
   commentsCount: number;
   attachmentsCount: number;
+  // Customer information (optional)
+  iccid?: string;
+  customerEmail?: string;
+  customerName?: string;
 }
 
 type TicketStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED' | 'CANCELLED';
 type TicketPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+
+interface TicketComment {
+  id: string;
+  content: string;
+  isInternal: boolean;
+  ticketId: string;
+  authorId: string;
+  authorName: string;
+  authorAvatar?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 ```
 
 ### API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/v1/tickets` | List tickets with pagination |
+| GET | `/api/v1/tickets` | List tickets with pagination and filters |
 | GET | `/api/v1/tickets/{id}` | Get ticket details |
 | POST | `/api/v1/tickets` | Create new ticket |
-| PUT | `/api/v1/tickets/{id}` | Update ticket |
-| PUT | `/api/v1/tickets/{id}/status` | Update status |
+| PATCH | `/api/v1/tickets/{id}` | Update ticket (including status) |
+| DELETE | `/api/v1/tickets/{id}` | Delete ticket |
 | GET | `/api/v1/tickets/{id}/comments` | Get comments |
 | POST | `/api/v1/tickets/{id}/comments` | Add comment |
+| GET | `/api/v1/tickets/{id}/attachments` | Get attachments |
 | POST | `/api/v1/tickets/{id}/attachments` | Upload attachment |
+| GET | `/api/v1/attachments/{id}` | Get attachment download URL |
+| GET | `/api/v1/tickets/stats` | Get ticket statistics |
+
+**Query Parameters for GET /api/v1/tickets:**
+- `page` - Page number (0-indexed)
+- `size` - Page size
+- `status` - Filter by status (comma-separated for multiple)
+- `priority` - Filter by priority (comma-separated for multiple)
+- `category` - Filter by category (comma-separated for multiple)
+- `search` - Search in subject and ticket number
+- `accountId` - Filter by account (required for admin users)
 
 ### File Structure
 
@@ -207,4 +235,4 @@ src/app/views/tickets/
 
 ---
 
-**Specification Version:** 1.0.0 | **Last Updated:** 2025-12-03
+**Specification Version:** 1.1.0 | **Last Updated:** 2025-12-06

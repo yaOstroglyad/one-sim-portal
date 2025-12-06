@@ -9,7 +9,10 @@ import {
   UpdateTicketRequest,
   TicketSearchRequest,
   PageResponse,
-  TicketStatus
+  TicketComment,
+  TicketAttachment,
+  CreateTicketCommentRequest,
+  DownloadUrlResponse
 } from '../models';
 import { CacheHubService, DataType } from '@shared/services/cache-hub';
 
@@ -95,7 +98,7 @@ export class TicketService {
   }
 
   updateTicket(id: string, request: UpdateTicketRequest): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}`, request).pipe(
+    return this.http.patch(`${this.baseUrl}/${id}`, request).pipe(
       tap(() => {
         // Invalidate tickets cache after update
         this.cacheHub.invalidate('tickets:overview');
@@ -104,13 +107,27 @@ export class TicketService {
     );
   }
 
-  updateTicketStatus(id: string, status: TicketStatus): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}/status`, { status }).pipe(
-      tap(() => {
-        // Invalidate tickets cache after status update
-        this.cacheHub.invalidate('tickets:overview');
-        this.cacheHub.invalidate('tickets:stats');
-      })
-    );
+  // Comments
+  getComments(ticketId: string): Observable<TicketComment[]> {
+    return this.http.get<TicketComment[]>(`${this.baseUrl}/${ticketId}/comments`);
+  }
+
+  addComment(ticketId: string, request: CreateTicketCommentRequest): Observable<TicketComment> {
+    return this.http.post<TicketComment>(`${this.baseUrl}/${ticketId}/comments`, request);
+  }
+
+  // Attachments
+  getAttachments(ticketId: string): Observable<TicketAttachment[]> {
+    return this.http.get<TicketAttachment[]>(`${this.baseUrl}/${ticketId}/attachments`);
+  }
+
+  uploadAttachment(ticketId: string, file: File): Observable<TicketAttachment> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<TicketAttachment>(`${this.baseUrl}/${ticketId}/attachments`, formData);
+  }
+
+  getAttachmentDownloadUrl(attachmentId: string): Observable<DownloadUrlResponse> {
+    return this.http.get<DownloadUrlResponse>(`/api-tickets/api/v1/attachments/${attachmentId}`);
   }
 }

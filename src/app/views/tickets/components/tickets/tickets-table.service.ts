@@ -45,7 +45,7 @@ export class TicketsTableService extends TableConfigAbstractService<Ticket> {
 				key: 'ticketNumber',
 				header: 'ticketNumber',
 				templateType: TemplateType.Text,
-				sortable: true,
+				sortable: false,
 				minWidth: '120px',
 				class: 'font-weight-bold'
 			},
@@ -54,7 +54,7 @@ export class TicketsTableService extends TableConfigAbstractService<Ticket> {
 				key: 'subject',
 				header: 'subject',
 				templateType: TemplateType.Text,
-				sortable: true,
+				sortable: false,
 				minWidth: '250px'
 			},
 			{
@@ -63,7 +63,7 @@ export class TicketsTableService extends TableConfigAbstractService<Ticket> {
 				header: 'status',
 				templateType: TemplateType.Custom,
 				customTemplate: () => this.statusTemplate,
-				sortable: true,
+				sortable: false,
 				minWidth: '120px',
 				class: 'text-center'
 			},
@@ -73,7 +73,7 @@ export class TicketsTableService extends TableConfigAbstractService<Ticket> {
 				header: 'priority',
 				templateType: TemplateType.Custom,
 				customTemplate: () => this.priorityTemplate,
-				sortable: true,
+				sortable: false,
 				minWidth: '100px',
 				class: 'text-center'
 			},
@@ -100,7 +100,7 @@ export class TicketsTableService extends TableConfigAbstractService<Ticket> {
 				key: 'createdByName',
 				header: 'createdBy',
 				templateType: TemplateType.Text,
-				sortable: true,
+				sortable: false,
 				minWidth: '150px'
 			},
 			{
@@ -108,7 +108,7 @@ export class TicketsTableService extends TableConfigAbstractService<Ticket> {
 				key: 'createdAt',
 				header: 'createdAt',
 				templateType: TemplateType.Date,
-				sortable: true,
+				sortable: false,
 				minWidth: '140px'
 			},
 			{
@@ -116,7 +116,7 @@ export class TicketsTableService extends TableConfigAbstractService<Ticket> {
 				key: 'companyName',
 				header: 'company',
 				templateType: TemplateType.Text,
-				sortable: true,
+				sortable: false,
 				minWidth: '180px'
 			},
 			{

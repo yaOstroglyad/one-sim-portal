@@ -84,19 +84,26 @@
   &--circle {
     border-radius: map.get(vars.$os-border-radius, 'full') !important;
 
-    .user-avatar__image {
+    .user-avatar__image,
+    .user-avatar__fallback {
       border-radius: map.get(vars.$os-border-radius, 'full');
     }
   }
 
   &--rounded {
-    // Uses default border-radius from size variants
+    border-radius: map.get(vars.$os-border-radius, 'medium') !important;
+
+    .user-avatar__image,
+    .user-avatar__fallback {
+      border-radius: map.get(vars.$os-border-radius, 'medium');
+    }
   }
 
   &--square {
     border-radius: 0 !important;
 
-    .user-avatar__image {
+    .user-avatar__image,
+    .user-avatar__fallback {
       border-radius: 0;
     }
   }

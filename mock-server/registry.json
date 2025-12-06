@@ -6,7 +6,7 @@
     },
     "TicketsDataService": {
       "mocked": true,
-      "endpoints": ["getTickets", "createTicket", "getTicketById", "updateTicket", "deleteTicket", "getRecentTickets", "getTicketCount", "getAllCompanyTickets", "getTicketComments", "addComment", "getTicketAttachments", "uploadAttachment"]
+      "endpoints": ["getTickets", "createTicket", "getTicketById", "updateTicket", "deleteTicket", "getRecentTickets", "getTicketCount", "getTicketStats", "getAllCompanyTickets", "getTicketComments", "addComment", "getTicketAttachments", "uploadAttachment"]
     }
   },
   "endpoints": [
@@ -41,6 +41,24 @@
       "handler": "tickets/create"
     },
     {
+      "path": "/api/v1/tickets/:id",
+      "method": "GET",
+      "service": "TicketsDataService",
+      "handler": "tickets/details"
+    },
+    {
+      "path": "/api/v1/tickets/:id",
+      "method": "PATCH",
+      "service": "TicketsDataService",
+      "handler": "tickets/update"
+    },
+    {
+      "path": "/api/v1/tickets/:id",
+      "method": "DELETE",
+      "service": "TicketsDataService",
+      "handler": "tickets/delete"
+    },
+    {
       "path": "/api/v1/tickets/recent",
       "method": "GET",
       "service": "TicketsDataService",
@@ -53,10 +71,40 @@
       "handler": "tickets/count"
     },
     {
+      "path": "/api/v1/tickets/stats",
+      "method": "GET",
+      "service": "TicketsDataService",
+      "handler": "tickets/stats"
+    },
+    {
       "path": "/api/v1/tickets/all",
       "method": "GET",
       "service": "TicketsDataService",
       "handler": "tickets/all-company"
+    },
+    {
+      "path": "/api/v1/tickets/:ticketId/comments",
+      "method": "GET",
+      "service": "TicketsDataService",
+      "handler": "tickets/comments"
+    },
+    {
+      "path": "/api/v1/tickets/:ticketId/comments",
+      "method": "POST",
+      "service": "TicketsDataService",
+      "handler": "tickets/add-comment"
+    },
+    {
+      "path": "/api/v1/tickets/:ticketId/attachments",
+      "method": "GET",
+      "service": "TicketsDataService",
+      "handler": "tickets/attachments"
+    },
+    {
+      "path": "/api/v1/tickets/:ticketId/attachments",
+      "method": "POST",
+      "service": "TicketsDataService",
+      "handler": "tickets/upload-attachment"
     }
   ]
 }

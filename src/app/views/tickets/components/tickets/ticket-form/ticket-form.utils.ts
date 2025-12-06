@@ -6,27 +6,31 @@ import { Ticket, CreateTicketRequest, UpdateTicketRequest, TicketPriority, Ticke
 export function getTicketFormConfig(
   ticket: Ticket | null = null
 ): FormConfig {
+  const isEditMode = !!ticket;
+
   return {
     fields: [
       {
         name: 'subject',
         type: FieldType.text,
         label: 'tickets.form.subject',
-        validators: [Validators.required, Validators.maxLength(200)],
+        validators: isEditMode
+          ? [Validators.maxLength(200)]
+          : [Validators.required, Validators.minLength(3), Validators.maxLength(200)],
         placeholder: 'tickets.form.subjectPlaceholder'
       },
       {
         name: 'description',
         type: FieldType.textarea,
         label: 'tickets.form.description',
-        validators: [Validators.required],
+        validators: [Validators.maxLength(5000)],
         placeholder: 'tickets.form.descriptionPlaceholder'
       },
       {
         name: 'category',
         type: FieldType.select,
         label: 'tickets.form.category',
-        validators: [Validators.required],
+        validators: isEditMode ? [] : [Validators.required],
         options: getCategoryOptions(),
         placeholder: 'tickets.form.selectCategory'
       },
@@ -34,16 +38,16 @@ export function getTicketFormConfig(
         name: 'priority',
         type: FieldType.select,
         label: 'tickets.form.priority',
-        validators: [Validators.required],
+        validators: isEditMode ? [] : [Validators.required],
         options: getPriorityOptions(),
         placeholder: 'tickets.form.selectPriority'
       },
       // Add status field conditionally for edit mode
-      ...(ticket ? [{
+      ...(isEditMode ? [{
         name: 'status',
         type: FieldType.select,
         label: 'tickets.form.status',
-        validators: [Validators.required],
+        validators: [],
         options: getStatusOptions(),
         placeholder: 'tickets.form.selectStatus'
       }] : [])

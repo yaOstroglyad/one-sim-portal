@@ -6,7 +6,6 @@ import {
   signal,
   computed
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarVariant = 'circle' | 'rounded' | 'square';
@@ -40,7 +39,7 @@ export type AvatarVariant = 'circle' | 'rounded' | 'square';
 @Component({
   selector: 'app-user-avatar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <button
@@ -48,16 +47,19 @@ export type AvatarVariant = 'circle' | 'rounded' | 'square';
       [class]="avatarClasses()"
       [disabled]="disabled()"
       [attr.aria-label]="ariaLabel()"
-      (click)="handleClick($event)"
-      (error)="onImageError($event)">
-      <img
-        class="user-avatar__image"
-        [src]="src()"
-        [alt]="alt()"
-        (error)="onImageError($event)">
-      <div class="user-avatar__fallback" *ngIf="showFallback()">
-        {{ initials() }}
-      </div>
+      (click)="handleClick($event)">
+      @if (hasValidSrc() && !showFallback()) {
+        <img
+          class="user-avatar__image"
+          [src]="src()"
+          [alt]="alt()"
+          (error)="onImageError($event)">
+      }
+      @if (!hasValidSrc() || showFallback()) {
+        <div class="user-avatar__fallback">
+          {{ initials() }}
+        </div>
+      }
     </button>
   `,
   styleUrls: ['./user-avatar.component.scss']
@@ -122,6 +124,14 @@ export class UserAvatarComponent {
    * Track if fallback should be shown
    */
   readonly showFallback = signal(false);
+
+  /**
+   * Check if src is valid (not empty/null/undefined)
+   */
+  readonly hasValidSrc = computed(() => {
+    const srcValue = this.src();
+    return srcValue !== null && srcValue !== undefined && srcValue.trim() !== '';
+  });
 
   /**
    * Computed CSS classes based on inputs

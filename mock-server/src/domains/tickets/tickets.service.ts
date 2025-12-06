@@ -4,7 +4,6 @@ import { PaginatedResponse, ServiceError } from '../../types';
 import {
   Ticket,
   TicketListItem,
-  TicketStatus,
   CreateTicketRequest,
   UpdateTicketRequest,
   GetTicketsParams,
@@ -68,15 +67,36 @@ export class TicketsService {
     
     // Apply filters
     if (params.status) {
-      filteredContent = filteredContent.filter(t => t.status === params.status);
+      // Support comma-separated values for multiple statuses
+      const statuses = params.status.toString().split(',');
+      filteredContent = filteredContent.filter(t => statuses.includes(t.status));
     }
-    
+
     if (params.priority) {
-      filteredContent = filteredContent.filter(t => t.priority === params.priority);
+      // Support comma-separated values for multiple priorities
+      const priorities = params.priority.toString().split(',');
+      filteredContent = filteredContent.filter(t => priorities.includes(t.priority));
     }
-    
+
     if (params.category) {
-      filteredContent = filteredContent.filter(t => t.category === params.category);
+      // Support comma-separated values for multiple categories
+      const categories = params.category.toString().split(',');
+      filteredContent = filteredContent.filter(t => categories.includes(t.category));
+    }
+
+    // Search filter - search in subject and ticketNumber
+    if (params.search) {
+      const searchLower = params.search.toLowerCase();
+      filteredContent = filteredContent.filter(t =>
+        t.subject.toLowerCase().includes(searchLower) ||
+        t.ticketNumber.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Account filter - in mock we just log it, real implementation would filter by accountId
+    if (params.accountId) {
+      console.log('[MOCK] Filtering by accountId:', params.accountId);
+      // For mock purposes, we return all tickets as we don't have accountId in list data
     }
     
     // Apply pagination after filtering
@@ -117,9 +137,13 @@ export class TicketsService {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       commentsCount: 0,
-      attachmentsCount: 0
+      attachmentsCount: 0,
+      // Customer information
+      iccid: ticketData.iccid,
+      customerEmail: ticketData.customerEmail,
+      customerName: ticketData.customerName
     };
-    
+
     console.log('[MOCK] Created ticket:', newTicket);
     return newTicket;
   }
@@ -150,22 +174,6 @@ export class TicketsService {
     };
 
     console.log('[MOCK] Updated ticket:', updatedTicket);
-    return updatedTicket;
-  }
-
-  // PUT /api/v1/tickets/{id}/status - Update ticket status only
-  public updateTicketStatus(id: string, status: TicketStatus): Ticket {
-    const ticket = this.getTicketById(id); // This will throw if not found
-
-    const updatedTicket: Ticket = {
-      ...ticket,
-      status,
-      updatedAt: new Date().toISOString(),
-      resolvedAt: status === 'RESOLVED' ? new Date().toISOString() : ticket.resolvedAt,
-      closedAt: status === 'CLOSED' ? new Date().toISOString() : ticket.closedAt
-    };
-
-    console.log('[MOCK] Updated ticket status:', { id, status });
     return updatedTicket;
   }
 
@@ -209,18 +217,19 @@ export class TicketsService {
   public addComment(ticketId: string, commentData: CreateCommentRequest): Comment {
     // Verify ticket exists
     this.getTicketById(ticketId);
-    
+
     const newComment: Comment = {
       id: `comment-${Date.now()}`,
       content: commentData.content,
-      isInternal: commentData.isInternal,
+      isInternal: commentData.isInternal || false,
       ticketId: ticketId,
       authorId: 'user-mock-123',
       authorName: 'Mock User',
+      authorAvatar: undefined, // No avatar for mock user
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
-    
+
     console.log('[MOCK] Added comment:', newComment);
     return newComment;
   }

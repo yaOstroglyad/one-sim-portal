@@ -734,6 +734,9 @@
     "attachments": "Вкладення",
     "company": "Компанія",
     "unassigned": "Не призначено",
+    "customerName": "Ім'я клієнта",
+    "customerEmail": "Email клієнта",
+    "iccid": "ICCID",
     "commentsWillBeImplemented": "Функціонал коментарів буде реалізований найближчим часом",
     "attachmentsWillBeImplemented": "Функціонал вкладень буде реалізований найближчим часом",
     "filter": {
@@ -792,6 +795,9 @@
     },
     "details": {
       "title": "Деталі квитка"
+    },
+    "pending": {
+      "author": "Ви (очікує)"
     },
     "actions": {
       "createTicket": "Створити квиток",

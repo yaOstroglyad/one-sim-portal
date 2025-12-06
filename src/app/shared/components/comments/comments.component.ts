@@ -10,10 +10,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { ButtonDirective, AvatarComponent } from '@coreui/angular';
+import { ButtonDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 
 import { Comment, CommentsConfiguration, CreateCommentRequest } from '../../models';
+import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 
 @Component({
 	standalone: true,
@@ -23,7 +24,7 @@ import { Comment, CommentsConfiguration, CreateCommentRequest } from '../../mode
 		ReactiveFormsModule,
 		TranslateModule,
 		ButtonDirective,
-		AvatarComponent,
+		UserAvatarComponent,
 		IconDirective
 	],
 	templateUrl: './comments.component.html',

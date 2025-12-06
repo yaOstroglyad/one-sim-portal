@@ -19,6 +19,10 @@ export interface Ticket {
   closedAt?: string;
   commentsCount: number;
   attachmentsCount: number;
+  // Customer information
+  iccid?: string;
+  customerEmail?: string;
+  customerName?: string;
 }
 
 export type TicketStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED' | 'CANCELLED';
@@ -43,6 +47,9 @@ export interface CreateTicketRequest {
   description: string;
   priority: TicketPriority;
   category: TicketCategory;
+  iccid?: string;
+  customerEmail?: string;
+  customerName?: string;
 }
 
 export interface UpdateTicketRequest {
@@ -52,5 +59,41 @@ export interface UpdateTicketRequest {
   assignedToId?: string;
   subject?: string;
   description?: string;
+}
+
+// Comment from API
+export interface TicketComment {
+  id: string;
+  content: string;
+  isInternal: boolean;
+  ticketId: string;
+  authorId: string;
+  authorName: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Attachment from API
+export interface TicketAttachment {
+  id: string;
+  filename: string;
+  size: number;
+  contentType: string;
+  ticketId: string;
+  uploadedById: string;
+  uploadedByName: string;
+  uploadedAt: string;
+  s3Key: string;
+}
+
+// Create Comment Request
+export interface CreateTicketCommentRequest {
+  content: string;
+  isInternal?: boolean;
+}
+
+// Download URL Response
+export interface DownloadUrlResponse {
+  url: string;
 }
 

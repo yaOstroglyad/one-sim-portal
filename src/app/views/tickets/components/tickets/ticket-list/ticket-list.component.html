@@ -1,10 +1,11 @@
-<!-- Account Selector (только для админов) -->
-<app-account-selector *ngIf="isAdmin"
-                      [helperText]="'COMMON.select_account_hint_message'"
+<!-- Account Selector (only for admins) -->
+@if (isAdmin()) {
+<app-account-selector [helperText]="'COMMON.select_account_hint_message'"
                       [defaultAccountName]="'only-sim'"
-                      [preSelectedAccountId]="selectedAccountId"
+                      [preSelectedAccountId]="selectedAccountId()"
                       (accountSelected)="onAccountSelected($event)">
 </app-account-selector>
+}
 
 <app-header class="os-header-sticky"
             [formGroup]="filterForm"
@@ -83,12 +84,11 @@
 <ng-template #assigneeTemplate let-data='context'>
     <td>
         <div class="assignee-info">
-            <span *ngIf="data.assignedToName; else unassigned" class="assignee-name">
-                {{ data.assignedToName }}
-            </span>
-            <ng-template #unassigned>
+            @if (data.assignedToName) {
+                <span class="assignee-name">{{ data.assignedToName }}</span>
+            } @else {
                 <span class="text-muted">{{ 'tickets.unassigned' | translate }}</span>
-            </ng-template>
+            }
         </div>
     </td>
 </ng-template>
@@ -107,42 +107,45 @@
             <span>{{ 'common.edit' | translate }}</span>
         </button>
         <mat-divider></mat-divider>
-        <button mat-menu-item
-                (click)="onStatusChange(item, 'IN_PROGRESS')"
-                *ngIf="item.status === 'OPEN'">
-            <mat-icon>play_arrow</mat-icon>
-            <span>{{ 'tickets.actions.startProgress' | translate }}</span>
-        </button>
-        <button mat-menu-item
-                (click)="onStatusChange(item, 'RESOLVED')"
-                *ngIf="item.status === 'IN_PROGRESS'">
-            <mat-icon>check_circle</mat-icon>
-            <span>{{ 'tickets.actions.markResolved' | translate }}</span>
-        </button>
-        <button mat-menu-item
-                (click)="onStatusChange(item, 'CLOSED')"
-                *ngIf="item.status === 'RESOLVED'">
-            <mat-icon>archive</mat-icon>
-            <span>{{ 'tickets.actions.closeTicket' | translate }}</span>
-        </button>
+        @if (item.status === 'OPEN') {
+            <button mat-menu-item (click)="onStatusChange(item, 'IN_PROGRESS')">
+                <mat-icon>play_arrow</mat-icon>
+                <span>{{ 'tickets.actions.startProgress' | translate }}</span>
+            </button>
+        }
+        @if (item.status === 'IN_PROGRESS') {
+            <button mat-menu-item (click)="onStatusChange(item, 'RESOLVED')">
+                <mat-icon>check_circle</mat-icon>
+                <span>{{ 'tickets.actions.markResolved' | translate }}</span>
+            </button>
+        }
+        @if (item.status === 'RESOLVED') {
+            <button mat-menu-item (click)="onStatusChange(item, 'CLOSED')">
+                <mat-icon>archive</mat-icon>
+                <span>{{ 'tickets.actions.closeTicket' | translate }}</span>
+            </button>
+        }
     </mat-menu>
 </ng-template>
 
 <!-- Create Panel -->
+@if (showCreatePanel()) {
 <app-generic-right-panel
-  *ngIf="showCreatePanel"
   title="{{ 'tickets.create.title' | translate }}"
   subtitle="{{ 'tickets.create.subtitle' | translate }}"
-  [isOpen]="showCreatePanel"
+  [isOpen]="true"
   [hasFooter]="true"
+  [resizable]="true"
+  [defaultWidth]="600"
+  [maxWidth]="900"
   (close)="onPanelClose()">
 
   <div panel-content>
-    <app-ticket-form
-      #createForm
+    <app-ticket-edit-wrapper
+      #createWrapper
       [ticket]="null"
       (save)="onTicketSaved()">
-    </app-ticket-form>
+    </app-ticket-edit-wrapper>
   </div>
 
   <ng-container panel-actions>
@@ -155,30 +158,48 @@
     <button
       type="button"
       class="btn btn-primary"
-      (click)="createForm.onSubmit()"
-      [disabled]="createForm.loading || createForm.isFormInvalid">
-      <span *ngIf="createForm.loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      (click)="createWrapper.onSubmit()"
+      [disabled]="createWrapper.isLoading() || createWrapper.isInvalid()">
+      @if (createWrapper.isLoading()) {
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      }
       {{ 'tickets.create.createTicket' | translate }}
     </button>
   </ng-container>
 
 </app-generic-right-panel>
+}
 
 <!-- Edit Panel -->
+@if (showEditPanel()) {
 <app-generic-right-panel
-  *ngIf="showEditPanel && selectedTicket"
   title="{{ 'tickets.edit.title' | translate }}"
   subtitle="{{ 'tickets.edit.subtitle' | translate }}"
-  [isOpen]="showEditPanel"
-  [hasFooter]="true"
+  [isOpen]="true"
+  [hasFooter]="!editLoading() && !!selectedTicket()"
+  [resizable]="true"
+  [defaultWidth]="600"
+  [maxWidth]="900"
   (close)="onPanelClose()">
 
   <div panel-content>
-    <app-ticket-form
-      #editForm
-      [ticket]="selectedTicket"
-      (save)="onTicketSaved()">
-    </app-ticket-form>
+    <!-- Loading state -->
+    @if (editLoading()) {
+      <div class="d-flex justify-content-center align-items-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    }
+
+    <!-- Edit wrapper with form + comments + attachments -->
+    @if (!editLoading() && selectedTicket()) {
+      <app-ticket-edit-wrapper
+        #editWrapper
+        [ticket]="selectedTicket()"
+        (save)="onTicketSaved()">
+      </app-ticket-edit-wrapper>
+    }
   </div>
 
   <ng-container panel-actions>
@@ -191,20 +212,23 @@
     <button
       type="button"
       class="btn btn-primary"
-      (click)="editForm.onSubmit()"
-      [disabled]="editForm.loading || editForm.isFormInvalid">
-      <span *ngIf="editForm.loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      (click)="editWrapperComponent?.onSubmit()"
+      [disabled]="!editWrapperComponent || editWrapperComponent.isLoading() || editWrapperComponent.isInvalid()">
+      @if (editWrapperComponent?.isLoading()) {
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      }
       {{ 'tickets.edit.updateTicket' | translate }}
     </button>
   </ng-container>
 
 </app-generic-right-panel>
+}
 
 <!-- Details Panel -->
+@if (showDetailsPanel()) {
 <app-generic-right-panel
-  *ngIf="showDetailsPanel && selectedTicketDetails"
   title="{{ 'tickets.details.title' | translate }}"
-  [isOpen]="showDetailsPanel"
+  [isOpen]="true"
   [actions]="detailsPanelActions"
   [resizable]="true"
   [defaultWidth]="600"
@@ -212,7 +236,20 @@
   (close)="onPanelClose()">
 
   <div panel-content>
-    <app-ticket-details-wrapper [ticket]="selectedTicketDetails"></app-ticket-details-wrapper>
+    <!-- Loading state -->
+    @if (detailsLoading()) {
+      <div class="d-flex justify-content-center align-items-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    }
+
+    <!-- Details when loaded -->
+    @if (!detailsLoading() && selectedTicketDetails(); as ticketDetails) {
+      <app-ticket-details-wrapper [ticket]="ticketDetails"></app-ticket-details-wrapper>
+    }
   </div>
 
 </app-generic-right-panel>
+}

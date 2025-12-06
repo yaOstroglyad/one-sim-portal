@@ -1,52 +1,46 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 import { Ticket } from '../models';
+
+export interface TicketEvent<T = any> {
+  data: T;
+  timestamp: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class TicketEventService {
-  // Event emitted when a new ticket is created
-  private ticketCreatedSource = new Subject<Ticket>();
-  ticketCreated$ = this.ticketCreatedSource.asObservable();
+  // Signal-based events
+  private ticketCreatedSignal = signal<TicketEvent<Ticket> | null>(null);
+  private ticketUpdatedSignal = signal<TicketEvent<Ticket> | null>(null);
+  private applyFiltersSignal = signal<TicketEvent<any> | null>(null);
+  private refreshListSignal = signal<number>(0);
 
-  // Event emitted when a ticket is updated
-  private ticketUpdatedSource = new Subject<Ticket>();
-  ticketUpdated$ = this.ticketUpdatedSource.asObservable();
-
-  // Event emitted when filters should be applied
-  private applyFiltersSource = new Subject<any>();
-  applyFilters$ = this.applyFiltersSource.asObservable();
-
-  // Event emitted to refresh ticket list
-  private refreshListSource = new Subject<void>();
-  refreshList$ = this.refreshListSource.asObservable();
-
-  constructor() {}
+  // Public readonly signals
+  readonly ticketCreated = this.ticketCreatedSignal.asReadonly();
+  readonly ticketUpdated = this.ticketUpdatedSignal.asReadonly();
+  readonly applyFilters = this.applyFiltersSignal.asReadonly();
+  readonly refreshListTrigger = this.refreshListSignal.asReadonly();
 
   // Emit when a new ticket is created
   emitTicketCreated(ticket: Ticket): void {
-    console.log('[TicketEventService] Ticket created:', ticket);
-    this.ticketCreatedSource.next(ticket);
-    this.refreshListSource.next(); // Also trigger list refresh
+    this.ticketCreatedSignal.set({ data: ticket, timestamp: Date.now() });
+    this.emitRefreshList();
   }
 
   // Emit when a ticket is updated
   emitTicketUpdated(ticket: Ticket): void {
-    console.log('[TicketEventService] Ticket updated:', ticket);
-    this.ticketUpdatedSource.next(ticket);
-    this.refreshListSource.next(); // Also trigger list refresh
+    this.ticketUpdatedSignal.set({ data: ticket, timestamp: Date.now() });
+    this.emitRefreshList();
   }
 
   // Apply filters from external sources (like quick actions)
   emitApplyFilters(filters: any): void {
-    console.log('[TicketEventService] Apply filters:', filters);
-    this.applyFiltersSource.next(filters);
+    this.applyFiltersSignal.set({ data: filters, timestamp: Date.now() });
   }
 
   // Request list refresh
   emitRefreshList(): void {
-    console.log('[TicketEventService] Refresh list requested');
-    this.refreshListSource.next();
+    this.refreshListSignal.update(v => v + 1);
   }
 }

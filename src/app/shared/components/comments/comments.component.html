@@ -8,12 +8,14 @@
   <div class="comments-list" *ngIf="!loading && comments.length > 0; else noComments">
     <div class="comment" *ngFor="let comment of comments; trackBy: trackByCommentId">
       <div class="comment-avatar">
-        <c-avatar 
-          [src]="comment.authorAvatar" 
-          [textContent]="getAuthorInitials(comment.authorName)"
-          shape="rounded"
-          size="md">
-        </c-avatar>
+        <app-user-avatar
+          [src]="comment.authorAvatar"
+          [initials]="getAuthorInitials(comment.authorName)"
+          [alt]="comment.authorName"
+          variant="circle"
+          size="md"
+          [clickable]="false">
+        </app-user-avatar>
       </div>
       
       <div class="comment-content">

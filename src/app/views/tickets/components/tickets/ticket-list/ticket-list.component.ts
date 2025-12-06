@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, signal, effect, inject } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -20,7 +19,7 @@ import {
   ADMIN_PERMISSION
 } from '@shared';
 import { TicketDetailsWrapperComponent } from '../ticket-details-wrapper/ticket-details-wrapper.component';
-import { TicketFormComponent } from '../ticket-form/ticket-form.component';
+import { TicketEditWrapperComponent } from '../ticket-edit-wrapper/ticket-edit-wrapper.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -38,13 +37,12 @@ import { AccountSelectorComponent } from '@shared/components/account-selector/ac
     selector: 'app-ticket-list',
     standalone: true,
     imports: [
-        CommonModule,
         RouterModule,
         ReactiveFormsModule,
         TranslateModule,
         GenericRightPanelComponent,
         TicketDetailsWrapperComponent,
-        TicketFormComponent,
+        TicketEditWrapperComponent,
         GenericTableComponent,
         HeaderComponent,
         MatMenuModule,
@@ -68,21 +66,35 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('priorityTemplate', { static: true }) priorityTemplate: TemplateRef<any>;
   @ViewChild('categoryTemplate', { static: true }) categoryTemplate: TemplateRef<any>;
   @ViewChild('assigneeTemplate', { static: true }) assigneeTemplate: TemplateRef<any>;
+  @ViewChild('editWrapper') editWrapperComponent: TicketEditWrapperComponent;
 
+  // Services
+  private ticketService = inject(TicketService);
+  private tableService = inject(TicketsTableService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private ticketEventService = inject(TicketEventService);
+  private authService = inject(AuthService);
+
+  // Observable for GenericTable compatibility
   tickets$: Observable<Ticket[]>;
   tableConfig$: BehaviorSubject<TableConfig>;
   filterForm: FormGroup;
-  loading = true;
-  error = false;
+
+  // State signals
+  loading = signal(true);
+  error = signal(false);
 
   private unsubscribe$ = new Subject<void>();
 
-  // Panel states
-  showCreatePanel = false;
-  showEditPanel = false;
-  showDetailsPanel = false;
-  selectedTicket: Ticket | null = null;
-  selectedTicketDetails: Ticket | null = null;
+  // Panel states as signals
+  showCreatePanel = signal(false);
+  showEditPanel = signal(false);
+  showDetailsPanel = signal(false);
+  selectedTicket = signal<Ticket | null>(null);
+  selectedTicketDetails = signal<Ticket | null>(null);
+  editLoading = signal(false);
+  detailsLoading = signal(false);
 
   // Panel actions
   detailsPanelActions: PanelAction[] = [];
@@ -97,22 +109,14 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   prioritySelectConfig: SearchableSelectConfig;
   categorySelectConfig: SearchableSelectConfig;
 
-  // Account selector properties
-  isAdmin = false;
-  selectedAccountId: string | null = null;
+  // Account selector properties as signals
+  isAdmin = signal(false);
+  selectedAccountId = signal<string | null>(null);
 
-  // Sort state
-  currentSort: { column: string; direction: 'asc' | 'desc' } | null = null;
+  // Sort state as signal
+  currentSort = signal<{ column: string; direction: 'asc' | 'desc' } | null>(null);
 
-  constructor(
-    private ticketService: TicketService,
-    private tableService: TicketsTableService,
-    private cdr: ChangeDetectorRef,
-    private route: ActivatedRoute,
-    private router: Router,
-    private ticketEventService: TicketEventService,
-    private authService: AuthService
-  ) {
+  constructor() {
     // Initialize form
     this.filterForm = new FormGroup({
       status: new FormControl([]),
@@ -135,6 +139,20 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Initialize searchable-select configurations
     this.initializeSelectConfigurations();
+
+    // Effects for signal-based event service
+    this.setupEventEffects();
+  }
+
+  private setupEventEffects(): void {
+    // Effect for applyFilters
+    effect(() => {
+      const filtersEvent = this.ticketEventService.applyFilters();
+      if (filtersEvent) {
+        this.filterForm.patchValue(filtersEvent.data);
+        this.filterForm.markAsDirty();
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -145,19 +163,13 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     // Setup filters first
     this.setupFilters();
 
-    // Subscribe to ticket events
-    this.subscribeToTicketEvents();
-
     // Then check for query parameters from quick actions
     this.route.queryParams.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
-      console.log('[TicketList] Query params received:', params);
-
       let filtersApplied = false;
 
       // Handle accountId from overview navigation
-      if (params['accountId'] && this.isAdmin) {
-        console.log('[TicketList] Setting account from query params:', params['accountId']);
-        this.selectedAccountId = params['accountId'];
+      if (params['accountId'] && this.isAdmin()) {
+        this.selectedAccountId.set(params['accountId']);
         filtersApplied = true;
       }
 
@@ -171,19 +183,14 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
       if (params['assignedToMe'] === 'true') {
         // TODO: Add assignedTo filter when user context is available
-        console.log('[TicketList] Filter by assigned to current user');
         filtersApplied = true;
       }
 
       // Mark form as dirty to enable reset button
       if (filtersApplied) {
         this.filterForm.markAsDirty();
-        // Trigger data load with filters
-        this.loadData();
-      } else {
-        // Load data without filters
-        this.loadData();
       }
+      this.loadData();
     });
   }
 
@@ -203,21 +210,21 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private checkPermissions(): void {
-    this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+    this.isAdmin.set(this.authService.hasPermission(ADMIN_PERMISSION));
   }
 
   private initializeAccount(): void {
-    if (!this.isAdmin) {
-      // Для не-админов используем аккаунт из loggedUser
+    if (!this.isAdmin()) {
+      // For non-admin users, use account from loggedUser
       const loggedUser = this.authService.loggedUser;
       if (loggedUser?.accountId) {
-        this.selectedAccountId = loggedUser.accountId;
+        this.selectedAccountId.set(loggedUser.accountId);
       }
     }
   }
 
   public onAccountSelected(account: Account): void {
-    this.selectedAccountId = account.id;
+    this.selectedAccountId.set(account.id);
     this.loadData();
   }
 
@@ -307,23 +314,23 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   } = { page: 0, size: 15 }): void {
 
     // Don't load data if admin hasn't selected an account yet
-    if (this.isAdmin && !this.selectedAccountId) {
-      console.log('[TicketList] Admin without account selected - skipping data loading');
+    if (this.isAdmin() && !this.selectedAccountId()) {
       return;
     }
 
+    const currentSort = this.currentSort();
     const searchRequest: TicketSearchRequest = {
       searchParams: {
         status: params.status || undefined,
         priority: params.priority || undefined,
         category: params.category || undefined,
         search: params.search || undefined,
-        accountId: this.selectedAccountId || undefined
+        accountId: this.selectedAccountId() || undefined
       },
       page: {
         page: params.page,
         size: params.size,
-        sort: this.currentSort ? [`${this.currentSort.column},${this.currentSort.direction}`] : undefined
+        sort: currentSort ? [`${currentSort.column},${currentSort.direction}`] : undefined
       }
     };
 
@@ -334,16 +341,14 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.tableService.updateConfigData(data?.totalPages || 15);
           this.tableConfig$ = this.tableService.getTableConfig();
           this.tickets$ = of(data.content);
-          this.loading = false;
-          this.error = false;
-          this.cdr.detectChanges();
+          this.loading.set(false);
+          this.error.set(false);
         },
         error: (error) => {
           console.error('Error loading tickets:', error);
-          this.loading = false;
-          this.error = true;
+          this.loading.set(false);
+          this.error.set(true);
           this.tickets$ = of([]);
-          this.cdr.detectChanges();
         }
       });
   }
@@ -360,42 +365,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
       queryParams: {}
     });
     this.loadData();
-  }
-
-  private subscribeToTicketEvents(): void {
-    // Listen for ticket creation
-    this.ticketEventService.ticketCreated$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        console.log('[TicketList] New ticket created, refreshing list');
-        this.loadData();
-        // Show success message or highlight new row
-      });
-
-    // Listen for ticket updates
-    this.ticketEventService.ticketUpdated$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        console.log('[TicketList] Ticket updated, refreshing list');
-        this.loadData();
-      });
-
-    // Listen for refresh requests
-    this.ticketEventService.refreshList$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        console.log('[TicketList] Refresh requested');
-        this.loadData();
-      });
-
-    // Listen for filter changes from external sources
-    this.ticketEventService.applyFilters$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(filters => {
-        console.log('[TicketList] External filters received:', filters);
-        this.filterForm.patchValue(filters);
-        this.filterForm.markAsDirty();
-      });
   }
 
   applyFilter(): void {
@@ -424,9 +393,8 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSortChange(sortEvent: { column: string; direction: 'asc' | 'desc' }): void {
-    console.log('[TicketList] Sort changed:', sortEvent);
-    this.currentSort = sortEvent;
-    this.applyFilter(); // Reload data with new sort
+    this.currentSort.set(sortEvent);
+    this.applyFilter();
   }
 
   onColumnSelectionChanged(selectedColumns: Set<string>): void {
@@ -445,45 +413,70 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onCreateNew(): void {
-    this.selectedTicket = null;
-    this.showCreatePanel = true;
+    this.selectedTicket.set(null);
+    this.showCreatePanel.set(true);
   }
 
   onViewDetails(ticket: Ticket): void {
-    this.selectedTicket = ticket;
-    // Show panel immediately with basic data
-    this.selectedTicketDetails = ticket;
-    this.showDetailsPanel = true;
+    // Show panel with loading state
+    this.detailsLoading.set(true);
+    this.showDetailsPanel.set(true);
+    this.selectedTicketDetails.set(null);
 
-    // Then load detailed data if needed
-    this.ticketService.getTicket(ticket.id).subscribe({
-      next: (ticketDetails) => {
-        this.selectedTicketDetails = ticketDetails;
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error loading ticket details:', error);
-        // Keep the panel open with basic data even if detailed loading fails
-      }
-    });
+    // Load full ticket details
+    this.ticketService.getTicket(ticket.id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (ticketDetails) => {
+          this.selectedTicketDetails.set(ticketDetails);
+          this.detailsLoading.set(false);
+        },
+        error: (error) => {
+          console.error('Error loading ticket details:', error);
+          this.detailsLoading.set(false);
+          this.showDetailsPanel.set(false);
+        }
+      });
   }
 
   onEdit(ticket: Ticket): void {
-    this.selectedTicket = ticket;
-    this.showEditPanel = true;
+    // Show panel with loading state
+    this.editLoading.set(true);
+    this.showEditPanel.set(true);
+    this.selectedTicket.set(null);
+
+    // Load full ticket details before editing
+    this.ticketService.getTicket(ticket.id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (ticketDetails) => {
+          this.selectedTicket.set(ticketDetails);
+          this.editLoading.set(false);
+        },
+        error: (error) => {
+          console.error('Error loading ticket details for edit:', error);
+          this.editLoading.set(false);
+          this.showEditPanel.set(false);
+        }
+      });
   }
 
   onEditFromDetails(): void {
-    this.showDetailsPanel = false;
-    this.showEditPanel = true;
+    // Use already loaded details from the details panel
+    const details = this.selectedTicketDetails();
+    if (details) {
+      this.selectedTicket.set(details);
+    }
+    this.showDetailsPanel.set(false);
+    this.showEditPanel.set(true);
   }
 
   onPanelClose(): void {
-    this.showCreatePanel = false;
-    this.showEditPanel = false;
-    this.showDetailsPanel = false;
-    this.selectedTicket = null;
-    this.selectedTicketDetails = null;
+    this.showCreatePanel.set(false);
+    this.showEditPanel.set(false);
+    this.showDetailsPanel.set(false);
+    this.selectedTicket.set(null);
+    this.selectedTicketDetails.set(null);
   }
 
   onTicketSaved(): void {
@@ -492,16 +485,16 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onStatusChange(ticket: Ticket, newStatus: TicketStatus): void {
-    this.ticketService.updateTicketStatus(ticket.id, newStatus).subscribe({
-      next: () => {
-        ticket.status = newStatus;
-        this.onRefresh();
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error updating ticket status:', error);
-      }
-    });
+    this.ticketService.updateTicket(ticket.id, { status: newStatus })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: () => {
+          this.onRefresh();
+        },
+        error: (error) => {
+          console.error('Error updating ticket status:', error);
+        }
+      });
   }
 
   // Helper methods for templates

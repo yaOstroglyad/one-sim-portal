@@ -1,13 +1,15 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  EventEmitter,
-  Input,
+  DestroyRef,
   OnInit,
-  Output
+  input,
+  output,
+  signal,
+  computed,
+  inject
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 
 import { FormConfig, FormGeneratorComponent } from '@shared';
@@ -24,7 +26,6 @@ import {
     selector: 'app-ticket-form',
     standalone: true,
     imports: [
-        CommonModule,
         FormGeneratorComponent
     ],
     templateUrl: './ticket-form.component.html',
@@ -32,78 +33,85 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TicketFormComponent implements OnInit {
-  @Input() ticket: Ticket | null = null;
-  @Output() save = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
+  // Inputs/Outputs
+  ticket = input<Ticket | null>(null);
+  save = output<void>();
 
-  ticketForm: FormGroup;
-  loading = false;
+  // Services
+  private ticketService = inject(TicketService);
+  private ticketEventService = inject(TicketEventService);
+  private destroyRef = inject(DestroyRef);
+
+  // State signals
+  loading = signal(false);
+  private ticketForm = signal<FormGroup | null>(null);
+
+  // Form config - initialized once in ngOnInit
   formSchema: FormConfig;
-  private initialFormValues: any = null;
 
-  constructor(
-    private ticketService: TicketService,
-    private cdr: ChangeDetectorRef,
-    private ticketEventService: TicketEventService
-  ) {}
+  // Computed
+  isFormInvalid = computed(() => {
+    const form = this.ticketForm();
+    return form ? form.invalid : true;
+  });
 
   ngOnInit(): void {
-    this.formSchema = getTicketFormConfig(this.ticket);
-    this.initialFormValues = getTicketInitialValues(this.ticket);
+    // Create form config once based on initial ticket value
+    this.formSchema = getTicketFormConfig(this.ticket());
+  }
+
+  // Public access to form for external submission (used by TicketEditWrapperComponent)
+  getForm(): FormGroup | null {
+    return this.ticketForm();
   }
 
   onSubmit(): void {
-    if (!this.ticketForm || this.ticketForm.invalid) {
+    const form = this.ticketForm();
+    if (!form || form.invalid) {
       return;
     }
 
-    this.loading = true;
-    this.cdr.markForCheck();
+    this.loading.set(true);
 
-    const formValue = this.ticketForm.getRawValue();
+    const formValue = form.getRawValue();
+    const currentTicket = this.ticket();
 
-    const operation$ = this.ticket
-      ? this.ticketService.updateTicket(this.ticket.id, getTicketUpdateRequest(formValue))
+    const operation$ = currentTicket
+      ? this.ticketService.updateTicket(currentTicket.id, getTicketUpdateRequest(formValue))
       : this.ticketService.createTicket(getTicketCreateRequest(formValue));
 
-    operation$.subscribe({
-      next: (ticket) => {
-        this.loading = false;
-        // Emit appropriate event
-        if (this.ticket) {
-          this.ticketEventService.emitTicketUpdated(ticket);
-        } else {
-          this.ticketEventService.emitTicketCreated(ticket);
+    operation$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (ticket) => {
+          this.loading.set(false);
+          // Emit appropriate event
+          if (currentTicket) {
+            this.ticketEventService.emitTicketUpdated(ticket);
+          } else {
+            this.ticketEventService.emitTicketCreated(ticket);
+          }
+          this.save.emit();
+        },
+        error: (error) => {
+          console.error('Error saving ticket:', error);
+          this.loading.set(false);
         }
-        this.save.emit();
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error saving ticket:', error);
-        this.loading = false;
-        this.cdr.markForCheck();
-      }
-    });
-  }
-
-  onCancel(): void {
-    this.cancel.emit();
+      });
   }
 
   onFormReady(form: FormGroup): void {
-    this.ticketForm = form;
-    
-    // Apply initial values if they were stored before form was ready
-    if (this.initialFormValues && form) {
-      // Use emitEvent: false to prevent triggering valueChanges
-      form.patchValue(this.initialFormValues, { emitEvent: false });
-      this.initialFormValues = null; // Clear after applying
+    // Only initialize form once - formChanges emits on every value change
+    if (this.ticketForm()) {
+      return;
     }
-    
-    this.cdr.markForCheck();
-  }
 
-  get isFormInvalid(): boolean {
-    return this.ticketForm ? this.ticketForm.invalid : true;
+    this.ticketForm.set(form);
+
+    // Apply initial values based on ticket
+    const initialValues = getTicketInitialValues(this.ticket());
+    if (initialValues && form) {
+      form.patchValue(initialValues, { emitEvent: false });
+    }
   }
 }

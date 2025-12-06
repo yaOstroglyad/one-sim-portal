@@ -1,20 +1,18 @@
 @use "sass:map";
-@use "../../../../../../scss/variables" as vars;
-@use "../../../../../../scss/mixins" as mixins;
-@use "../../../../../../scss/utilities" as utils;
+@use "variables" as vars;
+@use "mixins" as mixins;
 
 .ticket-details {
-  padding: map.get(vars.$os-spacing, '4');
-  
+
   .ticket-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: map.get(vars.$os-spacing, '6');
-    
+
     .ticket-title {
       flex: 1;
-      
+
       h3 {
         font-size: map.get(vars.$os-font-sizes, 'xl');
         font-weight: 600;
@@ -22,7 +20,7 @@
         margin-bottom: map.get(vars.$os-spacing, '2');
         line-height: 1.4;
       }
-      
+
       .ticket-number {
         font-size: map.get(vars.$os-font-sizes, 'sm');
         color: var(--cui-body-color-rgb);
@@ -30,7 +28,7 @@
         font-weight: 500;
       }
     }
-    
+
     .ticket-badges {
       display: flex;
       gap: map.get(vars.$os-spacing, '2');
@@ -38,16 +36,17 @@
       margin-left: map.get(vars.$os-spacing, '4');
     }
   }
-  
+
   // Meta information card
   .ticket-meta-card {
+    display: block;
     margin-bottom: map.get(vars.$os-spacing, '6');
-    
+
     .meta-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: map.get(vars.$os-spacing, '4');
-      
+
       .meta-item {
         label {
           display: block;
@@ -59,12 +58,12 @@
           letter-spacing: 0.5px; // Design-specific value
           margin-bottom: map.get(vars.$os-spacing, '1');
         }
-        
+
         span {
           font-size: map.get(vars.$os-font-sizes, 'sm');
           color: var(--cui-body-color);
           font-weight: 500;
-          
+
           &.text-muted {
             color: var(--cui-body-color-rgb);
             opacity: 0.6;
@@ -74,15 +73,16 @@
       }
     }
   }
-  
+
   // Description card
   .ticket-description-card {
+    display: block;
     margin-bottom: map.get(vars.$os-spacing, '8');
-    
+
     .card-header {
       @include mixins.dashboard-card-header();
       margin-bottom: map.get(vars.$os-spacing, '3');
-      
+
       h4 {
         font-size: map.get(vars.$os-font-sizes, 'lg');
         font-weight: 600;
@@ -90,7 +90,7 @@
         margin: 0;
       }
     }
-    
+
     .description-content {
       p {
         color: var(--cui-body-color);
@@ -100,53 +100,22 @@
       }
     }
   }
-  
-  // Comments and attachments cards
-  .comments-card,
-  .attachments-card {
-    margin-bottom: map.get(vars.$os-spacing, '8');
-    
-    .card-header {
-      @include mixins.dashboard-card-header();
-      margin-bottom: map.get(vars.$os-spacing, '3');
-      
-      h4 {
-        font-size: map.get(vars.$os-font-sizes, 'lg');
-        font-weight: 600;
-        color: var(--cui-body-color);
-        margin: 0;
-      }
-    }
-    
-    .comments-placeholder,
-    .attachments-placeholder {
-      text-align: center;
-      padding: map.get(vars.$os-spacing, '8');
-      
-      p {
-        color: var(--cui-body-color-rgb);
-        opacity: 0.6;
-        font-style: italic;
-        margin: 0;
-      }
-    }
-  }
 }
 
 // Responsive design
 @media (max-width: 768px) {
   .ticket-details {
     padding: map.get(vars.$os-spacing, '3');
-    
+
     .ticket-header {
       flex-direction: column;
       gap: map.get(vars.$os-spacing, '3');
-      
+
       .ticket-badges {
         margin-left: 0;
       }
     }
-    
+
     .ticket-meta-card {
       .meta-grid {
         grid-template-columns: 1fr;
