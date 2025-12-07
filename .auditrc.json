@@ -1,0 +1,14 @@
+{
+  "ignore": [
+    {
+      "id": "GHSA-4r6h-8v6p-xvw6",
+      "package": "xlsx",
+      "reason": "Only used for Excel export (json_to_sheet, write), not for parsing user-uploaded files. Prototype Pollution vulnerability requires parsing malicious files which we don't do."
+    },
+    {
+      "id": "GHSA-5pgg-2g8v-p4x9",
+      "package": "xlsx",
+      "reason": "Only used for Excel export (json_to_sheet, write), not for parsing user-uploaded files. ReDoS vulnerability requires parsing malicious files which we don't do."
+    }
+  ]
+}

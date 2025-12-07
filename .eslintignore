@@ -1,0 +1,10 @@
+# Documentation and templates (not compilable code)
+.claude/
+docs/
+
+# Build outputs
+dist/
+coverage/
+
+# Dependencies
+node_modules/
