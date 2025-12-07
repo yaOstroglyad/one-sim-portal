@@ -6,28 +6,53 @@
   .subscribers-content {
     @include mixins.dashboard-content();
 
+    // KPI Cards Row - 5 columns for subscriber metrics
     .kpi-row {
-      @include mixins.dashboard-kpi-grid(4);
+      margin-bottom: 1.5rem;
+      @include mixins.dashboard-kpi-grid(5);
     }
 
-    .growth-row {
-      .growth-card {
+    // Chart section (full width)
+    .chart-section {
+      margin-bottom: 1.5rem;
+
+      .chart-card {
         .card-header {
           @include mixins.dashboard-card-header();
-          @include mixins.dashboard-chart-legend();
         }
 
         .chart-container {
           @include mixins.dashboard-chart-container(300px);
         }
+
+        .empty-state {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 200px;
+          color: var(--os-color-medium);
+
+          p {
+            margin: 0;
+            font-size: 0.875rem;
+          }
+        }
       }
     }
 
-    .demographics-row {
-      @include mixins.dashboard-demographics-row();
+    // Bundle row - 2 charts side by side
+    .bundle-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
 
-      .demographics-card,
-      .lifecycle-card {
+      @media (max-width: 992px) {
+        grid-template-columns: 1fr;
+      }
+
+      .bundle-card,
+      .country-card {
         .card-header {
           @include mixins.dashboard-card-header();
         }
@@ -35,80 +60,22 @@
         .chart-container {
           @include mixins.dashboard-chart-container(250px);
         }
-      }
-    }
 
-    .retention-row {
-      .retention-card {
-        .card-header {
-          @include mixins.dashboard-card-header();
-          
-          // Unique exception: retention has specific metric structure
-          .retention-summary {
-            display: flex;
-            gap: 2rem;
+        .empty-state {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 200px;
+          color: var(--os-color-medium);
 
-            .retention-metric {
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-
-              .label {
-                font-size: 0.75rem;
-                color: var(--os-color-medium);
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-              }
-
-              .value {
-                font-size: 1.5rem;
-                font-weight: 700;
-                color: var(--os-color-success);
-              }
-            }
+          p {
+            margin: 0;
+            font-size: 0.875rem;
           }
-        }
-
-        .chart-container {
-          @include mixins.dashboard-chart-container(250px);
-        }
-      }
-    }
-
-    .churn-row {
-      .churn-card {
-        .card-header {
-          @include mixins.dashboard-card-header();
-          
-          .churn-rate {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            .label {
-              font-size: 0.75rem;
-              color: var(--os-color-medium);
-              text-transform: uppercase;
-              letter-spacing: 0.05em;
-            }
-
-            .value {
-              font-size: 1.5rem;
-              font-weight: 700;
-
-              &.negative {
-                color: var(--os-color-danger);
-              }
-            }
-          }
-        }
-
-        .churn-reasons {
-          @include mixins.dashboard-reason-bars();
         }
       }
     }
   }
-  
+
   @include mixins.dashboard-dark-theme();
 }

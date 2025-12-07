@@ -64,7 +64,11 @@
       "Bash(sudo chown:*)",
       "Bash(export PATH=\"/Users/andreyostroglyad/.local/bin:$PATH\")",
       "Bash(specify:*)",
-      "Bash(./.specify/scripts/bash/check-prerequisites.sh:*)"
+      "Bash(./.specify/scripts/bash/check-prerequisites.sh:*)",
+      "Bash(.specify/scripts/bash/create-new-feature.sh:*)",
+      "WebFetch(domain:esim-server.dev.global-sim.app)",
+      "Bash(./.specify/scripts/bash/setup-plan.sh:*)",
+      "Bash(./.specify/scripts/bash/update-agent-context.sh:*)"
     ],
     "deny": []
   }

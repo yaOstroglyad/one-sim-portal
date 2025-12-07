@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit {
   // Tab configuration
   tabs = signal<DashboardTab[]>([
     { id: 'executive', label: 'dashboard.tabs.executive', icon: 'cilChartPie', disabled: false },
-    { id: 'subscribers', label: 'dashboard.tabs.subscribers', icon: 'cilPeople', disabled: true },
+    { id: 'subscribers', label: 'dashboard.tabs.subscribers', icon: 'cilPeople', disabled: false },
     { id: 'traffic', label: 'dashboard.tabs.traffic', icon: 'cilSpeedometer', disabled: true },
     { id: 'finance', label: 'dashboard.tabs.finance', icon: 'cilDollar', disabled: true }
   ]);

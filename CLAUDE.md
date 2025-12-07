@@ -17,6 +17,23 @@ This gives you complete project knowledge without iterative exploration.
 
 ## 🚨 CRITICAL RULES (Quick Reference)
 
+### 0. Spec-Kit Workflow for New Features (MANDATORY)
+**Before starting ANY new feature (more than a single line change):**
+
+1. **ASK FIRST**: "Это большой фитчер или я могу начать делать сразу?"
+2. **If big feature** → Follow FULL Spec-Kit workflow:
+   - `/speckit.specify` → Create spec.md
+   - `/speckit.clarify` → Resolve ambiguities (if needed)
+   - `/speckit.plan` → Create plan.md
+   - `/speckit.tasks` → Generate tasks.md
+   - `/speckit.implement` → Execute tasks
+
+**NEVER skip straight to implementation for features involving:**
+- Multiple files
+- New API integrations
+- New components/services
+- Architecture changes
+
 ### 1. Absolute Paths ONLY
 ```
 ❌ WRONG: ../../../../path/to/file
@@ -168,3 +185,10 @@ specs/                      # Feature specifications
 
 **Documentation System Version:** 4.1 (Spec-Kit)
 **Last Major Update:** 2025-12-03 (Migrated to Spec-Kit format)
+
+## Active Technologies
+- TypeScript 5.x, Angular 19.2.15 + Angular HttpClient, RxJS, Chart.js, CoreUI, Angular Material (010-subscribers-api)
+- N/A (read-only API integration) (010-subscribers-api)
+
+## Recent Changes
+- 010-subscribers-api: Added TypeScript 5.x, Angular 19.2.15 + Angular HttpClient, RxJS, Chart.js, CoreUI, Angular Material

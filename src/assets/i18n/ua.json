@@ -941,6 +941,21 @@
       "refundsCount": "Кількість повернень",
       "expired": "Прострочені"
     },
+    "subscribers": {
+      "newSubscribers": "Нові підписники",
+      "downloadedSims": "Завантажені SIM",
+      "activeSubscribers": "Активні підписники",
+      "spentBundles": "Використані бандли",
+      "avgBundleSize": "Середній розмір бандла",
+      "networkStatus": "Статус мережі",
+      "byBundle": "Підписники за бандлами",
+      "byCountry": "Підписники за країнами",
+      "bundleStatuses": "Статуси бандлів",
+      "chartLabels": {
+        "subscribers": "Підписники"
+      }
+    },
+    "noData": "Немає даних",
     "inDevelopment": "В розробці",
     "kpiMetricsComingSoon": "KPI метрики скоро будуть доступні",
     "breakdownInDevelopment": "Деталізація доходу скоро буде доступна",

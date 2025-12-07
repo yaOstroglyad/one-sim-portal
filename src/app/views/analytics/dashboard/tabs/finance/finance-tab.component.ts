@@ -39,15 +39,14 @@ export class FinanceTabComponent implements OnInit {
 	constructor() {
 		// React to period and accountId changes using effect
 		effect(() => {
-			const period = this.dashboardDataService.period(); // Track signal changes
-			const accountId = this.dashboardDataService.accountId(); // Track accountId changes
+			const period = this.dashboardDataService.period();
+			const accountId = this.dashboardDataService.accountId();
 
 			// Only load data if accountId is set (required for API calls)
 			if (accountId) {
-				// Schedule data load on next tick to avoid effect issues
-				setTimeout(() => this.loadData(), 0);
+				this.loadData();
 			}
-		});
+		}, { allowSignalWrites: true });
 	}
 
 	ngOnInit(): void {

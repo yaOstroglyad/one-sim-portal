@@ -1178,8 +1178,21 @@
       "demographics": "Demographics",
       "lifecycle": "Lifecycle",
       "retention": "Retention Analysis",
-      "churn": "Churn Analysis"
+      "churn": "Churn Analysis",
+      "newSubscribers": "New Subscribers",
+      "downloadedSims": "Downloaded SIMs",
+      "activeSubscribers": "Active Subscribers",
+      "spentBundles": "Spent Bundles",
+      "avgBundleSize": "Avg Bundle Size",
+      "networkStatus": "Network Status",
+      "byBundle": "Subscribers by Bundle",
+      "byCountry": "Subscribers by Country",
+      "bundleStatuses": "Bundle Statuses",
+      "chartLabels": {
+        "subscribers": "Subscribers"
+      }
     },
+    "noData": "No data available",
     "traffic": {
       "byCountry": "Traffic by Country",
       "shares": "Traffic Shares",

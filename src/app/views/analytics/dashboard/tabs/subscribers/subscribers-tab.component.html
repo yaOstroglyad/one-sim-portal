@@ -1,131 +1,126 @@
 <div class="subscribers-tab">
   <!-- Loading State -->
-  <app-loading-indicator 
-    *ngIf="loading" 
-    [status]="{ state: 'loading', message: 'Fetching subscriber analytics...' }">
-  </app-loading-indicator>
+  @if (loading()) {
+    <app-loading-indicator
+      [status]="{ state: 'loading', message: 'Fetching subscriber analytics...' }">
+    </app-loading-indicator>
+  }
 
   <!-- Error State -->
-  <app-error-display 
-    *ngIf="error && !loading" 
-    [error]="error" 
-    (retry)="onRetry()">
-  </app-error-display>
+  @if (error() && !loading()) {
+    <app-error-display
+      [error]="error()"
+      (retry)="onRetry()">
+    </app-error-display>
+  }
 
   <!-- Data Content -->
-  <div *ngIf="data && !loading && !error" class="subscribers-content">
-    
-    <!-- KPI Cards Row -->
-    <div class="kpi-row">
-      <app-metric-card 
-        *ngFor="let card of data.kpis" 
-        [metric]="card">
-      </app-metric-card>
-    </div>
+  @if (summaryData() && !loading() && !error()) {
+    <div class="subscribers-content">
 
-    <!-- Growth Chart -->
-    <div class="growth-row">
-      <os-card class="growth-card" variant="default">
-        <div class="card-header">
-          <h3>{{ 'dashboard.subscribers.growth' | translate }}</h3>
-          <div class="chart-legend">
-            <div class="legend-item">
-              <span class="legend-color new"></span>
-              <span>New</span>
+      <!-- KPI Cards Row -->
+      <div class="kpi-row">
+        @for (card of kpiCards(); track card.id) {
+          <app-metric-card [metric]="card"></app-metric-card>
+        }
+      </div>
+
+      <!-- Network Status Chart -->
+      @if (networkStatusData()?.periodStatuses?.length) {
+        <div class="chart-section">
+          <os-card class="chart-card" variant="default">
+            <div class="card-header">
+              <h3>{{ 'dashboard.subscribers.networkStatus' | translate }}</h3>
             </div>
-            <div class="legend-item">
-              <span class="legend-color active"></span>
-              <span>Active</span>
+            <div class="chart-container">
+              <os-bar-chart
+                [data]="networkStatusChartData()"
+                [options]="chartOptions">
+              </os-bar-chart>
             </div>
-            <div class="legend-item">
-              <span class="legend-color churned"></span>
-              <span>Churned</span>
+          </os-card>
+        </div>
+      } @else {
+        <div class="chart-section">
+          <os-card class="chart-card" variant="default">
+            <div class="card-header">
+              <h3>{{ 'dashboard.subscribers.networkStatus' | translate }}</h3>
             </div>
+            <div class="empty-state">
+              <p>{{ 'dashboard.noData' | translate }}</p>
+            </div>
+          </os-card>
+        </div>
+      }
+
+      <!-- Bundle Subscribers Charts (side by side) -->
+      <div class="bundle-row">
+        <!-- By Bundle Name -->
+        <os-card class="bundle-card" variant="default">
+          <div class="card-header">
+            <h3>{{ 'dashboard.subscribers.byBundle' | translate }}</h3>
           </div>
-        </div>
-        <div class="chart-container">
-          <os-line-chart 
-            [data]="$any(data.growth.chartConfig?.data) || {labels: [], datasets: []}"
-            [options]="data.growth.chartConfig?.options || {}">
-          </os-line-chart>
-        </div>
-      </os-card>
-    </div>
-
-    <!-- Demographics and Lifecycle -->
-    <div class="demographics-row">
-      <!-- Demographics Chart -->
-      <os-card class="demographics-card" variant="default">
-        <div class="card-header">
-          <h3>{{ 'dashboard.subscribers.demographics' | translate }}</h3>
-        </div>
-        <div class="chart-container">
-          <os-bar-chart 
-            [data]="$any(data.demographics.chartConfig?.data) || {labels: [], datasets: []}"
-            [options]="data.demographics.chartConfig?.options || {}">
-          </os-bar-chart>
-        </div>
-      </os-card>
-
-      <!-- Lifecycle Chart -->
-      <os-card class="lifecycle-card" variant="default">
-        <div class="card-header">
-          <h3>{{ 'dashboard.subscribers.lifecycle' | translate }}</h3>
-        </div>
-        <div class="chart-container">
-          <os-bar-chart 
-            [data]="$any(data.lifecycle.chartConfig?.data) || {labels: [], datasets: []}"
-            [options]="data.lifecycle.chartConfig?.options || {}">
-          </os-bar-chart>
-        </div>
-      </os-card>
-    </div>
-
-    <!-- Retention Analysis -->
-    <div class="retention-row">
-      <os-card class="retention-card" variant="default">
-        <div class="card-header">
-          <h3>{{ 'dashboard.subscribers.retention' | translate }}</h3>
-          <div class="retention-summary">
-            <div class="retention-metric">
-              <span class="label">30-Day Retention</span>
-              <span class="value">{{ data.retention.thirtyDay }}%</span>
+          @if (bundleSubscribersData()?.subscribersByBundle?.length) {
+            <div class="chart-container">
+              <os-bar-chart
+                [data]="bundleChartData()"
+                [options]="chartOptions">
+              </os-bar-chart>
             </div>
-            <div class="retention-metric">
-              <span class="label">90-Day Retention</span>
-              <span class="value">{{ data.retention.ninetyDay }}%</span>
+          } @else {
+            <div class="empty-state">
+              <p>{{ 'dashboard.noData' | translate }}</p>
             </div>
-          </div>
-        </div>
-        <div class="chart-container">
-          <os-line-chart 
-            [data]="$any(data.retention.chartConfig?.data) || {labels: [], datasets: []}"
-            [options]="data.retention.chartConfig?.options || {}">
-          </os-line-chart>
-        </div>
-      </os-card>
-    </div>
+          }
+        </os-card>
 
-    <!-- Churn Analysis -->
-    <div class="churn-row">
-      <os-card class="churn-card" variant="default">
-        <div class="card-header">
-          <h3>{{ 'dashboard.subscribers.churn' | translate }}</h3>
-          <div class="churn-rate">
-            <span class="label">Current Month Churn Rate</span>
-            <span class="value negative">{{ data.churnAnalysis.currentRate }}%</span>
+        <!-- By Country -->
+        <os-card class="country-card" variant="default">
+          <div class="card-header">
+            <h3>{{ 'dashboard.subscribers.byCountry' | translate }}</h3>
           </div>
-        </div>
-        <div class="churn-reasons">
-          <div class="reason-item" *ngFor="let reason of data.churnAnalysis.reasons">
-            <span class="reason-label">{{ reason.label }}</span>
-            <div class="reason-bar">
-              <div class="reason-fill" [style.width.%]="reason.percentage"></div>
+          @if (bundleSubscribersData()?.subscribersByCountry?.length) {
+            <div class="chart-container">
+              <os-bar-chart
+                [data]="countryChartData()"
+                [options]="chartOptions">
+              </os-bar-chart>
             </div>
-            <span class="reason-value">{{ reason.percentage }}%</span>
-          </div>
+          } @else {
+            <div class="empty-state">
+              <p>{{ 'dashboard.noData' | translate }}</p>
+            </div>
+          }
+        </os-card>
+      </div>
+
+      <!-- Bundle Statuses Chart -->
+      @if (bundleStatusData()?.periodStatuses?.length) {
+        <div class="chart-section">
+          <os-card class="chart-card" variant="default">
+            <div class="card-header">
+              <h3>{{ 'dashboard.subscribers.bundleStatuses' | translate }}</h3>
+            </div>
+            <div class="chart-container">
+              <os-bar-chart
+                [data]="bundleStatusChartData()"
+                [options]="chartOptions">
+              </os-bar-chart>
+            </div>
+          </os-card>
         </div>
-      </os-card>
+      } @else {
+        <div class="chart-section">
+          <os-card class="chart-card" variant="default">
+            <div class="card-header">
+              <h3>{{ 'dashboard.subscribers.bundleStatuses' | translate }}</h3>
+            </div>
+            <div class="empty-state">
+              <p>{{ 'dashboard.noData' | translate }}</p>
+            </div>
+          </os-card>
+        </div>
+      }
     </div>
-  </div>
+  }
 </div>

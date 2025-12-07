@@ -36,6 +36,9 @@
   @extend .m-0;
   @extend .text-uppercase;
   letter-spacing: 0.5px;
+  min-height: 2.5em; // Fixed height for 2 lines of text
+  display: flex;
+  align-items: flex-start;
 }
 
 .metric-icon {

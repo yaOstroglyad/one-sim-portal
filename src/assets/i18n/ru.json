@@ -1150,6 +1150,21 @@
       "refundsCount": "Количество возвратов",
       "expired": "Истёкшие"
     },
+    "subscribers": {
+      "newSubscribers": "Новые подписчики",
+      "downloadedSims": "Загруженные SIM",
+      "activeSubscribers": "Активные подписчики",
+      "spentBundles": "Использованные бандлы",
+      "avgBundleSize": "Средний размер бандла",
+      "networkStatus": "Статус сети",
+      "byBundle": "Подписчики по бандлам",
+      "byCountry": "Подписчики по странам",
+      "bundleStatuses": "Статусы бандлов",
+      "chartLabels": {
+        "subscribers": "Подписчики"
+      }
+    },
+    "noData": "Нет данных",
     "inDevelopment": "В разработке",
     "kpiMetricsComingSoon": "KPI метрики скоро будут доступны",
     "breakdownInDevelopment": "Детализация дохода скоро будет доступна",

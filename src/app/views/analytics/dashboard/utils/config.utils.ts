@@ -12,10 +12,14 @@ export const DASHBOARD_API_CONFIG = {
       bundleRevenue: '/api/v1/reports/dashboards/executive/bundle-revenue',
       inventoryStatus: '/api/v1/reports/dashboards/executive/inventory-status'
     },
-    subscribers: '/api/v1/dashboard/subscribers',
+    subscribers: {
+      subscriberSummary: '/api/v1/reports/dashboards/subscribers/subscriber-summary',
+      networkStatuses: '/api/v1/reports/dashboards/subscribers/network-statuses',
+      bundleSubscribers: '/api/v1/reports/dashboards/subscribers/bundle-subscribers',
+      bundleStatuses: '/api/v1/reports/dashboards/subscribers/bundle-statuses'
+    },
     traffic: '/api/v1/dashboard/traffic',
-    finance: '/api/v1/dashboard/finance',
-    subscriberAnalytics: '/api/v1/dashboard/subscriber-analytics'
+    finance: '/api/v1/dashboard/finance'
   }
 } as const;
 
@@ -31,7 +35,7 @@ export interface MockDataConfig {
 
 export const DEFAULT_MOCK_CONFIG: MockDataConfig = {
   executive: false,
-  subscribers: true,
+  subscribers: false,
   traffic: true,
   finance: true
 };

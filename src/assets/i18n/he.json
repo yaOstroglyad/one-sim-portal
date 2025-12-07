@@ -974,6 +974,21 @@
       "refundsCount": "מספר החזרים",
       "expired": "פג תוקף"
     },
+    "subscribers": {
+      "newSubscribers": "מנויים חדשים",
+      "downloadedSims": "SIM שהורדו",
+      "activeSubscribers": "מנויים פעילים",
+      "spentBundles": "חבילות שנוצלו",
+      "avgBundleSize": "גודל חבילה ממוצע",
+      "networkStatus": "סטטוס רשת",
+      "byBundle": "מנויים לפי חבילה",
+      "byCountry": "מנויים לפי מדינה",
+      "bundleStatuses": "סטטוסי חבילות",
+      "chartLabels": {
+        "subscribers": "מנויים"
+      }
+    },
+    "noData": "אין נתונים",
     "inDevelopment": "בפיתוח",
     "kpiMetricsComingSoon": "מדדי KPI יהיו זמינים בקרוב",
     "breakdownInDevelopment": "פירוט הכנסות יהיה זמין בקרוב",

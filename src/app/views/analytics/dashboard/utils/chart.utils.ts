@@ -13,6 +13,35 @@ const COLORS = {
 };
 
 /**
+ * Dashboard chart colors with rgba support
+ * These colors are designed to work well together in charts
+ */
+export const DASHBOARD_CHART_COLORS = [
+  'rgba(54, 162, 235, 0.8)',   // Blue
+  'rgba(75, 192, 192, 0.8)',   // Teal
+  'rgba(255, 206, 86, 0.8)',   // Yellow
+  'rgba(255, 99, 132, 0.8)',   // Red
+  'rgba(153, 102, 255, 0.8)',  // Purple
+  'rgba(255, 159, 64, 0.8)',   // Orange
+  'rgba(46, 204, 113, 0.8)',   // Green
+  'rgba(52, 73, 94, 0.8)'      // Dark gray
+] as const;
+
+/**
+ * Get chart color by index (cycles through colors if index exceeds array length)
+ */
+export function getChartColor(index: number): string {
+  return DASHBOARD_CHART_COLORS[index % DASHBOARD_CHART_COLORS.length];
+}
+
+/**
+ * Get array of chart colors for a given count
+ */
+export function getChartColors(count: number): string[] {
+  return Array.from({ length: count }, (_, i) => getChartColor(i));
+}
+
+/**
  * Create stacked bar chart configuration for subscribers
  * Shows subscribers and refunds as stacked bars
  *

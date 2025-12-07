@@ -1,180 +1,51 @@
 /**
- * Subscribers Tab Types
- * Based on dashboard-hld.md specifications
+ * Subscribers Tab API Response Types
+ * Based on Swagger documentation from SubscriberReports API
  */
 
-import { ChartConfig, TabData, BaseAnalytics, MetricCard } from './dashboard.types';
-
-export interface SubscribersTabData extends TabData {
-  metrics: SubscriberMetrics;
-  customerJourney: CustomerJourney;
-  bundleStatus: BundleStatus;
-  geographic: GeographicDistribution;
+/**
+ * Response from /api/v1/reports/dashboards/subscribers/subscriber-summary
+ */
+export interface SubscriberSummaryResponse {
+  newSubscribers: number;
+  downloadedSims: number;
+  activeSubscribers: number;
+  spentBundles: number;
+  avrBundleSize: number;
 }
 
 /**
- * Subscriber Analytics Data Structure (alternative interface)
+ * Shared types for period-based status responses
  */
-export interface SubscriberAnalytics extends BaseAnalytics {
-  kpis: MetricCard[];
-  growth: SubscriberGrowth;
-  demographics: SubscriberDemographics;
-  lifecycle: SubscriberLifecycle;
-  retention: RetentionAnalysis;
-  churnAnalysis: ChurnAnalysis;
-}
-
-export interface SubscriberMetrics {
-  newSubscribers: {
-    count: number;
-    change: number;
-    trend: 'up' | 'down' | 'stable';
-  };
-  downloadedSIMs: {
-    count: number;
-    change: number;
-  };
-  activeSubscribers: {
-    count: number;
-    change: number;
-  };
-  spentBundles: {
-    count: number;
-    totalGB: number;
-  };
-  avgBundleSize: {
-    sizeGB: number;
-    unit: 'GB' | 'MB';
-  };
-}
-
-export interface CustomerJourney {
-  stages: JourneyStage[];
-  conversionRates: {
-    overall: number;
-    byStage: { [stage: string]: number };
-  };
-  chartConfig?: ChartConfig;
-}
-
-export interface JourneyStage {
-  id: string;
-  name: string;
+export interface StatusCount {
+  status: string;
   count: number;
-  percentage: number;
-  avgDuration: number;
-  icon?: string;
 }
 
-export interface BundleStatus {
-  statuses: {
-    active: number;
-    pending: number;
-    expired: number;
-    suspended: number;
-  };
-  distribution: {
-    label: string;
-    value: number;
-    color: string;
-  }[];
-  chartConfig?: ChartConfig;
-}
-
-export interface GeographicDistribution {
-  countries: CountryMetric[];
-  totalCountries: number;
-  chartConfig?: ChartConfig;
-}
-
-export interface CountryMetric {
-  code: string;
-  name: string;
-  subscribers: number;
-  revenue: number;
-  percentage: number;
-  growth: number;
-  flag?: string;
+export interface PeriodStatus {
+  period: string;
+  totalCount: number;
+  statuses: StatusCount[];
 }
 
 /**
- * Additional interfaces for SubscriberAnalytics
+ * Response from /api/v1/reports/dashboards/subscribers/network-statuses
+ * and /api/v1/reports/dashboards/subscribers/bundle-statuses
  */
-export interface SubscriberGrowth {
-  summary: {
-    totalSubscribers: number;
-    newSubscribers: number;
-    activeSubscribers: number;
-    churnedSubscribers: number;
-    growthRate: number;
-    churnRate: number;
-  };
-  chartConfig?: ChartConfig;
-  trends: {
-    period: string;
-    new: number;
-    active: number;
-    churned: number;
-  }[];
+export interface PeriodStatusesResponse {
+  periodStatuses: PeriodStatus[];
 }
 
-export interface SubscriberDemographics {
-  byCountry: {
-    country: string;
-    subscribers: number;
-    percentage: number;
-  }[];
-  byAge: {
-    ageRange: string;
-    subscribers: number;
-    percentage: number;
-  }[];
-  byGender: {
-    gender: string;
-    subscribers: number;
-    percentage: number;
-  }[];
-  chartConfig?: ChartConfig;
+/**
+ * Response from /api/v1/reports/dashboards/subscribers/bundle-subscribers
+ */
+export interface BundleGroup {
+  groupName: string;
+  subscribers: number;
+  statuses: StatusCount[];
 }
 
-export interface SubscriberLifecycle {
-  stages: {
-    stage: 'prospect' | 'trial' | 'active' | 'at_risk' | 'churned';
-    subscribers: number;
-    percentage: number;
-    averageDuration: number; // in days
-  }[];
-  chartConfig?: ChartConfig;
-}
-
-export interface RetentionAnalysis {
-  thirtyDay: number;
-  sixtyDay: number;
-  ninetyDay: number;
-  cohortAnalysis: {
-    cohort: string;
-    month0: number;
-    month1: number;
-    month2: number;
-    month3: number;
-    month6: number;
-    month12: number;
-  }[];
-  chartConfig?: ChartConfig;
-}
-
-export interface ChurnAnalysis {
-  currentRate: number;
-  previousRate: number;
-  trend: 'up' | 'down' | 'stable';
-  reasons: {
-    label: string;
-    count: number;
-    percentage: number;
-  }[];
-  predictedChurn: {
-    nextMonth: number;
-    confidence: number;
-    riskFactors: string[];
-  };
+export interface BundleSubscribersResponse {
+  subscribersByBundle: BundleGroup[];
+  subscribersByCountry: BundleGroup[];
 }
