@@ -19,7 +19,7 @@ export const DASHBOARD_API_CONFIG = {
       bundleStatuses: '/api/v1/reports/dashboards/subscribers/bundle-statuses'
     },
     traffic: '/api/v1/dashboard/traffic',
-    finance: '/api/v1/dashboard/finance'
+    finance: '/api/v1/reports/dashboards/finance/period-revenue-summary'
   }
 } as const;
 
@@ -37,7 +37,7 @@ export const DEFAULT_MOCK_CONFIG: MockDataConfig = {
   executive: false,
   subscribers: false,
   traffic: true,
-  finance: true
+  finance: false
 };
 
 /**

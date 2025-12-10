@@ -1,82 +1,29 @@
-@use "../../../../../../scss/variables" as vars;
-@use "../../../../../../scss/utilities" as utils;
-@use "../../../../../../scss/mixins" as mixins;
+@use "variables" as vars;
+@use "mixins" as mixins;
+@use "sass:map";
 
 .finance-tab {
   .finance-content {
     @include mixins.dashboard-content();
 
-    .kpi-row {
-      @include mixins.dashboard-kpi-grid(3);
-    }
-
     .charts-row {
       @include mixins.dashboard-demographics-row();
-      
-      .margin-card,
-      .revenue-card {
-        .card-header {
-          @include mixins.dashboard-card-header();
-        }
-        
-        .chart-container {
-          @include mixins.dashboard-chart-container(250px);
-        }
-      }
-    }
 
-    .performance-row {
-      @include mixins.dashboard-demographics-row();
-      
-      .top-countries-card,
-      .top-bundles-card {
+      &.single {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-card {
         .card-header {
           @include mixins.dashboard-card-header();
         }
-        
+
         .chart-container {
           @include mixins.dashboard-chart-container(300px);
         }
       }
     }
-
-    .tables-row {
-      @include mixins.dashboard-demographics-row();
-      
-      .balance-invoice-card,
-      .bundle-purchases-card {
-        .card-header {
-          @include mixins.dashboard-card-header();
-        }
-        
-        @include mixins.dashboard-table();
-        
-        // Specific class mappings for finance table
-        .finance-table {
-          td {
-            &.company-name,
-            &.customer-name,
-            &.bundle-name {
-              @extend .name-cell;
-            }
-            
-            &.amount,
-            &.total {
-              @extend .amount-cell;
-            }
-            
-            &.quantity {
-              @extend .quantity-cell;
-            }
-            
-            &.due-date {
-              @extend .date-cell;
-            }
-          }
-        }
-      }
-    }
   }
-  
+
   @include mixins.dashboard-dark-theme();
 }

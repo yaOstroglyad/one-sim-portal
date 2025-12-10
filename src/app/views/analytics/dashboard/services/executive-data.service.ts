@@ -158,7 +158,7 @@ export class ExecutiveDataService {
       revenueByBundle: {
         bundles: mapRevenueBundles(bundleRevenue.revenueByBundle, totalRevenue),
         total: totalRevenue,
-        chartConfig: createRevenueChartConfig(bundleRevenue.revenueByBundle)
+        chartConfig: createRevenueChartConfig(bundleRevenue.revenueByBundle, bundleRevenue.currency)
       },
 
       inventoryStatus: {

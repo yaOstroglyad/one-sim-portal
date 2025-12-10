@@ -1,0 +1,22 @@
+<div
+  class="chart-legend"
+  [class.chart-legend--scrollable]="needsScroll()"
+  [style.max-height.px]="maxHeight()">
+  <div class="chart-legend__items">
+    @for (item of items(); track item.label; let i = $index) {
+      <button
+        type="button"
+        class="chart-legend__item"
+        [class.chart-legend__item--hidden]="item.hidden"
+        (click)="onItemClick(i, item)">
+        <span
+          class="chart-legend__color"
+          [style.background-color]="item.color">
+        </span>
+        <span class="chart-legend__label" [title]="item.label">
+          {{ item.label }}
+        </span>
+      </button>
+    }
+  </div>
+</div>

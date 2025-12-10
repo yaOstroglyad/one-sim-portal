@@ -189,6 +189,8 @@ specs/                      # Feature specifications
 ## Active Technologies
 - TypeScript 5.x, Angular 19.2.15 + Angular HttpClient, RxJS, Chart.js, CoreUI, Angular Material (010-subscribers-api)
 - N/A (read-only API integration) (010-subscribers-api)
+- TypeScript 5.x, Angular 19.2.15 + Chart.js (existing), @angular/core, RxJS (012-waterfall-chart)
+- N/A (visualization component only) (012-waterfall-chart)
 
 ## Recent Changes
 - 010-subscribers-api: Added TypeScript 5.x, Angular 19.2.15 + Angular HttpClient, RxJS, Chart.js, CoreUI, Angular Material

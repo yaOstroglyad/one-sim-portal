@@ -30,6 +30,8 @@ docs/
 ├── components/                # Component deep-dives
 │   ├── generic-table.md       # Table component (72KB)
 │   ├── account-selector.md    # Account selection
+│   ├── bar-chart.md           # Bar chart with Chart.js
+│   ├── chart-legend.md        # Custom scrollable chart legend
 │   ├── email-logs.md          # Email logs viewer
 │   ├── navigation-system.md   # Navigation architecture
 │   ├── generic-right-panel.md # Right panel component
@@ -62,6 +64,8 @@ docs/
 |------|-------------|------|
 | [generic-table.md](./components/generic-table.md) | GenericTableComponent with examples | 8KB |
 | [account-selector.md](./components/account-selector.md) | Account selection component | 3KB |
+| [bar-chart.md](./components/bar-chart.md) | Bar chart with Chart.js | 10KB |
+| [chart-legend.md](./components/chart-legend.md) | Custom scrollable chart legend | 5KB |
 | [email-logs.md](./components/email-logs.md) | Email logs viewer | 3KB |
 | [navigation-system.md](./components/navigation-system.md) | Navigation architecture | 5KB |
 | [generic-right-panel.md](./components/generic-right-panel.md) | Right panel component | 5KB |
@@ -131,9 +135,9 @@ Use `.claude/templates/hld.template.md` for new feature HLDs.
 | Category | Files | Total Size |
 |----------|-------|------------|
 | Features | 5 | ~96KB |
-| Components | 7 | ~29KB |
+| Components | 9 | ~44KB |
 | Architecture | 2 | ~11KB |
 | Optimizations | 1 | ~6KB |
-| **Total** | **15** | **~142KB** |
+| **Total** | **17** | **~157KB** |
 
-**Last Updated:** 2025-11-26
+**Last Updated:** 2025-12-10

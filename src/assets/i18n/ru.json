@@ -1159,10 +1159,31 @@
       "networkStatus": "Статус сети",
       "byBundle": "Подписчики по бандлам",
       "byCountry": "Подписчики по странам",
-      "bundleStatuses": "Статусы бандлов",
+      "bundleStatuses": "Статус бандлов",
       "chartLabels": {
         "subscribers": "Подписчики"
       }
+    },
+    "finance": {
+      "totalRevenue": "Общий доход",
+      "avgMargin": "Средняя маржа",
+      "marginByMonth": "Маржа по месяцам",
+      "revenueTrend": "Тренд дохода",
+      "revenue": "Тренд дохода",
+      "revenueByBundle": "Доход по тарифам",
+      "revenueByCountry": "Доход по странам",
+      "topCountries": "Топ-10 стран по доходу",
+      "topBundles": "Топ-10 тарифов по доходу",
+      "balanceForInvoice": "Баланс для выставления счёта",
+      "bundlePurchases": "Покупки бандлов для выставления счёта",
+      "company": "Компания",
+      "amount": "Сумма",
+      "dueDate": "Срок оплаты",
+      "status": "Статус",
+      "bundle": "Тариф",
+      "quantity": "Количество",
+      "customer": "Клиент",
+      "total": "Итого"
     },
     "noData": "Нет данных",
     "inDevelopment": "В разработке",

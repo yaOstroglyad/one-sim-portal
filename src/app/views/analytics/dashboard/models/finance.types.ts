@@ -129,3 +129,34 @@ export interface FinanceMockData {
   balanceForInvoice: BalanceForInvoice[];
   bundlePurchases: BundlePurchaseInvoice[];
 }
+
+// ============================================
+// API Response Types for period-revenue-summary
+// ============================================
+
+/**
+ * Revenue group item (bundle name or country name with revenue)
+ */
+export interface RevenueGroup {
+  name: string;
+  revenue: number;
+}
+
+/**
+ * Single period entry with grouped revenue data
+ */
+export interface PeriodRevenueData {
+  period: string;           // ISO date "2025-12-10"
+  totalRevenue: number;
+  revenueByGroup: RevenueGroup[];
+}
+
+/**
+ * API Response from /api/v1/reports/dashboards/finance/period-revenue-summary
+ */
+export interface PeriodRevenueSummaryResponse {
+  currency: string;
+  revenueByBundle: PeriodRevenueData[];
+  revenueByCountry: PeriodRevenueData[];
+  marginByCountry: PeriodRevenueData[];
+}

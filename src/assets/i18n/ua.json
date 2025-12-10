@@ -950,10 +950,31 @@
       "networkStatus": "Статус мережі",
       "byBundle": "Підписники за бандлами",
       "byCountry": "Підписники за країнами",
-      "bundleStatuses": "Статуси бандлів",
+      "bundleStatuses": "Статус бандлів",
       "chartLabels": {
         "subscribers": "Підписники"
       }
+    },
+    "finance": {
+      "totalRevenue": "Загальний дохід",
+      "avgMargin": "Середня маржа",
+      "marginByMonth": "Маржа за місяцями",
+      "revenueTrend": "Тренд доходу",
+      "revenue": "Тренд доходу",
+      "revenueByBundle": "Дохід за тарифами",
+      "revenueByCountry": "Дохід за країнами",
+      "topCountries": "Топ-10 країн за доходом",
+      "topBundles": "Топ-10 тарифів за доходом",
+      "balanceForInvoice": "Баланс для виставлення рахунку",
+      "bundlePurchases": "Покупки бандлів для виставлення рахунку",
+      "company": "Компанія",
+      "amount": "Сума",
+      "dueDate": "Термін оплати",
+      "status": "Статус",
+      "bundle": "Тариф",
+      "quantity": "Кількість",
+      "customer": "Клієнт",
+      "total": "Разом"
     },
     "noData": "Немає даних",
     "inDevelopment": "В розробці",

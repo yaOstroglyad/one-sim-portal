@@ -1,0 +1,14 @@
+<div class="os-waterfall-chart"
+     [style.height.px]="height()">
+  <div class="os-waterfall-chart__container"
+       [style.height.px]="height()">
+    <canvas #waterfallChartCanvas
+            class="os-waterfall-chart__canvas"
+            [attr.aria-label]="'chart.waterfallChart' | translate"
+            role="img">
+      <p class="os-waterfall-chart__fallback">
+        {{ 'chart.noDataAvailable' | translate }}
+      </p>
+    </canvas>
+  </div>
+</div>

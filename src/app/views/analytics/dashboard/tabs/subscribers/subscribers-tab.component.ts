@@ -9,14 +9,17 @@ import {
   BundleSubscribersResponse
 } from '../../models/dashboard.types';
 import { DashboardDataService } from '../../services/dashboard-data.service';
-import { getChartColor, getChartColors } from '../../utils';
+import { getChartColor, getChartColors, BUNDLE_STATUS_LIFECYCLE_ORDER, getBundleStatusColor } from '../../utils';
 import {
   CardComponent,
   MetricCardComponent,
   OsBarChartComponent,
+  OsWaterfallChartComponent,
+  WaterfallDataPoint,
   MetricCard,
   BarChartData,
-  BarChartOptions
+  BarChartOptions,
+  ChartLegendItem
 } from '@shared';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
@@ -31,7 +34,8 @@ import { ErrorDisplayComponent } from '../../components/error-display/error-disp
     LoadingIndicatorComponent,
     ErrorDisplayComponent,
     CardComponent,
-    OsBarChartComponent
+    OsBarChartComponent,
+    OsWaterfallChartComponent
   ],
   templateUrl: './subscribers-tab.component.html',
   styleUrls: ['./subscribers-tab.component.scss'],
@@ -57,17 +61,21 @@ export class SubscribersTabComponent implements OnInit {
 
   // Chart configurations
   networkStatusChartData = signal<BarChartData>({ labels: [], datasets: [] });
+  networkStatusLegendItems = signal<ChartLegendItem[]>([]);
   bundleChartData = signal<BarChartData>({ labels: [], datasets: [] });
+  bundleLegendItems = signal<ChartLegendItem[]>([]);
   countryChartData = signal<BarChartData>({ labels: [], datasets: [] });
-  bundleStatusChartData = signal<BarChartData>({ labels: [], datasets: [] });
+  countryLegendItems = signal<ChartLegendItem[]>([]);
+
+  // T025: Waterfall data for bundle statuses
+  bundleStatusWaterfallData = signal<WaterfallDataPoint[]>([]);
 
   chartOptions: BarChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: true,
-        position: 'top'
+        display: false // Using custom legend component
       }
     },
     scales: {
@@ -122,7 +130,7 @@ export class SubscribersTabComponent implements OnInit {
         this.buildNetworkStatusChartConfig(response.networkStatuses);
         this.buildBundleChartConfig(response.bundleSubscribers);
         this.buildCountryChartConfig(response.bundleSubscribers);
-        this.buildBundleStatusChartConfig(response.bundleStatuses);
+        this.buildBundleStatusWaterfallData(response.bundleStatuses);
 
         this.error.set(null);
         this.cdr.markForCheck();
@@ -191,6 +199,7 @@ export class SubscribersTabComponent implements OnInit {
   private buildNetworkStatusChartConfig(data: PeriodStatusesResponse): void {
     if (!data.periodStatuses || data.periodStatuses.length === 0) {
       this.networkStatusChartData.set({ labels: [], datasets: [] });
+      this.networkStatusLegendItems.set([]);
       return;
     }
 
@@ -203,6 +212,15 @@ export class SubscribersTabComponent implements OnInit {
     const statusList = Array.from(allStatuses);
     const labels = data.periodStatuses.map(p => p.period);
 
+    // Calculate totals per status for legend
+    const statusTotals = new Map<string, number>();
+    data.periodStatuses.forEach(period => {
+      period.statuses.forEach(s => {
+        const current = statusTotals.get(s.status) || 0;
+        statusTotals.set(s.status, current + s.count);
+      });
+    });
+
     // Create a dataset for each status
     const datasets = statusList.map((status, index) => ({
       label: status,
@@ -210,11 +228,21 @@ export class SubscribersTabComponent implements OnInit {
         const found = period.statuses.find(s => s.status === status);
         return found ? found.count : 0;
       }),
-      backgroundColor: getChartColor(index)
+      backgroundColor: getChartColor(index),
+      borderWidth: 0
+    }));
+
+    // Build legend items
+    const legendItems: ChartLegendItem[] = statusList.map((status, index) => ({
+      label: status,
+      color: getChartColor(index),
+      value: statusTotals.get(status) || 0,
+      hidden: false
     }));
 
     const chartData: BarChartData = { labels, datasets };
     this.networkStatusChartData.set(chartData);
+    this.networkStatusLegendItems.set(legendItems);
   }
 
   /**
@@ -223,11 +251,13 @@ export class SubscribersTabComponent implements OnInit {
   private buildBundleChartConfig(data: BundleSubscribersResponse): void {
     if (!data.subscribersByBundle || data.subscribersByBundle.length === 0) {
       this.bundleChartData.set({ labels: [], datasets: [] });
+      this.bundleLegendItems.set([]);
       return;
     }
 
     const labels = data.subscribersByBundle.map(b => b.groupName);
     const values = data.subscribersByBundle.map(b => b.subscribers);
+    const colors = getChartColors(labels.length);
 
     const subscribersLabel = this.translateService.instant('dashboard.subscribers.chartLabels.subscribers');
 
@@ -236,10 +266,21 @@ export class SubscribersTabComponent implements OnInit {
       datasets: [{
         label: subscribersLabel,
         data: values,
-        backgroundColor: getChartColors(labels.length)
+        backgroundColor: colors,
+        borderWidth: 0
       }]
     };
+
+    // Build legend items for each bundle
+    const legendItems: ChartLegendItem[] = labels.map((label, index) => ({
+      label,
+      color: colors[index],
+      value: values[index],
+      hidden: false
+    }));
+
     this.bundleChartData.set(chartData);
+    this.bundleLegendItems.set(legendItems);
   }
 
   /**
@@ -248,11 +289,13 @@ export class SubscribersTabComponent implements OnInit {
   private buildCountryChartConfig(data: BundleSubscribersResponse): void {
     if (!data.subscribersByCountry || data.subscribersByCountry.length === 0) {
       this.countryChartData.set({ labels: [], datasets: [] });
+      this.countryLegendItems.set([]);
       return;
     }
 
     const labels = data.subscribersByCountry.map(c => c.groupName);
     const values = data.subscribersByCountry.map(c => c.subscribers);
+    const colors = getChartColors(labels.length);
     const subscribersLabel = this.translateService.instant('dashboard.subscribers.chartLabels.subscribers');
 
     const chartData: BarChartData = {
@@ -260,41 +303,69 @@ export class SubscribersTabComponent implements OnInit {
       datasets: [{
         label: subscribersLabel,
         data: values,
-        backgroundColor: getChartColors(labels.length)
+        backgroundColor: colors,
+        borderWidth: 0
       }]
     };
+
+    // Build legend items for each country
+    const legendItems: ChartLegendItem[] = labels.map((label, index) => ({
+      label,
+      color: colors[index],
+      value: values[index],
+      hidden: false
+    }));
+
     this.countryChartData.set(chartData);
+    this.countryLegendItems.set(legendItems);
   }
 
   /**
-   * Build bundle status chart configuration
+   * T024: Build bundle status waterfall data.
+   * Transforms API response into WaterfallDataPoint[] for waterfall chart visualization.
+   * Uses lifecycle ordering, calculates totals per status, and applies unique colors.
    */
-  private buildBundleStatusChartConfig(data: PeriodStatusesResponse): void {
+  private buildBundleStatusWaterfallData(data: PeriodStatusesResponse): void {
     if (!data.periodStatuses || data.periodStatuses.length === 0) {
-      this.bundleStatusChartData.set({ labels: [], datasets: [] });
+      this.bundleStatusWaterfallData.set([]);
       return;
     }
 
-    // Get all unique statuses
-    const allStatuses = new Set<string>();
+    // Calculate totals per status across all periods
+    const statusTotals = new Map<string, number>();
     data.periodStatuses.forEach(period => {
-      period.statuses.forEach(s => allStatuses.add(s.status));
+      period.statuses.forEach(s => {
+        const current = statusTotals.get(s.status) || 0;
+        statusTotals.set(s.status, current + s.count);
+      });
     });
 
-    const statusList = Array.from(allStatuses);
-    const labels = data.periodStatuses.map(p => p.period);
+    // Build waterfall data points in lifecycle order with unique colors
+    const points: WaterfallDataPoint[] = [];
 
-    const datasets = statusList.map((status, index) => ({
-      label: status,
-      data: data.periodStatuses.map(period => {
-        const found = period.statuses.find(s => s.status === status);
-        return found ? found.count : 0;
-      }),
-      backgroundColor: getChartColor(index)
-    }));
+    for (const status of BUNDLE_STATUS_LIFECYCLE_ORDER) {
+      const count = statusTotals.get(status);
+      if (count !== undefined && count > 0) {
+        points.push({
+          label: status,
+          value: count,
+          color: getBundleStatusColor(status)
+        });
+      }
+    }
 
-    const chartData: BarChartData = { labels, datasets };
-    this.bundleStatusChartData.set(chartData);
+    // Add any unknown statuses at the end
+    statusTotals.forEach((count, status) => {
+      if (!BUNDLE_STATUS_LIFECYCLE_ORDER.includes(status as any) && count > 0) {
+        points.push({
+          label: status,
+          value: count,
+          color: '#6b7280' // Gray for unknown statuses
+        });
+      }
+    });
+
+    this.bundleStatusWaterfallData.set(points);
   }
 
   onRetry(): void {

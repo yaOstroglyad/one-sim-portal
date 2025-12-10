@@ -17,12 +17,29 @@
       margin-bottom: 1.5rem;
 
       .chart-card {
+        overflow: hidden; // Prevent chart overflow
+
         .card-header {
           @include mixins.dashboard-card-header();
         }
 
         .chart-container {
           @include mixins.dashboard-chart-container(300px);
+          overflow: hidden;
+
+          // Fix waterfall chart - needs more height
+          os-waterfall-chart {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            height: 350px; // Override default height for waterfall
+            overflow: hidden;
+          }
+        }
+
+        // Waterfall chart needs taller container
+        &:has(os-waterfall-chart) .chart-container {
+          height: 350px;
         }
 
         .empty-state {

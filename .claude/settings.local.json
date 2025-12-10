@@ -14,14 +14,12 @@
       "Bash(tree:*)",
       "Bash(realpath:*)",
       "Bash(wc:*)",
-
       "// === Git ===",
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git checkout:*)",
       "Bash(git push:*)",
       "Bash(git fetch:*)",
-
       "// === Node.js / npm ===",
       "Bash(node:*)",
       "Bash(npm:*)",
@@ -34,60 +32,48 @@
       "Bash(npm ls:*)",
       "Bash(npm cache clean:*)",
       "Bash(timeout 30 npm start)",
-
       "// === Angular ===",
       "Bash(ng build:*)",
       "Bash(ng update:*)",
       "Bash(npx ng build:*)",
       "Bash(npx tsc:*)",
-
       "// === nvm ===",
       "Bash(source ~/.nvm/nvm.sh)",
       "Bash(nvm install:*)",
       "Bash(nvm alias:*)",
       "Bash(nvm use:*)",
-
       "// === Search / Text ===",
       "Bash(grep:*)",
       "Bash(rg:*)",
       "Bash(sed:*)",
       "Bash(jq:*)",
-
       "// === Process Management ===",
       "Bash(pkill:*)",
       "Bash(lsof:*)",
-
       "// === Docker ===",
       "Bash(docker:*)",
       "Bash(docker build:*)",
-
       "// === Package Managers ===",
       "Bash(brew install:*)",
       "Bash(brew upgrade:*)",
       "Bash(uv:*)",
-
       "// === Python ===",
       "Bash(python3:*)",
-
       "// === Network ===",
       "Bash(curl:*)",
-
       "// === Claude CLI ===",
       "Bash(claude doctor)",
       "Bash(claude --version)",
-
       "// === Specify Scripts ===",
       "Bash(specify:*)",
       "Bash(./.specify/scripts/bash/check-prerequisites.sh:*)",
       "Bash(.specify/scripts/bash/create-new-feature.sh:*)",
       "Bash(./.specify/scripts/bash/setup-plan.sh:*)",
       "Bash(./.specify/scripts/bash/update-agent-context.sh:*)",
-
       "// === Misc ===",
       "Bash(defaults read:*)",
       "Bash(echo $PWD)",
       "Bash(export PATH=\"/Users/andreyostroglyad/.local/bin:$PATH\")",
-
       "// === Web Fetch ===",
       "WebFetch(domain:localhost)",
       "WebFetch(domain:angular.dev)",
@@ -95,9 +81,11 @@
       "WebFetch(domain:catalyst.tailwindui.com)",
       "WebFetch(domain:esim-product.dev.global-sim.app)",
       "WebFetch(domain:esim-server.dev.global-sim.app)",
-
       "// === MCP ===",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(./.specify/scripts/bash/create-new-feature.sh:*)",
+      "SlashCommand(/speckit.specify)",
+      "SlashCommand(/speckit.implement)"
     ],
     "deny": [
       "// === Blocked for Security ===",

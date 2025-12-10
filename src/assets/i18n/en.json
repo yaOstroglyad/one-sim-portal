@@ -1187,7 +1187,7 @@
       "networkStatus": "Network Status",
       "byBundle": "Subscribers by Bundle",
       "byCountry": "Subscribers by Country",
-      "bundleStatuses": "Bundle Statuses",
+      "bundleStatuses": "Bundle Status",
       "chartLabels": {
         "subscribers": "Subscribers"
       }
@@ -1204,8 +1204,13 @@
       "topCountry": "Top Country"
     },
     "finance": {
+      "totalRevenue": "Total Revenue",
+      "avgMargin": "Avg Margin",
       "marginByMonth": "Margin by Month",
+      "revenueTrend": "Revenue Trend",
       "revenue": "Revenue Trend",
+      "revenueByBundle": "Revenue by Bundle",
+      "revenueByCountry": "Revenue by Country",
       "topCountries": "Top 10 Countries by Revenue",
       "topBundles": "Top 10 Bundles by Revenue",
       "balanceForInvoice": "Balance for Invoice",

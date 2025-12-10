@@ -1,7 +1,13 @@
-<div class="os-bar-chart" 
-     [style.width]="width" 
-     [style.height]="height">
-  <div class="os-bar-chart__container">
+<div class="os-bar-chart"
+     [style.width]="width()">
+  @if (showLegend() && legendItems().length > 0) {
+    <app-chart-legend
+      [items]="legendItems()"
+      [maxHeight]="legendMaxHeight()"
+      (itemClick)="onLegendItemClick($event)">
+    </app-chart-legend>
+  }
+  <div class="os-bar-chart__container" [style.height]="height()">
     <canvas #barChartCanvas
             class="os-bar-chart__canvas"
             [attr.aria-label]="'chart.barChart' | translate"

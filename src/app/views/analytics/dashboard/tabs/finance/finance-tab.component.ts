@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@coreui/icons-angular';
 
-import { CardComponent, MetricCardComponent, OsBarChartComponent, OsLineChartComponent } from '@shared';
+import { CardComponent, OsBarChartComponent } from '@shared';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
 
@@ -19,11 +19,9 @@ import { DashboardError } from '../../models/dashboard.types';
 		TranslateModule,
 		IconModule,
 		CardComponent,
-		MetricCardComponent,
 		LoadingIndicatorComponent,
 		ErrorDisplayComponent,
-		OsBarChartComponent,
-		OsLineChartComponent
+		OsBarChartComponent
 	],
 	templateUrl: './finance-tab.component.html',
 	styleUrls: ['./finance-tab.component.scss']

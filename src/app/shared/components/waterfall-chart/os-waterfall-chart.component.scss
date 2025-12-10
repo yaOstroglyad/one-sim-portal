@@ -1,0 +1,21 @@
+// Waterfall Chart Component Styles - Using Chart Mixins Architecture
+@use "variables" as vars;
+@use "mixins" as mixins;
+
+.os-waterfall-chart {
+  @include mixins.chart-complete('os-waterfall-chart', '📊');
+
+  // Fix canvas overflow issue using existing architecture
+  &__container {
+    overflow: hidden;
+  }
+}
+
+// Chart.js canvas styling overrides
+@include mixins.chart-canvas('os-waterfall-chart');
+
+// Responsive breakpoints
+@include mixins.chart-responsive('os-waterfall-chart');
+
+// Accessibility support
+@include mixins.chart-accessibility('os-waterfall-chart');

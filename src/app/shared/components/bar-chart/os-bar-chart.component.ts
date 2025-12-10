@@ -4,17 +4,18 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Input,
-  OnChanges,
   OnDestroy,
-  SimpleChanges,
-  ViewChild
+  effect,
+  inject,
+  input,
+  output,
+  viewChild
 } from '@angular/core';
 import Chart, { ChartOptions } from 'chart.js/auto';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
 import { LocalStorageService } from 'ngx-webstorage';
+import { ChartLegendComponent, ChartLegendItem } from '../chart-legend';
 
 export interface BarChartData {
   labels: string[];
@@ -35,29 +36,42 @@ export type BarChartOptions = ChartOptions<'bar'>;
 
 @Component({
   standalone: true,
-    selector: 'os-bar-chart',
-    templateUrl: './os-bar-chart.component.html',
-    styleUrls: ['./os-bar-chart.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        CommonModule,
-        TranslateModule
-    ]
+  selector: 'os-bar-chart',
+  templateUrl: './os-bar-chart.component.html',
+  styleUrls: ['./os-bar-chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    ChartLegendComponent
+  ]
 })
-export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy {
-  @ViewChild('barChartCanvas') private barChartCanvas!: ElementRef<HTMLCanvasElement>;
+export class OsBarChartComponent implements AfterViewInit, OnDestroy {
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly localStorageService = inject(LocalStorageService);
 
-  @Input() data: BarChartData | null = null;
-  @Input() options: BarChartOptions = {};
-  @Input() width: number | string = '100%';
-  @Input() height: number | string = 400;
-  @Input() chartType: 'bar' | 'horizontalBar' = 'bar';
-  @Input() responsive: boolean = true;
-  @Input() maintainAspectRatio: boolean = false;
-  @Input() theme: 'light' | 'dark' = 'light';
+  private readonly barChartCanvas = viewChild<ElementRef<HTMLCanvasElement>>('barChartCanvas');
+
+  // Signal inputs
+  readonly data = input<BarChartData | null>(null);
+  readonly options = input<BarChartOptions>({});
+  readonly width = input<number | string>('100%');
+  readonly height = input<number | string>(400);
+  readonly chartType = input<'bar' | 'horizontalBar'>('bar');
+  readonly theme = input<'light' | 'dark'>('light');
+
+  /** Legend items for custom legend display */
+  readonly legendItems = input<ChartLegendItem[]>([]);
+  /** Maximum height for legend before scrolling (in pixels) */
+  readonly legendMaxHeight = input<number>(80);
+  /** Whether to show legend (if legendItems provided) */
+  readonly showLegend = input<boolean>(true);
+
+  /** Emits when legend item visibility changes */
+  readonly legendItemsChange = output<ChartLegendItem[]>();
 
   private chart: Chart | null = null;
-  private unsubscribe$ = new Subject<void>();
+  private initialized = false;
 
   // Color palette from project configuration
   private colors = {
@@ -174,10 +188,7 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   };
 
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private localStorageService: LocalStorageService
-  ) {
+  constructor() {
     // Get primary color from view configuration
     const viewConfig = this.localStorageService.retrieve('viewConfig');
     if (viewConfig?.primaryColor) {
@@ -186,6 +197,21 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     // Try to get colors from CSS variables if available
     this.loadColorsFromCSS();
+
+    // Effect to react to input changes (replaces ngOnChanges)
+    effect(() => {
+      const data = this.data();
+      const options = this.options();
+      const chartType = this.chartType();
+      const theme = this.theme();
+
+      // Only update after component is initialized
+      if (this.initialized) {
+        if (data) {
+          this.updateChart();
+        }
+      }
+    });
   }
 
   private loadColorsFromCSS(): void {
@@ -216,37 +242,23 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   ngAfterViewInit(): void {
     this.initializeChart();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data'] && !changes['data'].firstChange) {
-      this.updateChart();
-    }
-    if (changes['options'] && !changes['options'].firstChange) {
-      this.updateChart();
-    }
-    if (changes['chartType'] && !changes['chartType'].firstChange) {
-      this.initializeChart();
-    }
-    if (changes['theme'] && !changes['theme'].firstChange) {
-      this.updateChartTheme();
-    }
+    this.initialized = true;
   }
 
   ngOnDestroy(): void {
     this.destroyChart();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
   }
 
   private initializeChart(): void {
-    if (!this.barChartCanvas?.nativeElement || !this.data) {
+    const canvas = this.barChartCanvas()?.nativeElement;
+    const data = this.data();
+
+    if (!canvas || !data) {
       return;
     }
 
     this.destroyChart();
 
-    const canvas = this.barChartCanvas.nativeElement;
     const context = canvas.getContext('2d');
 
     if (!context) {
@@ -257,19 +269,27 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     // Merge default options with provided options
-    const chartOptions = this.mergeOptions(this.defaultOptions, this.options);
+    const chartOptions = this.mergeOptions(this.defaultOptions, this.options());
 
     // Set chart type specific options
-    if (this.chartType === 'horizontalBar') {
+    if (this.chartType() === 'horizontalBar') {
       chartOptions.indexAxis = 'y';
     }
 
+    // Auto-disable native legend when custom legendItems are provided
+    if (this.legendItems().length > 0 && chartOptions.plugins) {
+      chartOptions.plugins = {
+        ...chartOptions.plugins,
+        legend: { display: false }
+      };
+    }
+
     // Apply theme-specific styling
-    this.applyThemeToData();
+    this.applyThemeToData(data);
 
     this.chart = new Chart(context, {
       type: 'bar',
-      data: this.data,
+      data: data,
       options: chartOptions as any
     });
 
@@ -277,20 +297,34 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   private updateChart(): void {
-    if (!this.chart || !this.data) {
+    const data = this.data();
+
+    if (!this.chart || !data) {
+      // If no chart exists but we have data, initialize
+      if (data && this.barChartCanvas()?.nativeElement) {
+        this.initializeChart();
+      }
       return;
     }
 
     // Apply theme-specific styling
-    this.applyThemeToData();
+    this.applyThemeToData(data);
 
     // Update chart data
-    this.chart.data = this.data;
+    this.chart.data = data;
 
     // Update chart options
-    const chartOptions = this.mergeOptions(this.defaultOptions, this.options);
-    if (this.chartType === 'horizontalBar') {
+    const chartOptions = this.mergeOptions(this.defaultOptions, this.options());
+    if (this.chartType() === 'horizontalBar') {
       chartOptions.indexAxis = 'y';
+    }
+
+    // Auto-disable native legend when custom legendItems are provided
+    if (this.legendItems().length > 0 && chartOptions.plugins) {
+      chartOptions.plugins = {
+        ...chartOptions.plugins,
+        legend: { display: false }
+      };
     }
 
     this.chart.options = chartOptions as any;
@@ -300,31 +334,14 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.cdr.detectChanges();
   }
 
-  private updateChartTheme(): void {
-    if (!this.chart) {
-      return;
-    }
-
-    this.applyThemeToData();
-    this.chart.update('resize');
-    this.cdr.detectChanges();
-  }
-
-  private applyThemeToData(): void {
-    if (!this.data) {
-      return;
-    }
-
+  private applyThemeToData(data: BarChartData): void {
     // Apply default colors if not provided
-    this.data.datasets.forEach((dataset, index) => {
+    data.datasets.forEach((dataset, index) => {
       if (!dataset.backgroundColor) {
         dataset.backgroundColor = this.getDefaultColor(index);
       }
-      if (!dataset.borderColor) {
-        dataset.borderColor = this.getDefaultBorderColor(index);
-      }
       if (dataset.borderWidth === undefined) {
-        dataset.borderWidth = 1;
+        dataset.borderWidth = 0;
       }
       // Only apply default borderRadius if not already set (preserve object values for stacked charts)
       if (dataset.borderRadius === undefined) {
@@ -350,27 +367,6 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
     ];
     const colorKey = colorKeys[index % colorKeys.length];
     return this.colors[colorKey as keyof typeof this.colors];
-  }
-
-  private getDefaultBorderColor(index: number): string {
-    // Generate darker shade for border
-    const baseColor = this.getDefaultColor(index);
-    return this.darkenColor(baseColor, 20);
-  }
-
-  private darkenColor(color: string, percent: number): string {
-    // Convert hex to RGB, darken, and convert back
-    const hex = color.replace('#', '');
-    const r = parseInt(hex.substr(0, 2), 16);
-    const g = parseInt(hex.substr(2, 2), 16);
-    const b = parseInt(hex.substr(4, 2), 16);
-
-    const factor = (100 - percent) / 100;
-    const newR = Math.round(r * factor);
-    const newG = Math.round(g * factor);
-    const newB = Math.round(b * factor);
-
-    return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
   }
 
   private mergeOptions(defaultOptions: BarChartOptions, userOptions: BarChartOptions): BarChartOptions {
@@ -432,8 +428,9 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   public updateColors(newColors: Partial<typeof this.colors>): void {
     Object.assign(this.colors, newColors);
-    if (this.chart && this.data) {
-      this.applyThemeToData();
+    const data = this.data();
+    if (this.chart && data) {
+      this.applyThemeToData(data);
       this.chart.update();
       this.cdr.detectChanges();
     }
@@ -441,5 +438,36 @@ export class OsBarChartComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   public getCurrentColors(): typeof this.colors {
     return { ...this.colors };
+  }
+
+  /**
+   * Handle legend item click - toggle visibility of related datasets
+   */
+  onLegendItemClick(event: { index: number; item: ChartLegendItem }): void {
+    if (!this.chart) return;
+
+    const clickedLabel = event.item.label;
+    const datasets = this.chart.data.datasets;
+
+    // Find all datasets that match this legend item (same color/group)
+    datasets.forEach((dataset, datasetIndex) => {
+      // Match by label containing the group name
+      if (dataset.label?.includes(clickedLabel)) {
+        const meta = this.chart!.getDatasetMeta(datasetIndex);
+        meta.hidden = !meta.hidden;
+      }
+    });
+
+    // Emit updated legend items to parent (do not mutate input)
+    const updatedItems = this.legendItems().map((item, index) => {
+      if (index === event.index) {
+        return { ...item, hidden: !item.hidden };
+      }
+      return item;
+    });
+    this.legendItemsChange.emit(updatedItems);
+
+    this.chart.update();
+    this.cdr.detectChanges();
   }
 }

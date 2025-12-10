@@ -983,10 +983,31 @@
       "networkStatus": "סטטוס רשת",
       "byBundle": "מנויים לפי חבילה",
       "byCountry": "מנויים לפי מדינה",
-      "bundleStatuses": "סטטוסי חבילות",
+      "bundleStatuses": "סטטוס חבילות",
       "chartLabels": {
         "subscribers": "מנויים"
       }
+    },
+    "finance": {
+      "totalRevenue": "הכנסה כוללת",
+      "avgMargin": "מרווח ממוצע",
+      "marginByMonth": "מרווח לפי חודש",
+      "revenueTrend": "מגמת הכנסות",
+      "revenue": "מגמת הכנסות",
+      "revenueByBundle": "הכנסה לפי חבילה",
+      "revenueByCountry": "הכנסה לפי מדינה",
+      "topCountries": "10 המדינות המובילות לפי הכנסה",
+      "topBundles": "10 החבילות המובילות לפי הכנסה",
+      "balanceForInvoice": "יתרה להפקת חשבונית",
+      "bundlePurchases": "רכישות חבילות להפקת חשבונית",
+      "company": "חברה",
+      "amount": "סכום",
+      "dueDate": "תאריך פירעון",
+      "status": "סטטוס",
+      "bundle": "חבילה",
+      "quantity": "כמות",
+      "customer": "לקוח",
+      "total": "סה\"כ"
     },
     "noData": "אין נתונים",
     "inDevelopment": "בפיתוח",

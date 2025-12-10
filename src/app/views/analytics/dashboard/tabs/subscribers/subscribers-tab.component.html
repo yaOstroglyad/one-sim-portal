@@ -35,7 +35,9 @@
             <div class="chart-container">
               <os-bar-chart
                 [data]="networkStatusChartData()"
-                [options]="chartOptions">
+                [options]="chartOptions"
+                [legendItems]="networkStatusLegendItems()"
+                [legendMaxHeight]="80">
               </os-bar-chart>
             </div>
           </os-card>
@@ -64,7 +66,9 @@
             <div class="chart-container">
               <os-bar-chart
                 [data]="bundleChartData()"
-                [options]="chartOptions">
+                [options]="chartOptions"
+                [legendItems]="bundleLegendItems()"
+                [legendMaxHeight]="80">
               </os-bar-chart>
             </div>
           } @else {
@@ -83,7 +87,9 @@
             <div class="chart-container">
               <os-bar-chart
                 [data]="countryChartData()"
-                [options]="chartOptions">
+                [options]="chartOptions"
+                [legendItems]="countryLegendItems()"
+                [legendMaxHeight]="80">
               </os-bar-chart>
             </div>
           } @else {
@@ -94,18 +100,18 @@
         </os-card>
       </div>
 
-      <!-- Bundle Statuses Chart -->
-      @if (bundleStatusData()?.periodStatuses?.length) {
+      <!-- Bundle Statuses Waterfall Chart -->
+      @if (bundleStatusWaterfallData()?.length) {
         <div class="chart-section">
           <os-card class="chart-card" variant="default">
             <div class="card-header">
               <h3>{{ 'dashboard.subscribers.bundleStatuses' | translate }}</h3>
             </div>
             <div class="chart-container">
-              <os-bar-chart
-                [data]="bundleStatusChartData()"
-                [options]="chartOptions">
-              </os-bar-chart>
+              <os-waterfall-chart
+                [data]="bundleStatusWaterfallData()"
+                [height]="350">
+              </os-waterfall-chart>
             </div>
           </os-card>
         </div>
