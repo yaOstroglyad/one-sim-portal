@@ -384,6 +384,7 @@ export class FinanceDataService {
             enabled: true,
             mode: 'index' as const,
             intersect: false,
+            itemSort: (a: any, b: any) => (b.parsed.y || 0) - (a.parsed.y || 0),
             callbacks: {
               label: (context: any) => {
                 const value = context.parsed.y || 0;

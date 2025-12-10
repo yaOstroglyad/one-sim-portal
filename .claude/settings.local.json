@@ -85,7 +85,9 @@
       "mcp__ide__getDiagnostics",
       "Bash(./.specify/scripts/bash/create-new-feature.sh:*)",
       "SlashCommand(/speckit.specify)",
-      "SlashCommand(/speckit.implement)"
+      "SlashCommand(/speckit.implement)",
+      "Bash(git merge:*)",
+      "Bash(git stash:*)"
     ],
     "deny": [
       "// === Blocked for Security ===",
