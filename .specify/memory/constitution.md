@@ -7,7 +7,7 @@
 - **Name:** One-Sim-Portal
 - **Purpose:** B2B eSIM management platform for telecom operators
 - **Domain:** eSIM provisioning, subscriber management, billing, analytics
-- **Stack:** Angular 21.0.5, TypeScript 5.9, CoreUI, Angular Material, RxJS, Chart.js
+- **Stack:** Angular 21.0.5 (Zoneless), TypeScript 5.9, CoreUI, Angular Material, RxJS, Chart.js
 - **Root Directory:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/`
 
 ---

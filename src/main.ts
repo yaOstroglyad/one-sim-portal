@@ -5,7 +5,7 @@ import { AppComponent } from './app/app.component';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ErrorHandler, importProvidersFrom, inject, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
+import { ErrorHandler, importProvidersFrom, inject, provideAppInitializer, provideZonelessChangeDetection } from '@angular/core';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
@@ -105,7 +105,8 @@ initializeMockMode();
 bootstrapApplication(AppComponent, {
   providers: [
     // Router
-    provideZoneChangeDetection(),provideRouter(routes, withHashLocation()),
+    provideZonelessChangeDetection(),
+    provideRouter(routes, withHashLocation()),
 
     // Animations
     provideAnimations(),
