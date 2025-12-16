@@ -98,7 +98,9 @@
       "Bash(while read file)",
       "Bash(do perl -i -0pe 's/\\@Component\\(\\{\\n(\\s+)/\\@Component({\\n$1standalone: true,\\n$1/g' \"$file\" done)",
       "Bash(xargs:*)",
-      "Bash(nvm list)"
+      "Bash(nvm list)",
+      "Bash(gzip:*)",
+      "Bash(git pull:*)"
     ],
     "deny": [
       "// === Blocked for Security ===",

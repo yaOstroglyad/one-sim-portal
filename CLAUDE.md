@@ -191,6 +191,8 @@ specs/                      # Feature specifications
 - N/A (read-only API integration) (010-subscribers-api)
 - TypeScript 5.9, Angular 21.0.5 + Chart.js (existing), @angular/core, RxJS (012-waterfall-chart)
 - N/A (visualization component only) (012-waterfall-chart)
+- TypeScript 5.9, Angular 21.0.5 + Angular Core, Angular Material, CoreUI, RxJS, Chart.js (014-zoneless)
+- N/A (frontend-only change) (014-zoneless)
 
 ## Recent Changes
 - 013-angular-21-upgrade: Upgraded Angular 19.2.15 → 21.0.5, TypeScript 5.8 → 5.9, removed @angular/flex-layout
