@@ -1,25 +1,24 @@
 import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core';
-import { AsyncPipe, DatePipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
 import { Subscriber, SubscriberDataService, SubscriberStatusEvent, EmptyStateComponent } from '@shared';
 import { MatTableModule } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-event-status',
     templateUrl: './event-status.component.html',
     styleUrls: ['./event-status.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
-        MatTableModule,
-        DatePipe,
-        NgClass,
-        AsyncPipe,
-        NgIf,
-        EmptyStateComponent,
-        TranslateModule
-    ]
+    MatTableModule,
+    DatePipe,
+    NgClass,
+    AsyncPipe,
+    EmptyStateComponent,
+    TranslateModule
+]
 })
 export class EventStatusComponent implements OnInit {
 	subscriberDataService = inject(SubscriberDataService);
@@ -44,8 +43,6 @@ export class EventStatusComponent implements OnInit {
 				return '';
 		}
 	}
-
-
 	ngOnInit(): void {
 		this.subscriberEventsView$ = this.subscriberDataService.getSimStatusEvents(this.subscriber.simId);
 	}

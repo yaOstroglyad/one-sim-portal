@@ -38,7 +38,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { VisualService } from 'src/app/shared/services/ui/visual.service';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-portal',
     templateUrl: './portal.component.html',
     styleUrls: ['./portal.component.scss'],
@@ -62,8 +62,6 @@ export class PortalComponent implements OnInit {
 	public isFormValid = false;
 	public formValues: any = {};
   public defaultFormConfig: FormConfig;
-
-
   constructor(
 		private snackBar: MatSnackBar,
 		private viewConfigService: ViewConfigurationService,

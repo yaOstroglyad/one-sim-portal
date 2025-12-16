@@ -1,161 +1,161 @@
-<ng-container *ngIf="customerDetailsView$ | async as customerDetailsView">
-    <div class="header">
-        <div class="header-title">
-            <h1>{{ customerDetailsView.customer.name }}</h1>
-        </div>
-        <div class="header-actions">
-            <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-                <button *ngIf="isAdmin || isSpecial"
-                        mat-menu-item
-                        (click)="addSubscriber()">
-                    <mat-icon>person_add</mat-icon>
-                    <span>{{ 'customer.private-customer-details.add-subscriber' | translate }}</span>
-                </button>
-                <button mat-menu-item
-                        [disabled]="!selectedSubscriber"
-                        [matTooltipDisabled]="!!selectedSubscriber"
-                        matTooltip="{{ 'customer.private-customer-details.sendRegistrationEmailTooltip' | translate }}"
-                        matTooltipPosition="below"
-                        matTooltipClass="tooltip"
-                        (mouseenter)="!selectedSubscriber && highlightTab()"
-                        (mouseleave)="!selectedSubscriber && removeHighlightTab()"
-                        (click)="sendRegistrationEmail(selectedSubscriber)">
-                    <mat-icon>email</mat-icon>
-                    <span>{{ 'customer.private-customer-details.sendRegistrationEmail' | translate }}</span>
-                </button>
-                <button mat-menu-item
-                        *ngIf="isAdmin || isSpecial"
-                        [disabled]="!selectedSubscriber"
-                        [matTooltipDisabled]="!!selectedSubscriber"
-                        matTooltip="{{ 'customer.private-customer-details.add-product-action-tooltip' | translate }}"
-                        matTooltipPosition="below"
-                        matTooltipClass="tooltip"
-                        (mouseenter)="!selectedSubscriber && highlightTab()"
-                        (mouseleave)="!selectedSubscriber && removeHighlightTab()"
-                        (click)="addProduct(selectedSubscriber)">
-                    <mat-icon>add_shopping_cart</mat-icon>
-                    <span>{{ 'customer.private-customer-details.add-product' | translate }}</span>
-                </button>
-                <button mat-menu-item
-                        [disabled]="!selectedSubscriber"
-                        [matTooltipDisabled]="!!selectedSubscriber"
-                        matTooltip="{{ 'customer.private-customer-details.refundTooltip' | translate }}"
-                        matTooltipPosition="below"
-                        matTooltipClass="tooltip"
-                        (mouseenter)="!selectedSubscriber && highlightTab()"
-                        (mouseleave)="!selectedSubscriber && removeHighlightTab()"
-                        (click)="openRefund(selectedSubscriber)">
-                    <mat-icon>money_off</mat-icon>
-                    <span>{{ 'customer.private-customer-details.refund' | translate }}</span>
-                </button>
-                <button mat-menu-item
-                        [disabled]="!selectedSubscriber"
-                        [matTooltipDisabled]="!!selectedSubscriber"
-                        matTooltip="{{ 'customer.private-customer-details.qrCodeTooltip' | translate }}"
-                        matTooltipPosition="below"
-                        matTooltipClass="tooltip"
-                        (mouseenter)="!selectedSubscriber && highlightTab()"
-                        (mouseleave)="!selectedSubscriber && removeHighlightTab()"
-                        (click)="openShowQRCode(selectedSubscriber)">
-                    <mat-icon>qr_code</mat-icon>
-                    <span>{{ 'customer.private-customer-details.showQRCode' | translate }}</span>
-                </button>
-            </mat-menu>
-        </div>
+@if (customerDetailsView$ | async; as customerDetailsView) {
+  <div class="header">
+    <div class="header-title">
+      <h1>{{ customerDetailsView.customer.name }}</h1>
     </div>
-
-    <div class="tabs-container">
-        <mat-tab-group #tabGroup
-                       class="tabs"
-                       mat-stretch-tabs="false"
-                       mat-align-tabs="start"
-                       (selectedTabChange)="onTabChange($event)">
-            <mat-tab label="{{ 'customer.private-customer-details.overview' | translate }}">
-                <div class="content">
-                    <div class="left-panel">
-                        <mat-card>
-                            <mat-card-header>
-                                <mat-card-title>{{ 'customer.private-customer-details.location' | translate }}</mat-card-title>
-                            </mat-card-header>
-                            <mat-card-content *ngIf="simLocations">
-                                <p><strong>{{ 'customer.private-customer-details.imsi' | translate }}
-                                    :</strong> {{ simLocations[0]?.imsi || 'N/A' }}</p>
-                                <p><strong>{{ 'customer.private-customer-details.state' | translate }}
-                                    :</strong> {{ simLocations[0]?.state || 'N/A' }}</p>
-                                <p><strong>{{ 'customer.private-customer-details.country' | translate }}
-                                    :</strong> {{ simLocations[0]?.country || 'N/A' }}</p>
-                                <p><strong>{{ 'customer.private-customer-details.operator' | translate }}
-                                    :</strong> {{ simLocations[0]?.operator || 'N/A' }}</p>
-                            </mat-card-content>
-                        </mat-card>
-
-                        <mat-card>
-                            <mat-card-header>
-                                <mat-card-title>{{ 'customer.private-customer-details.otherDetails' | translate }}</mat-card-title>
-                            </mat-card-header>
-                            <mat-card-content>
-                                <p><strong>{{ 'customer.private-customer-details.currencyCode' | translate }}
-                                    : </strong>{{ currency.toUpperCase() }}</p>
-                                <p><strong>{{ 'customer.private-customer-details.status' | translate }}: </strong>
-                                    <c-badge
-                                            [color]="customerDetailsView.customer.status === 'active' ? 'success' : 'secondary'">
-                                        {{ customerDetailsView?.customer?.status || '-' }}
-                                    </c-badge>
-                                </p>
-                                <p>
-                                    <strong>{{ 'createUser.email' | translate }}: </strong>
-                                    <span copyToClipboard>
-                                        {{ customerDetailsView?.userProfile?.email || '-' }}
-                                    </span>
-                                </p>
-                                <p><strong>{{ 'customer.private-customer-details.language' | translate }}: </strong>EN
-                                </p>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-
-                    <div class="right-panel">
-                        <mat-card>
-                            <mat-card-header>
-                                <mat-card-title>{{ 'customer.private-customer-details.financialSummary' | translate }}</mat-card-title>
-                            </mat-card-header>
-                            <mat-card-content>
-                                <p><strong>{{ 'customer.private-customer-details.totalSpent' | translate }}
-                                    :</strong> {{ totalSpent }} {{ currency.toUpperCase() }}</p>
-                                <p><strong>{{ 'customer.private-customer-details.totalUsedData' | translate }}
-                                    :</strong> {{ totalUsedGB }} GB</p>
-                            </mat-card-content>
-                        </mat-card>
-
-                        <mat-card>
-                            <mat-card-header>
-                                <mat-card-title>{{ 'customer.private-customer-details.activityTimeline' | translate }}</mat-card-title>
-                            </mat-card-header>
-                            <mat-card-content>
-                                <app-empty-state
-                                        *ngIf="!timelineEvents || timelineEvents.length === 0"
-                                        [title]="'customer.private-customer-details.noActivities' | translate"
-                                        [message]="'customer.private-customer-details.noActivitiesMessage' | translate"
-                                        [imageSrc]="'assets/icons/no-activities.svg'">
-                                </app-empty-state>
-                                <app-timeline [events]="timelineEvents"></app-timeline>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                </div>
-            </mat-tab>
-
-            <ng-container *ngFor="let subscriber of customerDetailsView.subscribers; trackBy: trackBySubscriber">
-                <mat-tab label="{{ subscriber.name }}">
-                    <div class="tab-content">
-                        <app-subscriber-details [subscriber]="subscriber"></app-subscriber-details>
-                    </div>
-                </mat-tab>
-            </ng-container>
-
-        </mat-tab-group>
+    <div class="header-actions">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        @if (isAdmin || isSpecial) {
+          <button
+            mat-menu-item
+            (click)="addSubscriber()">
+            <mat-icon>person_add</mat-icon>
+            <span>{{ 'customer.private-customer-details.add-subscriber' | translate }}</span>
+          </button>
+        }
+        <button mat-menu-item
+          [disabled]="!selectedSubscriber"
+          [matTooltipDisabled]="!!selectedSubscriber"
+          matTooltip="{{ 'customer.private-customer-details.sendRegistrationEmailTooltip' | translate }}"
+          matTooltipPosition="below"
+          matTooltipClass="tooltip"
+          (mouseenter)="!selectedSubscriber && highlightTab()"
+          (mouseleave)="!selectedSubscriber && removeHighlightTab()"
+          (click)="sendRegistrationEmail(selectedSubscriber)">
+          <mat-icon>email</mat-icon>
+          <span>{{ 'customer.private-customer-details.sendRegistrationEmail' | translate }}</span>
+        </button>
+        @if (isAdmin || isSpecial) {
+          <button mat-menu-item
+            [disabled]="!selectedSubscriber"
+            [matTooltipDisabled]="!!selectedSubscriber"
+            matTooltip="{{ 'customer.private-customer-details.add-product-action-tooltip' | translate }}"
+            matTooltipPosition="below"
+            matTooltipClass="tooltip"
+            (mouseenter)="!selectedSubscriber && highlightTab()"
+            (mouseleave)="!selectedSubscriber && removeHighlightTab()"
+            (click)="addProduct(selectedSubscriber)">
+            <mat-icon>add_shopping_cart</mat-icon>
+            <span>{{ 'customer.private-customer-details.add-product' | translate }}</span>
+          </button>
+        }
+        <button mat-menu-item
+          [disabled]="!selectedSubscriber"
+          [matTooltipDisabled]="!!selectedSubscriber"
+          matTooltip="{{ 'customer.private-customer-details.refundTooltip' | translate }}"
+          matTooltipPosition="below"
+          matTooltipClass="tooltip"
+          (mouseenter)="!selectedSubscriber && highlightTab()"
+          (mouseleave)="!selectedSubscriber && removeHighlightTab()"
+          (click)="openRefund(selectedSubscriber)">
+          <mat-icon>money_off</mat-icon>
+          <span>{{ 'customer.private-customer-details.refund' | translate }}</span>
+        </button>
+        <button mat-menu-item
+          [disabled]="!selectedSubscriber"
+          [matTooltipDisabled]="!!selectedSubscriber"
+          matTooltip="{{ 'customer.private-customer-details.qrCodeTooltip' | translate }}"
+          matTooltipPosition="below"
+          matTooltipClass="tooltip"
+          (mouseenter)="!selectedSubscriber && highlightTab()"
+          (mouseleave)="!selectedSubscriber && removeHighlightTab()"
+          (click)="openShowQRCode(selectedSubscriber)">
+          <mat-icon>qr_code</mat-icon>
+          <span>{{ 'customer.private-customer-details.showQRCode' | translate }}</span>
+        </button>
+      </mat-menu>
     </div>
-</ng-container>
+  </div>
+  <div class="tabs-container">
+    <mat-tab-group #tabGroup
+      class="tabs"
+      mat-stretch-tabs="false"
+      mat-align-tabs="start"
+      (selectedTabChange)="onTabChange($event)">
+      <mat-tab label="{{ 'customer.private-customer-details.overview' | translate }}">
+        <div class="content">
+          <div class="left-panel">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>{{ 'customer.private-customer-details.location' | translate }}</mat-card-title>
+              </mat-card-header>
+              @if (simLocations) {
+                <mat-card-content>
+                  <p><strong>{{ 'customer.private-customer-details.imsi' | translate }}
+                  :</strong> {{ simLocations[0]?.imsi || 'N/A' }}</p>
+                  <p><strong>{{ 'customer.private-customer-details.state' | translate }}
+                  :</strong> {{ simLocations[0]?.state || 'N/A' }}</p>
+                  <p><strong>{{ 'customer.private-customer-details.country' | translate }}
+                  :</strong> {{ simLocations[0]?.country || 'N/A' }}</p>
+                  <p><strong>{{ 'customer.private-customer-details.operator' | translate }}
+                  :</strong> {{ simLocations[0]?.operator || 'N/A' }}</p>
+                </mat-card-content>
+              }
+            </mat-card>
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>{{ 'customer.private-customer-details.otherDetails' | translate }}</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p><strong>{{ 'customer.private-customer-details.currencyCode' | translate }}
+                : </strong>{{ currency.toUpperCase() }}</p>
+                <p><strong>{{ 'customer.private-customer-details.status' | translate }}: </strong>
+                <c-badge
+                  [color]="customerDetailsView.customer.status === 'active' ? 'success' : 'secondary'">
+                  {{ customerDetailsView?.customer?.status || '-' }}
+                </c-badge>
+              </p>
+              <p>
+                <strong>{{ 'createUser.email' | translate }}: </strong>
+                <span copyToClipboard>
+                  {{ customerDetailsView?.userProfile?.email || '-' }}
+                </span>
+              </p>
+              <p><strong>{{ 'customer.private-customer-details.language' | translate }}: </strong>EN
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="right-panel">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>{{ 'customer.private-customer-details.financialSummary' | translate }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p><strong>{{ 'customer.private-customer-details.totalSpent' | translate }}
+            :</strong> {{ totalSpent }} {{ currency.toUpperCase() }}</p>
+            <p><strong>{{ 'customer.private-customer-details.totalUsedData' | translate }}
+            :</strong> {{ totalUsedGB }} GB</p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>{{ 'customer.private-customer-details.activityTimeline' | translate }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (!timelineEvents || timelineEvents.length === 0) {
+              <app-empty-state
+                [title]="'customer.private-customer-details.noActivities' | translate"
+                [message]="'customer.private-customer-details.noActivitiesMessage' | translate"
+                [imageSrc]="'assets/icons/no-activities.svg'">
+              </app-empty-state>
+            }
+            <app-timeline [events]="timelineEvents"></app-timeline>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </mat-tab>
+  @for (subscriber of customerDetailsView.subscribers; track trackBySubscriber($index, subscriber)) {
+    <mat-tab label="{{ subscriber.name }}">
+      <div class="tab-content">
+        <app-subscriber-details [subscriber]="subscriber"></app-subscriber-details>
+      </div>
+    </mat-tab>
+  }
+</mat-tab-group>
+</div>
+}

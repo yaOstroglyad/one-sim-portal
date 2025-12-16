@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormGroup } from '@angular/forms';
 import { IconDirective } from '@coreui/icons-angular';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,16 +27,15 @@ import {
 } from './company-product-form.utils';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-company-product-form',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
-        CommonModule,
-        FormGeneratorComponent,
-        IconDirective,
-        SelectedTariffOfferDetailsComponent,
-        CompanyProductPricesTableComponent
-    ],
+    FormGeneratorComponent,
+    IconDirective,
+    SelectedTariffOfferDetailsComponent,
+    CompanyProductPricesTableComponent
+],
     templateUrl: './company-product-form.component.html',
     styleUrls: ['./company-product-form.component.scss']
 })

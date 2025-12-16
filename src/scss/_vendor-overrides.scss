@@ -1145,16 +1145,16 @@ h6.mat-mdc-dialog-title,
 
 .mat-mdc-snack-bar-container {
   --mat-mdc-snack-bar-button-color: var(--os-color-dark-contrast);
-  --mdc-snackbar-supporting-text-color: var(--os-color-dark-contrast);
+  --mat-snackbar-supporting-text-color: var(--os-color-dark-contrast);
   border-radius: map.get(vars.$os-border-radius, 'medium');
   font-family: var(--os-font-family);
 
   &.app-notification-error {
-    --mdc-snackbar-container-color: var(--os-color-danger);
+    --mat-snackbar-container-color: var(--os-color-danger);
   }
 
   &.app-notification-success {
-    --mdc-snackbar-container-color: var(--os-color-success);
+    --mat-snackbar-container-color: var(--os-color-success);
   }
 }
 
@@ -1228,10 +1228,10 @@ h6.mat-mdc-dialog-title,
 .ag-cell .mat-mdc-icon-button,
 :host ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base,
 :host-context([dir="rtl"]) ::ng-deep .mat-mdc-icon-button.mat-mdc-button-base {
-  --mdc-icon-button-state-layer-size: 28px;
-  --mdc-icon-button-icon-size: 18px;
-  width: var(--mdc-icon-button-state-layer-size) !important;
-  height: var(--mdc-icon-button-state-layer-size) !important;
+  --mat-icon-button-state-layer-size: 28px;
+  --mat-icon-button-icon-size: 18px;
+  width: var(--mat-icon-button-state-layer-size) !important;
+  height: var(--mat-icon-button-state-layer-size) !important;
   padding: 0 !important;
   margin: 0 !important;
   min-width: unset !important;
@@ -1244,18 +1244,18 @@ h6.mat-mdc-dialog-title,
 // ==============================================
 
 .mat-mdc-icon-button.mat-mdc-button-base {
-  --mdc-icon-button-state-layer-size: 39px;
-  width: var(--mdc-icon-button-state-layer-size);
-  height: var(--mdc-icon-button-state-layer-size);
+  --mat-icon-button-state-layer-size: 39px;
+  width: var(--mat-icon-button-state-layer-size);
+  height: var(--mat-icon-button-state-layer-size);
   padding: 6px;
 }
 
 // Material icons inside table buttons
 .ag-grid-table .mat-mdc-icon-button .mat-icon,
 .ag-cell .mat-mdc-icon-button .mat-icon {
-  width: var(--mdc-icon-button-icon-size) !important;
-  height: var(--mdc-icon-button-icon-size) !important;
-  font-size: var(--mdc-icon-button-icon-size) !important;
+  width: var(--mat-icon-button-icon-size) !important;
+  height: var(--mat-icon-button-icon-size) !important;
+  font-size: var(--mat-icon-button-icon-size) !important;
   line-height: 1 !important;
 }
 

@@ -44,8 +44,8 @@ import { OsDropdownPosition } from './os-dropdown.model';
  * ```
  */
 @Component({
-  selector: 'os-dropdown',
   standalone: true,
+  selector: 'os-dropdown',
   imports: [
     CommonModule
   ],
@@ -144,7 +144,8 @@ export class OsDropdownComponent {
    * Handle Escape key to close dropdown
    */
   @HostListener('document:keydown.escape', ['$event'])
-  onEscapeKey(event: KeyboardEvent): void {
+  onEscapeKey(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
     if (this.isOpenState()) {
       event.preventDefault();
       this.close();

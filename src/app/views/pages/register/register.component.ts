@@ -7,6 +7,7 @@ import { FormGeneratorComponent } from '@shared';
 
 @Component({
     standalone: true,
+
     selector: 'app-register',
     imports: [TranslateModule, MatButtonModule, FormGeneratorComponent],
     templateUrl: './register.component.html',

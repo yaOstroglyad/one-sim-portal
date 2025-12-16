@@ -36,7 +36,7 @@ import { CompanyProductsTableService } from '../company-products-table.service';
 import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-company-product-list',
     imports: [
         CommonModule,

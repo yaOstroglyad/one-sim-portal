@@ -1,14 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
-
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-empty-state',
     templateUrl: './empty-state.component.html',
-    imports: [
-        NgIf,
-        CommonModule
-    ],
+    imports: [],
     styleUrls: ['./empty-state.component.scss']
 })
 export class EmptyStateComponent {

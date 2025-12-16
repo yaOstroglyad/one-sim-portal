@@ -1,134 +1,164 @@
-<div class="searchable-select" 
-     [class.disabled]="config.disabled"
-     [class.error]="!!error"
-     [class.open]="isOpen">
+<div class="searchable-select"
+  [class.disabled]="config.disabled"
+  [class.error]="!!error"
+  [class.open]="isOpen">
 
   <!-- Label -->
-  <label *ngIf="label" class="select-label">
-    {{ label | translate }}
-    <span *ngIf="required" class="required">*</span>
-  </label>
+  @if (label) {
+    <label class="select-label">
+      {{ label | translate }}
+      @if (required) {
+        <span class="required">*</span>
+      }
+    </label>
+  }
 
   <!-- Main select button -->
-  <div class="select-trigger" 
-       (click)="toggle()"
-       [attr.tabindex]="config.disabled ? -1 : 0"
-       role="combobox"
-       [attr.aria-expanded]="isOpen"
-       [attr.aria-haspopup]="true"
-       [attr.aria-disabled]="config.disabled">
+  <div class="select-trigger"
+    (click)="toggle()"
+    [attr.tabindex]="config.disabled ? -1 : 0"
+    role="combobox"
+    [attr.aria-expanded]="isOpen"
+    [attr.aria-haspopup]="true"
+    [attr.aria-disabled]="config.disabled">
 
     <!-- Selected value display -->
     <div class="select-value" [class.placeholder]="hasPlaceholder">
       <!-- Single selection display -->
-      <span *ngIf="!config.multiple" class="single-value" [class.placeholder]="hasPlaceholder">
-        <span *ngIf="!hasPlaceholder">{{ displayText }}</span>
-        <span *ngIf="hasPlaceholder">{{ config.placeholder | translate }}</span>
-      </span>
+      @if (!config.multiple) {
+        <span class="single-value" [class.placeholder]="hasPlaceholder">
+          @if (!hasPlaceholder) {
+            <span>{{ displayText }}</span>
+          }
+          @if (hasPlaceholder) {
+            <span>{{ config.placeholder | translate }}</span>
+          }
+        </span>
+      }
 
       <!-- Multiple selection display -->
-      <div *ngIf="config.multiple" class="multiple-values">
-        <!-- Show placeholder text when no selections -->
-        <span *ngIf="hasPlaceholder" class="placeholder">
-          {{ config.placeholder | translate }}
-        </span>
-        <!-- Show chips when items are selected -->
-        <div *ngIf="hasSelectedChips" class="selected-chips">
-          <span *ngFor="let option of selectedMultipleOptions" class="chip">
-            {{ option.label }}
-            <svg cIcon name="cilX" 
-                 class="chip-remove" 
-                 (click)="removeOption(option, $event)"
-                 width="12" height="12">
-            </svg>
-          </span>
+      @if (config.multiple) {
+        <div class="multiple-values">
+          <!-- Show placeholder text when no selections -->
+          @if (hasPlaceholder) {
+            <span class="placeholder">
+              {{ config.placeholder | translate }}
+            </span>
+          }
+          <!-- Show chips when items are selected -->
+          @if (hasSelectedChips) {
+            <div class="selected-chips">
+              @for (option of selectedMultipleOptions; track option) {
+                <span class="chip">
+                  {{ option.label }}
+                  <svg cIcon name="cilX"
+                    class="chip-remove"
+                    (click)="removeOption(option, $event)"
+                    width="12" height="12">
+                  </svg>
+                </span>
+              }
+            </div>
+          }
         </div>
-      </div>
+      }
     </div>
 
     <!-- Controls -->
     <div class="select-controls">
       <!-- Clear button disabled -->
-      <!-- <svg *ngIf="showClearButton" 
-           cIcon name="cilX" 
-           class="clear-button"
-           (click)="clear($event); $event.stopPropagation()"
-           width="16" height="16">
-      </svg> -->
+      <!-- <svg *ngIf="showClearButton"
+      cIcon name="cilX"
+      class="clear-button"
+      (click)="clear($event); $event.stopPropagation()"
+      width="16" height="16">
+    </svg> -->
 
-      <!-- Loading spinner -->
-      <div *ngIf="showLoadingState" class="loading-spinner">
+    <!-- Loading spinner -->
+    @if (showLoadingState) {
+      <div class="loading-spinner">
         <svg cIcon name="cilReload" width="16" height="16" class="spinning"></svg>
       </div>
+    }
 
-      <!-- Dropdown arrow -->
-      <mat-icon class="dropdown-arrow" 
-                [class.rotated]="isOpen">
-        expand_more
-      </mat-icon>
-    </div>
+    <!-- Dropdown arrow -->
+    <mat-icon class="dropdown-arrow"
+      [class.rotated]="isOpen">
+      expand_more
+    </mat-icon>
   </div>
+</div>
 
-  <!-- Dropdown -->
-  <div *ngIf="isOpen" class="select-dropdown" [style.max-height]="dropdownMaxHeight">
-    
+<!-- Dropdown -->
+@if (isOpen) {
+  <div class="select-dropdown" [style.max-height]="dropdownMaxHeight">
     <!-- Search input -->
-    <div *ngIf="showSearchInput" class="search-container">
-      <svg cIcon name="cilSearch" class="search-icon" width="16" height="16"></svg>
-      <input #searchInput
-             type="text"
-             class="search-input"
-             [formControl]="searchControl"
-             [placeholder]="config.searchPlaceholder | translate"
-             (click)="$event.stopPropagation()">
-    </div>
-
+    @if (showSearchInput) {
+      <div class="search-container">
+        <svg cIcon name="cilSearch" class="search-icon" width="16" height="16"></svg>
+        <input #searchInput
+          type="text"
+          class="search-input"
+          [formControl]="searchControl"
+          [placeholder]="config.searchPlaceholder | translate"
+          (click)="$event.stopPropagation()">
+      </div>
+    }
     <!-- Options list -->
     <div class="options-list" #dropdown>
-      
       <!-- Loading state -->
-      <div *ngIf="showLoadingState" class="option loading">
-        <svg cIcon name="cilReload" width="16" height="16" class="spinning"></svg>
-        {{ config.loadingText | translate }}
-      </div>
-
-      <!-- No results -->
-      <div *ngIf="showNoResults" class="option no-results">
-        {{ config.noResultsText | translate }}
-      </div>
-
-      <!-- Options -->
-      <div *ngFor="let option of filteredOptions; let i = index; trackBy: trackByOptionValue"
-           class="option"
-           [class.selected]="isOptionSelected(option)"
-           [class.highlighted]="i === highlightedIndex"
-           [class.disabled]="option.disabled"
-           (click)="selectOption(option, $event)">
-        
-        <!-- Checkbox for multiple selection -->
-        <div *ngIf="config.multiple" class="option-checkbox">
-          <svg *ngIf="isOptionSelected(option)" 
-               cIcon name="cilCheckAlt" 
-               width="16" height="16" 
-               class="check-icon">
-          </svg>
+      @if (showLoadingState) {
+        <div class="option loading">
+          <svg cIcon name="cilReload" width="16" height="16" class="spinning"></svg>
+          {{ config.loadingText | translate }}
         </div>
-
-        <!-- Option label -->
-        <span class="option-label">{{ option.label }}</span>
-
-        <!-- Selected indicator for single selection -->
-        <svg *ngIf="!config.multiple && isOptionSelected(option)" 
-             cIcon name="cilCheckAlt" 
-             width="16" height="16" 
-             class="selected-icon">
-        </svg>
-      </div>
+      }
+      <!-- No results -->
+      @if (showNoResults) {
+        <div class="option no-results">
+          {{ config.noResultsText | translate }}
+        </div>
+      }
+      <!-- Options -->
+      @for (option of filteredOptions; track trackByOptionValue(i, option); let i = $index) {
+        <div
+          class="option"
+          [class.selected]="isOptionSelected(option)"
+          [class.highlighted]="i === highlightedIndex"
+          [class.disabled]="option.disabled"
+          (click)="selectOption(option, $event)">
+          <!-- Checkbox for multiple selection -->
+          @if (config.multiple) {
+            <div class="option-checkbox">
+              @if (isOptionSelected(option)) {
+                <svg
+                  cIcon name="cilCheckAlt"
+                  width="16" height="16"
+                  class="check-icon">
+                </svg>
+              }
+            </div>
+          }
+          <!-- Option label -->
+          <span class="option-label">{{ option.label }}</span>
+          <!-- Selected indicator for single selection -->
+          @if (!config.multiple && isOptionSelected(option)) {
+            <svg
+              cIcon name="cilCheckAlt"
+              width="16" height="16"
+              class="selected-icon">
+            </svg>
+          }
+        </div>
+      }
     </div>
   </div>
+}
 
-  <!-- Error message -->
-  <div *ngIf="error" class="error-message">
+<!-- Error message -->
+@if (error) {
+  <div class="error-message">
     {{ error | translate }}
   </div>
+}
 </div>

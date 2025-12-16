@@ -4,9 +4,11 @@
     <div class="form-group">
       <label for="name">{{ 'domains.name' | translate }}</label>
       <input id="name" type="text" formControlName="name" class="form-control">
-      <div class="error-message" *ngIf="form.get('name').touched && form.get('name').errors?.required">
-        {{ 'domains.nameRequired' | translate }}
-      </div>
+      @if (form.get('name').touched && form.get('name').errors?.required) {
+        <div class="error-message">
+          {{ 'domains.nameRequired' | translate }}
+        </div>
+      }
     </div>
   </mat-dialog-content>
 
@@ -16,4 +18,4 @@
       {{ 'common.save' | translate }}
     </button>
   </mat-dialog-actions>
-</form> 
+</form>

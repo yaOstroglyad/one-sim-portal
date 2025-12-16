@@ -1,12 +1,12 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { LoadingStatus } from '../../models/dashboard.types';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-loading-indicator',
-    imports: [CommonModule, TranslateModule],
+    imports: [TranslateModule],
     templateUrl: './loading-indicator.component.html',
     styleUrls: ['./loading-indicator.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

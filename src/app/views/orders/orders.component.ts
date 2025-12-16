@@ -6,7 +6,7 @@ import {
 	OnInit,
 	inject
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,15 +33,14 @@ import { RevertOrderComponent } from './revert-order/revert-order.component';
     standalone: true,
     selector: 'app-orders',
     imports: [
-        CommonModule,
-        GenericTableComponent,
-        HeaderComponent,
-        MatDialogModule,
-        MatButtonModule,
-        MatIconModule,
-        MatMenuModule,
-        TranslateModule
-    ],
+    GenericTableComponent,
+    HeaderComponent,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    TranslateModule
+],
     templateUrl: './orders.component.html',
     styleUrls: ['./orders.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

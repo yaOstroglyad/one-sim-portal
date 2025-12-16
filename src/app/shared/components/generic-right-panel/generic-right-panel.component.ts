@@ -24,8 +24,8 @@ export interface PanelAction {
 }
 
 @Component({
-    selector: 'app-generic-right-panel',
     standalone: true,
+    selector: 'app-generic-right-panel',
     imports: [CommonModule, IconDirective],
     templateUrl: './generic-right-panel.component.html',
     styleUrls: ['./generic-right-panel.component.scss']

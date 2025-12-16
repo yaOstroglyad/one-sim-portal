@@ -9,25 +9,24 @@ import { RefundProductService } from './refund-product.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
-import { NgIf } from '@angular/common';
+
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoaderComponent } from '../loader/loader.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-refund-product',
     templateUrl: './refund-product.component.html',
     imports: [
-        MatDialogModule,
-        FormGeneratorComponent,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatIconModule,
-        NgIf,
-        LoaderComponent,
-        TranslateModule
-    ],
+    MatDialogModule,
+    FormGeneratorComponent,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    LoaderComponent,
+    TranslateModule
+],
     styleUrls: ['./refund-product.component.scss']
 })
 export class RefundProductComponent implements OnInit {

@@ -31,8 +31,6 @@ export class AddSubscriberProductService {
 			})
 		);
 	}
-
-
 	private formatDisplayValue(product: RefundableProduct | SubscriberProduct): string {
 		let price: number;
 		let currency: string;

@@ -1,18 +1,20 @@
 <div [ngClass]="containerClasses()">
 
-<app-account-selector *ngIf="isAdmin"
-                      [helperText]="'COMMON.select_account_hint_message'"
-                      (accountSelected)="onAccountSelected($event)">
-</app-account-selector>
+  @if (isAdmin) {
+    <app-account-selector
+      [helperText]="'COMMON.select_account_hint_message'"
+      (accountSelected)="onAccountSelected($event)">
+    </app-account-selector>
+  }
 
-<app-header class="os-header-sticky"
-            [formGroup]="filterForm"
-            [tableConfig$]="tableConfig$"
-            (onAddAction)="onCreateNew()"
-            (columnSelectionChange)="onColumnSelectionChanged($event)">
+  <app-header class="os-header-sticky"
+    [formGroup]="filterForm"
+    [tableConfig$]="tableConfig$"
+    (onAddAction)="onCreateNew()"
+    (columnSelectionChange)="onColumnSelectionChanged($event)">
     <ng-container header-custom-inputs>
-        <app-searchable-select
-                [options]="countryOptions$ | async"
+      <app-searchable-select
+        [options]="countryOptions$ | async"
                 [config]="{
                         placeholder: ('product.selectCountry' | translate),
                         searchPlaceholder: ('common.search' | translate) + '...',
@@ -20,12 +22,12 @@
                         clearable: true,
                         searchable: true
                     }"
-                formControlName="countryId"
-                class="w-100">
-        </app-searchable-select>
+        formControlName="countryId"
+        class="w-100">
+      </app-searchable-select>
 
-        <app-searchable-select
-                [options]="regionOptions$ | async"
+      <app-searchable-select
+        [options]="regionOptions$ | async"
                 [config]="{
                         placeholder: ('product.selectRegion' | translate),
                         searchPlaceholder: ('common.search' | translate) + '...',
@@ -33,182 +35,183 @@
                         clearable: true,
                         searchable: true
                     }"
-                formControlName="regionId"
-                class="w-100">
-        </app-searchable-select>
+        formControlName="regionId"
+        class="w-100">
+      </app-searchable-select>
 
-        <button cButton
-                color="secondary"
-                [disabled]="filterForm.pristine"
-                (click)="resetForm()"
-                class="reset-button">
-            <svg cIcon name="cilReload"></svg>
-        </button>
-        <!--        </div>-->
-    </ng-container>
+      <button cButton
+        color="secondary"
+        [disabled]="filterForm.pristine"
+        (click)="resetForm()"
+        class="reset-button">
+        <svg cIcon name="cilReload"></svg>
+      </button>
+    <!--        </div>-->
+  </ng-container>
 </app-header>
 
 <generic-table #genericTable
-               [config$]="tableConfig$"
-               [menu]="menuTemplate"
-               [data$]="companyProducts$"
-               [isRowClickable]="true"
-               (onRowClickEvent)="onViewDetails($event)"
-               (pageChange)="onPageChange($event)">
+  [config$]="tableConfig$"
+  [menu]="menuTemplate"
+  [data$]="companyProducts$"
+  [isRowClickable]="true"
+  (onRowClickEvent)="onViewDetails($event)"
+  (pageChange)="onPageChange($event)">
 </generic-table>
 
 <!-- Custom template for price column -->
 <ng-template #priceTemplate let-data='context'>
-    <td class="text-end">
-        {{ formatPrice(data) }}
-    </td>
+  <td class="text-end">
+    {{ formatPrice(data) }}
+  </td>
 </ng-template>
 
 <!-- Custom template for status column -->
 <ng-template #statusTemplate let-data='context'>
-    <td class="text-center">
-        <c-badge [color]="data.active ? 'success' : 'danger'"
-                 shape="rounded-pill">
-            {{ data.active ? 'Active' : 'Inactive' }}
-        </c-badge>
-    </td>
+  <td class="text-center">
+    <c-badge [color]="data.active ? 'success' : 'danger'"
+      shape="rounded-pill">
+      {{ data.active ? 'Active' : 'Inactive' }}
+    </c-badge>
+  </td>
 </ng-template>
 
 <!-- Custom template for provider column -->
 <ng-template #providerTemplate let-data='context'>
-    <td>
-        <span *ngIf="data.tariffOffer?.serviceProvider?.name; else noProvider">
-            {{ data.tariffOffer.serviceProvider.name }}
-        </span>
-        <ng-template #noProvider>
-            <span class="text-muted">-</span>
-        </ng-template>
-    </td>
+  <td>
+    @if (data.tariffOffer?.serviceProvider?.name) {
+      <span>
+        {{ data.tariffOffer.serviceProvider.name }}
+      </span>
+    } @else {
+      <span class="text-muted">-</span>
+    }
+  </td>
 </ng-template>
 
 <!-- Custom template for base price column -->
 <ng-template #basePriceTemplate let-data='context'>
-    <td class="text-end">
-        <span *ngIf="data.tariffOffer?.price !== null && data.tariffOffer?.price !== undefined; else noBasePrice">
-            {{ data.tariffOffer.price | currency:data.tariffOffer.currency:'symbol':'1.2-2' }}
-        </span>
-        <ng-template #noBasePrice>
-            <span class="text-muted">-</span>
-        </ng-template>
-    </td>
+  <td class="text-end">
+    @if (data.tariffOffer?.price !== null && data.tariffOffer?.price !== undefined) {
+      <span>
+        {{ data.tariffOffer.price | currency:data.tariffOffer.currency:'symbol':'1.2-2' }}
+      </span>
+    } @else {
+      <span class="text-muted">-</span>
+    }
+  </td>
 </ng-template>
 
 <ng-template #menuTemplate let-item>
-    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
-        <mat-icon>more_vert</mat-icon>
+  <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onViewDetails(item)">
+      <mat-icon>visibility</mat-icon>
+      <span>{{ 'common.view' | translate }} Details</span>
     </button>
-    <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="onViewDetails(item)">
-            <mat-icon>visibility</mat-icon>
-            <span>{{ 'common.view' | translate }} Details</span>
-        </button>
-        <button mat-menu-item (click)="onEdit(item)">
-            <mat-icon>edit</mat-icon>
-            <span>{{ 'common.edit' | translate }}</span>
-        </button>
-        <button mat-menu-item (click)="onToggleStatus(item)">
-            <mat-icon>{{ item.active ? 'toggle_off' : 'toggle_on' }}</mat-icon>
-            <span>{{ item.active ? 'Deactivate' : 'Activate' }}</span>
-        </button>
-    </mat-menu>
+    <button mat-menu-item (click)="onEdit(item)">
+      <mat-icon>edit</mat-icon>
+      <span>{{ 'common.edit' | translate }}</span>
+    </button>
+    <button mat-menu-item (click)="onToggleStatus(item)">
+      <mat-icon>{{ item.active ? 'toggle_off' : 'toggle_on' }}</mat-icon>
+      <span>{{ item.active ? 'Deactivate' : 'Activate' }}</span>
+    </button>
+  </mat-menu>
 </ng-template>
 
 <!-- Create Panel -->
-<app-generic-right-panel
-        *ngIf="showCreatePanel"
-        title="Create Company Product"
-        subtitle="Link a product to a company with custom pricing"
-        [isOpen]="showCreatePanel"
-        [hasFooter]="true"
-        (close)="onPanelClose()">
-
+@if (showCreatePanel) {
+  <app-generic-right-panel
+    title="Create Company Product"
+    subtitle="Link a product to a company with custom pricing"
+    [isOpen]="showCreatePanel"
+    [hasFooter]="true"
+    (close)="onPanelClose()">
     <div panel-content>
-        <app-company-product-form
-            #createForm
-            [companyProduct]="null"
-            [selectedAccountId]="selectedAccountId"
-            (save)="onCompanyProductSaved()">
-        </app-company-product-form>
+      <app-company-product-form
+        #createForm
+        [companyProduct]="null"
+        [selectedAccountId]="selectedAccountId"
+        (save)="onCompanyProductSaved()">
+      </app-company-product-form>
     </div>
-
     <ng-container panel-actions>
-        <button
-                type="button"
-                class="btn btn-outline-secondary"
-                (click)="onPanelClose()">
-            Cancel
-        </button>
-        <button
-                type="button"
-                class="btn btn-primary"
-                (click)="createForm.onSubmit()"
-                [disabled]="createForm.loading || createForm.companyProductForm?.invalid">
-            <span *ngIf="createForm.loading" class="spinner-border spinner-border-sm me-2" role="status"
-                  aria-hidden="true"></span>
-            Create Company Product
-        </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="onPanelClose()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="createForm.onSubmit()"
+        [disabled]="createForm.loading || createForm.companyProductForm?.invalid">
+        @if (createForm.loading) {
+          <span class="spinner-border spinner-border-sm me-2" role="status"
+          aria-hidden="true"></span>
+        }
+        Create Company Product
+      </button>
     </ng-container>
-
-</app-generic-right-panel>
+  </app-generic-right-panel>
+}
 
 <!-- Edit Panel -->
-<app-generic-right-panel
-        *ngIf="showEditPanel && selectedCompanyProduct"
-        title="Edit Company Product"
-        subtitle="Update company product details"
-        [isOpen]="showEditPanel"
-        [hasFooter]="true"
-        (close)="onPanelClose()">
-
+@if (showEditPanel && selectedCompanyProduct) {
+  <app-generic-right-panel
+    title="Edit Company Product"
+    subtitle="Update company product details"
+    [isOpen]="showEditPanel"
+    [hasFooter]="true"
+    (close)="onPanelClose()">
     <div panel-content>
-        <app-company-product-form
-            #editForm
-            [companyProduct]="selectedCompanyProduct"
-            [selectedAccountId]="selectedAccountId"
-            (save)="onCompanyProductSaved()">
-        </app-company-product-form>
+      <app-company-product-form
+        #editForm
+        [companyProduct]="selectedCompanyProduct"
+        [selectedAccountId]="selectedAccountId"
+        (save)="onCompanyProductSaved()">
+      </app-company-product-form>
     </div>
-
     <ng-container panel-actions>
-        <button
-                type="button"
-                class="btn btn-outline-secondary"
-                (click)="onPanelClose()">
-            Cancel
-        </button>
-        <button
-                type="button"
-                class="btn btn-primary"
-                (click)="editForm.onSubmit()"
-                [disabled]="editForm.loading || editForm.companyProductForm?.invalid">
-            <span *ngIf="editForm.loading" class="spinner-border spinner-border-sm me-2" role="status"
-                  aria-hidden="true"></span>
-            Update Company Product
-        </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="onPanelClose()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="editForm.onSubmit()"
+        [disabled]="editForm.loading || editForm.companyProductForm?.invalid">
+        @if (editForm.loading) {
+          <span class="spinner-border spinner-border-sm me-2" role="status"
+          aria-hidden="true"></span>
+        }
+        Update Company Product
+      </button>
     </ng-container>
-
-</app-generic-right-panel>
+  </app-generic-right-panel>
+}
 
 <!-- Details Panel -->
-<app-generic-right-panel
-        *ngIf="showDetailsPanel && selectedCompanyProductDetails"
-        title="Company Product Details"
-        [isOpen]="showDetailsPanel"
-        [actions]="detailsPanelActions"
-        [resizable]="true"
-        [defaultWidth]="600"
-        [maxWidth]="900"
-        (close)="onPanelClose()">
-
+@if (showDetailsPanel && selectedCompanyProductDetails) {
+  <app-generic-right-panel
+    title="Company Product Details"
+    [isOpen]="showDetailsPanel"
+    [actions]="detailsPanelActions"
+    [resizable]="true"
+    [defaultWidth]="600"
+    [maxWidth]="900"
+    (close)="onPanelClose()">
     <div panel-content>
-        <app-company-product-details [companyProduct]="selectedCompanyProductDetails"></app-company-product-details>
+      <app-company-product-details [companyProduct]="selectedCompanyProductDetails"></app-company-product-details>
     </div>
-
-</app-generic-right-panel>
+  </app-generic-right-panel>
+}
 
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, effect, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@coreui/icons-angular';
 
@@ -15,14 +15,13 @@ import { DashboardError } from '../../models/dashboard.types';
 	standalone: true,
 	selector: 'app-finance-tab',
 	imports: [
-		CommonModule,
-		TranslateModule,
-		IconModule,
-		CardComponent,
-		LoadingIndicatorComponent,
-		ErrorDisplayComponent,
-		OsBarChartComponent
-	],
+    TranslateModule,
+    IconModule,
+    CardComponent,
+    LoadingIndicatorComponent,
+    ErrorDisplayComponent,
+    OsBarChartComponent
+],
 	templateUrl: './finance-tab.component.html',
 	styleUrls: ['./finance-tab.component.scss']
 })
@@ -44,7 +43,7 @@ export class FinanceTabComponent implements OnInit {
 			if (accountId) {
 				this.loadData();
 			}
-		}, { allowSignalWrites: true });
+		});
 	}
 
 	ngOnInit(): void {

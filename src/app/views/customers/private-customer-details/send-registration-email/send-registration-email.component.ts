@@ -5,14 +5,12 @@ import { FieldType, FormConfig, FormGeneratorComponent, SubscriberDataService, P
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
-
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-send-registration-email',
     templateUrl: './send-registration-email.component.html',
     styleUrls: ['./send-registration-email.component.scss'],
-    imports: [FormGeneratorComponent, MatDialogModule, TranslateModule, ReactiveFormsModule, MatButtonModule, InfoStripComponent, CommonModule]
+    imports: [FormGeneratorComponent, MatDialogModule, TranslateModule, ReactiveFormsModule, MatButtonModule, InfoStripComponent]
 })
 export class SendRegistrationEmailComponent implements OnInit {
   formConfig: FormConfig;

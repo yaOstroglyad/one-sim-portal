@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject, signal, Signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormGroup, FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
@@ -32,7 +32,6 @@ import { CompanyProductPriceService } from '../../../services';
   selector: 'app-modify-price-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     MatDialogModule,
     ButtonModule,
     FormGeneratorComponent,
@@ -40,7 +39,7 @@ import { CompanyProductPriceService } from '../../../services';
     LoaderComponent,
     PriceInfoDisplayComponent,
     PricePreviewComponent
-  ],
+],
   templateUrl: './modify-price-dialog.component.html',
   styleUrls: ['./modify-price-dialog.component.scss'],
   providers: [

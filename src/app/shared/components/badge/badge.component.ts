@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' |
@@ -9,7 +9,7 @@ export type BadgeShape = 'rounded' | 'pill' | 'square';
 @Component({
     standalone: true,
     selector: 'os-badge',
-    imports: [CommonModule],
+    imports: [],
     template: `
     <ng-content></ng-content>
   `,

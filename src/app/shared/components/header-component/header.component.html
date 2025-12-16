@@ -1,32 +1,42 @@
 <!-- src/app/shared/components/header-component/header.component.html -->
 <form [formGroup]="headerForm" class="pb-2 d-flex pt-2 header-form">
-    <ng-container *ngFor="let key of formKeys">
-        <input *ngIf="config[key].type === 'text'" [formControlName]="key"
-               [placeholder]="config[key].placeholder" cFormControl [type]="'text'">
-        <select *ngIf="config[key].type === 'select'" [formControlName]="key" cSelect>
-            <option *ngFor="let option of config[key].options" [value]="option.value">
-                {{ option.label }}
-            </option>
-        </select>
-    </ng-container>
-    <!-- Slot for custom inputs -->
-    <ng-content select="[header-custom-inputs]"></ng-content>
-    <!-- Column picker -->
-    <ng-container *ngIf="tableConfig$ | async as tableConfig">
-        <column-control [config$]="tableConfig$"
-                        [currentSelectedColumns]="currentSelectedColumns"
-                        (columnSelectionChange)="onColumnSelectionChanged($event)"></column-control>
-        <!-- Reset button -->
-        <button *ngIf="tableConfig.showAddButton"
-                cButton color="primary"
-                (click)="addNewEntity()">
-            <svg cIcon name="cilPlus"></svg>
-        </button>
-    </ng-container>
-    <!-- Slot for additional actions -->
-    <ng-content select="[header-actions]"></ng-content>
+  @for (key of formKeys; track key) {
+    @if (config[key].type === 'text') {
+      <input [formControlName]="key"
+        [placeholder]="config[key].placeholder" cFormControl [type]="'text'">
+    }
+    @if (config[key].type === 'select') {
+      <select [formControlName]="key" cSelect>
+        @for (option of config[key].options; track option) {
+          <option [value]="option.value">
+            {{ option.label }}
+          </option>
+        }
+      </select>
+    }
+  }
+  <!-- Slot for custom inputs -->
+  <ng-content select="[header-custom-inputs]"></ng-content>
+  <!-- Column picker -->
+  @if (tableConfig$ | async; as tableConfig) {
+    <column-control [config$]="tableConfig$"
+      [currentSelectedColumns]="currentSelectedColumns"
+    (columnSelectionChange)="onColumnSelectionChanged($event)"></column-control>
     <!-- Reset button -->
-    <button *ngIf="formKeys.length > 0" [disabled]="headerForm.pristine" cButton color="secondary" (click)="resetForm()">
-        <svg cIcon name="cilReload"></svg>
+    @if (tableConfig.showAddButton) {
+      <button
+        cButton color="primary"
+        (click)="addNewEntity()">
+        <svg cIcon name="cilPlus"></svg>
+      </button>
+    }
+  }
+  <!-- Slot for additional actions -->
+  <ng-content select="[header-actions]"></ng-content>
+  <!-- Reset button -->
+  @if (formKeys.length > 0) {
+    <button [disabled]="headerForm.pristine" cButton color="secondary" (click)="resetForm()">
+      <svg cIcon name="cilReload"></svg>
     </button>
+  }
 </form>

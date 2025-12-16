@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 export interface TimelineEvent {
   date: Date;
@@ -8,15 +8,13 @@ export interface TimelineEvent {
 }
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-timeline',
     templateUrl: './timeline.component.html',
     styleUrls: ['./timeline.component.scss'],
     imports: [
-        NgForOf,
-        NgIf,
-        DatePipe
-    ]
+    DatePipe
+]
 })
 export class TimelineComponent {
   @Input() events: TimelineEvent[] = [];

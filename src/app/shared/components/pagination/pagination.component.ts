@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -16,9 +16,9 @@ export interface PaginationConfig {
 }
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-pagination',
-    imports: [CommonModule, TranslateModule, MatIconModule],
+    imports: [TranslateModule, MatIconModule],
     templateUrl: './pagination.component.html',
     styleUrls: ['./pagination.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

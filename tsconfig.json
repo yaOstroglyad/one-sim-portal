@@ -5,24 +5,28 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2022",
     "module": "es2020",
-    "lib": [
-      "es2022",
-      "dom"
-    ],
     "strictNullChecks": false,
     "allowSyntheticDefaultImports": true,
     "stripInternal": true,
     "paths": {
-      "@shared": ["src/app/shared"],
-      "@shared/*": ["src/app/shared/*"],
-      "@models": ["src/app/shared/models"],
-      "@models/*": ["src/app/shared/models/*"]
+      "@shared": [
+        "src/app/shared"
+      ],
+      "@shared/*": [
+        "src/app/shared/*"
+      ],
+      "@models": [
+        "src/app/shared/models"
+      ],
+      "@models/*": [
+        "src/app/shared/models/*"
+      ]
     }
   },
   "angularCompilerOptions": {

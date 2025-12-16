@@ -14,7 +14,7 @@ import {
   HostListener,
   forwardRef
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -25,9 +25,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SearchableSelectOption, SearchableSelectConfig, SearchableSelectChangeEvent } from './searchable-select.types';
 
 @Component({
-    selector: 'app-searchable-select',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, IconDirective, MatIconModule, TranslateModule],
+    selector: 'app-searchable-select',
+    imports: [ReactiveFormsModule, IconDirective, MatIconModule, TranslateModule],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

@@ -7,7 +7,7 @@ import {
   OnInit,
   HostListener,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Subject, takeUntil, skip } from 'rxjs';
@@ -21,16 +21,16 @@ import { HeaderComponent } from './components';
 import { GlobalFabComponent, FlyoutLayoutComponent } from '@shared/components/fab-layout';
 
 @Component({
+    standalone: true,
   selector: 'app-default-layout',
-  standalone: true,
+
   imports: [
-    CommonModule,
     RouterModule,
     SidebarComponent,
     HeaderComponent,
     GlobalFabComponent,
     FlyoutLayoutComponent
-  ],
+],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './default-layout.component.html',
   styleUrls: ['./default-layout.component.scss']
@@ -159,7 +159,7 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
 
   // Close mobile sidebar on ESC key
   @HostListener('document:keydown.escape', ['$event'])
-  handleEscapeKey(event: KeyboardEvent): void {
+  handleEscapeKey(event: Event): void {
     if (this.isMobileSidebarOpen()) {
       event.preventDefault();
       this.closeMobileSidebar();

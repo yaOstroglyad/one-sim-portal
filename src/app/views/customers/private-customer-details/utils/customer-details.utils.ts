@@ -39,8 +39,6 @@ export function calculateFinancialSummary(purchasedProducts: any[]): FinancialSu
 
 	return { totalSpent, totalUsedGB, currency };
 }
-
-
 export function mapTransactionEvents(transactions: any[]): TimelineEvent[] {
 	return transactions.map(transaction => ({
 		date: new Date(transaction.createdAt),

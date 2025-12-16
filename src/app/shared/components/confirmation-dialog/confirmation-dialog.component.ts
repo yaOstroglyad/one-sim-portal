@@ -9,7 +9,7 @@ export interface ConfirmationDialogData {
 }
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-confirmation-dialog',
     templateUrl: './confirmation-dialog.component.html',
     imports: [

@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { Subject } from 'rxjs';
@@ -14,15 +14,14 @@ export interface ProviderProductUploadDialogData {
 }
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-provider-product-upload-dialog',
     imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-        TranslateModule,
-        FileUploadComponent
-    ],
+    MatDialogModule,
+    MatButtonModule,
+    TranslateModule,
+    FileUploadComponent
+],
     templateUrl: './provider-product-upload-dialog.component.html',
     styleUrls: ['./provider-product-upload-dialog.component.scss']
 })

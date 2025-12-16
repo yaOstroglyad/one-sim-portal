@@ -23,8 +23,8 @@ import {
 } from './ticket-form.utils';
 
 @Component({
-    selector: 'app-ticket-form',
     standalone: true,
+    selector: 'app-ticket-form',
     imports: [
         FormGeneratorComponent
     ],

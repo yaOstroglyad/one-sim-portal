@@ -42,7 +42,7 @@ import { CopyToClipboardDirective } from '@shared';
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-private-customer-details',
     templateUrl: './private-customer-details.component.html',
     styleUrls: ['./private-customer-details.component.scss'],

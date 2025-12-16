@@ -12,8 +12,8 @@ import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.
 import { WhiteLabelDataService } from 'src/app/shared/services/data/white-label-data.service';
 
 @Component({
-    selector: 'app-general-settings',
     standalone: true,
+    selector: 'app-general-settings',
     imports: [
         CommonModule,
         FormGeneratorComponent,
@@ -30,7 +30,7 @@ import { WhiteLabelDataService } from 'src/app/shared/services/data/white-label-
       <div class="card-body">
         <div class="d-flex">
           <div class="w-50 mt-1 me-4">
-            <ng-container *ngIf="formConfig$ | async as formConfig">
+            @if (formConfig$ | async; as formConfig) {
               <app-form-generator
                 [config]="formConfig"
                 (formChanges)="handleFormChanges($event)">
@@ -44,7 +44,7 @@ import { WhiteLabelDataService } from 'src/app/shared/services/data/white-label-
                   {{ 'common.save' | translate }}
                 </button>
               </div>
-            </ng-container>
+            }
           </div>
           <div class="w-50 ms-4">
             <div class="alert alert-info">
@@ -60,7 +60,7 @@ import { WhiteLabelDataService } from 'src/app/shared/services/data/white-label-
         </div>
       </div>
     </div>
-  `,
+    `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GeneralSettingsComponent implements OnInit {

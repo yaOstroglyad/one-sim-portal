@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -27,25 +27,24 @@ import { Role } from '../../models';
 import { RoleFormComponent } from '../role-form/role-form.component';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-role-list',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        TranslateModule,
-        GenericRightPanelComponent,
-        RoleFormComponent,
-        DeleteConfirmationComponent,
-        GenericTableComponent,
-        HeaderComponent,
-        MatMenuModule,
-        MatIconModule,
-        MatButtonModule,
-        MatDialogModule,
-        ButtonDirective,
-        FormControlDirective,
-        IconDirective
-    ],
+    ReactiveFormsModule,
+    TranslateModule,
+    GenericRightPanelComponent,
+    RoleFormComponent,
+    DeleteConfirmationComponent,
+    GenericTableComponent,
+    HeaderComponent,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule,
+    ButtonDirective,
+    FormControlDirective,
+    IconDirective
+],
     providers: [RolesTableService],
     templateUrl: './role-list.component.html',
     styleUrls: ['./role-list.component.scss'],

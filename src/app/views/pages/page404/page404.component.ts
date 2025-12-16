@@ -3,6 +3,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     standalone: true,
+
     selector: 'app-page404',
     imports: [TranslateModule],
     templateUrl: './page404.component.html',

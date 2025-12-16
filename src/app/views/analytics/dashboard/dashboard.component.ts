@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, signal, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -26,21 +26,20 @@ import { TrafficTabComponent } from './tabs/traffic';
 import { FinanceTabComponent } from './tabs/finance';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-dashboard',
     imports: [
-        CommonModule,
-        FormsModule,
-        RouterModule,
-        TranslateModule,
-        IconModule,
-        AccountSelectorComponent,
-        PeriodSelectorComponent,
-        ExecutiveTabComponent,
-        SubscribersTabComponent,
-        TrafficTabComponent,
-        FinanceTabComponent
-    ],
+    FormsModule,
+    RouterModule,
+    TranslateModule,
+    IconModule,
+    AccountSelectorComponent,
+    PeriodSelectorComponent,
+    ExecutiveTabComponent,
+    SubscribersTabComponent,
+    TrafficTabComponent,
+    FinanceTabComponent
+],
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

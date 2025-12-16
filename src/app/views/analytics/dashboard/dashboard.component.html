@@ -1,10 +1,12 @@
 <div class="dashboard-container" [class.dark-theme]="isDarkTheme()">
   <!-- Account Selector (only for admins) -->
-  <app-account-selector *ngIf="isAdmin()"
-                        [helperText]="'COMMON.select_account_hint_message'"
-                        [selectFirstByDefault]="true"
-                        (accountSelected)="onAccountSelected($event)">
-  </app-account-selector>
+  @if (isAdmin()) {
+    <app-account-selector
+      [helperText]="'COMMON.select_account_hint_message'"
+      [selectFirstByDefault]="true"
+      (accountSelected)="onAccountSelected($event)">
+    </app-account-selector>
+  }
 
   <!-- Dashboard Header -->
   <div class="dashboard-header mt-2">
@@ -35,34 +37,43 @@
 
   <!-- Tab Navigation -->
   <div class="dashboard-tabs">
-    <button
-      *ngFor="let tab of tabs()"
-      class="tab-button"
-      [class.active]="activeTab() === tab.id"
-      [class.disabled]="tab.disabled"
-      [disabled]="tab.disabled"
-      (click)="!tab.disabled && onTabChange(tab.id)">
-      <c-icon [name]="tab.icon"></c-icon>
-      <span>{{ tab.label | translate }}</span>
-    </button>
+    @for (tab of tabs(); track tab.id) {
+      <button
+        class="tab-button"
+        [class.active]="activeTab() === tab.id"
+        [class.disabled]="tab.disabled"
+        [disabled]="tab.disabled"
+        (click)="!tab.disabled && onTabChange(tab.id)">
+        <c-icon [name]="tab.icon"></c-icon>
+        <span>{{ tab.label | translate }}</span>
+      </button>
+    }
   </div>
 
   <!-- Tab Content -->
   <div class="tab-content">
     <div class="tab-pane" [class.active]="activeTab() === 'executive'">
-      <app-executive-tab *ngIf="activeTab() === 'executive'"></app-executive-tab>
+      @if (activeTab() === 'executive') {
+        <app-executive-tab></app-executive-tab>
+      }
     </div>
 
     <div class="tab-pane" [class.active]="activeTab() === 'subscribers'">
-      <app-subscribers-tab *ngIf="activeTab() === 'subscribers'"></app-subscribers-tab>
+      @if (activeTab() === 'subscribers') {
+        <app-subscribers-tab></app-subscribers-tab>
+      }
     </div>
 
     <div class="tab-pane" [class.active]="activeTab() === 'traffic'">
-      <app-traffic-tab *ngIf="activeTab() === 'traffic'"></app-traffic-tab>
+      @if (activeTab() === 'traffic') {
+        <app-traffic-tab></app-traffic-tab>
+      }
     </div>
 
     <div class="tab-pane" [class.active]="activeTab() === 'finance'">
-      <app-finance-tab *ngIf="activeTab() === 'finance'"></app-finance-tab>
+      @if (activeTab() === 'finance') {
+        <app-finance-tab></app-finance-tab>
+      }
     </div>
   </div>
 </div>

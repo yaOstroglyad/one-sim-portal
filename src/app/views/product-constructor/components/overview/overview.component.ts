@@ -16,7 +16,7 @@ import { QUICK_ACTIONS, isActionEnabled } from './overview.utils';
 import { OverviewService } from '../../services';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-overview',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [

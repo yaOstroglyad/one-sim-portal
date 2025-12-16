@@ -45,4 +45,3 @@ export interface SubscriberProduct {
   };
   purchaseLink: string;
 }
-

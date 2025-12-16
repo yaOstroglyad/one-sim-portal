@@ -4,13 +4,17 @@
     <div class="form-group">
       <label for="ownerAccountId">{{ 'domains.ownerAccount' | translate }}</label>
       <mat-select id="ownerAccountId" formControlName="ownerAccountId" class="form-control">
-        <mat-option *ngFor="let account of ownerAccounts$ | async" [value]="account.id">
-          {{ account.name }}
-        </mat-option>
+        @for (account of ownerAccounts$ | async; track account) {
+          <mat-option [value]="account.id">
+            {{ account.name }}
+          </mat-option>
+        }
       </mat-select>
-      <div class="error-message" *ngIf="form.get('ownerAccountId').touched && form.get('ownerAccountId').errors?.required">
-        {{ 'domains.ownerAccountRequired' | translate }}
-      </div>
+      @if (form.get('ownerAccountId').touched && form.get('ownerAccountId').errors?.required) {
+        <div class="error-message">
+          {{ 'domains.ownerAccountRequired' | translate }}
+        </div>
+      }
     </div>
   </mat-dialog-content>
 
@@ -20,4 +24,4 @@
       {{ 'common.save' | translate }}
     </button>
   </mat-dialog-actions>
-</form> 
+</form>

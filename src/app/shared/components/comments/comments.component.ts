@@ -7,7 +7,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonDirective } from '@coreui/angular';
@@ -20,13 +20,12 @@ import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 	standalone: true,
 	selector: 'app-comments',
 	imports: [
-		CommonModule,
-		ReactiveFormsModule,
-		TranslateModule,
-		ButtonDirective,
-		UserAvatarComponent,
-		IconDirective
-	],
+    ReactiveFormsModule,
+    TranslateModule,
+    ButtonDirective,
+    UserAvatarComponent,
+    IconDirective
+],
 	templateUrl: './comments.component.html',
 	styleUrls: ['./comments.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
@@ -118,4 +117,3 @@ export class CommentsComponent implements OnInit {
 		return this.config?.placeholder || 'comments.placeholder';
 	}
 }
-

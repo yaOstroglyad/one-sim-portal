@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { 
   ChangeDetectionStrategy, 
   Component, 
@@ -8,9 +8,9 @@ import { TooltipDirective } from './tooltip.directive';
 import { TooltipPosition, TooltipVariant } from './tooltip.component';
 
 @Component({
-    selector: 'os-tooltip-wrapper',
     standalone: true,
-    imports: [CommonModule, TooltipDirective],
+    selector: 'os-tooltip-wrapper',
+    imports: [TooltipDirective],
     template: `
     <div 
       class="os-tooltip-wrapper"

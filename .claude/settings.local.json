@@ -87,7 +87,18 @@
       "SlashCommand(/speckit.specify)",
       "SlashCommand(/speckit.implement)",
       "Bash(git merge:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "WebSearch",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(npx ng update:*)",
+      "Bash(command -v:*)",
+      "Bash(timeout 60 npm start)",
+      "Bash(xargs sed:*)",
+      "Bash(perl:*)",
+      "Bash(while read file)",
+      "Bash(do perl -i -0pe 's/\\@Component\\(\\{\\n(\\s+)/\\@Component({\\n$1standalone: true,\\n$1/g' \"$file\" done)",
+      "Bash(xargs:*)",
+      "Bash(nvm list)"
     ],
     "deny": [
       "// === Blocked for Security ===",

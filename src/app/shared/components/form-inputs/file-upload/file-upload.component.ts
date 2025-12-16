@@ -24,8 +24,8 @@ export interface FileUploadState {
 }
 
 @Component({
-    selector: 'app-file-upload',
     standalone: true,
+    selector: 'app-file-upload',
     imports: [
         CommonModule,
         MatButtonModule,

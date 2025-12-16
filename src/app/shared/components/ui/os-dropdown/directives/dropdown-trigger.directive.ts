@@ -12,7 +12,7 @@ import { Directive } from '@angular/core';
  * ```
  */
 @Directive({
+  standalone: true,
   selector: '[dropdownTrigger]',
-  standalone: true
 })
 export class DropdownTriggerDirective {}

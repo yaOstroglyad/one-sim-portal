@@ -28,7 +28,8 @@ import { TableRow, PageChangeEvent, SortChangeEvent } from './models/table-row.i
  * Generic reusable table with pagination, sorting, and footer aggregations
  */
 @Component({
-  standalone: true,
+    standalone: true,
+
   selector: 'generic-table',
   imports: [
     CommonModule,

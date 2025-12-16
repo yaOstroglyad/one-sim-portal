@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { printQrCode } from '@shared/utils/dom';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-show-qr-code-dialog',
     templateUrl: './show-qr-code-dialog.component.html',
     styleUrls: ['./show-qr-code-dialog.component.scss'],

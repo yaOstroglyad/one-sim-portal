@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, computed, input, output, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonModule } from '@coreui/angular';
 
@@ -27,13 +27,12 @@ import { UIConfigFactory, TariffOfferDetailsConfig } from '../factories';
   selector: 'app-selected-tariff-offer-details',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     MatIconModule,
     ButtonModule,
     InfoStripComponent,
     DetailRowComponent,
     PricePreviewComponent
-  ],
+],
   templateUrl: './selected-tariff-offer-details.component.html',
   styleUrls: ['./selected-tariff-offer-details.component.scss']
 })

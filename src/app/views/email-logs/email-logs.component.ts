@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,22 +24,21 @@ import { FormControlDirective, ButtonDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-email-logs',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        DatePickerWrapperComponent,
-        TranslateModule,
-        GenericTableComponent,
-        AccountSelectorComponent,
-        HeaderComponent,
-        FormControlDirective,
-        ButtonDirective,
-        IconDirective
-    ],
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    DatePickerWrapperComponent,
+    TranslateModule,
+    GenericTableComponent,
+    AccountSelectorComponent,
+    HeaderComponent,
+    FormControlDirective,
+    ButtonDirective,
+    IconDirective
+],
     providers: [EmailLogsTableConfigService],
     templateUrl: './email-logs.component.html',
     styleUrls: ['./email-logs.component.scss'],
@@ -201,8 +200,6 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
       }
     } else {
     }
-
-
     this.tableConfigService.loadData(loadParams)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({

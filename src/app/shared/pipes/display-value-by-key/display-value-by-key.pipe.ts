@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   standalone: true,
+
   name: 'displayValueByKey'
 })
 export class DisplayValueByKeyPipe implements PipeTransform {

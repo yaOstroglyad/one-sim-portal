@@ -6,23 +6,22 @@ import {
   WhiteLabelDataService
 } from '@shared';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { getEditEmailTemplateFormConfig, getEmailTemplateRequest } from './edit-email-template.utils';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-    selector: 'app-edit-email-template',
     standalone: true,
+    selector: 'app-edit-email-template',
     templateUrl: './edit-email-template.component.html',
     imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-        FormGeneratorComponent,
-        TranslateModule
-    ],
+    MatDialogModule,
+    MatButtonModule,
+    FormGeneratorComponent,
+    TranslateModule
+],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditEmailTemplateComponent implements OnInit {

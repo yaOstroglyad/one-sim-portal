@@ -25,8 +25,8 @@ interface PriceTableRow extends CompanyProductPrice {
  * Uses signals for all reactive state
  */
 @Component({
-  selector: 'app-company-product-prices-table',
   standalone: true,
+  selector: 'app-company-product-prices-table',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,

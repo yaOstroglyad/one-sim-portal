@@ -41,6 +41,7 @@ interface FilterFieldConfig {
 
 @Component({
     standalone: true,
+
     selector: 'app-customers',
     imports: [
         CommonModule,

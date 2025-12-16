@@ -1,36 +1,42 @@
 <app-header class="os-header-sticky"
-            [config]="headerConfig"
-            [tableConfig$]="tableConfig$"
-            (columnSelectionChange)="onColumnSelectionChanged($event)"
-            (filteredData)="applyFilter($event)">
-    <button *ngIf="isAdmin"
-            cButton
-            color="dark"
-            class="me-1"
-            [matTooltip]="'inventory.uploadResource' | translate"
-            (click)="openSelectionDialog()" header-actions>
-        <svg cIcon name="cilDataTransferUp"></svg>
+  [config]="headerConfig"
+  [tableConfig$]="tableConfig$"
+  (columnSelectionChange)="onColumnSelectionChanged($event)"
+  (filteredData)="applyFilter($event)">
+  @if (isAdmin) {
+    <button
+      cButton
+      color="dark"
+      class="me-1"
+      [matTooltip]="'inventory.uploadResource' | translate"
+      (click)="openSelectionDialog()" header-actions>
+      <svg cIcon name="cilDataTransferUp"></svg>
     </button>
-    <button *ngIf="isAdmin"
-            cButton
-            color="dark"
-            class="me-1"
-            [matTooltip]="'inventory.moveResource' | translate"
-            (click)="onMoveResource()" header-actions>
-        <svg cIcon name="cilArrowThickToRight"></svg>
+  }
+  @if (isAdmin) {
+    <button
+      cButton
+      color="dark"
+      class="me-1"
+      [matTooltip]="'inventory.moveResource' | translate"
+      (click)="onMoveResource()" header-actions>
+      <svg cIcon name="cilArrowThickToRight"></svg>
     </button>
+  }
 </app-header>
 <generic-table [config$]="tableConfig$"
-               [data$]="dataList$"
-               (pageChange)="onPageChange($event)"></generic-table>
+  [data$]="dataList$"
+(pageChange)="onPageChange($event)"></generic-table>
 <!--TODO refactor it, use snackbar instead-->
-<mat-card *ngIf="moveResult.isActive"
-          class="notification-card"
-          style="background: #7b7bff">
+@if (moveResult.isActive) {
+  <mat-card
+    class="notification-card"
+    style="background: #7b7bff">
     <mat-card-content>
-        <div class="text-white">
-            <p>{{ 'inventory.movedSimsMessage' | translate: { movedSims: moveResult.movedSims } }}</p>
-            <p>{{ 'inventory.availableSimsMessage' | translate: { availableSims: moveResult.availableSims } }}</p>
-        </div>
+      <div class="text-white">
+        <p>{{ 'inventory.movedSimsMessage' | translate: { movedSims: moveResult.movedSims } }}</p>
+        <p>{{ 'inventory.availableSimsMessage' | translate: { availableSims: moveResult.availableSims } }}</p>
+      </div>
     </mat-card-content>
-</mat-card>
+  </mat-card>
+}

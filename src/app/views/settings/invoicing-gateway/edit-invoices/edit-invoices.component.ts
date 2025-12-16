@@ -17,7 +17,7 @@ import { InvoicesService } from '../invoices.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { InvoicingMethod } from '@shared/models/payment';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,18 +32,17 @@ import { InvoicesUtilsService } from '../invoices.utils.service';
 	templateUrl: './edit-invoices.component.html',
 	styleUrls: ['./edit-invoices.component.scss'],
 	imports: [
-		CommonModule,
-		ReactiveFormsModule,
-		FormsModule,
-		MatDialogModule,
-		MatSnackBarModule,
-		MatFormFieldModule,
-		MatInputModule,
-		MatButtonModule,
-		TranslateModule,
-		FormGeneratorComponent,
-		MatTooltipModule
-	]
+    ReactiveFormsModule,
+    FormsModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    TranslateModule,
+    FormGeneratorComponent,
+    MatTooltipModule
+]
 })
 export class EditInvoicesComponent implements OnInit, OnChanges, AfterViewInit {
 	@Input() invoicingMethod: InvoicingMethod | null = null;

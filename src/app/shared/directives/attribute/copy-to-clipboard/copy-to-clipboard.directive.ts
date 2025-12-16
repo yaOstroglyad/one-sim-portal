@@ -2,8 +2,8 @@ import { Directive, HostListener, ElementRef, inject, Renderer2 } from '@angular
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Directive({
+  standalone: true,
   selector: '[copyToClipboard]',
-  standalone: true
 })
 export class CopyToClipboardDirective {
   private snackBar = inject(MatSnackBar);

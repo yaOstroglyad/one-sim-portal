@@ -77,8 +77,6 @@ export class ProductService {
            !searchRequest.searchParams.regionId &&
            !searchRequest.searchParams.mobileBundleId;
   }
-
-
   createProduct(request: CreateProductRequest): Observable<any> {
     return this.http.post(this.baseUrl, request).pipe(
       tap(() => {

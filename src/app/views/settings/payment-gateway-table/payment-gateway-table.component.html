@@ -1,122 +1,132 @@
 <div class="container">
-    <!-- Account selector for admins only -->
+  <!-- Account selector for admins only -->
+  @if (isAdmin) {
     <app-account-selector
-        *ngIf="isAdmin"
-        [helperText]="'COMMON.select_account_hint_message'"
-        (accountSelected)="onAccountSelected($event)">
+      [helperText]="'COMMON.select_account_hint_message'"
+      (accountSelected)="onAccountSelected($event)">
     </app-account-selector>
+  }
 
-    <!-- Admin warning for admin accounts -->
-    <div *ngIf="isAdmin && selectedAccount?.isAdmin" class="admin-account-message mx-3">
-        <mat-icon color="warn">warning</mat-icon>
-        <span>{{ 'paymentGateway.adminAccountWarning' | translate }}</span>
+  <!-- Admin warning for admin accounts -->
+  @if (isAdmin && selectedAccount?.isAdmin) {
+    <div class="admin-account-message mx-3">
+      <mat-icon color="warn">warning</mat-icon>
+      <span>{{ 'paymentGateway.adminAccountWarning' | translate }}</span>
     </div>
+  }
 
-    <!-- Main content - shown for non-admins always, for admins only when non-admin account selected -->
-    <ng-container *ngIf="shouldShowContent">
-        <div class="d-flex justify-content-between align-items-center mb-3 mx-3">
-            <mat-hint class="hint mb-1">
-                <mat-icon fontIcon="info_outline"></mat-icon>
-                {{ 'paymentGateway.hint' | translate }}
-            </mat-hint>
-
-            <ng-container *ngIf="strategyTypes$ | async as strategies">
-                <div *ngIf="strategies && strategies.length > 0">
-                    <c-dropdown>
-                        <button cButton cDropdownToggle color="secondary">
-                            {{ 'paymentGateway.setupNew' | translate }}
-                        </button>
-                        <ul cDropdownMenu>
-                            <li *ngFor="let strategy of strategies">
-                                <a cDropdownItem (click)="openPanel({ name: strategy }, 'create')">{{ strategy }}</a>
-                            </li>
-                        </ul>
-                    </c-dropdown>
-                </div>
-            </ng-container>
-        </div>
-
-        <generic-table [config$]="tableConfig$"
-                       [menu]="menuTemplate"
-                       [data$]="dataList$"></generic-table>
-    </ng-container>
+  <!-- Main content - shown for non-admins always, for admins only when non-admin account selected -->
+  @if (shouldShowContent) {
+    <div class="d-flex justify-content-between align-items-center mb-3 mx-3">
+      <mat-hint class="hint mb-1">
+        <mat-icon fontIcon="info_outline"></mat-icon>
+        {{ 'paymentGateway.hint' | translate }}
+      </mat-hint>
+      @if (strategyTypes$ | async; as strategies) {
+        @if (strategies && strategies.length > 0) {
+          <div>
+            <c-dropdown>
+              <button cButton cDropdownToggle color="secondary">
+                {{ 'paymentGateway.setupNew' | translate }}
+              </button>
+              <ul cDropdownMenu>
+                @for (strategy of strategies; track strategy) {
+                  <li>
+                    <a cDropdownItem (click)="openPanel({ name: strategy }, 'create')">{{ strategy }}</a>
+                  </li>
+                }
+              </ul>
+            </c-dropdown>
+          </div>
+        }
+      }
+    </div>
+    <generic-table [config$]="tableConfig$"
+      [menu]="menuTemplate"
+    [data$]="dataList$"></generic-table>
+  }
 </div>
 
 <!-- Shared templates -->
 <ng-template #menuTemplate let-item>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="edit(item)">{{ 'paymentGateway.setup' | translate }}</button>
-    </mat-menu>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="edit(item)">{{ 'paymentGateway.setup' | translate }}</button>
+  </mat-menu>
 </ng-template>
 
 <ng-template #isActiveFlag let-data='context'>
-    <td>
-        <div class="badge-display">
-            <c-badge [class]="data?.isActive ? 'active-badge' : 'disabled-badge'"
-                     class="me-1"
-                     shape="rounded-pill">{{ data?.isActive }}
-            </c-badge>
-        </div>
-    </td>
+  <td>
+    <div class="badge-display">
+      <c-badge [class]="data?.isActive ? 'active-badge' : 'disabled-badge'"
+        class="me-1"
+        shape="rounded-pill">{{ data?.isActive }}
+      </c-badge>
+    </div>
+  </td>
 </ng-template>
 
 <ng-template #isPrimaryFlag let-data='context'>
-    <td>
-        <div class="badge-display">
-            <c-badge [class]="data?.primary ? 'primary-badge' : 'disabled-badge'"
-                     class="me-1"
-                     shape="rounded-pill">{{ data?.primary }}
-            </c-badge>
-        </div>
-    </td>
+  <td>
+    <div class="badge-display">
+      <c-badge [class]="data?.primary ? 'primary-badge' : 'disabled-badge'"
+        class="me-1"
+        shape="rounded-pill">{{ data?.primary }}
+      </c-badge>
+    </div>
+  </td>
 </ng-template>
 
 <!-- Right Panel for Create/Edit Payment Gateway -->
 <app-generic-right-panel
-    [isOpen]="isPanelOpen"
-    [title]="panelTitle | translate"
-    [subtitle]="selectedPaymentGateway?.name"
-    [hasFooter]="true"
-    [defaultWidth]="650"
-    [minWidth]="500"
-    [maxWidth]="900"
-    (close)="onPanelClose()">
+  [isOpen]="isPanelOpen"
+  [title]="panelTitle | translate"
+  [subtitle]="selectedPaymentGateway?.name"
+  [hasFooter]="true"
+  [defaultWidth]="650"
+  [minWidth]="500"
+  [maxWidth]="900"
+  (close)="onPanelClose()">
 
-    <div panel-content *ngIf="selectedPaymentGateway">
-        <app-edit-payment-gateway
-            #paymentGatewayFormRef
-            [paymentStrategy]="selectedPaymentGateway"
-            [accountId]="selectedAccount?.id"
-            (save)="onPaymentGatewaySaved()"
-            (cancel)="onPanelClose()">
-        </app-edit-payment-gateway>
+  @if (selectedPaymentGateway) {
+    <div panel-content>
+      <app-edit-payment-gateway
+        #paymentGatewayFormRef
+        [paymentStrategy]="selectedPaymentGateway"
+        [accountId]="selectedAccount?.id"
+        (save)="onPaymentGatewaySaved()"
+        (cancel)="onPanelClose()">
+      </app-edit-payment-gateway>
     </div>
+  }
 
-    <ng-container panel-actions>
-        <button
-            type="button"
-            class="btn btn-outline-secondary"
-            (click)="onPanelClose()">
-            {{ 'common.cancel' | translate }}
-        </button>
-        <button
-            *ngIf="selectedPaymentGateway?.id"
-            type="button"
-            class="btn"
-            [ngClass]="selectedPaymentGateway?.isActive ? 'btn-warning' : 'btn-success'"
-            (click)="onToggleStatus()">
-            {{ selectedPaymentGateway?.isActive ? ('editPaymentGateway.deactivate' | translate) : ('editPaymentGateway.activate' | translate) }}
-        </button>
-        <button
-            type="button"
-            class="btn btn-primary"
-            (click)="paymentGatewayFormRef?.submit()"
-            [disabled]="paymentGatewayFormRef?.loading || !paymentGatewayFormRef?.isFormValid">
-            <span *ngIf="paymentGatewayFormRef?.loading" class="loading-spinner"></span>
-            {{ panelMode === 'create' ? ('editPaymentGateway.create' | translate) : ('editPaymentGateway.save' | translate) }}
-        </button>
-    </ng-container>
+  <ng-container panel-actions>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="onPanelClose()">
+      {{ 'common.cancel' | translate }}
+    </button>
+    @if (selectedPaymentGateway?.id) {
+      <button
+        type="button"
+        class="btn"
+        [ngClass]="selectedPaymentGateway?.isActive ? 'btn-warning' : 'btn-success'"
+        (click)="onToggleStatus()">
+        {{ selectedPaymentGateway?.isActive ? ('editPaymentGateway.deactivate' | translate) : ('editPaymentGateway.activate' | translate) }}
+      </button>
+    }
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="paymentGatewayFormRef?.submit()"
+      [disabled]="paymentGatewayFormRef?.loading || !paymentGatewayFormRef?.isFormValid">
+      @if (paymentGatewayFormRef?.loading) {
+        <span class="loading-spinner"></span>
+      }
+      {{ panelMode === 'create' ? ('editPaymentGateway.create' | translate) : ('editPaymentGateway.save' | translate) }}
+    </button>
+  </ng-container>
 </app-generic-right-panel>

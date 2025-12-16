@@ -37,8 +37,8 @@ export type AvatarVariant = 'circle' | 'rounded' | 'square';
  * ```
  */
 @Component({
-  selector: 'app-user-avatar',
   standalone: true,
+  selector: 'app-user-avatar',
   imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

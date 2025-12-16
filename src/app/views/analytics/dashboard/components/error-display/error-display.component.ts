@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { DashboardError } from '../../models/dashboard.types';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-error-display',
-    imports: [CommonModule, TranslateModule],
+    imports: [TranslateModule],
     templateUrl: './error-display.component.html',
     styleUrls: ['./error-display.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

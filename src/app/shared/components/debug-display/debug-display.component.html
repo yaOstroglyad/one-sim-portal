@@ -1,20 +1,24 @@
-<div 
-  *ngIf="enabled" 
-  class="debug-display"
-  [style.border-color]="borderColor">
-  <div class="debug-header">
-    <strong>{{ title }}</strong>
-  </div>
-  <div class="debug-content">
-    <div 
-      *ngFor="let item of debugItems" 
-      class="debug-item"
-      [ngClass]="'debug-type-' + item.type">
-      <span class="debug-key">{{ item.key }}:</span>
-      <span class="debug-value">{{ item.value }}</span>
+@if (enabled) {
+  <div
+    class="debug-display"
+    [style.border-color]="borderColor">
+    <div class="debug-header">
+      <strong>{{ title }}</strong>
     </div>
-    <div *ngIf="debugItems.length === 0" class="debug-empty">
-      No debug data available
+    <div class="debug-content">
+      @for (item of debugItems; track item) {
+        <div
+          class="debug-item"
+          [ngClass]="'debug-type-' + item.type">
+          <span class="debug-key">{{ item.key }}:</span>
+          <span class="debug-value">{{ item.value }}</span>
+        </div>
+      }
+      @if (debugItems.length === 0) {
+        <div class="debug-empty">
+          No debug data available
+        </div>
+      }
     </div>
   </div>
-</div>
+}

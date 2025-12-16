@@ -42,5 +42,3 @@ export namespace UsageInfo {
     Min: 'Min' as UnitTypeAmountEnum
   };
 }
-
-

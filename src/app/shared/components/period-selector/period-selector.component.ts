@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonDirective } from '@coreui/angular';
@@ -32,12 +32,11 @@ import { DatepickerComponent } from '../datepicker/datepicker.component';
   standalone: true,
   selector: 'app-period-selector',
   imports: [
-    CommonModule,
     FormsModule,
     TranslateModule,
     ButtonDirective,
     DatepickerComponent
-  ],
+],
   templateUrl: './period-selector.component.html',
   styleUrls: ['./period-selector.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

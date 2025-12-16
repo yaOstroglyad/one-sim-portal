@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 export type InfoStripType = 'primary' | 'warning' | 'alert';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-info-strip',
     imports: [CommonModule, MatIconModule],
     templateUrl: './info-strip.component.html',

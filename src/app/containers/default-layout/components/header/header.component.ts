@@ -32,8 +32,8 @@ const DEFAULT_USER_AVATAR = './assets/img/avatars/9.jpg';
 const DEFAULT_NOTIFICATION_COUNT = 3;
 
 @Component({
-  selector: 'app-header',
   standalone: true,
+  selector: 'app-header',
   imports: [
     CommonModule,
     RouterModule,

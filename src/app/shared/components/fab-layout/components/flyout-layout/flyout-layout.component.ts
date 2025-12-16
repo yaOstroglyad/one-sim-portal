@@ -15,7 +15,7 @@ import {
   inject,
   effect
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { CdkDrag, CdkDragEnd, DragDropModule } from '@angular/cdk/drag-drop';
@@ -26,9 +26,9 @@ import { FeatureRegistryService } from '@shared/components/fab-layout';
 import { DockedState, Breakpoint, ResizeConfig } from '../../models';
 
 @Component({
-  selector: 'app-flyout-layout',
   standalone: true,
-  imports: [CommonModule, TranslateModule, CdkTrapFocus, DragDropModule],
+  selector: 'app-flyout-layout',
+  imports: [TranslateModule, CdkTrapFocus, DragDropModule],
   templateUrl: './flyout-layout.component.html',
   styleUrls: ['./flyout-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -147,7 +147,7 @@ export class FlyoutLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   @HostListener('document:keydown.escape', ['$event'])
-  onEscapeKey(event: KeyboardEvent): void {
+  onEscapeKey(event: Event): void {
     if (this.isOpen()) {
       this.close();
       event.preventDefault();

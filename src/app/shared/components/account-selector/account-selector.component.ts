@@ -8,7 +8,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,18 +20,17 @@ import { Subject } from 'rxjs';
 import { Account } from '@shared/models';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-account-selector',
     templateUrl: './account-selector.component.html',
     styleUrls: ['./account-selector.component.scss'],
     imports: [
-        CommonModule,
-        TranslateModule,
-        MatIconModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        ReactiveFormsModule
-    ],
+    TranslateModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    ReactiveFormsModule
+],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountSelectorComponent implements OnInit, OnDestroy {

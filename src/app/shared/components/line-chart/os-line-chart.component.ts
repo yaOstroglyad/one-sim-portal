@@ -11,7 +11,7 @@ import {
   ViewChild
 } from '@angular/core';
 import Chart, { ChartOptions } from 'chart.js/auto';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -39,15 +39,14 @@ export interface LineChartData {
 export type LineChartOptions = ChartOptions<'line'>;
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'os-line-chart',
     templateUrl: './os-line-chart.component.html',
     styleUrls: ['./os-line-chart.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
-        CommonModule,
-        TranslateModule
-    ]
+    TranslateModule
+]
 })
 export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('lineChartCanvas') private lineChartCanvas!: ElementRef<HTMLCanvasElement>;

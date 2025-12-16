@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -16,13 +16,13 @@ import { ProvidersTableService } from './providers-table.service';
 
 @Component({
     standalone: true,
+
     selector: 'app-providers',
     imports: [
-        CommonModule,
-        GenericTableComponent,
-        HeaderComponent,
-        TranslateModule
-    ],
+    GenericTableComponent,
+    HeaderComponent,
+    TranslateModule
+],
     templateUrl: './providers.component.html',
     styleUrls: ['./providers.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

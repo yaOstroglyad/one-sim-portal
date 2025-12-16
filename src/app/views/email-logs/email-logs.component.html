@@ -1,22 +1,24 @@
 <!-- Account Selector (только для админов) -->
-<app-account-selector *ngIf="isAdmin"
-                      [helperText]="'COMMON.select_account_hint_message'"
-                      (accountSelected)="onAccountSelected($event)">
-</app-account-selector>
+@if (isAdmin) {
+  <app-account-selector
+    [helperText]="'COMMON.select_account_hint_message'"
+    (accountSelected)="onAccountSelected($event)">
+  </app-account-selector>
+}
 
 <!-- Header with filters -->
 <app-header class="os-header-sticky"
-            [formGroup]="filterForm"
-            [tableConfig$]="tableConfig$"
-            (columnSelectionChange)="onColumnSelectionChanged($event)">
-    <ng-container header-custom-inputs>
-        <input cFormControl
-               formControlName="email"
-               [type]="'email'"
-               placeholder="{{ 'email_logs.email_placeholder' | translate }}">
+  [formGroup]="filterForm"
+  [tableConfig$]="tableConfig$"
+  (columnSelectionChange)="onColumnSelectionChanged($event)">
+  <ng-container header-custom-inputs>
+    <input cFormControl
+      formControlName="email"
+      [type]="'email'"
+      placeholder="{{ 'email_logs.email_placeholder' | translate }}">
 
-        <app-date-picker-wrapper
-            formControlName="dateFrom"
+    <app-date-picker-wrapper
+      formControlName="dateFrom"
             [config]="{
                 mode: 'single',
                 label: 'email_logs.date_from',
@@ -24,10 +26,10 @@
                 appearance: 'outline',
                 size: 'medium'
             }">
-        </app-date-picker-wrapper>
+    </app-date-picker-wrapper>
 
-        <app-date-picker-wrapper
-            formControlName="dateTo"
+    <app-date-picker-wrapper
+      formControlName="dateTo"
             [config]="{
                 mode: 'single',
                 label: 'email_logs.date_to',
@@ -35,20 +37,20 @@
                 appearance: 'outline',
                 size: 'medium'
             }">
-        </app-date-picker-wrapper>
+    </app-date-picker-wrapper>
 
-        <button cButton
-                color="secondary"
-                [disabled]="filterForm?.pristine"
-                (click)="resetForm()">
-            <svg cIcon name="cilReload"></svg>
-        </button>
-    </ng-container>
+    <button cButton
+      color="secondary"
+      [disabled]="filterForm?.pristine"
+      (click)="resetForm()">
+      <svg cIcon name="cilReload"></svg>
+    </button>
+  </ng-container>
 </app-header>
 
 <!-- Generic Table -->
 <generic-table #genericTable
-        [config$]="tableConfig$"
-        [data$]="dataList$"
-        (pageChange)="onPageChange($event)">
+  [config$]="tableConfig$"
+  [data$]="dataList$"
+  (pageChange)="onPageChange($event)">
 </generic-table>

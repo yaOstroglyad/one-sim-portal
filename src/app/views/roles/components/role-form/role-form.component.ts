@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormGroup } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -9,13 +9,12 @@ import { FormGeneratorComponent, FormConfig } from '@shared';
 import { getRoleFormConfig, getRoleCreateRequest, getRoleUpdateRequest } from './role-form.utils';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-role-form',
     imports: [
-        CommonModule,
-        TranslateModule,
-        FormGeneratorComponent
-    ],
+    TranslateModule,
+    FormGeneratorComponent
+],
     templateUrl: './role-form.component.html',
     styleUrls: ['./role-form.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -36,8 +35,6 @@ export class RoleFormComponent implements OnInit {
     this.isEditMode = !!this.role;
     this.formConfig = getRoleFormConfig(this.role, this.isEditMode, this.roleService);
   }
-
-
   onFormChanges(form: FormGroup): void {
     this.roleForm = form;
     this.cdr.markForCheck();

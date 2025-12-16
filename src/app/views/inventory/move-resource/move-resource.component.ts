@@ -11,6 +11,7 @@ import { ProvidersDataService, OrdersDataService, CompaniesDataService, FormConf
 
 @Component({
     standalone: true,
+
     selector: 'app-move-resource',
     imports: [
         MatDialogModule,

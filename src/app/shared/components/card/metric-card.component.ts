@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 
 // Metric card interface (copied from dashboard types)
@@ -26,9 +26,9 @@ export interface MetricCard {
 }
 
 @Component({
-    selector: 'app-metric-card',
     standalone: true,
-    imports: [CommonModule, TranslateModule],
+    selector: 'app-metric-card',
+    imports: [TranslateModule],
     templateUrl: './metric-card.component.html',
     styleUrls: ['./metric-card.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

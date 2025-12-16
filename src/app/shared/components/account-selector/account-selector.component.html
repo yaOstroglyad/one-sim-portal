@@ -1,15 +1,19 @@
 <div class="account-selector">
-    <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{ 'domains.ownerAccount' | translate }}</mat-label>
-        <mat-select [formControl]="accountControl">
-            <mat-option *ngFor="let account of accounts" [value]="account.id">
-                {{ getAccountDisplayName(account) }}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>{{ 'domains.ownerAccount' | translate }}</mat-label>
+    <mat-select [formControl]="accountControl">
+      @for (account of accounts; track account) {
+        <mat-option [value]="account.id">
+          {{ getAccountDisplayName(account) }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
 
-    <div class="helper-text" *ngIf="!selectedAccountId">
-        <mat-icon color="primary">info</mat-icon>
-        {{ helperText | translate }}
+  @if (!selectedAccountId) {
+    <div class="helper-text">
+      <mat-icon color="primary">info</mat-icon>
+      {{ helperText | translate }}
     </div>
+  }
 </div>

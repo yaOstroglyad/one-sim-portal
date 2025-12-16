@@ -47,8 +47,8 @@ import { OsMenuItem, OsMenuSection, OsMenuPosition } from './os-menu.model';
  * ```
  */
 @Component({
-  selector: 'os-menu',
   standalone: true,
+  selector: 'os-menu',
   imports: [
     CommonModule,
     TranslateModule,

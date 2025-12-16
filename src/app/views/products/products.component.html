@@ -1,62 +1,68 @@
 <app-header class="os-header-sticky"
-            [config]="headerConfig"
-            [tableConfig$]="tableConfig$"
-            (onAddAction)="create()"
-            (columnSelectionChange)="onColumnSelectionChanged($event)"
-            (filteredData)="applyFilter($event)">
+  [config]="headerConfig"
+  [tableConfig$]="tableConfig$"
+  (onAddAction)="create()"
+  (columnSelectionChange)="onColumnSelectionChanged($event)"
+  (filteredData)="applyFilter($event)">
 </app-header>
 
 <generic-table [config$]="tableConfig$"
-               [data$]="dataList$"
-               [menu]="menuTemplate"
-               (toggleAction)="edit($event)">
+  [data$]="dataList$"
+  [menu]="menuTemplate"
+  (toggleAction)="edit($event)">
 </generic-table>
 
 <ng-template #menuTemplate let-item>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="openDetails(item)">{{ 'package.details' | translate }}</button>
-        <button mat-menu-item (click)="edit(item)">{{ 'package.edit' | translate }}</button>
-        <button [disabled]="!validStatuses.includes(item.status)"
-                mat-menu-item (click)="openChangeStatus(item)">{{ 'package.changeStatus' | translate }}</button>
-    </mat-menu>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="openDetails(item)">{{ 'package.details' | translate }}</button>
+    <button mat-menu-item (click)="edit(item)">{{ 'package.edit' | translate }}</button>
+    <button [disabled]="!validStatuses.includes(item.status)"
+    mat-menu-item (click)="openChangeStatus(item)">{{ 'package.changeStatus' | translate }}</button>
+  </mat-menu>
 </ng-template>
 
 <ng-template #statusTemplate let-data='context'>
-    <td>
-        <div class="badge-display">
-            <c-badge [class]="data?.status + '-badge'"
-                     class="me-1"
-                     shape="rounded-pill">{{ data?.status }}
-            </c-badge>
-        </div>
-    </td>
+  <td>
+    <div class="badge-display">
+      <c-badge [class]="data?.status + '-badge'"
+        class="me-1"
+        shape="rounded-pill">{{ data?.status }}
+      </c-badge>
+    </div>
+  </td>
 </ng-template>
 
 <ng-template #usageTemplate let-data='context'>
-    <td>
-        <div class="badge-display">
-            <c-badge *ngFor="let usage of data.bundle.usage"
-                     [class]="usage?.unitType + '-badge'"
-                     class="me-1"
-                     shape="rounded-pill">{{ usage?.value }} {{ usage?.unitType }}
-            </c-badge>
-        </div>
-    </td>
+  <td>
+    <div class="badge-display">
+      @for (usage of data.bundle.usage; track usage) {
+        <c-badge
+          [class]="usage?.unitType + '-badge'"
+          class="me-1"
+          shape="rounded-pill">{{ usage?.value }} {{ usage?.unitType }}
+        </c-badge>
+      }
+    </div>
+  </td>
 </ng-template>
 
 <ng-template #validityTemplate let-data='context'>
-    <td *ngIf="data.bundle && data.bundle.validity">
-        {{data.bundle?.validity?.period + ' ' + data.bundle?.validity?.timeUnit}}
+  @if (data.bundle && data.bundle.validity) {
+    <td>
+      {{data.bundle?.validity?.period + ' ' + data.bundle?.validity?.timeUnit}}
     </td>
+  }
 </ng-template>
 
 <ng-template #companiesTemplate let-data='context'>
-    <td *ngIf="data.companies && data.companies.length">
-        <span matTooltip="{{data.companies | itemNames:100:'name'}}" matTooltipPosition="above">
-            {{ data.companies | itemNames }}
-        </span>
+  @if (data.companies && data.companies.length) {
+    <td>
+      <span matTooltip="{{data.companies | itemNames:100:'name'}}" matTooltipPosition="above">
+        {{ data.companies | itemNames }}
+      </span>
     </td>
+  }
 </ng-template>

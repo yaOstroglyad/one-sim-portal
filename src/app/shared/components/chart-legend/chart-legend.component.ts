@@ -5,8 +5,6 @@ import {
   output,
   computed
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
 export interface ChartLegendItem {
   label: string;
   color: string;
@@ -21,7 +19,7 @@ export interface ChartLegendItem {
 @Component({
   standalone: true,
   selector: 'app-chart-legend',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './chart-legend.component.html',
   styleUrls: ['./chart-legend.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

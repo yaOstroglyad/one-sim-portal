@@ -1,6 +1,6 @@
 <nav aria-label="os-breadcrumb">
     <ul class="os-breadcrumb" [ngClass]="breadcrumbClasses()">
-        @for (breadcrumb of breadcrumbs(); track breadcrumb.url; let last = $last) {
+        @for (breadcrumb of breadcrumbs(); track $index; let last = $last) {
             <li class="os-breadcrumb-item" [class.active]="last">
                 @if (!last) {
                     <span [routerLink]="breadcrumb.url">{{ breadcrumb.label | translate }}</span>

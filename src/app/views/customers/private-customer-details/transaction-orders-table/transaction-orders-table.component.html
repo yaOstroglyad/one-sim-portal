@@ -1,88 +1,80 @@
-<div *ngIf="transactionsView$ | async as transactions; else loading" class="trans-wrapper">
-    <app-empty-state
-            *ngIf="!transactions || transactions.length === 0"
-            [title]="'transactionOrdersTable.noTransactionOrdersFound' | translate"
-            [message]="'transactionOrdersTable.noTransactionsMessage' | translate"
-            [imageSrc]="'assets/img/empty-states/file-not-found.svg'">
-    </app-empty-state>
-
-    <table *ngIf="transactions.length > 0"
-           [dataSource]="transactions"
-           mat-table
-           class="mat-elevation-z0">
+@if (transactionsView$ | async; as transactions) {
+  <div class="trans-wrapper">
+    @if (!transactions || transactions.length === 0) {
+      <app-empty-state
+        [title]="'transactionOrdersTable.noTransactionOrdersFound' | translate"
+        [message]="'transactionOrdersTable.noTransactionsMessage' | translate"
+        [imageSrc]="'assets/img/empty-states/file-not-found.svg'">
+      </app-empty-state>
+    }
+    @if (transactions.length > 0) {
+      <table
+        [dataSource]="transactions"
+        mat-table
+        class="mat-elevation-z0">
         <!-- Type Column -->
         <ng-container matColumnDef="type">
-            <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.type' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ element.type }}</td>
+          <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.type' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.type }}</td>
         </ng-container>
-
         <!-- Status Column -->
         <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.status' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ element.status }}</td>
+          <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.status' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.status }}</td>
         </ng-container>
-
         <!-- Product -->
         <ng-container matColumnDef="productName">
-            <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.productName' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ element.productName }}</td>
+          <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.productName' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.productName }}</td>
         </ng-container>
-
         <!-- Product Price -->
         <ng-container matColumnDef="productPrice">
-            <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.productPrice' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ element.price + " " + element.currency }}</td>
+          <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.productPrice' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.price + " " + element.currency }}</td>
         </ng-container>
-
         <!-- Payment Method Column -->
         <ng-container matColumnDef="paymentMethod">
-            <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.paymentMethod' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ element.paymentMethod }}</td>
+          <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.paymentMethod' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.paymentMethod }}</td>
         </ng-container>
-
         <!-- Created At Column -->
         <ng-container matColumnDef="createdAt">
-            <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.createdAt' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ element.createdAt | date: 'dd/MM/yyyy' }}</td>
+          <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.createdAt' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.createdAt | date: 'dd/MM/yyyy' }}</td>
         </ng-container>
-
         <!-- Created By Column -->
         <ng-container matColumnDef="createdBy">
-            <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.createdBy' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ element.createdBy }}</td>
+          <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.createdBy' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.createdBy }}</td>
         </ng-container>
-
         <!-- Updated At Column -->
         <ng-container matColumnDef="updatedAt">
-            <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.updatedAt' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ element.updatedAt | date: 'dd/MM/yyyy' }}</td>
+          <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.updatedAt' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.updatedAt | date: 'dd/MM/yyyy' }}</td>
         </ng-container>
-
         <!-- Updated By Column -->
         <ng-container matColumnDef="updatedBy">
-            <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.updatedBy' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ element.updatedBy }}</td>
+          <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.updatedBy' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.updatedBy }}</td>
         </ng-container>
-
         <!-- External Transaction ID Column -->
         <ng-container matColumnDef="externalTransactionId">
-            <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.externalTransactionId' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ element.externalTransactionId }}</td>
+          <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.externalTransactionId' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.externalTransactionId }}</td>
         </ng-container>
-
         <!-- Trigger Type Column -->
         <ng-container matColumnDef="triggerType">
-            <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.triggerType' | translate }}</th>
-            <td mat-cell *matCellDef="let element"> {{ element.triggerType }}</td>
+          <th mat-header-cell *matHeaderCellDef> {{ 'transactionOrdersTable.triggerType' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.triggerType }}</td>
         </ng-container>
-
         <!-- Header and Row Definitions -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-</div>
+      </table>
+    }
+  </div>
+} @else {
+  <p>{{ 'transactionOrdersTable.loading' | translate }}</p>
+}
 
 <!-- Loading Template -->
-<ng-template #loading>
-    <p>{{ 'transactionOrdersTable.loading' | translate }}</p>
-</ng-template>

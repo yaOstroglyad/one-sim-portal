@@ -1,17 +1,15 @@
 import { Component, Input } from '@angular/core';
-import { NgForOf, NgIf, TitleCasePipe } from '@angular/common';
+import { TitleCasePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-display-key-value',
     templateUrl: './display-key-value.component.html',
     imports: [
-        TitleCasePipe,
-        NgForOf,
-        NgIf,
-        MatCardModule
-    ],
+    TitleCasePipe,
+    MatCardModule
+],
     styleUrls: ['./display-key-value.component.scss']
 })
 export class DisplayKeyValueComponent {

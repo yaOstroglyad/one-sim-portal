@@ -11,7 +11,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TemplateTypeGridService } from './template-type-grid.service';
 import { EditEmailTemplateComponent } from '../edit-email-template/edit-email-template.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -23,23 +23,22 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
-    selector: 'app-template-type-grid',
     standalone: true,
+    selector: 'app-template-type-grid',
     templateUrl: './template-type-grid.component.html',
     providers: [TemplateTypeGridService],
     imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatIconModule,
-        MatMenuModule,
-        MatSnackBarModule,
-        TranslateModule,
-        GenericTableComponent,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        BadgeComponent
-    ],
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatSnackBarModule,
+    TranslateModule,
+    GenericTableComponent,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    BadgeComponent
+],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TemplateTypeGridComponent implements OnInit, OnChanges, OnDestroy {

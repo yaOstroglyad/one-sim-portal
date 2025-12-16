@@ -24,8 +24,8 @@ const ICON_SIZES: Record<IconSize, string> = {
 };
 
 @Component({
-  selector: 'app-icon',
   standalone: true,
+  selector: 'app-icon',
   imports: [CommonModule],
   template: `
     @if (iconContent$ | async; as iconSvg) {

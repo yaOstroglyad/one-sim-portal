@@ -1,42 +1,41 @@
-<ng-container *ngIf="formConfig$ | async as formConfig;">
-    <div class="portal-container">
-        <div class="preview-section">
-            <div class="preview-header">
-                <img *ngIf="formValues?.faviconUrl"
-                     [src]="formValues.faviconUrl"
-                     alt="Favicon"
-                     class="favicon">
-                <span class="preview-title">
+@if (formConfig$ | async; as formConfig;) {
+  <div class="portal-container">
+    <div class="preview-section">
+      <div class="preview-header">
+        @if (formValues?.faviconUrl) {
+          <img
+            [src]="formValues.faviconUrl"
+            alt="Favicon"
+            class="favicon">
+        }
+        <span class="preview-title">
           {{ 'portal.preview.title' | translate }}
         </span>
-            </div>
-            <app-portal-preview
-                    [primaryColor]="formValues.primaryColor"
-                    [secondaryColor]="formValues.secondaryColor"
-                    [logoUrl]="formValues.logoUrl">
-            </app-portal-preview>
-        </div>
-
-        <div class="settings-section">
-            <h4 class="mb-1">{{ 'portal.settings.title' | translate }}</h4>
-            <mat-hint class="small">
-                The settings will be applied to all domains of the corresponding application type (portal).
-            </mat-hint>
-            <mat-divider class="my-2"></mat-divider>
-
-            <app-form-generator
-                    [config]="formConfig"
-                    (formChanges)="handleFormChanges($event)">
-            </app-form-generator>
-
-            <div class="form-actions">
-                <button mat-raised-button
-                        color="primary"
-                        [disabled]="!isFormValid"
-                        (click)="save()">
-                    {{ 'portal.settings.saveButton' | translate }}
-                </button>
-            </div>
-        </div>
+      </div>
+      <app-portal-preview
+        [primaryColor]="formValues.primaryColor"
+        [secondaryColor]="formValues.secondaryColor"
+        [logoUrl]="formValues.logoUrl">
+      </app-portal-preview>
     </div>
-</ng-container>
+    <div class="settings-section">
+      <h4 class="mb-1">{{ 'portal.settings.title' | translate }}</h4>
+      <mat-hint class="small">
+        The settings will be applied to all domains of the corresponding application type (portal).
+      </mat-hint>
+      <mat-divider class="my-2"></mat-divider>
+      <app-form-generator
+        [config]="formConfig"
+        (formChanges)="handleFormChanges($event)">
+      </app-form-generator>
+      <div class="form-actions">
+        <button mat-raised-button
+          color="primary"
+          [disabled]="!isFormValid"
+          (click)="save()">
+          {{ 'portal.settings.saveButton' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

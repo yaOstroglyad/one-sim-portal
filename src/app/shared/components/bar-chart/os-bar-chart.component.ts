@@ -12,7 +12,7 @@ import {
   viewChild
 } from '@angular/core';
 import Chart, { ChartOptions } from 'chart.js/auto';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { LocalStorageService } from 'ngx-webstorage';
 import { ChartLegendComponent, ChartLegendItem } from '../chart-legend';
@@ -41,10 +41,9 @@ export type BarChartOptions = ChartOptions<'bar'>;
   styleUrls: ['./os-bar-chart.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     TranslateModule,
     ChartLegendComponent
-  ]
+]
 })
 export class OsBarChartComponent implements AfterViewInit, OnDestroy {
   private readonly cdr = inject(ChangeDetectorRef);

@@ -7,7 +7,7 @@ import {
 	convertUsage
 } from '@shared';
 import { MatTableModule } from '@angular/material/table';
-import { AsyncPipe, DatePipe, NgClass, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
 import { Observable } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
@@ -17,14 +17,13 @@ import { map } from 'rxjs/operators';
 	selector: 'app-purchased-products',
 	templateUrl: './purchased-products.component.html',
 	imports: [
-		MatTableModule,
-		DatePipe,
-		NgClass,
-		AsyncPipe,
-		NgIf,
-		EmptyStateComponent,
-		TranslateModule
-	],
+    MatTableModule,
+    DatePipe,
+    NgClass,
+    AsyncPipe,
+    EmptyStateComponent,
+    TranslateModule
+],
 	styleUrls: ['./purchased-products.component.scss']
 })
 export class PurchasedProductsComponent implements OnInit {

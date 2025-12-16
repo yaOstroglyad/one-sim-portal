@@ -38,8 +38,6 @@ export class EditOrderDescriptionComponent {
     this.isFormValid = form.valid;
     this.cdr.markForCheck();
   }
-
-
   close(): void {
     this.dialogRef.close();
   }

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { take } from 'rxjs/operators';
 import { IconDirective } from '@coreui/icons-angular';
 
@@ -16,13 +16,12 @@ import {
 } from './tariff-offer-form.utils';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-tariff-offer-form',
     imports: [
-        CommonModule,
-        FormGeneratorComponent,
-        IconDirective
-    ],
+    FormGeneratorComponent,
+    IconDirective
+],
     templateUrl: './tariff-offer-form.component.html',
     styleUrls: ['./tariff-offer-form.component.scss']
 })

@@ -1,79 +1,89 @@
 <div class="attachments-container">
   <!-- Loading State -->
-  <div *ngIf="loading" class="loading-state">
-    <p>{{ 'attachments.loading' | translate }}</p>
-  </div>
+  @if (loading) {
+    <div class="loading-state">
+      <p>{{ 'attachments.loading' | translate }}</p>
+    </div>
+  }
 
   <!-- Upload Section -->
-  <div class="upload-section" *ngIf="!loading && config?.allowUpload">
-    <input 
-      type="file" 
-      id="file-input" 
-      (change)="onFileSelect($event)"
-      style="display: none;"
-      [disabled]="isUploading">
-    
-    <button 
-      type="button" 
-      cButton 
-      variant="outline" 
-      color="primary"
-      size="sm"
-      (click)="triggerFileInput()"
-      [disabled]="isUploading">
-      <svg cIcon name="cil-cloud-upload" width="16" height="16"></svg>
-      <span *ngIf="!isUploading">{{ 'attachments.uploadFile' | translate }}</span>
-      <span *ngIf="isUploading">{{ 'attachments.uploading' | translate }}</span>
-    </button>
-    
-    <div class="upload-hint">
-      {{ uploadHint | translate }}
+  @if (!loading && config?.allowUpload) {
+    <div class="upload-section">
+      <input
+        type="file"
+        id="file-input"
+        (change)="onFileSelect($event)"
+        style="display: none;"
+        [disabled]="isUploading">
+      <button
+        type="button"
+        cButton
+        variant="outline"
+        color="primary"
+        size="sm"
+        (click)="triggerFileInput()"
+        [disabled]="isUploading">
+        <svg cIcon name="cil-cloud-upload" width="16" height="16"></svg>
+        @if (!isUploading) {
+          <span>{{ 'attachments.uploadFile' | translate }}</span>
+        }
+        @if (isUploading) {
+          <span>{{ 'attachments.uploading' | translate }}</span>
+        }
+      </button>
+      <div class="upload-hint">
+        {{ uploadHint | translate }}
+      </div>
     </div>
-  </div>
+  }
 
   <!-- Attachments List -->
-  <div class="attachments-list" *ngIf="!loading && attachments.length > 0; else noAttachments">
-    <div class="attachment" *ngFor="let attachment of attachments; trackBy: trackByAttachmentId">
-      <div class="attachment-icon">
-        <svg [cIcon]="getFileIcon(attachment.mimeType)" width="24" height="24"></svg>
-      </div>
-      
-      <div class="attachment-info">
-        <div class="attachment-name" [title]="attachment.originalFileName">
-          {{ attachment.originalFileName }}
+  @if (!loading && attachments.length > 0) {
+    <div class="attachments-list">
+      @for (attachment of attachments; track trackByAttachmentId($index, attachment)) {
+        <div class="attachment">
+          <div class="attachment-icon">
+            <svg [cIcon]="getFileIcon(attachment.mimeType)" width="24" height="24"></svg>
+          </div>
+          <div class="attachment-info">
+            <div class="attachment-name" [title]="attachment.originalFileName">
+              {{ attachment.originalFileName }}
+            </div>
+            <div class="attachment-meta">
+              <span class="file-size">{{ formatFileSize(attachment.fileSize) }}</span>
+              <span class="separator">•</span>
+              <span class="upload-info">
+                {{ 'attachments.uploadedBy' | translate }} {{ attachment.uploadedByName }}
+              </span>
+              <span class="separator">•</span>
+              <span class="upload-date">{{ formatDate(attachment.createdAt) }}</span>
+            </div>
+          </div>
+          @if (config?.allowDownload) {
+            <div class="attachment-actions">
+              <button
+                type="button"
+                cButton
+                variant="ghost"
+                color="primary"
+                size="sm"
+                (click)="downloadAttachment(attachment)"
+                [title]="'attachments.download' | translate">
+                <svg cIcon name="cil-cloud-download" width="16" height="16"></svg>
+              </button>
+            </div>
+          }
         </div>
-        
-        <div class="attachment-meta">
-          <span class="file-size">{{ formatFileSize(attachment.fileSize) }}</span>
-          <span class="separator">•</span>
-          <span class="upload-info">
-            {{ 'attachments.uploadedBy' | translate }} {{ attachment.uploadedByName }}
-          </span>
-          <span class="separator">•</span>
-          <span class="upload-date">{{ formatDate(attachment.createdAt) }}</span>
-        </div>
-      </div>
-      
-      <div class="attachment-actions" *ngIf="config?.allowDownload">
-        <button 
-          type="button" 
-          cButton 
-          variant="ghost" 
-          color="primary"
-          size="sm"
-          (click)="downloadAttachment(attachment)"
-          [title]="'attachments.download' | translate">
-          <svg cIcon name="cil-cloud-download" width="16" height="16"></svg>
-        </button>
-      </div>
+      }
     </div>
-  </div>
+  } @else {
+    @if (!loading) {
+      <div class="no-attachments">
+        <svg cIcon name="cil-paperclip" width="32" height="32"></svg>
+        <p>{{ 'attachments.noAttachments' | translate }}</p>
+      </div>
+    }
+  }
 
   <!-- No Attachments State -->
-  <ng-template #noAttachments>
-    <div class="no-attachments" *ngIf="!loading">
-      <svg cIcon name="cil-paperclip" width="32" height="32"></svg>
-      <p>{{ 'attachments.noAttachments' | translate }}</p>
-    </div>
-  </ng-template>
 </div>

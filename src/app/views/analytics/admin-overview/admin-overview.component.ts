@@ -1,12 +1,12 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { IconComponent } from '@shared';
 
 @Component({
   standalone: true,
   selector: 'app-admin-overview',
-  imports: [CommonModule, TranslateModule, IconComponent],
+  imports: [TranslateModule, IconComponent],
   template: `
     <div class="admin-overview-container">
       <div class="placeholder-content">

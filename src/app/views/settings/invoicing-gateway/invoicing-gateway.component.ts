@@ -17,7 +17,7 @@ import { AccountSelectorComponent } from 'src/app/shared/components/account-sele
 import { GenericRightPanelComponent, PanelAction } from 'src/app/shared/components/generic-right-panel/generic-right-panel.component';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-invoicing-gateway',
     templateUrl: './invoicing-gateway.component.html',
     styleUrls: ['./invoicing-gateway.component.scss'],

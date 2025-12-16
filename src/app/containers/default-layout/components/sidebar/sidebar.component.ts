@@ -11,8 +11,8 @@ import { LayoutService } from '../../services';
 import { IconComponent, LanguageService } from '@shared';
 
 @Component({
-  selector: 'app-sidebar',
   standalone: true,
+  selector: 'app-sidebar',
   imports: [
     CommonModule,
     RouterModule,

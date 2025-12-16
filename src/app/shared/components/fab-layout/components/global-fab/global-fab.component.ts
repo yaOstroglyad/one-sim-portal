@@ -10,7 +10,7 @@ import {
 	OnDestroy,
 	effect
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { GlobalFlyoutService, FabConfigService } from '@shared/components/fab-layout';
@@ -18,9 +18,9 @@ import { FabButtonConfig, FabMenuItem } from '../../models';
 import { IconComponent } from '@shared';
 
 @Component({
-	selector: 'app-global-fab',
 	standalone: true,
-	imports: [CommonModule, TranslateModule, IconComponent],
+	selector: 'app-global-fab',
+	imports: [TranslateModule, IconComponent],
 	templateUrl: './global-fab.component.html',
 	styleUrls: ['./global-fab.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush

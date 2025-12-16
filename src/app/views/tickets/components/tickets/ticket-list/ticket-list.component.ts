@@ -34,8 +34,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 
 @Component({
-    selector: 'app-ticket-list',
     standalone: true,
+    selector: 'app-ticket-list',
     imports: [
         RouterModule,
         ReactiveFormsModule,

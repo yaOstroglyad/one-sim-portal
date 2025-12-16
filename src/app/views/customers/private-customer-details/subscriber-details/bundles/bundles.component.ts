@@ -11,7 +11,7 @@ import {
 	convertUsage
 } from '@shared';
 import { MatCardModule } from '@angular/material/card';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
@@ -21,21 +21,19 @@ interface ExtendedUsageInfo extends UsageInfo {
 }
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-bundles',
     templateUrl: './bundles.component.html',
     styleUrls: ['./bundles.component.scss'],
     imports: [
-        ChartComponent,
-        MatCardModule,
-        NgForOf,
-        NgIf,
-        AsyncPipe,
-        EmptyStateComponent,
-        MatButtonModule,
-        NgClass,
-        TranslateModule
-    ]
+    ChartComponent,
+    MatCardModule,
+    AsyncPipe,
+    EmptyStateComponent,
+    MatButtonModule,
+    NgClass,
+    TranslateModule
+]
 })
 export class BundlesComponent implements OnInit {
 	bundlesView$: Observable<ExtendedUsageInfo[]>;

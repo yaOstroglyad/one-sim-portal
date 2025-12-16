@@ -29,7 +29,7 @@ import { MobileBundle } from '../../../models';
 import { BundlesTableService } from '../bundles-table.service';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-bundle-list',
     imports: [
         CommonModule,

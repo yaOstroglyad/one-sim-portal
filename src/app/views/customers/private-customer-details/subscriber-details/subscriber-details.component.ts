@@ -23,7 +23,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { GlobalFlyoutService } from '@shared/components/fab-layout';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-subscriber-details',
     templateUrl: './subscriber-details.component.html',
     styleUrls: ['./subscriber-details.component.scss'],

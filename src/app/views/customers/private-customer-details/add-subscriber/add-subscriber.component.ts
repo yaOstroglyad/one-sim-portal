@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { NgIf } from '@angular/common';
+
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
@@ -18,19 +18,18 @@ import {
 } from '@shared';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-add-subscriber',
     templateUrl: './add-subscriber.component.html',
     imports: [
-        MatDialogModule,
-        FormGeneratorComponent,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatIconModule,
-        NgIf,
-        LoaderComponent,
-        TranslateModule
-    ],
+    MatDialogModule,
+    FormGeneratorComponent,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    LoaderComponent,
+    TranslateModule
+],
     styleUrls: ['./add-subscriber.component.scss']
 })
 export class AddSubscriberComponent implements OnInit {

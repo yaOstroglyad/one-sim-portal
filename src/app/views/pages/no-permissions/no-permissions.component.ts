@@ -1,6 +1,6 @@
 import { Component, inject, ChangeDetectionStrategy, signal, OnInit, OnDestroy } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { CommonModule } from '@angular/common';
+
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService, UserRoleService, VisualService } from '@shared';
 
@@ -21,9 +21,8 @@ import { AuthService, UserRoleService, VisualService } from '@shared';
   styleUrls: ['./no-permissions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     TranslateModule
-  ]
+]
 })
 export class NoPermissionsComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);

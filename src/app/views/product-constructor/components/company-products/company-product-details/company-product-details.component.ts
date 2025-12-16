@@ -8,7 +8,7 @@ import { CompanyProductPriceService } from '../../../services';
 import { CompanyProductPricesTableComponent } from '../company-product-prices-table';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-company-product-details',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [

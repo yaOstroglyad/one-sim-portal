@@ -153,7 +153,7 @@ specs/                      # Feature specifications
 
 ## 📊 Project Info
 
-**Framework:** Angular 19.2.15 (standalone components)
+**Framework:** Angular 21.0.5 (standalone components)
 
 **Key Libraries:**
 - CoreUI + Angular Material (UI)
@@ -187,10 +187,11 @@ specs/                      # Feature specifications
 **Last Major Update:** 2025-12-03 (Migrated to Spec-Kit format)
 
 ## Active Technologies
-- TypeScript 5.x, Angular 19.2.15 + Angular HttpClient, RxJS, Chart.js, CoreUI, Angular Material (010-subscribers-api)
+- TypeScript 5.9, Angular 21.0.5 + Angular HttpClient, RxJS, Chart.js, CoreUI, Angular Material (010-subscribers-api)
 - N/A (read-only API integration) (010-subscribers-api)
-- TypeScript 5.x, Angular 19.2.15 + Chart.js (existing), @angular/core, RxJS (012-waterfall-chart)
+- TypeScript 5.9, Angular 21.0.5 + Chart.js (existing), @angular/core, RxJS (012-waterfall-chart)
 - N/A (visualization component only) (012-waterfall-chart)
 
 ## Recent Changes
-- 010-subscribers-api: Added TypeScript 5.x, Angular 19.2.15 + Angular HttpClient, RxJS, Chart.js, CoreUI, Angular Material
+- 013-angular-21-upgrade: Upgraded Angular 19.2.15 → 21.0.5, TypeScript 5.8 → 5.9, removed @angular/flex-layout
+- 010-subscribers-api: Added TypeScript 5.9, Angular 21.0.5 + Angular HttpClient, RxJS, Chart.js, CoreUI, Angular Material

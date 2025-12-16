@@ -17,7 +17,7 @@ import { PaymentGatewayService } from '../payment-gateway.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PaymentStrategy } from '@shared/models/payment';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,18 +32,17 @@ import { FormConfig } from 'src/app/shared';
 	templateUrl: './edit-payment-gateway.component.html',
 	styleUrls: ['./edit-payment-gateway.component.scss'],
 	imports: [
-		CommonModule,
-		ReactiveFormsModule,
-		FormsModule,
-		MatDialogModule,
-		MatSnackBarModule,
-		MatFormFieldModule,
-		MatInputModule,
-		MatButtonModule,
-		TranslateModule,
-		FormGeneratorComponent,
-		MatTooltipModule
-	]
+    ReactiveFormsModule,
+    FormsModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    TranslateModule,
+    FormGeneratorComponent,
+    MatTooltipModule
+]
 })
 export class EditPaymentGatewayComponent implements OnInit, OnChanges, AfterViewInit {
 	@Input() paymentStrategy: PaymentStrategy | null = null;

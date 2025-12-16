@@ -29,8 +29,8 @@ import { GlobalFlyoutService } from '@shared/components/fab-layout';
  * Handles state-based navigation between thread list and thread view.
  */
 @Component({
-	selector: 'app-support-chat-shell',
 	standalone: true,
+	selector: 'app-support-chat-shell',
 	imports: [
 		CommonModule,
 		TranslateModule,

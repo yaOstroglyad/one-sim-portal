@@ -1,18 +1,17 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-html-dialog',
     templateUrl: './html-dialog.component.html',
     styleUrls: ['./html-dialog.component.scss'],
     imports: [
-        CommonModule,
-        TranslateModule,
-        MatButtonModule
-    ]
+    TranslateModule,
+    MatButtonModule
+]
 })
 export class HtmlDialogComponent {
   @ViewChild('htmlDialog') htmlDialog!: ElementRef<HTMLDialogElement>;

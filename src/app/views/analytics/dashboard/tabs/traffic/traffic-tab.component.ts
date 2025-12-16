@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, effect, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@coreui/icons-angular';
 
@@ -20,16 +20,15 @@ import { DashboardError } from '../../models/dashboard.types';
 	standalone: true,
 	selector: 'app-traffic-tab',
 	imports: [
-		CommonModule,
-		TranslateModule,
-		IconModule,
-		CardComponent,
-		MetricCardComponent,
-		LoadingIndicatorComponent,
-		ErrorDisplayComponent,
-		OsBarChartComponent,
-		OsLineChartComponent
-	],
+    TranslateModule,
+    IconModule,
+    CardComponent,
+    MetricCardComponent,
+    LoadingIndicatorComponent,
+    ErrorDisplayComponent,
+    OsBarChartComponent,
+    OsLineChartComponent
+],
 	templateUrl: './traffic-tab.component.html',
 	styleUrls: ['./traffic-tab.component.scss']
 })
@@ -51,7 +50,7 @@ export class TrafficTabComponent implements OnInit {
 			if (accountId) {
 				this.loadData();
 			}
-		}, { allowSignalWrites: true });
+		});
 	}
 
 	ngOnInit(): void {

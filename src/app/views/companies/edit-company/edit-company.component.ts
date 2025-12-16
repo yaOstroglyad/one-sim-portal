@@ -8,7 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-edit-company',
     templateUrl: './edit-company.component.html',
     imports: [

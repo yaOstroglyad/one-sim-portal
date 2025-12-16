@@ -40,8 +40,6 @@ export type TicketCategory =
   | 'DATA_REQUEST' 
   | 'COMPLIANCE_INQUIRY' 
   | 'OTHER';
-
-
 export interface CreateTicketRequest {
   subject: string;
   description: string;
@@ -96,4 +94,3 @@ export interface CreateTicketCommentRequest {
 export interface DownloadUrlResponse {
   url: string;
 }
-

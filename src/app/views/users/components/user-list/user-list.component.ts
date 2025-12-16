@@ -45,7 +45,7 @@ import { RoleService } from '../../../roles';
 import { USERS_CONFIG, UsersFilterParams, UsersUtils } from './user-list.utils';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-user-list',
     imports: [
         CommonModule,

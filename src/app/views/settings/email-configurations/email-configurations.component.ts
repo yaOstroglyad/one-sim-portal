@@ -14,7 +14,7 @@ import { AccountSelectorComponent } from '@shared/components/account-selector/ac
 import { IconDirective } from '@coreui/icons-angular';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-email-configurations',
     templateUrl: './email-configurations.component.html',
     styleUrls: ['./email-configurations.component.scss'],

@@ -10,16 +10,12 @@ import { of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { CompanyProduct, CreateCompanyProductRequest, UpdateCompanyProductRequest, ActiveTariffOffer } from '../../../models';
 import { CompanyProductService } from '../../../services';
-
-
 const timeUnits = [
   { value: 'days', displayValue: 'Days' },
   { value: 'hours', displayValue: 'Hours' },
   { value: 'months', displayValue: 'Months' },
   { value: 'years', displayValue: 'Years' }
 ];
-
-
 
 // Helper functions for creating form fields
 function createCompanySelectionField(

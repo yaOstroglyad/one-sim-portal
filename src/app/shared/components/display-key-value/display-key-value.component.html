@@ -1,27 +1,31 @@
 <div class="key-value-container">
-    <div class="key-value-entry" *ngFor="let entry of entries">
-        <div class="key">{{ entry.key | titlecase }}</div>
-        <div class="value">
-            <ng-container *ngIf="isObject(entry.value); else primitiveValue">
-                <mat-card class="nested-object-card">
-                    <mat-card-header>
-                        <mat-card-title>{{ entry.key | titlecase }}</mat-card-title>
-                    </mat-card-header>
-                    <mat-card-content>
-                        <app-display-key-value [data]="entry.value"></app-display-key-value>
-                    </mat-card-content>
-                </mat-card>
-            </ng-container>
-            <ng-template #primitiveValue>
-                <ng-container *ngIf="isArray(entry.value); else singleValue">
-                    <ul class="list">
-                        <li *ngFor="let item of entry.value">
-                            <app-display-key-value [data]="item"></app-display-key-value>
-                        </li>
-                    </ul>
-                </ng-container>
-                <ng-template #singleValue>{{ entry.value }}</ng-template>
-            </ng-template>
-        </div>
+  @for (entry of entries; track entry) {
+    <div class="key-value-entry">
+      <div class="key">{{ entry.key | titlecase }}</div>
+      <div class="value">
+        @if (isObject(entry.value)) {
+          <mat-card class="nested-object-card">
+            <mat-card-header>
+              <mat-card-title>{{ entry.key | titlecase }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <app-display-key-value [data]="entry.value"></app-display-key-value>
+            </mat-card-content>
+          </mat-card>
+        } @else {
+          @if (isArray(entry.value)) {
+            <ul class="list">
+              @for (item of entry.value; track item) {
+                <li>
+                  <app-display-key-value [data]="item"></app-display-key-value>
+                </li>
+              }
+            </ul>
+          } @else {
+            {{ entry.value }}
+          }
+        }
+      </div>
     </div>
+  }
 </div>

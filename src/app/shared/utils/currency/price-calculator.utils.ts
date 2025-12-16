@@ -136,8 +136,6 @@ export class CurrencyPriceCalculatorUtils {
       currencyConverted: fromConversion.isConverted || toConversion.isConverted
     };
   }
-
-
   /**
    * Format price with currency
    */

@@ -1,8 +1,14 @@
 <div class="empty-state">
-    <img [src]="imageSrc" alt="Empty State" *ngIf="imageSrc" class="empty-state-image"/>
-    <h3 class="empty-state-title">{{ title }}</h3>
-    <p class="empty-state-message" *ngIf="message">{{ message }}</p>
-    <div class="action-container" *ngIf="hasAction">
-        <ng-content></ng-content>
+  @if (imageSrc) {
+    <img [src]="imageSrc" alt="Empty State" class="empty-state-image"/>
+  }
+  <h3 class="empty-state-title">{{ title }}</h3>
+  @if (message) {
+    <p class="empty-state-message">{{ message }}</p>
+  }
+  @if (hasAction) {
+    <div class="action-container">
+      <ng-content></ng-content>
     </div>
+  }
 </div>

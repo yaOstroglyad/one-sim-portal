@@ -11,6 +11,7 @@ import { TableConfig, HeaderConfig } from '@shared/models';
 
 @Component({
     standalone: true,
+
     selector: 'app-header',
     imports: [
         CommonModule,

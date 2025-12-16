@@ -1,43 +1,57 @@
 <h2 mat-dialog-title class="dialog-header">{{ 'uploadDialog.title' | translate }}</h2>
 
 <mat-dialog-content class="mat-typography dialog-content">
-    <!-- Upload parameters info -->
-    <div class="upload-info" *ngIf="serviceProviderId || orderDescription">
-        <p><strong>Service Provider ID:</strong> {{ serviceProviderId }}</p>
-        <p *ngIf="orderDescription"><strong>Order Description:</strong> {{ orderDescription }}</p>
+  <!-- Upload parameters info -->
+  @if (serviceProviderId || orderDescription) {
+    <div class="upload-info">
+      <p><strong>Service Provider ID:</strong> {{ serviceProviderId }}</p>
+      @if (orderDescription) {
+        <p><strong>Order Description:</strong> {{ orderDescription }}</p>
+      }
     </div>
+  }
 
-    <!-- File upload component -->
-    <app-file-upload
-        [config]="uploadConfig"
-        [disabled]="isUploading"
-        (fileSelected)="onFileSelected($event)"
-        (uploadRequested)="onUploadRequested($event)"
-        (fileCleared)="onFileCleared()"
-        #fileUploadComponent>
-    </app-file-upload>
+  <!-- File upload component -->
+  <app-file-upload
+    [config]="uploadConfig"
+    [disabled]="isUploading"
+    (fileSelected)="onFileSelected($event)"
+    (uploadRequested)="onUploadRequested($event)"
+    (fileCleared)="onFileCleared()"
+    #fileUploadComponent>
+  </app-file-upload>
 
-    <!-- Status messages (additional to FileUploadComponent internal states) -->
-    <div class="upload-status" *ngIf="uploadSuccess || uploadError">
-        <div *ngIf="uploadSuccess" class="upload-success">
-            <mat-icon>check_circle</mat-icon>
-            {{ 'uploadDialog.uploadSuccessMessage' | translate: { fileName: currentFile?.name } }}
+  <!-- Status messages (additional to FileUploadComponent internal states) -->
+  @if (uploadSuccess || uploadError) {
+    <div class="upload-status">
+      @if (uploadSuccess) {
+        <div class="upload-success">
+          <mat-icon>check_circle</mat-icon>
+          {{ 'uploadDialog.uploadSuccessMessage' | translate: { fileName: currentFile?.name } }}
         </div>
-        <div *ngIf="uploadError" class="upload-error">
-            <mat-icon>error</mat-icon>
-            {{ 'uploadDialog.uploadErrorMessage' | translate }}
+      }
+      @if (uploadError) {
+        <div class="upload-error">
+          <mat-icon>error</mat-icon>
+          {{ 'uploadDialog.uploadErrorMessage' | translate }}
         </div>
+      }
     </div>
+  }
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog-footer" align="end">
-    <button mat-button (click)="close()" *ngIf="!isUploading">
-        {{ uploadSuccess ? 'common.close' : 'common.cancel' | translate }}
+  @if (!isUploading) {
+    <button mat-button (click)="close()">
+      {{ uploadSuccess ? 'common.close' : 'common.cancel' | translate }}
     </button>
+  }
+  @if (uploadSuccess) {
     <button mat-button
-            color="primary"
-            (click)="submit()"
-            *ngIf="uploadSuccess">
-        {{ 'common.save' | translate }}
+      color="primary"
+      (click)="submit()"
+      >
+      {{ 'common.save' | translate }}
     </button>
+  }
 </mat-dialog-actions>

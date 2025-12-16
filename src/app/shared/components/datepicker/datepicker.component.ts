@@ -10,7 +10,7 @@ import {
   HostListener,
   inject
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
   parseISODate,
@@ -48,7 +48,7 @@ import {
 @Component({
   standalone: true,
   selector: 'app-datepicker',
-  imports: [CommonModule, TranslateModule],
+  imports: [TranslateModule],
   templateUrl: './datepicker.component.html',
   styleUrls: ['./datepicker.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -32,7 +32,7 @@ import { ProviderProduct, ProviderProductSearchRequest } from '../../../models';
 import { ProviderProductsTableService } from '../provider-products-table.service';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-provider-product-list',
     imports: [
         CommonModule,

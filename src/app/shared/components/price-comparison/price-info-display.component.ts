@@ -1,6 +1,4 @@
 import { Component, input, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
 import { PriceInfoViewModel } from '@shared/utils';
 
 /**
@@ -14,7 +12,7 @@ import { PriceInfoViewModel } from '@shared/utils';
   templateUrl: './price-info-display.component.html',
   styleUrls: ['./price-info-display.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule]
+  imports: []
 })
 export class PriceInfoDisplayComponent {
   /**

@@ -31,7 +31,7 @@ import { Product, ProductSearchRequest, RegionSummary } from '../../../models';
 import { ProductsTableService } from '../products-table.service';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-product-list',
     imports: [
         CommonModule,

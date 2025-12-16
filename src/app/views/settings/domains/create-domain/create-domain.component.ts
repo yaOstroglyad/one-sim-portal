@@ -4,25 +4,24 @@ import {
 	FormConfig, FormGeneratorComponent, AccountsDataService,
 	WhiteLabelDataService, DomainsDataService
 } from '@shared';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-create-domain',
     templateUrl: './create-domain.component.html',
     styleUrls: ['./create-domain.component.scss'],
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatDialogModule,
-        MatButtonModule,
-        TranslateModule,
-        FormGeneratorComponent
-    ]
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    TranslateModule,
+    FormGeneratorComponent
+]
 })
 export class CreateDomainComponent implements OnInit {
 	formConfig: FormConfig;

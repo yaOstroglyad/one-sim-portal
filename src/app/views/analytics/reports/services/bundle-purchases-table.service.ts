@@ -34,7 +34,7 @@ export class BundlePurchasesTableService extends TableConfigAbstractService<Bund
         key: 'purchaseDate',
         header: 'purchaseDate',
         templateType: TemplateType.Date,
-        dateFormat: 'dd/MM/YYYY'
+        dateFormat: 'dd/MM/yyyy'
       },
       {
         visible: true,

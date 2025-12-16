@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-send-invite-email',
     templateUrl: './send-invite-email.component.html',
     imports: [
@@ -34,8 +34,6 @@ export class SendInviteEmailComponent {
     this.form = form;
     this.isFormValid = form.valid;
   }
-
-
   close(): void {
     this.dialogRef.close();
   }

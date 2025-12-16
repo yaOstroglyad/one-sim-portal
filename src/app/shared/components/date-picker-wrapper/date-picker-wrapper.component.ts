@@ -11,7 +11,7 @@ import {
   ChangeDetectorRef,
   forwardRef
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -27,14 +27,13 @@ import { DatePickerConfig, DateRange, DateValue } from './date-picker-wrapper.ty
     standalone: true,
     selector: 'app-date-picker-wrapper',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        TranslateModule
-    ],
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    TranslateModule
+],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

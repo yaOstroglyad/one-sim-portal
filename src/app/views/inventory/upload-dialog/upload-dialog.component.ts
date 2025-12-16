@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,18 +10,17 @@ import { takeUntil } from 'rxjs/operators';
 import { FileUploadComponent, FileUploadConfig } from '@shared';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-upload-dialog',
     templateUrl: './upload-dialog.component.html',
     styleUrls: ['./upload-dialog.component.scss'],
     imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatIconModule,
-        TranslateModule,
-        FileUploadComponent
-    ]
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    TranslateModule,
+    FileUploadComponent
+]
 })
 export class UploadDialogComponent implements OnInit, OnDestroy {
 	@ViewChild('fileUploadComponent') fileUploadComponent!: FileUploadComponent;

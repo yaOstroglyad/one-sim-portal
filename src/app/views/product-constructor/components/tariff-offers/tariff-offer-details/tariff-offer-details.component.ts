@@ -6,7 +6,7 @@ import { BadgeComponent } from '@coreui/angular';
 import { TariffOffer } from '../../../models';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-tariff-offer-details',
     imports: [
         CommonModule,

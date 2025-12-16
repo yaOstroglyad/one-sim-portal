@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
@@ -15,12 +15,11 @@ import { UserService } from '../../services';
 import { getUserFormConfig } from './user-form.utils';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-user-form',
     imports: [
-        CommonModule,
-        FormGeneratorComponent
-    ],
+    FormGeneratorComponent
+],
     templateUrl: './user-form.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

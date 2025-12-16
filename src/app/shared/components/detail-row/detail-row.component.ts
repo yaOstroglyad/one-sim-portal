@@ -1,15 +1,13 @@
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
 /**
  * Reusable component for displaying key-value pairs in details views
  * Uses signals for all reactive state
  */
 @Component({
-  selector: 'app-detail-row',
   standalone: true,
+  selector: 'app-detail-row',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './detail-row.component.html',
   styleUrls: ['./detail-row.component.scss']
 })

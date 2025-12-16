@@ -1,208 +1,230 @@
-<ng-container *ngIf="config">
-    <form [formGroup]="form" [dir]="dir" fxLayout="column" fxLayoutAlign="start start">
-        <ng-container *ngFor="let field of config.fields">
-            <ng-container *ngIf="!field.invisible && shouldFieldBeVisible(field)">
-                <ng-container [ngSwitch]="field.type">
-                    <ng-container *ngSwitchCase="FieldType.text" [ngTemplateOutlet]="textTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.number" [ngTemplateOutlet]="numberTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.textarea" [ngTemplateOutlet]="textareaTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.password" [ngTemplateOutlet]="passwordTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.email" [ngTemplateOutlet]="email"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.datepicker" [ngTemplateOutlet]="datePickerTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.select" [ngTemplateOutlet]="selectTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.checkbox" [ngTemplateOutlet]="checkboxTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.slide" [ngTemplateOutlet]="slideTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.chips" [ngTemplateOutlet]="chipsTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.color" [ngTemplateOutlet]="colorTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.uuid" [ngTemplateOutlet]="uuidTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.richText" [ngTemplateOutlet]="richTextTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.multiselectGrid" [ngTemplateOutlet]="multiselectGridTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.formArray" [ngTemplateOutlet]="formArrayTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                    <ng-container *ngSwitchCase="FieldType.fileUpload" [ngTemplateOutlet]="fileUploadTemplate"
-                                  [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
-                </ng-container>
-            </ng-container>
-        </ng-container>
-
-        <!-- Shared hint template -->
-        <ng-template #hintTemplate let-field>
-            <ng-container *ngIf="hasFieldHintOrError(field)">
-                <mat-hint *ngIf="field.hintMessage && field.hintMessage.trim()"
-                          [attr.class]="'hint ' + (field.hintClassName || '')">
-                    <mat-icon fontIcon="info_outline"></mat-icon>
-                    {{ field.hintMessage | translate }}
-                </mat-hint>
-            </ng-container>
+@if (config) {
+  <form [formGroup]="form" [dir]="dir" class="form-generator-layout">
+    @for (field of config.fields; track field) {
+      @if (!field.invisible && shouldFieldBeVisible(field)) {
+        @switch (field.type) {
+          @case (FieldType.text) {
+            <ng-container [ngTemplateOutlet]="textTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.number) {
+            <ng-container [ngTemplateOutlet]="numberTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.textarea) {
+            <ng-container [ngTemplateOutlet]="textareaTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.password) {
+            <ng-container [ngTemplateOutlet]="passwordTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.email) {
+            <ng-container [ngTemplateOutlet]="email"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.datepicker) {
+            <ng-container [ngTemplateOutlet]="datePickerTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.select) {
+            <ng-container [ngTemplateOutlet]="selectTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.checkbox) {
+            <ng-container [ngTemplateOutlet]="checkboxTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.slide) {
+            <ng-container [ngTemplateOutlet]="slideTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.chips) {
+            <ng-container [ngTemplateOutlet]="chipsTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.color) {
+            <ng-container [ngTemplateOutlet]="colorTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.uuid) {
+            <ng-container [ngTemplateOutlet]="uuidTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.richText) {
+            <ng-container [ngTemplateOutlet]="richTextTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.multiselectGrid) {
+            <ng-container [ngTemplateOutlet]="multiselectGridTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.formArray) {
+            <ng-container [ngTemplateOutlet]="formArrayTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+          @case (FieldType.fileUpload) {
+            <ng-container [ngTemplateOutlet]="fileUploadTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
+        }
+      }
+    }
+    <!-- Shared hint template -->
+    <ng-template #hintTemplate let-field>
+      @if (hasFieldHintOrError(field)) {
+        @if (field.hintMessage && field.hintMessage.trim()) {
+          <mat-hint
+            [attr.class]="'hint ' + (field.hintClassName || '')">
+            <mat-icon fontIcon="info_outline"></mat-icon>
+            {{ field.hintMessage | translate }}
+          </mat-hint>
+        }
+      }
+    </ng-template>
+    <ng-template #textTemplate let-field>
+      <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
+        <mat-form-field appearance="outline"
+          class="w-100"
+          [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+          <mat-label>{{ field.label | translate }}</mat-label>
+          <input matInput
+            [formControlName]="field.name"
+            [type]="field.type"
+            [placeholder]="field.placeholder | translate"
+            (input)="onInputChange($event, field)">
+          </mat-form-field>
+          <!-- Custom hint outside mat-form-field -->
+          <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+        </div>
+      </ng-template>
+      <ng-template #numberTemplate let-field>
+        <mat-form-field appearance="outline"
+          [attr.class]="'full-width ' + getFormFieldClass(field)"
+          [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+          <mat-label>{{ field.label | translate }}</mat-label>
+          <input matInput
+            [formControlName]="field.name"
+            [type]="field.type"
+            (input)="onInputChange($event, field)">
+            <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+          </mat-form-field>
         </ng-template>
-
-        <ng-template #textTemplate let-field>
-            <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
-                <mat-form-field appearance="outline"
-                                class="w-100"
-                                [hideRequiredMarker]="field.hideRequiredMarker ?? false">
-                    <mat-label>{{ field.label | translate }}</mat-label>
-                    <input matInput
-                           [formControlName]="field.name"
-                           [type]="field.type"
-                           [placeholder]="field.placeholder | translate"
-                           (input)="onInputChange($event, field)">
-                </mat-form-field>
-
-                <!-- Custom hint outside mat-form-field -->
-                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </div>
-        </ng-template>
-
-        <ng-template #numberTemplate let-field>
-            <mat-form-field appearance="outline"
-                            [attr.class]="'full-width ' + getFormFieldClass(field)"
-                            [hideRequiredMarker]="field.hideRequiredMarker ?? false">
-                <mat-label>{{ field.label | translate }}</mat-label>
-                <input matInput
-                       [formControlName]="field.name"
-                       [type]="field.type"
-                       (input)="onInputChange($event, field)">
-
-                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </mat-form-field>
-        </ng-template>
-
         <ng-template #textareaTemplate let-field>
-            <mat-form-field appearance="outline"
-                            [attr.class]="'full-width ' + getFormFieldClass(field)"
-                            [hideRequiredMarker]="field.hideRequiredMarker ?? false">
-                <mat-label>{{ field.label | translate }}</mat-label>
-                <textarea matInput
-                          [formControlName]="field.name"
-                          [placeholder]="field.placeholder | translate"
-                          (input)="onInputChange($event, field)"></textarea>
-
-                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </mat-form-field>
+          <mat-form-field appearance="outline"
+            [attr.class]="'full-width ' + getFormFieldClass(field)"
+            [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+            <mat-label>{{ field.label | translate }}</mat-label>
+            <textarea matInput
+              [formControlName]="field.name"
+              [placeholder]="field.placeholder | translate"
+            (input)="onInputChange($event, field)"></textarea>
+            <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+          </mat-form-field>
         </ng-template>
-
         <ng-template #passwordTemplate let-field>
-            <mat-form-field appearance="outline"
-                            [attr.class]="'w-100 ' + getFormFieldClass(field)"
-                            [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+          <mat-form-field appearance="outline"
+            [attr.class]="'w-100 ' + getFormFieldClass(field)"
+            [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+            <mat-label>{{ field.label | translate }}</mat-label>
+            <input matInput
+              [formControlName]="field.name"
+              [type]="field.type"
+              (input)="onInputChange($event, field)">
+              <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+            </mat-form-field>
+          </ng-template>
+          <ng-template #email let-field>
+            <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
+              <mat-form-field appearance="outline"
+                class="w-100"
+                [hideRequiredMarker]="field.hideRequiredMarker ?? false">
                 <mat-label>{{ field.label | translate }}</mat-label>
                 <input matInput
-                       [formControlName]="field.name"
-                       [type]="field.type"
-                       (input)="onInputChange($event, field)">
-
-                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </mat-form-field>
-        </ng-template>
-
-        <ng-template #email let-field>
-            <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
-                <mat-form-field appearance="outline"
-                                class="w-100"
-                                [hideRequiredMarker]="field.hideRequiredMarker ?? false">
-                    <mat-label>{{ field.label | translate }}</mat-label>
-                    <input matInput
-                           [formControlName]="field.name"
-                           [type]="field.type"
-                           [placeholder]="field.placeholder | translate"
-                           type="email"
-                           (input)="onInputChange($event, field)">
-
-                    <mat-error *ngIf="shouldShowError(field.name) && form.controls[field.name].hasError('required')"
-                               class="error">
-                        Email is required
+                  [formControlName]="field.name"
+                  [type]="field.type"
+                  [placeholder]="field.placeholder | translate"
+                  type="email"
+                  (input)="onInputChange($event, field)">
+                  @if (shouldShowError(field.name) && form.controls[field.name].hasError('required')) {
+                    <mat-error
+                      class="error">
+                      Email is required
                     </mat-error>
-                    <mat-error *ngIf="shouldShowError(field.name) && form.controls[field.name].hasError('email')"
-                               class="error">
-                        Please, enter email format
+                  }
+                  @if (shouldShowError(field.name) && form.controls[field.name].hasError('email')) {
+                    <mat-error
+                      class="error">
+                      Please, enter email format
                     </mat-error>
+                  }
                 </mat-form-field>
-
                 <!-- Custom hint outside mat-form-field -->
                 <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </div>
-        </ng-template>
-
-        <ng-template #datePickerTemplate let-field>
-            <div [attr.class]="getFormFieldClass(field)">
+              </div>
+            </ng-template>
+            <ng-template #datePickerTemplate let-field>
+              <div [attr.class]="getFormFieldClass(field)">
                 <mat-form-field appearance="outline"
-                                class="full-width"
-                                [hideRequiredMarker]="field.hideRequiredMarker ?? false">
-                    <mat-label>{{ field.label | translate }}</mat-label>
-                    <input matInput
-                           [matDatepicker]="picker"
-                           [formControlName]="field.name"
-                           (dateChange)="onInputChange($event, field)">
+                  class="full-width"
+                  [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+                  <mat-label>{{ field.label | translate }}</mat-label>
+                  <input matInput
+                    [matDatepicker]="picker"
+                    [formControlName]="field.name"
+                    (dateChange)="onInputChange($event, field)">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
-
-                    <mat-error *ngIf="shouldShowError(field.name)" class="error">
+                    @if (shouldShowError(field.name)) {
+                      <mat-error class="error">
                         {{ getErrorMessage(field) }}
-                    </mat-error>
-                </mat-form-field>
-
-                <!-- Custom hint outside mat-form-field -->
-                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </div>
-        </ng-template>
-
-        <ng-template #selectTemplate let-field>
-            <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
-                <mat-form-field appearance="outline"
-                                class="w-100"
-                                [hideRequiredMarker]="field.hideRequiredMarker ?? false">
+                      </mat-error>
+                    }
+                  </mat-form-field>
+                  <!-- Custom hint outside mat-form-field -->
+                  <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+                </div>
+              </ng-template>
+              <ng-template #selectTemplate let-field>
+                <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
+                  <mat-form-field appearance="outline"
+                    class="w-100"
+                    [hideRequiredMarker]="field.hideRequiredMarker ?? false">
                     <mat-label>{{ field.label | translate }}</mat-label>
                     <mat-select [formControlName]="field.name"
-                                (selectionChange)="onInputChange($event, field)"
-                                [multiple]="field.multiple">
-                        <mat-option *ngFor="let option of field.options | async" [value]="option.value">
-                            {{ option.displayValue | translate }}
+                      (selectionChange)="onInputChange($event, field)"
+                      [multiple]="field.multiple">
+                      @for (option of $any(field.options | async); track option) {
+                        <mat-option [value]="option.value">
+                          {{ option.displayValue | translate }}
                         </mat-option>
+                      }
                     </mat-select>
-
-                </mat-form-field>
-                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </div>
-        </ng-template>
-
-        <ng-template #checkboxTemplate let-field>
-            <mat-checkbox [attr.class]="'full-width ' + getFormFieldClass(field)"
-                          [formControlName]="field.name"
-                          [color]="'primary'"
-                          (change)="onInputChange($event, field)">
-                {{ field.label | translate }}
-            </mat-checkbox>
-        </ng-template>
-
-        <ng-template #slideTemplate let-field>
-            <div class="display-flex-space-between">
-                <label class="mr-1">{{ field.label | translate }}</label>
-                <div></div>
-                <c-form-check [switch]="true">
+                  </mat-form-field>
+                  <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+                </div>
+              </ng-template>
+              <ng-template #checkboxTemplate let-field>
+                <mat-checkbox [attr.class]="'full-width ' + getFormFieldClass(field)"
+                  [formControlName]="field.name"
+                  [color]="'primary'"
+                  (change)="onInputChange($event, field)">
+                  {{ field.label | translate }}
+                </mat-checkbox>
+              </ng-template>
+              <ng-template #slideTemplate let-field>
+                <div class="display-flex-space-between">
+                  <label class="mr-1">{{ field.label | translate }}</label>
+                  <div></div>
+                  <c-form-check [switch]="true">
                     <input [formControlName]="field.name"
-                           cFormCheckInput type="checkbox"
-                           (change)="onInputChange($event, field)"/>
-                </c-form-check>
-            </div>
-        </ng-template>
-
-        <ng-template #chipsTemplate let-field>
-            <app-chips-input
+                      cFormCheckInput type="checkbox"
+                      (change)="onInputChange($event, field)"/>
+                    </c-form-check>
+                  </div>
+                </ng-template>
+                <ng-template #chipsTemplate let-field>
+                  <app-chips-input
                     [attr.class]="'full-width ' + getFormFieldClass(field)"
                     [label]="field.label | translate"
                     [placeholder]="field.placeholder | translate"
@@ -211,132 +233,131 @@
                     [separatorKeysCodes]="field.separatorKeysCodes"
                     [selectable]="field.selectable"
                     [removable]="field.removable">
-            </app-chips-input>
-        </ng-template>
-
-        <ng-template #colorTemplate let-field>
-            <app-color-picker
+                  </app-chips-input>
+                </ng-template>
+                <ng-template #colorTemplate let-field>
+                  <app-color-picker
                     [label]="field.label | translate"
                     [formControlName]="field.name">
-            </app-color-picker>
-
-            <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-        </ng-template>
-
-        <ng-template #uuidTemplate let-field>
-            <input type="hidden" [formControlName]="field.name">
-        </ng-template>
-
-        <ng-template #richTextTemplate let-field>
-            <div [attr.class]="'full-width ' + getFormFieldClass(field)">
-                <app-rich-text-input
-                        [label]="field.label | translate"
-                        [placeholder]="field.placeholder | translate"
-                        [maxLength]="field.maxLength || 500"
-                        [formControlName]="field.name">
-                </app-rich-text-input>
-
-                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </div>
-        </ng-template>
-
-        <ng-template #multiselectGridTemplate let-field>
-            <div [attr.class]="'full-width ' + getFormFieldClass(field)">
-                <label *ngIf="field.label" class="form-label">
-                    {{ field.label | translate }}
-                    <span class="text-danger" *ngIf="isRequired(field) && !field.hideRequiredMarker">*</span>
-                </label>
-
-                <app-multiselect-grid
-                        [options]="getGridOptions(field)"
-                        [config]="field.gridConfig || {}"
-                        [placeholder]="field.placeholder | translate"
-                        [formControlName]="field.name">
-                </app-multiselect-grid>
-
-                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </div>
-        </ng-template>
-
-        <ng-template #formArrayTemplate let-field>
-            <div [attr.class]="'full-width ' + getFormFieldClass(field)">
-                <label *ngIf="field.label" class="form-label">
-                    {{ field.label | translate }}
-                    <span class="text-danger" *ngIf="isRequired(field) && !field.hideRequiredMarker">*</span>
-                </label>
-
-                <div class="form-array-container" [formArrayName]="field.name">
-                    <div *ngFor="let item of getFormArray(field.name).controls; let i = index; trackBy: trackByIndex"
-                         class="form-array-item"
-                         [formGroupName]="i">
-
-                        <div class="item-header" *ngIf="field.arrayConfig?.itemLabel">
-                            <span class="item-label">{{ field.arrayConfig.itemLabel(i) }}</span>
-                            <button
-                                    *ngIf="canRemoveArrayItem(field)"
-                                    type="button"
-                                    class="btn btn-sm btn-ghost-danger"
-                                    (click)="removeArrayItem(field.name, i)"
-                                    [title]="field.arrayConfig?.removeButtonText || 'Remove'">
-                                <svg cIcon name="cilTrash" width="16" height="16"></svg>
-                            </button>
-                        </div>
-
-                        <div class="item-content">
+                  </app-color-picker>
+                  <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+                </ng-template>
+                <ng-template #uuidTemplate let-field>
+                  <input type="hidden" [formControlName]="field.name">
+                </ng-template>
+                <ng-template #richTextTemplate let-field>
+                  <div [attr.class]="'full-width ' + getFormFieldClass(field)">
+                    <app-rich-text-input
+                      [label]="field.label | translate"
+                      [placeholder]="field.placeholder | translate"
+                      [maxLength]="field.maxLength || 500"
+                      [formControlName]="field.name">
+                    </app-rich-text-input>
+                    <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+                  </div>
+                </ng-template>
+                <ng-template #multiselectGridTemplate let-field>
+                  <div [attr.class]="'full-width ' + getFormFieldClass(field)">
+                    @if (field.label) {
+                      <label class="form-label">
+                        {{ field.label | translate }}
+                        @if (isRequired(field) && !field.hideRequiredMarker) {
+                          <span class="text-danger">*</span>
+                        }
+                      </label>
+                    }
+                    <app-multiselect-grid
+                      [options]="getGridOptions(field)"
+                      [config]="field.gridConfig || {}"
+                      [placeholder]="field.placeholder | translate"
+                      [formControlName]="field.name">
+                    </app-multiselect-grid>
+                    <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+                  </div>
+                </ng-template>
+                <ng-template #formArrayTemplate let-field>
+                  <div [attr.class]="'full-width ' + getFormFieldClass(field)">
+                    @if (field.label) {
+                      <label class="form-label">
+                        {{ field.label | translate }}
+                        @if (isRequired(field) && !field.hideRequiredMarker) {
+                          <span class="text-danger">*</span>
+                        }
+                      </label>
+                    }
+                    <div class="form-array-container" [formArrayName]="field.name">
+                      @for (item of getFormArray(field.name).controls; track i; let i = $index) {
+                        <div
+                          class="form-array-item"
+                          [formGroupName]="i">
+                          @if (field.arrayConfig?.itemLabel) {
+                            <div class="item-header">
+                              <span class="item-label">{{ field.arrayConfig.itemLabel(i) }}</span>
+                              @if (canRemoveArrayItem(field)) {
+                                <button
+                                  type="button"
+                                  class="btn btn-sm btn-ghost-danger"
+                                  (click)="removeArrayItem(field.name, i)"
+                                  [title]="field.arrayConfig?.removeButtonText || 'Remove'">
+                                  <svg cIcon name="cilTrash" width="16" height="16"></svg>
+                                </button>
+                              }
+                            </div>
+                          }
+                          <div class="item-content">
                             <app-form-array-item
-                                    [itemFormGroup]="$any(getFormArray(field.name).at(i))"
-                                    [fields]="field.arrayConfig!.itemConfig.fields">
+                              [itemFormGroup]="$any(getFormArray(field.name).at(i))"
+                              [fields]="field.arrayConfig!.itemConfig.fields">
                             </app-form-array-item>
+                          </div>
+                          @if (!field.arrayConfig?.itemLabel && canRemoveArrayItem(field)) {
+                            <button
+                              type="button"
+                              class="btn btn-sm btn-ghost-danger mt-2"
+                              (click)="removeArrayItem(field.name, i)"
+                              [title]="field.arrayConfig?.removeButtonText || 'Remove'">
+                              <svg cIcon name="cilTrash" width="16" height="16"></svg>
+                              <span class="ms-1">{{ field.arrayConfig?.removeButtonText || 'Remove' }}</span>
+                            </button>
+                          }
                         </div>
-
+                      }
+                      @if (getFormArray(field.name).length === 0) {
+                        <div class="empty-message">
+                          {{ field.arrayConfig?.emptyMessage || 'No items added yet' }}
+                        </div>
+                      }
+                      @if (canAddArrayItem(field)) {
                         <button
-                                *ngIf="!field.arrayConfig?.itemLabel && canRemoveArrayItem(field)"
-                                type="button"
-                                class="btn btn-sm btn-ghost-danger mt-2"
-                                (click)="removeArrayItem(field.name, i)"
-                                [title]="field.arrayConfig?.removeButtonText || 'Remove'">
-                            <svg cIcon name="cilTrash" width="16" height="16"></svg>
-                            <span class="ms-1">{{ field.arrayConfig?.removeButtonText || 'Remove' }}</span>
+                          type="button"
+                          class="btn btn-outline-primary mt-3"
+                          (click)="addArrayItem(field.name, field.arrayConfig!)"
+                          [disabled]="addingItem">
+                          <svg cIcon name="cilPlus" width="16" height="16"></svg>
+                          <span class="ms-1">{{ field.arrayConfig?.addButtonText || 'Add Item' }}</span>
                         </button>
+                      }
                     </div>
-
-                    <div *ngIf="getFormArray(field.name).length === 0" class="empty-message">
-                        {{ field.arrayConfig?.emptyMessage || 'No items added yet' }}
-                    </div>
-
-                    <button
-                            *ngIf="canAddArrayItem(field)"
-                            type="button"
-                            class="btn btn-outline-primary mt-3"
-                            (click)="addArrayItem(field.name, field.arrayConfig!)"
-                            [disabled]="addingItem">
-                        <svg cIcon name="cilPlus" width="16" height="16"></svg>
-                        <span class="ms-1">{{ field.arrayConfig?.addButtonText || 'Add Item' }}</span>
-                    </button>
-                </div>
-
-                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </div>
-        </ng-template>
-
-        <ng-template #fileUploadTemplate let-field>
-            <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
-                <label class="form-label fw-semibold">
-                    {{ field.label | translate }}
-                    <span *ngIf="!field.hideRequiredMarker && isFieldRequired(field)" class="text-danger">*</span>
-                </label>
-
-                <app-file-upload
-                        [config]="getFileUploadConfig(field)"
-                        [disabled]="field.disabled || false"
-                        (fileSelected)="onFileSelected($event, field)"
-                        (uploadRequested)="onFileUploadRequested($event, field)"
-                        (fileCleared)="onFileCleared(field)">
-                </app-file-upload>
-
-                <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
-            </div>
-        </ng-template>
-
-    </form>
-</ng-container>
+                    <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+                  </div>
+                </ng-template>
+                <ng-template #fileUploadTemplate let-field>
+                  <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
+                    <label class="form-label fw-semibold">
+                      {{ field.label | translate }}
+                      @if (!field.hideRequiredMarker && isFieldRequired(field)) {
+                        <span class="text-danger">*</span>
+                      }
+                    </label>
+                    <app-file-upload
+                      [config]="getFileUploadConfig(field)"
+                      [disabled]="field.disabled || false"
+                      (fileSelected)="onFileSelected($event, field)"
+                      (uploadRequested)="onFileUploadRequested($event, field)"
+                      (fileCleared)="onFileCleared(field)">
+                    </app-file-upload>
+                    <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+                  </div>
+                </ng-template>
+              </form>
+            }

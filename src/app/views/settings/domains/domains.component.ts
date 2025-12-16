@@ -32,7 +32,7 @@ import { EditDomainOwnerComponent } from './edit-domain-owner/edit-domain-owner.
 import { CreateDomainComponent } from './create-domain/create-domain.component';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-domains',
     templateUrl: './domains.component.html',
     styleUrls: ['./domains.component.scss'],

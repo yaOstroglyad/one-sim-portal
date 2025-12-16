@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, forwardRef, ChangeDetectorRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, Observable, BehaviorSubject, combineLatest } from 'rxjs';
@@ -10,14 +10,13 @@ import { IconDirective } from '@coreui/icons-angular';
 import { GridSelectOption, GridConfig } from '@shared/models';
 
 @Component({
-    selector: 'app-multiselect-grid',
     standalone: true,
+    selector: 'app-multiselect-grid',
     imports: [
-        CommonModule,
-        FormsModule,
-        TranslateModule,
-        IconDirective
-    ],
+    FormsModule,
+    TranslateModule,
+    IconDirective
+],
     templateUrl: './multiselect-grid.component.html',
     styleUrls: ['./multiselect-grid.component.scss'],
     providers: [

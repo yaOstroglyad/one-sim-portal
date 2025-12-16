@@ -16,14 +16,14 @@
   cdkTrapFocus
   [cdkTrapFocusAutoCapture]="isOpen()"
   (keydown.escape)="close()">
-  
+
   <header class="flyout__header"
-          cdkDragHandle>
+    cdkDragHandle>
     @if (title()) {
       <h2 class="flyout__title">{{ title() | translate }}</h2>
     }
     <div class="flyout__actions">
-      <button 
+      <button
         class="flyout__action"
         [class.active]="dockedState() === 'left'"
         (click)="toggleDocked('left'); $event.stopPropagation()"
@@ -32,7 +32,7 @@
           <path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm1 0v10h3V3H3z"/>
         </svg>
       </button>
-      <button 
+      <button
         class="flyout__action"
         [class.active]="dockedState() === 'floating'"
         (click)="toggleDocked('floating'); $event.stopPropagation()"
@@ -41,7 +41,7 @@
           <path d="M3 2a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V3a1 1 0 00-1-1H3zm0 1h10v10H3V3z"/>
         </svg>
       </button>
-      <button 
+      <button
         class="flyout__action"
         [class.active]="dockedState() === 'right'"
         (click)="toggleDocked('right'); $event.stopPropagation()"
@@ -59,39 +59,46 @@
   </header>
 
   <div class="flyout__body">
-    <aside class="flyout__nav" *ngIf="availableFeatures().length > 1">
-      <button 
-        *ngFor="let feature of availableFeatures()"
-        class="flyout__nav-item"
-        [class.active]="activeKey() === feature.meta.key"
-        (click)="select(feature.meta.key); $event.stopPropagation()">
-        <i class="flyout__nav-icon" *ngIf="feature.meta.icon">{{ feature.meta.icon }}</i>
-        <span class="flyout__nav-title">{{ feature.meta.title }}</span>
-      </button>
-    </aside>
+    @if (availableFeatures().length > 1) {
+      <aside class="flyout__nav">
+        @for (feature of availableFeatures(); track feature) {
+          <button
+            class="flyout__nav-item"
+            [class.active]="activeKey() === feature.meta.key"
+            (click)="select(feature.meta.key); $event.stopPropagation()">
+            @if (feature.meta.icon) {
+              <i class="flyout__nav-icon">{{ feature.meta.icon }}</i>
+            }
+            <span class="flyout__nav-title">{{ feature.meta.title }}</span>
+          </button>
+        }
+      </aside>
+    }
 
     <main class="flyout__content">
       <ng-container #host></ng-container>
     </main>
   </div>
 
-  <div 
-    class="flyout__resize flyout__resize--left"
-    *ngIf="dockedState() !== 'floating' && currentBreakpoint() !== 'mobile'"
-    (mousedown)="startResize('left', $event)"
-    (dblclick)="onResizeHandleDoubleClick()"
-    role="separator"
-    aria-orientation="vertical"
-    tabindex="0">
-  </div>
-  
-  <div 
-    class="flyout__resize flyout__resize--right"
-    *ngIf="dockedState() !== 'floating' && currentBreakpoint() !== 'mobile'"
-    (mousedown)="startResize('right', $event)"
-    (dblclick)="onResizeHandleDoubleClick()"
-    role="separator"
-    aria-orientation="vertical"
-    tabindex="0">
-  </div>
+  @if (dockedState() !== 'floating' && currentBreakpoint() !== 'mobile') {
+    <div
+      class="flyout__resize flyout__resize--left"
+      (mousedown)="startResize('left', $event)"
+      (dblclick)="onResizeHandleDoubleClick()"
+      role="separator"
+      aria-orientation="vertical"
+      tabindex="0">
+    </div>
+  }
+
+  @if (dockedState() !== 'floating' && currentBreakpoint() !== 'mobile') {
+    <div
+      class="flyout__resize flyout__resize--right"
+      (mousedown)="startResize('right', $event)"
+      (dblclick)="onResizeHandleDoubleClick()"
+      role="separator"
+      aria-orientation="vertical"
+      tabindex="0">
+    </div>
+  }
 </div>

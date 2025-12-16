@@ -17,7 +17,7 @@ import { AccountSelectorComponent } from 'src/app/shared/components/account-sele
 import { GenericRightPanelComponent, PanelAction } from 'src/app/shared/components/generic-right-panel/generic-right-panel.component';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-payment-gateway-table',
     templateUrl: './payment-gateway-table.component.html',
     styleUrls: ['./payment-gateway-table.component.scss'],

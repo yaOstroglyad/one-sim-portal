@@ -6,7 +6,7 @@ import { AddSubscriberProductService } from './add-subscriber-product.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
-import { NgIf } from '@angular/common';
+
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { getSubscriberProductsFormConfig } from './add-subscriber-product.utils';
@@ -14,19 +14,18 @@ import { FormConfig, FormGeneratorComponent } from '@shared';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-add-subscriber-product',
     templateUrl: './add-subscriber-product.component.html',
     imports: [
-        MatDialogModule,
-        FormGeneratorComponent,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatIconModule,
-        NgIf,
-        LoaderComponent,
-        TranslateModule
-    ],
+    MatDialogModule,
+    FormGeneratorComponent,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    LoaderComponent,
+    TranslateModule
+],
     styleUrls: ['./add-subscriber-product.component.scss']
 })
 export class AddSubscriberProductComponent implements OnInit {

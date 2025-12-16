@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { IconDirective } from '@coreui/icons-angular';
 
 export interface DeleteConfirmationConfig {
@@ -14,9 +14,9 @@ export interface DeleteConfirmationConfig {
 }
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-delete-confirmation',
-    imports: [CommonModule, IconDirective],
+    imports: [IconDirective],
     templateUrl: './delete-confirmation.component.html',
     styleUrls: ['./delete-confirmation.component.scss']
 })

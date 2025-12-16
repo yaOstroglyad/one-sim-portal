@@ -5,7 +5,7 @@ import {
   signal,
   computed
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { OsMenuComponent, OsMenuItem } from '../ui/os-menu';
 import { ContextMenuItem } from './contextual-text.model';
@@ -26,13 +26,12 @@ import { ContextMenuItem } from './contextual-text.model';
  * ```
  */
 @Component({
-  selector: 'app-contextual-text',
   standalone: true,
+  selector: 'app-contextual-text',
   imports: [
-    CommonModule,
     MatTooltipModule,
     OsMenuComponent
-  ],
+],
   templateUrl: './contextual-text.component.html',
   styleUrls: ['./contextual-text.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,26 +1,28 @@
 <app-header class="os-header-sticky"
-            [config]="headerConfig"
-            [tableConfig$]="tableConfig$"
-            (columnSelectionChange)="onColumnSelectionChanged($event)"
-            (filteredData)="applyFilter($event)">
+  [config]="headerConfig"
+  [tableConfig$]="tableConfig$"
+  (columnSelectionChange)="onColumnSelectionChanged($event)"
+  (filteredData)="applyFilter($event)">
 </app-header>
 
 <generic-table [config$]="tableConfig$"
-               [menu]="menuTemplate"
-               [data$]="dataList$"></generic-table>
+  [menu]="menuTemplate"
+[data$]="dataList$"></generic-table>
 
 <ng-template #menuTemplate let-item>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>more_vert</mat-icon>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="openEditDescriptionDialog(item)">
+      {{ 'order.editDescription' | translate }}
     </button>
-    <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="openEditDescriptionDialog(item)">
-            {{ 'order.editDescription' | translate }}
-        </button>
-        <button *ngIf="isAdmin"
-                mat-menu-item
-                (click)="openRevertOrderDialog(item)">
-            {{ 'order.revertOrder.action' | translate }}
-        </button>
-    </mat-menu>
+    @if (isAdmin) {
+      <button
+        mat-menu-item
+        (click)="openRevertOrderDialog(item)">
+        {{ 'order.revertOrder.action' | translate }}
+      </button>
+    }
+  </mat-menu>
 </ng-template>

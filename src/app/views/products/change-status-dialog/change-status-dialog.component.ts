@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { StatusEnum } from '@shared/models/product';
@@ -13,14 +13,13 @@ import { TranslateModule } from '@ngx-translate/core';
     standalone: true,
     selector: 'app-change-status-dialog',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatButtonModule,
-        TranslateModule
-    ],
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatButtonModule,
+    TranslateModule
+],
     templateUrl: './change-status-dialog.component.html',
     styleUrls: ['./change-status-dialog.component.scss']
 })

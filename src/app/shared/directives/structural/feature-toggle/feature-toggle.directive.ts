@@ -10,8 +10,8 @@ import { isToggleActive, isToggleActive$ } from '@shared/services/feature-toggle
  * <button *featureToggle="'bulk-operations'">Bulk Delete</button>
  */
 @Directive({
+  standalone: true,
   selector: '[featureToggle]',
-  standalone: true
 })
 export class FeatureToggleDirective implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();

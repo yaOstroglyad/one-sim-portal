@@ -1,16 +1,21 @@
 <div class="invoices-form">
-  <div *ngIf="loading" class="loading-container">
-    <div class="loading-spinner"></div>
-    <span>Loading form fields...</span>
-  </div>
-  
-  <app-form-generator 
-    *ngIf="formConfig && !loading"
-    [config]="formConfig" 
-    (formChanges)="onFormChanges($event)">
-  </app-form-generator>
-  
-  <div *ngIf="!formConfig && !loading" class="no-fields-message">
-    No form fields available for this strategy.
-  </div>
+  @if (loading) {
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <span>Loading form fields...</span>
+    </div>
+  }
+
+  @if (formConfig && !loading) {
+    <app-form-generator
+      [config]="formConfig"
+      (formChanges)="onFormChanges($event)">
+    </app-form-generator>
+  }
+
+  @if (!formConfig && !loading) {
+    <div class="no-fields-message">
+      No form fields available for this strategy.
+    </div>
+  }
 </div>

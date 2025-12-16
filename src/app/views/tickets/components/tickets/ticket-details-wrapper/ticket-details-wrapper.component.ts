@@ -8,8 +8,8 @@ import { TicketDetailsComponent } from '../ticket-details/ticket-details.compone
 import { CommentsComponent, AttachmentsComponent, Comment, Attachment, CommentsConfiguration, AttachmentsConfiguration } from '@shared';
 
 @Component({
-    selector: 'app-ticket-details-wrapper',
     standalone: true,
+    selector: 'app-ticket-details-wrapper',
     imports: [
         TranslateModule,
         TicketDetailsComponent,

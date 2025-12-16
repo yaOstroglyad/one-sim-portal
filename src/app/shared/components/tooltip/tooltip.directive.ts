@@ -14,8 +14,8 @@ import {
 import { TooltipComponent, TooltipPosition, TooltipVariant } from './tooltip.component';
 
 @Directive({
+  standalone: true,
   selector: '[osTooltip]',
-  standalone: true
 })
 export class TooltipDirective implements OnInit, OnDestroy {
   @Input('osTooltip') tooltipText = '';

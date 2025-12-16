@@ -13,8 +13,8 @@ import {
 import { TICKET_ALLOWED_MIME_TYPES, TICKET_MAX_FILE_SIZE, TICKET_PENDING_AUTHOR_KEY } from '../../../models';
 
 @Component({
-    selector: 'app-ticket-edit-wrapper',
     standalone: true,
+    selector: 'app-ticket-edit-wrapper',
     imports: [
         TranslateModule,
         TicketFormComponent,

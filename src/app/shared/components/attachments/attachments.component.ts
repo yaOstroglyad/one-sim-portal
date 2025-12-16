@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
@@ -7,14 +7,13 @@ import { IconDirective } from '@coreui/icons-angular';
 import { Attachment, AttachmentsConfiguration, UploadAttachmentRequest } from '../../models';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-attachments',
     imports: [
-        CommonModule,
-        TranslateModule,
-        ButtonDirective,
-        IconDirective
-    ],
+    TranslateModule,
+    ButtonDirective,
+    IconDirective
+],
     templateUrl: './attachments.component.html',
     styleUrls: ['./attachments.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -137,4 +136,3 @@ export class AttachmentsComponent implements OnInit {
     return this.config?.uploadHint || 'attachments.uploadHint';
   }
 }
-

@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, signal, computed, Signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { ButtonModule } from '@coreui/angular';
@@ -34,18 +34,17 @@ export interface ModifyTariffOfferResult {
  * Uses signal-based architecture with OnPush change detection
  */
 @Component({
-  selector: 'app-modify-tariff-offer-dialog',
   standalone: true,
+  selector: 'app-modify-tariff-offer-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     MatDialogModule,
     ButtonModule,
     FormGeneratorComponent,
     InfoStripComponent,
     PricePreviewComponent,
     PriceInfoDisplayComponent
-  ],
+],
   templateUrl: './modify-tariff-offer-dialog.component.html',
   styleUrls: ['./modify-tariff-offer-dialog.component.scss']
 })

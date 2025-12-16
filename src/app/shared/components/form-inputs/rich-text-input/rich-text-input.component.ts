@@ -4,10 +4,10 @@ import { HtmlDialogComponent } from '../../html-dialog';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+    standalone: true,
     selector: 'app-rich-text-input',
     templateUrl: './rich-text-input.component.html',
     styleUrls: ['./rich-text-input.component.scss'],
-    standalone: true,
     imports: [
         TranslateModule,
         HtmlDialogComponent

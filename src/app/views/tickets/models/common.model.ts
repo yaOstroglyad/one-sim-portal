@@ -15,8 +15,6 @@ export interface TicketSearchRequest {
   };
   page: PageRequestType;
 }
-
-
 // API response types
 export interface TicketCount {
   total: number;

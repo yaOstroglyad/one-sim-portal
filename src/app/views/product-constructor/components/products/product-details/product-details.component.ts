@@ -1,18 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { BadgeComponent } from '@coreui/angular';
 
 import { Product } from '../../../models';
 
 @Component({
-    selector: 'app-product-details',
     standalone: true,
+    selector: 'app-product-details',
     imports: [
-        CommonModule,
-        TranslateModule,
-        BadgeComponent
-    ],
+    TranslateModule,
+    BadgeComponent
+],
     templateUrl: './product-details.component.html',
     styleUrls: ['./product-details.component.scss']
 })

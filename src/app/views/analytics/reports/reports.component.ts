@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -29,13 +29,12 @@ import { ReportStrategy } from './models/report-strategy.interface';
   standalone: true,
   selector: 'app-reports',
   imports: [
-    CommonModule,
     TranslateModule,
     GenericTableComponent,
     AccountSelectorComponent,
     PeriodSelectorComponent,
     IconComponent
-  ],
+],
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

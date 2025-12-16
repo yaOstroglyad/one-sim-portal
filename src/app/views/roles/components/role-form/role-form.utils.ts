@@ -94,4 +94,3 @@ export function getRoleUpdateRequest(formValue: any): UpdateRoleRequest {
     description: formValue.description
   };
 }
-

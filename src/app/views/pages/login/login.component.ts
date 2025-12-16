@@ -7,6 +7,7 @@ import { CacheHubService } from '@shared/services/cache-hub';
 
 @Component({
     standalone: true,
+
     selector: 'app-login',
     imports: [ReactiveFormsModule, TranslateModule],
     templateUrl: './login.component.html',

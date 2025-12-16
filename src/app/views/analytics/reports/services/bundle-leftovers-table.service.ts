@@ -34,14 +34,14 @@ export class BundleLeftoversTableService extends TableConfigAbstractService<Bund
         key: 'purchaseDate',
         header: 'purchaseDate',
         templateType: TemplateType.Date,
-        dateFormat: 'dd/MM/YYYY'
+        dateFormat: 'dd/MM/yyyy'
       },
       {
         visible: true,
         key: 'expirationDate',
         header: 'expirationDate',
         templateType: TemplateType.Date,
-        dateFormat: 'dd/MM/YYYY'
+        dateFormat: 'dd/MM/yyyy'
       },
       {
         visible: true,

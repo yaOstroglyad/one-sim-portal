@@ -13,13 +13,17 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog-footer" align="end">
-  <button mat-button (click)="onCancel()" *ngIf="!isUploading">
-    {{ uploadSuccess ? 'common.close' : 'common.cancel' | translate }}
-  </button>
-  <button mat-raised-button 
-          color="primary" 
-          (click)="onSubmit()"
-          *ngIf="uploadSuccess">
-    {{ 'common.done' | translate }}
-  </button>
+  @if (!isUploading) {
+    <button mat-button (click)="onCancel()">
+      {{ uploadSuccess ? 'common.close' : 'common.cancel' | translate }}
+    </button>
+  }
+  @if (uploadSuccess) {
+    <button mat-raised-button
+      color="primary"
+      (click)="onSubmit()"
+      >
+      {{ 'common.done' | translate }}
+    </button>
+  }
 </mat-dialog-actions>

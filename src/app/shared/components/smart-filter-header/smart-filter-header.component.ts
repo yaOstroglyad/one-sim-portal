@@ -31,7 +31,7 @@ import { TranslateModule } from '@ngx-translate/core';
 type DisplayMode = 'simple' | 'advanced';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-smart-filter-header',
     templateUrl: './smart-filter-header.component.html',
     styleUrls: ['./smart-filter-header.component.scss'],

@@ -12,8 +12,8 @@ interface Breadcrumb {
 }
 
 @Component({
-    selector: 'app-breadcrumb',
     standalone: true,
+    selector: 'app-breadcrumb',
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './breadcrumb.component.html',
     styleUrls: ['./breadcrumb.component.scss'],

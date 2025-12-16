@@ -10,7 +10,7 @@ import { AccountsDataService } from '@shared';
 import { Observable } from 'rxjs';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-edit-domain-owner',
     templateUrl: './edit-domain-owner.component.html',
     styleUrls: ['./edit-domain-owner.component.scss'],

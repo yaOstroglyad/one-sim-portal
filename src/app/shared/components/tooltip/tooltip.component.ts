@@ -18,11 +18,11 @@ export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
 export type TooltipVariant = 'default' | 'error' | 'warning' | 'info' | 'success';
 
 @Component({
-    selector: 'os-tooltip',
     standalone: true,
+    selector: 'os-tooltip',
     imports: [CommonModule],
     template: `
-    <div 
+    <div
       class="os-tooltip"
       [class]="tooltipClasses"
       [style.display]="isVisible ? 'block' : 'none'"
@@ -33,27 +33,24 @@ export type TooltipVariant = 'default' | 'error' | 'warning' | 'info' | 'success
         <div #contentWrapper style="display: none;">
           <ng-content></ng-content>
         </div>
-        
+    
         <!-- Show ng-content if present, template if present, or fallback to text -->
-        <ng-container *ngIf="hasNgContent; else templateOrTextContent">
+        @if (hasNgContent) {
           <ng-content></ng-content>
-        </ng-container>
-        
-        <ng-template #templateOrTextContent>
+        } @else {
           <!-- Custom content template has priority over text -->
-          <ng-container *ngIf="hasCustomContent(); else textContent">
+          @if (hasCustomContent()) {
             <ng-container *ngTemplateOutlet="getCustomContent()"></ng-container>
-          </ng-container>
-          
-          <!-- Fallback to text content -->
-          <ng-template #textContent>
+          } @else {
             {{ text }}
-          </ng-template>
-        </ng-template>
+          }
+          <!-- Fallback to text content -->
+        }
+    
       </div>
       <div class="os-tooltip__arrow"></div>
     </div>
-  `,
+    `,
     styleUrls: ['./tooltip.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,25 +33,25 @@ import { MoveResourceComponent } from './move-resource/move-resource.component';
 
 @Component({
     standalone: true,
+
     selector: 'app-inventory',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        HeaderComponent,
-        GenericTableComponent,
-        MatDialogModule,
-        ButtonDirective,
-        IconDirective,
-        MatButtonModule,
-        MatDatepickerModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatTooltipModule,
-        MatCardModule,
-        MatIconModule,
-        MatMenuModule,
-        TranslateModule
-    ],
+    ReactiveFormsModule,
+    HeaderComponent,
+    GenericTableComponent,
+    MatDialogModule,
+    ButtonDirective,
+    IconDirective,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTooltipModule,
+    MatCardModule,
+    MatIconModule,
+    MatMenuModule,
+    TranslateModule
+],
     templateUrl: './inventory.component.html',
     styleUrls: ['./inventory.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

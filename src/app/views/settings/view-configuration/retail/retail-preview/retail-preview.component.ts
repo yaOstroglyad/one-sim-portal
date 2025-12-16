@@ -1,12 +1,10 @@
 import { Component, Input, ElementRef, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-retail-preview',
     templateUrl: './retail-preview.component.html',
     styleUrls: ['./retail-preview.component.scss'],
-    imports: [CommonModule]
+    imports: []
 })
 export class RetailPreviewComponent implements OnChanges, OnInit {
   @Input() primary: string = '#f9a743';

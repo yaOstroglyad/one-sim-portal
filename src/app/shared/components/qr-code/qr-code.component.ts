@@ -1,27 +1,27 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as QRCode from 'qrcode';
-import { NgIf } from '@angular/common';
+
 import { EmptyStateComponent } from '../empty-state/empty-state.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-qr-code',
     template: `
     <div class="text-center" [class.no-height]="!qrCodeValue">
       <canvas #qrCanvas></canvas>
     </div>
-    <app-empty-state
-      *ngIf="!qrCodeValue"
-      [title]="'qrCode.noQrCode' | translate"
-      [imageSrc]="'assets/img/empty-states/file-not-found.svg'">
-    </app-empty-state>
-  `,
+    @if (!qrCodeValue) {
+      <app-empty-state
+        [title]="'qrCode.noQrCode' | translate"
+        [imageSrc]="'assets/img/empty-states/file-not-found.svg'">
+      </app-empty-state>
+    }
+    `,
     imports: [
-        EmptyStateComponent,
-        NgIf,
-        TranslateModule
-    ],
+    EmptyStateComponent,
+    TranslateModule
+],
     styleUrls: ['./qr-code.component.scss']
 })
 export class QrCodeComponent implements OnInit {

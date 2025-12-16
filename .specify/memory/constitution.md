@@ -7,7 +7,7 @@
 - **Name:** One-Sim-Portal
 - **Purpose:** B2B eSIM management platform for telecom operators
 - **Domain:** eSIM provisioning, subscriber management, billing, analytics
-- **Stack:** Angular 19.2.15, TypeScript, CoreUI, Angular Material, RxJS, Chart.js
+- **Stack:** Angular 21.0.5, TypeScript 5.9, CoreUI, Angular Material, RxJS, Chart.js
 - **Root Directory:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/`
 
 ---
@@ -30,6 +30,8 @@
 - **NO NgModules** for new features
 - **NO HttpClientModule imports** — HttpClient is provided globally
 
+> **Note:** Angular 21 makes `standalone: true` the default only for NEW components created via `ng generate`. Existing components still require explicit `standalone: true`.
+
 ### OnPush Change Detection
 - **ALL components MUST use OnPush** (`changeDetection: ChangeDetectionStrategy.OnPush`)
 - Use `markForCheck()` instead of `detectChanges()`
@@ -49,7 +51,7 @@ private readonly cdr = inject(ChangeDetectorRef);
 constructor(private http: HttpClient) {}
 ```
 
-### Signal APIs (Angular 19+)
+### Signal APIs (Angular 21)
 - **Use `input()` instead of `@Input()`**
 - **Use `output()` instead of `@Output()`**
 - **Use `effect()` for input synchronization**

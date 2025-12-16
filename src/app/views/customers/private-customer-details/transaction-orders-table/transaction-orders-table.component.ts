@@ -7,24 +7,23 @@ import {
 	EmptyStateComponent
 } from '@shared';
 import { MatTableModule } from '@angular/material/table';
-import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { Observable } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-transaction-orders-table',
     templateUrl: './transaction-orders-table.component.html',
     styleUrls: ['./transaction-orders-table.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
-        MatTableModule,
-        DatePipe,
-        AsyncPipe,
-        NgIf,
-        EmptyStateComponent,
-        TranslateModule
-    ]
+    MatTableModule,
+    DatePipe,
+    AsyncPipe,
+    EmptyStateComponent,
+    TranslateModule
+]
 })
 export class TransactionOrdersTableComponent implements OnInit {
 	transactionsView$: Observable<TransactionOrder[]>;

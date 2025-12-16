@@ -14,10 +14,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { EditCompanyComponent } from './edit-company/edit-company.component';
 import { debounceTime, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { SendInviteEmailComponent } from './send-invite-email/send-invite-email.component';
-
-
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-companies',
     templateUrl: './companies.component.html',
     styleUrls: ['./companies.component.scss'],

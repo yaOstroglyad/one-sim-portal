@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import {
@@ -21,19 +21,19 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     standalone: true,
+
     selector: 'app-create-product',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatSelectModule,
-        MatCheckboxModule,
-        MatIconModule,
-        TranslateModule
-    ],
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatIconModule,
+    TranslateModule
+],
     templateUrl: './create-product.component.html',
     styleUrls: ['./create-product.component.scss']
 })

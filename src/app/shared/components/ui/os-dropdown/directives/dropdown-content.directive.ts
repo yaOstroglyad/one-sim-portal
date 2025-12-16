@@ -14,7 +14,7 @@ import { Directive } from '@angular/core';
  * ```
  */
 @Directive({
+  standalone: true,
   selector: '[dropdownContent]',
-  standalone: true
 })
 export class DropdownContentDirective {}

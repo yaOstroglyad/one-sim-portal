@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { BadgeVariant } from '../badge/badge.component';
 
@@ -8,9 +8,9 @@ export type CardSize = 'small' | 'medium' | 'large';
 export type CardRadius = 'none' | 'small' | 'medium' | 'large' | 'xl';
 
 @Component({
-    selector: 'os-card',
     standalone: true,
-    imports: [CommonModule],
+    selector: 'os-card',
+    imports: [],
     templateUrl: './card.component.html',
     styleUrls: ['./card.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

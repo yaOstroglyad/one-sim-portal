@@ -13,7 +13,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslateModule } from '@ngx-translate/core';
 import { 
 	hasFieldHintOrError, 
@@ -23,10 +22,10 @@ import {
 import { isFunction } from 'rxjs/internal/util/isFunction';
 
 @Component({
+    standalone: true,
     selector: 'app-form-array-item',
     templateUrl: './form-array-item.component.html',
     styleUrls: ['./form-array-item.component.scss'],
-    standalone: true,
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
@@ -41,8 +40,7 @@ import { isFunction } from 'rxjs/internal/util/isFunction';
         MatButtonModule,
         MatListModule,
         MatNativeDateModule,
-        MatOptionModule,
-        FlexLayoutModule
+        MatOptionModule
     ]
 })
 export class FormArrayItemComponent {

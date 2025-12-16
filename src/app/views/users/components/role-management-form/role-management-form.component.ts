@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectionStrategy, inject, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -8,12 +8,11 @@ import { FormGeneratorComponent, FormConfig, RoleOption } from '@shared';
 import { getRoleManagementFormConfig } from './role-management-form.utils';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-role-management-form',
     imports: [
-        CommonModule,
-        FormGeneratorComponent
-    ],
+    FormGeneratorComponent
+],
     template: `
     <app-form-generator
       [config]="formConfig"

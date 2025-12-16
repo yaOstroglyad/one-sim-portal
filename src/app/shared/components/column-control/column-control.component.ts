@@ -10,7 +10,7 @@ import {
   SimpleChanges,
   ChangeDetectorRef
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -26,19 +26,19 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
     standalone: true,
+
     selector: 'column-control',
     imports: [
-        CommonModule,
-        TranslateModule,
-        MatButtonModule,
-        MatMenuModule,
-        MatIconModule,
-        MatCheckboxModule,
-        MatTooltipModule,
-        MatDividerModule,
-        ButtonDirective,
-        IconDirective
-    ],
+    TranslateModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    MatDividerModule,
+    ButtonDirective,
+    IconDirective
+],
     templateUrl: './column-control.component.html',
     styleUrls: ['./column-control.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

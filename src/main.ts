@@ -5,11 +5,11 @@ import { AppComponent } from './app/app.component';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ErrorHandler, importProvidersFrom, inject, provideAppInitializer } from '@angular/core';
+import { ErrorHandler, importProvidersFrom, inject, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
-import { NgxWebstorageModule } from 'ngx-webstorage';
+import { provideNgxWebstorage, withLocalStorage, withSessionStorage } from 'ngx-webstorage';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { firstValueFrom } from 'rxjs';
 
@@ -105,7 +105,7 @@ initializeMockMode();
 bootstrapApplication(AppComponent, {
   providers: [
     // Router
-    provideRouter(routes, withHashLocation()),
+    provideZoneChangeDetection(),provideRouter(routes, withHashLocation()),
 
     // Animations
     provideAnimations(),
@@ -115,7 +115,6 @@ bootstrapApplication(AppComponent, {
 
     // Import legacy modules
     importProvidersFrom(
-      NgxWebstorageModule.forRoot(),
       MatSnackBarModule,
       TranslateModule.forRoot({
         defaultLanguage: 'en',
@@ -125,6 +124,12 @@ bootstrapApplication(AppComponent, {
           deps: [HttpClient]
         }
       })
+    ),
+
+    // ngx-webstorage (v21+ uses functional providers)
+    provideNgxWebstorage(
+      withLocalStorage(),
+      withSessionStorage()
     ),
 
     // Services and providers

@@ -1,31 +1,31 @@
 <app-header class="os-header-sticky"
-            [tableConfig$]="tableConfig$"
-            (onAddAction)="createCustomer()"
-            (columnSelectionChange)="onColumnSelectionChanged($event)">
-    <ng-container header-custom-inputs>
-        <app-smart-filter-header
-            [formGroup]="filterForm"
-            [config]="smartFilterConfig"
-            (resetFilters)="resetForm()">
+  [tableConfig$]="tableConfig$"
+  (onAddAction)="createCustomer()"
+  (columnSelectionChange)="onColumnSelectionChanged($event)">
+  <ng-container header-custom-inputs>
+    <app-smart-filter-header
+      [formGroup]="filterForm"
+      [config]="smartFilterConfig"
+      (resetFilters)="resetForm()">
 
-            <!-- Shared filter fields -->
-            <ng-template #filterFields let-mode="mode">
-                @for (field of filterFieldsConfig; track field.key) {
-                    @if (!field.adminOnly || isAdmin) {
-                        @if (mode === 'advanced') {
-                            <div class="form-group">
-                                <label [for]="field.key">{{ field.label | translate }}</label>
+      <!-- Shared filter fields -->
+      <ng-template #filterFields let-mode="mode">
+        @for (field of filterFieldsConfig; track field.key) {
+          @if (!field.adminOnly || isAdmin) {
+            @if (mode === 'advanced') {
+              <div class="form-group">
+                <label [for]="field.key">{{ field.label | translate }}</label>
 
-                                @if (field.type === 'input') {
-                                    <input
-                                        [id]="field.key"
-                                        cFormControl
-                                        [formControlName]="field.key"
-                                        [placeholder]="field.label | translate">
-                                } @else if (field.type === 'searchable-select') {
-                                    <app-searchable-select
-                                        [id]="field.key"
-                                        [options]="companyOptions$ | async"
+                @if (field.type === 'input') {
+                  <input
+                    [id]="field.key"
+                    cFormControl
+                    [formControlName]="field.key"
+                    [placeholder]="field.label | translate">
+                  } @else if (field.type === 'searchable-select') {
+                    <app-searchable-select
+                      [id]="field.key"
+                      [options]="companyOptions$ | async"
                                         [config]="{
                                             placeholder: (field.label | translate),
                                             searchPlaceholder: ('common.search' | translate) + '...',
@@ -33,22 +33,22 @@
                                             clearable: true,
                                             searchable: true
                                         }"
-                                        [formControlName]="field.key"
-                                        class="w-100">
-                                    </app-searchable-select>
-                                }
-                            </div>
-                        } @else {
-                            @if (field.type === 'input') {
-                                <input
-                                    [id]="field.key + '-simple'"
-                                    cFormControl
-                                    [formControlName]="field.key"
-                                    [placeholder]="field.label | translate">
-                            } @else if (field.type === 'searchable-select') {
-                                <app-searchable-select
-                                    [id]="field.key + '-simple'"
-                                    [options]="companyOptions$ | async"
+                      [formControlName]="field.key"
+                      class="w-100">
+                    </app-searchable-select>
+                  }
+                </div>
+              } @else {
+                @if (field.type === 'input') {
+                  <input
+                    [id]="field.key + '-simple'"
+                    cFormControl
+                    [formControlName]="field.key"
+                    [placeholder]="field.label | translate">
+                  } @else if (field.type === 'searchable-select') {
+                    <app-searchable-select
+                      [id]="field.key + '-simple'"
+                      [options]="companyOptions$ | async"
                                     [config]="{
                                         placeholder: (field.label | translate),
                                         searchPlaceholder: ('common.search' | translate) + '...',
@@ -56,48 +56,50 @@
                                         clearable: true,
                                         searchable: true
                                     }"
-                                    [formControlName]="field.key"
-                                    class="w-100">
-                                </app-searchable-select>
-                            }
-                        }
-                    }
+                      [formControlName]="field.key"
+                      class="w-100">
+                    </app-searchable-select>
+                  }
                 }
-            </ng-template>
+              }
+            }
+          </ng-template>
 
-            <ng-template #simpleFilters>
-                <ng-container *ngTemplateOutlet="filterFields; context: { mode: 'simple' }"></ng-container>
-            </ng-template>
+          <ng-template #simpleFilters>
+            <ng-container *ngTemplateOutlet="filterFields; context: { mode: 'simple' }"></ng-container>
+          </ng-template>
 
-            <ng-template #advancedFilters>
-                <ng-container *ngTemplateOutlet="filterFields; context: { mode: 'advanced' }"></ng-container>
-            </ng-template>
+          <ng-template #advancedFilters>
+            <ng-container *ngTemplateOutlet="filterFields; context: { mode: 'advanced' }"></ng-container>
+          </ng-template>
 
         </app-smart-filter-header>
 
         <button cButton
-                color="secondary"
-                [disabled]="!filterForm?.dirty"
-                (click)="resetForm()">
-            <svg cIcon name="cilReload"></svg>
+          color="secondary"
+          [disabled]="!filterForm?.dirty"
+          (click)="resetForm()">
+          <svg cIcon name="cilReload"></svg>
         </button>
-    </ng-container>
-</app-header>
-<generic-table [config$]="tableConfig$"
-               [menu]="menuTemplate"
-               [data$]="dataList$"
-               [isRowClickable]="true"
-               (onRowClickEvent)="openCustomerDetails($event)"
-               (pageChange)="onPageChange($event)"></generic-table>
+      </ng-container>
+    </app-header>
+    <generic-table [config$]="tableConfig$"
+      [menu]="menuTemplate"
+      [data$]="dataList$"
+      [isRowClickable]="true"
+      (onRowClickEvent)="openCustomerDetails($event)"
+    (pageChange)="onPageChange($event)"></generic-table>
 
-<ng-template #menuTemplate let-item>
-    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
+    <ng-template #menuTemplate let-item>
+      <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
         <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-        <button *ngIf="item.type.toUpperCase() === CustomerType.Private.toUpperCase()"
-                mat-menu-item
-                (click)="openCustomerDetails(item)">{{ 'customer.details' | translate }}
-        </button>
-    </mat-menu>
-</ng-template>
+      </button>
+      <mat-menu #menu="matMenu">
+        @if (item.type.toUpperCase() === CustomerType.Private.toUpperCase()) {
+          <button
+            mat-menu-item
+            (click)="openCustomerDetails(item)">{{ 'customer.details' | translate }}
+          </button>
+        }
+      </mat-menu>
+    </ng-template>

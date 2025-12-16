@@ -35,7 +35,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatNativeDateModule } from '@angular/material/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormCheckComponent, FormCheckInputDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
 import {
@@ -48,11 +47,12 @@ import {
 } from '../form-inputs';
 
 @Component({
+    standalone: true,
     selector: 'app-form-generator',
     templateUrl: './form-generator.component.html',
     styleUrls: ['./form-generator.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
+
     imports: [
         CommonModule,
         ReactiveFormsModule,
@@ -67,7 +67,6 @@ import {
         MatButtonModule,
         MatListModule,
         MatNativeDateModule,
-        FlexLayoutModule,
         ChipsInputComponent,
         FormCheckComponent,
         FormCheckInputDirective,

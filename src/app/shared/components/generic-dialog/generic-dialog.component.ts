@@ -2,8 +2,8 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angu
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-generic-dialog',
   standalone: true,
+  selector: 'app-generic-dialog',
   imports: [CommonModule],
   templateUrl: './generic-dialog.component.html',
   styleUrls: ['./generic-dialog.component.scss']

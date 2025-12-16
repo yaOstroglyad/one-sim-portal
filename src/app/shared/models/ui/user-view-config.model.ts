@@ -20,4 +20,3 @@ export interface UserViewConfig {
      */
     height?: number;
 }
-

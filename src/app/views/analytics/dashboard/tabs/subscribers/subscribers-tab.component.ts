@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, effect, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { forkJoin } from 'rxjs';
 import {
@@ -28,7 +28,6 @@ import { ErrorDisplayComponent } from '../../components/error-display/error-disp
   standalone: true,
   selector: 'app-subscribers-tab',
   imports: [
-    CommonModule,
     TranslateModule,
     MetricCardComponent,
     LoadingIndicatorComponent,
@@ -36,7 +35,7 @@ import { ErrorDisplayComponent } from '../../components/error-display/error-disp
     CardComponent,
     OsBarChartComponent,
     OsWaterfallChartComponent
-  ],
+],
   templateUrl: './subscribers-tab.component.html',
   styleUrls: ['./subscribers-tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -95,7 +94,7 @@ export class SubscribersTabComponent implements OnInit {
       if (accountId) {
         this.loadData();
       }
-    }, { allowSignalWrites: true });
+    });
   }
 
   ngOnInit(): void {

@@ -26,7 +26,7 @@ import { TariffOfferFormComponent } from '../tariff-offer-form/tariff-offer-form
 import { TariffOfferDetailsComponent } from '../tariff-offer-details/tariff-offer-details.component';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-tariff-offer-list',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [

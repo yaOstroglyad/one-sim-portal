@@ -1,83 +1,100 @@
 <div class="comments-container">
   <!-- Loading State -->
-  <div *ngIf="loading" class="loading-state">
-    <p>{{ 'comments.loading' | translate }}</p>
-  </div>
+  @if (loading) {
+    <div class="loading-state">
+      <p>{{ 'comments.loading' | translate }}</p>
+    </div>
+  }
 
   <!-- Comments List -->
-  <div class="comments-list" *ngIf="!loading && comments.length > 0; else noComments">
-    <div class="comment" *ngFor="let comment of comments; trackBy: trackByCommentId">
-      <div class="comment-avatar">
-        <app-user-avatar
-          [src]="comment.authorAvatar"
-          [initials]="getAuthorInitials(comment.authorName)"
-          [alt]="comment.authorName"
-          variant="circle"
-          size="md"
-          [clickable]="false">
-        </app-user-avatar>
-      </div>
-      
-      <div class="comment-content">
-        <div class="comment-header">
-          <span class="comment-author">{{ comment.authorName }}</span>
-          <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+  @if (!loading && comments.length > 0) {
+    <div class="comments-list">
+      @for (comment of comments; track trackByCommentId($index, comment)) {
+        <div class="comment">
+          <div class="comment-avatar">
+            <app-user-avatar
+              [src]="comment.authorAvatar"
+              [initials]="getAuthorInitials(comment.authorName)"
+              [alt]="comment.authorName"
+              variant="circle"
+              size="md"
+              [clickable]="false">
+            </app-user-avatar>
+          </div>
+          <div class="comment-content">
+            <div class="comment-header">
+              <span class="comment-author">{{ comment.authorName }}</span>
+              <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+            </div>
+            <div class="comment-text">
+              {{ comment.content }}
+            </div>
+          </div>
         </div>
-        
-        <div class="comment-text">
-          {{ comment.content }}
-        </div>
-      </div>
+      }
     </div>
-  </div>
+  } @else {
+    @if (!loading) {
+      <div class="no-comments">
+        <svg cIcon name="cil-speech" width="32" height="32"></svg>
+        <p>{{ 'comments.noComments' | translate }}</p>
+      </div>
+    }
+  }
 
   <!-- No Comments State -->
-  <ng-template #noComments>
-    <div class="no-comments" *ngIf="!loading">
-      <svg cIcon name="cil-speech" width="32" height="32"></svg>
-      <p>{{ 'comments.noComments' | translate }}</p>
-    </div>
-  </ng-template>
 
   <!-- Add Comment Form -->
-  <div class="add-comment-form" *ngIf="config?.allowAddComments">
-    <form [formGroup]="commentForm" (ngSubmit)="onSubmitComment()">
-      <div class="form-group">
-        <label for="comment-content">{{ 'comments.addComment' | translate }}</label>
-        <textarea
-          id="comment-content"
-          formControlName="content"
-          [placeholder]="placeholder | translate"
-          rows="3"
-          class="form-control"
-          [class.is-invalid]="commentForm.get('content')?.invalid && commentForm.get('content')?.touched">
-        </textarea>
-        
-        <div class="invalid-feedback" 
-             *ngIf="commentForm.get('content')?.invalid && commentForm.get('content')?.touched">
-          <div *ngIf="commentForm.get('content')?.errors?.['required']">
-            {{ 'comments.required' | translate }}
-          </div>
-          <div *ngIf="commentForm.get('content')?.errors?.['minlength']">
-            {{ 'comments.minLength' | translate }}
-          </div>
-          <div *ngIf="commentForm.get('content')?.errors?.['maxlength']">
-            {{ 'comments.maxLength' | translate }}
-          </div>
+  @if (config?.allowAddComments) {
+    <div class="add-comment-form">
+      <form [formGroup]="commentForm" (ngSubmit)="onSubmitComment()">
+        <div class="form-group">
+          <label for="comment-content">{{ 'comments.addComment' | translate }}</label>
+          <textarea
+            id="comment-content"
+            formControlName="content"
+            [placeholder]="placeholder | translate"
+            rows="3"
+            class="form-control"
+            [class.is-invalid]="commentForm.get('content')?.invalid && commentForm.get('content')?.touched">
+          </textarea>
+          @if (commentForm.get('content')?.invalid && commentForm.get('content')?.touched) {
+            <div class="invalid-feedback"
+              >
+              @if (commentForm.get('content')?.errors?.['required']) {
+                <div>
+                  {{ 'comments.required' | translate }}
+                </div>
+              }
+              @if (commentForm.get('content')?.errors?.['minlength']) {
+                <div>
+                  {{ 'comments.minLength' | translate }}
+                </div>
+              }
+              @if (commentForm.get('content')?.errors?.['maxlength']) {
+                <div>
+                  {{ 'comments.maxLength' | translate }}
+                </div>
+              }
+            </div>
+          }
         </div>
-      </div>
-      
-      <div class="form-actions">
-        <button 
-          type="submit" 
-          cButton 
-          color="primary"
-          [disabled]="commentForm.invalid || isSubmitting"
-          [class.loading]="isSubmitting">
-          <span *ngIf="!isSubmitting">{{ 'comments.addComment' | translate }}</span>
-          <span *ngIf="isSubmitting">{{ 'common.submitting' | translate }}</span>
-        </button>
-      </div>
-    </form>
-  </div>
+        <div class="form-actions">
+          <button
+            type="submit"
+            cButton
+            color="primary"
+            [disabled]="commentForm.invalid || isSubmitting"
+            [class.loading]="isSubmitting">
+            @if (!isSubmitting) {
+              <span>{{ 'comments.addComment' | translate }}</span>
+            }
+            @if (isSubmitting) {
+              <span>{{ 'common.submitting' | translate }}</span>
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  }
 </div>

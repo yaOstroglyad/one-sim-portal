@@ -7,8 +7,8 @@
   }
 
   <!-- Price Information & Preview (only when viewModel is available) -->
-  @if (viewModel; as vm) {
-    @let vmValue = vm();
+  @if (viewModel !== null) {
+    @let vmValue = viewModel();
 
     <!-- Price Info Display Component -->
     @if (vmValue.priceInfo) {

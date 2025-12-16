@@ -211,7 +211,6 @@ export class ExampleUsageService {
       <button (click)="showStats()">Show Stats</button>
     </div>
   `,
-  standalone: true
 })
 export class ExampleComponent {
   private readonly exampleService = inject(ExampleUsageService);

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-debug-display',
     imports: [CommonModule],
     templateUrl: './debug-display.component.html',

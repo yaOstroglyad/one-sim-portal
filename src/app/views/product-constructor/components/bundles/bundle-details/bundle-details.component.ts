@@ -4,7 +4,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import { MobileBundle } from '../../../models';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-bundle-details',
     imports: [CommonModule, IconDirective],
     templateUrl: './bundle-details.component.html',

@@ -30,7 +30,7 @@ import { Region, RegionSummary } from '../../../models';
 import { RegionsTableService } from '../regions-table.service';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-region-list',
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [

@@ -13,14 +13,14 @@ import {MatChipEditedEvent, MatChipInputEvent, MatChipsModule} from '@angular/ma
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { NgForOf } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
+    standalone: true,
     selector: 'app-chips-input',
     templateUrl: './chips-input.component.html',
     styleUrls: ['./chips-input.component.scss'],
-    standalone: true,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -28,7 +28,7 @@ import { TranslateModule } from '@ngx-translate/core';
             multi: true
         }
     ],
-    imports: [MatFormFieldModule, MatChipsModule, MatIconModule, NgForOf, TranslateModule],
+    imports: [MatFormFieldModule, MatChipsModule, MatIconModule, TranslateModule],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChipsInputComponent implements ControlValueAccessor {

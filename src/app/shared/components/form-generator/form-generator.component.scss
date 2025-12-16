@@ -4,6 +4,14 @@
 // Apply Material Form Field overrides
 @include form-utils.material-form-field-overrides();
 
+// Flex layout replacement (previously fxLayout="column" fxLayoutAlign="start start")
+.form-generator-layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
 //mb replace it into hint component and refactor styles
 mat-icon {
   margin-right: 4px;

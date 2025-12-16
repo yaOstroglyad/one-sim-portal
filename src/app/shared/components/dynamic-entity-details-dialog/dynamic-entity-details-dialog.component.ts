@@ -5,7 +5,7 @@ import { DisplayKeyValueComponent } from '../display-key-value/display-key-value
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  standalone: true,
+    standalone: true,
     selector: 'app-dynamic-entity-details-dialog',
     templateUrl: './dynamic-entity-details-dialog.component.html',
     styleUrls: ['./dynamic-entity-details-dialog.component.scss'],

@@ -6,12 +6,9 @@
  */
 
 import { UsageInfo } from './usage-info.model';
-
-
 export interface SubscriberUsage {
     /**
      * Usage information
      */
     data?: Array<UsageInfo>;
 }
-

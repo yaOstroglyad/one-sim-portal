@@ -7,8 +7,8 @@ import { Ticket } from '../../../models';
 import { CardComponent } from '@shared';
 
 @Component({
-    selector: 'app-ticket-details',
     standalone: true,
+    selector: 'app-ticket-details',
     imports: [
         TranslateModule,
         DatePipe,

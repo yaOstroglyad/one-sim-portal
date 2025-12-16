@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { IconDirective } from '@coreui/icons-angular';
@@ -18,13 +18,12 @@ import {
 } from './product-form.utils';
 
 @Component({
-    selector: 'app-product-form',
     standalone: true,
+    selector: 'app-product-form',
     imports: [
-        CommonModule,
-        FormGeneratorComponent,
-        IconDirective
-    ],
+    FormGeneratorComponent,
+    IconDirective
+],
     templateUrl: './product-form.component.html',
     styleUrls: ['./product-form.component.scss']
 })

@@ -1,50 +1,53 @@
 <!-- Period Selector Buttons -->
 <div class="period-selector">
-  <button
-    *ngFor="let preset of presets"
-    class="period-btn"
-    [class.active]="selectedPeriod === preset.value"
-    (click)="onPeriodClick(preset.value)">
-    {{ preset.label | translate }}
-  </button>
+  @for (preset of presets; track preset) {
+    <button
+      class="period-btn"
+      [class.active]="selectedPeriod === preset.value"
+      (click)="onPeriodClick(preset.value)">
+      {{ preset.label | translate }}
+    </button>
+  }
 </div>
 
 <!-- Custom Date Picker (shown when custom period selected) -->
-<div class="custom-date-picker" *ngIf="showCustomDatePicker()">
-  <div class="date-inputs">
-    <app-datepicker
-      [value]="customDateRange().start"
-      [minDate]="minDate"
-      [maxDate]="maxDate"
-      [placeholder]="'common.periods.startDate'"
-      (dateChange)="onStartDateChange($event)"
-      class="date-input">
-    </app-datepicker>
-    <span class="date-separator">-</span>
-    <app-datepicker
-      [value]="customDateRange().end"
-      [minDate]="minDate"
-      [maxDate]="maxDate"
-      [placeholder]="'common.periods.endDate'"
-      (dateChange)="onEndDateChange($event)"
-      class="date-input">
-    </app-datepicker>
+@if (showCustomDatePicker()) {
+  <div class="custom-date-picker">
+    <div class="date-inputs">
+      <app-datepicker
+        [value]="customDateRange().start"
+        [minDate]="minDate"
+        [maxDate]="maxDate"
+        [placeholder]="'common.periods.startDate'"
+        (dateChange)="onStartDateChange($event)"
+        class="date-input">
+      </app-datepicker>
+      <span class="date-separator">-</span>
+      <app-datepicker
+        [value]="customDateRange().end"
+        [minDate]="minDate"
+        [maxDate]="maxDate"
+        [placeholder]="'common.periods.endDate'"
+        (dateChange)="onEndDateChange($event)"
+        class="date-input">
+      </app-datepicker>
+    </div>
+    <div class="date-actions">
+      <button
+        cButton
+        color="secondary"
+        size="sm"
+        (click)="cancelCustomRange()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        cButton
+        color="primary"
+        size="sm"
+        [disabled]="!canApplyCustomRange()"
+        (click)="applyCustomRange()">
+        {{ 'common.apply' | translate }}
+      </button>
+    </div>
   </div>
-  <div class="date-actions">
-    <button
-      cButton
-      color="secondary"
-      size="sm"
-      (click)="cancelCustomRange()">
-      {{ 'common.cancel' | translate }}
-    </button>
-    <button
-      cButton
-      color="primary"
-      size="sm"
-      [disabled]="!canApplyCustomRange()"
-      (click)="applyCustomRange()">
-      {{ 'common.apply' | translate }}
-    </button>
-  </div>
-</div>
+}

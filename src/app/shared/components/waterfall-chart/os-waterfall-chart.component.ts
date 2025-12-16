@@ -8,7 +8,7 @@ import {
   input,
   effect
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import Chart from 'chart.js/auto';
 
@@ -48,9 +48,8 @@ import { transformToWaterfallData } from './waterfall-chart.utils';
   styleUrls: ['./os-waterfall-chart.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     TranslateModule
-  ]
+]
 })
 export class OsWaterfallChartComponent implements AfterViewInit, OnDestroy {
   @ViewChild('waterfallChartCanvas') private waterfallChartCanvas!: ElementRef<HTMLCanvasElement>;

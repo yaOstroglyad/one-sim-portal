@@ -1,12 +1,12 @@
 <div [ngClass]="containerClasses()">
 
-<app-header class="os-header-sticky"
-            [formGroup]="filterForm"
-            [tableConfig$]="tableConfig$"
-            (onAddAction)="onCreateNew()">
+  <app-header class="os-header-sticky"
+    [formGroup]="filterForm"
+    [tableConfig$]="tableConfig$"
+    (onAddAction)="onCreateNew()">
     <ng-container header-custom-inputs>
-        <app-searchable-select
-                [options]="countryOptions$ | async"
+      <app-searchable-select
+        [options]="countryOptions$ | async"
                 [config]="{
                         placeholder: ('product.selectCountry' | translate),
                         searchPlaceholder: ('common.search' | translate) + '...',
@@ -14,12 +14,12 @@
                         clearable: true,
                         searchable: true
                     }"
-                formControlName="countryId"
-                class="w-100">
-        </app-searchable-select>
+        formControlName="countryId"
+        class="w-100">
+      </app-searchable-select>
 
-        <app-searchable-select
-                [options]="regionOptions$ | async"
+      <app-searchable-select
+        [options]="regionOptions$ | async"
                 [config]="{
                         placeholder: ('product.selectRegion' | translate),
                         searchPlaceholder: ('common.search' | translate) + '...',
@@ -27,60 +27,59 @@
                         clearable: true,
                         searchable: true
                     }"
-                formControlName="regionId"
-                class="w-100">
-        </app-searchable-select>
+        formControlName="regionId"
+        class="w-100">
+      </app-searchable-select>
 
-        <button cButton
-                color="secondary"
-                [disabled]="filterForm.pristine"
-                (click)="resetForm()"
-                class="reset-button">
-            <svg cIcon name="cilReload"></svg>
-        </button>
+      <button cButton
+        color="secondary"
+        [disabled]="filterForm.pristine"
+        (click)="resetForm()"
+        class="reset-button">
+        <svg cIcon name="cilReload"></svg>
+      </button>
     </ng-container>
-</app-header>
+  </app-header>
 
-<generic-table [config$]="tableConfig$"
-               [menu]="menuTemplate"
-               [data$]="providerProducts$"
-               [isRowClickable]="true"
-               (onRowClickEvent)="onViewDetails($event)"
-               (pageChange)="onPageChange($event)">
-</generic-table>
+  <generic-table [config$]="tableConfig$"
+    [menu]="menuTemplate"
+    [data$]="providerProducts$"
+    [isRowClickable]="true"
+    (onRowClickEvent)="onViewDetails($event)"
+    (pageChange)="onPageChange($event)">
+  </generic-table>
 
-<ng-template #menuTemplate let-item>
+  <ng-template #menuTemplate let-item>
     <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation();">
-        <mat-icon>more_vert</mat-icon>
+      <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="onViewDetails(item)">
-            <mat-icon>visibility</mat-icon>
-            <span>View Details</span>
-        </button>
-        <button mat-menu-item (click)="onToggleStatus(item)">
-            <mat-icon>{{ item.active ? 'toggle_off' : 'toggle_on' }}</mat-icon>
-            <span>{{ item.active ? 'Deactivate' : 'Activate' }}</span>
-        </button>
+      <button mat-menu-item (click)="onViewDetails(item)">
+        <mat-icon>visibility</mat-icon>
+        <span>View Details</span>
+      </button>
+      <button mat-menu-item (click)="onToggleStatus(item)">
+        <mat-icon>{{ item.active ? 'toggle_off' : 'toggle_on' }}</mat-icon>
+        <span>{{ item.active ? 'Deactivate' : 'Activate' }}</span>
+      </button>
     </mat-menu>
-</ng-template>
+  </ng-template>
 
 
-<!-- Details Panel -->
-<app-generic-right-panel
-  *ngIf="showDetailsPanel && selectedProviderProduct"
-  title="Provider Product Details"
-  [isOpen]="showDetailsPanel"
-  [actions]="detailsPanelActions"
-  [resizable]="true"
-  [defaultWidth]="600"
-  [maxWidth]="900"
-  (close)="onPanelClose()">
-
-  <div panel-content>
-    <app-provider-product-details [providerProduct]="selectedProviderProduct"></app-provider-product-details>
-  </div>
-
-</app-generic-right-panel>
+  <!-- Details Panel -->
+  @if (showDetailsPanel && selectedProviderProduct) {
+    <app-generic-right-panel
+      title="Provider Product Details"
+      [isOpen]="showDetailsPanel"
+      [actions]="detailsPanelActions"
+      [resizable]="true"
+      [defaultWidth]="600"
+      [maxWidth]="900"
+      (close)="onPanelClose()">
+      <div panel-content>
+        <app-provider-product-details [providerProduct]="selectedProviderProduct"></app-provider-product-details>
+      </div>
+    </app-generic-right-panel>
+  }
 
 </div>

@@ -12,7 +12,7 @@
 
 | Property | Value |
 |----------|-------|
-| Framework | Angular 19.2.15 (standalone components) |
+| Framework | Angular 21.0.5 (standalone components) |
 | Root | `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/` |
 | Dev Server | `npm start` → http://localhost:4200 |
 | API Proxy | `/api/*` → `https://esim-server.dev.global-sim.app` |
