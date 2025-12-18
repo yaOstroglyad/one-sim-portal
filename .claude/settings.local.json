@@ -109,7 +109,8 @@
       "Bash(src/app/views/product-constructor/services/company-product-price.service.ts )",
       "Bash(src/app/views/analytics/dashboard/services/traffic-data.service.ts )",
       "Bash(src/app/views/analytics/reports/services/bundle-purchases-data.service.ts )",
-      "Bash(src/app/views/analytics/reports/services/bundle-leftovers-data.service.ts)"
+      "Bash(src/app/views/analytics/reports/services/bundle-leftovers-data.service.ts)",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh:*)"
     ],
     "deny": [
       "// === Blocked for Security ===",

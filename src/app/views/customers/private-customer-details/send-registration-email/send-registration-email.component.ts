@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { getRegistrationEmailFormConfig } from './send-registration-email.utils';
 import { SendRegistrationEmailService } from './send-registration-email.service';
 import { InfoStripComponent } from '@shared/components/info-strip/info-strip.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '@shared/services/ui/notification.service';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -31,7 +31,7 @@ export class SendRegistrationEmailComponent {
 	private readonly destroyRef = inject(DestroyRef);
 	private readonly sendRegistrationEmailService = inject(SendRegistrationEmailService);
 	private readonly dialogRef = inject(MatDialogRef<SendRegistrationEmailComponent>);
-	private readonly snackBar = inject(MatSnackBar);
+	private readonly notification = inject(NotificationService);
 	private readonly data = inject<{ id: string }>(MAT_DIALOG_DATA);
 
 	readonly loading = signal(true);
@@ -83,22 +83,13 @@ export class SendRegistrationEmailComponent {
 			takeUntilDestroyed(this.destroyRef)
 		).subscribe({
 			next: () => {
-				this.snackBar.open('Registration email sent successfully', null, {
-					panelClass: 'app-notification-success',
-					duration: 3000
-				});
-			},
-			error: (error) => {
-				this.loading.set(false);
-				const errorMessage = error?.error?.message || 'An error occurred while sending registration email.';
-				this.snackBar.open(errorMessage, null, {
-					panelClass: 'app-notification-error',
-					duration: 3000
-				});
-			},
-			complete: () => {
+				this.notification.success('notifications.emailSent');
 				this.loading.set(false);
 				this.dialogRef.close(true);
+			},
+			error: () => {
+				this.loading.set(false);
+				this.notification.error('errors.emailSendFailed');
 			}
 		});
 	}

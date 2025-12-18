@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ADMIN_PERMISSION, AuthService, FormGeneratorComponent } from 'src/app/shared';
 import { getGeneralSettingsFormConfig, getCompanySettingsRequest } from './general-settings.utils';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -10,6 +9,7 @@ import { Observable, catchError, map, of } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
 import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
 import { WhiteLabelDataService } from 'src/app/shared/services/data/white-label-data.service';
+import { NotificationService } from '@shared/services/ui/notification.service';
 
 @Component({
     standalone: true,
@@ -18,7 +18,6 @@ import { WhiteLabelDataService } from 'src/app/shared/services/data/white-label-
         CommonModule,
         FormGeneratorComponent,
         TranslateModule,
-        MatSnackBarModule,
         MatButtonModule,
         MatDividerModule
     ],
@@ -66,18 +65,14 @@ import { WhiteLabelDataService } from 'src/app/shared/services/data/white-label-
 export class GeneralSettingsComponent implements OnInit {
   @ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;
 
+  private readonly notification = inject(NotificationService);
+  private readonly whiteLabelService = inject(WhiteLabelDataService);
+  private readonly authService = inject(AuthService);
+  private readonly accountsService = inject(AccountsDataService);
+
   public formConfig$: Observable<FormConfig>;
   public isFormValid = false;
-  public isAdmin = false;
-
-  constructor(
-    private snackBar: MatSnackBar,
-    private whiteLabelService: WhiteLabelDataService,
-    private authService: AuthService,
-    private accountsService: AccountsDataService,
-  ) {
-    this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
-  }
+  public isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 
   ngOnInit(): void {
     this.formConfig$ = this.whiteLabelService.companySettings().pipe(
@@ -89,12 +84,8 @@ export class GeneralSettingsComponent implements OnInit {
           this.whiteLabelService
         );
       }),
-      catchError(error => {
-        console.error('Ошибка при получении настроек:', error);
-        this.snackBar.open('Ошибка при загрузке настроек. Используются дефолтные значения.', 'Закрыть', {
-          duration: 3000
-        });
-
+      catchError(() => {
+        this.notification.error('errors.settingsLoadFailed');
         return of(getGeneralSettingsFormConfig(
           null,
           this.accountsService,
@@ -120,15 +111,10 @@ export class GeneralSettingsComponent implements OnInit {
 
       saveOperation.subscribe({
         next: () => {
-          this.snackBar.open('Настройки сохранены успешно', 'Закрыть', {
-            duration: 3000
-          });
+          this.notification.success('notifications.settingsSaved');
         },
-        error: (error) => {
-          console.error('Ошибка при сохранении настроек:', error);
-          this.snackBar.open('Ошибка при сохранении настроек', 'Закрыть', {
-            duration: 3000
-          });
+        error: () => {
+          this.notification.error('errors.settingsSaveFailed');
         }
       });
     }

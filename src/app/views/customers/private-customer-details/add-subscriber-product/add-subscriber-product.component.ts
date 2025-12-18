@@ -1,4 +1,4 @@
-import { Component, inject, Inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,11 +7,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { getSubscriberProductsFormConfig } from './add-subscriber-product.utils';
 import { FormConfig, FormGeneratorComponent } from '@shared';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
+import { NotificationService } from '@shared/services/ui/notification.service';
 
 @Component({
     standalone: true,
@@ -29,19 +29,16 @@ import { LoaderComponent } from '@shared/components/loader/loader.component';
     styleUrls: ['./add-subscriber-product.component.scss']
 })
 export class AddSubscriberProductComponent implements OnInit {
-	addSubscriberProductService = inject(AddSubscriberProductService);
+	private readonly addSubscriberProductService = inject(AddSubscriberProductService);
+	private readonly dialogRef = inject(MatDialogRef<AddSubscriberProductComponent>);
+	private readonly notification = inject(NotificationService);
+	readonly data = inject<any>(MAT_DIALOG_DATA);
+
 	formConfig: FormConfig;
 	form: FormGroup;
 	isFormValid: boolean;
 	subscriberProducts: any;
 	loading = true;
-
-	constructor(
-		@Inject(MAT_DIALOG_DATA) public data: any,
-		public dialogRef: MatDialogRef<AddSubscriberProductComponent>,
-		private snackBar: MatSnackBar
-	) {
-	}
 
 	ngOnInit(): void {
 		const subscriberProducts$: Observable<any> = this.addSubscriberProductService.list(this.data.id);
@@ -70,26 +67,16 @@ export class AddSubscriberProductComponent implements OnInit {
 				productId: product.id
 			}
 			this.addSubscriberProductService.addProduct(payload).subscribe({
-				next: (response: {code: number, message: string}) => {
-					this.snackBar.open(`Transaction Status: ${response.message}`, null, {
-						panelClass: 'app-notification-success',
-						duration: 3000
-					});
-				},
-				error: (error) => {
-					const errorMessage = error?.error?.message || 'An error occurred during the process.';
-					this.snackBar.open(errorMessage, null, {
-						panelClass: 'app-notification-error',
-						duration: 3000
-					});
-				},
-				complete: () => {
+				next: () => {
+					this.notification.success('notifications.productAdded');
 					this.loading = false;
-					this.dialogRef.close();
+					this.dialogRef.close(true);
+				},
+				error: () => {
+					this.loading = false;
+					this.notification.error('errors.productAddFailed');
 				}
 			});
-		} else {
-			console.warn('Form is invalid. Cannot submit.');
 		}
 	}
 }

@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '@shared/services/ui/notification.service';
 import { EventStatusComponent } from './event-status/event-status.component';
 import { TransactionOrdersTableComponent } from '../transaction-orders-table/transaction-orders-table.component';
 import { PurchasedProductsComponent } from './purchased-products/purchased-products.component';
@@ -45,7 +45,7 @@ import { GlobalFlyoutService } from '@shared/components/fab-layout';
 export class SubscriberDetailsComponent implements OnInit {
   private readonly subscriberDataService = inject(SubscriberDataService);
   private readonly flyoutService = inject(GlobalFlyoutService);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly notification = inject(NotificationService);
 
   @Input() subscriber: Subscriber;
 
@@ -100,19 +100,11 @@ export class SubscriberDetailsComponent implements OnInit {
 
     navigator.clipboard.writeText(text).then(
       () => {
-        this.snackBar.open('ICCID copied to clipboard', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom'
-        });
+        this.notification.success('notifications.copiedToClipboard');
       },
       (err) => {
         console.error('Failed to copy ICCID:', err);
-        this.snackBar.open('Failed to copy ICCID', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom'
-        });
+        this.notification.error('errors.copyFailed');
       }
     );
   }

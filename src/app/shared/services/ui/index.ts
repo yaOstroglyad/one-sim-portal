@@ -4,10 +4,10 @@
  * Provides UI/UX interaction services for:
  * - Language and internationalization
  * - Theme and visual customization
- * - Snackbar notifications
+ * - Notification service (i18n-aware, replaces legacy snackbar)
  */
 
 export * from './language.service';
 export * from './theme.service';
 export * from './visual.service';
-export * from './snackbar.service';
+export * from './notification.service';

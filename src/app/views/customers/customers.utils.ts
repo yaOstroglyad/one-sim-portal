@@ -2,7 +2,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import {
   SmartFilterConfig,
@@ -175,20 +174,14 @@ export class CustomersNavigationUtils {
   }
 }
 
-// Notification utilities
+// Notification utilities - search results notifications removed per error handling architecture
+// We don't need to notify users about successful data loading
 export class CustomersNotificationUtils {
   static showSearchResultsNotification(
-    snackBar: MatSnackBar,
-    totalElements: number
+    _totalElements: number
   ): void {
-    snackBar.open(
-      `Search results loaded successfully. Total elements: ${totalElements}`,
-      null,
-      {
-        panelClass: 'app-notification-success',
-        duration: CUSTOMERS_CONFIG.NOTIFICATION_DURATION
-      }
-    );
+    // Search results notification removed per error handling architecture
+    // We don't need to notify users about successful data loading
   }
 }
 

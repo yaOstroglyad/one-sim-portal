@@ -3,8 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import {
   InvoicingMethod,
-  handleArrayError,
-  handleObjectError,
   transformHttpError
 } from '@shared';
 
@@ -20,24 +18,18 @@ export class InvoicesService {
       params = params.set('accountId', accountId);
     }
 
-    return this.http.post<any>('/api/v1/invoicing-method/command/create', invoicingMethodForm, { params }).pipe(
-      handleObjectError('creating invoicing method')
-    );
+    return this.http.post<any>('/api/v1/invoicing-method/command/create', invoicingMethodForm, { params });
   }
 
   update(invoicingMethodForm: InvoicingMethod): Observable<any> {
-    return this.http.patch<any>('/api/v1/invoicing-method/command/update', invoicingMethodForm).pipe(
-      handleObjectError('updating invoicing method')
-    );
+    return this.http.patch<any>('/api/v1/invoicing-method/command/update', invoicingMethodForm);
   }
 
   updateStatus(status: {
     "id": string,
     "active": boolean
   }): Observable<any> {
-    return this.http.patch<any>('/api/v1/invoicing-method/command/update-status', status).pipe(
-      handleObjectError('updating invoicing method status')
-    );
+    return this.http.patch<any>('/api/v1/invoicing-method/command/update-status', status);
   }
 
   list(accountId?: string): Observable<InvoicingMethod[]> {
@@ -46,15 +38,11 @@ export class InvoicesService {
       params = params.set('accountId', accountId);
     }
 
-    return this.http.get<InvoicingMethod[]>('/api/v1/invoicing-method/query/all', { params }).pipe(
-      handleArrayError('fetching invoicing methods')
-    );
+    return this.http.get<InvoicingMethod[]>('/api/v1/invoicing-method/query/all', { params });
   }
 
   getInvoicingStrategyTypes(): Observable<string[]> {
-    return this.http.get<string[]>('/api/v1/invoicing-method/invoicing-strategies').pipe(
-      handleArrayError('fetching invoicing strategy types')
-    );
+    return this.http.get<string[]>('/api/v1/invoicing-method/invoicing-strategies');
   }
 
   getFieldsByStrategyType(strategyType: string): Observable<any> {

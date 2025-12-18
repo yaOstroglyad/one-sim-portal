@@ -9,7 +9,7 @@ import { getRefundFormConfig } from './refund-product.utils';
 import { RefundProductService } from './refund-product.service';
 import { InfoStripComponent } from '../info-strip/info-strip.component';
 import { shareReplay, tap } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '@shared/services/ui/notification.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -32,7 +32,7 @@ export class RefundProductComponent {
 	private readonly destroyRef = inject(DestroyRef);
 	private readonly refundProductService = inject(RefundProductService);
 	private readonly dialogRef = inject(MatDialogRef<RefundProductComponent>);
-	private readonly snackBar = inject(MatSnackBar);
+	private readonly notification = inject(NotificationService);
 	private readonly data = inject<{ id: string }>(MAT_DIALOG_DATA);
 
 	readonly loading = signal(true);
@@ -73,23 +73,14 @@ export class RefundProductComponent {
 		this.refundProductService.refund(product.id).pipe(
 			takeUntilDestroyed(this.destroyRef)
 		).subscribe({
-			next: (response) => {
-				this.snackBar.open(`Transaction Status: ${response.transactionStatus}`, null, {
-					panelClass: 'app-notification-success',
-					duration: 3000
-				});
-			},
-			error: (error) => {
-				this.loading.set(false);
-				const errorMessage = error?.error?.message || 'An error occurred during the refund process.';
-				this.snackBar.open(errorMessage, null, {
-					panelClass: 'app-notification-error',
-					duration: 3000
-				});
-			},
-			complete: () => {
+			next: () => {
+				this.notification.success('notifications.refundSuccess');
 				this.loading.set(false);
 				this.dialogRef.close(true);
+			},
+			error: () => {
+				this.loading.set(false);
+				this.notification.error('errors.refundFailed');
 			}
 		});
 	}

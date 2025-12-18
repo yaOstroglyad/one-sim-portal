@@ -4,7 +4,6 @@ import { Observable, tap } from 'rxjs';
 import { DataService } from '../core';
 import { Company } from '@shared/models';
 import { CacheHubService, DataType } from '../cache-hub';
-import { handleArrayError, handleWithDefault } from '../../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -24,9 +23,7 @@ export class CompaniesDataService extends DataService<Company> {
 			'companies:list',
 			() => {
 				let params = new HttpParams();
-				return this.http.get<Company[]>(this.apiUrl, {params}).pipe(
-					handleArrayError('fetching companies')
-				);
+				return this.http.get<Company[]>(this.apiUrl, {params});
 			},
 			{ dataType: DataType.REFERENCE }
 		);
@@ -37,8 +34,7 @@ export class CompaniesDataService extends DataService<Company> {
 			tap(() => {
 				// Invalidate companies list cache after creation
 				this.cacheHub.invalidate('companies:list');
-			}),
-			handleArrayError('creating company')
+			})
 		);
 	}
 
@@ -57,20 +53,12 @@ export class CompaniesDataService extends DataService<Company> {
 			}
 		});
 
-		return this.http.get<any>('/api/v1/companies/query/all/page', { params }).pipe(
-			handleWithDefault('fetching paginated companies', {
-				totalElements: 0,
-				totalPages: 0,
-				content: []
-			})
-		);
+		return this.http.get<any>('/api/v1/companies/query/all/page', { params });
 	}
 
 	sendInviteEmail(entityId: string, email: string): Observable<any> {
 		return this.http.post<any>('/api/v1/companies/send-user-registration-email', {
 			entityId, email
-		}).pipe(
-			handleArrayError('sending invite email')
-		);
+		});
 	}
 }

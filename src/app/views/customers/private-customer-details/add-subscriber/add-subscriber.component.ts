@@ -1,11 +1,10 @@
-import { Component, inject, Inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
 import { getAddSubscriberFormConfig } from './add-subscriber.utils';
@@ -16,6 +15,7 @@ import {
   ProvidersDataService,
   SubscriberDataService
 } from '@shared';
+import { NotificationService } from '@shared/services/ui/notification.service';
 
 @Component({
     standalone: true,
@@ -33,20 +33,17 @@ import {
     styleUrls: ['./add-subscriber.component.scss']
 })
 export class AddSubscriberComponent implements OnInit {
-  subscriberDataService = inject(SubscriberDataService);
-  providersDataService = inject(ProvidersDataService);
-  productsDataService = inject(ProductsDataService);
+  private readonly subscriberDataService = inject(SubscriberDataService);
+  private readonly providersDataService = inject(ProvidersDataService);
+  private readonly productsDataService = inject(ProductsDataService);
+  private readonly dialogRef = inject(MatDialogRef<AddSubscriberComponent>);
+  private readonly notification = inject(NotificationService);
+  readonly data = inject<{ customerId: string, email: string }>(MAT_DIALOG_DATA);
 
   formConfig: FormConfig;
   form: FormGroup;
   isFormValid: boolean;
   loading = true;
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { customerId: string, email: string },
-    public dialogRef: MatDialogRef<AddSubscriberComponent>,
-    private snackBar: MatSnackBar
-  ) {}
 
   ngOnInit(): void {
     const providers$ = this.providersDataService.list();
@@ -84,25 +81,15 @@ export class AddSubscriberComponent implements OnInit {
 
       this.subscriberDataService.createSubscriber(payload).subscribe({
         next: () => {
-          this.snackBar.open('Subscriber created successfully', null, {
-            panelClass: 'app-notification-success',
-            duration: 3000
-          });
-        },
-        error: (error) => {
-          const errorMessage = error?.error?.message || 'An error occurred during subscriber creation.';
-          this.snackBar.open(errorMessage, null, {
-            panelClass: 'app-notification-error',
-            duration: 3000
-          });
-        },
-        complete: () => {
+          this.notification.success('notifications.subscriberCreated');
           this.loading = false;
           this.dialogRef.close(true);
+        },
+        error: () => {
+          this.loading = false;
+          this.notification.error('errors.subscriberCreateFailed');
         }
       });
-    } else {
-      console.warn('Form is invalid. Cannot submit.');
     }
   }
 }

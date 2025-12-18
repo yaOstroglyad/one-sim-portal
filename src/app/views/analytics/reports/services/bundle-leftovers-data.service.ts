@@ -1,8 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { handleArrayError } from '@shared/utils';
 import { BundleLeftover, BundleLeftoverFilterParams } from '../models/bundle-leftover.model';
 
 /**
@@ -30,8 +28,6 @@ export class BundleLeftoversDataService {
       httpParams = httpParams.set('accountId', params.accountId);
     }
 
-    return this.http.get<BundleLeftover[]>(this.baseUrl, { params: httpParams }).pipe(
-      handleArrayError<BundleLeftover>('fetching bundle leftovers report')
-    );
+    return this.http.get<BundleLeftover[]>(this.baseUrl, { params: httpParams });
   }
 }

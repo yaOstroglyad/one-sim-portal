@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable } from 'rxjs';
-import { DataService, handleArrayError } from '@shared';
+import { Observable } from 'rxjs';
+import { DataService } from '@shared';
 import { Resource } from '@shared/models/product';
 
 @Injectable({
@@ -15,8 +15,6 @@ export class InventoryDataService extends DataService<Resource> {
 	}
 
 	list(params?: any): Observable<any> {
-		return this.http.get<any>(this.apiUrl, { params }).pipe(
-			handleArrayError('fetching inventory')
-		);
+		return this.http.get<any>(this.apiUrl, { params });
 	}
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import {
   Account,
   WhiteLabelDataService,
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { TemplateTypeGridComponent } from './template-type-grid/template-type-grid.component';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '@shared/services/ui/notification.service';
 import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 import { IconDirective } from '@coreui/icons-angular';
 
@@ -28,16 +28,14 @@ import { IconDirective } from '@coreui/icons-angular';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmailConfigurationsComponent implements OnInit {
+  private readonly whiteLabelService = inject(WhiteLabelDataService);
+  private readonly authService = inject(AuthService);
+  private readonly notification = inject(NotificationService);
+
   public templateTypes$: Observable<string[]>;
   public isAdmin: boolean = false;
   public selectedAccountId: string | null = null;
   public selectedTemplateType: string | null = null;
-
-  constructor(
-    private whiteLabelService: WhiteLabelDataService,
-    private authService: AuthService,
-    private snackBar: MatSnackBar
-  ) {}
 
   ngOnInit(): void {
     this.templateTypes$ = this.whiteLabelService.emailTemplateTypes();
@@ -53,10 +51,7 @@ export class EmailConfigurationsComponent implements OnInit {
 
   public selectTemplateType(type: string): void {
     if (this.isAdmin && !this.selectedAccountId) {
-      this.snackBar.open('Please select an account first', null, {
-        duration: 3000,
-        panelClass: 'app-notification-warning'
-      });
+      this.notification.warning('COMMON.select_account_hint_message');
       return;
     }
     this.selectedTemplateType = type;

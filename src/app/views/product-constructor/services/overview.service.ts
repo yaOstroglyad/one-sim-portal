@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { OverviewStats, ProductStatisticsResponse } from '../models';
-import { handleWithDefault } from '@shared';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +15,7 @@ export class OverviewService {
    * Get product statistics from API
    */
   getProductStatistics(): Observable<ProductStatisticsResponse> {
-    return this.http.get<ProductStatisticsResponse>(`/api-product/api/v1/esim-product/statistics/products`).pipe(
-      handleWithDefault('fetching product statistics', {
-        productsCount: 0,
-        mobileBundlesCount: 0,
-        regionsCount: 0
-      })
-    );
+    return this.http.get<ProductStatisticsResponse>(`/api-product/api/v1/esim-product/statistics/products`);
   }
 
   /**
@@ -41,15 +34,6 @@ export class OverviewService {
           activeProducts: 0, // Not available in current API response
           inactiveProducts: 0 // Not available in current API response
         };
-      }),
-      handleWithDefault('fetching overview statistics', {
-        regions: 0,
-        bundles: 0,
-        products: 0,
-        companyProducts: 0,
-        providerProducts: 0,
-        activeProducts: 0,
-        inactiveProducts: 0
       })
     );
   }

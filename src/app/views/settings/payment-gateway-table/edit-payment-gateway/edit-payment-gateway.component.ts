@@ -9,13 +9,13 @@ import {
 	ChangeDetectorRef,
 	AfterViewInit,
 	Optional,
-	Inject
+	Inject,
+	inject
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { PaymentGatewayService } from '../payment-gateway.service';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { PaymentStrategy } from '@shared/models/payment';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +25,7 @@ import { FormGeneratorComponent } from 'src/app/shared/components/form-generator
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PaymentGatewayUtilsService } from '../payment-gateway.utils.service';
 import { FormConfig } from 'src/app/shared';
+import { NotificationService } from '@shared/services/ui/notification.service';
 
 @Component({
 	standalone: true,
@@ -35,7 +36,6 @@ import { FormConfig } from 'src/app/shared';
     ReactiveFormsModule,
     FormsModule,
     MatDialogModule,
-    MatSnackBarModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -51,6 +51,11 @@ export class EditPaymentGatewayComponent implements OnInit, OnChanges, AfterView
 	@Output() save = new EventEmitter<void>();
 	@Output() cancel = new EventEmitter<void>();
 
+	private readonly notification = inject(NotificationService);
+	private readonly paymentGatewayService = inject(PaymentGatewayService);
+	private readonly paymentGatewayUtilsService = inject(PaymentGatewayUtilsService);
+	private readonly cdr = inject(ChangeDetectorRef);
+
 	formConfig: FormConfig;
 	gatewayForm: FormGroup; // Public for parent access like region-form
 	loading = false;
@@ -59,12 +64,7 @@ export class EditPaymentGatewayComponent implements OnInit, OnChanges, AfterView
 
 	constructor(
 		@Optional() public dialogRef: MatDialogRef<EditPaymentGatewayComponent>,
-		@Optional() @Inject(MAT_DIALOG_DATA) private dialogData: PaymentStrategy & { accountId?: string },
-		private paymentGatewayService: PaymentGatewayService,
-		private paymentGatewayUtilsService: PaymentGatewayUtilsService,
-		private snackBar: MatSnackBar,
-		private translate: TranslateService,
-		private cdr: ChangeDetectorRef
+		@Optional() @Inject(MAT_DIALOG_DATA) private dialogData: PaymentStrategy & { accountId?: string }
 	) {
 		// Support dialog mode
 		if (this.dialogData) {
@@ -150,11 +150,14 @@ export class EditPaymentGatewayComponent implements OnInit, OnChanges, AfterView
 		operation$.subscribe({
 			next: () => {
 				this.loading = false;
+				const messageKey = this.isEditing ? 'notifications.configurationUpdated' : 'notifications.configurationCreated';
+				this.notification.success(messageKey);
 				this.save.emit();
 			},
-			error: (error) => {
+			error: () => {
 				this.loading = false;
-				console.error('Error saving payment gateway:', error);
+				const messageKey = this.isEditing ? 'errors.configurationUpdateFailed' : 'errors.configurationCreateFailed';
+				this.notification.error(messageKey);
 			}
 		});
 	}

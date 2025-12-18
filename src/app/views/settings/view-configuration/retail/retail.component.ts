@@ -1,9 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ADMIN_PERMISSION, AuthService, FormGeneratorComponent } from 'src/app/shared';
 import { RetailPreviewComponent } from './retail-preview/retail-preview.component';
 import { getRetailFormConfig, getRetailSettingsRequest } from './retail.utils';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -11,6 +10,7 @@ import { ViewConfigurationService } from '../view-configuration.service';
 import { Observable, catchError, map, of } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
 import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
+import { NotificationService } from '@shared/services/ui/notification.service';
 import { tap } from 'rxjs/operators';
 import { MatInputModule } from '@angular/material/input';
 
@@ -24,7 +24,6 @@ import { MatInputModule } from '@angular/material/input';
         FormGeneratorComponent,
         RetailPreviewComponent,
         TranslateModule,
-        MatSnackBarModule,
         MatButtonModule,
         MatDividerModule,
         MatInputModule
@@ -33,20 +32,16 @@ import { MatInputModule } from '@angular/material/input';
 export class RetailComponent implements OnInit {
   @ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;
 
+  private readonly notification = inject(NotificationService);
+  private readonly viewConfigService = inject(ViewConfigurationService);
+  private readonly authService = inject(AuthService);
+  private readonly accountsService = inject(AccountsDataService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
   public formConfig$: Observable<FormConfig>;
   public isFormValid = false;
-  private isAdmin = false;
+  private isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
   public formValues: any = {};
-
-  constructor(
-    private snackBar: MatSnackBar,
-    private viewConfigService: ViewConfigurationService,
-    private authService: AuthService,
-    private accountsService: AccountsDataService,
-    private cdr: ChangeDetectorRef
-  ) {
-    this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
-  }
 
   ngOnInit(): void {
     this.formValues = {
@@ -85,12 +80,8 @@ export class RetailComponent implements OnInit {
           this.cdr.detectChanges();
         });
       }),
-      catchError(error => {
-        console.error('Ошибка при получении конфигурации:', error);
-        this.snackBar.open('Ошибка при загрузке настроек. Используются дефолтные значения.', 'Закрыть', {
-          duration: 3000
-        });
-
+      catchError(() => {
+        this.notification.error('errors.settingsLoadFailed');
         return of(getRetailFormConfig(
           null,
           this.accountsService,
@@ -112,15 +103,10 @@ export class RetailComponent implements OnInit {
       const settings = getRetailSettingsRequest(this.formGenerator.form.value);
       this.viewConfigService.save(settings).subscribe({
         next: () => {
-          this.snackBar.open('Настройки сохранены успешно', 'Закрыть', {
-            duration: 3000
-          });
+          this.notification.success('notifications.settingsSaved');
         },
-        error: (error) => {
-          console.error('Ошибка при сохранении настроек:', error);
-          this.snackBar.open('Ошибка при сохранении настроек', 'Закрыть', {
-            duration: 3000
-          });
+        error: () => {
+          this.notification.error('errors.settingsSaveFailed');
         }
       });
     }

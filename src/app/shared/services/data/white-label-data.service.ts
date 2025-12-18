@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { DataService } from '../core';
 import { EditCompanySettings } from '@shared/models';
 import { EmailTemplate } from '@shared/models';
-import { handleArrayError } from '../../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -17,15 +16,11 @@ export class WhiteLabelDataService extends DataService<any> {
 	}
 
 	applicationTypes(): Observable<any[]> {
-		return this.http.get<any[]>('/api/v1/whitelabel/common/application-types').pipe(
-			handleArrayError('fetching application types')
-		);
+		return this.http.get<any[]>('/api/v1/whitelabel/common/application-types');
 	}
 
 	emailTemplateTypes(): Observable<string[]> {
-		return this.http.get<any[]>('/api/v1/whitelabel/email-templates/query/template-types').pipe(
-			handleArrayError('fetching email template types')
-		);
+		return this.http.get<any[]>('/api/v1/whitelabel/email-templates/query/template-types');
 	}
 
 	allEmailTemplatesByType(type: string, ownerAccountId?: string): Observable<EmailTemplate[]> {
@@ -36,15 +31,11 @@ export class WhiteLabelDataService extends DataService<any> {
 			params = params.set('ownerAccountId', ownerAccountId);
 		}
 
-		return this.http.get<EmailTemplate[]>('/api/v1/whitelabel/email-templates/query/all-by-type', { params }).pipe(
-			handleArrayError('fetching email templates by type')
-		);
+		return this.http.get<EmailTemplate[]>('/api/v1/whitelabel/email-templates/query/all-by-type', { params });
 	}
 
 	allEmailTemplateLanguages(): Observable<string[]> {
-		return this.http.get<any[]>('/api/v1/whitelabel/common/languages').pipe(
-			handleArrayError('fetching email template languages')
-		);
+		return this.http.get<any[]>('/api/v1/whitelabel/common/languages');
 	}
 
 	createEmailTemplateIntegration(payload: any): Observable<any> {
@@ -62,9 +53,7 @@ export class WhiteLabelDataService extends DataService<any> {
 	companySettings(accountId?: string): Observable<any> {
 		const params = accountId ? new HttpParams().set('accountId', accountId) : undefined;
 
-		return this.http.get<any[]>('/api/v1/whitelabel/account-settings/query', { params }).pipe(
-			handleArrayError('fetching company settings')
-		);
+		return this.http.get<any[]>('/api/v1/whitelabel/account-settings/query', { params });
 	}
 
 	createCompanySettings(payload: EditCompanySettings): Observable<any> {

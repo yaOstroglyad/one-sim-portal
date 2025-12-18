@@ -1,10 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { SimInfo } from '@shared/models';
 import { SubscriberStatusEvent } from '@shared/models';
 import { SimLocations } from '@shared/models';
-import { handleArrayError, handleObjectError } from '../../utils';
 
 export interface CreateSubscriberDto {
 	customerId: string;
@@ -25,28 +24,20 @@ export class SubscriberDataService {
 	}
 
 	getSimDetails(params: {id: string}): Observable<SimInfo | null> {
-		return this.http.get<SimInfo>(`/api/v1/sims/query/sim/details`, { params }).pipe(
-			handleObjectError<SimInfo>('fetching SIM details')
-		);
+		return this.http.get<SimInfo>(`/api/v1/sims/query/sim/details`, { params });
 	}
 
 	getSimLocations(id: string): Observable<SimLocations[]> {
-		return this.http.get<SimLocations[]>(`/api/v1/sims/query/${id}/locations`).pipe(
-			handleArrayError('fetching SIM locations')
-		);
+		return this.http.get<SimLocations[]>(`/api/v1/sims/query/${id}/locations`);
 	}
 
 	getSimStatusEvents(id: string): Observable<SubscriberStatusEvent[]> {
-		return this.http.get<SubscriberStatusEvent[]>(`/api/v1/sims/query/${id}/status/events`).pipe(
-			handleArrayError('fetching SIM status events')
-		);
+		return this.http.get<SubscriberStatusEvent[]>(`/api/v1/sims/query/${id}/status/events`);
 	}
 
 	sendRegistrationEmail(subscriberId: string, email: string): Observable<any> {
 		return this.http.get(`/api/v1/subscribers/send-registration-email`, {
 			params: { subscriberId, email }
-		}).pipe(
-			handleObjectError('sending registration email')
-		);
+		});
 	}
 }

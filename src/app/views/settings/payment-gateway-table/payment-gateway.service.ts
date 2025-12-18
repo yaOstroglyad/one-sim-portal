@@ -3,8 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import {
   PaymentStrategy,
-  handleArrayError,
-  handleObjectError,
   transformHttpError
 } from '@shared';
 
@@ -20,24 +18,18 @@ export class PaymentGatewayService {
       params = params.set('accountId', accountId);
     }
 
-    return this.http.post<any>('/api/v1/payment-method/command/create', paymentGatewayForm, { params }).pipe(
-      handleObjectError('creating payment gateway')
-    );
+    return this.http.post<any>('/api/v1/payment-method/command/create', paymentGatewayForm, { params });
   }
 
   update(paymentGatewayForm: PaymentStrategy): Observable<any> {
-    return this.http.patch<any>('/api/v1/payment-method/command/update', paymentGatewayForm).pipe(
-      handleObjectError('updating payment gateway')
-    );
+    return this.http.patch<any>('/api/v1/payment-method/command/update', paymentGatewayForm);
   }
 
   updateStatus(status: {
     "id": string,
     "active": boolean
   }): Observable<any> {
-    return this.http.patch<any>('/api/v1/payment-method/command/update-status', status).pipe(
-      handleObjectError('updating payment gateway status')
-    );
+    return this.http.patch<any>('/api/v1/payment-method/command/update-status', status);
   }
 
   list(accountId?: string): Observable<PaymentStrategy[]> {
@@ -46,15 +38,11 @@ export class PaymentGatewayService {
       params = params.set('accountId', accountId);
     }
 
-    return this.http.get<PaymentStrategy[]>('/api/v1/payment-method/query/all', { params }).pipe(
-      handleArrayError('fetching payment gateways')
-    );
+    return this.http.get<PaymentStrategy[]>('/api/v1/payment-method/query/all', { params });
   }
 
   getPaymentStrategyTypes(): Observable<string[]> {
-    return this.http.get<string[]>('/api/v1/payment-method/payment-strategies').pipe(
-      handleArrayError('fetching payment strategy types')
-    );
+    return this.http.get<string[]>('/api/v1/payment-method/payment-strategies');
   }
 
   getFieldsByStrategyType(strategyType: string): Observable<any> {

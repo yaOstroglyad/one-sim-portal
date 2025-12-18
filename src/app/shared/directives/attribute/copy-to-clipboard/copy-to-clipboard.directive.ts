@@ -1,14 +1,14 @@
 import { Directive, HostListener, ElementRef, inject, Renderer2 } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '@shared/services/ui/notification.service';
 
 @Directive({
   standalone: true,
   selector: '[copyToClipboard]',
 })
 export class CopyToClipboardDirective {
-  private snackBar = inject(MatSnackBar);
-  private el = inject(ElementRef);
-  private renderer = inject(Renderer2);
+  private readonly notification = inject(NotificationService);
+  private readonly el = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
 
   constructor() {
     this.renderer.listen(this.el.nativeElement, 'mouseenter', () => {
@@ -26,11 +26,10 @@ export class CopyToClipboardDirective {
     const text = this.el.nativeElement.innerText;
     if (text) {
       navigator.clipboard.writeText(text).then(() => {
-        this.snackBar.open('Text copied to clipboard', 'Close', {
-          duration: 2000,
-        });
+        this.notification.success('notifications.copiedToClipboard');
       }).catch(err => {
         console.error('Could not copy text: ', err);
+        this.notification.error('errors.copyFailed');
       });
     }
   }

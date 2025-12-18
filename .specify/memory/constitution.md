@@ -51,6 +51,53 @@ private readonly cdr = inject(ChangeDetectorRef);
 constructor(private http: HttpClient) {}
 ```
 
+### HTTP Interceptors: Circular Dependency Prevention (NON-NEGOTIABLE)
+
+> **⚠️ CRITICAL:** HTTP Interceptors have special DI constraints due to circular dependencies.
+
+**Problem:** Interceptors are created during HttpClient initialization. If an interceptor depends on a service that uses HttpClient, a circular dependency occurs:
+```
+HttpErrorInterceptor → AuthService → HttpClient → HTTP_INTERCEPTORS → HttpErrorInterceptor
+```
+
+**Solution:** In HTTP Interceptors, use `Injector` for lazy loading of ALL services:
+
+```typescript
+// ✅ CORRECT - Lazy injection in HTTP Interceptor
+@Injectable()
+export class HttpErrorInterceptor implements HttpInterceptor {
+  private _authService: AuthService | null = null;
+  private _notification: NotificationService | null = null;
+
+  constructor(private readonly injector: Injector) {}
+
+  private get authService(): AuthService {
+    if (!this._authService) {
+      this._authService = this.injector.get(AuthService);
+    }
+    return this._authService;
+  }
+
+  private get notification(): NotificationService {
+    if (!this._notification) {
+      this._notification = this.injector.get(NotificationService);
+    }
+    return this._notification;
+  }
+}
+
+// ❌ FORBIDDEN - Direct injection in HTTP Interceptor
+@Injectable()
+export class HttpErrorInterceptor implements HttpInterceptor {
+  constructor(
+    private readonly authService: AuthService,      // CIRCULAR!
+    private readonly notification: NotificationService // CIRCULAR!
+  ) {}
+}
+```
+
+**Rule:** ANY service that might use HttpClient (directly or transitively) MUST be lazy-loaded via Injector in HTTP Interceptors.
+
 ### Signal APIs (Angular 21)
 - **Use `input()` instead of `@Input()`**
 - **Use `output()` instead of `@Output()`**
@@ -97,36 +144,97 @@ selector: 'app-my-component'
 
 ---
 
-## III. HTTP Error Handling (NON-NEGOTIABLE)
+## III. Error Handling Architecture (NON-NEGOTIABLE)
 
-### Unified Error Handlers
-**ALL HTTP calls MUST use error handlers from `@shared/utils`:**
+> **Full Documentation:** [docs/architecture/error-handling.md](../../docs/architecture/error-handling.md)
 
-| Handler | Use For | Returns |
-|---------|---------|---------|
-| `handleArrayError<T>()` | Array endpoints | `[]` on error |
-| `handleObjectError<T>()` | Object endpoints | `null` on error |
-| `handleWithDefault<T>()` | Custom fallbacks | Default value |
+### 4-Layer Architecture
 
+| Layer | Responsibility | Shows Notification? |
+|-------|----------------|---------------------|
+| **HTTP Interceptor** | 401→login, 403→403 page, retry 503/504, network errors | Only network errors |
+| **Service Layer** | Business logic, data transformation, NO UI | Never |
+| **Component Layer** | Context-aware messages, user feedback | Yes (via NotificationService) |
+| **GlobalErrorHandler** | Catch uncaught errors, logging | Yes (generic fallback) |
+
+### Rules by Layer
+
+**Interceptor (Layer 1):**
+- MUST redirect to `/login` on 401 (no notification)
+- MUST redirect to `/403` on 403 (no notification)
+- MUST retry 2-3 times for 503/504/network errors
+- MUST pass through 400/404/409/422/500 to components
+
+**Services (Layer 2):**
 ```typescript
-// ✅ CORRECT
-list(): Observable<Customer[]> {
-  return this.http.get<Customer[]>('/api/v1/customers').pipe(
-    catchError(handleArrayError<Customer>('fetching customers'))
+// ✅ CORRECT - Let errors propagate to component
+getCustomer(id: string): Observable<Customer> {
+  return this.http.get<Customer>(`/api/customers/${id}`);
+}
+
+// ✅ CORRECT - Silent fallback ONLY for non-critical data
+getStats(id: string): Observable<Stats | null> {
+  return this.http.get<Stats>(`/api/stats/${id}`).pipe(
+    catchError(() => of(null)) // Stats are supplementary
   );
 }
 
-// ❌ FORBIDDEN
-catchError(() => of([]))  // Inline error handling
+// ❌ FORBIDDEN - Service shows notification
+getCustomer(id: string): Observable<Customer | null> {
+  return this.http.get<Customer>(...).pipe(
+    catchError(err => {
+      this.notification.error('Error!'); // NO! Component's job
+      return of(null);
+    })
+  );
+}
 ```
 
-### forkJoin Pattern
-- **Add `catchError` ONLY after `forkJoin`**, never inside individual observables
-- Individual observables inside forkJoin must be clean (no catchError)
+**Components (Layer 3):**
+```typescript
+// ✅ CORRECT - Handle errors with context-aware messages
+loadCustomer(id: string): void {
+  this.customerService.getCustomer(id).subscribe({
+    next: (customer) => this.customer.set(customer),
+    error: (error: ApiError) => {
+      if (error.code === '404') {
+        this.notification.error('customer.notFound');
+        this.router.navigate(['/customers']);
+        return;
+      }
+      this.notification.error('customer.loadError');
+    }
+  });
+}
 
-### Auth Errors
-- Use `transformAuthError()` for OAuth/login errors only
-- Use `transformHttpError()` for regular API errors
+// ❌ FORBIDDEN - Direct MatSnackBar usage
+this.snackBar.open('Error!', ...); // Use NotificationService
+
+// ❌ FORBIDDEN - Hardcoded messages
+this.notification.error('Ошибка загрузки'); // Use i18n keys
+```
+
+### NotificationService (MANDATORY)
+
+```typescript
+// ✅ CORRECT - Always use NotificationService with i18n keys
+this.notification.success('customer.saved');
+this.notification.error('customer.loadError');
+this.notification.warning('customer.unsavedChanges');
+
+// ❌ FORBIDDEN
+this.snackBar.open('Success!', ...);
+this.matSnackBar.open('Error', ...);
+```
+
+### Legacy Error Handlers (DEPRECATED)
+
+> **Warning:** `handleArrayError()`, `handleObjectError()` are being refactored.
+> See [016-error-handling spec](../../specs/016-error-handling/spec.md) for migration plan.
+
+Until refactoring is complete:
+- New code MUST follow 4-layer architecture
+- Existing code will be migrated as part of error handling refactoring
 
 ---
 
@@ -305,7 +413,10 @@ color: #2c2c2c;
 - [ ] Signal inputs/outputs in new code
 - [ ] `@if/@for/@switch` in new templates
 - [ ] `os-` selector prefix
-- [ ] Error handlers for HTTP calls
+- [ ] Error handling follows 4-layer architecture (see Section III)
+- [ ] NotificationService used for all user notifications (no direct MatSnackBar)
+- [ ] All notification messages use i18n keys (no hardcoded strings)
+- [ ] Services do NOT show notifications (component responsibility)
 - [ ] CSS variables for colors
 - [ ] `map.get()` for SCSS values
 - [ ] English documentation
@@ -435,4 +546,4 @@ specs/{feature-name}/
 
 ---
 
-**Version:** 1.2.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2025-12-06
+**Version:** 1.4.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2025-12-18

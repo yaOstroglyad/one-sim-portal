@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { CompaniesDataService, Company, GenericTableComponent, HeaderComponent, TableConfig } from '@shared';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CompaniesTableService } from './companies-table.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ButtonDirective, FormControlDirective } from '@coreui/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconDirective } from '@coreui/icons-angular';
@@ -14,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { EditCompanyComponent } from './edit-company/edit-company.component';
 import { debounceTime, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { SendInviteEmailComponent } from './send-invite-email/send-invite-email.component';
+import { NotificationService } from '@shared/services/ui/notification.service';
 @Component({
     standalone: true,
     selector: 'app-companies',
@@ -27,7 +27,6 @@ import { SendInviteEmailComponent } from './send-invite-email/send-invite-email.
         ButtonDirective,
         IconDirective,
         GenericTableComponent,
-        MatSnackBarModule,
         MatDialogModule,
         MatButtonModule,
         MatMenuModule,
@@ -40,6 +39,7 @@ import { SendInviteEmailComponent } from './send-invite-email/send-invite-email.
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CompaniesComponent implements OnInit, OnDestroy {
+	private readonly notification = inject(NotificationService);
 	private unsubscribe$ = new Subject<void>();
 	public tableConfig$: BehaviorSubject<TableConfig>;
 	public dataList$: Observable<Company[]>;
@@ -49,8 +49,7 @@ export class CompaniesComponent implements OnInit, OnDestroy {
 		private cdr: ChangeDetectorRef,
 		private tableService: CompaniesTableService,
 		private companiesDataService: CompaniesDataService,
-		private dialog: MatDialog,
-		private snackBar: MatSnackBar
+		private dialog: MatDialog
 	) {
 	}
 	public ngOnInit(): void {
@@ -115,14 +114,10 @@ export class CompaniesComponent implements OnInit, OnDestroy {
 			switchMap(email => {
 				if (email) {
 					return this.companiesDataService.sendInviteEmail(item.id, email).pipe(
-						tap(() =>
-							this.snackBar.open('Mail sent successfully', null, {
-								panelClass: 'app-notification-success',
-								duration: 2000
-							})
-						)
+						tap(() => this.notification.success('notifications.emailSent'))
 					);
 				}
+				return of(null);
 			})
 		).subscribe();
 	}
@@ -160,12 +155,6 @@ export class CompaniesComponent implements OnInit, OnDestroy {
 				this.tableConfig$ = this.tableService.getTableConfig();
 				this.dataList$ = of(data.content);
 				this.cdr.detectChanges();
-				if (this.filterForm.dirty) {
-					this.snackBar.open(`Search results loaded successfully. Total elements: ${data.totalElements}`, null, {
-						panelClass: 'app-notification-success',
-						duration: 1000
-					});
-				}
 			});
 	}
 }

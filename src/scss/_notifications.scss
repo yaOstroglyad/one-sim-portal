@@ -1,0 +1,82 @@
+// ==============================================
+// NOTIFICATION STYLES
+// Unified notification styling for MatSnackBar
+// ==============================================
+
+@use "sass:map";
+@use "./variables" as vars;
+
+// ==============================================
+// NOTIFICATION PANEL CLASSES
+// ==============================================
+
+// Success notification (green)
+.app-notification-success {
+  --mdc-snackbar-container-color: var(--os-color-success);
+  --mdc-snackbar-supporting-text-color: var(--os-color-success-contrast);
+  --mat-snack-bar-button-color: var(--os-color-success-contrast);
+
+  .mat-mdc-snack-bar-label {
+    font-weight: 500;
+  }
+}
+
+// Error notification (red)
+.app-notification-error {
+  --mdc-snackbar-container-color: var(--os-color-danger);
+  --mdc-snackbar-supporting-text-color: var(--os-color-danger-contrast);
+  --mat-snack-bar-button-color: var(--os-color-danger-contrast);
+
+  .mat-mdc-snack-bar-label {
+    font-weight: 500;
+  }
+}
+
+// Warning notification (amber/yellow)
+.app-notification-warning {
+  --mdc-snackbar-container-color: var(--os-color-warning);
+  --mdc-snackbar-supporting-text-color: var(--os-color-warning-contrast);
+  --mat-snack-bar-button-color: var(--os-color-warning-contrast);
+
+  .mat-mdc-snack-bar-label {
+    font-weight: 500;
+  }
+}
+
+// Info notification (cyan/blue)
+.app-notification-info {
+  --mdc-snackbar-container-color: var(--os-color-info);
+  --mdc-snackbar-supporting-text-color: var(--os-color-info-contrast);
+  --mat-snack-bar-button-color: var(--os-color-info-contrast);
+
+  .mat-mdc-snack-bar-label {
+    font-weight: 500;
+  }
+}
+
+// ==============================================
+// COMMON NOTIFICATION STYLES
+// ==============================================
+
+.mat-mdc-snack-bar-container {
+  // Ensure notifications are above other content
+  &.app-notification-success,
+  &.app-notification-error,
+  &.app-notification-warning,
+  &.app-notification-info {
+    margin: map.get(vars.$os-spacing, '4');
+    border-radius: map.get(vars.$os-spacing, '2');
+
+    .mat-mdc-snack-bar-label {
+      font-family: var(--os-font-family);
+      font-size: map.get(vars.$os-font-sizes, 'sm');
+    }
+
+    .mat-mdc-button {
+      font-family: var(--os-font-family);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+}

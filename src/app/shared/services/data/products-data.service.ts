@@ -6,7 +6,6 @@ import { DataService } from '../core';
 import { map } from 'rxjs/operators';
 import { Pagination } from '@shared/models/ui';
 import { CacheHubService, DataType } from '../cache-hub';
-import { handleArrayError, handleEmptyObjectError } from '../../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -23,9 +22,7 @@ export class ProductsDataService extends DataService<Package> {
 	 * @deprecated Use ProductService.getProducts() instead
 	 */
 	list(): Observable<Package[]> {
-		return this.http.get<Package[]>(this.apiUrl).pipe(
-			handleArrayError('fetching products')
-		);
+		return this.http.get<Package[]>(this.apiUrl);
 	}
 
 	/**
@@ -49,8 +46,7 @@ export class ProductsDataService extends DataService<Package> {
 		return this.http.get<Pagination<Package>>('/api/v1/products/query/available', {
 			params: queryParams
 		}).pipe(
-			map(e => e?.content),
-			handleArrayError('fetching filtered products')
+			map(e => e?.content)
 		);
 	}
 
@@ -58,44 +54,34 @@ export class ProductsDataService extends DataService<Package> {
 	 * @deprecated Use ProductService.createProduct() instead
 	 */
 	create(product: any): Observable<any> {
-		return this.http.post<any>(`/api/v1/products/command/create`, product).pipe(
-			handleArrayError('creating product')
-		);
+		return this.http.post<any>(`/api/v1/products/command/create`, product);
 	}
 
 	/**
 	 * @deprecated Use ProductService.updateProduct() instead
 	 */
 	update(product: any): Observable<any> {
-		return this.http.patch<any>(`/api/v1/products/command/update`, product).pipe(
-			handleArrayError('updating product')
-		);
+		return this.http.patch<any>(`/api/v1/products/command/update`, product);
 	}
 
 	/**
 	 * @deprecated Use ProductService.updateProductStatus() instead
 	 */
 	updateStatus(changeStatus: any): Observable<any> {
-		return this.http.patch<any>(`/api/v1/products/command/update-status`, changeStatus).pipe(
-			handleArrayError('updating product status')
-		);
+		return this.http.patch<any>(`/api/v1/products/command/update-status`, changeStatus);
 	}
 
 	/**
 	 * @deprecated This method is deprecated
 	 */
 	getStatuses(): Observable<string[]> {
-		return this.http.get<any>(`/api/v1/products/statuses`).pipe(
-			handleArrayError('fetching product statuses')
-		);
+		return this.http.get<any>(`/api/v1/products/statuses`);
 	}
 
 	getCurrencies(): Observable<string[]> {
 		return this.cacheHub.get(
 			'currencies:all-currencies',
-			() => this.http.get<string[]>(`/api-product/api/v1/esim-product/common/currency`).pipe(
-				handleArrayError('fetching currencies')
-			),
+			() => this.http.get<string[]>(`/api-product/api/v1/esim-product/common/currency`),
 			{
 				dataType: DataType.REFERENCE,
 				ttl: 24 * 60 * 60 * 1000 // 24 hours - currencies don't change often
@@ -160,18 +146,14 @@ export class ProductsDataService extends DataService<Package> {
 	 * @deprecated This method is deprecated
 	 */
 	getProductTemplate(params: any): Observable<any> {
-		return this.http.get<any>(`/api/v1/products/command/template`, {params}).pipe(
-			handleEmptyObjectError('fetching product template')
-		);
+		return this.http.get<any>(`/api/v1/products/command/template`, {params});
 	}
 
 	/**
 	 * @deprecated This method is deprecated
 	 */
 	getParentProducts(): Observable<any> {
-		return this.http.get<any>(`/api/v1/products/query/parent`).pipe(
-			handleEmptyObjectError('fetching parent products')
-		);
+		return this.http.get<any>(`/api/v1/products/query/parent`);
 	}
 
 }

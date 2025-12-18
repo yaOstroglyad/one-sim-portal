@@ -9,12 +9,12 @@ import {
 	ChangeDetectorRef,
 	AfterViewInit,
 	Optional,
-	Inject
+	Inject,
+	inject
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { InvoicesService } from '../invoices.service';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { InvoicingMethod } from '@shared/models/payment';
 
@@ -25,6 +25,7 @@ import { FormGeneratorComponent } from 'src/app/shared/components/form-generator
 import { FormConfig } from 'src/app/shared';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { InvoicesUtilsService } from '../invoices.utils.service';
+import { NotificationService } from '@shared/services/ui/notification.service';
 
 @Component({
 	standalone: true,
@@ -35,7 +36,6 @@ import { InvoicesUtilsService } from '../invoices.utils.service';
     ReactiveFormsModule,
     FormsModule,
     MatDialogModule,
-    MatSnackBarModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -51,6 +51,11 @@ export class EditInvoicesComponent implements OnInit, OnChanges, AfterViewInit {
 	@Output() save = new EventEmitter<void>();
 	@Output() cancel = new EventEmitter<void>();
 
+	private readonly notification = inject(NotificationService);
+	private readonly invoicesService = inject(InvoicesService);
+	private readonly invoicesUtilsService = inject(InvoicesUtilsService);
+	private readonly cdr = inject(ChangeDetectorRef);
+
 	formConfig: FormConfig;
 	invoiceForm: FormGroup; // Public for parent access like region-form
 	loading = false;
@@ -58,10 +63,7 @@ export class EditInvoicesComponent implements OnInit, OnChanges, AfterViewInit {
 
 	constructor(
 		@Optional() public dialogRef: MatDialogRef<EditInvoicesComponent>,
-		@Optional() @Inject(MAT_DIALOG_DATA) private dialogData: InvoicingMethod & { accountId?: string },
-		private invoicesService: InvoicesService,
-		private invoicesUtilsService: InvoicesUtilsService,
-		private cdr: ChangeDetectorRef
+		@Optional() @Inject(MAT_DIALOG_DATA) private dialogData: InvoicingMethod & { accountId?: string }
 	) {
 		// Support dialog mode
 		if (this.dialogData) {
@@ -144,11 +146,14 @@ export class EditInvoicesComponent implements OnInit, OnChanges, AfterViewInit {
 		operation$.subscribe({
 			next: () => {
 				this.loading = false;
+				const messageKey = this.isEditing ? 'notifications.configurationUpdated' : 'notifications.configurationCreated';
+				this.notification.success(messageKey);
 				this.save.emit();
 			},
-			error: (error) => {
+			error: () => {
 				this.loading = false;
-				console.error('Error saving invoice:', error);
+				const messageKey = this.isEditing ? 'errors.configurationUpdateFailed' : 'errors.configurationCreateFailed';
+				this.notification.error(messageKey);
 			}
 		});
 	}

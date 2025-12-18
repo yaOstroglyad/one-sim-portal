@@ -4,7 +4,6 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import {
   GenericRightPanelComponent,
@@ -14,6 +13,7 @@ import {
   TableConfig,
   DeleteConfirmationComponent
 } from '@shared';
+import { NotificationService } from '@shared/services/ui/notification.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -54,7 +54,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
   private roleService = inject(RoleService);
   private tableService = inject(RolesTableService);
   private cdr = inject(ChangeDetectorRef);
-  private snackBar = inject(MatSnackBar);
+  private notification = inject(NotificationService);
 
   @ViewChild('genericTable') genericTable: GenericTableComponent;
 
@@ -130,24 +130,12 @@ export class RoleListComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.error = false;
           this.cdr.detectChanges();
-
-          // Show success message only when filtering (not on initial load)
-          if (this.filterForm.dirty) {
-            this.snackBar.open(`Search results loaded successfully. Total elements: ${data.totalElements}`, null, {
-              panelClass: 'app-notification-success',
-              duration: 1000
-            });
-          }
         },
-        error: (error) => {
-          console.error('Error loading roles:', error);
+        error: () => {
           this.loading = false;
           this.error = true;
           this.roles$ = of([]);
-          this.snackBar.open('Error loading roles', null, {
-            panelClass: 'app-notification-error',
-            duration: 3000
-          });
+          this.notification.error('errors.roleLoadFailed');
           this.cdr.detectChanges();
         }
       });
@@ -217,29 +205,13 @@ export class RoleListComponent implements OnInit, OnDestroy {
     if (this.selectedRole) {
       this.roleService.deleteRole(this.selectedRole.id).subscribe({
         next: () => {
-          this.snackBar.open('Role deleted successfully', null, {
-            panelClass: 'app-notification-success',
-            duration: 2000
-          });
+          this.notification.success('notifications.roleDeleted');
           this.showDeletePanel = false;
           this.selectedRole = null;
           this.onRefresh();
         },
-        error: (error) => {
-          console.error('Error deleting role:', error);
-
-          // Extract meaningful error message from backend response
-          let errorMessage = 'Error deleting role';
-          if (error?.error?.message) {
-            errorMessage = error.error.message;
-          } else if (error?.message) {
-            errorMessage = error.message;
-          }
-
-          this.snackBar.open(errorMessage, null, {
-            panelClass: 'app-notification-error',
-            duration: 4000 // Longer duration for error messages
-          });
+        error: () => {
+          this.notification.error('errors.roleDeleteFailed');
         }
       });
     }
@@ -254,10 +226,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
   }
 
   onRoleSaved(): void {
-    this.snackBar.open('Role saved successfully', null, {
-      panelClass: 'app-notification-success',
-      duration: 2000
-    });
+    this.notification.success('notifications.roleSaved');
     this.onPanelClose();
     this.onRefresh();
   }

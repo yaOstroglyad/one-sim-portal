@@ -6,14 +6,14 @@ import {
   OnInit,
   ViewChild,
   TemplateRef,
-  AfterViewInit
+  AfterViewInit,
+  inject
 } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { BadgeComponent, ButtonDirective, FormControlDirective } from '@coreui/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { IconDirective } from '@coreui/icons-angular';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -26,6 +26,7 @@ import {
   HeaderComponent,
   TableConfig
 } from '@shared';
+import { NotificationService } from '@shared/services/ui/notification.service';
 import { Domain } from '@shared/models/core';
 import { EditDomainNameComponent } from './edit-domain-name/edit-domain-name.component';
 import { EditDomainOwnerComponent } from './edit-domain-owner/edit-domain-owner.component';
@@ -43,7 +44,6 @@ import { CreateDomainComponent } from './create-domain/create-domain.component';
         ButtonDirective,
         IconDirective,
         GenericTableComponent,
-        MatSnackBarModule,
         MatDialogModule,
         MatButtonModule,
         MatMenuModule,
@@ -60,20 +60,16 @@ import { CreateDomainComponent } from './create-domain/create-domain.component';
 export class DomainsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('activeTemplate') activeTemplate: TemplateRef<any>;
 
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly tableService = inject(DomainsTableService);
+  private readonly domainsDataService = inject(DomainsDataService);
+  private readonly dialog = inject(MatDialog);
+  private readonly notification = inject(NotificationService);
+
   private unsubscribe$ = new Subject<void>();
   public tableConfig$: BehaviorSubject<TableConfig>;
   public dataList$: Observable<Domain[]>;
   public filterForm: FormGroup;
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private tableService: DomainsTableService,
-    private domainsDataService: DomainsDataService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private translateService: TranslateService
-  ) {
-  }
 
   public ngOnInit(): void {
     this.initFormControls();
@@ -124,10 +120,7 @@ export class DomainsComponent implements OnInit, OnDestroy, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadData();
-        this.snackBar.open(this.translateService.instant('domains.domainCreatedSuccess'), null, {
-          panelClass: 'app-notification-success',
-          duration: 3000
-        });
+        this.notification.success('notifications.domainCreated');
       }
     });
   }
@@ -144,10 +137,7 @@ export class DomainsComponent implements OnInit, OnDestroy, AfterViewInit {
       if (result) {
         this.domainsDataService.updateDomainName(result).subscribe(() => {
           this.loadData();
-          this.snackBar.open(this.translateService.instant('domains.domainNameUpdatedSuccess'), null, {
-            panelClass: 'app-notification-success',
-            duration: 3000
-          });
+          this.notification.success('notifications.domainNameUpdated');
         });
       }
     });
@@ -165,10 +155,7 @@ export class DomainsComponent implements OnInit, OnDestroy, AfterViewInit {
       if (result) {
         this.domainsDataService.updateDomainOwner(result).subscribe(() => {
           this.loadData();
-          this.snackBar.open(this.translateService.instant('domains.domainOwnerUpdatedSuccess'), null, {
-            panelClass: 'app-notification-success',
-            duration: 3000
-          });
+          this.notification.success('notifications.domainOwnerUpdated');
         });
       }
     });
@@ -177,11 +164,8 @@ export class DomainsComponent implements OnInit, OnDestroy, AfterViewInit {
   public changeDomainState(domain: Domain): void {
     this.domainsDataService.changeDomainState(domain.id, !domain.active).subscribe(() => {
       this.loadData();
-      const state = domain.active ? 'deactivated' : 'activated';
-      this.snackBar.open(this.translateService.instant('domains.domainStateUpdatedSuccess', { state }), null, {
-        panelClass: 'app-notification-success',
-        duration: 3000
-      });
+      const notificationKey = domain.active ? 'notifications.domainDeactivated' : 'notifications.domainActivated';
+      this.notification.success(notificationKey);
     });
   }
 
@@ -218,12 +202,6 @@ export class DomainsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.tableConfig$ = this.tableService.getTableConfig();
         this.dataList$ = of(data.content);
         this.cdr.detectChanges();
-        if (this.filterForm.dirty) {
-          this.snackBar.open(`Search results loaded successfully. Total elements: ${data.totalElements}`, null, {
-            panelClass: 'app-notification-success',
-            duration: 1000
-          });
-        }
       });
   }
 }

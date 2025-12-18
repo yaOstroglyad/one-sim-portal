@@ -1,13 +1,13 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   SmartFilterConfig,
   SearchableSelectOption,
   CompaniesDataService,
   VALUE_MAPPER_TYPES
 } from '@shared';
+import { NotificationService } from '@shared/services/ui/notification.service';
 
 // Constants
 export const USERS_CONFIG = {
@@ -158,50 +158,32 @@ export class UsersTypeUtils {
 // Notification utilities
 export class UsersNotificationUtils {
   static showSuccessNotification(
-    snackBar: MatSnackBar,
-    message: string,
-    duration = USERS_CONFIG.NOTIFICATION_DURATION
+    notification: NotificationService,
+    messageKey: string
   ): void {
-    snackBar.open(message, null, {
-      panelClass: 'app-notification-success',
-      duration
-    });
+    notification.success(messageKey);
   }
 
   static showSearchResultsNotification(
-    snackBar: MatSnackBar,
-    totalElements: number
+    _notification: NotificationService,
+    _totalElements: number
   ): void {
-    snackBar.open(
-      `Search results loaded successfully. Total elements: ${totalElements}`,
-      null,
-      {
-        panelClass: 'app-notification-success',
-        duration: USERS_CONFIG.SEARCH_NOTIFICATION_DURATION
-      }
-    );
+    // Search results notification removed per error handling architecture
+    // We don't need to notify users about successful data loading
   }
 
   static showErrorNotification(
-    snackBar: MatSnackBar,
-    message: string,
-    duration = USERS_CONFIG.NOTIFICATION_DURATION
+    notification: NotificationService,
+    messageKey: string
   ): void {
-    snackBar.open(message, null, {
-      panelClass: 'app-notification-error',
-      duration
-    });
+    notification.error(messageKey);
   }
 
   static showWarningNotification(
-    snackBar: MatSnackBar,
-    message: string,
-    duration = USERS_CONFIG.NOTIFICATION_DURATION
+    notification: NotificationService,
+    messageKey: string
   ): void {
-    snackBar.open(message, null, {
-      panelClass: 'app-notification-warning',
-      duration
-    });
+    notification.warning(messageKey);
   }
 }
 

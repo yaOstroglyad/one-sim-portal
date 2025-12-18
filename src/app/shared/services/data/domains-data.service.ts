@@ -3,7 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DataService } from '../core';
 import { Domain } from '@shared/models/core';
-import { handleArrayError, handleWithDefault } from '../../utils';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +17,7 @@ export class DomainsDataService extends DataService<Domain> {
   list(): Observable<Domain[]> {
     let params = new HttpParams();
 
-    return this.http.get<Domain[]>(this.apiUrl, {params}).pipe(
-      handleArrayError('fetching domains')
-    );
+    return this.http.get<Domain[]>(this.apiUrl, {params});
   }
 
   paginatedDomains(searchParams: any = {}, page: number = 0, size: number = 20, sort: string[] = []): Observable<any> {
@@ -38,36 +35,22 @@ export class DomainsDataService extends DataService<Domain> {
       }
     });
 
-    return this.http.get<any>('/api/v1/whitelabel/domains/query/all/page', { params }).pipe(
-      handleWithDefault('fetching paginated domains', {
-        totalElements: 0,
-        totalPages: 0,
-        content: []
-      })
-    );
+    return this.http.get<any>('/api/v1/whitelabel/domains/query/all/page', { params });
   }
 
   create(domain: Domain): Observable<any> {
-    return this.http.post<any>(`/api/v1/whitelabel/domains/command/create`, domain).pipe(
-      handleArrayError('creating domain')
-    );
+    return this.http.post<any>(`/api/v1/whitelabel/domains/command/create`, domain);
   }
 
   updateDomainName(domain: { id: string, name: string }): Observable<any> {
-    return this.http.patch<any>(`/api/v1/whitelabel/domains/command/update/name`, domain).pipe(
-      handleArrayError('updating domain name')
-    );
+    return this.http.patch<any>(`/api/v1/whitelabel/domains/command/update/name`, domain);
   }
 
   updateDomainOwner(domain: { id: string, ownerAccountId: string }): Observable<any> {
-    return this.http.patch<any>(`/api/v1/whitelabel/domains/command/update/owner`, domain).pipe(
-      handleArrayError('updating domain owner')
-    );
+    return this.http.patch<any>(`/api/v1/whitelabel/domains/command/update/owner`, domain);
   }
 
   changeDomainState(id: string, isActive: boolean): Observable<any> {
-    return this.http.patch<any>(`/api/v1/whitelabel/domains/command/change/state/${id}?isActive=${isActive}`, {}).pipe(
-      handleArrayError('changing domain state')
-    );
+    return this.http.patch<any>(`/api/v1/whitelabel/domains/command/change/state/${id}?isActive=${isActive}`, {});
   }
 }

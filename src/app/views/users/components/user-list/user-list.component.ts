@@ -13,7 +13,6 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,6 +36,7 @@ import {
 	TableConfig,
 	UserRoleService
 } from '@shared';
+import { NotificationService } from '@shared/services/ui/notification.service';
 import { UserService, UsersTableService } from '../../services';
 import { User } from '../../models';
 import { UserFormComponent } from '../user-form/user-form.component';
@@ -73,7 +73,7 @@ import { USERS_CONFIG, UsersFilterParams, UsersUtils } from './user-list.utils';
 })
 export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 	private cdr = inject(ChangeDetectorRef);
-	private snackBar = inject(MatSnackBar);
+	private notification = inject(NotificationService);
 	private userService = inject(UserService);
 	private roleService = inject(RoleService);
 	private authService = inject(AuthService);
@@ -220,12 +220,11 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		this.userService.deleteUser(this.selectedUser.id).subscribe({
 			next: () => {
-				this.showSuccessNotification('User deleted successfully');
+				this.showSuccessNotification('notifications.userDeleted');
 				this.closeAllPanelsAndRefresh();
 			},
-			error: (error) => {
-				console.error('Error deleting user:', error);
-				this.showErrorNotification('Error deleting user');
+			error: () => {
+				this.showErrorNotification('errors.userDeleteFailed');
 			}
 		});
 	}
@@ -240,24 +239,24 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	onUserSaved(): void {
-		this.showSuccessNotification('User saved successfully');
+		this.showSuccessNotification('notifications.userSaved');
 		this.closeAllPanelsAndRefresh();
 	}
 
-	private showSuccessNotification(message: string): void {
-		UsersUtils.Notification.showSuccessNotification(this.snackBar, message);
+	private showSuccessNotification(messageKey: string): void {
+		UsersUtils.Notification.showSuccessNotification(this.notification, messageKey);
 	}
 
-	private showErrorNotification(message: string): void {
-		UsersUtils.Notification.showErrorNotification(this.snackBar, message);
+	private showErrorNotification(messageKey: string): void {
+		UsersUtils.Notification.showErrorNotification(this.notification, messageKey);
 	}
 
-	private showWarningNotification(message: string): void {
-		UsersUtils.Notification.showWarningNotification(this.snackBar, message);
+	private showWarningNotification(messageKey: string): void {
+		UsersUtils.Notification.showWarningNotification(this.notification, messageKey);
 	}
 
 	private showSearchResultsNotification(count: number): void {
-		UsersUtils.Notification.showSearchResultsNotification(this.snackBar, count);
+		UsersUtils.Notification.showSearchResultsNotification(this.notification, count);
 	}
 
 	canManageRoles(): boolean {
@@ -278,7 +277,7 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	assignRoles(user: User): void {
 		if (this.isSelfUser(user) && !this.canManageSelfRoles()) {
-			this.showWarningNotification('You cannot manage your own roles');
+			this.showWarningNotification('errors.cannotManageOwnRoles');
 			return;
 		}
 		this.selectedUser = user;
@@ -289,7 +288,7 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	removeRoles(user: User): void {
 		if (this.isSelfUser(user) && !this.canManageSelfRoles()) {
-			this.showWarningNotification('You cannot manage your own roles');
+			this.showWarningNotification('errors.cannotManageOwnRoles');
 			return;
 		}
 		this.selectedUser = user;
@@ -330,7 +329,7 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		const selectedRoleIds = this.assignRoleForm.getSelectedRoleIds();
 		if (selectedRoleIds.length === 0) {
-			this.showWarningNotification('Please select at least one role');
+			this.showWarningNotification('errors.selectAtLeastOneRole');
 			return;
 		}
 
@@ -338,12 +337,11 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 			takeUntil(this.unsubscribe$)
 		).subscribe({
 			next: () => {
-				this.showSuccessNotification('Roles assigned successfully');
+				this.showSuccessNotification('notifications.rolesAssigned');
 				this.closeAllPanelsAndRefresh();
 			},
-			error: (error) => {
-				console.error('Error assigning roles:', error);
-				this.showErrorNotification('Error assigning roles');
+			error: () => {
+				this.showErrorNotification('errors.rolesAssignFailed');
 			}
 		});
 	}
@@ -356,7 +354,7 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		const selectedRoleIds = this.removeRoleForm.getSelectedRoleIds();
 		if (selectedRoleIds.length === 0) {
-			this.showWarningNotification('Please select at least one role');
+			this.showWarningNotification('errors.selectAtLeastOneRole');
 			return;
 		}
 
@@ -364,12 +362,11 @@ export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
 			takeUntil(this.unsubscribe$)
 		).subscribe({
 			next: () => {
-				this.showSuccessNotification('Roles removed successfully');
+				this.showSuccessNotification('notifications.rolesRemoved');
 				this.closeAllPanelsAndRefresh();
 			},
-			error: (error) => {
-				console.error('Error removing roles:', error);
-				this.showErrorNotification('Error removing roles');
+			error: () => {
+				this.showErrorNotification('errors.rolesRemoveFailed');
 			}
 		});
 	}

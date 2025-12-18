@@ -168,11 +168,23 @@ export class AuthService {
 		}
 	}
 
-	public clearAndLogout(): void {
+	/**
+	 * Clear authentication state without navigation.
+	 * Use this when you need to handle navigation separately (e.g., in interceptors).
+	 */
+	public clearAuth(): void {
 		clearInterval(this.reLoginTimeout);
 		this.deleteLoginResponse();
 		this.permissions = [];
 		this.permissions$ = null;
+	}
+
+	/**
+	 * Clear authentication state and navigate to login page.
+	 * Use this for explicit logout actions.
+	 */
+	public clearAndLogout(): void {
+		this.clearAuth();
 		this.router.navigate(['/login']);
 	}
 }

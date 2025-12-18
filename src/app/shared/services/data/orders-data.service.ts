@@ -3,9 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DataService } from '../core';
 import { AvailableOrders, Order } from '@shared/models/payment';
-import { ordersMock } from '../../../views/orders/orders-mock';
 import { CacheHubService, DataType } from '../cache-hub';
-import { handleArrayError, handleWithDefault } from '../../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -21,9 +19,7 @@ export class OrdersDataService extends DataService<Order> {
 	list(): Observable<Order[]> {
 		return this.cacheHub.get(
 			'orders:all-orders',
-			() => this.http.get<Order[]>(this.apiUrl).pipe(
-				handleWithDefault('fetching orders', ordersMock)
-			),
+			() => this.http.get<Order[]>(this.apiUrl),
 			{
 				dataType: DataType.BUSINESS,
 				ttl: 5 * 60 * 1000 // 5 minutes - orders change frequently
@@ -32,14 +28,10 @@ export class OrdersDataService extends DataService<Order> {
 	}
 
 	availableOrders(): Observable<AvailableOrders[]> {
-		return this.http.get<AvailableOrders[]>('/api/v1/inventory/query/orders/available').pipe(
-			handleArrayError('fetching available orders')
-		);
+		return this.http.get<AvailableOrders[]>('/api/v1/inventory/query/orders/available');
 	}
 
 	updateDescription(param: any): Observable<any> {
-		return this.http.patch<any>(`/api/v1/inventory/command/orders/update`, param).pipe(
-			handleArrayError('updating order description')
-		);
+		return this.http.patch<any>(`/api/v1/inventory/command/orders/update`, param);
 	}
 }

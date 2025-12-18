@@ -6,20 +6,7 @@
 import { Observable, of, OperatorFunction } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-
-// ============================================================================
-// TYPES & INTERFACES
-// ============================================================================
-
-/**
- * Generic error object
- */
-export interface ApiError {
-  code: string;
-  message: string;
-  details?: any;
-  timestamp: Date;
-}
+import { ApiError } from '@models';
 
 /**
  * Generic API response wrapper
@@ -49,11 +36,16 @@ export const HTTP_RETRY_CONFIG = {
  * HTTP status code to user-friendly message mapping
  */
 const ERROR_MESSAGES: Record<number, string> = {
-  401: 'You are not authorized to view this data.',
-  403: 'You do not have permission to access this data.',
-  404: 'The requested data was not found.',
-  500: 'Unexpected error occurred. Please try again later.',
-  503: 'Service temporarily unavailable. Please try again later.'
+  0: 'No internet connection. Please check your network.',
+  400: 'Invalid request. Please check your input.',
+  401: 'Session expired. Please log in again.',
+  403: 'You don\'t have permission to access this resource.',
+  404: 'The requested resource was not found.',
+  409: 'This operation conflicts with existing data.',
+  422: 'Validation failed. Please check your input.',
+  500: 'Server error. Please try again later.',
+  503: 'Service temporarily unavailable. Please try again later.',
+  504: 'Request timed out. Please try again.'
 };
 
 // ============================================================================
@@ -117,12 +109,12 @@ export function transformHttpError(error: HttpErrorResponse): ApiError {
   // Determine code
   const code = hasBackendCode
     ? String(backendError.code)
-    : (statusCode !== 0 ? String(statusCode) : 'UNKNOWN_ERROR');
+    : (statusCode !== 0 ? String(statusCode) : 'NETWORK_ERROR');
 
   // Determine message (priority: backend message > status message > default)
   const message = (hasBackendCode && typeof backendError.message === 'string' && backendError.message)
     ? backendError.message
-    : (statusCode !== 0 ? getErrorMessage(statusCode) : 'Unexpected error occurred.');
+    : getErrorMessage(statusCode);
 
   return createApiError(code, message, error.error);
 }

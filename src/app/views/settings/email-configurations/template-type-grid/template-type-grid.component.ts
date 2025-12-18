@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild, TemplateRef, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild, TemplateRef, OnChanges, SimpleChanges, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import {
@@ -10,7 +10,7 @@ import {
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TemplateTypeGridService } from './template-type-grid.service';
 import { EditEmailTemplateComponent } from '../edit-email-template/edit-email-template.component';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from '@shared/services/ui/notification.service';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +32,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
-    MatSnackBarModule,
     TranslateModule,
     GenericTableComponent,
     ReactiveFormsModule,
@@ -46,18 +45,16 @@ export class TemplateTypeGridComponent implements OnInit, OnChanges, OnDestroy {
   @Input() type: string;
   @Input() ownerAccountId?: string;
 
+  private readonly whiteLabelService = inject(WhiteLabelDataService);
+  private readonly tableService = inject(TemplateTypeGridService);
+  private readonly dialog = inject(MatDialog);
+  private readonly notification = inject(NotificationService);
+
   public tableConfig$: BehaviorSubject<TableConfig>;
   public dataList$: Observable<EmailTemplate[]>;
 
   private reloadTrigger$ = new BehaviorSubject<void>(undefined);
   private destroy$ = new Subject<void>();
-
-  constructor(
-    private whiteLabelService: WhiteLabelDataService,
-    private tableService: TemplateTypeGridService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar
-  ) {}
 
   ngOnInit(): void {
     this.tableService.isPrimaryTemplate = this.isPrimaryTemplate;
@@ -96,10 +93,7 @@ export class TemplateTypeGridComponent implements OnInit, OnChanges, OnDestroy {
       if (result) {
         this.whiteLabelService.createEmailTemplateIntegration(result).subscribe(() => {
           this.reloadTrigger$.next();
-          this.snackBar.open('Template created successfully', null, {
-            duration: 2000,
-            panelClass: 'app-notification-success'
-          });
+          this.notification.success('notifications.templateCreated');
         });
       }
     });
@@ -119,10 +113,7 @@ export class TemplateTypeGridComponent implements OnInit, OnChanges, OnDestroy {
       if (result) {
         this.whiteLabelService.updateEmailTemplateIntegration(result).subscribe(() => {
           this.reloadTrigger$.next();
-          this.snackBar.open('Template updated successfully', null, {
-            duration: 2000,
-            panelClass: 'app-notification-success'
-          });
+          this.notification.success('notifications.templateUpdated');
         });
       }
     });
@@ -131,10 +122,7 @@ export class TemplateTypeGridComponent implements OnInit, OnChanges, OnDestroy {
   public setAsPrimary(template: EmailTemplate): void {
     this.whiteLabelService.setPrimaryEmailTemplateIntegration(template.id).subscribe(() => {
       this.reloadTrigger$.next();
-      this.snackBar.open('Template set as primary successfully', null, {
-        duration: 2000,
-        panelClass: 'app-notification-success'
-      });
+      this.notification.success('notifications.changesSaved');
     });
   }
 }

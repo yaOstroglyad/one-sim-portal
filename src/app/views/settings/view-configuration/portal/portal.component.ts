@@ -2,7 +2,8 @@ import {
 	ChangeDetectorRef,
 	Component,
 	OnInit,
-	ViewChild
+	ViewChild,
+	inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -15,10 +16,6 @@ import {
 	getPortalFormConfig,
 	getPortalSettingsRequest
 } from './portal.utils';
-import {
-	MatSnackBar,
-	MatSnackBarModule
-} from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -34,6 +31,7 @@ import {
 } from 'rxjs/operators';
 import { FormConfig } from 'src/app/shared';
 import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
+import { NotificationService } from '@shared/services/ui/notification.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { VisualService } from 'src/app/shared/services/ui/visual.service';
 
@@ -47,7 +45,6 @@ import { VisualService } from 'src/app/shared/services/ui/visual.service';
         FormGeneratorComponent,
         PortalPreviewComponent,
         TranslateModule,
-        MatSnackBarModule,
         MatButtonModule,
         MatDividerModule,
         MatFormFieldModule
@@ -56,22 +53,19 @@ import { VisualService } from 'src/app/shared/services/ui/visual.service';
 export class PortalComponent implements OnInit {
 	@ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;
 
-	private readonly isAdmin: boolean;
+	private readonly notification = inject(NotificationService);
+	private readonly viewConfigService = inject(ViewConfigurationService);
+	private readonly authService = inject(AuthService);
+	private readonly accountsService = inject(AccountsDataService);
+	private readonly visualService = inject(VisualService);
+	private readonly cdr = inject(ChangeDetectorRef);
+
+	private readonly isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 
 	public formConfig$: Observable<FormConfig>;
 	public isFormValid = false;
 	public formValues: any = {};
-  public defaultFormConfig: FormConfig;
-  constructor(
-		private snackBar: MatSnackBar,
-		private viewConfigService: ViewConfigurationService,
-		private authService: AuthService,
-		private accountsService: AccountsDataService,
-		private visualService: VisualService,
-		private cdr: ChangeDetectorRef
-	) {
-		this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
-	}
+	public defaultFormConfig: FormConfig;
 
   ngOnInit() {
     const defaultVC = this.viewConfigService.getDefaultConfig('admin portal');
@@ -111,13 +105,13 @@ export class PortalComponent implements OnInit {
 
 		this.viewConfigService.save(payload).subscribe({
 			next: () => {
-				this.snackBar.open('Settings saved successfully', 'Close', {
-					duration: 3000,
-					panelClass: 'app-notification-success'
-				});
+				this.notification.success('notifications.settingsSaved');
 				if (!this.isAdmin) {
 					this.visualService.applyVisualConfig({...values, language: 'en'});
 				}
+			},
+			error: () => {
+				this.notification.error('errors.settingsSaveFailed');
 			}
 		});
 	}

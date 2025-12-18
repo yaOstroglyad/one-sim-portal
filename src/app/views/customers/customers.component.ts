@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
-import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -54,7 +53,6 @@ interface FilterFieldConfig {
         MatButtonModule,
         MatMenuModule,
         MatIconModule,
-        MatSnackBarModule,
         SearchableSelectComponent,
         SmartFilterHeaderComponent,
         FormControlDirective,
@@ -74,7 +72,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
 	private companiesDataService = inject(CompaniesDataService);
 	private router = inject(Router);
 	private dialog = inject(MatDialog);
-	private snackBar = inject(MatSnackBar);
 	private authService = inject(AuthService);
 
 	protected readonly CustomerType = CustomerType;
@@ -161,13 +158,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
 				this.tableConfig$ = this.tableService.getTableConfig();
 				this.dataList$ = of(processedData.content);
 				this.cdr.detectChanges();
-
-				if (this.filterForm.dirty) {
-					CustomersUtils.Notification.showSearchResultsNotification(
-						this.snackBar,
-						processedData.totalElements
-					);
-				}
 			});
 	}
 

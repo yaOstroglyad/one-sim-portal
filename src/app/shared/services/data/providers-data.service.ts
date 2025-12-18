@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Provider } from '@shared/models/business';
 import { DataService } from '../core';
-import { handleArrayError } from '../../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,8 +15,6 @@ export class ProvidersDataService extends DataService<Provider> {
 	}
 
 	list(): Observable<Provider[]> {
-		return this.http.get<Provider[]>(this.apiUrl).pipe(
-			handleArrayError('fetching service providers')
-		);
+		return this.http.get<Provider[]>(this.apiUrl);
 	}
 }

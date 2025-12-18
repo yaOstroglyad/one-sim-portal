@@ -1,9 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, retry, shareReplay } from 'rxjs/operators';
+import { retry, shareReplay } from 'rxjs/operators';
 
-import { handleObjectError } from '@shared/utils';
 import { TrafficUsagePeriodResponse } from '../models/traffic.types';
 import { DashboardStateService } from './dashboard-state.service';
 import { DASHBOARD_API_CONFIG, HTTP_RETRY_CONFIG } from '../utils';
@@ -42,8 +41,7 @@ export class TrafficDataService {
       .get<TrafficUsagePeriodResponse>(DASHBOARD_API_CONFIG.endpoints.traffic, { params })
       .pipe(
         retry(HTTP_RETRY_CONFIG.retries),
-        shareReplay(HTTP_RETRY_CONFIG.shareReplay),
-        handleObjectError<TrafficUsagePeriodResponse>('fetching traffic data')
+        shareReplay(HTTP_RETRY_CONFIG.shareReplay)
       );
   }
 }

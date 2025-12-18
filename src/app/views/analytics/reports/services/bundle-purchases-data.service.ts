@@ -1,8 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { handleObjectError } from '@shared/utils';
 import {
   BundlePurchaseFilterParams,
   BundlePurchasesResponse
@@ -34,8 +32,6 @@ export class BundlePurchasesDataService {
       httpParams = httpParams.set('accountId', params.accountId);
     }
 
-    return this.http.get<BundlePurchasesResponse>(this.baseUrl, { params: httpParams }).pipe(
-      handleObjectError<BundlePurchasesResponse>('fetching bundle purchases report')
-    );
+    return this.http.get<BundlePurchasesResponse>(this.baseUrl, { params: httpParams });
   }
 }

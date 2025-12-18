@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RefundableProduct } from '@shared/models/product';
 import { SelectOption } from '@shared/models';
-import { handleArrayError } from '@shared/utils';
 import { formatDate } from '@angular/common';
 
 export interface RefundParams {
@@ -34,8 +33,7 @@ export class RefundProductService {
 					value: product,
 					displayValue: this.formatDisplayValue(product)
 				}))
-			),
-			handleArrayError('RefundProductService.list')
+			)
 		);
 	}
 
