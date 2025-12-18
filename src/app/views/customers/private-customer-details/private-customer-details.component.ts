@@ -231,7 +231,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	public sendRegistrationEmail(subscriber: Subscriber): void {
 		const data = { id: subscriber.id };
 		const dialogRef = this.dialog.open(SendRegistrationEmailComponent, {
-			width: '400px',
+			width: '600px',
 			data
 		});
 

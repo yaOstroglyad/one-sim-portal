@@ -1,36 +1,14 @@
-// Global dialog styles are now available from src/scss/_vendor-overrides.scss
-// Send registration email dialog specific styles
-
-@use "../../../../../scss/variables" as vars;
-@use "sass:map";
-
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: map.get(vars.$os-spacing, '5');
-  color: var(--os-color-medium-text);
-  font-size: map.get(vars.$os-font-sizes, 'sm');
-  
-  p {
-    margin: 0;
-  }
+.dialog-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
 }
 
-// Improve info strip spacing in dialog
-app-info-strip {
+.dialog-content {
   display: block;
-  margin-bottom: map.get(vars.$os-spacing, '4');
+  padding-top: 20px;
 }
 
-// Form generator spacing in dialog
-app-form-generator {
-  display: block;
-}
-
-// Dark theme support
-[data-coreui-theme="dark"] {
-  .loading-container {
-    color: var(--os-color-light-text);
-  }
+.dialog-footer {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 10px;
 }

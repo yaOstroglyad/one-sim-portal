@@ -1,106 +1,105 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FieldType, FormConfig, FormGeneratorComponent, SubscriberDataService, PurchasedProductsDataService, InfoStripComponent } from '@shared';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslateModule } from '@ngx-translate/core';
+import { FormConfig } from '@shared/models';
+import { FormGeneratorComponent } from '@shared/components/form-generator/form-generator.component';
 import { MatButtonModule } from '@angular/material/button';
+import { getRegistrationEmailFormConfig } from './send-registration-email.utils';
+import { SendRegistrationEmailService } from './send-registration-email.service';
+import { InfoStripComponent } from '@shared/components/info-strip/info-strip.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoaderComponent } from '@shared/components/loader/loader.component';
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
-    standalone: true,
-    selector: 'app-send-registration-email',
-    templateUrl: './send-registration-email.component.html',
-    styleUrls: ['./send-registration-email.component.scss'],
-    imports: [FormGeneratorComponent, MatDialogModule, TranslateModule, ReactiveFormsModule, MatButtonModule, InfoStripComponent]
+	standalone: true,
+	selector: 'app-send-registration-email',
+	templateUrl: './send-registration-email.component.html',
+	imports: [
+		MatDialogModule,
+		FormGeneratorComponent,
+		MatButtonModule,
+		InfoStripComponent,
+		LoaderComponent,
+		TranslateModule
+	],
+	styleUrls: ['./send-registration-email.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SendRegistrationEmailComponent implements OnInit {
-  formConfig: FormConfig;
-  form: FormGroup;
-  isFormValid: boolean = false;
-  hasActiveProducts: boolean = false;
-  isLoadingProducts: boolean = true;
+export class SendRegistrationEmailComponent {
+	private readonly destroyRef = inject(DestroyRef);
+	private readonly sendRegistrationEmailService = inject(SendRegistrationEmailService);
+	private readonly dialogRef = inject(MatDialogRef<SendRegistrationEmailComponent>);
+	private readonly snackBar = inject(MatSnackBar);
+	private readonly data = inject<{ id: string }>(MAT_DIALOG_DATA);
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { id: string },
-    public dialogRef: MatDialogRef<SendRegistrationEmailComponent>,
-    private snackBar: MatSnackBar,
-    private subscriberDataService: SubscriberDataService,
-    private purchasedProductsDataService: PurchasedProductsDataService
-  ) {}
+	readonly loading = signal(true);
+	readonly hasActiveProducts = signal(false);
+	readonly formConfig: FormConfig;
 
-  ngOnInit(): void {
-    this.checkActiveProducts();
-  }
+	private form: FormGroup | null = null;
+	readonly isFormValid = signal(false);
 
-  private checkActiveProducts(): void {
-    this.purchasedProductsDataService.getPurchasedProducts({ subscriberId: this.data.id, isActive: true }).subscribe({
-      next: (products) => {
-        this.hasActiveProducts = products && products.length > 0;
-        this.isLoadingProducts = false;
+	constructor() {
+		this.formConfig = getRegistrationEmailFormConfig(this.data.id);
+		this.checkActiveProducts();
+	}
 
-        if (this.hasActiveProducts) {
-          this.formConfig = this.getFormConfig();
-        }
-      },
-      error: () => {
-        this.hasActiveProducts = false;
-        this.isLoadingProducts = false;
-      }
-    });
-  }
+	private checkActiveProducts(): void {
+		this.sendRegistrationEmailService.checkActiveProducts(this.data.id).pipe(
+			takeUntilDestroyed(this.destroyRef)
+		).subscribe({
+			next: (hasProducts: boolean) => {
+				this.hasActiveProducts.set(hasProducts);
+				this.loading.set(false);
+			},
+			error: () => {
+				this.hasActiveProducts.set(false);
+				this.loading.set(false);
+			}
+		});
+	}
 
-  getFormConfig(): FormConfig {
-    return {
-      fields: [
-        {
-          type: FieldType.uuid,
-          name: 'subscriberId',
-          label: 'ID',
-          value: this.data.id,
-          invisible: true
-        },
-        {
-          type: FieldType.email,
-          name: 'email',
-          label: 'Email',
-          validators: [Validators.required, Validators.email],
-          placeholder: 'Enter email'
-        }
-      ]
-    };
-  }
+	handleFormChanges(form: FormGroup): void {
+		this.form = form;
+		this.isFormValid.set(form.valid);
+	}
 
-  handleFormChanges(form: FormGroup): void {
-    this.form = form;
-    this.isFormValid = form.valid;
-  }
+	close(): void {
+		this.dialogRef.close();
+	}
 
-  close(): void {
-    this.dialogRef.close();
-  }
+	submit(): void {
+		if (!this.form?.valid) return;
 
-  submit(): void {
-    if (this.isFormValid) {
-      const email = this.form.value.email;
-      this.sendEmail(this.data.id, email);
-    }
-  }
+		this.loading.set(true);
+		const email = this.form.get('email')?.value;
 
-  sendEmail(subscriberId: string, email: string): void {
-    this.subscriberDataService.sendRegistrationEmail(subscriberId, email).subscribe({
-      next: () => {
-        this.snackBar.open('Registration email sent successfully', null, {
-          panelClass: 'app-notification-success',
-          duration: 3000
-        });
-        this.close();
-      },
-      error: (error) => {
-        const errorMessage = error?.error?.message || 'An error occurred while sending registration email.';
-        this.snackBar.open(errorMessage, null, {
-          panelClass: 'app-notification-error',
-          duration: 3000
-        });
-      }
-    });
-  }
+		this.sendRegistrationEmailService.sendEmail({
+			subscriberId: this.data.id,
+			email
+		}).pipe(
+			takeUntilDestroyed(this.destroyRef)
+		).subscribe({
+			next: () => {
+				this.snackBar.open('Registration email sent successfully', null, {
+					panelClass: 'app-notification-success',
+					duration: 3000
+				});
+			},
+			error: (error) => {
+				this.loading.set(false);
+				const errorMessage = error?.error?.message || 'An error occurred while sending registration email.';
+				this.snackBar.open(errorMessage, null, {
+					panelClass: 'app-notification-error',
+					duration: 3000
+				});
+			},
+			complete: () => {
+				this.loading.set(false);
+				this.dialogRef.close(true);
+			}
+		});
+	}
 }

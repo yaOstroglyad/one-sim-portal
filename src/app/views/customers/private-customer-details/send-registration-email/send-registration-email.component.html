@@ -1,33 +1,22 @@
 <h2 mat-dialog-title class="dialog-header">{{ 'send-registration-email.title' | translate }}</h2>
 <mat-dialog-content class="mat-typography dialog-content">
-
-  @if (isLoadingProducts) {
-    <div class="loading-container">
-      <p>Loading...</p>
-    </div>
-  }
-
-  @if (!isLoadingProducts && !hasActiveProducts) {
-    <app-info-strip
-      [text]="'send-registration-email.noActivePackages' | translate">
-    </app-info-strip>
-  }
-
-  @if (!isLoadingProducts && hasActiveProducts) {
-    <app-form-generator
-      [config]="formConfig"
-    (formChanges)="handleFormChanges($event)"></app-form-generator>
-  }
+    @if (!loading()) {
+        @if (hasActiveProducts()) {
+            <app-form-generator [config]="formConfig"
+                                (formChanges)="handleFormChanges($event)"></app-form-generator>
+        }
+        @if (!hasActiveProducts()) {
+            <app-info-strip [text]="'send-registration-email.noActivePackages' | translate"></app-info-strip>
+        }
+    } @else {
+        <app-loader></app-loader>
+    }
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-footer" align="end">
-
-  <button mat-button (click)="close()">{{ 'common.cancel' | translate }}</button>
-  @if (hasActiveProducts) {
-    <button
-      mat-button
-      color="primary"
-      [disabled]="!isFormValid"
-      (click)="submit()">{{ 'send-registration-email.submit' | translate }}
+    <button mat-button (click)="close()">{{ 'common.cancel' | translate }}</button>
+    <button mat-button
+            color="primary"
+            [disabled]="!isFormValid() || loading()"
+            (click)="submit()">{{ 'send-registration-email.submit' | translate }}
     </button>
-  }
 </mat-dialog-actions>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -39,8 +39,8 @@ export class RefundProductComponent {
 	readonly hasProducts = signal(false);
 	readonly formConfig: FormConfig;
 
-	private readonly form = signal<FormGroup | null>(null);
-	readonly isFormValid = computed(() => this.form()?.valid ?? false);
+	private form: FormGroup | null = null;
+	readonly isFormValid = signal(false);
 
 	constructor() {
 		const products$ = this.refundProductService.list({ simId: this.data.id }).pipe(
@@ -56,7 +56,8 @@ export class RefundProductComponent {
 	}
 
 	handleFormChanges(form: FormGroup): void {
-		this.form.set(form);
+		this.form = form;
+		this.isFormValid.set(form.valid);
 	}
 
 	close(): void {
@@ -64,11 +65,10 @@ export class RefundProductComponent {
 	}
 
 	submit(): void {
-		const form = this.form();
-		if (!form?.valid) return;
+		if (!this.form?.valid) return;
 
 		this.loading.set(true);
-		const product = form.get('product')?.value;
+		const product = this.form.get('product')?.value;
 
 		this.refundProductService.refund(product.id).pipe(
 			takeUntilDestroyed(this.destroyRef)
