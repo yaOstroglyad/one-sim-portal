@@ -1,61 +1,62 @@
-import { Component, inject, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { FormConfig } from '@shared/models';
+import { FormConfig, SelectOption } from '@shared/models';
 import { FormGeneratorComponent } from '../form-generator/form-generator.component';
 import { MatButtonModule } from '@angular/material/button';
 import { getRefundFormConfig } from './refund-product.utils';
 import { RefundProductService } from './refund-product.service';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { Observable } from 'rxjs';
-
+import { InfoStripComponent } from '../info-strip/info-strip.component';
+import { shareReplay, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoaderComponent } from '../loader/loader.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-    standalone: true,
-    selector: 'app-refund-product',
-    templateUrl: './refund-product.component.html',
-    imports: [
-    MatDialogModule,
-    FormGeneratorComponent,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatIconModule,
-    LoaderComponent,
-    TranslateModule
-],
-    styleUrls: ['./refund-product.component.scss']
+	standalone: true,
+	selector: 'app-refund-product',
+	templateUrl: './refund-product.component.html',
+	imports: [
+		MatDialogModule,
+		FormGeneratorComponent,
+		MatButtonModule,
+		InfoStripComponent,
+		LoaderComponent,
+		TranslateModule
+	],
+	styleUrls: ['./refund-product.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RefundProductComponent implements OnInit {
-	refundProductService = inject(RefundProductService);
-	formConfig: FormConfig;
-	form: FormGroup;
-	isFormValid: boolean;
-	refundData: any;
-	loading = true;
+export class RefundProductComponent {
+	private readonly destroyRef = inject(DestroyRef);
+	private readonly refundProductService = inject(RefundProductService);
+	private readonly dialogRef = inject(MatDialogRef<RefundProductComponent>);
+	private readonly snackBar = inject(MatSnackBar);
+	private readonly data = inject<{ id: string }>(MAT_DIALOG_DATA);
 
-	constructor(
-		@Inject(MAT_DIALOG_DATA) public data: any,
-		public dialogRef: MatDialogRef<RefundProductComponent>,
-		private snackBar: MatSnackBar
-	) {
-	}
+	readonly loading = signal(true);
+	readonly hasProducts = signal(false);
+	readonly formConfig: FormConfig;
 
-	ngOnInit(): void {
-		const refundData$: Observable<any> = this.refundProductService.list({simId: this.data.id});
-		refundData$.subscribe(data => {
-			this.refundData = data;
-			this.loading = false;
-		});
-		this.formConfig = getRefundFormConfig(refundData$);
+	private readonly form = signal<FormGroup | null>(null);
+	readonly isFormValid = computed(() => this.form()?.valid ?? false);
+
+	constructor() {
+		const products$ = this.refundProductService.list({ simId: this.data.id }).pipe(
+			tap((products: SelectOption[]) => {
+				this.hasProducts.set(products.length > 0);
+				this.loading.set(false);
+			}),
+			shareReplay(1)
+		);
+
+		products$.pipe(takeUntilDestroyed()).subscribe();
+		this.formConfig = getRefundFormConfig(products$);
 	}
 
 	handleFormChanges(form: FormGroup): void {
-		this.form = form;
-		this.isFormValid = form.valid;
+		this.form.set(form);
 	}
 
 	close(): void {
@@ -63,30 +64,33 @@ export class RefundProductComponent implements OnInit {
 	}
 
 	submit(): void {
-		if (this.isFormValid) {
-			this.loading = true;
-			const product = this.form.get('product').value;
-			this.refundProductService.refund(product.id).subscribe({
-				next: (response) => {
-					this.snackBar.open(`Transaction Status: ${response.transactionStatus}`, null, {
-						panelClass: 'app-notification-success',
-						duration: 3000
-					});
-				},
-				error: (error) => {
-					const errorMessage = error?.error?.message || 'An error occurred during the refund process.';
-					this.snackBar.open(errorMessage, null, {
-						panelClass: 'app-notification-error',
-						duration: 3000
-					});
-				},
-				complete: () => {
-					this.loading = false;
-					this.dialogRef.close();
-				}
-			});
-		} else {
-			console.warn('Form is invalid. Cannot submit.');
-		}
+		const form = this.form();
+		if (!form?.valid) return;
+
+		this.loading.set(true);
+		const product = form.get('product')?.value;
+
+		this.refundProductService.refund(product.id).pipe(
+			takeUntilDestroyed(this.destroyRef)
+		).subscribe({
+			next: (response) => {
+				this.snackBar.open(`Transaction Status: ${response.transactionStatus}`, null, {
+					panelClass: 'app-notification-success',
+					duration: 3000
+				});
+			},
+			error: (error) => {
+				this.loading.set(false);
+				const errorMessage = error?.error?.message || 'An error occurred during the refund process.';
+				this.snackBar.open(errorMessage, null, {
+					panelClass: 'app-notification-error',
+					duration: 3000
+				});
+			},
+			complete: () => {
+				this.loading.set(false);
+				this.dialogRef.close(true);
+			}
+		});
 	}
 }

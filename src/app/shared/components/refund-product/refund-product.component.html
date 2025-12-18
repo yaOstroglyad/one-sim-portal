@@ -1,25 +1,22 @@
 <h2 mat-dialog-title class="dialog-header">{{ 'refundProduct.title' | translate }}</h2>
 <mat-dialog-content class="mat-typography dialog-content">
-  @if (!loading) {
-    <app-form-generator [config]="formConfig"
-    (formChanges)="handleFormChanges($event)"></app-form-generator>
-    @if (refundData.length === 0) {
-      <mat-hint
-        class="hint mb-1">
-        <mat-icon fontIcon="info_outline"></mat-icon>
-        {{ 'refundProduct.noProducts' | translate }}
-      </mat-hint>
+    @if (!loading()) {
+        @if (hasProducts()) {
+            <app-form-generator [config]="formConfig"
+                                (formChanges)="handleFormChanges($event)"></app-form-generator>
+        }
+        @if (!hasProducts()) {
+            <app-info-strip [text]="'refundProduct.noProducts' | translate"></app-info-strip>
+        }
+    } @else {
+        <app-loader></app-loader>
     }
-  }
-  @if (loading) {
-    <app-loader></app-loader>
-  }
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-footer" align="end">
-  <button mat-button (click)="close()">{{ 'common.cancel' | translate }}</button>
-  <button mat-button
-    color="primary"
-    [disabled]="!isFormValid || loading"
-    (click)="submit()">{{ 'common.submit' | translate }}
-  </button>
+    <button mat-button (click)="close()">{{ 'common.cancel' | translate }}</button>
+    <button mat-button
+            color="primary"
+            [disabled]="!isFormValid() || loading()"
+            (click)="submit()">{{ 'common.submit' | translate }}
+    </button>
 </mat-dialog-actions>

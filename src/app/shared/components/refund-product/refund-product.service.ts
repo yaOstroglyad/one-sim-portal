@@ -1,52 +1,53 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RefundableProduct } from '@shared/models/product';
 import { SelectOption } from '@shared/models';
+import { handleArrayError } from '@shared/utils';
 import { formatDate } from '@angular/common';
+
+export interface RefundParams {
+	simId: string;
+}
+
+export interface RefundResponse {
+	transactionId: string;
+	externalTransactionId: string;
+	transactionStatus: string;
+	redirectRef: string;
+}
 
 @Injectable({
 	providedIn: 'root'
 })
 export class RefundProductService {
-	private apiUrl = '/api/v1/product-purchases/query/refundable';
+	private readonly http = inject(HttpClient);
+	private readonly apiUrl = '/api/v1/product-purchases/query/refundable';
 
-	constructor(public http: HttpClient) {}
-
-	list(params?: any): Observable<SelectOption[]> {
-		return this.http.get<RefundableProduct[]>(this.apiUrl, {params}).pipe(
-			map((products: RefundableProduct[]) => {
-				return products.map((product: RefundableProduct) => ({
+	list(params: RefundParams): Observable<SelectOption[]> {
+		return this.http.get<RefundableProduct[]>(this.apiUrl, {
+			params: { simId: params.simId }
+		}).pipe(
+			map((products: RefundableProduct[]) =>
+				products.map((product: RefundableProduct) => ({
 					value: product,
 					displayValue: this.formatDisplayValue(product)
-				}));
-			}),
-			catchError(() => {
-				console.warn('Error happened, presenting mocked data');
-				return of([
-					{value: 1, displayValue: 'Product 1'}
-				]);
-			})
+				}))
+			),
+			handleArrayError('RefundProductService.list')
+		);
+	}
+
+	refund(productId: string): Observable<RefundResponse> {
+		return this.http.post<RefundResponse>(
+			`/api/v1/product-purchases/command/${productId}/refund`,
+			{}
 		);
 	}
 
 	private formatDisplayValue(product: RefundableProduct): string {
 		const formattedDate = formatDate(product.purchasedAt, 'MM/dd/yyyy', 'en-US');
 		return `${product.name} - ${product.price.price} ${product.price.currency} - ${formattedDate}`;
-	}
-
-	refund(productId: string): Observable<{
-		transactionId: string,
-		externalTransactionId: string,
-		transactionStatus: string,
-		redirectRef: string
-	}> {
-		return this.http.post<any>(`/api/v1/product-purchases/command/${productId}/refund`, {}).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of();
-			})
-		);
 	}
 }
