@@ -16,7 +16,7 @@ export class ProviderBundlesDataService extends DataService<any> {
 
 	list(): Observable<any> {
 		return this.http.get<any>('/api/v1/provider-bundles/query/all').pipe(
-			catchError(handleEmptyObjectError('fetching provider bundles'))
+			handleEmptyObjectError('fetching provider bundles')
 		);
 	}
 }

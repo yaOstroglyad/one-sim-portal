@@ -43,7 +43,7 @@ export class TrafficDataService {
       .pipe(
         retry(HTTP_RETRY_CONFIG.retries),
         shareReplay(HTTP_RETRY_CONFIG.shareReplay),
-        catchError(handleObjectError<TrafficUsagePeriodResponse>('fetching traffic data'))
+        handleObjectError<TrafficUsagePeriodResponse>('fetching traffic data')
       );
   }
 }

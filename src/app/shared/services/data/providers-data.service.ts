@@ -17,7 +17,7 @@ export class ProvidersDataService extends DataService<Provider> {
 
 	list(): Observable<Provider[]> {
 		return this.http.get<Provider[]>(this.apiUrl).pipe(
-			catchError(handleArrayError('fetching service providers'))
+			handleArrayError('fetching service providers')
 		);
 	}
 }

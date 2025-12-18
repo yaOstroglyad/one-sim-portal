@@ -3,7 +3,8 @@
  * All HTTP error handling, response wrapping, and configuration in one place
  */
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, OperatorFunction } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 
 // ============================================================================
@@ -229,89 +230,95 @@ export function createErrorResponse<T = any>(error: any): Observable<ApiResponse
 
 /**
  * Generic error handler factory
- * Creates error handler that logs error and returns default value
+ * Creates a pipeable operator that catches errors, logs them, and returns default value
  *
  * @param errorContext - Context description for logging
  * @param defaultValue - Default value to return on error
- * @returns Error handler function
+ * @returns Pipeable operator that can be used directly in .pipe()
  */
-function createErrorHandler<T>(errorContext: string, defaultValue: T): (error: any) => Observable<T> {
-  return (error: any) => {
-    logError(errorContext, error);
-    return of(defaultValue);
-  };
+function createErrorHandler<T, R>(errorContext: string, defaultValue: R): OperatorFunction<T, T | R> {
+  return (source: Observable<T>) => source.pipe(
+    catchError((error: any) => {
+      logError(errorContext, error);
+      return of(defaultValue);
+    })
+  );
 }
 
 /**
  * Standard error handler that returns empty array on error
  * Used for list/array-based API calls
+ * Returns a pipeable operator - use directly in .pipe() without catchError
  *
  * @param errorContext - Context description for logging (e.g., 'fetching customers')
- * @returns Observable of empty array
+ * @returns Pipeable operator that catches errors and returns empty array
  *
  * @example
  * ```typescript
  * return this.http.get<Customer[]>('/api/customers').pipe(
- *   catchError(handleArrayError('fetching customers'))
+ *   handleArrayError('fetching customers')
  * );
  * ```
  */
-export function handleArrayError<T = any>(errorContext: string): (error: any) => Observable<T[]> {
-  return createErrorHandler<T[]>(errorContext, []);
+export function handleArrayError<T = any>(errorContext: string): OperatorFunction<T[], T[]> {
+  return createErrorHandler<T[], T[]>(errorContext, []);
 }
 
 /**
  * Standard error handler that returns null on error
  * Used for single-object API calls
+ * Returns a pipeable operator - use directly in .pipe() without catchError
  *
  * @param errorContext - Context description for logging (e.g., 'fetching customer details')
- * @returns Observable of null
+ * @returns Pipeable operator that catches errors and returns null
  *
  * @example
  * ```typescript
  * return this.http.get<Customer>(`/api/customers/${id}`).pipe(
- *   catchError(handleObjectError('fetching customer details'))
+ *   handleObjectError('fetching customer details')
  * );
  * ```
  */
-export function handleObjectError<T>(errorContext: string): (error: any) => Observable<T | null> {
-  return createErrorHandler<T | null>(errorContext, null);
+export function handleObjectError<T>(errorContext: string): OperatorFunction<T, T | null> {
+  return createErrorHandler<T, null>(errorContext, null);
 }
 
 /**
  * Standard error handler that returns empty object on error
  * Used for object-based API calls that expect an object response
+ * Returns a pipeable operator - use directly in .pipe() without catchError
  *
  * @param errorContext - Context description for logging (e.g., 'fetching configuration')
- * @returns Observable of empty object
+ * @returns Pipeable operator that catches errors and returns empty object
  *
  * @example
  * ```typescript
  * return this.http.get<Config>('/api/config').pipe(
- *   catchError(handleEmptyObjectError('fetching configuration'))
+ *   handleEmptyObjectError('fetching configuration')
  * );
  * ```
  */
-export function handleEmptyObjectError(errorContext: string): (error: any) => Observable<{}> {
-  return createErrorHandler<{}>(errorContext, {});
+export function handleEmptyObjectError<T extends object>(errorContext: string): OperatorFunction<T, T | {}> {
+  return createErrorHandler<T, {}>(errorContext, {});
 }
 
 /**
  * Standard error handler that returns a default value on error
+ * Returns a pipeable operator - use directly in .pipe() without catchError
  *
  * @param errorContext - Context description for logging
  * @param defaultValue - Default value to return on error
- * @returns Observable with default value
+ * @returns Pipeable operator that catches errors and returns default value
  *
  * @example
  * ```typescript
  * return this.http.get<number>('/api/count').pipe(
- *   catchError(handleWithDefault('fetching count', 0))
+ *   handleWithDefault('fetching count', 0)
  * );
  * ```
  */
-export function handleWithDefault<T>(errorContext: string, defaultValue: T): (error: any) => Observable<T> {
-  return createErrorHandler<T>(errorContext, defaultValue);
+export function handleWithDefault<T, R>(errorContext: string, defaultValue: R): OperatorFunction<T, T | R> {
+  return createErrorHandler<T, R>(errorContext, defaultValue);
 }
 
 // ============================================================================

@@ -21,13 +21,13 @@ export class PaymentGatewayService {
     }
 
     return this.http.post<any>('/api/v1/payment-method/command/create', paymentGatewayForm, { params }).pipe(
-      catchError(handleObjectError('creating payment gateway'))
+      handleObjectError('creating payment gateway')
     );
   }
 
   update(paymentGatewayForm: PaymentStrategy): Observable<any> {
     return this.http.patch<any>('/api/v1/payment-method/command/update', paymentGatewayForm).pipe(
-      catchError(handleObjectError('updating payment gateway'))
+      handleObjectError('updating payment gateway')
     );
   }
 
@@ -36,7 +36,7 @@ export class PaymentGatewayService {
     "active": boolean
   }): Observable<any> {
     return this.http.patch<any>('/api/v1/payment-method/command/update-status', status).pipe(
-      catchError(handleObjectError('updating payment gateway status'))
+      handleObjectError('updating payment gateway status')
     );
   }
 
@@ -47,13 +47,13 @@ export class PaymentGatewayService {
     }
 
     return this.http.get<PaymentStrategy[]>('/api/v1/payment-method/query/all', { params }).pipe(
-      catchError(handleArrayError('fetching payment gateways'))
+      handleArrayError('fetching payment gateways')
     );
   }
 
   getPaymentStrategyTypes(): Observable<string[]> {
     return this.http.get<string[]>('/api/v1/payment-method/payment-strategies').pipe(
-      catchError(handleArrayError('fetching payment strategy types'))
+      handleArrayError('fetching payment strategy types')
     );
   }
 

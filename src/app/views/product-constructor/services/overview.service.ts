@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { OverviewStats, ProductStatisticsResponse } from '../models';
 import { handleWithDefault } from '@shared';
 
@@ -17,11 +17,11 @@ export class OverviewService {
    */
   getProductStatistics(): Observable<ProductStatisticsResponse> {
     return this.http.get<ProductStatisticsResponse>(`/api-product/api/v1/esim-product/statistics/products`).pipe(
-      catchError(handleWithDefault('fetching product statistics', {
+      handleWithDefault('fetching product statistics', {
         productsCount: 0,
         mobileBundlesCount: 0,
         regionsCount: 0
-      }))
+      })
     );
   }
 
@@ -42,7 +42,7 @@ export class OverviewService {
           inactiveProducts: 0 // Not available in current API response
         };
       }),
-      catchError(handleWithDefault('fetching overview statistics', {
+      handleWithDefault('fetching overview statistics', {
         regions: 0,
         bundles: 0,
         products: 0,
@@ -50,7 +50,7 @@ export class OverviewService {
         providerProducts: 0,
         activeProducts: 0,
         inactiveProducts: 0
-      }))
+      })
     );
   }
 }

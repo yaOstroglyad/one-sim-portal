@@ -31,7 +31,7 @@ export class BundleLeftoversDataService {
     }
 
     return this.http.get<BundleLeftover[]>(this.baseUrl, { params: httpParams }).pipe(
-      catchError(handleArrayError<BundleLeftover>('fetching bundle leftovers report'))
+      handleArrayError<BundleLeftover>('fetching bundle leftovers report')
     );
   }
 }

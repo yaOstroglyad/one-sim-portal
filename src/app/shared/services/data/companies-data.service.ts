@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { DataService } from '../core';
 import { Company } from '@shared/models';
 import { CacheHubService, DataType } from '../cache-hub';
@@ -25,7 +25,7 @@ export class CompaniesDataService extends DataService<Company> {
 			() => {
 				let params = new HttpParams();
 				return this.http.get<Company[]>(this.apiUrl, {params}).pipe(
-					catchError(handleArrayError('fetching companies'))
+					handleArrayError('fetching companies')
 				);
 			},
 			{ dataType: DataType.REFERENCE }
@@ -38,7 +38,7 @@ export class CompaniesDataService extends DataService<Company> {
 				// Invalidate companies list cache after creation
 				this.cacheHub.invalidate('companies:list');
 			}),
-			catchError(handleArrayError('creating company'))
+			handleArrayError('creating company')
 		);
 	}
 
@@ -58,11 +58,11 @@ export class CompaniesDataService extends DataService<Company> {
 		});
 
 		return this.http.get<any>('/api/v1/companies/query/all/page', { params }).pipe(
-			catchError(handleWithDefault('fetching paginated companies', {
+			handleWithDefault('fetching paginated companies', {
 				totalElements: 0,
 				totalPages: 0,
 				content: []
-			}))
+			})
 		);
 	}
 
@@ -70,7 +70,7 @@ export class CompaniesDataService extends DataService<Company> {
 		return this.http.post<any>('/api/v1/companies/send-user-registration-email', {
 			entityId, email
 		}).pipe(
-			catchError(handleArrayError('sending invite email'))
+			handleArrayError('sending invite email')
 		);
 	}
 }

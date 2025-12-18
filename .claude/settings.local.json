@@ -100,7 +100,16 @@
       "Bash(xargs:*)",
       "Bash(nvm list)",
       "Bash(gzip:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(src/app/shared/services/data/*.ts)",
+      "Bash(src/app/views/settings/invoicing-gateway/invoices.service.ts )",
+      "Bash(src/app/views/settings/payment-gateway-table/payment-gateway.service.ts )",
+      "Bash(src/app/views/inventory/inventory-data.service.ts )",
+      "Bash(src/app/views/product-constructor/services/overview.service.ts )",
+      "Bash(src/app/views/product-constructor/services/company-product-price.service.ts )",
+      "Bash(src/app/views/analytics/dashboard/services/traffic-data.service.ts )",
+      "Bash(src/app/views/analytics/reports/services/bundle-purchases-data.service.ts )",
+      "Bash(src/app/views/analytics/reports/services/bundle-leftovers-data.service.ts)"
     ],
     "deny": [
       "// === Blocked for Security ===",

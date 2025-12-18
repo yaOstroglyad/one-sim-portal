@@ -12,7 +12,7 @@ export class PurchasedProductsDataService {
 
 	getPurchasedProducts(params: { subscriberId: string; isActive?: boolean }): Observable<ProductPurchase[]> {
 		return this.http.get<ProductPurchase[]>(`/api/v1/product-purchases/query/all`, { params }).pipe(
-			catchError(handleArrayError<ProductPurchase>('fetching purchased products'))
+			handleArrayError<ProductPurchase>('fetching purchased products')
 		);
 	}
 }

@@ -35,7 +35,7 @@ export class BundlePurchasesDataService {
     }
 
     return this.http.get<BundlePurchasesResponse>(this.baseUrl, { params: httpParams }).pipe(
-      catchError(handleObjectError<BundlePurchasesResponse>('fetching bundle purchases report'))
+      handleObjectError<BundlePurchasesResponse>('fetching bundle purchases report')
     );
   }
 }

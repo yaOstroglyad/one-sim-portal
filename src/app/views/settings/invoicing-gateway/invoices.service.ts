@@ -21,13 +21,13 @@ export class InvoicesService {
     }
 
     return this.http.post<any>('/api/v1/invoicing-method/command/create', invoicingMethodForm, { params }).pipe(
-      catchError(handleObjectError('creating invoicing method'))
+      handleObjectError('creating invoicing method')
     );
   }
 
   update(invoicingMethodForm: InvoicingMethod): Observable<any> {
     return this.http.patch<any>('/api/v1/invoicing-method/command/update', invoicingMethodForm).pipe(
-      catchError(handleObjectError('updating invoicing method'))
+      handleObjectError('updating invoicing method')
     );
   }
 
@@ -36,7 +36,7 @@ export class InvoicesService {
     "active": boolean
   }): Observable<any> {
     return this.http.patch<any>('/api/v1/invoicing-method/command/update-status', status).pipe(
-      catchError(handleObjectError('updating invoicing method status'))
+      handleObjectError('updating invoicing method status')
     );
   }
 
@@ -47,13 +47,13 @@ export class InvoicesService {
     }
 
     return this.http.get<InvoicingMethod[]>('/api/v1/invoicing-method/query/all', { params }).pipe(
-      catchError(handleArrayError('fetching invoicing methods'))
+      handleArrayError('fetching invoicing methods')
     );
   }
 
   getInvoicingStrategyTypes(): Observable<string[]> {
     return this.http.get<string[]>('/api/v1/invoicing-method/invoicing-strategies').pipe(
-      catchError(handleArrayError('fetching invoicing strategy types'))
+      handleArrayError('fetching invoicing strategy types')
     );
   }
 

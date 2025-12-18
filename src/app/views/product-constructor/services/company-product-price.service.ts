@@ -24,7 +24,7 @@ export class CompanyProductPriceService {
   getPrices(companyProductId: string): Observable<CompanyProductPrice[]> {
     return this.http.get<CompanyProductPrice[]>(`${this.baseUrl}/${companyProductId}/prices`)
       .pipe(
-        catchError(handleArrayError<CompanyProductPrice>('Failed to load company product prices'))
+        handleArrayError<CompanyProductPrice>('Failed to load company product prices')
       );
   }
 
@@ -34,7 +34,7 @@ export class CompanyProductPriceService {
   ): Observable<CompanyProductPrice> {
     return this.http.post<CompanyProductPrice>(`${this.baseUrl}/${companyProductId}/prices`, request)
       .pipe(
-        catchError(handleObjectError<CompanyProductPrice>('Failed to create company product price'))
+        handleObjectError<CompanyProductPrice>('Failed to create company product price')
       );
   }
 
@@ -45,7 +45,7 @@ export class CompanyProductPriceService {
   ): Observable<CompanyProductPrice> {
     return this.http.put<CompanyProductPrice>(`${this.baseUrl}/${companyProductId}/prices/${priceId}`, request)
       .pipe(
-        catchError(handleObjectError<CompanyProductPrice>('Failed to update company product price'))
+        handleObjectError<CompanyProductPrice>('Failed to update company product price')
       );
   }
 }

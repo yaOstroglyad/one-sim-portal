@@ -18,7 +18,7 @@ export class TransactionDataService {
 		}
 
 		return this.http.get<TransactionOrder[]>(`/api/v1/transaction-orders/query/all`, { params }).pipe(
-			catchError(handleArrayError('fetching transactions'))
+			handleArrayError('fetching transactions')
 		);
 	}
 }

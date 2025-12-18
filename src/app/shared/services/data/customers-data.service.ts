@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { DataService } from '../core';
 import { Customer, CustomerType, DataObject } from '@shared/models';
 import { Pagination } from '@shared/models/ui';
@@ -23,7 +23,7 @@ export class CustomersDataService extends DataService<Customer> {
 		}
 
 		return this.http.get<Customer[]>(this.apiUrl, {params}).pipe(
-			catchError(handleArrayError('fetching customers list'))
+			handleArrayError('fetching customers list')
 		);
 	}
 
@@ -46,23 +46,23 @@ export class CustomersDataService extends DataService<Customer> {
 		});
 
 		return this.http.get<any>('/api/v1/customers/query/all/page', {params}).pipe(
-			catchError(handleWithDefault('fetching paginated customers', {
+			handleWithDefault('fetching paginated customers', {
 				totalElements: 0,
 				totalPages: 0,
 				content: []
-			}))
+			})
 		);
 	}
 
 	getCustomerDetails(id: Customer['id']): Observable<DataObject | null> {
 		return this.http.get<DataObject>(`/api/v1/customers/query/${id}/details`).pipe(
-			catchError(handleObjectError<DataObject>('fetching customer details'))
+			handleObjectError<DataObject>('fetching customer details')
 		);
 	}
 
 	create(customer: Customer): Observable<any> {
 		return this.http.post<any>(`/api/v1/customers/command/create`, customer).pipe(
-			catchError(handleObjectError('creating customer'))
+			handleObjectError('creating customer')
 		);
 	}
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { DataService } from '../core';
 import { Domain } from '@shared/models/core';
 import { handleArrayError, handleWithDefault } from '../../utils';
@@ -19,7 +19,7 @@ export class DomainsDataService extends DataService<Domain> {
     let params = new HttpParams();
 
     return this.http.get<Domain[]>(this.apiUrl, {params}).pipe(
-      catchError(handleArrayError('fetching domains'))
+      handleArrayError('fetching domains')
     );
   }
 
@@ -39,35 +39,35 @@ export class DomainsDataService extends DataService<Domain> {
     });
 
     return this.http.get<any>('/api/v1/whitelabel/domains/query/all/page', { params }).pipe(
-      catchError(handleWithDefault('fetching paginated domains', {
+      handleWithDefault('fetching paginated domains', {
         totalElements: 0,
         totalPages: 0,
         content: []
-      }))
+      })
     );
   }
 
   create(domain: Domain): Observable<any> {
     return this.http.post<any>(`/api/v1/whitelabel/domains/command/create`, domain).pipe(
-      catchError(handleArrayError('creating domain'))
+      handleArrayError('creating domain')
     );
   }
 
   updateDomainName(domain: { id: string, name: string }): Observable<any> {
     return this.http.patch<any>(`/api/v1/whitelabel/domains/command/update/name`, domain).pipe(
-      catchError(handleArrayError('updating domain name'))
+      handleArrayError('updating domain name')
     );
   }
 
   updateDomainOwner(domain: { id: string, ownerAccountId: string }): Observable<any> {
     return this.http.patch<any>(`/api/v1/whitelabel/domains/command/update/owner`, domain).pipe(
-      catchError(handleArrayError('updating domain owner'))
+      handleArrayError('updating domain owner')
     );
   }
 
   changeDomainState(id: string, isActive: boolean): Observable<any> {
     return this.http.patch<any>(`/api/v1/whitelabel/domains/command/change/state/${id}?isActive=${isActive}`, {}).pipe(
-      catchError(handleArrayError('changing domain state'))
+      handleArrayError('changing domain state')
     );
   }
 }

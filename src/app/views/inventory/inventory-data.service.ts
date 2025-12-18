@@ -16,7 +16,7 @@ export class InventoryDataService extends DataService<Resource> {
 
 	list(params?: any): Observable<any> {
 		return this.http.get<any>(this.apiUrl, { params }).pipe(
-			catchError(handleArrayError('fetching inventory'))
+			handleArrayError('fetching inventory')
 		);
 	}
 }

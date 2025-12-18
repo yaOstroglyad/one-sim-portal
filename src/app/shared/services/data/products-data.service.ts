@@ -1,12 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Package } from '@shared/models/product';
 import { DataService } from '../core';
 import { map } from 'rxjs/operators';
 import { Pagination } from '@shared/models/ui';
 import { CacheHubService, DataType } from '../cache-hub';
-import { handleArrayError, handleWithDefault, handleEmptyObjectError } from '../../utils';
+import { handleArrayError, handleEmptyObjectError } from '../../utils';
 
 @Injectable({
 	providedIn: 'root'
@@ -24,7 +24,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	list(): Observable<Package[]> {
 		return this.http.get<Package[]>(this.apiUrl).pipe(
-			catchError(handleArrayError('fetching products'))
+			handleArrayError('fetching products')
 		);
 	}
 
@@ -50,7 +50,7 @@ export class ProductsDataService extends DataService<Package> {
 			params: queryParams
 		}).pipe(
 			map(e => e?.content),
-			catchError(handleArrayError('fetching filtered products'))
+			handleArrayError('fetching filtered products')
 		);
 	}
 
@@ -59,7 +59,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	create(product: any): Observable<any> {
 		return this.http.post<any>(`/api/v1/products/command/create`, product).pipe(
-			catchError(handleArrayError('creating product'))
+			handleArrayError('creating product')
 		);
 	}
 
@@ -68,7 +68,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	update(product: any): Observable<any> {
 		return this.http.patch<any>(`/api/v1/products/command/update`, product).pipe(
-			catchError(handleArrayError('updating product'))
+			handleArrayError('updating product')
 		);
 	}
 
@@ -77,7 +77,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	updateStatus(changeStatus: any): Observable<any> {
 		return this.http.patch<any>(`/api/v1/products/command/update-status`, changeStatus).pipe(
-			catchError(handleArrayError('updating product status'))
+			handleArrayError('updating product status')
 		);
 	}
 
@@ -86,7 +86,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	getStatuses(): Observable<string[]> {
 		return this.http.get<any>(`/api/v1/products/statuses`).pipe(
-			catchError(handleArrayError('fetching product statuses'))
+			handleArrayError('fetching product statuses')
 		);
 	}
 
@@ -94,7 +94,7 @@ export class ProductsDataService extends DataService<Package> {
 		return this.cacheHub.get(
 			'currencies:all-currencies',
 			() => this.http.get<string[]>(`/api-product/api/v1/esim-product/common/currency`).pipe(
-				catchError(handleArrayError('fetching currencies'))
+				handleArrayError('fetching currencies')
 			),
 			{
 				dataType: DataType.REFERENCE,
@@ -147,9 +147,7 @@ export class ProductsDataService extends DataService<Package> {
 					'VND': 24500.0    // без точных свежих данных
 				};
 
-				return of(mockExchangeRates).pipe(
-					catchError(handleWithDefault('fetching exchange rates', { 'USD': 1.0 }))
-				);
+				return of(mockExchangeRates);
 			},
 			{
 				dataType: DataType.REFERENCE,
@@ -163,7 +161,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	getProductTemplate(params: any): Observable<any> {
 		return this.http.get<any>(`/api/v1/products/command/template`, {params}).pipe(
-			catchError(handleEmptyObjectError('fetching product template'))
+			handleEmptyObjectError('fetching product template')
 		);
 	}
 
@@ -172,7 +170,7 @@ export class ProductsDataService extends DataService<Package> {
 	 */
 	getParentProducts(): Observable<any> {
 		return this.http.get<any>(`/api/v1/products/query/parent`).pipe(
-			catchError(handleEmptyObjectError('fetching parent products'))
+			handleEmptyObjectError('fetching parent products')
 		);
 	}
 
