@@ -1,86 +1,130 @@
-import { Component, OnInit, ChangeDetectorRef, effect, inject } from '@angular/core';
-
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject, signal, effect } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@coreui/icons-angular';
 
-import {
-  CardComponent,
-  MetricCardComponent,
-  OsBarChartComponent,
-  OsLineChartComponent
-} from '@shared';
+import { CardComponent, OsBarChartComponent, OsLineChartComponent, TooltipDirective } from '@shared';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
 
 import { DashboardDataService } from '../../services/dashboard-data.service';
-import { TrafficAnalytics } from '../../models/traffic.types';
+import {
+  TrafficUsagePeriodResponse,
+  TrafficKpiValues,
+  TrafficChartLegendItem
+} from '../../models/traffic.types';
 import { DashboardError } from '../../models/dashboard.types';
+import {
+  calculateKpiValues,
+  buildTrafficByCountryChartConfig,
+  buildSubscribersByCountryChartConfig,
+  buildAverageTrafficChartConfig
+} from '../../utils/traffic.utils';
 
 @Component({
-	standalone: true,
-	selector: 'app-traffic-tab',
-	imports: [
+  standalone: true,
+  selector: 'os-traffic-tab',
+  imports: [
+    CommonModule,
     TranslateModule,
     IconModule,
     CardComponent,
-    MetricCardComponent,
+    TooltipDirective,
     LoadingIndicatorComponent,
     ErrorDisplayComponent,
     OsBarChartComponent,
     OsLineChartComponent
-],
-	templateUrl: './traffic-tab.component.html',
-	styleUrls: ['./traffic-tab.component.scss']
+  ],
+  templateUrl: './traffic-tab.component.html',
+  styleUrls: ['./traffic-tab.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TrafficTabComponent implements OnInit {
-	private readonly dashboardDataService = inject(DashboardDataService);
-	private readonly cdr = inject(ChangeDetectorRef);
+export class TrafficTabComponent {
+  private readonly dashboardDataService = inject(DashboardDataService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-	data: TrafficAnalytics | null = null;
-	loading = true;
-	error: DashboardError | null = null;
+  // State signals
+  readonly loading = signal(true);
+  readonly error = signal<DashboardError | null>(null);
+  readonly data = signal<TrafficUsagePeriodResponse | null>(null);
 
-	constructor() {
-		// React to period and accountId changes using effect
-		effect(() => {
-			const period = this.dashboardDataService.period();
-			const accountId = this.dashboardDataService.accountId();
+  // Computed values for template
+  readonly kpiValues = signal<TrafficKpiValues | null>(null);
+  readonly trafficChartConfig = signal<any>(null);
+  readonly subscribersChartConfig = signal<any>(null);
+  readonly avgTrafficChartConfig = signal<any>(null);
 
-			// Only load data if accountId is set (required for API calls)
-			if (accountId) {
-				this.loadData();
-			}
-		});
-	}
+  constructor() {
+    // React to period and accountId changes
+    effect(() => {
+      const period = this.dashboardDataService.period();
+      const accountId = this.dashboardDataService.accountId();
 
-	ngOnInit(): void {
-		// Initial data load is handled by effect
-	}
+      if (accountId) {
+        this.loadData();
+      }
+    });
+  }
 
-	loadData(): void {
-		this.loading = true;
-		this.error = null;
+  loadData(): void {
+    this.loading.set(true);
+    this.error.set(null);
 
-		this.dashboardDataService.getTrafficData()
-			.subscribe({
-				next: (response) => {
-					this.data = response.data;
-					this.loading = false;
-					this.cdr.detectChanges();
-				},
-				error: (error) => {
-					this.error = {
-						code: error.status || error.code || 'UNKNOWN',
-						message: error.message || 'Failed to load traffic data',
-						details: error,
-						timestamp: new Date()
-					};
-					this.loading = false;
-				}
-			});
-	}
+    this.dashboardDataService.getTrafficData().subscribe({
+      next: (response) => {
+        if (response) {
+          this.data.set(response);
+          this.processData(response);
+        } else {
+          // Empty response
+          this.data.set(null);
+          this.kpiValues.set(null);
+          this.trafficChartConfig.set(null);
+          this.subscribersChartConfig.set(null);
+          this.avgTrafficChartConfig.set(null);
+        }
+        this.loading.set(false);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.error.set({
+          code: err.status || err.code || 'UNKNOWN',
+          message: err.message || 'Failed to load traffic data',
+          details: err,
+          timestamp: new Date()
+        });
+        this.loading.set(false);
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
-	trackByMetricId(index: number, metric: any): string {
-		return metric.id;
-	}
+  private processData(data: TrafficUsagePeriodResponse): void {
+    // Calculate KPI values
+    this.kpiValues.set(calculateKpiValues(data));
+
+    // Build chart configurations
+    this.trafficChartConfig.set(buildTrafficByCountryChartConfig(data.trafficByCountry));
+    this.subscribersChartConfig.set(buildSubscribersByCountryChartConfig(data.subscribersByCountry));
+    this.avgTrafficChartConfig.set(buildAverageTrafficChartConfig(data.subscriberAverageTraffic));
+  }
+
+  onRetry(): void {
+    this.loadData();
+  }
+
+  /**
+   * Check if there is any data to display
+   */
+  hasData(): boolean {
+    const data = this.data();
+    if (!data) return false;
+
+    return !!(
+      data.currentPeriodTraffic ||
+      data.trafficByCountry?.length ||
+      data.subscribersByCountry?.length ||
+      data.subscriberAverageTraffic?.length
+    );
+  }
 }

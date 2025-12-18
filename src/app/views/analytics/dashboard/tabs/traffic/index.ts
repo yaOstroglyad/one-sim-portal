@@ -1,1 +1,1 @@
-export * from './traffic-tab.component';
+export { TrafficTabComponent } from './traffic-tab.component';

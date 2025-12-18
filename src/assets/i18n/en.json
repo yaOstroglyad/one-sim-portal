@@ -1195,13 +1195,18 @@
     "noData": "No data available",
     "traffic": {
       "byCountry": "Traffic by Country",
+      "trafficByCountry": "Traffic by Country",
+      "subscribersByCountry": "Subscribers by Country",
+      "avgTrafficTrend": "Average Traffic per Subscriber Trend",
       "shares": "Traffic Shares",
       "activeUsers": "Active Users by Country",
       "averageTraffic": "Average Traffic",
       "avgPerUser": "Avg per User",
       "totalTraffic": "Total Traffic",
       "activeCountries": "Active Countries",
-      "topCountry": "Top Country"
+      "topCountry": "Top Country",
+      "avgTrafficPerSubscriber": "Avg Traffic/Subscriber",
+      "noData": "No traffic data available for the selected period"
     },
     "finance": {
       "totalRevenue": "Total Revenue",

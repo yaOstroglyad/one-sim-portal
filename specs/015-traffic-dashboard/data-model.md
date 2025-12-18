@@ -1,14 +1,15 @@
-/**
- * Traffic Dashboard Types
- * Based on API: GET /api/v1/reports/dashboards/trafic/traffic-usage-period
- */
+# Data Model: Traffic Dashboard Tab
 
-// ============================================
-// API Response Types
-// ============================================
+**Feature**: 015-traffic-dashboard
+**Date**: 2025-12-16
 
+## API Response Types
+
+### Root Response
+
+```typescript
 /**
- * Root response from traffic usage period API
+ * Response from GET /api/v1/reports/dashboards/trafic/traffic-usage-period
  */
 export interface TrafficUsagePeriodResponse {
   /** Summary for current/latest period */
@@ -23,7 +24,11 @@ export interface TrafficUsagePeriodResponse {
   /** Average traffic per subscriber trend */
   subscriberAverageTraffic: AverageTrafficData[];
 }
+```
 
+### Period Traffic Data
+
+```typescript
 /**
  * Current period summary with country breakdown
  */
@@ -62,7 +67,11 @@ export interface CountryTraffic {
   /** Traffic amount (in bytes) */
   traffic: number;
 }
+```
 
+### Period Subscriber Data
+
+```typescript
 /**
  * Subscriber data for a single period
  */
@@ -87,7 +96,11 @@ export interface CountrySubscribers {
   /** Number of subscribers */
   subscribers: number;
 }
+```
 
+### Average Traffic Data
+
+```typescript
 /**
  * Average traffic per subscriber for a single period
  */
@@ -98,11 +111,13 @@ export interface AverageTrafficData {
   /** Average traffic per subscriber (in bytes) */
   traffic: number;
 }
+```
 
-// ============================================
-// UI State Types
-// ============================================
+## UI State Types
 
+### KPI Card Values
+
+```typescript
 /**
  * Calculated KPI values for display
  */
@@ -125,11 +140,15 @@ export interface TrafficKpiValues {
   /** Raw average traffic in bytes */
   avgTrafficPerSubscriberRaw: number;
 }
+```
 
+### Chart Legend Item
+
+```typescript
 /**
  * Legend item for stacked bar charts
  */
-export interface TrafficChartLegendItem {
+export interface ChartLegendItem {
   /** Display label (country name) */
   label: string;
 
@@ -141,15 +160,16 @@ export interface TrafficChartLegendItem {
 
   /** Formatted value for display */
   formattedValue: string;
-
-  /** Whether this item is hidden in the chart */
-  hidden?: boolean;
 }
+```
 
+### Chart Configuration
+
+```typescript
 /**
- * Traffic stacked bar chart configuration
+ * Stacked bar chart configuration
  */
-export interface TrafficStackedBarChartConfig {
+export interface StackedBarChartConfig {
   /** Chart type */
   type: 'bar';
 
@@ -164,22 +184,20 @@ export interface TrafficStackedBarChartConfig {
       data: number[];
       backgroundColor: string;
       stack: string;
-      borderWidth?: number;
-      borderRadius?: number;
     }>;
   };
 
   /** Legend items for custom legend */
-  legendItems: TrafficChartLegendItem[];
+  legendItems: ChartLegendItem[];
 
   /** Chart.js options */
   options: object;
 }
 
 /**
- * Traffic line chart configuration
+ * Line chart configuration
  */
-export interface TrafficLineChartConfig {
+export interface LineChartConfig {
   /** Chart type */
   type: 'line';
 
@@ -201,3 +219,66 @@ export interface TrafficLineChartConfig {
   /** Chart.js options */
   options: object;
 }
+```
+
+## Request Types
+
+### API Request Parameters
+
+```typescript
+/**
+ * Query parameters for traffic API
+ */
+export interface TrafficQueryParams {
+  /** Company account UUID */
+  accountId: string;
+
+  /** Period grouping: DAY, WEEK, or MONTH */
+  period: 'DAY' | 'WEEK' | 'MONTH';
+
+  /** Start of date range (ISO datetime) */
+  dateFrom: string;
+
+  /** End of date range (ISO datetime) */
+  dateTo: string;
+}
+```
+
+## Type Relationships
+
+```
+TrafficUsagePeriodResponse
+├── currentPeriodTraffic: CurrentPeriodTraffic
+│   └── countryTraffics: CountryTraffic[]
+├── trafficByCountry: PeriodTrafficData[]
+│   └── countryTraffics: CountryTraffic[]
+├── subscribersByCountry: PeriodSubscriberData[]
+│   └── countrySubscribers: CountrySubscribers[]
+└── subscriberAverageTraffic: AverageTrafficData[]
+
+UI State
+├── TrafficKpiValues (derived from currentPeriodTraffic + subscriberAverageTraffic)
+├── StackedBarChartConfig (built from trafficByCountry/subscribersByCountry)
+│   └── ChartLegendItem[]
+└── LineChartConfig (built from subscriberAverageTraffic)
+```
+
+## Validation Rules
+
+| Field | Rule |
+|-------|------|
+| period | Must be valid ISO date string |
+| totalTraffic | Must be >= 0 |
+| traffic | Must be >= 0 |
+| totalSubscribers | Must be >= 0 |
+| subscribers | Must be >= 0 |
+| country | Non-empty string |
+
+## Empty State Handling
+
+| Condition | Behavior |
+|-----------|----------|
+| `trafficByCountry.length === 0` | Show "No traffic data" message |
+| `countryTraffics.length === 0` | Show single "No data" bar |
+| `totalTraffic === 0` | Show "0 KB" in KPI card |
+| All arrays empty | Show full empty state with message |

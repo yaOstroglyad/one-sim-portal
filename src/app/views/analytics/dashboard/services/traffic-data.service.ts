@@ -1,56 +1,49 @@
 import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, delay, catchError, retry, shareReplay } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { catchError, retry, shareReplay } from 'rxjs/operators';
 
-import { DashboardResponse } from '../models/dashboard.types';
-import { TrafficAnalytics } from '../models/traffic.types';
-import { MockDataService } from './mock-data.service';
+import { handleObjectError } from '@shared/utils';
+import { TrafficUsagePeriodResponse } from '../models/traffic.types';
 import { DashboardStateService } from './dashboard-state.service';
-import {
-  DASHBOARD_API_CONFIG,
-  DEFAULT_MOCK_CONFIG,
-  MOCK_DELAYS,
-  HTTP_RETRY_CONFIG
-} from '../utils';
-import { wrapResponse, createErrorResponse } from '@shared';
+import { DASHBOARD_API_CONFIG, HTTP_RETRY_CONFIG } from '../utils';
 
 /**
- * Service for Traffic tab data
+ * Service for fetching traffic dashboard data from API
  */
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class TrafficDataService {
   private readonly http = inject(HttpClient);
-  private readonly mockDataService = inject(MockDataService);
   private readonly stateService = inject(DashboardStateService);
 
-  private readonly mockConfig = DEFAULT_MOCK_CONFIG;
-
   /**
-   * Get Traffic tab data
+   * Fetch traffic usage data from API
+   * @returns Observable of TrafficUsagePeriodResponse or null on error
    */
-  getTrafficData(): Observable<DashboardResponse<TrafficAnalytics>> {
+  getTrafficData(): Observable<TrafficUsagePeriodResponse | null> {
     const period = this.stateService.getCurrentPeriod();
+    const accountId = this.stateService.getAccountId();
 
-    if (this.mockConfig.traffic) {
-      return this.mockDataService.getTrafficData(period)
-        .pipe(
-          delay(MOCK_DELAYS.traffic),
-          map(data => wrapResponse(data)),
-          catchError(error => createErrorResponse(error))
-        );
+    if (!accountId) {
+      console.warn('TrafficDataService: No accountId available');
+      return new Observable(subscriber => {
+        subscriber.next(null);
+        subscriber.complete();
+      });
     }
 
-    return this.http.post<TrafficAnalytics>(DASHBOARD_API_CONFIG.endpoints.traffic, {
-      startDate: period.startDate.toISOString(),
-      endDate: period.endDate.toISOString()
-    }).pipe(
-      retry(HTTP_RETRY_CONFIG.retries),
-      map(data => wrapResponse(data)),
-      catchError(error => createErrorResponse(error)),
-      shareReplay(HTTP_RETRY_CONFIG.shareReplay)
-    );
+    const params = new HttpParams()
+      .set('accountId', accountId)
+      .set('period', this.stateService.mapPeriodToApiEnum(period.preset))
+      .set('dateFrom', period.startDate.toISOString())
+      .set('dateTo', period.endDate.toISOString());
+
+    return this.http
+      .get<TrafficUsagePeriodResponse>(DASHBOARD_API_CONFIG.endpoints.traffic, { params })
+      .pipe(
+        retry(HTTP_RETRY_CONFIG.retries),
+        shareReplay(HTTP_RETRY_CONFIG.shareReplay),
+        catchError(handleObjectError<TrafficUsagePeriodResponse>('fetching traffic data'))
+      );
   }
 }
