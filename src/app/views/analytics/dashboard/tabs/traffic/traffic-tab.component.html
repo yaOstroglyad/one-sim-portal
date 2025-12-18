@@ -1,123 +1,143 @@
 <div class="traffic-tab">
   <!-- Loading State -->
-  @if (loading) {
+  @if (loading()) {
     <app-loading-indicator
       [status]="{ state: 'loading', message: 'Fetching traffic data...' }">
     </app-loading-indicator>
   }
 
   <!-- Error State -->
-  @if (error && !loading) {
+  @if (error() && !loading()) {
     <app-error-display
-      [error]="error"
-      (retry)="loadData()">
+      [error]="error()"
+      (retry)="onRetry()">
     </app-error-display>
   }
 
-  <!-- Data Content -->
-  @if (data && !loading && !error) {
-    <div class="traffic-content">
-      <!-- KPI Metrics Row -->
-      <div class="kpi-row">
-        @for (metric of data?.kpiMetrics; track trackByMetricId($index, metric)) {
-          <app-metric-card
-            [metric]="metric">
-          </app-metric-card>
-        }
-      </div>
-      <!-- Traffic by Country -->
-      <div class="traffic-by-country-row">
-        <os-card class="traffic-by-country-card" variant="default">
-          <div class="card-header">
-            <h3>{{ 'dashboard.traffic.byCountry' | translate }}</h3>
-          </div>
-          @if (!data?.trafficByCountry.loading) {
-            <div class="chart-container">
-              @if (data?.trafficByCountry.chartConfig) {
-                <os-bar-chart
-                  [data]="$any(data.trafficByCountry.chartConfig.data)"
-                  [options]="data.trafficByCountry.chartConfig.options || {}">
-                </os-bar-chart>
-              }
-            </div>
-          } @else {
-            <app-loading-indicator></app-loading-indicator>
-          }
-        </os-card>
-      </div>
-      <!-- Charts Row: Traffic Shares & Active Users -->
-      <div class="charts-row">
-        <!-- Traffic Shares (Pie Chart) -->
-        <os-card class="traffic-shares-card" variant="default">
-          <div class="card-header">
-            <h3>{{ 'dashboard.traffic.shares' | translate }}</h3>
-          </div>
-          @if (!data?.trafficShares.loading) {
-            <div class="chart-container">
-              @if (data?.trafficShares.chartConfig) {
-                <os-line-chart
-                  [data]="$any(data.trafficShares.chartConfig.data)"
-                  [options]="data.trafficShares.chartConfig.options || {}">
-                </os-line-chart>
-              }
-            </div>
-          } @else {
-            <app-loading-indicator></app-loading-indicator>
-          }
-        </os-card>
-        <!-- Active Users by Country -->
-        <os-card class="active-users-card" variant="default">
-          <div class="card-header">
-            <h3>{{ 'dashboard.traffic.activeUsers' | translate }}</h3>
-          </div>
-          @if (!data?.activeUsersByCountry.loading) {
-            <div class="chart-container">
-              @if (data?.activeUsersByCountry.chartConfig) {
-                <os-bar-chart
-                  [data]="$any(data.activeUsersByCountry.chartConfig.data)"
-                  [options]="data.activeUsersByCountry.chartConfig.options || {}">
-                </os-bar-chart>
-              }
-            </div>
-          } @else {
-            <app-loading-indicator></app-loading-indicator>
-          }
-        </os-card>
-      </div>
-      <!-- Average Traffic KPI -->
-      <div class="average-traffic-row">
-        <os-card class="average-traffic-card" variant="default">
-          <div class="card-header">
-            <h3>{{ 'dashboard.traffic.averageTraffic' | translate }}</h3>
-            @if (data?.averageTraffic.data) {
-              <div class="traffic-summary">
-                <div class="metric">
-                  <span class="label">{{ 'dashboard.traffic.avgPerUser' | translate }}</span>
-                  <span class="value">{{ data.averageTraffic.data.averageTrafficGB }} GB</span>
-                </div>
-                <div class="metric">
-                  <span class="label">{{ 'dashboard.traffic.totalTraffic' | translate }}</span>
-                  <span class="value">{{ data.averageTraffic.data.totalTrafficGB }} GB</span>
-                </div>
-                <div class="metric">
-                  <span class="label">{{ 'dashboard.traffic.activeCountries' | translate }}</span>
-                  <span class="value">{{ data.averageTraffic.data.activeCountries }}</span>
-                </div>
-              </div>
-            }
-          </div>
-          @if (data?.averageTraffic.data) {
-            <div class="traffic-details">
-              <div class="detail-item">
-                <span class="detail-label">{{ 'dashboard.traffic.topCountry' | translate }}:</span>
-                <span class="detail-value">{{ data.averageTraffic.data.topCountry }}</span>
-              </div>
-            </div>
-          }
-        </os-card>
-      </div>
+  <!-- Empty State -->
+  @if (!loading() && !error() && !hasData()) {
+    <div class="empty-state">
+      <c-icon name="cilChartPie" size="3xl"></c-icon>
+      <p>{{ 'dashboard.traffic.noData' | translate }}</p>
     </div>
   }
 
-  <!-- Loading Template -->
+  <!-- Data Content -->
+  @if (!loading() && !error() && hasData()) {
+    <div class="traffic-content">
+
+      <!-- KPI Cards Row -->
+      @if (kpiValues()) {
+        <div class="kpi-cards-row">
+          <!-- Total Traffic Card -->
+          <os-card class="kpi-card" variant="default">
+            <div class="kpi-content">
+              <div class="kpi-icon primary">
+                <c-icon name="cilCloudUpload"></c-icon>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">{{ 'dashboard.traffic.totalTraffic' | translate }}</span>
+                <span class="kpi-value">{{ kpiValues()?.totalTraffic }}</span>
+              </div>
+            </div>
+          </os-card>
+
+          <!-- Active Countries Card -->
+          <os-card class="kpi-card" variant="default">
+            <div class="kpi-content">
+              <div class="kpi-icon success">
+                <c-icon name="cilGlobe"></c-icon>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">{{ 'dashboard.traffic.activeCountries' | translate }}</span>
+                <span class="kpi-value">{{ kpiValues()?.activeCountries }}</span>
+              </div>
+            </div>
+          </os-card>
+
+          <!-- Top Country Card -->
+          <os-card class="kpi-card" variant="default">
+            <div class="kpi-content">
+              <div class="kpi-icon info">
+                <c-icon name="cilLocationPin"></c-icon>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">{{ 'dashboard.traffic.topCountry' | translate }}</span>
+                <span class="kpi-value">{{ kpiValues()?.topCountry }}</span>
+              </div>
+            </div>
+          </os-card>
+
+          <!-- Avg Traffic/Subscriber Card -->
+          <os-card class="kpi-card" variant="default">
+            <div class="kpi-content">
+              <div class="kpi-icon warning">
+                <c-icon name="cilSpeedometer"></c-icon>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">{{ 'dashboard.traffic.avgTrafficPerSubscriber' | translate }}</span>
+                <span class="kpi-value">{{ kpiValues()?.avgTrafficPerSubscriber }}</span>
+              </div>
+            </div>
+          </os-card>
+        </div>
+      }
+
+      <!-- Traffic by Country Chart -->
+      @if (trafficChartConfig()) {
+        <div class="charts-row single">
+          <os-card class="chart-card" variant="default">
+            <div class="card-header">
+              <h3>{{ 'dashboard.traffic.trafficByCountry' | translate }}</h3>
+            </div>
+            <div class="chart-container">
+              <os-bar-chart
+                [data]="$any(trafficChartConfig().data)"
+                [options]="trafficChartConfig().options || {}"
+                [legendItems]="trafficChartConfig().legendItems || []"
+                [legendMaxHeight]="80">
+              </os-bar-chart>
+            </div>
+          </os-card>
+        </div>
+      }
+
+      <!-- Subscribers by Country Chart -->
+      @if (subscribersChartConfig()) {
+        <div class="charts-row single">
+          <os-card class="chart-card" variant="default">
+            <div class="card-header">
+              <h3>{{ 'dashboard.traffic.subscribersByCountry' | translate }}</h3>
+            </div>
+            <div class="chart-container">
+              <os-bar-chart
+                [data]="$any(subscribersChartConfig().data)"
+                [options]="subscribersChartConfig().options || {}"
+                [legendItems]="subscribersChartConfig().legendItems || []"
+                [legendMaxHeight]="80">
+              </os-bar-chart>
+            </div>
+          </os-card>
+        </div>
+      }
+
+      <!-- Line Chart Row (Average Traffic Trend) -->
+      @if (avgTrafficChartConfig()) {
+        <div class="charts-row single">
+          <os-card class="chart-card" variant="default">
+            <div class="card-header">
+              <h3>{{ 'dashboard.traffic.avgTrafficTrend' | translate }}</h3>
+            </div>
+            <div class="chart-container">
+              <os-line-chart
+                [data]="$any(avgTrafficChartConfig().data)"
+                [options]="avgTrafficChartConfig().options || {}">
+              </os-line-chart>
+            </div>
+          </os-card>
+        </div>
+      }
+
+    </div>
+  }
 </div>

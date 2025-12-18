@@ -9,8 +9,8 @@ import {
   PeriodStatusesResponse,
   BundleSubscribersResponse
 } from '../models/dashboard.types';
-import { TrafficAnalytics } from '../models/traffic.types';
 import { FinanceAnalytics } from '../models/finance.types';
+import { TrafficUsagePeriodResponse } from '../models/traffic.types';
 
 import { DashboardStateService } from './dashboard-state.service';
 import { ExecutiveDataService } from './executive-data.service';
@@ -62,7 +62,7 @@ export class DashboardDataService {
 
   // ===== Traffic Tab =====
 
-  getTrafficData(): Observable<DashboardResponse<TrafficAnalytics>> {
+  getTrafficData(): Observable<TrafficUsagePeriodResponse | null> {
     return this.trafficService.getTrafficData();
   }
 
