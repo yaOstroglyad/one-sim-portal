@@ -46,7 +46,7 @@
           <os-card class="kpi-card" variant="default">
             <div class="kpi-content">
               <div class="kpi-icon success">
-                <c-icon name="cilGlobe"></c-icon>
+                <c-icon name="cilGlobeAlt"></c-icon>
               </div>
               <div class="kpi-info">
                 <span class="kpi-label">{{ 'dashboard.traffic.activeCountries' | translate }}</span>
@@ -63,7 +63,7 @@
               </div>
               <div class="kpi-info">
                 <span class="kpi-label">{{ 'dashboard.traffic.topCountry' | translate }}</span>
-                <span class="kpi-value">{{ kpiValues()?.topCountry }}</span>
+                <span class="kpi-value" [osTooltip]="kpiValues()?.topCountry || ''" tooltipPosition="bottom">{{ kpiValues()?.topCountry }}</span>
               </div>
             </div>
           </os-card>

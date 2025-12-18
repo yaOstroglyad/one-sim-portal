@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconModule } from '@coreui/icons-angular';
 
-import { CardComponent, OsBarChartComponent, OsLineChartComponent } from '@shared';
+import { CardComponent, OsBarChartComponent, OsLineChartComponent, TooltipDirective } from '@shared';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
 
@@ -29,6 +29,7 @@ import {
     TranslateModule,
     IconModule,
     CardComponent,
+    TooltipDirective,
     LoadingIndicatorComponent,
     ErrorDisplayComponent,
     OsBarChartComponent,

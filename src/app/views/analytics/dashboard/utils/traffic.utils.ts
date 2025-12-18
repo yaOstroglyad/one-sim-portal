@@ -13,48 +13,14 @@ import {
   CountryTraffic
 } from '../models/traffic.types';
 
-const TRAFFIC_UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-
 /**
- * Determine the best unit for displaying traffic values based on magnitude
- * Returns the unit index (0=B, 1=KB, 2=MB, 3=GB, etc.) and divisor
+ * Format traffic value to display with GB unit
+ * API returns values already in GB, no conversion needed
  */
-function getBestTrafficUnit(maxBytes: number): { unitIndex: number; divisor: number; unit: string } {
-  if (maxBytes === 0 || !isFinite(maxBytes) || isNaN(maxBytes)) {
-    return { unitIndex: 0, divisor: 1, unit: 'B' };
-  }
-
-  // Find the appropriate unit so values are between 1 and 1000
-  const absBytes = Math.abs(maxBytes);
-  let unitIndex = 0;
-
-  if (absBytes >= 1) {
-    unitIndex = Math.floor(Math.log(absBytes) / Math.log(1024));
-    unitIndex = Math.max(0, Math.min(unitIndex, TRAFFIC_UNITS.length - 1));
-  }
-
-  return {
-    unitIndex,
-    divisor: Math.pow(1024, unitIndex),
-    unit: TRAFFIC_UNITS[unitIndex]
-  };
-}
-
-/**
- * Format traffic value in bytes to human-readable format
- * Auto-selects appropriate unit (B, KB, MB, GB, TB, PB)
- */
-export function formatTrafficValue(bytes: number): string {
-  if (bytes === null || bytes === undefined || isNaN(bytes)) return '0 B';
-  if (bytes === 0) return '0 B';
-  if (bytes < 0) return '-' + formatTrafficValue(Math.abs(bytes));
-  if (bytes < 1) return `${bytes.toFixed(2)} B`;
-
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  const index = Math.max(0, Math.min(i, TRAFFIC_UNITS.length - 1));
-  const value = bytes / Math.pow(1024, index);
-
-  return `${value.toFixed(2)} ${TRAFFIC_UNITS[index]}`;
+export function formatTrafficValue(value: number): string {
+  if (value === null || value === undefined || isNaN(value)) return '0 GB';
+  if (value === 0) return '0 GB';
+  return `${value.toFixed(2)} GB`;
 }
 
 /**
@@ -92,13 +58,14 @@ function getLatestAvgTraffic(data: AverageTrafficData[]): number {
 /**
  * Build stacked bar chart configuration for Traffic by Country
  * X-axis = periods, stacked by top 15 countries
+ * API returns values already in GB - no conversion needed
  */
 export function buildTrafficByCountryChartConfig(
   data: PeriodTrafficData[],
   maxCountries = 15
 ) {
   if (!data?.length) {
-    return createEmptyChartConfig('Traffic');
+    return createEmptyChartConfig('Traffic (GB)');
   }
 
   // Get all unique countries and their totals
@@ -110,28 +77,19 @@ export function buildTrafficByCountryChartConfig(
     });
   });
 
-  // Find max value to determine best unit
-  let maxTrafficInPeriod = 0;
-  data.forEach(period => {
-    const periodTotal = period.countryTraffics?.reduce((sum, ct) => sum + ct.traffic, 0) || 0;
-    maxTrafficInPeriod = Math.max(maxTrafficInPeriod, periodTotal);
-  });
-
-  const { divisor, unit } = getBestTrafficUnit(maxTrafficInPeriod);
-
   // Sort and limit to top N
   const topCountries = Array.from(countryTotals.entries())
     .sort((a, b) => b[1] - a[1])
     .slice(0, maxCountries)
     .map(([country]) => country);
 
-  // Build datasets using auto-detected unit
+  // Build datasets - values are already in GB
   const periods = data.map(d => formatPeriodLabel(d.period));
   const datasets = topCountries.map((country, index) => ({
     label: country,
     data: data.map(period => {
       const ct = period.countryTraffics?.find(c => c.country === country);
-      return ct ? ct.traffic / divisor : 0;
+      return ct ? ct.traffic : 0;
     }),
     backgroundColor: getChartColor(index),
     stack: 'stack0',
@@ -167,11 +125,11 @@ export function buildTrafficByCountryChartConfig(
             label: (context: any) => {
               const value = context.parsed.y || 0;
               if (value === 0) return null;
-              return `${context.dataset.label}: ${value.toFixed(2)} ${unit}`;
+              return `${context.dataset.label}: ${value.toFixed(2)} GB`;
             },
             footer: (items: any) => {
               const total = items.reduce((sum: number, item: any) => sum + (item.parsed.y || 0), 0);
-              return `Total: ${total.toFixed(2)} ${unit}`;
+              return `Total: ${total.toFixed(2)} GB`;
             }
           }
         }
@@ -180,7 +138,7 @@ export function buildTrafficByCountryChartConfig(
         x: { stacked: true },
         y: {
           stacked: true,
-          title: { display: true, text: `Traffic (${unit})` },
+          title: { display: true, text: 'Traffic (GB)' },
           beginAtZero: true
         }
       }
@@ -281,6 +239,7 @@ export function buildSubscribersByCountryChartConfig(
 
 /**
  * Build line chart configuration for Average Traffic per Subscriber trend
+ * API returns values already in GB - no conversion needed
  */
 export function buildAverageTrafficChartConfig(data: AverageTrafficData[]) {
   if (!data?.length) {
@@ -301,7 +260,7 @@ export function buildAverageTrafficChartConfig(data: AverageTrafficData[]) {
         maintainAspectRatio: false,
         scales: {
           y: {
-            title: { display: true, text: 'Traffic' },
+            title: { display: true, text: 'Traffic (GB)' },
             beginAtZero: true
           }
         }
@@ -309,12 +268,8 @@ export function buildAverageTrafficChartConfig(data: AverageTrafficData[]) {
     };
   }
 
-  // Find max value to determine best unit
-  const maxTraffic = Math.max(...data.map(d => d.traffic));
-  const { divisor, unit } = getBestTrafficUnit(maxTraffic);
-
   const periods = data.map(d => formatPeriodLabel(d.period));
-  const values = data.map(d => d.traffic / divisor);
+  const values = data.map(d => d.traffic);
 
   return {
     type: 'line' as const,
@@ -341,14 +296,14 @@ export function buildAverageTrafficChartConfig(data: AverageTrafficData[]) {
           callbacks: {
             label: (context: any) => {
               const value = context.parsed.y || 0;
-              return `Avg Traffic: ${value.toFixed(2)} ${unit}`;
+              return `Avg Traffic: ${value.toFixed(2)} GB`;
             }
           }
         }
       },
       scales: {
         y: {
-          title: { display: true, text: `Traffic (${unit})` },
+          title: { display: true, text: 'Traffic (GB)' },
           beginAtZero: true
         }
       }
