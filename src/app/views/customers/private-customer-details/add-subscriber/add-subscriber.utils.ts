@@ -7,7 +7,6 @@ import { Validators } from '@angular/forms';
 export function getAddSubscriberFormConfig(
   providers$: Observable<Provider[]>,
   productsDataService: ProductsDataService,
-  email: string,
   customerId: string
 ): FormConfig {
   return {
@@ -57,9 +56,8 @@ export function getAddSubscriberFormConfig(
       {
         type: FieldType.email,
         name: 'email',
-        value: email,
+        validators: [Validators.required],
         label: 'add-subscriber.email',
-        validators: [],
         placeholder: 'add-subscriber.enter-email',
         hintMessage: 'Email will be sent to register the user.'
       }

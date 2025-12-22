@@ -19,8 +19,8 @@ import {
   DEFAULT_MOCK_CONFIG,
   MOCK_DELAYS,
   HTTP_RETRY_CONFIG,
-  getChartColors,
-  DASHBOARD_CHART_COLORS
+  DASHBOARD_CHART_COLORS,
+  applyDefaultVisibility
 } from '../utils';
 import { wrapResponse, createErrorResponse } from '@shared';
 
@@ -358,13 +358,14 @@ export class FinanceDataService {
       }
     });
 
-    // Build legend items for custom legend component
-    const legendItems = sortedGroups.map((groupName, index) => ({
-      label: groupName,
-      color: DASHBOARD_CHART_COLORS[index % DASHBOARD_CHART_COLORS.length],
-      value: groupTotals.get(groupName) || 0,
-      hidden: false
-    }));
+    // Build legend items for custom legend component with default visibility (top 3 visible)
+    const legendItems = applyDefaultVisibility(
+      sortedGroups.map((groupName, index) => ({
+        label: groupName,
+        color: DASHBOARD_CHART_COLORS[index % DASHBOARD_CHART_COLORS.length],
+        value: groupTotals.get(groupName) || 0
+      }))
+    );
 
     return {
       type: 'bar' as const,

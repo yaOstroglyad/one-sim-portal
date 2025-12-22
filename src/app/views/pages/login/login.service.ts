@@ -40,20 +40,16 @@ export class LoginService implements OnDestroy {
 			}),
 
 			catchError(err => {
-				// Use specialized auth error transformation for OAuth/login errors
-				let message = 'errors.unauthorized';
-				if (err instanceof HttpErrorResponse) {
-					const authError = transformAuthError(err);
-					// For login errors, show the actual error message (not i18n key)
-					// because these are server-specific OAuth error messages
-					this.notification.showError(authError.message);
-					console.error('Login error:', err);
-					return EMPTY;
-				} else if (err?.message) {
-					message = err.message;
-				}
 				console.error('Login error:', err);
-				this.notification.showError(message);
+
+				if (err instanceof HttpErrorResponse) {
+					// OAuth/login errors - show actual server error message
+					const authError = transformAuthError(err);
+					this.notification.showError(authError.message);
+				} else {
+					// Other errors - show message or generic unauthorized
+					this.notification.showError(err?.message || 'errors.unauthorized');
+				}
 				return EMPTY;
 			})
 

@@ -2,9 +2,14 @@
      [style.width]="width()">
   @if (showLegend() && legendItems().length > 0) {
     <app-chart-legend
-      [items]="legendItems()"
+      [items]="displayLegendItems()"
       [maxHeight]="legendMaxHeight()"
-      (itemClick)="onLegendItemClick($event)">
+      [topN]="defaultTopN()"
+      [showControls]="showLegendControls()"
+      (itemClick)="onLegendItemClick($event)"
+      (showAll)="onShowAll()"
+      (hideAll)="onHideAll()"
+      (showTopN)="onShowTopN()">
     </app-chart-legend>
   }
   <div class="os-bar-chart__container" [style.height]="height()">

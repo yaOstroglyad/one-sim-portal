@@ -1,22 +1,55 @@
-<div
-  class="chart-legend"
-  [class.chart-legend--scrollable]="needsScroll()"
-  [style.max-height.px]="maxHeight()">
-  <div class="chart-legend__items">
-    @for (item of items(); track item.label; let i = $index) {
-      <button
-        type="button"
-        class="chart-legend__item"
-        [class.chart-legend__item--hidden]="item.hidden"
-        (click)="onItemClick(i, item)">
-        <span
-          class="chart-legend__color"
-          [style.background-color]="item.color">
-        </span>
-        <span class="chart-legend__label" [title]="item.label">
-          {{ item.label }}
-        </span>
-      </button>
-    }
+<div class="chart-legend-wrapper">
+  <!-- Controls: counter + buttons (only if more items than topN) -->
+  @if (showControls() && totalCount() > topN()) {
+    <div class="chart-legend__controls">
+      <span class="chart-legend__counter">
+        {{ visibleCount() }} {{ 'chart.legend.of' | translate }} {{ totalCount() }}
+      </span>
+      <div class="chart-legend__buttons">
+        <button
+          type="button"
+          class="chart-legend__btn"
+          (click)="onShowTopN()">
+          {{ 'chart.legend.top' | translate }} {{ topN() }}
+        </button>
+        <button
+          type="button"
+          class="chart-legend__btn"
+          [disabled]="allVisible()"
+          (click)="onShowAll()">
+          {{ 'chart.legend.showAll' | translate }}
+        </button>
+        <button
+          type="button"
+          class="chart-legend__btn"
+          [disabled]="allHidden()"
+          (click)="onHideAll()">
+          {{ 'chart.legend.hideAll' | translate }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Legend items -->
+  <div
+    class="chart-legend"
+    [style.max-height.px]="maxHeight()">
+    <div class="chart-legend__items">
+      @for (item of items(); track item.label; let i = $index) {
+        <button
+          type="button"
+          class="chart-legend__item"
+          [class.chart-legend__item--hidden]="item.hidden"
+          (click)="onItemClick(i, item)">
+          <span
+            class="chart-legend__color"
+            [style.background-color]="item.color">
+          </span>
+          <span class="chart-legend__label" [title]="item.label">
+            {{ item.label }}
+          </span>
+        </button>
+      }
+    </div>
   </div>
 </div>

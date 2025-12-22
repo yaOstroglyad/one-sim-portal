@@ -1,66 +1,83 @@
-import { Component, Input, ChangeDetectionStrategy, OnChanges, SimpleChanges, OnDestroy, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, input, computed, DestroyRef, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
-import { Subject, takeUntil } from 'rxjs';
+
+import { DetailSectionComponent } from '@shared/components/detail-section';
+import { DetailRowComponent } from '@shared/components/detail-row';
+import { StatusBadgeComponent } from '@shared/components/status-badge';
+import { UsageUnitsGridComponent } from '@shared/components/usage-units-grid';
+import { CoverageIconPipe } from '@shared/pipes';
+import { formatCurrency, formatValidityPeriod } from '@shared/utils';
 
 import { CompanyProduct, CompanyProductPrice } from '../../../models';
 import { CompanyProductPriceService } from '../../../services';
 import { CompanyProductPricesTableComponent } from '../company-product-prices-table';
 
+/**
+ * Company product details view component.
+ * Displays company product information with pricing schedule.
+ */
 @Component({
-    standalone: true,
-    selector: 'app-company-product-details',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-      CommonModule,
-      MatIconModule,
-      CompanyProductPricesTableComponent
-    ],
-    templateUrl: './company-product-details.component.html',
-    styleUrls: ['./company-product-details.component.scss']
+  standalone: true,
+  selector: 'app-company-product-details',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    MatIconModule,
+    DetailSectionComponent,
+    DetailRowComponent,
+    StatusBadgeComponent,
+    UsageUnitsGridComponent,
+    CoverageIconPipe,
+    CompanyProductPricesTableComponent
+  ],
+  templateUrl: './company-product-details.component.html',
+  styleUrls: ['./company-product-details.component.scss']
 })
-export class CompanyProductDetailsComponent implements OnChanges, OnDestroy {
-  @Input() companyProduct: CompanyProduct | null = null;
-
-  // Signals for retail prices
-  readonly prices = signal<CompanyProductPrice[]>([]);
-  readonly pricesLoading = signal(false);
-
-  private readonly destroy$ = new Subject<void>();
+export class CompanyProductDetailsComponent {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly companyProductPriceService = inject(CompanyProductPriceService);
 
-  // Pre-computed values for template
-  statusColor: string = '';
-  statusIcon: string = '';
-  statusText: string = '';
-  coverageTypeIcon: string = '';
-  formattedPrice: string = '';
-  formattedValidityPeriod: string = '';
-  processedUsageUnits: Array<{
-    type: string;
-    icon: string;
-    formattedValue: string;
-    typeDisplay: string;
-  }> = [];
+  /** Company product to display */
+  readonly companyProduct = input<CompanyProduct | null>(null);
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['companyProduct'] && this.companyProduct) {
-      this.precomputeValues();
-      // Load retail prices when company product changes
-      this.loadPrices(this.companyProduct.id);
-    }
-  }
+  /** Prices signal */
+  readonly prices = signal<CompanyProductPrice[]>([]);
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  /** Loading state for prices */
+  readonly pricesLoading = signal(false);
+
+  /** Formatted price */
+  readonly formattedPrice = computed(() => {
+    const product = this.companyProduct();
+    if (!product) return '';
+    return formatCurrency(product.price, product.currency);
+  });
+
+  /** Formatted validity period */
+  readonly formattedValidity = computed(() => {
+    const product = this.companyProduct();
+    return product?.validityPeriod ? formatValidityPeriod(product.validityPeriod) : '';
+  });
+
+  constructor() {
+    // Effect to load prices when companyProduct changes
+    effect(() => {
+      const product = this.companyProduct();
+      if (product) {
+        this.loadPrices(product.id);
+      }
+    });
   }
 
   private loadPrices(companyProductId: string): void {
     this.pricesLoading.set(true);
 
     this.companyProductPriceService.getPrices(companyProductId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (prices) => {
           this.prices.set(prices);
@@ -71,94 +88,5 @@ export class CompanyProductDetailsComponent implements OnChanges, OnDestroy {
           this.pricesLoading.set(false);
         }
       });
-  }
-
-  private precomputeValues(): void {
-    if (!this.companyProduct) {
-      this.resetValues();
-      return;
-    }
-
-    // Status-related values
-    this.statusColor = this.getStatusColor(this.companyProduct.active);
-    this.statusIcon = this.getStatusIcon(this.companyProduct.active);
-    this.statusText = this.companyProduct.active ? 'Active' : 'Inactive';
-
-    // Coverage icon
-    this.coverageTypeIcon = this.companyProduct.serviceCoverage ? 
-      this.getCoverageTypeIcon(this.companyProduct.serviceCoverage.type) : '';
-
-    // Formatted values
-    this.formattedPrice = this.formatPrice();
-    this.formattedValidityPeriod = this.formatValidityPeriod();
-
-    // Process usage units
-    this.processedUsageUnits = this.companyProduct.usageUnits?.map(unit => ({
-      type: unit?.type || '',
-      icon: this.getUsageUnitIcon(unit?.type),
-      formattedValue: this.formatUsageUnit(unit),
-      typeDisplay: unit?.type ? (unit.type.charAt(0).toUpperCase() + unit.type.slice(1)) : ''
-    })) || [];
-  }
-
-  private resetValues(): void {
-    this.statusColor = '';
-    this.statusIcon = '';
-    this.statusText = '';
-    this.coverageTypeIcon = '';
-    this.formattedPrice = '';
-    this.formattedValidityPeriod = '';
-    this.processedUsageUnits = [];
-  }
-
-  getStatusColor(active: boolean): string {
-    return active ? 'success' : 'danger';
-  }
-
-  getStatusIcon(active: boolean): string {
-    return active ? 'check_circle' : 'cancel';
-  }
-
-  getCoverageTypeIcon(type: string): string {
-    switch (type.toLowerCase()) {
-      case 'country': return 'location_on';
-      case 'region': return 'map';
-      default: return 'public';
-    }
-  }
-
-  getUsageUnitIcon(type: string): string {
-    switch (type) {
-      case 'data': return 'cloud_download';
-      case 'voice': return 'phone';
-      case 'sms': return 'email';
-      default: return 'circle';
-    }
-  }
-
-  formatUsageUnit(unit: any): string {
-    if (!unit) return '';
-    
-    if (unit.value === -1) {
-      return `Unlimited ${unit.type || ''}`;
-    }
-    return `${unit.value || 0} ${unit.unitType || ''}`;
-  }
-
-  formatPrice(): string {
-    if (!this.companyProduct) return '';
-    
-    const formatter = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: this.companyProduct.currency
-    });
-    return formatter.format(this.companyProduct.price);
-  }
-
-  formatValidityPeriod(): string {
-    if (!this.companyProduct?.validityPeriod) return '';
-    
-    const { period, timeUnit } = this.companyProduct.validityPeriod;
-    return `${period} ${timeUnit}`;
   }
 }

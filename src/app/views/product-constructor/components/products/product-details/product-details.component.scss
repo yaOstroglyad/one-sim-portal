@@ -1,65 +1,27 @@
-@use "../../../../../../scss/variables" as vars;
-@use "../../../../../../scss/mixins" as mixins;
-@use "../../../../../../scss/utilities" as utils;
+@use "detail-section" as shared;
 
 .product-details {
-  padding: 1.5rem;
-}
-
-.details-section {
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--os-color-light);
-  
-  &:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-  }
-}
-
-.section-title {
-  color: var(--os-color-dark);
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--os-color-primary);
-}
-
-.detail-label {
-  display: block;
-  font-weight: 600;
-  color: var(--os-color-medium);
-  font-size: 0.875rem;
-  margin-bottom: 0.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-.detail-value {
-  font-size: 1rem;
-  color: var(--os-color-dark);
-  
-  &.text-muted {
-    color: var(--os-color-medium) !important;
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-  }
-}
-
-.usage-units {
+  padding: 1rem;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 1rem; // Отступ между всеми дочерними элементами
 }
 
-// Responsive design
-@media (max-width: 768px) {
-  .product-details {
-    padding: 1rem;
-  }
-  
-  .section-title {
-    font-size: 1.1rem;
-  }
+// Helper classes
+.text-muted {
+  color: var(--cui-secondary-color) !important;
+  font-family: monospace;
+  font-size: 0.8125rem;
+}
+
+.fw-bold {
+  font-weight: 600;
+}
+
+.ms-1 {
+  margin-left: 0.25rem;
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
 }

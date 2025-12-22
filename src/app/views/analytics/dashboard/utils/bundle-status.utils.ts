@@ -1,3 +1,5 @@
+import { WaterfallDataPoint } from '@shared/components/waterfall-chart';
+
 /**
  * Bundle status lifecycle utilities
  *
@@ -27,6 +29,18 @@ export const BUNDLE_STATUS_LIFECYCLE_ORDER = [
 
 /** Type representing valid bundle status values */
 export type BundleStatus = typeof BUNDLE_STATUS_LIFECYCLE_ORDER[number];
+
+/**
+ * Waterfall chart order for bundle statuses.
+ * Excludes PAID (it's the starting total), lists statuses that subtract from it.
+ */
+export const BUNDLE_STATUS_WATERFALL_ORDER: BundleStatus[] = [
+  'REFUNDED',
+  'FAILED_ACTIVATE',
+  'ACTIVE',
+  'SPENT',
+  'EXPIRED'
+];
 
 /**
  * Color mapping for bundle statuses.
@@ -68,4 +82,72 @@ export function sortByLifecycleOrder(statuses: string[]): string[] {
 
     return orderA - orderB;
   });
+}
+
+/** i18n key prefix for bundle status labels */
+export const BUNDLE_STATUS_I18N_PREFIX = 'bundleStatuses';
+
+/**
+ * Get i18n key for a bundle status label.
+ */
+export function getBundleStatusI18nKey(status: string): string {
+  return `${BUNDLE_STATUS_I18N_PREFIX}.${status}`;
+}
+
+/**
+ * Builds waterfall chart data from status totals map.
+ *
+ * Waterfall logic:
+ * 1. PAID = total sold (sum of all statuses) - starting point, type: 'total'
+ * 2. All other statuses subtract from total (negative values)
+ *
+ * @param statusTotals - Map of status -> count
+ * @param translateFn - Optional function to translate status labels
+ * @returns Array of WaterfallDataPoint for chart visualization
+ */
+export function buildBundleStatusWaterfallData(
+  statusTotals: Map<string, number>,
+  translateFn?: (key: string) => string
+): WaterfallDataPoint[] {
+  // Calculate total sold (sum of all known statuses)
+  let totalSold = 0;
+  for (const status of BUNDLE_STATUS_LIFECYCLE_ORDER) {
+    totalSold += statusTotals.get(status) || 0;
+  }
+
+  if (totalSold === 0) {
+    return [];
+  }
+
+  const getLabel = (status: string): string => {
+    if (translateFn) {
+      return translateFn(getBundleStatusI18nKey(status));
+    }
+    return status;
+  };
+
+  const points: WaterfallDataPoint[] = [];
+
+  // First point: PAID = total (starting point)
+  points.push({
+    label: getLabel('PAID'),
+    value: totalSold,
+    type: 'total',
+    color: getBundleStatusColor('PAID')
+  });
+
+  // Remaining statuses: subtract from total (in waterfall order)
+  for (const status of BUNDLE_STATUS_WATERFALL_ORDER) {
+    const count = statusTotals.get(status) || 0;
+    if (count > 0) {
+      points.push({
+        label: getLabel(status),
+        value: -count,
+        type: 'decrease',
+        color: getBundleStatusColor(status)
+      });
+    }
+  }
+
+  return points;
 }

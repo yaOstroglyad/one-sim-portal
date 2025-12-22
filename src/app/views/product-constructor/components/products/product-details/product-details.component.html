@@ -1,113 +1,69 @@
-@if (product) {
+@if (product(); as p) {
   <div class="product-details">
+    <!-- Status Badge -->
+    <app-status-badge [active]="p.active"></app-status-badge>
+
     <!-- Basic Information -->
-    <div class="details-section">
-      <h5 class="section-title">{{ 'product.basicInformation' | translate }}</h5>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="detail-label">{{ 'product.productName' | translate }}</label>
-          <div class="detail-value">{{ product.name }}</div>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="detail-label">{{ 'product.status' | translate }}</label>
-          <div class="detail-value">
-            <c-badge [color]="getStatusColor()" shape="rounded-pill">
-              {{ getStatusText() }}
-            </c-badge>
-          </div>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="detail-label">{{ 'product.productId' | translate }}</label>
-          <div class="detail-value text-muted">{{ product.id }}</div>
-        </div>
-      </div>
-    </div>
+    <app-detail-section
+      [title]="'product.basicInformation' | translate"
+      icon="info">
+      <app-detail-row [label]="'product.productName' | translate">
+        {{ p.name }}
+      </app-detail-row>
+      <app-detail-row [label]="'product.productId' | translate" valueClass="text-muted">
+        {{ p.id }}
+      </app-detail-row>
+    </app-detail-section>
+
     <!-- Bundle Information -->
-    @if (product.bundle) {
-      <div class="details-section">
-        <h5 class="section-title">{{ 'product.bundleInformation' | translate }}</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="detail-label">{{ 'product.bundleName' | translate }}</label>
-            <div class="detail-value">{{ product.bundle.name }}</div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="detail-label">{{ 'product.bundleId' | translate }}</label>
-            <div class="detail-value text-muted">{{ product.bundle.id }}</div>
-          </div>
-          <div class="col-12 mb-3">
-            <label class="detail-label">{{ 'product.usageUnits' | translate }}</label>
-            <div class="detail-value">
-              <div class="usage-units">
-                @for (unit of product.bundle.usageUnits; track unit) {
-                  <c-badge
-                    color="info"
-                    class="me-2 mb-1"
-                    shape="rounded-pill">
-                    {{ unit.value }} {{ unit.unitType }} {{ unit.type }}
-                  </c-badge>
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    @if (p.bundle) {
+      <app-detail-section
+        [title]="'product.bundleInformation' | translate"
+        icon="layers">
+        <app-detail-row [label]="'product.bundleName' | translate">
+          {{ p.bundle.name }}
+        </app-detail-row>
+        <app-detail-row [label]="'product.bundleId' | translate" valueClass="text-muted">
+          {{ p.bundle.id }}
+        </app-detail-row>
+      </app-detail-section>
+
+      <!-- Usage Units -->
+      @if (p.bundle.usageUnits && p.bundle.usageUnits.length > 0) {
+        <app-detail-section
+          [title]="'product.usageUnits' | translate"
+          icon="cloud_download">
+          <app-usage-units-grid [units]="p.bundle.usageUnits"></app-usage-units-grid>
+        </app-detail-section>
+      }
     }
+
     <!-- Coverage Information -->
-    @if (product.serviceCoverage) {
-      <div class="details-section">
-        <h5 class="section-title">{{ 'product.coverageInformation' | translate }}</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="detail-label">{{ 'product.coverageName' | translate }}</label>
-            <div class="detail-value">{{ product.serviceCoverage.name }}</div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="detail-label">{{ 'product.coverageType' | translate }}</label>
-            <div class="detail-value">
-              <c-badge
-                [color]="product.serviceCoverage.type === 'REGION' ? 'primary' : 'secondary'"
-                shape="rounded-pill">
-                {{ product.serviceCoverage.type }}
-              </c-badge>
-            </div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="detail-label">{{ 'product.coverageId' | translate }}</label>
-            <div class="detail-value text-muted">{{ product.serviceCoverage.id }}</div>
-          </div>
-        </div>
-      </div>
+    @if (p.serviceCoverage) {
+      <app-detail-section
+        [title]="'product.coverageInformation' | translate"
+        icon="public">
+        <app-detail-row [label]="'product.coverageName' | translate">
+          <mat-icon>{{ p.serviceCoverage.type | coverageIcon }}</mat-icon>
+          {{ p.serviceCoverage.name }}
+          <span class="text-muted ms-1">({{ p.serviceCoverage.type }})</span>
+        </app-detail-row>
+        <app-detail-row [label]="'product.coverageId' | translate" valueClass="text-muted">
+          {{ p.serviceCoverage.id }}
+        </app-detail-row>
+      </app-detail-section>
     }
+
     <!-- Validity Information -->
-    @if (product.validityPeriod) {
-      <div class="details-section">
-        <h5 class="section-title">{{ 'product.validityInformation' | translate }}</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="detail-label">{{ 'product.validityPeriod' | translate }}</label>
-            <div class="detail-value">
-              <c-badge color="warning" shape="rounded-pill">
-                {{ formatValidity() }}
-              </c-badge>
-            </div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="detail-label">{{ 'product.period' | translate }}</label>
-            <div class="detail-value">{{ product.validityPeriod.period }}</div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="detail-label">{{ 'product.timeUnit' | translate }}</label>
-            <div class="detail-value">{{ product.validityPeriod.timeUnit }}</div>
-          </div>
-        </div>
-      </div>
-    }
-    <!-- No data message -->
-    @if (!product) {
-      <div class="text-center text-muted py-4">
-        <p>{{ 'product.noDetailsAvailable' | translate }}</p>
-      </div>
+    @if (p.validityPeriod) {
+      <app-detail-section
+        [title]="'product.validityInformation' | translate"
+        icon="schedule"
+        [isLast]="true">
+        <app-detail-row [label]="'product.validityPeriod' | translate" valueClass="fw-bold">
+          {{ formattedValidity() }}
+        </app-detail-row>
+      </app-detail-section>
     }
   </div>
 }

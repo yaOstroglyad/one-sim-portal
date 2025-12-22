@@ -142,6 +142,30 @@ selector: 'app-my-component'
 - **Complex templates (3+ logical blocks) MUST be in separate `.html` files**
 - Simple single-block templates may use inline `template`
 
+### Host Display for Block-Level Components
+- **Components used as block-level elements MUST declare `:host { display: block; }` in SCSS**
+- Angular components render as custom HTML elements which default to `display: inline`
+- CSS margins/padding do not work correctly on inline elements
+- This makes the component self-documenting and portable
+
+```scss
+// ✅ CORRECT - In component SCSS file
+:host {
+  display: block;
+}
+
+.my-component {
+  // component styles...
+}
+
+// ❌ WRONG - Relying on global styles or parent to set display
+```
+
+**When to add `:host { display: block }`:**
+- Component is placed directly in layouts (not wrapped in a `<div>`)
+- Component needs margins, padding, or other block-level behaviors
+- Component is used in flex/grid containers where sizing matters
+
 ---
 
 ## III. Error Handling Architecture (NON-NEGOTIABLE)
@@ -413,6 +437,7 @@ color: #2c2c2c;
 - [ ] Signal inputs/outputs in new code
 - [ ] `@if/@for/@switch` in new templates
 - [ ] `os-` selector prefix
+- [ ] `:host { display: block }` for block-level components
 - [ ] Error handling follows 4-layer architecture (see Section III)
 - [ ] NotificationService used for all user notifications (no direct MatSnackBar)
 - [ ] All notification messages use i18n keys (no hardcoded strings)
@@ -546,4 +571,4 @@ specs/{feature-name}/
 
 ---
 
-**Version:** 1.4.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2025-12-18
+**Version:** 1.5.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2025-12-22

@@ -1,0 +1,10 @@
+@use "detail-section" as shared;
+
+:host {
+  display: block;
+}
+
+.text-muted {
+  color: var(--cui-secondary-color);
+  font-size: 0.875rem;
+}

@@ -1034,5 +1034,21 @@
     "operationFailed": "הפעולה נכשלה. אנא נסה שוב.",
     "timeout": "הבקשה חרגה מזמן ההמתנה. אנא נסה שוב.",
     "close": "סגור"
+  },
+  "chart": {
+    "legend": {
+      "top": "Top",
+      "showAll": "Show All",
+      "hideAll": "Hide All",
+      "of": "of"
+    }
+  },
+  "bundleStatuses": {
+    "PAID": "Paid",
+    "REFUNDED": "Refunded",
+    "FAILED_ACTIVATE": "Failed",
+    "ACTIVE": "Active",
+    "SPENT": "Spent",
+    "EXPIRED": "Expired"
   }
 }

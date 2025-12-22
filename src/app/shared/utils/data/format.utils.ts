@@ -182,3 +182,72 @@ export function truncateString(
 
   return text.substring(0, maxLength - ellipsis.length) + ellipsis;
 }
+
+// =============================================================================
+// Product/Usage Formatting
+// =============================================================================
+
+/**
+ * Usage unit interface for formatting
+ */
+export interface UsageUnitFormatInput {
+  value: number;
+  unitType?: string;
+  type?: string;
+}
+
+/**
+ * Validity period interface for formatting
+ */
+export interface ValidityPeriodFormatInput {
+  period: number;
+  timeUnit: string;
+}
+
+/**
+ * Format usage unit value with proper handling of unlimited (-1)
+ *
+ * @param unit - Usage unit object with value, unitType, and type
+ * @returns Formatted string
+ *
+ * @example
+ * ```typescript
+ * formatUsageUnit({ value: 5, unitType: 'GB', type: 'data' });   // "5 GB"
+ * formatUsageUnit({ value: -1, unitType: 'GB', type: 'data' });  // "Unlimited"
+ * formatUsageUnit({ value: 100, unitType: 'min', type: 'voice' }); // "100 min"
+ * ```
+ */
+export function formatUsageUnit(unit: UsageUnitFormatInput | null | undefined): string {
+  if (!unit) {
+    return '';
+  }
+
+  if (unit.value === -1) {
+    return 'Unlimited';
+  }
+
+  const value = unit.value ?? 0;
+  const unitType = unit.unitType ?? '';
+
+  return `${value} ${unitType}`.trim();
+}
+
+/**
+ * Format validity period
+ *
+ * @param period - Validity period object with period and timeUnit
+ * @returns Formatted string
+ *
+ * @example
+ * ```typescript
+ * formatValidityPeriod({ period: 30, timeUnit: 'days' });  // "30 days"
+ * formatValidityPeriod({ period: 1, timeUnit: 'year' });   // "1 year"
+ * ```
+ */
+export function formatValidityPeriod(period: ValidityPeriodFormatInput | null | undefined): string {
+  if (!period) {
+    return '';
+  }
+
+  return `${period.period} ${period.timeUnit}`;
+}

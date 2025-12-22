@@ -1,0 +1,11 @@
+<section class="os-detail-section" [class.is-last]="isLast()">
+  <h6 class="section-title">
+    @if (icon()) {
+      <mat-icon>{{ icon() }}</mat-icon>
+    }
+    {{ title() }}
+  </h6>
+  <div class="section-content">
+    <ng-content></ng-content>
+  </div>
+</section>

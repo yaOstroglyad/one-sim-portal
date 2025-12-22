@@ -109,8 +109,9 @@ export function transformToWaterfallData(
     const type = getDataPointType(point);
 
     if (type === 'total') {
-      // Total bars always start from 0 and show the cumulative total
-      floatingBarData.push([0, runningTotal]);
+      // Total bars start from 0 and show the value (sets new baseline)
+      floatingBarData.push([0, point.value]);
+      runningTotal = point.value;
     } else {
       // Regular bars show the change from current total
       const start = runningTotal;

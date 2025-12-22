@@ -51,7 +51,6 @@ export class AddSubscriberComponent implements OnInit {
     this.formConfig = getAddSubscriberFormConfig(
       providers$,
       this.productsDataService,
-      this.data.email,
       this.data.customerId
     );
     this.loading = false;

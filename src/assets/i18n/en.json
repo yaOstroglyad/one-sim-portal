@@ -193,6 +193,7 @@
     "today": "Today",
     "selectAll": "Select All",
     "all": "All",
+    "noDescription": "No description provided",
     "months": {
       "january": "January",
       "february": "February",
@@ -325,8 +326,16 @@
     "inactive": "Inactive",
     "basicInformation": "Basic Information",
     "companyInformation": "Company Information",
+    "productInformation": "Product Information",
+    "description": "Description",
+    "serviceCoverage": "Service Coverage",
     "coverageInformation": "Coverage Information",
+    "coveragePricing": "Coverage & Pricing",
     "pricingInformation": "Pricing Information",
+    "pricingSchedule": "Pricing Schedule",
+    "additionalInformation": "Additional Information",
+    "productId": "Product ID",
+    "companyId": "Company ID",
     "noDetailsAvailable": "No details available"
   },
   "tariffOffer": {
@@ -1372,5 +1381,21 @@
     "roleLoadFailed": "Failed to load roles. Please try again.",
     "configurationCreateFailed": "Failed to create configuration. Please try again.",
     "configurationUpdateFailed": "Failed to update configuration. Please try again."
+  },
+  "chart": {
+    "legend": {
+      "top": "Top",
+      "showAll": "Show All",
+      "hideAll": "Hide All",
+      "of": "of"
+    }
+  },
+  "bundleStatuses": {
+    "PAID": "Paid",
+    "REFUNDED": "Refunded",
+    "FAILED_ACTIVATE": "Failed",
+    "ACTIVE": "Active",
+    "SPENT": "Spent",
+    "EXPIRED": "Expired"
   }
 }

@@ -100,7 +100,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 			}),
 
 			catchError((error: HttpErrorResponse) => {
-				return this.handleError(error, req);
+				return this.handleError(error);
 			})
 		);
 	}
@@ -108,7 +108,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 	/**
 	 * Main error handling logic
 	 */
-	private handleError(error: HttpErrorResponse, req: HttpRequest<any>): Observable<never> {
+	private handleError(error: HttpErrorResponse): Observable<never> {
 		if (isDevMode()) {
 			console.log(`[HttpErrorInterceptor] Error: ${error.status} for ${error.url}`);
 		}

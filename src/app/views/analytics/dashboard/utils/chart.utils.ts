@@ -58,6 +58,55 @@ export function getChartColors(count: number): string[] {
 }
 
 /**
+ * Apply default visibility to legend items.
+ * Shows only top N items by value, hides the rest.
+ * Items are sorted by value descending to determine visibility.
+ *
+ * @param items - Array of legend items with value property
+ * @param maxVisible - Maximum number of visible items (default: 3)
+ * @returns Items with hidden property set appropriately
+ *
+ * @example
+ * ```typescript
+ * const items = [
+ *   { label: 'Italy', value: 45, color: '#abc' },
+ *   { label: 'Austria', value: 30, color: '#def' },
+ *   { label: 'Egypt', value: 5, color: '#ghi' }
+ * ];
+ * applyDefaultVisibility(items, 2);
+ * // Result: Italy & Austria visible, Egypt hidden
+ * ```
+ */
+export function applyDefaultVisibility<T extends { value?: number; hidden?: boolean }>(
+  items: T[],
+  maxVisible = 3
+): T[] {
+  if (!items?.length || maxVisible <= 0) {
+    return items;
+  }
+
+  // If we have fewer items than max, show all
+  if (items.length <= maxVisible) {
+    return items.map(item => ({ ...item, hidden: false }));
+  }
+
+  // Create indexed items to track original positions
+  const indexedItems = items.map((item, index) => ({ item, index, value: item.value ?? 0 }));
+
+  // Sort by value descending to find top N
+  const sorted = [...indexedItems].sort((a, b) => b.value - a.value);
+
+  // Get indices of top N items
+  const visibleIndices = new Set(sorted.slice(0, maxVisible).map(i => i.index));
+
+  // Return items with hidden flag based on whether they're in top N
+  return items.map((item, index) => ({
+    ...item,
+    hidden: !visibleIndices.has(index)
+  }));
+}
+
+/**
  * Create stacked bar chart configuration for subscribers
  * Shows subscribers and refunds as stacked bars
  *

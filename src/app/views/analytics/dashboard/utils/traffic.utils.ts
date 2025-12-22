@@ -2,7 +2,7 @@
  * Traffic Dashboard Utility Functions
  */
 
-import { DASHBOARD_CHART_COLORS, getChartColor } from './chart.utils';
+import { DASHBOARD_CHART_COLORS, getChartColor, applyDefaultVisibility } from './chart.utils';
 import {
   TrafficUsagePeriodResponse,
   PeriodTrafficData,
@@ -97,13 +97,15 @@ export function buildTrafficByCountryChartConfig(
     borderRadius: 2
   }));
 
-  // Build legend items
-  const legendItems: TrafficChartLegendItem[] = topCountries.map((country, index) => ({
-    label: country,
-    color: getChartColor(index),
-    value: countryTotals.get(country) || 0,
-    formattedValue: formatTrafficValue(countryTotals.get(country) || 0)
-  }));
+  // Build legend items with default visibility (top 3 visible)
+  const legendItems: TrafficChartLegendItem[] = applyDefaultVisibility(
+    topCountries.map((country, index) => ({
+      label: country,
+      color: getChartColor(index),
+      value: countryTotals.get(country) || 0,
+      formattedValue: formatTrafficValue(countryTotals.get(country) || 0)
+    }))
+  );
 
   return {
     type: 'bar' as const,
@@ -188,13 +190,15 @@ export function buildSubscribersByCountryChartConfig(
     borderRadius: 2
   }));
 
-  // Build legend items
-  const legendItems: TrafficChartLegendItem[] = topCountries.map((country, index) => ({
-    label: country,
-    color: getChartColor(index),
-    value: countryTotals.get(country) || 0,
-    formattedValue: (countryTotals.get(country) || 0).toLocaleString()
-  }));
+  // Build legend items with default visibility (top 3 visible)
+  const legendItems: TrafficChartLegendItem[] = applyDefaultVisibility(
+    topCountries.map((country, index) => ({
+      label: country,
+      color: getChartColor(index),
+      value: countryTotals.get(country) || 0,
+      formattedValue: (countryTotals.get(country) || 0).toLocaleString()
+    }))
+  );
 
   return {
     type: 'bar' as const,

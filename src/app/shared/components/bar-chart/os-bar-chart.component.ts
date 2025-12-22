@@ -5,10 +5,12 @@ import {
   Component,
   ElementRef,
   OnDestroy,
+  computed,
   effect,
   inject,
   input,
   output,
+  signal,
   viewChild
 } from '@angular/core';
 import Chart, { ChartOptions } from 'chart.js/auto';
@@ -65,9 +67,27 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
   readonly legendMaxHeight = input<number>(80);
   /** Whether to show legend (if legendItems provided) */
   readonly showLegend = input<boolean>(true);
+  /** Number of top items to show when "Top N" is clicked */
+  readonly defaultTopN = input<number>(3);
+  /** Whether to show legend controls (Top N, Show All, Hide All buttons) */
+  readonly showLegendControls = input<boolean>(true);
 
   /** Emits when legend item visibility changes */
   readonly legendItemsChange = output<ChartLegendItem[]>();
+
+  /** Internal state tracking toggled (hidden) legend items by index */
+  private readonly toggledIndices = signal<Set<number>>(new Set());
+
+  /** Computed legend items with merged hidden state for template */
+  readonly displayLegendItems = computed(() => {
+    const items = this.legendItems();
+    const toggled = this.toggledIndices();
+
+    return items.map((item, index) => ({
+      ...item,
+      hidden: toggled.has(index) ? !item.hidden : !!item.hidden
+    }));
+  });
 
   private chart: Chart | null = null;
   private initialized = false;
@@ -292,7 +312,38 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
       options: chartOptions as any
     });
 
+    // Apply initial visibility from legend items
+    this.applyInitialVisibility();
+
     this.cdr.detectChanges();
+  }
+
+  /**
+   * Apply initial visibility state from legend items to chart datasets
+   * Hides datasets that correspond to hidden legend items
+   * Note: Does NOT update toggledIndices - that tracks only user toggles
+   */
+  private applyInitialVisibility(): void {
+    if (!this.chart) return;
+
+    const items = this.legendItems();
+    if (!items.length) return;
+
+    const datasets = this.chart.data.datasets;
+
+    items.forEach((item) => {
+      if (item.hidden) {
+        // Find datasets matching this legend item and hide them
+        datasets.forEach((dataset, datasetIndex) => {
+          if (dataset.label?.includes(item.label)) {
+            const meta = this.chart!.getDatasetMeta(datasetIndex);
+            meta.hidden = true;
+          }
+        });
+      }
+    });
+
+    this.chart.update();
   }
 
   private updateChart(): void {
@@ -457,15 +508,115 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    // Emit updated legend items to parent (do not mutate input)
-    const updatedItems = this.legendItems().map((item, index) => {
-      if (index === event.index) {
-        return { ...item, hidden: !item.hidden };
+    // Update internal toggled state
+    this.toggledIndices.update(set => {
+      const newSet = new Set(set);
+      if (newSet.has(event.index)) {
+        newSet.delete(event.index);
+      } else {
+        newSet.add(event.index);
       }
-      return item;
+      return newSet;
     });
-    this.legendItemsChange.emit(updatedItems);
 
+    // Emit updated legend items to parent (for external state management if needed)
+    this.legendItemsChange.emit(this.displayLegendItems());
+
+    this.chart.update();
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Show all datasets
+   */
+  onShowAll(): void {
+    if (!this.chart) return;
+
+    const items = this.legendItems();
+
+    // Show all Chart.js datasets
+    this.chart.data.datasets.forEach((_, datasetIndex) => {
+      this.chart!.getDatasetMeta(datasetIndex).hidden = false;
+    });
+
+    // Reset toggled indices - need to track which items were originally hidden
+    // and toggle them so XOR logic shows them as visible
+    const newToggledSet = new Set<number>();
+    items.forEach((item, index) => {
+      if (item.hidden) {
+        // If originally hidden, add to toggled so XOR makes it visible
+        newToggledSet.add(index);
+      }
+    });
+    this.toggledIndices.set(newToggledSet);
+
+    this.legendItemsChange.emit(this.displayLegendItems());
+    this.chart.update();
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Hide all datasets
+   */
+  onHideAll(): void {
+    if (!this.chart) return;
+
+    const items = this.legendItems();
+
+    // Hide all Chart.js datasets
+    this.chart.data.datasets.forEach((_, datasetIndex) => {
+      this.chart!.getDatasetMeta(datasetIndex).hidden = true;
+    });
+
+    // Update toggled indices - need to track which items were originally visible
+    // and toggle them so XOR logic shows them as hidden
+    const newToggledSet = new Set<number>();
+    items.forEach((item, index) => {
+      if (!item.hidden) {
+        // If originally visible, add to toggled so XOR makes it hidden
+        newToggledSet.add(index);
+      }
+    });
+    this.toggledIndices.set(newToggledSet);
+
+    this.legendItemsChange.emit(this.displayLegendItems());
+    this.chart.update();
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Show only top N datasets by value (reset to initial state)
+   */
+  onShowTopN(): void {
+    if (!this.chart) return;
+
+    const items = this.legendItems();
+    const topN = this.defaultTopN();
+
+    // Find top N indices by value
+    const sortedByValue = items
+      .map((item, index) => ({ index, value: item.value ?? 0 }))
+      .sort((a, b) => b.value - a.value);
+    const topIndices = new Set(sortedByValue.slice(0, topN).map(i => i.index));
+
+    // Update Chart.js visibility
+    items.forEach((item, index) => {
+      const shouldBeVisible = topIndices.has(index);
+      this.chart!.data.datasets.forEach((dataset) => {
+        if (dataset.label?.includes(item.label)) {
+          const datasetIndex = this.chart!.data.datasets.indexOf(dataset);
+          this.chart!.getDatasetMeta(datasetIndex).hidden = !shouldBeVisible;
+        }
+      });
+    });
+
+    // Reset toggled indices to match original hidden state
+    // Items that were originally hidden and should stay hidden = not in toggledIndices
+    // Items that were originally visible and should be hidden = add to toggledIndices
+    // Items that were originally hidden and should be visible = add to toggledIndices
+    this.toggledIndices.set(new Set());
+
+    this.legendItemsChange.emit(this.displayLegendItems());
     this.chart.update();
     this.cdr.detectChanges();
   }

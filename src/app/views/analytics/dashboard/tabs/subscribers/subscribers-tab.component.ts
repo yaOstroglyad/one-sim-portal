@@ -9,7 +9,7 @@ import {
   BundleSubscribersResponse
 } from '../../models/dashboard.types';
 import { DashboardDataService } from '../../services/dashboard-data.service';
-import { getChartColor, getChartColors, BUNDLE_STATUS_LIFECYCLE_ORDER, getBundleStatusColor } from '../../utils';
+import { getChartColor, getChartColors, applyDefaultVisibility, buildBundleStatusWaterfallData } from '../../utils';
 import {
   CardComponent,
   MetricCardComponent,
@@ -129,7 +129,7 @@ export class SubscribersTabComponent implements OnInit {
         this.buildNetworkStatusChartConfig(response.networkStatuses);
         this.buildBundleChartConfig(response.bundleSubscribers);
         this.buildCountryChartConfig(response.bundleSubscribers);
-        this.buildBundleStatusWaterfallData(response.bundleStatuses);
+        this.buildBundleStatusWaterfallDataFromResponse(response.bundleStatuses);
 
         this.error.set(null);
         this.cdr.markForCheck();
@@ -270,13 +270,14 @@ export class SubscribersTabComponent implements OnInit {
       }]
     };
 
-    // Build legend items for each bundle
-    const legendItems: ChartLegendItem[] = labels.map((label, index) => ({
-      label,
-      color: colors[index],
-      value: values[index],
-      hidden: false
-    }));
+    // Build legend items for each bundle with default visibility (top 3 visible)
+    const legendItems: ChartLegendItem[] = applyDefaultVisibility(
+      labels.map((label, index) => ({
+        label,
+        color: colors[index],
+        value: values[index]
+      }))
+    );
 
     this.bundleChartData.set(chartData);
     this.bundleLegendItems.set(legendItems);
@@ -307,13 +308,14 @@ export class SubscribersTabComponent implements OnInit {
       }]
     };
 
-    // Build legend items for each country
-    const legendItems: ChartLegendItem[] = labels.map((label, index) => ({
-      label,
-      color: colors[index],
-      value: values[index],
-      hidden: false
-    }));
+    // Build legend items for each country with default visibility (top 3 visible)
+    const legendItems: ChartLegendItem[] = applyDefaultVisibility(
+      labels.map((label, index) => ({
+        label,
+        color: colors[index],
+        value: values[index]
+      }))
+    );
 
     this.countryChartData.set(chartData);
     this.countryLegendItems.set(legendItems);
@@ -321,10 +323,9 @@ export class SubscribersTabComponent implements OnInit {
 
   /**
    * T024: Build bundle status waterfall data.
-   * Transforms API response into WaterfallDataPoint[] for waterfall chart visualization.
-   * Uses lifecycle ordering, calculates totals per status, and applies unique colors.
+   * Uses utility function from bundle-status.utils.ts
    */
-  private buildBundleStatusWaterfallData(data: PeriodStatusesResponse): void {
+  private buildBundleStatusWaterfallDataFromResponse(data: PeriodStatusesResponse): void {
     if (!data.periodStatuses || data.periodStatuses.length === 0) {
       this.bundleStatusWaterfallData.set([]);
       return;
@@ -339,31 +340,9 @@ export class SubscribersTabComponent implements OnInit {
       });
     });
 
-    // Build waterfall data points in lifecycle order with unique colors
-    const points: WaterfallDataPoint[] = [];
-
-    for (const status of BUNDLE_STATUS_LIFECYCLE_ORDER) {
-      const count = statusTotals.get(status);
-      if (count !== undefined && count > 0) {
-        points.push({
-          label: status,
-          value: count,
-          color: getBundleStatusColor(status)
-        });
-      }
-    }
-
-    // Add any unknown statuses at the end
-    statusTotals.forEach((count, status) => {
-      if (!BUNDLE_STATUS_LIFECYCLE_ORDER.includes(status as any) && count > 0) {
-        points.push({
-          label: status,
-          value: count,
-          color: '#6b7280' // Gray for unknown statuses
-        });
-      }
-    });
-
+    // Use utility function with translation
+    const translateFn = (key: string) => this.translateService.instant(key);
+    const points = buildBundleStatusWaterfallData(statusTotals, translateFn);
     this.bundleStatusWaterfallData.set(points);
   }
 

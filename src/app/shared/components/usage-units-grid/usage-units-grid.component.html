@@ -1,0 +1,17 @@
+@if (processedUnits().length > 0) {
+  <div class="os-usage-units-grid">
+    @for (unit of processedUnits(); track unit.type) {
+      <div class="usage-unit-card">
+        <div class="unit-icon">
+          <mat-icon>{{ unit.icon }}</mat-icon>
+        </div>
+        <div class="unit-details">
+          <div class="unit-type">{{ unit.typeDisplay }}</div>
+          <div class="unit-value">{{ unit.formattedValue }}</div>
+        </div>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="text-muted">{{ emptyMessage() }}</div>
+}

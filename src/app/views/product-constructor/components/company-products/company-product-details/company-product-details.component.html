@@ -1,121 +1,83 @@
-@if (companyProduct) {
+@if (companyProduct(); as cp) {
   <div class="company-product-details">
     <!-- Status Badge -->
-    <div class="status-badge mb-3">
-      <span class="badge" [ngClass]="'bg-' + statusColor">
-        <mat-icon [innerHTML]="statusIcon"></mat-icon>
-        {{ statusText }}
-      </span>
-    </div>
+    <app-status-badge [active]="cp.active"></app-status-badge>
+
     <!-- Company Information -->
-    <div class="detail-section">
-      <h6 class="section-title">
-        <mat-icon>business</mat-icon>
-        Company Information
-      </h6>
-      <div class="detail-row">
-        <span class="detail-label">Company Name:</span>
-        <span class="detail-value">{{ companyProduct.company.name }}</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Account ID:</span>
-        <span class="detail-value text-muted">{{ companyProduct.company.accountId }}</span>
-      </div>
-    </div>
+    <app-detail-section
+      [title]="'companyProduct.companyInformation' | translate"
+      icon="business">
+      <app-detail-row [label]="'companyProduct.companyName' | translate">
+        {{ cp.company.name }}
+      </app-detail-row>
+      <app-detail-row [label]="'companyProduct.accountId' | translate" valueClass="text-muted">
+        {{ cp.company.accountId }}
+      </app-detail-row>
+    </app-detail-section>
+
     <!-- Product Information -->
-    <div class="detail-section">
-      <h6 class="section-title">
-        <mat-icon>layers</mat-icon>
-        Product Information
-      </h6>
-      <div class="detail-row">
-        <span class="detail-label">Product Name:</span>
-        <span class="detail-value">{{ companyProduct.name }}</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Description:</span>
-        <span class="detail-value">{{ companyProduct.description || 'No description provided' }}</span>
-      </div>
-    </div>
+    <app-detail-section
+      [title]="'companyProduct.productInformation' | translate"
+      icon="layers">
+      <app-detail-row [label]="'companyProduct.productName' | translate">
+        {{ cp.name }}
+      </app-detail-row>
+      <app-detail-row [label]="'companyProduct.description' | translate">
+        {{ cp.description || ('common.noDescription' | translate) }}
+      </app-detail-row>
+    </app-detail-section>
+
     <!-- Coverage & Pricing -->
-    <div class="detail-section">
-      <h6 class="section-title">
-        <mat-icon>public</mat-icon>
-        Coverage & Pricing
-      </h6>
-      @if (companyProduct.serviceCoverage) {
-        <div class="detail-row">
-          <span class="detail-label">Service Coverage:</span>
-          <span class="detail-value">
-            <mat-icon [innerHTML]="coverageTypeIcon"></mat-icon>
-            {{ companyProduct.serviceCoverage.name }}
-            <span class="text-muted">({{ companyProduct.serviceCoverage.type }})</span>
-          </span>
-        </div>
+    <app-detail-section
+      [title]="'companyProduct.coveragePricing' | translate"
+      icon="public">
+      @if (cp.serviceCoverage) {
+        <app-detail-row [label]="'companyProduct.serviceCoverage' | translate">
+          <mat-icon>{{ cp.serviceCoverage.type | coverageIcon }}</mat-icon>
+          {{ cp.serviceCoverage.name }}
+          <span class="text-muted ms-1">({{ cp.serviceCoverage.type }})</span>
+        </app-detail-row>
       }
-      <div class="detail-row">
-        <span class="detail-label">Price:</span>
-        <span class="detail-value fw-bold">{{ formattedPrice }}</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Validity Period:</span>
-        <span class="detail-value">{{ formattedValidityPeriod }}</span>
-      </div>
-    </div>
+      <app-detail-row [label]="'companyProduct.price' | translate" valueClass="fw-bold">
+        {{ formattedPrice() }}
+      </app-detail-row>
+      <app-detail-row [label]="'companyProduct.validityPeriod' | translate">
+        {{ formattedValidity() }}
+      </app-detail-row>
+    </app-detail-section>
+
     <!-- Usage Units -->
-    <div class="detail-section">
-      <h6 class="section-title">
-        <mat-icon>cloud_download</mat-icon>
-        Usage Units
-      </h6>
-      @if (processedUsageUnits.length > 0) {
-        <div class="usage-units-grid">
-          @for (unit of processedUsageUnits; track unit) {
-            <div class="usage-unit-card">
-              <div class="unit-icon">
-                <mat-icon [innerHTML]="unit.icon"></mat-icon>
-              </div>
-              <div class="unit-details">
-                <div class="unit-type">{{ unit.typeDisplay }}</div>
-                <div class="unit-value">{{ unit.formattedValue }}</div>
-              </div>
-            </div>
-          }
-        </div>
-      }
-      @if (processedUsageUnits.length === 0) {
-        <div class="text-muted">
-          No usage units available
-        </div>
-      }
-    </div>
+    @if (cp.usageUnits && cp.usageUnits.length > 0) {
+      <app-detail-section
+        [title]="'companyProduct.usageUnits' | translate"
+        icon="cloud_download">
+        <app-usage-units-grid [units]="cp.usageUnits"></app-usage-units-grid>
+      </app-detail-section>
+    }
+
     <!-- Pricing Schedule -->
-    <div class="detail-section">
-      <h6 class="section-title">
-        <mat-icon>event</mat-icon>
-        Pricing Schedule
-      </h6>
+    <app-detail-section
+      [title]="'companyProduct.pricingSchedule' | translate"
+      icon="event">
       <app-company-product-prices-table
         [prices]="prices()"
         [loading]="pricesLoading()"
         [editable]="false"
         [showHeader]="false">
       </app-company-product-prices-table>
-    </div>
-    <!-- Metadata -->
-    <div class="detail-section">
-      <h6 class="section-title">
-        <mat-icon>info</mat-icon>
-        Additional Information
-      </h6>
-      <div class="detail-row">
-        <span class="detail-label">Product ID:</span>
-        <span class="detail-value text-muted">{{ companyProduct.id }}</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Company ID:</span>
-        <span class="detail-value text-muted">{{ companyProduct.company.id }}</span>
-      </div>
-    </div>
+    </app-detail-section>
+
+    <!-- Additional Information -->
+    <app-detail-section
+      [title]="'companyProduct.additionalInformation' | translate"
+      icon="info"
+      [isLast]="true">
+      <app-detail-row [label]="'companyProduct.productId' | translate" valueClass="text-muted">
+        {{ cp.id }}
+      </app-detail-row>
+      <app-detail-row [label]="'companyProduct.companyId' | translate" valueClass="text-muted">
+        {{ cp.company.id }}
+      </app-detail-row>
+    </app-detail-section>
   </div>
 }
