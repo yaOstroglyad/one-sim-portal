@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import {
   Account,
-  WhiteLabelDataService,
+  WhitelabelTemplatesService,
   AuthService,
   ADMIN_PERMISSION
 } from '@shared';
@@ -28,7 +28,7 @@ import { IconDirective } from '@coreui/icons-angular';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmailConfigurationsComponent implements OnInit {
-  private readonly whiteLabelService = inject(WhiteLabelDataService);
+  private readonly templatesService = inject(WhitelabelTemplatesService);
   private readonly authService = inject(AuthService);
   private readonly notification = inject(NotificationService);
 
@@ -38,7 +38,7 @@ export class EmailConfigurationsComponent implements OnInit {
   public selectedTemplateType: string | null = null;
 
   ngOnInit(): void {
-    this.templateTypes$ = this.whiteLabelService.emailTemplateTypes();
+    this.templateTypes$ = this.templatesService.getTypes();
     this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
   }
 

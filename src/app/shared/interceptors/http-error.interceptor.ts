@@ -146,6 +146,15 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 		// Clear auth state (without navigation - we handle it here)
 		this.authService.clearAuth();
 
+		// Don't set returnUrl if already on login page (prevents redirect loop)
+		const isLoginPage = currentUrl.startsWith('/login');
+		if (isLoginPage) {
+			if (isDevMode()) {
+				console.log('[HttpErrorInterceptor] Already on login page, skipping redirect');
+			}
+			return EMPTY;
+		}
+
 		// Check for consecutive 401s (infinite loop prevention)
 		const count = this.consecutive401Count.get(currentUrl) || 0;
 

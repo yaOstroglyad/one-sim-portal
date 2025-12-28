@@ -19,7 +19,11 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { ViewConfigurationService } from '../view-configuration.service';
+import {
+  ActiveThemeService,
+  APPLICATION_TYPES,
+  WhitelabelConfigService
+} from '@shared';
 import {
   concat,
   Observable,
@@ -33,7 +37,6 @@ import { FormConfig } from 'src/app/shared';
 import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
 import { NotificationService } from '@shared/services/ui/notification.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { VisualService } from 'src/app/shared/services/ui/visual.service';
 
 @Component({
     standalone: true,
@@ -54,10 +57,10 @@ export class PortalComponent implements OnInit {
 	@ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;
 
 	private readonly notification = inject(NotificationService);
-	private readonly viewConfigService = inject(ViewConfigurationService);
+	private readonly whitelabelConfigService = inject(WhitelabelConfigService);
 	private readonly authService = inject(AuthService);
 	private readonly accountsService = inject(AccountsDataService);
-	private readonly visualService = inject(VisualService);
+	private readonly activeThemeService = inject(ActiveThemeService);
 	private readonly cdr = inject(ChangeDetectorRef);
 
 	private readonly isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
@@ -68,23 +71,23 @@ export class PortalComponent implements OnInit {
 	public defaultFormConfig: FormConfig;
 
   ngOnInit() {
-    const defaultVC = this.viewConfigService.getDefaultConfig('admin portal');
+    const defaultVC = this.whitelabelConfigService.getDefaultConfig(APPLICATION_TYPES.ADMIN_PORTAL);
     this.defaultFormConfig = getPortalFormConfig(
       defaultVC,
       this.accountsService,
       this.isAdmin,
-      this.viewConfigService
+      this.whitelabelConfigService
     );
 
-    const load$ = this.viewConfigService
-      .getViewConfigByApplicationType('admin portal')
+    const load$ = this.whitelabelConfigService
+      .getByApplicationType(APPLICATION_TYPES.ADMIN_PORTAL)
       .pipe(
         map(vc => {
           if (vc.viewConfig) {
             this.formValues = { ...this.formValues, ...vc.viewConfig };
             this.cdr.markForCheck();
           }
-          return getPortalFormConfig(vc, this.accountsService, this.isAdmin, this.viewConfigService);
+          return getPortalFormConfig(vc, this.accountsService, this.isAdmin, this.whitelabelConfigService);
         }),
         catchError(() => of(this.defaultFormConfig))
       );
@@ -103,11 +106,11 @@ export class PortalComponent implements OnInit {
 		const values = this.formGenerator.form.value;
 		const payload = getPortalSettingsRequest(values);
 
-		this.viewConfigService.save(payload).subscribe({
+		this.whitelabelConfigService.save(payload).subscribe({
 			next: () => {
 				this.notification.success('notifications.settingsSaved');
 				if (!this.isAdmin) {
-					this.visualService.applyVisualConfig({...values, language: 'en'});
+					this.activeThemeService.apply({ ...values, language: 'en' });
 				}
 			},
 			error: () => {

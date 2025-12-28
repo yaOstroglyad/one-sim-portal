@@ -2,7 +2,7 @@ import { Component, inject, ChangeDetectionStrategy, signal, OnInit, OnDestroy }
 import { TranslateModule } from '@ngx-translate/core';
 
 import { Subject, takeUntil } from 'rxjs';
-import { AuthService, UserRoleService, VisualService } from '@shared';
+import { ActiveThemeService, AuthService, UserRoleService } from '@shared';
 
 /**
  * NoPermissionsComponent - Full screen page shown when user has no valid roles
@@ -27,7 +27,7 @@ import { AuthService, UserRoleService, VisualService } from '@shared';
 export class NoPermissionsComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly userRoleService = inject(UserRoleService);
-  private readonly visualService = inject(VisualService);
+  private readonly activeThemeService = inject(ActiveThemeService);
   private readonly unsubscribe$ = new Subject<void>();
 
   readonly logoUrl = signal<string>('');
@@ -38,13 +38,13 @@ export class NoPermissionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Load visual config from API first, then subscribe to changes
-    this.visualService.loadVisualConfig()
+    // Load theme config from API first, then subscribe to changes
+    this.activeThemeService.load()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe();
 
     // Subscribe to theme config changes
-    this.visualService.getThemeConfig$()
+    this.activeThemeService.getConfig$()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(config => {
         this.logoUrl.set(config.logoUrl || '');

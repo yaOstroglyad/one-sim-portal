@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import {
   EmailTemplate,
-  WhiteLabelDataService,
+  WhitelabelTemplatesService,
   TableConfig,
   GenericTableComponent
 } from '@shared';
@@ -45,7 +45,7 @@ export class TemplateTypeGridComponent implements OnInit, OnChanges, OnDestroy {
   @Input() type: string;
   @Input() ownerAccountId?: string;
 
-  private readonly whiteLabelService = inject(WhiteLabelDataService);
+  private readonly templatesService = inject(WhitelabelTemplatesService);
   private readonly tableService = inject(TemplateTypeGridService);
   private readonly dialog = inject(MatDialog);
   private readonly notification = inject(NotificationService);
@@ -62,7 +62,7 @@ export class TemplateTypeGridComponent implements OnInit, OnChanges, OnDestroy {
 
     this.dataList$ = this.reloadTrigger$.pipe(
       switchMap(() =>
-        this.whiteLabelService.allEmailTemplatesByType(this.type, this.ownerAccountId)
+        this.templatesService.getAllByType(this.type, this.ownerAccountId)
       ),
       takeUntil(this.destroy$)
     );
@@ -91,7 +91,7 @@ export class TemplateTypeGridComponent implements OnInit, OnChanges, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.whiteLabelService.createEmailTemplateIntegration(result).subscribe(() => {
+        this.templatesService.create(result).subscribe(() => {
           this.reloadTrigger$.next();
           this.notification.success('notifications.templateCreated');
         });
@@ -111,7 +111,7 @@ export class TemplateTypeGridComponent implements OnInit, OnChanges, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.whiteLabelService.updateEmailTemplateIntegration(result).subscribe(() => {
+        this.templatesService.update(result).subscribe(() => {
           this.reloadTrigger$.next();
           this.notification.success('notifications.templateUpdated');
         });
@@ -120,7 +120,7 @@ export class TemplateTypeGridComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public setAsPrimary(template: EmailTemplate): void {
-    this.whiteLabelService.setPrimaryEmailTemplateIntegration(template.id).subscribe(() => {
+    this.templatesService.setPrimary(template.id).subscribe(() => {
       this.reloadTrigger$.next();
       this.notification.success('notifications.changesSaved');
     });

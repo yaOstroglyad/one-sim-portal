@@ -6,7 +6,7 @@ import { getRetailFormConfig, getRetailSettingsRequest } from './retail.utils';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { ViewConfigurationService } from '../view-configuration.service';
+import { APPLICATION_TYPES, WhitelabelConfigService } from '@shared';
 import { Observable, catchError, map, of } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
 import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
@@ -33,7 +33,7 @@ export class RetailComponent implements OnInit {
   @ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;
 
   private readonly notification = inject(NotificationService);
-  private readonly viewConfigService = inject(ViewConfigurationService);
+  private readonly whitelabelConfigService = inject(WhitelabelConfigService);
   private readonly authService = inject(AuthService);
   private readonly accountsService = inject(AccountsDataService);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -59,7 +59,7 @@ export class RetailComponent implements OnInit {
       supportUrl: 'https://t.me/only_sim_bot'
     };
 
-    this.formConfig$ = this.viewConfigService.getViewConfigByApplicationType('retailer').pipe(
+    this.formConfig$ = this.whitelabelConfigService.getByApplicationType(APPLICATION_TYPES.RETAILER).pipe(
       map(config => {
         if (config && config.viewConfig) {
           this.formValues = {
@@ -72,7 +72,7 @@ export class RetailComponent implements OnInit {
           config,
           this.accountsService,
           this.isAdmin,
-          this.viewConfigService
+          this.whitelabelConfigService
         );
       }),
       tap(() => {
@@ -86,7 +86,7 @@ export class RetailComponent implements OnInit {
           null,
           this.accountsService,
           this.isAdmin,
-          this.viewConfigService
+          this.whitelabelConfigService
         ));
       })
     );
@@ -101,7 +101,7 @@ export class RetailComponent implements OnInit {
   save(): void {
     if (this.formGenerator.form.valid) {
       const settings = getRetailSettingsRequest(this.formGenerator.form.value);
-      this.viewConfigService.save(settings).subscribe({
+      this.whitelabelConfigService.save(settings).subscribe({
         next: () => {
           this.notification.success('notifications.settingsSaved');
         },

@@ -1,8 +1,7 @@
-import { EditCompanySettings, FieldType, FormConfig, SelectOption } from 'src/app/shared';
+import { EditCompanySettings, FieldType, FormConfig, SelectOption, WhitelabelSettingsService } from '@shared';
 import { map } from 'rxjs';
 import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
 import { Validators } from '@angular/forms';
-import { WhiteLabelDataService } from 'src/app/shared/services/data/white-label-data.service';
 
 const DEFAULT_SERVICE_EMAIL = 'service@1-esim.com';
 
@@ -31,7 +30,7 @@ export function getGeneralSettingsFormConfig(
   data?: EditCompanySettings,
   accountsService?: AccountsDataService,
   isAdmin?: boolean,
-  whiteLabelService?: WhiteLabelDataService
+  settingsService?: WhitelabelSettingsService
 ): FormConfig {
   const safeData: EditCompanySettings = data || {
     logoUrl: '',
@@ -115,11 +114,11 @@ export function getGeneralSettingsFormConfig(
       ),
       multiple: false,
       inputEvent: (event: any, formGenerator: any, field: any) => {
-        if (!whiteLabelService || !event || !event.value) {
+        if (!settingsService || !event || !event.value) {
           return;
         }
 
-        whiteLabelService.companySettings(event.value)
+        settingsService.get(event.value)
           .subscribe(settings => {
             if (settings) {
               const companySettings = settings;

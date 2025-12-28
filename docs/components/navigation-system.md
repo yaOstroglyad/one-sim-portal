@@ -93,7 +93,7 @@ Main container managing sidebar, branding, and navigation filtering.
 export class DefaultLayoutComponent {
   authService = inject(AuthService);
   translateService = inject(TranslateService);
-  visualService = inject(VisualService);
+  activeThemeService = inject(ActiveThemeService);
 
   // Filters menu by user permissions and translates labels
   filterAndTranslateNavItems(): void { ... }
@@ -156,6 +156,6 @@ All routes under `/home` are protected by `AuthGuardService`:
 - **Lazy Loading** - All modules load on demand
 - **Role-based Access** - Menu items filtered by permissions
 - **i18n Support** - All labels translatable
-- **Dynamic Branding** - Logo loaded via VisualService
+- **Dynamic Branding** - Logo loaded via ActiveThemeService
 - **Skeleton Loading** - UX during brand load
 - **OnPush Detection** - Performance optimized

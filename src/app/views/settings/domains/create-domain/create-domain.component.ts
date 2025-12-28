@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { getDomainCreateRequest, getCreateDomainFormConfig } from './create-domain.utils';
 import {
 	FormConfig, FormGeneratorComponent, AccountsDataService,
-	WhiteLabelDataService, DomainsDataService
+	WhitelabelSettingsService, DomainsDataService
 } from '@shared';
 
 import { ReactiveFormsModule } from '@angular/forms';
@@ -32,14 +32,14 @@ export class CreateDomainComponent implements OnInit {
 		private dialogRef: MatDialogRef<CreateDomainComponent>,
 		private domainsDataService: DomainsDataService,
 		private accountsDataService: AccountsDataService,
-		private whiteLabelDataService: WhiteLabelDataService
+		private settingsService: WhitelabelSettingsService
 	) {
 	}
 
 	ngOnInit() {
 		this.formConfig = getCreateDomainFormConfig(
 			this.accountsDataService,
-			this.whiteLabelDataService
+			this.settingsService
 		);
 	}
 

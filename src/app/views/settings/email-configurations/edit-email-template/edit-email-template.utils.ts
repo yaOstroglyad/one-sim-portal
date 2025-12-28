@@ -2,7 +2,7 @@ import {
   EditEmailTemplateIntegration,
   FieldType,
   FormConfig,
-  WhiteLabelDataService
+  WhitelabelTemplatesService
 } from '@shared';
 import { Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
@@ -20,7 +20,7 @@ export function getEmailTemplateRequest(form: any, type: string, ownerAccountId?
 
 export function getEditEmailTemplateFormConfig(
   data: EditEmailTemplateIntegration | null,
-  whiteLabelService: WhiteLabelDataService
+  templatesService: WhitelabelTemplatesService
 ): FormConfig {
   return {
     fields: [
@@ -51,7 +51,7 @@ export function getEditEmailTemplateFormConfig(
         label: 'email.template.language',
         value: data?.language,
         validators: [Validators.required],
-        options: whiteLabelService.allEmailTemplateLanguages().pipe(
+        options: templatesService.getLanguages().pipe(
           map(languages => languages.map(lang => ({
             value: lang,
             displayValue: lang

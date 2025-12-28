@@ -14,7 +14,6 @@
       "Bash(tree:*)",
       "Bash(realpath:*)",
       "Bash(wc:*)",
-
       "// === Git ===",
       "Bash(git add:*)",
       "Bash(git commit:*)",
@@ -24,7 +23,6 @@
       "Bash(git pull:*)",
       "Bash(git merge:*)",
       "Bash(git stash:*)",
-
       "// === Node.js / npm ===",
       "Bash(node:*)",
       "Bash(npm:*)",
@@ -38,21 +36,18 @@
       "Bash(npm cache clean:*)",
       "Bash(timeout 30 npm start)",
       "Bash(timeout 60 npm start)",
-
       "// === Angular ===",
       "Bash(ng build:*)",
       "Bash(ng update:*)",
       "Bash(npx ng build:*)",
       "Bash(npx ng update:*)",
       "Bash(npx tsc:*)",
-
       "// === nvm ===",
       "Bash(source ~/.nvm/nvm.sh)",
       "Bash(nvm install:*)",
       "Bash(nvm alias:*)",
       "Bash(nvm use:*)",
       "Bash(nvm list)",
-
       "// === Search / Text ===",
       "Bash(grep:*)",
       "Bash(rg:*)",
@@ -60,44 +55,35 @@
       "Bash(jq:*)",
       "Bash(xargs:*)",
       "Bash(xargs sed:*)",
-
       "// === Process Management ===",
       "Bash(pkill:*)",
       "Bash(lsof:*)",
-
       "// === Docker ===",
       "Bash(docker:*)",
       "Bash(docker build:*)",
-
       "// === Package Managers ===",
       "Bash(brew install:*)",
       "Bash(brew upgrade:*)",
       "Bash(uv:*)",
-
       "// === Python ===",
       "Bash(python3:*)",
-
       "// === Network ===",
       "Bash(curl:*)",
-
       "// === Claude CLI ===",
       "Bash(claude doctor)",
       "Bash(claude --version)",
-
       "// === Specify Scripts ===",
       "Bash(specify:*)",
       "Bash(./.specify/scripts/bash/check-prerequisites.sh:*)",
       "Bash(./.specify/scripts/bash/create-new-feature.sh:*)",
       "Bash(./.specify/scripts/bash/setup-plan.sh:*)",
       "Bash(./.specify/scripts/bash/update-agent-context.sh:*)",
-
       "// === Misc ===",
       "Bash(defaults read:*)",
       "Bash(command -v:*)",
       "Bash(echo $PWD)",
       "Bash(gzip:*)",
       "Bash(perl:*)",
-
       "// === Web Fetch ===",
       "WebFetch(domain:localhost)",
       "WebFetch(domain:angular.dev)",
@@ -106,16 +92,14 @@
       "WebFetch(domain:catalyst.tailwindui.com)",
       "WebFetch(domain:esim-product.dev.global-sim.app)",
       "WebFetch(domain:esim-server.dev.global-sim.app)",
-
       "// === MCP ===",
       "mcp__ide__getDiagnostics",
-
       "// === Slash Commands ===",
       "SlashCommand(/speckit.specify)",
       "SlashCommand(/speckit.implement)",
-
       "// === Search (Claude) ===",
-      "WebSearch"
+      "WebSearch",
+      "Bash(git restore:*)"
     ],
     "deny": [
       "// === Blocked for Security ===",

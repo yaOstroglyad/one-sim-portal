@@ -1,4 +1,4 @@
-import { FieldType, FormConfig, AccountsDataService, WhiteLabelDataService } from '@shared';
+import { FieldType, FormConfig, AccountsDataService, WhitelabelSettingsService } from '@shared';
 import { Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
 
@@ -13,7 +13,7 @@ export function getDomainCreateRequest(form: any) {
 
 export function getCreateDomainFormConfig(
   accountsDataService: AccountsDataService,
-  whiteLabelDataService: WhiteLabelDataService
+  settingsService: WhitelabelSettingsService
 ): FormConfig {
   return {
     fields: [
@@ -50,10 +50,10 @@ export function getCreateDomainFormConfig(
         label: 'domains.applicationType',
         value: null,
         validators: [Validators.required],
-        options: whiteLabelDataService.applicationTypes().pipe(
+        options: settingsService.getApplicationTypes().pipe(
           map(types => types.map(type => ({
-            value: type,
-            displayValue: type
+            value: type.value,
+            displayValue: type.displayValue
           })))
         )
       }

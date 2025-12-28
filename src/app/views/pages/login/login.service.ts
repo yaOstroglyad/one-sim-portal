@@ -71,7 +71,9 @@ export class LoginService implements OnDestroy {
 			console.log('[LoginService] returnUrl:', returnUrl || '(none, using /home)');
 		}
 
-		if (returnUrl) {
+		const isValidReturnUrl = returnUrl && !returnUrl.startsWith('/login');
+
+		if (isValidReturnUrl) {
 			this.router.navigateByUrl(returnUrl);
 		} else {
 			this.router.navigate(['/home']);

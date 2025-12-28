@@ -1,13 +1,17 @@
 import { FieldType, FormConfig, FormGeneratorComponent, SelectOption, shadeColor } from 'src/app/shared';
 import { map } from 'rxjs';
-import { ViewConfiguration, ViewConfigurationService } from '../view-configuration.service';
+import {
+  APPLICATION_TYPES,
+  WhitelabelConfig,
+  WhitelabelConfigService
+} from '@shared';
 import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
 import { Validators } from '@angular/forms';
 
-export function getRetailSettingsRequest(form: any): ViewConfiguration {
-  const request: ViewConfiguration = {
+export function getRetailSettingsRequest(form: any): WhitelabelConfig {
+  const request: WhitelabelConfig = {
     id: form.id,
-    applicationType: 'retailer',
+    applicationType: APPLICATION_TYPES.RETAILER,
     viewConfig: {
       primary: form.primary,
       'primary-hover': form['primary-hover'],
@@ -33,14 +37,14 @@ export function getRetailSettingsRequest(form: any): ViewConfiguration {
 }
 
 export function getRetailFormConfig(
-  data?: ViewConfiguration,
+  data?: WhitelabelConfig,
   accountsService?: AccountsDataService,
   isAdmin?: boolean,
-  viewConfigService?: ViewConfigurationService
+  whitelabelConfigService?: WhitelabelConfigService
 ): FormConfig {
-  const safeData: ViewConfiguration = data || {
+  const safeData: WhitelabelConfig = data || {
     id: null,
-    applicationType: 'retailer',
+    applicationType: APPLICATION_TYPES.RETAILER,
     viewConfig: {}
   };
 
@@ -168,12 +172,12 @@ export function getRetailFormConfig(
       multiple: false,
       inputEvent: (event: any, formGenerator: any, field: any) => {
         // Если сервис не передан или значение не выбрано, не выполняем запрос
-        if (!viewConfigService || !event || !event.value) {
+        if (!whitelabelConfigService || !event || !event.value) {
           return;
         }
 
         // Запрашиваем конфигурацию для выбранного аккаунта
-        viewConfigService.getViewConfigByApplicationType('retailer', event.value)
+        whitelabelConfigService.getByApplicationType(APPLICATION_TYPES.RETAILER, event.value)
           .subscribe(accountConfig => {
             if (accountConfig && accountConfig.viewConfig) {
               // Обновляем значения полей формы на основе полученной конфигурации

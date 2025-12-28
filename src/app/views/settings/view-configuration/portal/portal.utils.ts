@@ -1,13 +1,17 @@
 import { FieldType, FormConfig, SelectOption } from 'src/app/shared';
 import { map } from 'rxjs';
-import { ViewConfiguration, ViewConfigurationService } from '../view-configuration.service';
+import {
+  APPLICATION_TYPES,
+  WhitelabelConfig,
+  WhitelabelConfigService
+} from '@shared';
 import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
 import { Validators } from '@angular/forms';
 
-export function getPortalSettingsRequest(form: any): ViewConfiguration {
-  const request: ViewConfiguration = {
+export function getPortalSettingsRequest(form: any): WhitelabelConfig {
+  const request: WhitelabelConfig = {
     id: form.id,
-    applicationType: 'admin portal',
+    applicationType: APPLICATION_TYPES.ADMIN_PORTAL,
     viewConfig: {
       primaryColor: form.primaryColor,
       secondaryColor: form.secondaryColor,
@@ -26,14 +30,14 @@ export function getPortalSettingsRequest(form: any): ViewConfiguration {
 }
 
 export function getPortalFormConfig(
-  data?: ViewConfiguration,
+  data?: WhitelabelConfig,
   accountsService?: AccountsDataService,
   isAdmin?: boolean,
-  viewConfigService?: ViewConfigurationService
+  whitelabelConfigService?: WhitelabelConfigService
 ): FormConfig {
-  const safeData: ViewConfiguration = data || {
+  const safeData: WhitelabelConfig = data || {
     id: null,
-    applicationType: 'admin portal',
+    applicationType: APPLICATION_TYPES.ADMIN_PORTAL,
     viewConfig: {}
   };
 
@@ -100,11 +104,11 @@ export function getPortalFormConfig(
       ),
       multiple: false,
       inputEvent: (event: any, formGenerator: any, field: any) => {
-        if (!viewConfigService || !event || !event.value) {
+        if (!whitelabelConfigService || !event || !event.value) {
           return;
         }
 
-        viewConfigService.getViewConfigByApplicationType('admin portal', event.value)
+        whitelabelConfigService.getByApplicationType(APPLICATION_TYPES.ADMIN_PORTAL, event.value)
           .subscribe(accountConfig => {
             if (accountConfig && accountConfig.viewConfig) {
               const viewConfig = accountConfig.viewConfig;

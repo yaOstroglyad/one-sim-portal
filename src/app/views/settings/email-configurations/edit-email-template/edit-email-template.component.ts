@@ -3,7 +3,7 @@ import {
   FormConfig,
   FormGeneratorComponent,
   EmailTemplate,
-  WhiteLabelDataService
+  WhitelabelTemplatesService
 } from '@shared';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 
@@ -30,7 +30,7 @@ export class EditEmailTemplateComponent implements OnInit {
   private form: FormGroup;
 
   constructor(
-    private whiteLabelService: WhiteLabelDataService,
+    private templatesService: WhitelabelTemplatesService,
     private dialogRef: MatDialogRef<EditEmailTemplateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
       template?: EmailTemplate;
@@ -69,6 +69,6 @@ export class EditEmailTemplateComponent implements OnInit {
       type: this.data.type
     } : null;
 
-    this.formConfig = getEditEmailTemplateFormConfig(templateData, this.whiteLabelService);
+    this.formConfig = getEditEmailTemplateFormConfig(templateData, this.templatesService);
   }
 }

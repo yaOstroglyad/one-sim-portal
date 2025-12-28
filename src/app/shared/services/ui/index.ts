@@ -9,5 +9,5 @@
 
 export * from './language.service';
 export * from './theme.service';
-export * from './visual.service';
+export * from './active-theme.service';
 export * from './notification.service';

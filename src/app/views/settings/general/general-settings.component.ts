@@ -8,7 +8,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { Observable, catchError, map, of } from 'rxjs';
 import { FormConfig } from 'src/app/shared';
 import { AccountsDataService } from 'src/app/shared/services/data/accounts-data.service';
-import { WhiteLabelDataService } from 'src/app/shared/services/data/white-label-data.service';
+import { WhitelabelSettingsService } from '@shared';
 import { NotificationService } from '@shared/services/ui/notification.service';
 
 @Component({
@@ -66,7 +66,7 @@ export class GeneralSettingsComponent implements OnInit {
   @ViewChild(FormGeneratorComponent) formGenerator!: FormGeneratorComponent;
 
   private readonly notification = inject(NotificationService);
-  private readonly whiteLabelService = inject(WhiteLabelDataService);
+  private readonly settingsService = inject(WhitelabelSettingsService);
   private readonly authService = inject(AuthService);
   private readonly accountsService = inject(AccountsDataService);
 
@@ -75,13 +75,13 @@ export class GeneralSettingsComponent implements OnInit {
   public isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
 
   ngOnInit(): void {
-    this.formConfig$ = this.whiteLabelService.companySettings().pipe(
+    this.formConfig$ = this.settingsService.get().pipe(
       map(settings => {
         return getGeneralSettingsFormConfig(
           settings,
           this.accountsService,
           this.isAdmin,
-          this.whiteLabelService
+          this.settingsService
         );
       }),
       catchError(() => {
@@ -90,7 +90,7 @@ export class GeneralSettingsComponent implements OnInit {
           null,
           this.accountsService,
           this.isAdmin,
-          this.whiteLabelService
+          this.settingsService
         ));
       })
     );
@@ -106,8 +106,8 @@ export class GeneralSettingsComponent implements OnInit {
       const payload = getCompanySettingsRequest(formValues);
 
       const saveOperation = formValues.id
-        ? this.whiteLabelService.updateCompanySettings(payload)
-        : this.whiteLabelService.createCompanySettings(payload);
+        ? this.settingsService.update(payload)
+        : this.settingsService.create(payload);
 
       saveOperation.subscribe({
         next: () => {

@@ -19,5 +19,7 @@ export * from './providers-data.service';
 export * from './purchased-products-data.service';
 export * from './subscriber-data.service';
 export * from './transaction-data.service';
-export * from './white-label-data.service';
+export * from './whitelabel-config.service';
+export * from './whitelabel-templates.service';
+export * from './whitelabel-settings.service';
 export * from './tariff-offer.service';

@@ -15,7 +15,7 @@ import { Subject, takeUntil, skip } from 'rxjs';
 import { navItems } from './_nav';
 import { NavItem, BrandConfig, LayoutConfig } from './models';
 import { LayoutService } from './services';
-import { VisualConfig, isToggleActive, VisualService, AuthService, LanguageService } from '@shared';
+import { ActiveThemeConfig, ActiveThemeService, isToggleActive, AuthService, LanguageService } from '@shared';
 import { SidebarComponent } from './components';
 import { HeaderComponent } from './components';
 import { GlobalFabComponent, FlyoutLayoutComponent } from '@shared/components/fab-layout';
@@ -36,12 +36,13 @@ import { GlobalFabComponent, FlyoutLayoutComponent } from '@shared/components/fa
   styleUrls: ['./default-layout.component.scss']
 })
 export class DefaultLayoutComponent implements OnInit, OnDestroy {
-  authService = inject(AuthService);
-  translateService = inject(TranslateService);
-  visualService = inject(VisualService);
-  layoutService = inject(LayoutService);
-  languageService = inject(LanguageService);
-  cdr = inject(ChangeDetectorRef);
+  private readonly authService = inject(AuthService);
+  private readonly translateService = inject(TranslateService);
+  private readonly activeThemeService = inject(ActiveThemeService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  readonly layoutService = inject(LayoutService);
+  readonly languageService = inject(LanguageService);
 
   private unsubscribe$ = new Subject<void>();
 
@@ -77,8 +78,8 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.filterAndTranslateNavItems();
 
-    // Load visual configuration
-    this.visualService.loadVisualConfig().subscribe();
+    // Load theme configuration
+    this.activeThemeService.load().subscribe();
 
     // Subscribe to layout changes
     this.layoutService.getLayoutConfig()
@@ -89,7 +90,7 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
       });
 
     // Subscribe to theme config changes
-    this.visualService.getThemeConfig$()
+    this.activeThemeService.getConfig$()
       .pipe(
         skip(1),
         takeUntil(this.unsubscribe$)
@@ -107,7 +108,7 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
       });
   }
 
-  private updateBranding(config: VisualConfig): void {
+  private updateBranding(config: ActiveThemeConfig): void {
     this.brandConfig = {
       full: {
         src: config.logoUrl,
