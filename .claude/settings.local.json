@@ -99,7 +99,8 @@
       "SlashCommand(/speckit.implement)",
       "// === Search (Claude) ===",
       "WebSearch",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Skill(speckit.specify)"
     ],
     "deny": [
       "// === Blocked for Security ===",
