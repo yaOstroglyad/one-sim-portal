@@ -4,6 +4,9 @@
   [class.layout--rtl]="languageService.isRtl()"
   [class.layout--sidebar-collapsed]="layoutConfig.sidebarCollapsed">
 
+  <!-- Header (full-width, above sidebar) -->
+  <app-header></app-header>
+
   <!-- Sidebar -->
   <app-sidebar
     [navItems]="translatedNavItems"
@@ -12,13 +15,14 @@
 
   <!-- Main Content Area -->
   <div class="layout__main">
-    <!-- Header -->
-    <app-header></app-header>
-
     <!-- Content -->
     <main
       class="layout__content"
       [class.layout__content--with-collapsed-sidebar]="layoutConfig.sidebarCollapsed">
+      <!-- Breadcrumbs -->
+      <div class="layout__breadcrumb">
+        <app-breadcrumb></app-breadcrumb>
+      </div>
       <div class="layout__container">
         <router-outlet></router-outlet>
       </div>

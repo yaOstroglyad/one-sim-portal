@@ -80,7 +80,7 @@
   .text-muted {
     font-size: 0.875rem;
     font-style: italic;
-    color: var(--cui-secondary);
+    color: var(--layout-content-text-muted);
   }
 }
 
@@ -177,7 +177,7 @@
       label {
         font-weight: 500;
         font-size: 0.875rem;
-        color: var(--os-color-dark);
+        color: var(--layout-content-text);
         margin-bottom: map.get(vars.$os-spacing, '1');
       }
     }
@@ -200,19 +200,8 @@
   }
 }
 
-// Темная тема
-@media (prefers-color-scheme: dark) {
-  .filter-chip {
-    .chip-label {
-      color: var(--os-color-light);
-    }
-  }
-
-  .advanced-filters-content {
-    :global {
-      label {
-        color: var(--os-color-light);
-      }
-    }
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

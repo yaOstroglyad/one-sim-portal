@@ -23,14 +23,14 @@
     padding: map.get(vars.$os-spacing, '2');
     border: none;
     background: none;
-    color: var(--os-color-medium);
+    color: var(--layout-content-text-muted);
     cursor: pointer;
     border-radius: map.get(vars.$os-border-radius, 'small');
     transition: all 0.15s ease-in-out;
 
     &:hover {
-      background-color: var(--os-color-light);
-      color: var(--os-color-dark);
+      background-color: var(--layout-menu-hover);
+      color: var(--layout-content-text);
     }
   }
 
@@ -42,9 +42,15 @@
       max-height: 100vh;
       border-radius: 0;
     }
-    
+
     .dialog-footer {
       flex-direction: column-reverse;
     }
   }
 }
+
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

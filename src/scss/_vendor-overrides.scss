@@ -10,27 +10,95 @@
 // AG-GRID CUSTOMIZATIONS (complete styles from _ag-grid-styles.scss)
 // ==============================================
 
-/* AG-Grid CSS Variables */
+/* AG-Grid CSS Variables - Light Theme */
 :root {
   --ag-header-height: 48px;
   --ag-row-height: 48px;
-  --ag-header-foreground-color: rgba(0, 0, 0, 0.7);
-  --ag-header-background-color: #f8f8f8;
-  --ag-odd-row-background-color: #f9f9f9;
-  --ag-row-border-color: #e2e2e2;
-  --ag-cell-horizontal-border: #e2e2e2;
+  --ag-header-foreground-color: var(--layout-content-text);
+  --ag-header-background-color: var(--layout-content-bg);
+  --ag-odd-row-background-color: rgba(0, 0, 0, 0.02);
+  --ag-row-border-color: var(--layout-content-border);
+  --ag-cell-horizontal-border: var(--layout-content-border);
   --ag-selected-row-background-color: rgba(var(--os-color-primary-rgb), 0.1);
   --ag-row-hover-color: rgba(var(--os-color-primary-rgb), 0.05);
   --ag-font-family: var(--os-font-family);
-  --ag-row-even-background-color: #ffffff;
-  --ag-header-column-separator-color: #dde2eb;
-  --ag-border-color: #e2e2e2;
+  --ag-row-even-background-color: var(--layout-content-bg);
+  --ag-header-column-separator-color: var(--layout-content-border);
+  --ag-border-color: var(--layout-content-border);
   --ag-min-rows: 10; /* Default minimum rows */
+  --ag-foreground-color: var(--layout-content-text);
+  --ag-background-color: var(--layout-content-bg);
+}
+
+/* AG-Grid Dark Theme Overrides */
+html.dark,
+.layout--dark {
+  --ag-header-foreground-color: var(--layout-content-text);
+  --ag-header-background-color: var(--layout-content-bg);
+  --ag-odd-row-background-color: rgba(255, 255, 255, 0.02);
+  --ag-row-border-color: var(--layout-content-border);
+  --ag-cell-horizontal-border: var(--layout-content-border);
+  --ag-row-even-background-color: var(--layout-content-bg);
+  --ag-header-column-separator-color: var(--layout-content-border);
+  --ag-border-color: var(--layout-content-border);
+  --ag-foreground-color: var(--layout-content-text);
+  --ag-background-color: var(--layout-content-bg);
+
+  // CoreUI table dark theme overrides
+  --cui-table-bg: var(--layout-content-bg);
+  --cui-table-color: var(--layout-content-text);
+  --cui-table-border-color: var(--layout-content-border);
+  --cui-table-striped-bg: rgba(255, 255, 255, 0.02);
+  --cui-table-hover-bg: rgba(255, 255, 255, 0.05);
+  --cui-table-active-bg: rgba(var(--os-color-primary-rgb), 0.1);
+
+  // Explicit table element backgrounds
+  .ag-grid-wrapper {
+    background-color: var(--layout-content-bg) !important;
+    border-color: var(--layout-content-border) !important;
+  }
+
+  .ag-grid-table,
+  .table.ag-grid-table {
+    --cui-table-bg: var(--layout-content-bg);
+    background-color: var(--layout-content-bg) !important;
+    color: var(--layout-content-text) !important;
+  }
+
+  .ag-header,
+  .ag-header-row {
+    background-color: var(--layout-content-bg) !important;
+  }
+
+  .ag-header-cell {
+    background-color: var(--layout-content-bg) !important;
+    color: var(--layout-content-text) !important;
+    border-color: var(--layout-content-border) !important;
+  }
+
+  .ag-body,
+  .ag-row {
+    background-color: var(--layout-content-bg) !important;
+  }
+
+  .ag-row-odd {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+  }
+
+  .ag-cell {
+    background-color: transparent !important;
+    color: var(--layout-content-text) !important;
+    border-color: var(--layout-content-border) !important;
+  }
+
+  .ag-cell.actions-column {
+    background-color: var(--layout-content-bg) !important;
+  }
 }
 
 /* AG-Grid Wrapper */
 .ag-grid-wrapper {
-  background: #fff;
+  background: var(--layout-content-bg);
   border: 1px solid var(--ag-border-color);
   border-radius: map.get(vars.$os-border-radius, 'medium');
   box-shadow: map.get(vars.$os-shadows, 'sm');
@@ -129,7 +197,7 @@ colgroup col {
       cursor: pointer;
 
       &:hover {
-        background: #e9e9e9;
+        background: var(--layout-frame-bg);
       }
     }
 
@@ -212,7 +280,7 @@ colgroup col {
 /* Action Icons */
 .ag-action-icon {
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--layout-content-text-muted);
   transition: color 0.15s ease-in-out;
 
   &:hover {
@@ -249,7 +317,7 @@ colgroup col {
 }
 
 .ag-cell.actions-column {
-  background-color: #fff;
+  background-color: var(--layout-content-bg);
   border-left: 1px solid var(--ag-cell-horizontal-border);
 }
 
@@ -282,15 +350,15 @@ colgroup col {
 
 .ag-paging-description {
   margin: 0 map.get(vars.$os-spacing, '3');
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--layout-content-text-muted);
 }
 
 /* AG-Grid Checkboxes */
 .ag-checkbox,
 .ag-header-checkbox {
   appearance: none;
-  background: #fff;
-  border: 1px solid #d3d3d3;
+  background: var(--layout-content-bg);
+  border: 1px solid var(--layout-content-border);
   border-radius: map.get(vars.$os-border-radius, 'small');
   width: 16px;
   height: 16px;
@@ -323,7 +391,7 @@ colgroup col {
 .ag-overlay-wrapper {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--layout-overlay-bg, rgba(255, 255, 255, 0.8));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -334,7 +402,7 @@ colgroup col {
 
 /* Loading Overlay */
 .ag-overlay-loading-center {
-  background: #fff;
+  background: var(--layout-content-bg);
   border-radius: map.get(vars.$os-border-radius, 'medium');
   padding: map.get(vars.$os-spacing, '4') map.get(vars.$os-spacing, '6');
   box-shadow: map.get(vars.$os-shadows, 'lg');
@@ -361,17 +429,17 @@ colgroup col {
 
 .ag-loading-text {
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.7);
+  color: var(--layout-content-text);
   white-space: nowrap;
 }
 
 /* No-Data Overlay */
 .ag-overlay-no-rows-wrapper {
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--layout-overlay-bg, rgba(255, 255, 255, 0.8));
 }
 
 .ag-overlay-no-rows-center {
-  background: #fff;
+  background: var(--layout-content-bg);
   border-radius: map.get(vars.$os-border-radius, 'medium');
   padding: map.get(vars.$os-spacing, '6');
   box-shadow: map.get(vars.$os-shadows, 'md');
@@ -388,7 +456,7 @@ colgroup col {
 
 .ag-overlay-no-rows-text {
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.7);
+  color: var(--layout-content-text);
   white-space: nowrap;
 }
 
@@ -864,7 +932,17 @@ h6.mat-mdc-dialog-title,
 }
 
 // Dark theme support for dialogs
-[data-coreui-theme="dark"] {
+// Note: CDK overlay is outside .layout--dark, so we need both selectors
+html.dark,
+.layout--dark {
+  // Dialog container background
+  .mat-mdc-dialog-container,
+  .mat-mdc-dialog-surface,
+  .mdc-dialog__surface {
+    background-color: var(--layout-content-bg) !important;
+    color: var(--layout-content-text) !important;
+  }
+
   // Angular Material dialog elements - clean dark theme
   h1.mat-mdc-dialog-title,
   h2.mat-mdc-dialog-title,
@@ -875,24 +953,72 @@ h6.mat-mdc-dialog-title,
   .mat-mdc-dialog-title,
   .mdc-dialog__title,
   .dialog-header {
-    color: var(--os-color-light-text);
-    border-bottom-color: var(--os-color-dark-subtle-bg);
-    background: transparent; // No background in dark theme too
-    // No text shadow for clean look
+    color: var(--layout-content-text) !important;
+    border-bottom-color: var(--layout-content-border) !important;
+    background: transparent !important;
   }
 
+  .mat-mdc-dialog-actions,
+  .dialog-footer {
+    border-top: 1px solid var(--layout-content-border) !important;
+  }
+
+  // Dialog buttons dark theme
   .mat-mdc-dialog-actions {
-    border-top-color: var(--os-color-dark-subtle-bg);
+    // Default/text button (like Cancel)
+    .mat-mdc-button:not(.mat-mdc-button-disabled) {
+      color: var(--layout-content-text) !important;
+
+      &:hover {
+        background-color: var(--layout-menu-hover) !important;
+      }
+    }
+
+    // Stroked/outlined button
+    .mat-mdc-outlined-button:not(.mat-mdc-button-disabled) {
+      color: var(--layout-content-text) !important;
+      border-color: var(--layout-content-border) !important;
+
+      &:hover {
+        background-color: var(--layout-menu-hover) !important;
+      }
+    }
+
+    // Primary/raised button (like Save)
+    .mat-mdc-raised-button,
+    .mat-mdc-unelevated-button,
+    .mat-primary {
+      &:not(.mat-mdc-button-disabled) {
+        background-color: var(--os-color-primary) !important;
+        color: var(--os-color-primary-contrast) !important;
+      }
+
+      &.mat-mdc-button-disabled,
+      &[disabled] {
+        background-color: var(--layout-frame-bg) !important;
+        color: var(--layout-content-text-muted) !important;
+        opacity: 0.6;
+      }
+    }
+
+    // Warn button (like Delete)
+    .mat-warn:not(.mat-mdc-button-disabled) {
+      background-color: var(--os-color-danger) !important;
+      color: white !important;
+    }
+
+    // Disabled state for all buttons
+    .mat-mdc-button-disabled,
+    button[disabled] {
+      color: var(--layout-content-text-muted) !important;
+      opacity: 0.5;
+    }
   }
 
   // Legacy dialog classes (if any remain)
   .dialog-header:not(.mat-mdc-dialog-title):not(.mdc-dialog__title) {
-    color: var(--os-color-light-text);
-    border-bottom-color: var(--os-color-dark-subtle-bg);
-  }
-
-  .dialog-footer {
-    border-top-color: var(--os-color-dark-subtle-bg);
+    color: var(--layout-content-text) !important;
+    border-bottom: 1px solid var(--layout-content-border) !important;
   }
 
   .dialog-content {
@@ -907,25 +1033,25 @@ h6.mat-mdc-dialog-title,
     }
 
     .original-info, .info-section {
-      background-color: var(--os-color-dark-subtle-bg);
+      background-color: var(--layout-frame-bg);
 
       h6 {
-        color: var(--os-color-light-text);
+        color: var(--layout-content-text);
       }
 
       .info-row {
         .label {
-          color: var(--os-color-medium-text);
+          color: var(--layout-content-text-muted);
         }
 
         .value {
-          color: var(--os-color-light-text);
+          color: var(--layout-content-text);
         }
       }
     }
 
     .form-section h6, .modify-form h6 {
-      color: var(--os-color-light-text);
+      color: var(--layout-content-text);
     }
 
     .info-note {
@@ -934,10 +1060,10 @@ h6.mat-mdc-dialog-title,
     }
 
     .upload-info {
-      background-color: var(--os-color-dark-subtle-bg);
+      background-color: var(--layout-frame-bg);
 
       p {
-        color: var(--os-color-light-text);
+        color: var(--layout-content-text);
       }
     }
   }
@@ -1005,6 +1131,52 @@ h6.mat-mdc-dialog-title,
       &:hover {
         background: var(--os-color-primary-subtle-bg);
       }
+    }
+  }
+}
+
+// CoreUI table dark theme overrides
+html.dark,
+.layout--dark {
+  .table {
+    --cui-table-bg: var(--layout-content-bg);
+    --cui-table-color: var(--layout-content-text);
+    --cui-table-border-color: var(--layout-content-border);
+    --cui-table-striped-bg: rgba(255, 255, 255, 0.02);
+    --cui-table-hover-bg: rgba(255, 255, 255, 0.05);
+    background-color: var(--layout-content-bg) !important;
+    color: var(--layout-content-text) !important;
+
+    > thead {
+      background-color: var(--layout-content-bg) !important;
+      color: var(--layout-content-text) !important;
+
+      > tr > th {
+        background-color: var(--layout-content-bg) !important;
+        color: var(--layout-content-text) !important;
+        border-color: var(--layout-content-border) !important;
+      }
+    }
+
+    > tbody > tr {
+      background-color: var(--layout-content-bg) !important;
+      color: var(--layout-content-text) !important;
+
+      > td {
+        background-color: transparent !important;
+        color: var(--layout-content-text) !important;
+        border-color: var(--layout-content-border) !important;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+      }
+    }
+
+    > tfoot > tr > td {
+      background-color: var(--layout-content-bg) !important;
+      color: var(--layout-content-text) !important;
+      border-color: var(--layout-content-border) !important;
     }
   }
 }
@@ -1267,4 +1439,462 @@ h6.mat-mdc-dialog-title,
 // Table cell padding styles
 :host .table > :not(caption) > * > * {
   padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '2') 0 map.get(vars.$os-spacing, '2');
+}
+
+// ==============================================
+// GLOBAL DARK THEME OVERRIDES FOR MATERIAL COMPONENTS
+// These apply to both .layout--dark and html.dark (for CDK overlays)
+// ==============================================
+
+html.dark,
+.layout--dark {
+  // Material Form Fields - comprehensive dark theme
+  .mat-mdc-form-field {
+    --mdc-filled-text-field-container-color: var(--layout-input-bg);
+    --mdc-filled-text-field-label-text-color: var(--layout-input-placeholder);
+    --mdc-filled-text-field-input-text-color: var(--layout-input-text);
+    --mdc-filled-text-field-caret-color: var(--os-color-primary);
+    --mdc-filled-text-field-focus-active-indicator-color: var(--os-color-primary);
+    --mdc-filled-text-field-hover-active-indicator-color: var(--layout-content-border);
+    --mdc-filled-text-field-active-indicator-color: var(--layout-content-border);
+    --mdc-filled-text-field-disabled-container-color: var(--layout-frame-bg);
+    --mdc-filled-text-field-disabled-input-text-color: var(--layout-content-text-muted);
+    --mdc-filled-text-field-disabled-label-text-color: var(--layout-content-text-muted);
+
+    --mdc-outlined-text-field-container-shape: 4px;
+    --mdc-outlined-text-field-outline-color: var(--layout-input-border);
+    --mdc-outlined-text-field-hover-outline-color: var(--os-color-primary);
+    --mdc-outlined-text-field-focus-outline-color: var(--os-color-primary);
+    --mdc-outlined-text-field-label-text-color: var(--layout-input-placeholder);
+    --mdc-outlined-text-field-input-text-color: var(--layout-input-text);
+    --mdc-outlined-text-field-caret-color: var(--os-color-primary);
+    --mdc-outlined-text-field-disabled-outline-color: var(--layout-content-border);
+    --mdc-outlined-text-field-disabled-input-text-color: var(--layout-content-text-muted);
+    --mdc-outlined-text-field-disabled-label-text-color: var(--layout-content-text-muted);
+  }
+
+  // Material floating label
+  .mdc-floating-label,
+  .mat-mdc-floating-label {
+    color: var(--layout-input-placeholder) !important;
+  }
+
+  // Material text field wrapper
+  .mdc-text-field,
+  .mat-mdc-text-field-wrapper {
+    background-color: var(--layout-input-bg) !important;
+  }
+
+  // Material input elements
+  .mat-mdc-input-element,
+  .mdc-text-field__input {
+    color: var(--layout-input-text) !important;
+    caret-color: var(--os-color-primary) !important;
+
+    &::placeholder {
+      color: var(--layout-input-placeholder) !important;
+    }
+  }
+
+  // Material Select
+  .mat-mdc-select {
+    --mat-select-trigger-text-color: var(--layout-input-text);
+    --mat-select-placeholder-text-color: var(--layout-input-placeholder);
+    --mat-select-enabled-arrow-color: var(--layout-content-text-muted);
+    --mat-select-focused-arrow-color: var(--os-color-primary);
+    --mat-select-panel-background-color: var(--layout-menu-bg);
+  }
+
+  .mat-mdc-select-value {
+    color: var(--layout-input-text) !important;
+  }
+
+  .mat-mdc-select-placeholder {
+    color: var(--layout-input-placeholder) !important;
+  }
+
+  .mat-mdc-select-arrow {
+    color: var(--layout-content-text-muted) !important;
+  }
+
+  // Material Option (select dropdown items)
+  .mat-mdc-option {
+    --mat-option-label-text-color: var(--layout-menu-text);
+    --mat-option-hover-state-layer-color: var(--layout-menu-hover);
+    --mat-option-focus-state-layer-color: var(--layout-menu-hover);
+    --mat-option-selected-state-layer-color: rgba(var(--os-color-primary-rgb), 0.1);
+
+    &.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+      background-color: rgba(var(--os-color-primary-rgb), 0.1) !important;
+
+      .mdc-list-item__primary-text {
+        color: var(--os-color-primary) !important;
+      }
+    }
+
+    .mdc-list-item__primary-text {
+      color: var(--layout-menu-text) !important;
+    }
+
+    &:hover:not(.mdc-list-item--disabled) {
+      background-color: var(--layout-menu-hover) !important;
+    }
+  }
+
+  // Material Autocomplete panel
+  .mat-mdc-autocomplete-panel {
+    background-color: var(--layout-menu-bg) !important;
+    border: 1px solid var(--layout-content-border);
+  }
+
+  // Material Menu panel
+  .mat-mdc-menu-panel {
+    background-color: var(--layout-menu-bg) !important;
+    border: 1px solid var(--layout-content-border);
+  }
+
+  .mat-mdc-menu-item {
+    color: var(--layout-menu-text) !important;
+
+    &:hover:not([disabled]) {
+      background-color: var(--layout-menu-hover) !important;
+    }
+
+    .mat-icon {
+      color: var(--layout-content-text-muted) !important;
+    }
+  }
+
+  // Material Checkbox
+  .mat-mdc-checkbox {
+    --mdc-checkbox-unselected-icon-color: var(--layout-content-text-muted);
+    --mdc-checkbox-unselected-hover-icon-color: var(--os-color-primary);
+    --mdc-checkbox-selected-icon-color: var(--os-color-primary);
+    --mdc-checkbox-selected-hover-icon-color: var(--os-color-primary);
+    --mdc-checkbox-selected-checkmark-color: var(--os-color-primary-contrast);
+    --mat-checkbox-label-text-color: var(--layout-content-text);
+  }
+
+  // Material Radio
+  .mat-mdc-radio-button {
+    --mdc-radio-unselected-icon-color: var(--layout-content-text-muted);
+    --mdc-radio-unselected-hover-icon-color: var(--os-color-primary);
+    --mdc-radio-selected-icon-color: var(--os-color-primary);
+    --mdc-radio-selected-hover-icon-color: var(--os-color-primary);
+    --mat-radio-label-text-color: var(--layout-content-text);
+  }
+
+  // Material Slide Toggle
+  .mat-mdc-slide-toggle {
+    --mdc-switch-selected-track-color: var(--os-color-primary);
+    --mdc-switch-selected-handle-color: var(--os-color-primary-contrast);
+    --mdc-switch-unselected-track-color: var(--layout-content-border);
+    --mdc-switch-unselected-handle-color: var(--layout-content-text-muted);
+    --mat-slide-toggle-label-text-color: var(--layout-content-text);
+  }
+
+  // Material Datepicker
+  .mat-datepicker-content {
+    background-color: var(--layout-menu-bg) !important;
+    color: var(--layout-content-text) !important;
+    border: 1px solid var(--layout-content-border);
+  }
+
+  .mat-calendar {
+    background-color: var(--layout-menu-bg);
+  }
+
+  .mat-calendar-header {
+    background-color: var(--layout-frame-bg);
+  }
+
+  .mat-calendar-body-label,
+  .mat-calendar-period-button {
+    color: var(--layout-content-text) !important;
+  }
+
+  .mat-calendar-table-header th {
+    color: var(--layout-content-text-muted) !important;
+  }
+
+  .mat-calendar-body-cell-content {
+    color: var(--layout-content-text) !important;
+
+    &:hover {
+      background-color: var(--layout-menu-hover) !important;
+    }
+  }
+
+  .mat-calendar-body-selected {
+    background-color: var(--os-color-primary) !important;
+    color: var(--os-color-primary-contrast) !important;
+  }
+
+  .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+    border-color: var(--os-color-primary) !important;
+  }
+
+  .mat-calendar-body-disabled > .mat-calendar-body-cell-content {
+    color: var(--layout-content-text-muted) !important;
+    opacity: 0.5;
+  }
+
+  // Material Table
+  .mat-mdc-table {
+    background-color: var(--layout-content-bg) !important;
+
+    .mat-mdc-header-row {
+      background-color: var(--layout-frame-bg) !important;
+    }
+
+    .mat-mdc-header-cell {
+      color: var(--layout-content-text) !important;
+      border-bottom-color: var(--layout-content-border) !important;
+    }
+
+    .mat-mdc-row {
+      &:hover {
+        background-color: var(--layout-menu-hover) !important;
+      }
+    }
+
+    .mat-mdc-cell {
+      color: var(--layout-content-text) !important;
+      border-bottom-color: var(--layout-content-border) !important;
+    }
+  }
+
+  // Material Paginator
+  .mat-mdc-paginator {
+    background-color: var(--layout-content-bg) !important;
+    color: var(--layout-content-text) !important;
+
+    .mat-mdc-paginator-page-size-label,
+    .mat-mdc-paginator-range-label {
+      color: var(--layout-content-text-muted) !important;
+    }
+
+    .mat-mdc-select-value {
+      color: var(--layout-content-text) !important;
+    }
+
+    .mat-mdc-icon-button {
+      color: var(--layout-content-text-muted) !important;
+
+      &:hover:not([disabled]) {
+        background-color: var(--layout-menu-hover) !important;
+      }
+
+      &[disabled] {
+        color: var(--layout-content-text-muted) !important;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  // Material Button
+  .mat-mdc-button,
+  .mat-mdc-outlined-button {
+    --mdc-text-button-label-text-color: var(--layout-content-text);
+    --mdc-outlined-button-label-text-color: var(--layout-content-text);
+    --mdc-outlined-button-outline-color: var(--layout-content-border);
+  }
+
+  // Material Raised/Unelevated Button (primary, accent, warn)
+  .mat-mdc-raised-button,
+  .mat-mdc-unelevated-button {
+    &.mat-primary:not(.mat-mdc-button-disabled) {
+      background-color: var(--os-color-primary) !important;
+      color: var(--os-color-primary-contrast) !important;
+    }
+
+    &.mat-accent:not(.mat-mdc-button-disabled) {
+      background-color: var(--os-color-info) !important;
+      color: var(--os-color-info-contrast) !important;
+    }
+
+    &.mat-warn:not(.mat-mdc-button-disabled) {
+      background-color: var(--os-color-danger) !important;
+      color: white !important;
+    }
+
+    // Disabled state for all raised buttons
+    &.mat-mdc-button-disabled,
+    &[disabled] {
+      background-color: var(--layout-frame-bg) !important;
+      color: var(--layout-content-text-muted) !important;
+      opacity: 0.6;
+    }
+  }
+
+  // Material Icon button
+  .mat-mdc-icon-button {
+    color: var(--layout-content-text-muted) !important;
+
+    &:hover:not([disabled]) {
+      background-color: var(--layout-menu-hover) !important;
+    }
+  }
+
+  // Material Tabs
+  .mat-mdc-tab-group {
+    --mat-tab-header-inactive-label-text-color: var(--layout-content-text-muted);
+    --mat-tab-header-active-label-text-color: var(--os-color-primary);
+    --mat-tab-header-inactive-hover-label-text-color: var(--layout-content-text);
+    --mat-tab-header-inactive-focus-label-text-color: var(--layout-content-text);
+    --mat-tab-header-active-focus-label-text-color: var(--os-color-primary);
+    --mat-tab-header-active-hover-label-text-color: var(--os-color-primary);
+  }
+
+  .mat-mdc-tab-header {
+    border-bottom-color: var(--layout-content-border) !important;
+  }
+
+  // Material Expansion Panel
+  .mat-expansion-panel {
+    background-color: var(--layout-content-bg) !important;
+    color: var(--layout-content-text) !important;
+
+    .mat-expansion-panel-header {
+      &:hover:not([aria-disabled=true]) {
+        background-color: var(--layout-menu-hover) !important;
+      }
+    }
+
+    .mat-expansion-panel-header-title {
+      color: var(--layout-content-text) !important;
+    }
+
+    .mat-expansion-panel-header-description {
+      color: var(--layout-content-text-muted) !important;
+    }
+
+    .mat-expansion-indicator::after {
+      color: var(--layout-content-text-muted) !important;
+    }
+  }
+
+  // Material Card
+  .mat-mdc-card {
+    background-color: var(--layout-content-bg) !important;
+    color: var(--layout-content-text) !important;
+    border: 1px solid var(--layout-content-border);
+
+    .mat-mdc-card-title {
+      color: var(--layout-content-text) !important;
+    }
+
+    .mat-mdc-card-subtitle {
+      color: var(--layout-content-text-muted) !important;
+    }
+  }
+
+  // Material Tooltip
+  .mat-mdc-tooltip {
+    --mdc-plain-tooltip-container-color: var(--layout-frame-bg);
+    --mdc-plain-tooltip-supporting-text-color: var(--layout-content-text);
+  }
+
+  // Material Progress Bar
+  .mat-mdc-progress-bar {
+    --mdc-linear-progress-track-color: var(--layout-content-border);
+    --mdc-linear-progress-active-indicator-color: var(--os-color-primary);
+  }
+
+  // Material Progress Spinner
+  .mat-mdc-progress-spinner {
+    --mdc-circular-progress-active-indicator-color: var(--os-color-primary);
+  }
+
+  // Material Chip
+  .mat-mdc-chip {
+    --mdc-chip-elevated-container-color: var(--layout-frame-bg);
+    --mdc-chip-label-text-color: var(--layout-content-text);
+    --mdc-chip-with-icon-icon-color: var(--layout-content-text-muted);
+  }
+
+  // Generic form controls
+  .form-control {
+    background-color: var(--layout-input-bg) !important;
+    border-color: var(--layout-input-border) !important;
+    color: var(--layout-input-text) !important;
+
+    &::placeholder {
+      color: var(--layout-input-placeholder) !important;
+    }
+
+    &:focus {
+      border-color: var(--os-color-primary) !important;
+      box-shadow: 0 0 0 3px rgba(var(--os-color-primary-rgb), 0.2) !important;
+    }
+  }
+
+  // CoreUI cards in dark mode
+  .card {
+    background-color: var(--layout-content-bg) !important;
+    border-color: var(--layout-content-border) !important;
+
+    .card-header {
+      background-color: var(--layout-frame-bg) !important;
+      border-color: var(--layout-content-border) !important;
+      color: var(--layout-content-text) !important;
+    }
+
+    .card-body {
+      color: var(--layout-content-text) !important;
+    }
+  }
+}
+
+// ==============================================
+// CDK OVERLAY DARK THEME (for dropdowns, menus outside .layout--dark)
+// ==============================================
+
+html.dark .cdk-overlay-container {
+  // Ensure overlay pane backgrounds are dark
+  .cdk-overlay-pane {
+    .mat-mdc-select-panel,
+    .mat-mdc-autocomplete-panel,
+    .mat-mdc-menu-panel,
+    .mat-datepicker-content {
+      background-color: var(--layout-menu-bg) !important;
+      border: 1px solid var(--layout-content-border);
+    }
+  }
+}
+
+// Direct select panel dark theme (for panels that might not be in .cdk-overlay-pane)
+html.dark {
+  .mat-mdc-select-panel {
+    background-color: var(--layout-menu-bg) !important;
+    border: 1px solid var(--layout-content-border);
+
+    .mat-mdc-option {
+      color: var(--layout-content-text) !important;
+      background-color: transparent !important;
+
+      &:hover:not(.mdc-list-item--disabled) {
+        background-color: var(--layout-menu-hover) !important;
+      }
+
+      &.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+        background-color: rgba(var(--os-color-primary-rgb), 0.15) !important;
+
+        .mdc-list-item__primary-text {
+          color: var(--os-color-primary) !important;
+        }
+      }
+
+      .mdc-list-item__primary-text {
+        color: var(--layout-content-text) !important;
+      }
+    }
+  }
+
+  // Autocomplete panel
+  .mat-mdc-autocomplete-panel {
+    background-color: var(--layout-menu-bg) !important;
+    border: 1px solid var(--layout-content-border);
+  }
+
 }

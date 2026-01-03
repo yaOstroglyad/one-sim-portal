@@ -73,10 +73,8 @@ app-loader {
   }
 }
 
-// Dark theme support
-[data-coreui-theme="dark"] {
-  .hint {
-    background-color: rgba(var(--os-color-info-rgb), 0.15);
-    border: 1px solid rgba(var(--os-color-info-rgb), 0.3);
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

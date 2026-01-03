@@ -6,6 +6,8 @@
   padding: map.get(vars.$os-spacing, '2');
   min-width: 280px;
   outline: none;
+  // Ensure menu content uses isolated menu colors
+  color: var(--layout-menu-text);
 
   &__section {
     margin-bottom: map.get(vars.$os-spacing, '2');
@@ -18,7 +20,7 @@
   &__title {
     font-size: map.get(vars.$os-font-sizes, 'xs');
     font-weight: 600;
-    color: var(--os-color-medium);
+    color: var(--layout-menu-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin: 0 0 map.get(vars.$os-spacing, '2') 0;
@@ -35,7 +37,7 @@
     background: none;
     text-align: start;
     font-size: map.get(vars.$os-font-sizes, 'sm');
-    color: inherit;
+    color: var(--layout-menu-text);
     border-radius: map.get(vars.$os-border-radius, 'medium');
     cursor: pointer;
     transition: all 0.2s ease;
@@ -43,16 +45,12 @@
     user-select: none;
 
     &:hover:not(:disabled) {
-      background: rgba(0, 0, 0, 0.05);
+      background: var(--layout-menu-hover);
     }
 
     &:focus {
       outline: 2px solid var(--os-color-primary);
       outline-offset: -2px;
-    }
-
-    .layout--dark &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.05);
     }
 
     &--active {
@@ -121,12 +119,8 @@
 
   &__divider {
     height: 1px;
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--layout-menu-border);
     margin: map.get(vars.$os-spacing, '2') 0;
-
-    .layout--dark & {
-      background: rgba(255, 255, 255, 0.1);
-    }
 
     &--section {
       margin: map.get(vars.$os-spacing, '2') 0;

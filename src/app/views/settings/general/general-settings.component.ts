@@ -46,8 +46,8 @@ import { NotificationService } from '@shared/services/ui/notification.service';
             }
           </div>
           <div class="w-50 ms-4">
-            <div class="alert alert-info">
-              <h5 class="alert-heading">{{ 'settings.general.info.title' | translate }}</h5>
+            <div class="info-box">
+              <h5 class="info-heading">{{ 'settings.general.info.title' | translate }}</h5>
               <p>{{ 'settings.general.info.description' | translate }}</p>
               <ul>
                 <li>{{ 'settings.general.info.senderEmail' | translate }}</li>
@@ -60,6 +60,54 @@ import { NotificationService } from '@shared/services/ui/notification.service';
       </div>
     </div>
     `,
+    styles: [`
+      .card {
+        background-color: var(--layout-content-bg);
+        border: 1px solid var(--layout-content-border);
+        border-radius: 0.375rem;
+      }
+
+      .card-header {
+        background-color: var(--layout-frame-bg);
+        border-bottom: 1px solid var(--layout-content-border);
+        color: var(--layout-content-text);
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+      }
+
+      .card-body {
+        padding: 1.5rem;
+      }
+
+      .info-box {
+        padding: 1rem 1.25rem;
+        border-radius: 0.375rem;
+        background-color: rgba(var(--os-color-info-rgb), 0.1);
+        border: 1px solid rgba(var(--os-color-info-rgb), 0.2);
+        color: var(--layout-content-text);
+
+        .info-heading {
+          color: var(--os-color-info);
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          margin-bottom: 0.75rem;
+          color: var(--layout-content-text);
+        }
+
+        ul {
+          margin: 0;
+          padding-left: 1.25rem;
+
+          li {
+            margin-bottom: 0.25rem;
+            color: var(--layout-content-text);
+          }
+        }
+      }
+    `],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GeneralSettingsComponent implements OnInit {

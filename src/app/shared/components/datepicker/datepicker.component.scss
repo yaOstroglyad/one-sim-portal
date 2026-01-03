@@ -1,5 +1,6 @@
 @use "sass:map";
 @use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
 
 // ==============================================
 // DATEPICKER COMPONENT
@@ -28,44 +29,9 @@
   align-items: center;
 
   .datepicker-field {
-    width: 100%;
-    height: 44px;
+    @include mixins.os-input-base(44px);
     padding: 0 2.5rem 0 0.875rem;
-    font-family: var(--cui-body-font-family);
-    font-size: 0.875rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: var(--cui-input-color, #495057);
-    background-color: var(--cui-input-bg, #fff);
-    background-clip: padding-box;
-    border: 1px solid var(--cui-input-border-color, #d8dbe0);
-    border-radius: var(--cui-border-radius, 0.375rem);
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     cursor: pointer;
-
-    &::placeholder {
-      color: var(--cui-input-placeholder-color, #6c757d);
-      opacity: 1;
-    }
-
-    &:hover:not(:disabled) {
-      border-color: var(--cui-input-border-color-focus, #86b7fe);
-    }
-
-    &:focus {
-      color: var(--cui-input-color);
-      background-color: var(--cui-input-bg);
-      border-color: var(--cui-input-border-color-focus, #86b7fe);
-      outline: 0;
-      box-shadow: 0 0 0 0.25rem rgba(var(--cui-primary-rgb, 13, 110, 253), 0.25);
-    }
-
-    &:disabled {
-      background-color: var(--cui-input-disabled-bg, #e9ecef);
-      color: var(--cui-input-disabled-color, #6c757d);
-      opacity: 0.65;
-      cursor: not-allowed;
-    }
   }
 
   .datepicker-toggle {
@@ -79,12 +45,12 @@
     padding: 4px;
     background: transparent;
     border: none;
-    color: var(--cui-secondary-color, #6c757d);
+    color: var(--layout-content-text-muted);
     cursor: pointer;
     transition: color 0.15s ease-in-out;
 
     &:hover:not(:disabled) {
-      color: var(--cui-primary, #0d6efd);
+      color: var(--os-color-primary);
     }
 
     &:disabled {
@@ -100,7 +66,7 @@
 
   &.open {
     .datepicker-field {
-      border-color: var(--cui-input-border-color-focus, #86b7fe);
+      border-color: var(--os-color-primary);
       box-shadow: none; // Remove shadow when calendar is open to avoid double border effect
     }
   }
@@ -115,30 +81,10 @@
 // ==============================================
 
 .datepicker-popup {
-  position: absolute;
+  @include mixins.os-dropdown-base(280px);
+  @include mixins.os-dropdown-animation();
   top: calc(100% + 4px);
   left: 0;
-  z-index: 1050;
-  min-width: 280px;
-  padding: map.get(vars.$os-spacing, '4'); // 16px
-  background: var(--os-color-primary-white);
-  border: 1px solid var(--os-color-gray-200);
-  border-radius: map.get(vars.$os-border-radius, 'lg'); // 8px
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08);
-
-  // Animation
-  animation: slideDown 0.2s ease-out;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 // ==============================================
@@ -151,7 +97,7 @@
   justify-content: space-between;
   margin-bottom: map.get(vars.$os-spacing, '4'); // 16px
   padding-bottom: map.get(vars.$os-spacing, '3'); // 12px
-  border-bottom: 1px solid var(--os-color-gray-200);
+  border-bottom: 1px solid var(--layout-content-border);
 
   .calendar-title {
     display: flex;
@@ -159,14 +105,14 @@
     gap: map.get(vars.$os-spacing, '2'); // 8px
     font-weight: 600;
     font-size: map.get(vars.$os-font-sizes, 'base'); // 14px
-    color: var(--os-color-text-primary);
+    color: var(--layout-content-text);
 
     .calendar-month {
-      color: var(--os-color-text-primary);
+      color: var(--layout-content-text);
     }
 
     .calendar-year {
-      color: var(--os-color-text-secondary);
+      color: var(--layout-content-text-muted);
       cursor: pointer;
       transition: color 0.15s ease-in-out;
 
@@ -176,37 +122,12 @@
     }
 
     .calendar-year-range {
-      color: var(--os-color-text-primary);
+      color: var(--layout-content-text);
     }
   }
 
   .calendar-nav-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    background: transparent;
-    border: none;
-    border-radius: map.get(vars.$os-border-radius, 'md'); // 6px
-    color: var(--os-color-text-secondary);
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
-
-    &:hover {
-      background: var(--os-color-gray-100);
-      color: var(--os-color-text-primary);
-    }
-
-    &:active {
-      background: var(--os-color-gray-200);
-    }
-
-    svg {
-      width: 12px;
-      height: 12px;
-    }
+    @include mixins.os-nav-button(28px);
   }
 }
 
@@ -227,7 +148,7 @@
     height: 32px;
     font-size: map.get(vars.$os-font-sizes, 'xs'); // 12px
     font-weight: 600;
-    color: var(--os-color-text-secondary);
+    color: var(--layout-content-text-muted);
     text-transform: uppercase;
   }
 }
@@ -242,46 +163,10 @@
   gap: 2px;
 
   .calendar-day {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 36px;
-    padding: 0;
-    font-size: map.get(vars.$os-font-sizes, 'sm'); // 13px
-    font-weight: 500;
-    color: var(--os-color-text-primary);
-    background: transparent;
-    border: none;
-    border-radius: map.get(vars.$os-border-radius, 'md'); // 6px
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
-    position: relative;
+    @include mixins.os-calendar-day(36px);
 
-    &:hover:not(:disabled) {
-      background: var(--os-color-gray-100);
-      color: var(--os-color-primary);
-    }
-
-    &:active:not(:disabled) {
-      background: var(--os-color-gray-200);
-    }
-
-    // Other month days
-    &.other-month {
-      color: var(--os-color-gray-400);
-      cursor: default;
-
-      &:hover {
-        background: transparent;
-        color: var(--os-color-gray-400);
-      }
-    }
-
-    // Today
+    // Today indicator dot
     &.today:not(.selected) {
-      color: var(--os-color-primary);
-      font-weight: 600;
-
       &::after {
         content: '';
         position: absolute;
@@ -292,29 +177,6 @@
         height: 4px;
         background: var(--os-color-primary);
         border-radius: 50%;
-      }
-    }
-
-    // Selected
-    &.selected {
-      background: var(--os-color-primary);
-      color: var(--os-color-primary-white);
-      font-weight: 600;
-
-      &:hover {
-        background: var(--os-color-primary);
-        color: var(--os-color-primary-white);
-      }
-    }
-
-    // Disabled
-    &.disabled {
-      color: var(--os-color-gray-300);
-      cursor: not-allowed;
-
-      &:hover {
-        background: transparent;
-        color: var(--os-color-gray-300);
       }
     }
   }
@@ -330,7 +192,7 @@
   gap: map.get(vars.$os-spacing, '2'); // 8px
   padding-top: map.get(vars.$os-spacing, '3'); // 12px
   margin-top: map.get(vars.$os-spacing, '3'); // 12px
-  border-top: 1px solid var(--os-color-gray-200);
+  border-top: 1px solid var(--layout-content-border);
 
   .calendar-footer-btn {
     display: inline-flex;
@@ -340,7 +202,7 @@
     padding: 0 map.get(vars.$os-spacing, '3'); // 0 12px
     font-size: map.get(vars.$os-font-sizes, 'xs'); // 12px
     font-weight: 500;
-    color: var(--os-color-text-secondary);
+    color: var(--layout-content-text-muted);
     background: transparent;
     border: none;
     border-radius: map.get(vars.$os-border-radius, 'sm'); // 4px
@@ -348,24 +210,24 @@
     transition: all 0.15s ease-in-out;
 
     &:hover {
-      background: var(--os-color-gray-100);
-      color: var(--os-color-text-primary);
+      background: var(--layout-menu-hover);
+      color: var(--layout-content-text);
     }
 
     &:active {
-      background: var(--os-color-gray-200);
+      background: var(--layout-menu-hover);
     }
 
     &.calendar-footer-btn-primary {
       color: var(--os-color-primary);
 
       &:hover {
-        background: var(--os-color-gray-100);
+        background: var(--layout-menu-hover);
         color: var(--os-color-primary);
       }
 
       &:active {
-        background: var(--os-color-gray-200);
+        background: var(--layout-menu-hover);
       }
     }
   }
@@ -389,7 +251,7 @@
     padding: 0;
     font-size: map.get(vars.$os-font-sizes, 'base'); // 14px
     font-weight: 500;
-    color: var(--os-color-text-primary);
+    color: var(--layout-content-text);
     background: transparent;
     border: none;
     border-radius: map.get(vars.$os-border-radius, 'md'); // 6px
@@ -397,22 +259,22 @@
     transition: all 0.15s ease-in-out;
 
     &:hover {
-      background: var(--os-color-gray-100);
+      background: var(--layout-menu-hover);
       color: var(--os-color-primary);
     }
 
     &:active {
-      background: var(--os-color-gray-200);
+      background: var(--layout-menu-hover);
     }
 
     &.current {
       background: var(--os-color-primary);
-      color: var(--os-color-primary-white);
+      color: var(--os-color-primary-contrast);
       font-weight: 600;
 
       &:hover {
         background: var(--os-color-primary);
-        color: var(--os-color-primary-white);
+        color: var(--os-color-primary-contrast);
       }
     }
   }
@@ -420,89 +282,9 @@
 
 // ==============================================
 // DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
 // ==============================================
-
-[data-coreui-theme="dark"] {
-  .datepicker-popup {
-    background: var(--os-color-gray-800);
-    border-color: var(--os-color-gray-700);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-
-  .calendar-header {
-    border-bottom-color: var(--os-color-gray-700);
-  }
-
-  .calendar-nav-btn {
-    &:hover {
-      background: var(--os-color-gray-700);
-    }
-
-    &:active {
-      background: var(--os-color-gray-600);
-    }
-  }
-
-  .calendar-day {
-    &:hover:not(:disabled) {
-      background: var(--os-color-gray-700);
-    }
-
-    &:active:not(:disabled) {
-      background: var(--os-color-gray-600);
-    }
-
-    &.selected {
-      background: var(--os-color-primary);
-      color: var(--os-color-primary-white);
-    }
-  }
-
-  .calendar-year-btn {
-    &:hover {
-      background: var(--os-color-gray-700);
-    }
-
-    &:active {
-      background: var(--os-color-gray-600);
-    }
-
-    &.current {
-      background: var(--os-color-primary);
-      color: var(--os-color-primary-white);
-    }
-  }
-
-  .calendar-footer {
-    border-top-color: var(--os-color-gray-700);
-
-    .calendar-footer-btn {
-      color: var(--os-color-gray-400);
-
-      &:hover {
-        background: var(--os-color-gray-700);
-        color: var(--os-color-gray-100);
-      }
-
-      &:active {
-        background: var(--os-color-gray-600);
-      }
-
-      &.calendar-footer-btn-primary {
-        color: var(--os-color-primary);
-
-        &:hover {
-          background: var(--os-color-gray-700);
-          color: var(--os-color-primary);
-        }
-
-        &:active {
-          background: var(--os-color-gray-600);
-        }
-      }
-    }
-  }
-}
 
 // ==============================================
 // RESPONSIVE

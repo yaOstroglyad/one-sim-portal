@@ -5,24 +5,26 @@
   // RTL support
   &--rtl {
     direction: rtl;
-    
+
     .text-end {
       text-align: left !important;
     }
-    
+
     .reset-button {
       svg {
         transform: scaleX(-1);
       }
     }
   }
-}
 
-// Dark theme support for custom templates
-[data-theme="dark"] {
-  .company-product-list-container {
-    .text-muted {
-      color: rgba(255, 255, 255, 0.5) !important;
-    }
+  // Text muted uses layout variables that auto-switch
+  .text-muted {
+    color: var(--layout-content-text-muted) !important;
   }
 }
+
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

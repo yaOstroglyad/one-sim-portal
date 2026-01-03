@@ -12,7 +12,7 @@
 .preview-section {
   flex: 3;
   max-width: 65%;
-  background-color: #fff;
+  background-color: var(--layout-menu-bg);
   border-radius: 8px;
   padding: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -24,7 +24,7 @@
   gap: 8px;
   margin-bottom: 16px;
   padding: 8px;
-  background: #f5f5f5;
+  background: var(--layout-frame-bg);
   border-radius: 4px;
 
   [dir="rtl"] & {
@@ -38,7 +38,7 @@
   }
 
   .preview-title {
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--layout-content-text-muted);
   }
 }
 
@@ -46,13 +46,14 @@
   flex: 2;
   max-width: 35%;
   padding: 1rem;
-  background-color: white;
+  background-color: var(--layout-menu-bg);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   h4 {
     margin: 0 0 1rem;
     font-weight: 500;
+    color: var(--layout-content-text);
   }
 
   .form-actions {
@@ -81,7 +82,7 @@
     width: 100%;
     height: auto;
     max-height: calc(100% - 48px);
-    background-color: #eeeeee;
+    background-color: var(--layout-frame-bg);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 16px;
@@ -99,3 +100,9 @@
     }
   }
 }
+
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

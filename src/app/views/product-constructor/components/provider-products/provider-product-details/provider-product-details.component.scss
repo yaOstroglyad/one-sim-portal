@@ -8,14 +8,14 @@
     h3 {
       font-size: 1.5rem;
       font-weight: 600;
-      color: var(--os-color-dark);
+      color: var(--layout-content-text);
       margin: 0 0 1rem 0;
     }
 
     h4 {
       font-size: 1.125rem;
       font-weight: 600;
-      color: var(--os-color-dark);
+      color: var(--layout-content-text);
       margin: 0 0 0.75rem 0;
     }
   }
@@ -32,13 +32,13 @@
 
       .info-label, .data-label {
         font-size: 0.875rem;
-        color: var(--os-color-medium);
+        color: var(--layout-content-text-muted);
         font-weight: 500;
       }
 
       .info-value, .data-value {
         font-size: 1rem;
-        color: var(--os-color-dark);
+        color: var(--layout-content-text);
         word-break: break-all;
       }
     }
@@ -49,9 +49,9 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background: var(--os-color-light);
+    background: var(--layout-frame-bg);
     border-radius: 0.5rem;
-    border: 1px solid var(--os-color-light-shade);
+    border: 1px solid var(--layout-content-border);
 
     .coverage-icon {
       width: 48px;
@@ -71,13 +71,13 @@
       .coverage-name {
         font-size: 1.25rem;
         font-weight: 600;
-        color: var(--os-color-dark);
+        color: var(--layout-content-text);
         margin-bottom: 0.25rem;
       }
 
       .coverage-type {
         font-size: 0.875rem;
-        color: var(--os-color-medium);
+        color: var(--layout-content-text-muted);
         text-transform: uppercase;
         font-weight: 500;
       }
@@ -112,9 +112,9 @@
     .product-data-section {
       margin-bottom: 1.5rem;
       padding: 1rem;
-      background: var(--os-color-light);
+      background: var(--layout-frame-bg);
       border-radius: 0.5rem;
-      border: 1px solid var(--os-color-light-shade);
+      border: 1px solid var(--layout-content-border);
 
       &:last-child {
         margin-bottom: 0;
@@ -126,7 +126,7 @@
       }
 
       .empty-data {
-        color: var(--os-color-medium);
+        color: var(--layout-content-text-muted);
         font-style: italic;
         text-align: center;
         padding: 1rem;
@@ -137,7 +137,7 @@
   .empty-state {
     text-align: center;
     padding: 3rem;
-    color: var(--os-color-medium);
+    color: var(--layout-content-text-muted);
 
     svg {
       margin-bottom: 1rem;
@@ -146,7 +146,7 @@
 
     h4 {
       margin-bottom: 0.5rem;
-      color: var(--os-color-dark);
+      color: var(--layout-content-text);
     }
 
     p {
@@ -155,40 +155,8 @@
   }
 }
 
-// Dark theme support
-:host-context(.dark-theme) {
-  .provider-product-details {
-    .detail-section {
-      h3, h4 {
-        color: var(--os-color-light);
-      }
-    }
-
-    .coverage-card {
-      background: rgba(0, 0, 0, 0.2);
-      border-color: rgba(255, 255, 255, 0.1);
-
-      .coverage-info .coverage-name {
-        color: var(--os-color-light);
-      }
-    }
-
-    .product-data-container .product-data-section {
-      background: rgba(0, 0, 0, 0.2);
-      border-color: rgba(255, 255, 255, 0.1);
-
-      h4 {
-        color: var(--os-color-primary);
-      }
-    }
-
-    .info-grid .info-item .info-value,
-    .data-grid .data-item .data-value {
-      color: var(--os-color-light);
-    }
-
-    .empty-state h4 {
-      color: var(--os-color-light);
-    }
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

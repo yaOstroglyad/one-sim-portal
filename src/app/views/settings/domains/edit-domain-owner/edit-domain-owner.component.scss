@@ -4,17 +4,20 @@
   label {
     display: block;
     margin-bottom: 0.5rem;
+    color: var(--layout-content-text);
   }
 
   .form-control {
     width: 100%;
     padding: 0.5rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--layout-content-border);
     border-radius: 4px;
+    background-color: var(--layout-input-bg);
+    color: var(--layout-input-text);
   }
 
   .error-message {
-    color: red;
+    color: var(--os-color-danger);
     font-size: 0.8rem;
     margin-top: 0.25rem;
   }

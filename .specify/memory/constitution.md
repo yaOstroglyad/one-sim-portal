@@ -373,6 +373,53 @@ color: #2c2c2c;
 - **NEVER use `@media (prefers-color-scheme: dark)`**
 - Wait for official dark mode implementation
 
+### DRY Principle for Component Styles (NON-NEGOTIABLE)
+
+**Before writing ANY component styles, check `_mixins.scss` for existing patterns!**
+
+```scss
+// ✅ CORRECT - Use existing mixins
+@use "mixins" as mixins;
+
+.my-dropdown {
+  @include mixins.os-dropdown-base();
+}
+
+.my-input {
+  @include mixins.os-input-base();
+}
+
+// ❌ FORBIDDEN - Duplicating existing patterns
+.my-dropdown {
+  background: var(--layout-menu-bg);
+  border: 1px solid var(--layout-content-border);
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  // This pattern already exists in mixins!
+}
+```
+
+**Available UI Mixins (use instead of duplicating):**
+
+| Mixin | Use For |
+|-------|---------|
+| `os-input-base($height)` | Input fields, search boxes |
+| `os-dropdown-base($min-width)` | Dropdowns, popups, menus |
+| `os-dropdown-animation()` | Dropdown open animation |
+| `os-card-base($padding)` | Cards, sections, panels |
+| `os-option-item()` | Select options, list items |
+| `os-detail-row($label-width)` | Label + value pairs |
+| `os-btn-outline-primary()` | Primary outline buttons |
+| `os-btn-outline-secondary()` | Secondary outline buttons |
+| `os-nav-button($size)` | Navigation arrows, controls |
+| `os-scrollbar($width)` | Custom scrollbars |
+| `os-calendar-day($size)` | Calendar day cells |
+
+**When to create a NEW mixin:**
+1. Pattern is used in 3+ components
+2. Pattern has consistent structure with only size/color variations
+3. Add to `_mixins.scss` under "COMPONENT UI MIXINS" section
+
 ---
 
 ## VIII. Icons & SVG
@@ -444,8 +491,14 @@ color: #2c2c2c;
 - [ ] Services do NOT show notifications (component responsibility)
 - [ ] CSS variables for colors
 - [ ] `map.get()` for SCSS values
+- [ ] **SCSS uses mixins for repeated patterns** (see Section VII DRY Principle)
 - [ ] English documentation
 - [ ] Searched for existing code before creating
+
+### Build Execution Policy
+- **NEVER run `npm run build` automatically** after code changes
+- **Run build ONLY when user explicitly requests it**
+- User may ask: "запусти билд", "run build", "проверь билд", etc.
 
 ---
 
@@ -571,4 +624,4 @@ specs/{feature-name}/
 
 ---
 
-**Version:** 1.5.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2025-12-22
+**Version:** 1.6.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-03

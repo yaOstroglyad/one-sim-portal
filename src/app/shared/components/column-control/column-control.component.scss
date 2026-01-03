@@ -26,18 +26,18 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.75rem 1rem;
-    background-color: var(--cui-gray-100, #f8f9fa);
-    border-bottom: 1px solid var(--cui-border-color, #dee2e6);
+    background-color: var(--layout-frame-bg);
+    border-bottom: 1px solid var(--layout-content-border);
     min-height: auto;
-    
+
     &:hover {
-      background-color: var(--cui-gray-100, #f8f9fa) !important;
+      background-color: var(--layout-frame-bg) !important;
     }
 
     .header-text {
       font-weight: 600;
       font-size: 0.875rem;
-      color: var(--cui-gray-800, #343a40);
+      color: var(--layout-content-text);
     }
 
     button {
@@ -70,32 +70,32 @@
       cursor: pointer;
       
       &:hover {
-        background-color: var(--cui-gray-100, #f8f9fa);
+        background-color: var(--layout-menu-hover);
       }
 
       mat-checkbox {
         width: 100%;
         pointer-events: none; // Allow parent label to handle clicks
-        
+
         ::ng-deep .mdc-checkbox {
           margin-right: 0.75rem;
           pointer-events: auto; // Re-enable for checkbox itself
         }
-        
+
         ::ng-deep .mdc-form-field {
           font-size: 0.875rem;
-          color: var(--cui-body-color, #212529);
+          color: var(--layout-content-text);
         }
 
         ::ng-deep .mdc-checkbox__background {
-          border-color: var(--cui-gray-400, #ced4da) !important;
+          border-color: var(--layout-input-border) !important;
         }
 
         ::ng-deep .mdc-checkbox--selected .mdc-checkbox__background {
-          background-color: var(--cui-primary, #0d6efd) !important;
-          border-color: var(--cui-primary, #0d6efd) !important;
+          background-color: var(--os-color-primary) !important;
+          border-color: var(--os-color-primary) !important;
         }
-        
+
         ::ng-deep .mdc-checkbox__ripple {
           display: none; // Remove pink ripple
         }
@@ -105,17 +105,17 @@
 
   .column-control-footer {
     padding: 0.75rem 1rem;
-    background-color: var(--cui-gray-100, #f8f9fa);
-    border-top: 1px solid var(--cui-border-color, #dee2e6);
+    background-color: var(--layout-frame-bg);
+    border-top: 1px solid var(--layout-content-border);
     min-height: auto;
-    
+
     &:hover {
-      background-color: var(--cui-gray-100, #f8f9fa) !important;
+      background-color: var(--layout-frame-bg) !important;
     }
 
     .selected-count {
       font-size: 0.75rem;
-      color: var(--cui-gray-600, #6c757d);
+      color: var(--layout-content-text-muted);
       font-weight: 500;
     }
   }
@@ -125,61 +125,11 @@
   }
 }
 
-// Dark theme support
-[data-coreui-theme="dark"] {
-  .column-control-button {
-    background-color: var(--cui-dark, #212529);
-    border-color: var(--cui-gray-700, #495057);
-    color: var(--cui-gray-100, #f8f9fa);
-
-    &:hover:not(:disabled) {
-      background-color: var(--cui-gray-800, #343a40);
-      border-color: var(--cui-gray-600, #6c757d);
-    }
-  }
-
-  ::ng-deep .column-control-menu {
-    background-color: var(--cui-dark, #212529);
-
-    .column-control-header {
-      background-color: var(--cui-gray-800, #343a40);
-      border-bottom-color: var(--cui-gray-700, #495057);
-
-      .header-text {
-        color: var(--cui-gray-100, #f8f9fa);
-      }
-    }
-
-    .column-list {
-      .column-item {
-        color: var(--cui-gray-100, #f8f9fa);
-        
-        &:hover {
-          background-color: var(--cui-gray-800, #343a40);
-        }
-
-        mat-checkbox {
-          ::ng-deep .mdc-form-field {
-            color: var(--cui-gray-100, #f8f9fa);
-          }
-
-          ::ng-deep .mdc-checkbox__background {
-            border-color: var(--cui-gray-600, #6c757d) !important;
-          }
-        }
-      }
-    }
-
-    .column-control-footer {
-      background-color: var(--cui-gray-800, #343a40);
-      border-top-color: var(--cui-gray-700, #495057);
-
-      .selected-count {
-        color: var(--cui-gray-400, #adb5bd);
-      }
-    }
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================
 
 // Responsive adjustments
 @media (max-width: 576px) {

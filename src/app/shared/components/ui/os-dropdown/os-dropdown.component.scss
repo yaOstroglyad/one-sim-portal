@@ -30,19 +30,14 @@
   // Dropdown panel
   &__panel {
     position: absolute;
-    background: var(--os-color-light);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: var(--layout-menu-bg);
+    color: var(--layout-menu-text);
+    border: 1px solid var(--layout-menu-border);
     border-radius: map.get(vars.$os-border-radius, 'large');
-    box-shadow: map.get(vars.$os-shadows, 'lg');
+    box-shadow: var(--layout-menu-shadow);
     z-index: 1000;
     opacity: 0;
     animation: slideDown 0.2s ease forwards;
-
-    // Dark theme
-    .layout--dark & {
-      background: var(--os-color-dark);
-      border-color: rgba(255, 255, 255, 0.1);
-    }
 
     // Positioning variants - using CSS logical properties for automatic RTL support
     &--bottom-right {

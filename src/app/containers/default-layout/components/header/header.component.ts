@@ -19,7 +19,6 @@ import { LayoutService } from '../../services';
 import {
   AuthService,
   UserAvatarComponent,
-  BreadcrumbComponent,
   LanguageService,
   Language,
   OsMenuComponent,
@@ -40,7 +39,6 @@ const DEFAULT_NOTIFICATION_COUNT = 3;
     IconDirective,
     TranslateModule,
     UserAvatarComponent,
-    BreadcrumbComponent,
     OsMenuComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,10 +73,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   });
 
   readonly headerClasses = computed(() => ({
-    'header--dark': this.layoutConfig().darkTheme,
-    'header--rtl': this.languageService.isRtl(),
-    'header--with-collapsed-sidebar': this.layoutConfig().sidebarCollapsed
+    'header--rtl': this.languageService.isRtl()
   }));
+
+  // Theme toggle
+  readonly isDarkTheme = computed(() => this.layoutConfig().darkTheme);
 
   // Language data from service
   readonly languages = computed(() => this.languageService.supportedLanguages());
@@ -197,4 +196,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authService.clearAndLogout();
   }
 
+  toggleTheme(): void {
+    this.layoutService.toggleTheme();
+  }
 }

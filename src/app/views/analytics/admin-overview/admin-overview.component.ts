@@ -53,7 +53,8 @@ import { IconComponent } from '@shared';
       justify-content: center;
       min-height: 400px;
       text-align: center;
-      background-color: #ffffff;
+      background-color: var(--layout-content-bg);
+      border: 1px solid var(--layout-content-border);
       border-radius: 12px;
       padding: 3rem;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -70,13 +71,13 @@ import { IconComponent } from '@shared';
     h2 {
       font-size: 1.75rem;
       font-weight: 600;
-      color: #2c2c2c;
+      color: var(--layout-content-text);
       margin: 0 0 0.75rem 0;
     }
 
     p {
       font-size: 1rem;
-      color: #6b7280;
+      color: var(--layout-content-text-muted);
       margin: 0 0 1.5rem 0;
       max-width: 500px;
     }
@@ -93,7 +94,7 @@ import { IconComponent } from '@shared';
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      color: #6b7280;
+      color: var(--layout-content-text-muted);
       font-size: 0.9375rem;
     }
 
@@ -115,7 +116,7 @@ import { IconComponent } from '@shared';
       display: inline-block;
       padding: 0.5rem 1rem;
       background-color: var(--os-color-primary);
-      color: #ffffff;
+      color: var(--os-color-primary-contrast);
       border-radius: 20px;
       font-size: 0.875rem;
       font-weight: 500;

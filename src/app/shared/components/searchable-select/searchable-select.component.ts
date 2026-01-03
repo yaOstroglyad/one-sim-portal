@@ -20,7 +20,7 @@ import { Subject } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { IconDirective } from '@coreui/icons-angular';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { SearchableSelectOption, SearchableSelectConfig, SearchableSelectChangeEvent } from './searchable-select.types';
 
@@ -76,6 +76,7 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     searchPlaceholder: 'Search...',
     noResultsText: 'No results found',
     clearable: true,
+    clearOptionLabel: 'common.none',
     disabled: false,
     multiple: false,
     maxHeight: '200px',
@@ -86,7 +87,8 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -150,8 +152,13 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   }
 
   // Public methods
-  toggle(): void {
+  toggle(event?: Event): void {
     if (this.config.disabled) return;
+
+    // Prevent toggle when clicking on chip (multi-select) - let chip handle its own click
+    if (event && (event.target as HTMLElement).closest('.chip')) {
+      return;
+    }
 
     this.isOpen ? this.close() : this.open();
   }
@@ -162,8 +169,8 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     this.isOpen = true;
     this.highlightedIndex = -1;
     this.searchControl.setValue('');
-    // Safe check for options array
-    this.filteredOptions = this.options ? [...this.options] : [];
+    // Use filterOptions to ensure clear option is added for single select
+    this.filterOptions('');
 
     setTimeout(() => {
       if (this.config.searchable && this.searchInput) {
@@ -296,14 +303,27 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
       return;
     }
 
+    let filtered: SearchableSelectOption[];
+
     if (!searchTerm) {
-      this.filteredOptions = [...this.options];
+      filtered = [...this.options];
     } else {
-      this.filteredOptions = this.options.filter(option =>
+      filtered = this.options.filter(option =>
         option.label.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
+    // Add "None" option for single select with clearable enabled
+    if (!this.config.multiple && this.config.clearable) {
+      const clearOption: SearchableSelectOption = {
+        value: null,
+        label: this.translate.instant(this.config.clearOptionLabel || 'common.none'),
+        disabled: this.value === null // Disabled when nothing is selected
+      };
+      filtered = [clearOption, ...filtered];
+    }
+
+    this.filteredOptions = filtered;
     this.highlightedIndex = -1;
     this.updateOptionStates();
     this.cdr.markForCheck();

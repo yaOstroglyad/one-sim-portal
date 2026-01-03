@@ -17,7 +17,8 @@
     @extend .justify-end; // ag-grid выравнивает всё справа
     gap: map.get(vars.$os-spacing, '4'); // 16px между элементами
     padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '4'); // 12px vertical, 16px horizontal
-    border-top: 1px solid var(--os-color-light);
+    border-top: 1px solid var(--layout-content-border);
+    background-color: var(--layout-content-bg);
     min-height: 44px; // минимальная высота для соответствия ag-grid
 
     // Responsive behavior
@@ -36,10 +37,18 @@
 
   .ag-pagination-label {
     @include mixins.ag-grid-text();
+    color: var(--layout-content-text-muted);
   }
 
   .ag-pagination-select {
     @include mixins.ag-grid-select();
+    background-color: var(--layout-input-bg);
+    border-color: var(--layout-input-border);
+    color: var(--layout-content-text);
+
+    &:focus {
+      border-color: var(--os-color-primary);
+    }
   }
 }
 
@@ -54,24 +63,44 @@
 .ag-pagination-button {
   @include mixins.ag-grid-button(26px);
   @include mixins.ag-grid-focus();
-  
+  color: var(--layout-content-text);
+  background-color: var(--layout-frame-bg);
+  border: 1px solid var(--layout-content-border);
+
+  &:hover:not(.disabled) {
+    background-color: var(--layout-frame-bg-hover);
+    color: var(--layout-content-text);
+    border-color: var(--layout-content-border);
+  }
+
+  &.disabled {
+    color: var(--layout-content-text-muted);
+    background-color: transparent;
+    border-color: transparent;
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
   mat-icon {
     font-size: 16px;
     width: 16px;
     height: 16px;
     line-height: 16px;
+    color: inherit;
   }
 }
 
 // Records range info - using utility class
 .ag-pagination-range {
   @extend .ag-grid-text;
+  color: var(--layout-content-text-muted);
 }
 
 // Page info
 .ag-pagination-info {
   @extend .px-3;
   @extend .ag-grid-text;
+  color: var(--layout-content-text);
 }
 
 // Page numbers container
@@ -86,18 +115,18 @@
   @include mixins.ag-grid-button(26px);
   @include mixins.ag-grid-focus();
   background-color: transparent;
-  color: vars.$ag-grid-text-color;
+  color: var(--layout-content-text);
 
   &:hover {
-    background-color: vars.$ag-grid-button-bg;
+    background-color: var(--layout-frame-bg-hover);
   }
 
   &.active {
-    background-color: vars.$ag-grid-focus-color;
-    color: var(--os-color-white);
+    background-color: var(--os-color-primary);
+    color: var(--os-color-primary-contrast);
 
     &:hover {
-      background-color: #0066cc;
+      background-color: var(--os-color-primary-shade);
     }
   }
 }
@@ -106,13 +135,13 @@
 .ag-pagination-ellipsis {
   @extend .ag-grid-text;
   padding: 0 8px;
+  color: var(--layout-content-text-muted);
 }
 
-// Dark theme and RTL support using optimized mixins
+// RTL support using optimized mixins
 .ag-pagination {
   @include mixins.ag-grid-rtl();
 }
 
-.ag-pagination-panel {
-  @include mixins.ag-grid-dark-theme();
-}
+// Note: Dark theme styles are now handled globally in _vendor-overrides.scss
+// using .layout--dark class for consistency with the Gmail-style layout system

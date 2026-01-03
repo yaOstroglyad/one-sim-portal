@@ -20,7 +20,7 @@
 // Error styling
 .error {
   width: max-content;
-  color: var(--cui-danger, #dc3545);
+  color: var(--os-color-danger);
 }
 
 // New line utility
@@ -41,7 +41,7 @@
   display: inline-flex;
   align-items: flex-start;
   gap: 4px;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--layout-content-text-muted);
   font-size: 12px;
   margin-top: 4px;
 
@@ -55,10 +55,11 @@
   }
 }
 
-// Dark theme support for hints
-[data-coreui-theme="dark"] .hint {
-  color: rgba(255, 255, 255, 0.6);
-}
+// ==============================================
+// DARK THEME SUPPORT FOR HINTS
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================
 
 // ==============================================
 // FORM LABEL STYLES (for non-Material components)
@@ -68,19 +69,20 @@
   display: block;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: var(--cui-body-color);
+  color: var(--layout-content-text);
   font-size: 0.875rem;
 
   .text-danger {
-    color: var(--cui-danger, #dc3545);
+    color: var(--os-color-danger);
     margin-left: 0.25rem;
   }
 }
 
-// Dark theme support for labels
-[data-coreui-theme="dark"] .form-label {
-  color: var(--cui-body-color);
-}
+// ==============================================
+// DARK THEME SUPPORT FOR LABELS
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================
 
 // ==============================================
 // FORM ARRAY STYLES
@@ -95,14 +97,16 @@
 .form-array-item {
   position: relative;
   padding: 1rem;
-  background-color: var(--cui-gray-100);
-  border: 1px solid var(--cui-border-color);
-  border-radius: var(--cui-border-radius);
+  background-color: var(--layout-frame-bg);
+  border: 1px solid var(--layout-content-border);
+  border-radius: 0.375rem;
 }
 
-[data-coreui-theme="dark"] .form-array-item {
-  background-color: var(--cui-gray-800);
-}
+// ==============================================
+// DARK THEME SUPPORT FOR FORM ARRAY ITEMS
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================
 
 .item-header {
   display: flex;
@@ -110,12 +114,12 @@
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--cui-border-color);
+  border-bottom: 1px solid var(--layout-content-border);
 }
 
 .item-label {
   font-weight: 600;
-  color: var(--cui-body-color);
+  color: var(--layout-content-text);
 }
 
 .item-content {
@@ -127,7 +131,7 @@
 .empty-message {
   text-align: center;
   padding: 2rem;
-  color: var(--cui-text-medium);
+  color: var(--layout-content-text-muted);
   font-style: italic;
 }
 

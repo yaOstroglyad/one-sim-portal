@@ -8,15 +8,16 @@
   padding: 0;
   margin: 0;
   align-items: center;
+  color: var(--layout-content-text);
 
   // RTL Support
   &--rtl {
     direction: rtl;
-    
+
     .os-breadcrumb-item {
       margin-right: map.get(vars.$os-spacing, '2');
       margin-left: 0;
-      
+
       &::after {
         margin-left: 0;
         margin-right: map.get(vars.$os-spacing, '2');
@@ -29,15 +30,23 @@
     margin-right: map.get(vars.$os-spacing, '2');
     display: flex;
     align-items: center;
+    color: var(--layout-content-text-muted);
 
     &::after {
       content: '/';
       margin-left: map.get(vars.$os-spacing, '2');
+      color: var(--layout-content-text-muted);
     }
 
     span {
       text-decoration: none;
       cursor: pointer;
+      color: var(--layout-content-text-muted);
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--os-color-primary);
+      }
 
       &:focus {
         outline: 2px solid var(--os-color-primary);
@@ -48,36 +57,18 @@
 
     &.active {
       font-weight: bold;
-      color: var(--os-color-primary-contrast);
+      color: var(--layout-content-text);
       pointer-events: none;
       cursor: default;
+
+      span {
+        color: inherit;
+      }
     }
 
     &:last-child::after {
       content: '';
       margin: 0;
-    }
-  }
-}
-
-// Dark theme support
-[data-theme="dark"] {
-  .os-breadcrumb {
-    .os-breadcrumb-item {
-      &.active {
-        color: var(--os-color-light);
-      }
-    }
-  }
-}
-
-// Modern dark theme support (CSS custom properties based)
-:host-context([data-theme="dark"]) {
-  .os-breadcrumb {
-    .os-breadcrumb-item {
-      &.active {
-        color: var(--os-color-light);
-      }
     }
   }
 }

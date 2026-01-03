@@ -1,5 +1,9 @@
 @use "../../../../scss/custom";
 
+// ==============================================
+// LOADING SPINNER
+// ==============================================
+
 .loading-spinner {
   display: inline-block;
   width: 14px;
@@ -16,33 +20,49 @@
   100% { transform: rotate(360deg); }
 }
 
+// ==============================================
+// BADGE STYLES
+// ==============================================
+
 .primary-badge {
-  background: #0083e1;
+  background: var(--os-color-primary);
+  color: var(--os-color-primary-contrast);
 }
 
 .active-badge {
-  background: #55a961;
+  background-color: var(--os-color-success);
+  color: var(--os-color-success-contrast);
 }
 
 .disabled-badge {
-  background: #909190;
+  background-color: var(--os-color-medium);
+  color: var(--os-color-medium-contrast);
 }
+
+// ==============================================
+// ADMIN MESSAGE
+// ==============================================
 
 .admin-account-message {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 16px;
-  background-color: rgba(244, 67, 54, 0.1);
+  background-color: rgba(var(--os-color-danger-rgb), 0.1);
   border-radius: 4px;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--layout-content-text);
 
   mat-icon {
     font-size: 24px;
     width: 24px;
     height: 24px;
+    color: var(--os-color-danger);
   }
 }
+
+// ==============================================
+// ACCOUNT SELECTOR
+// ==============================================
 
 .account-selector {
   .helper-text {
@@ -50,8 +70,8 @@
     align-items: center;
     gap: 8px;
     margin-top: 8px;
-    color: rgba(0, 0, 0, 0.6);
-    
+    color: var(--layout-content-text-muted);
+
     mat-icon {
       font-size: 18px;
       width: 18px;
@@ -60,18 +80,18 @@
   }
 }
 
+// ==============================================
+// BADGE DISPLAY
+// ==============================================
+
 .badge-display {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.active-badge {
-  background-color: #4caf50;
-  color: white;
-}
-
-.disabled-badge {
-  background-color: #9e9e9e;
-  color: white;
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

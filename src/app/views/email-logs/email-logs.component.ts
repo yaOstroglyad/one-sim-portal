@@ -1,10 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
 
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import {
-  DatePickerWrapperComponent,
   GenericTableComponent,
   TableConfig,
   HeaderComponent,
@@ -12,7 +9,8 @@ import {
   AuthService,
   ADMIN_PERMISSION,
   EmailLog,
-  EmailLogFilterParams
+  EmailLogFilterParams,
+  DatepickerComponent
 } from '@shared';
 import { Subject, BehaviorSubject, Observable, of } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -28,9 +26,7 @@ import { IconDirective } from '@coreui/icons-angular';
     selector: 'app-email-logs',
     imports: [
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    DatePickerWrapperComponent,
+    DatepickerComponent,
     TranslateModule,
     GenericTableComponent,
     AccountSelectorComponent,

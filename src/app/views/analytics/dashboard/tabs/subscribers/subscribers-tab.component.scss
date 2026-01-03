@@ -57,16 +57,12 @@
       }
     }
 
-    // Bundle row - 2 charts side by side
+    // Bundle row - charts stacked vertically
     .bundle-row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      flex-direction: column;
       gap: 1.5rem;
       margin-bottom: 1.5rem;
-
-      @media (max-width: 992px) {
-        grid-template-columns: 1fr;
-      }
 
       .bundle-card,
       .country-card {
@@ -75,7 +71,7 @@
         }
 
         .chart-container {
-          @include mixins.dashboard-chart-container(250px);
+          @include mixins.dashboard-chart-container(300px);
         }
 
         .empty-state {

@@ -9,7 +9,7 @@
 .period-selector {
   display: flex;
   gap: map.get(vars.$os-spacing, '1'); // 4px
-  background-color: var(--os-color-primary-white);
+  background-color: var(--layout-menu-bg);
   padding: map.get(vars.$os-spacing, '1'); // 4px
   border-radius: map.get(vars.$os-border-radius, 'lg'); // 8px
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -18,7 +18,7 @@
     padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '4'); // 8px 16px
     border: none;
     background: transparent;
-    color: var(--os-color-text-secondary);
+    color: var(--layout-content-text-muted);
     font-size: map.get(vars.$os-font-sizes, 'sm'); // 0.875rem
     font-weight: 500;
     border-radius: map.get(vars.$os-border-radius, 'md'); // 6px
@@ -27,13 +27,13 @@
     white-space: nowrap;
 
     &:hover {
-      background-color: var(--os-color-gray-100);
-      color: var(--os-color-text-primary);
+      background-color: var(--layout-menu-hover);
+      color: var(--layout-content-text);
     }
 
     &.active {
       background-color: var(--os-color-primary);
-      color: var(--os-color-primary-white);
+      color: var(--os-color-primary-contrast);
     }
   }
 }
@@ -42,7 +42,7 @@
 .custom-date-picker {
   margin-top: map.get(vars.$os-spacing, '4'); // 16px
   padding: map.get(vars.$os-spacing, '4'); // 16px
-  background-color: var(--os-color-primary-white);
+  background-color: var(--layout-menu-bg);
   border-radius: map.get(vars.$os-border-radius, 'lg'); // 8px
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
@@ -58,7 +58,7 @@
     }
 
     .date-separator {
-      color: var(--os-color-text-secondary);
+      color: var(--layout-content-text-muted);
       font-weight: 500;
     }
   }
@@ -67,37 +67,6 @@
     display: flex;
     justify-content: flex-end;
     gap: map.get(vars.$os-spacing, '2'); // 8px
-  }
-}
-
-// Dark theme support
-:host-context(.dark-theme) {
-  .period-selector {
-    background-color: var(--os-color-gray-800);
-
-    .period-btn {
-      color: var(--os-color-gray-400);
-
-      &:hover {
-        background-color: var(--os-color-gray-700);
-        color: var(--os-color-gray-100);
-      }
-
-      &.active {
-        background-color: var(--os-color-primary);
-        color: var(--os-color-primary-white);
-      }
-    }
-  }
-
-  .custom-date-picker {
-    background-color: var(--os-color-gray-800);
-
-    .date-separator {
-      color: var(--os-color-gray-400);
-    }
-
-    // Date input styles are handled by app-datepicker component (supports dark theme natively)
   }
 }
 

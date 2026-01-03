@@ -4,7 +4,7 @@
 
 // Base card styles using Tailwind principles
 .os-card {
-  background: var(--os-color-white);
+  background: var(--layout-content-bg);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -36,7 +36,7 @@
 
   // Card variants (Tailwind-inspired)
   &--default {
-    border: 1px solid var(--os-color-light-shade);
+    border: 1px solid var(--layout-content-border);
     box-shadow: map.get(vars.$os-shadows, 'sm');
   }
 
@@ -50,7 +50,7 @@
   }
 
   &--outlined {
-    border: 2px solid var(--os-color-light-shade);
+    border: 2px solid var(--layout-content-border);
     box-shadow: none;
   }
 
@@ -58,15 +58,15 @@
     border: none;
     box-shadow: none;
     background: transparent;
-    
+
     &:hover:not(.os-card--disabled) {
-      background: rgba(var(--os-color-light-rgb), 0.5);
+      background: var(--layout-menu-hover);
     }
   }
 
   &--gradient {
     border: none;
-    @include mixins.gradient-bg(var(--os-color-white), var(--os-color-primary-opacity-03));
+    @include mixins.gradient-bg(var(--layout-content-bg), var(--os-color-primary-opacity-03));
     box-shadow: map.get(vars.$os-shadows, 'md');
   }
 
@@ -155,7 +155,7 @@
     border: 2px solid var(--os-color-primary);
     background: linear-gradient(
       135deg,
-      var(--os-color-white) 0%,
+      var(--layout-content-bg) 0%,
       var(--os-color-primary-opacity-05) 100%
     );
     box-shadow: 0 0 0 3px rgba(var(--os-color-primary-rgb), 0.1);
@@ -164,11 +164,11 @@
   // Disabled state
   &--disabled {
     @include mixins.disabled-state();
-    
+
     .os-card__title,
     .os-card__subtitle,
     .os-card__content {
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
     }
   }
 
@@ -197,14 +197,14 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    border-bottom: 1px solid var(--os-color-light-shade);
-    background: rgba(var(--os-color-light-rgb), 0.3);
-    
+    border-bottom: 1px solid var(--layout-content-border);
+    background: var(--layout-frame-bg);
+
     &-content {
       flex: 1;
       min-width: 0; // Allows text truncation
     }
-    
+
     &-actions {
       flex-shrink: 0;
       margin-left: map.get(vars.$os-spacing, '3');
@@ -216,7 +216,7 @@
 
   &__title {
     margin: 0 0 map.get(vars.$os-spacing, '1') 0;
-    color: var(--os-color-dark);
+    color: var(--layout-content-text);
     font-family: vars.$primary-font;
     line-height: 1.4;
     @include mixins.truncate(1);
@@ -224,7 +224,7 @@
 
   &__subtitle {
     margin: 0;
-    color: var(--os-color-medium);
+    color: var(--layout-content-text-muted);
     font-family: vars.$primary-font;
     font-weight: 400;
     line-height: 1.4;
@@ -233,23 +233,23 @@
 
   &__content {
     flex: 1;
-    color: var(--os-color-dark);
+    color: var(--layout-content-text);
     font-family: vars.$primary-font;
     line-height: 1.5;
-    
+
     &:empty {
       display: none;
     }
   }
 
   &__actions {
-    border-top: 1px solid var(--os-color-light-shade);
-    background: rgba(var(--os-color-light-rgb), 0.2);
+    border-top: 1px solid var(--layout-content-border);
+    background: var(--layout-frame-bg);
     display: flex;
     gap: map.get(vars.$os-spacing, '2');
     justify-content: flex-end;
     align-items: center;
-    
+
     &:empty {
       display: none;
     }
@@ -271,10 +271,16 @@
   &--glassmorphism {
     .os-card__header,
     .os-card__actions {
-      background: rgba(var(--os-color-white-rgb), 0.05);
+      background: transparent;
     }
   }
 }
+
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================
 
 // Animation classes
 .os-card-enter {

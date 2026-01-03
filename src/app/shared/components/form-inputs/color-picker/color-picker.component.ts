@@ -30,52 +30,52 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     styles: [`
     .color-picker-container {
       margin-bottom: 1.5rem;
-    
+
       label {
         display: block;
         margin-bottom: 0.5rem;
-        color: rgba(0, 0, 0, 0.6);
+        color: var(--layout-content-text-muted);
         font-size: 14px;
       }
-    
+
       .color-picker-wrapper {
         display: flex;
         align-items: center;
         gap: 1rem;
-    
+
         input[type="color"] {
           width: 0;
           height: 0;
           visibility: hidden;
           position: absolute;
         }
-    
+
         .color-preview {
           width: 36px;
           height: 36px;
           border-radius: 50%;
-          border: 2px solid #ddd;
+          border: 2px solid var(--layout-content-border);
           cursor: pointer;
           transition: transform 0.2s;
-    
+
           &:hover {
             transform: scale(1.05);
           }
         }
-    
+
         .color-value {
           font-family: monospace;
-          color: rgba(0, 0, 0, 0.87);
+          color: var(--layout-input-text);
           font-size: 14px;
           width: 80px;
           padding: 4px 8px;
-          border: 1px solid #ddd;
+          border: 1px solid var(--layout-content-border);
           border-radius: 4px;
-          background: transparent;
-          
+          background-color: var(--layout-input-bg);
+
           &:focus {
             outline: none;
-            border-color: #666;
+            border-color: var(--os-color-primary);
           }
         }
       }

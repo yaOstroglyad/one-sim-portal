@@ -44,17 +44,8 @@
   }
 }
 
-// Dark theme support
-[data-coreui-theme="dark"] {
-  .company-product-form-container {
-    .error-alert {
-      background-color: rgba(var(--cui-danger-rgb), 0.15);
-      border-color: rgba(var(--cui-danger-rgb), 0.3);
-    }
-
-    .info-alert {
-      background-color: rgba(var(--cui-info-rgb), 0.15);
-      border-color: rgba(var(--cui-info-rgb), 0.3);
-    }
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

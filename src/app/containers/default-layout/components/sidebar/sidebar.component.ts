@@ -48,10 +48,28 @@ export class SidebarComponent implements OnInit, OnDestroy {
   readonly sidebarClasses = computed(() => {
     return {
       'sidebar--collapsed': this.layoutConfig().sidebarCollapsed,
-      'sidebar--dark': this.layoutConfig().darkTheme,
       'sidebar--rtl': this.languageService.isRtl(),
       'sidebar--mobile-open': this.layoutService.isMobileSidebarOpen()
     };
+  });
+
+  // Computed logo sources (use darkSrc if available in dark theme, otherwise use src with CSS filter)
+  readonly fullLogoSrc = computed(() => {
+    const isDark = this.layoutConfig().darkTheme;
+    const config = this.brandConfig.full;
+    return isDark && config.darkSrc ? config.darkSrc : config.src;
+  });
+
+  readonly narrowLogoSrc = computed(() => {
+    const isDark = this.layoutConfig().darkTheme;
+    const config = this.brandConfig.narrow;
+    return isDark && config.darkSrc ? config.darkSrc : config.src;
+  });
+
+  // Whether to apply CSS filter (only when no darkSrc is provided)
+  readonly useLogoFilter = computed(() => {
+    const isDark = this.layoutConfig().darkTheme;
+    return isDark && !this.brandConfig.full.darkSrc;
   });
 
   private unsubscribe$ = new Subject<void>();

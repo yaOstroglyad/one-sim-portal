@@ -21,14 +21,14 @@
     span {
       font-family: monospace;
       font-weight: 600;
-      background-color: var(--os-color-light);
+      background-color: var(--layout-frame-bg);
       padding: 0.25rem 0.5rem;
       border-radius: 0.25rem;
       cursor: pointer;
       transition: background-color 0.15s ease-in-out;
 
       &:hover {
-        background-color: var(--os-color-medium-subtle-bg);
+        background-color: var(--layout-menu-hover);
       }
     }
   }
@@ -46,19 +46,11 @@
   }
 }
 
-// Dark theme support
-[data-coreui-theme="dark"] {
-  .dialog-content {
-    .iccid-info span {
-      background-color: var(--os-color-dark-subtle-bg);
-      color: var(--os-color-light-text);
-
-      &:hover {
-        background-color: var(--os-color-medium);
-      }
-    }
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================
 
 // Print functionality handled via window.open() in component
 // No print styles needed here as we generate a separate print window

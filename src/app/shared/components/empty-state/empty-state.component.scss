@@ -5,7 +5,7 @@
   justify-content: center;
   text-align: center;
   padding: 20px;
-  color: var(--os-color-dark-tint);
+  color: var(--layout-content-text);
 }
 
 .empty-state-image {
@@ -18,11 +18,12 @@
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 8px;
+  color: var(--layout-content-text);
 }
 
 .empty-state-message {
   font-size: 1rem;
-  color: var(--os-color-medium-shade);
+  color: var(--layout-content-text-muted);
   margin-bottom: 16px;
 }
 

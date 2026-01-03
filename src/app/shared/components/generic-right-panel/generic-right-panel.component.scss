@@ -18,32 +18,32 @@
 .right-panel {
   position: fixed;
   right: 0;
-  background: var(--cui-body-bg);
-  border-left: 1px solid var(--cui-border-color);
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  background: var(--layout-content-bg);
+  border-left: 1px solid var(--layout-content-border);
+  box-shadow: var(--layout-menu-shadow);
   z-index: 999;
   display: flex;
   flex-direction: column;
-  
+
   // Animation states
   transform: translateX(100%);
   opacity: 0;
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-  
+
   &.open {
     transform: translateX(0);
     opacity: 1;
   }
-  
+
   // RTL Support
   &.generic-right-panel--rtl {
     right: auto;
     left: 0;
     border-left: none;
-    border-right: 1px solid var(--cui-border-color);
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+    border-right: 1px solid var(--layout-content-border);
+    box-shadow: var(--layout-menu-shadow);
     transform: translateX(-100%);
-    
+
     &.open {
       transform: translateX(0);
     }
@@ -114,7 +114,7 @@
   .resize-grip {
     width: 7px;
     height: 60px;
-    background-color: var(--cui-border-color);
+    background-color: var(--layout-content-border);
     border-radius: 4px;
     opacity: 0.8;
     transition: all 0.2s ease;
@@ -123,11 +123,11 @@
     justify-content: center;
     align-items: center;
     gap: 3px;
-    
+
     .grip-line {
       width: 2px;
       height: 2px;
-      background-color: var(--cui-body-bg);
+      background-color: var(--layout-content-bg);
       border-radius: 50%;
       transition: all 0.2s ease;
     }
@@ -138,48 +138,48 @@
 .panel-header {
   position: sticky;
   top: 0;
-  background: var(--cui-body-bg);
-  border-bottom: 1px solid var(--cui-border-color);
+  background: var(--layout-content-bg);
+  border-bottom: 1px solid var(--layout-content-border);
   padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: 64px;
   z-index: 10;
-  
+
   .header-content {
     flex: 1;
     min-width: 0;
-    
+
     .panel-title {
       margin: 0;
       font-size: 1.25rem;
       font-weight: 600;
-      color: var(--cui-body-color);
+      color: var(--layout-content-text);
       @include mixins.truncate;
     }
-    
+
     .panel-subtitle {
       margin: 0.25rem 0 0 0;
       font-size: 0.875rem;
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
       line-height: 1.4;
       @include mixins.truncate;
     }
   }
-  
+
   .header-actions {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-left: 1rem;
-    
+
     // RTL Support
     .right-panel.generic-right-panel--rtl & {
       margin-left: 0;
       margin-right: 1rem;
     }
-    
+
     .action-btn {
       display: flex;
       align-items: center;
@@ -188,26 +188,26 @@
       height: 32px;
       border: none;
       background: transparent;
-      border-radius: var(--cui-border-radius);
-      color: var(--cui-body-color);
+      border-radius: 0.375rem;
+      color: var(--layout-content-text);
       cursor: pointer;
       transition: all 0.15s ease;
-      
+
       &:hover:not(.disabled) {
-        background-color: var(--cui-gray-100);
+        background-color: var(--layout-menu-hover);
         color: var(--os-color-primary);
       }
-      
+
       &:active:not(.disabled) {
-        background-color: var(--cui-gray-200);
+        background-color: var(--layout-frame-bg-hover);
         transform: scale(0.95);
       }
-      
+
       &.disabled {
         opacity: 0.5;
         cursor: not-allowed;
       }
-      
+
       svg {
         flex-shrink: 0;
       }
@@ -221,33 +221,17 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 1.5rem;
-  
+
   // Custom scrollbar
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: var(--cui-gray-100);
-    border-radius: 4px;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background: var(--cui-gray-300);
-    border-radius: 4px;
-    
-    &:hover {
-      background: var(--cui-gray-400);
-    }
-  }
+  @include mixins.os-scrollbar(8px);
 }
 
 // Panel Footer
 .panel-footer {
   position: sticky;
   bottom: 0;
-  background: var(--cui-body-bg);
-  border-top: 1px solid var(--cui-border-color);
+  background: var(--layout-content-bg);
+  border-top: 1px solid var(--layout-content-border);
   padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
@@ -289,83 +273,11 @@
   }
 }
 
-// Dark theme support
-[data-theme="dark"] {
-  .right-panel {
-    background: var(--cui-dark-bg);
-    border-left-color: var(--cui-dark-border-color);
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
-    
-    // RTL Support
-    &.generic-right-panel--rtl {
-      border-right-color: var(--cui-dark-border-color);
-      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
-    }
-  }
-  
-  .panel-header,
-  .panel-footer {
-    background: var(--cui-dark-bg);
-    border-color: var(--cui-dark-border-color);
-    
-    .panel-title {
-      color: var(--cui-dark-color);
-    }
-    
-    .panel-subtitle {
-      color: var(--cui-dark-gray-600);
-    }
-    
-    .action-btn {
-      color: var(--cui-dark-color);
-      
-      &:hover:not(.disabled) {
-        background-color: var(--cui-dark-gray-100);
-      }
-      
-      &:active:not(.disabled) {
-        background-color: var(--cui-dark-gray-200);
-      }
-    }
-  }
-  
-  .panel-content {
-    &::-webkit-scrollbar-track {
-      background: var(--cui-dark-gray-100);
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background: var(--cui-dark-gray-300);
-      
-      &:hover {
-        background: var(--cui-dark-gray-400);
-      }
-    }
-  }
-  
-  .resize-handle {
-    &:hover {
-      background-color: rgba(var(--os-color-primary-rgb), 0.1);
-    }
-    
-    .resize-grip {
-      background-color: var(--cui-dark-border-color);
-      opacity: 0.9;
-      
-      .grip-line {
-        background-color: var(--cui-dark-bg);
-      }
-    }
-    
-    &:hover .resize-grip {
-      background-color: var(--os-color-primary);
-      
-      .grip-line {
-        background-color: var(--cui-dark-bg);
-      }
-    }
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================
 
 // Responsive behavior
 @media (max-width: 768px) {
@@ -419,25 +331,25 @@
 @media (prefers-contrast: high) {
   .right-panel {
     border-left-width: 2px;
-    
+
     // RTL Support
     &.generic-right-panel--rtl {
       border-left-width: 1px;
       border-right-width: 2px;
     }
   }
-  
+
   .panel-header,
   .panel-footer {
     border-width: 2px;
   }
-  
+
   .action-btn {
-    border: 1px solid var(--cui-border-color);
+    border: 1px solid var(--layout-content-border);
   }
-  
+
   .resize-handle .resize-grip {
-    border: 1px solid var(--cui-border-color);
+    border: 1px solid var(--layout-content-border);
   }
 }
 

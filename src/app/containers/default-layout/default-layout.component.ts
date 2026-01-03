@@ -15,7 +15,7 @@ import { Subject, takeUntil, skip } from 'rxjs';
 import { navItems } from './_nav';
 import { NavItem, BrandConfig, LayoutConfig } from './models';
 import { LayoutService } from './services';
-import { ActiveThemeConfig, ActiveThemeService, isToggleActive, AuthService, LanguageService } from '@shared';
+import { ActiveThemeConfig, ActiveThemeService, isToggleActive, AuthService, LanguageService, BreadcrumbComponent } from '@shared';
 import { SidebarComponent } from './components';
 import { HeaderComponent } from './components';
 import { GlobalFabComponent, FlyoutLayoutComponent } from '@shared/components/fab-layout';
@@ -29,7 +29,8 @@ import { GlobalFabComponent, FlyoutLayoutComponent } from '@shared/components/fa
     SidebarComponent,
     HeaderComponent,
     GlobalFabComponent,
-    FlyoutLayoutComponent
+    FlyoutLayoutComponent,
+    BreadcrumbComponent
 ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './default-layout.component.html',

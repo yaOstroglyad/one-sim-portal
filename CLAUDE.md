@@ -194,6 +194,8 @@ specs/                      # Feature specifications
 - TypeScript 5.9, Angular 21.0.5 + Angular Core, Angular Material, CoreUI, RxJS, Chart.js (014-zoneless)
 - N/A (frontend-only change) (014-zoneless)
 - TypeScript 5.9, Angular 21.0.5 (Zoneless) + Angular HttpClient, RxJS, Chart.js, Angular Material (015-traffic-dashboard)
+- TypeScript 5.9 + CoreUI, Angular Material, RxJS (017-gmail-layout)
+- N/A (no backend changes) (017-gmail-layout)
 
 ## Recent Changes
 - 013-angular-21-upgrade: Upgraded Angular 19.2.15 → 21.0.5, TypeScript 5.8 → 5.9, removed @angular/flex-layout

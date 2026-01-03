@@ -1,24 +1,27 @@
+// Global dialog styles from _vendor-overrides.scss
+// Component-specific overrides only
+
 .dialog-header {
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 10px;
+  border-bottom: 1px solid var(--layout-content-border);
+  padding-bottom: 0.625rem;
 }
 
 .dialog-content {
   display: block;
-  padding-top: 20px;
-  max-height: 400px; /* Adjust the height as necessary */
+  padding-top: 1.25rem;
+  max-height: 400px;
   overflow-y: auto;
 }
 
 .dialog-footer {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 10px;
+  border-top: 1px solid var(--layout-content-border);
+  padding-top: 0.625rem;
 }
 
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  gap: 1.25rem;
 }
 
 .grid-item {
@@ -36,23 +39,23 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
 }
 
 .input-group, .usage-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .usage-item {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 mat-form-field {
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
 mat-dialog-content {
@@ -60,5 +63,12 @@ mat-dialog-content {
 }
 
 h3 {
-  margin-top: 24px;
+  margin-top: 1.5rem;
+  color: var(--layout-content-text);
 }
+
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

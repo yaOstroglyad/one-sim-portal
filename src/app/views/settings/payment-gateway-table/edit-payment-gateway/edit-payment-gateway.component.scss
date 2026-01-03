@@ -11,15 +11,15 @@
   gap: 12px;
   padding: 2rem;
   text-align: center;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--layout-content-text-muted);
 }
 
 .loading-spinner {
   display: inline-block;
   width: 24px;
   height: 24px;
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  border-top: 2px solid #0083e1;
+  border: 2px solid var(--layout-content-border);
+  border-top: 2px solid var(--os-color-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -32,6 +32,6 @@
 .no-fields-message {
   padding: 2rem;
   text-align: center;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--layout-content-text-muted);
   font-style: italic;
 }

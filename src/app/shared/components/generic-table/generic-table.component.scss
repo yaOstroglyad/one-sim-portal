@@ -1,14 +1,15 @@
 // Footer styling
 .ag-footer {
   .ag-footer-row {
-    background-color: var(--os-color-background-secondary);
-    border-top: 2px solid var(--os-color-border);
+    background-color: var(--layout-content-bg);
+    border-top: 2px solid var(--layout-content-border);
   }
 
   .ag-footer-cell {
     padding: 0.5rem 0.5rem;
     font-weight: 600;
-    color: var(--os-color-text-primary);
+    color: var(--layout-content-text);
+    background-color: var(--layout-content-bg);
   }
 
   .ag-footer-cell-content {
@@ -21,7 +22,7 @@
       cursor: help;
       text-decoration: underline;
       text-decoration-style: dotted;
-      text-decoration-color: var(--os-color-border);
+      text-decoration-color: var(--layout-content-border);
       text-underline-offset: 2px;
     }
   }

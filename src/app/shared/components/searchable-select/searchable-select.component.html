@@ -15,7 +15,7 @@
 
   <!-- Main select button -->
   <div class="select-trigger"
-    (click)="toggle()"
+    (click)="toggle($event)"
     [attr.tabindex]="config.disabled ? -1 : 0"
     role="combobox"
     [attr.aria-expanded]="isOpen"
@@ -49,11 +49,10 @@
           @if (hasSelectedChips) {
             <div class="selected-chips">
               @for (option of selectedMultipleOptions; track option) {
-                <span class="chip">
+                <span class="chip" (click)="removeOption(option, $event)">
                   {{ option.label }}
                   <svg cIcon name="cilX"
                     class="chip-remove"
-                    (click)="removeOption(option, $event)"
                     width="12" height="12">
                   </svg>
                 </span>

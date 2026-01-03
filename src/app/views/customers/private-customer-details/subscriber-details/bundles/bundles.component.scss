@@ -36,8 +36,8 @@
 
 /* Кнопки навигации */
 .nav-button {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #ccc;
+  background: var(--layout-menu-bg);
+  border: 1px solid var(--layout-content-border);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -46,11 +46,13 @@
   justify-content: center;
   cursor: pointer;
   font-size: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  transition: background 0.3s;
+  color: var(--layout-content-text-muted);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
 }
 
 .nav-button:hover {
-  background: #f0f0f0;
+  background: var(--layout-menu-hover);
+  color: var(--layout-content-text);
 }
 

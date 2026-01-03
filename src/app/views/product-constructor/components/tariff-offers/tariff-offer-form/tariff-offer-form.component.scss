@@ -26,12 +26,8 @@
   }
 }
 
-// Dark theme support
-[data-coreui-theme="dark"] {
-  .tariff-offer-form-container {
-    .error-alert {
-      background-color: rgba(var(--cui-danger-rgb), 0.15);
-      border-color: rgba(var(--cui-danger-rgb), 0.3);
-    }
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================
