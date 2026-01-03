@@ -22,12 +22,10 @@
   }
 }
 
+// Template type card - uses surface and interactive base mixins
 .template-type-card {
-  background: var(--layout-menu-bg);
-  border: 1px solid var(--layout-content-border);
-  border-radius: map.get(vars.$os-border-radius, 'medium');
-  cursor: pointer;
-  transition: all 0.2s ease;
+  @include mixins.os-surface-base(--layout-menu-bg, --layout-content-border, map.get(vars.$os-border-radius, 'medium'));
+  @include mixins.os-interactive-base();
 
   &:hover:not(&--disabled) {
     transform: translateY(-2px);

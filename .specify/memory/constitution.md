@@ -373,20 +373,78 @@ color: #2c2c2c;
 - **NEVER use `@media (prefers-color-scheme: dark)`**
 - Wait for official dark mode implementation
 
+### Mixin Hierarchy Architecture (NON-NEGOTIABLE)
+
+The SCSS architecture uses a 3-level hierarchical mixin system to eliminate code duplication:
+
+```
+Level 1: Abstract Bases (foundation)
+    ↓
+Level 2: Specialized Mixins (inherit from Level 1)
+    ↓
+Level 3: Sub-component Mixins (for complex components like tables)
+```
+
+**Level 1 - Abstract Bases:**
+| Mixin | Purpose | Parameters |
+|-------|---------|------------|
+| `os-surface-base($bg, $border, $radius)` | Any themed container | CSS var names, radius |
+| `os-interactive-base($transition)` | Clickable elements | Transition duration |
+| `os-feedback-base($color-var)` | Status indicators | CSS var name |
+
+**Level 2 - Specialized Mixins (prefer these for standard patterns):**
+| Mixin | Inherits | Use For |
+|-------|----------|---------|
+| `os-input-base($height, $padding)` | surface | Input fields, search boxes |
+| `os-dropdown-base($min-width, $padding)` | surface | Dropdowns, popups, menus |
+| `os-card-base($padding, $radius)` | surface | Cards, sections, panels |
+| `os-panel-base($padding)` | surface | Panels with header/content |
+| `os-overlay-base($opacity)` | - | Modal backdrops, overlays |
+| `os-table-base()` | surface | Table containers |
+| `os-button-base($height, $padding)` | surface + interactive | All buttons |
+| `os-list-item-base($padding)` | interactive | List items, menu items |
+| `os-icon-button-base($size)` | interactive | Icon-only buttons |
+| `os-table-sortable-base()` | interactive | Sortable table headers |
+| `os-spinner-base($size, $border-width)` | feedback | Loading spinners |
+| `os-alert-base($variant)` | feedback | Alert messages |
+| `os-badge-base($variant)` | feedback | Status badges |
+
+**Level 3 - Table Sub-components:**
+| Mixin | Inherits | Use For |
+|-------|----------|---------|
+| `os-table-header-base()` | table | Table header row |
+| `os-table-row-base()` | table | Body rows with hover/selected |
+| `os-table-cell-base($padding)` | table | Cell padding/alignment |
+| `os-table-actions-base()` | table | Action buttons column |
+
 ### DRY Principle for Component Styles (NON-NEGOTIABLE)
 
 **Before writing ANY component styles, check `_mixins.scss` for existing patterns!**
 
 ```scss
-// ✅ CORRECT - Use existing mixins
-@use "mixins" as mixins;
+// ✅ CORRECT - Use Level 2 mixins directly
+.my-dropdown { @include mixins.os-dropdown-base(); }
+.my-input { @include mixins.os-input-base(40px); }
+.my-card { @include mixins.os-card-base(1.5rem); }
 
-.my-dropdown {
-  @include mixins.os-dropdown-base();
+// ✅ CORRECT - Compose from Level 1 for custom surfaces
+.my-custom-surface {
+  @include mixins.os-surface-base(--layout-frame-bg, --layout-frame-border, 0.5rem);
+  padding: map.get(vars.$os-spacing, '4');
 }
 
-.my-input {
-  @include mixins.os-input-base();
+// ✅ CORRECT - Multiple inheritance for complex components
+.my-interactive-card {
+  @include mixins.os-surface-base(--layout-menu-bg, --layout-content-border);
+  @include mixins.os-interactive-base();
+}
+
+// ✅ CORRECT - Table composition
+.my-table {
+  @include mixins.os-table-base();
+  &__header { @include mixins.os-table-header-base(); }
+  &__row { @include mixins.os-table-row-base(); }
+  &__cell { @include mixins.os-table-cell-base(); }
 }
 
 // ❌ FORBIDDEN - Duplicating existing patterns
@@ -399,18 +457,11 @@ color: #2c2c2c;
 }
 ```
 
-**Available UI Mixins (use instead of duplicating):**
-
+**Additional Utility Mixins:**
 | Mixin | Use For |
 |-------|---------|
-| `os-input-base($height)` | Input fields, search boxes |
-| `os-dropdown-base($min-width)` | Dropdowns, popups, menus |
 | `os-dropdown-animation()` | Dropdown open animation |
-| `os-card-base($padding)` | Cards, sections, panels |
-| `os-option-item()` | Select options, list items |
 | `os-detail-row($label-width)` | Label + value pairs |
-| `os-btn-outline-primary()` | Primary outline buttons |
-| `os-btn-outline-secondary()` | Secondary outline buttons |
 | `os-nav-button($size)` | Navigation arrows, controls |
 | `os-scrollbar($width)` | Custom scrollbars |
 | `os-calendar-day($size)` | Calendar day cells |
@@ -418,7 +469,8 @@ color: #2c2c2c;
 **When to create a NEW mixin:**
 1. Pattern is used in 3+ components
 2. Pattern has consistent structure with only size/color variations
-3. Add to `_mixins.scss` under "COMPONENT UI MIXINS" section
+3. Determine the correct level (base if abstract, specialized if inherits)
+4. Add to `_mixins.scss` under appropriate section
 
 ---
 
@@ -624,4 +676,4 @@ specs/{feature-name}/
 
 ---
 
-**Version:** 1.6.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-03
+**Version:** 1.7.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-03

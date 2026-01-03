@@ -1,15 +1,15 @@
+@use "../../../../scss/mixins" as mixins;
+
+// Account selector - uses card base mixin
 .account-selector {
+  @include mixins.os-card-base(24px, 4px);
   background: var(--layout-menu-bg);
-  border: 1px solid var(--layout-content-border);
-  border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   max-width: 600px;
   width: 100%;
   overflow: hidden;
   position: relative;
-  padding: 24px;
 
   .helper-text {
     display: flex;

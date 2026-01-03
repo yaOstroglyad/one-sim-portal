@@ -22,30 +22,14 @@
     }
   }
 
-  // Main trigger button
+  // Main trigger button - uses input base mixin
   .select-trigger {
+    @include mixins.os-input-base(44px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 44px;
-    padding: 0.5rem 0.875rem;
-    background-color: var(--layout-input-bg);
-    border: 1px solid var(--layout-input-border);
-    border-radius: 6px;
     cursor: pointer !important;
-    transition: all 0.2s ease;
     position: relative;
-    color: var(--layout-input-text);
-
-    &:hover:not(.disabled) {
-      border-color: var(--os-color-primary);
-    }
-
-    &:focus {
-      outline: none;
-      border-color: var(--cui-primary);
-      box-shadow: 0 0 0 3px rgba(var(--cui-primary-rgb), 0.1);
-    }
 
     .select-value {
       flex: 1;
@@ -191,7 +175,7 @@
       overflow-y: auto;
 
       .option {
-        @include mixins.os-option-item();
+        @include mixins.os-list-item-base();
 
         &.loading,
         &.no-results {

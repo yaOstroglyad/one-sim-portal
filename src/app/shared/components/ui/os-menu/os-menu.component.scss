@@ -28,25 +28,15 @@
     user-select: none;
   }
 
+  // Menu item - uses list item base mixin
   &__item {
-    display: flex;
-    align-items: center;
+    @include mixins.os-list-item-base(map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '3'));
     width: 100%;
-    padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '3');
-    border: none;
-    background: none;
     text-align: start;
     font-size: map.get(vars.$os-font-sizes, 'sm');
     color: var(--layout-menu-text);
-    border-radius: map.get(vars.$os-border-radius, 'medium');
-    cursor: pointer;
-    transition: all 0.2s ease;
     gap: map.get(vars.$os-spacing, '2');
     user-select: none;
-
-    &:hover:not(:disabled) {
-      background: var(--layout-menu-hover);
-    }
 
     &:focus {
       outline: 2px solid var(--os-color-primary);

@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "../../../../scss/variables" as vars;
 @use "../../../../scss/mixins" as mixins;
 
@@ -40,31 +41,21 @@
   margin: 0;
 }
 
-// Period Selector
+// Period Selector - uses surface base
 .period-selector {
+  @include mixins.os-surface-base(--layout-menu-bg, --layout-menu-bg, 8px);
   display: flex;
   gap: 0.25rem;
-  background-color: var(--layout-menu-bg);
   padding: 0.25rem;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: map.get(vars.$os-shadows, 'sm');
 
+  // Period button - uses list item base concepts
   .period-btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    background: transparent;
-    color: var(--layout-content-text-muted);
+    @include mixins.os-list-item-base(0.5rem 1rem);
     font-size: 0.875rem;
     font-weight: 500;
     border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
     white-space: nowrap;
-
-    &:hover {
-      background-color: var(--layout-menu-hover);
-      color: var(--layout-content-text);
-    }
 
     &.active {
       background-color: var(--os-color-primary);
@@ -78,23 +69,14 @@
   display: flex;
   gap: 0.5rem;
 
+  // Icon button - uses icon button base mixin
   .btn-icon {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include mixins.os-icon-button-base(40px);
     border: 1px solid var(--layout-content-border);
-    background: none;
     border-radius: 8px;
-    cursor: pointer;
-    color: var(--layout-content-text-muted);
-    transition: all 0.2s ease;
 
     &:hover {
-      background: var(--layout-menu-hover);
       border-color: var(--os-color-primary);
-      color: var(--layout-content-text);
     }
 
     svg {
@@ -118,18 +100,10 @@
     flex-wrap: wrap;
   }
 
+  // Date input - uses input base mixin
   .date-input {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--layout-content-border);
+    @include mixins.os-input-base(auto, 0.5rem 1rem);
     border-radius: 6px;
-    font-size: 0.875rem;
-    background-color: var(--layout-input-bg);
-    color: var(--layout-input-text);
-
-    &:focus {
-      outline: none;
-      border-color: var(--os-color-primary);
-    }
   }
 
   .date-separator {
