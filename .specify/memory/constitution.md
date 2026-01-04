@@ -99,6 +99,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 **Rule:** ANY service that might use HttpClient (directly or transitively) MUST be lazy-loaded via Injector in HTTP Interceptors.
 
 ### Signal APIs (Angular 21)
+
+#### Component Inputs/Outputs
 - **Use `input()` instead of `@Input()`**
 - **Use `output()` instead of `@Output()`**
 - **Use `effect()` for input synchronization**
@@ -112,6 +114,70 @@ public readonly valueChange = output<string>();
 @Input() value?: string;
 @Output() valueChange = new EventEmitter<string>();
 ```
+
+#### State Management with Signals (NON-NEGOTIABLE)
+- **Use `signal()` for component local state** (not BehaviorSubject/Observable)
+- **Use `computed()` for derived state**
+- **Use `effect()` for side effects on signal changes**
+- **Services exposing reactive data MUST use `Signal<T>`**
+
+```typescript
+// ✅ CORRECT - Component state with signals
+@Component({ ... })
+export class MyComponent {
+  // Local state
+  readonly isOpen = signal(false);
+  readonly query = signal('');
+  readonly items = signal<Item[]>([]);
+
+  // Derived state
+  readonly filteredItems = computed(() =>
+    this.items().filter(item => item.name.includes(this.query()))
+  );
+
+  readonly isEmpty = computed(() => this.filteredItems().length === 0);
+
+  // Side effects
+  constructor() {
+    effect(() => {
+      console.log('Query changed:', this.query());
+    });
+  }
+
+  // Updating state
+  toggle(): void {
+    this.isOpen.update(v => !v);
+  }
+}
+
+// ✅ CORRECT - Service with signals
+@Injectable({ providedIn: 'root' })
+export class SearchService {
+  readonly results = signal<SearchResult[]>([]);
+  readonly isLoading = signal(false);
+
+  search(query: string): void {
+    this.isLoading.set(true);
+    // ...
+  }
+}
+
+// ❌ FORBIDDEN - Using BehaviorSubject for local state
+private readonly isOpen$ = new BehaviorSubject(false);
+
+// ❌ FORBIDDEN - Observable for simple derived state
+readonly filteredItems$ = combineLatest([...]).pipe(...);
+```
+
+**When to use Observable vs Signal:**
+| Use Case | Use |
+|----------|-----|
+| Component local state | `signal()` |
+| Derived/computed values | `computed()` |
+| HTTP requests | `Observable` (from HttpClient) |
+| Complex async streams (debounce, switchMap) | `Observable` |
+| Service exposing current value | `signal()` |
+| Cross-component communication | `signal()` in shared service |
 
 ### Control Flow Syntax
 - **Use `@if/@for/@switch`** instead of `*ngIf/*ngFor/*ngSwitch`
@@ -287,6 +353,67 @@ Until refactoring is complete:
 - **Files:** `kebab-case.model.ts` or `kebab-case.interface.ts`
 - **Interfaces:** PascalCase without `I` prefix (`User`, not `IUser`)
 - **Request/Response:** `CreateCustomerRequest`, `CustomerResponse`
+
+### Const Type Definitions (NON-NEGOTIABLE)
+
+**ALWAYS use `as const` objects with derived types instead of inline union types.**
+
+```typescript
+// ✅ CORRECT - Const object with derived type
+export const ORDER_STATUSES = {
+  PENDING: 'pending',
+  PROCESSING: 'processing',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
+} as const;
+export type OrderStatus = typeof ORDER_STATUSES[keyof typeof ORDER_STATUSES];
+
+// Usage in interface
+interface Order {
+  id: string;
+  status: OrderStatus;  // Type-safe, uses const
+}
+
+// Usage in code
+if (order.status === ORDER_STATUSES.COMPLETED) { ... }
+
+// ❌ FORBIDDEN - Inline union types
+interface Order {
+  status: 'pending' | 'processing' | 'completed' | 'cancelled';
+}
+
+// ❌ FORBIDDEN - Enum (less flexible, worse tree-shaking)
+enum OrderStatus {
+  PENDING = 'pending',
+  PROCESSING = 'processing',
+}
+```
+
+**Benefits of const types:**
+- **Single source of truth** — values defined once
+- **Refactoring safe** — rename in one place
+- **Runtime access** — can iterate over values, use in dropdowns
+- **Better tree-shaking** than enums
+
+**Pattern for related types:**
+```typescript
+// search.types.ts
+export const SEARCH_ITEM_TYPES = {
+  NAVIGATION: 'navigation',
+  ACTION: 'action',
+} as const;
+export type SearchItemType = typeof SEARCH_ITEM_TYPES[keyof typeof SEARCH_ITEM_TYPES];
+
+export const MATCH_SOURCES = {
+  LABEL: 'label',
+  KEYWORD: 'keyword',
+  URL: 'url',
+} as const;
+export type MatchSource = typeof MATCH_SOURCES[keyof typeof MATCH_SOURCES];
+
+// All type values accessible at runtime
+const allTypes = Object.values(SEARCH_ITEM_TYPES); // ['navigation', 'action']
+```
 
 ---
 
@@ -534,6 +661,8 @@ Level 3: Sub-component Mixins (for complex components like tables)
 - [ ] Standalone component with OnPush
 - [ ] `inject()` for dependencies
 - [ ] Signal inputs/outputs in new code
+- [ ] **`signal()`/`computed()` for local state** (not BehaviorSubject)
+- [ ] **`as const` types** (not inline unions or enums)
 - [ ] `@if/@for/@switch` in new templates
 - [ ] `os-` selector prefix
 - [ ] `:host { display: block }` for block-level components
@@ -676,4 +805,4 @@ specs/{feature-name}/
 
 ---
 
-**Version:** 1.7.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-03
+**Version:** 1.8.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-04

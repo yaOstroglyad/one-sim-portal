@@ -1,210 +1,104 @@
-# Implementation Plan: Gmail-Style Layout Redesign
+# Implementation Plan: [FEATURE]
 
-**Branch**: `017-gmail-layout` | **Date**: 2025-12-28 | **Spec**: [spec.md](./spec.md)
-**Input**: Feature specification from `/specs/017-gmail-layout/spec.md`
+**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
+
+**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
 ## Summary
 
-Redesign the application layout architecture from sidebar-first (100vh) to Gmail-style header-first pattern. The header will span full viewport width, with sidebar and content positioned below it. Content area will have rounded corners with sidebar background extending behind to create visual frame effect.
-
-**Key Changes:**
-- Header: full width, contains dropdown button (disabled), search bar, user menu
-- Sidebar: starts below header (top: 64px), maintains logo with full/narrow switching
-- Content: rounded corners (top-left, top-right), breadcrumbs inside
-- Mobile: same toggle position (bottom of sidebar) but enlarged
+[Extract from feature spec: primary requirement + technical approach from research]
 
 ## Technical Context
 
-**Language/Version**: TypeScript 5.9
-**Framework**: Angular 21.0.5 (Zoneless, Standalone Components)
-**Primary Dependencies**: CoreUI, Angular Material, RxJS
-**Storage**: N/A (no backend changes)
-**Testing**: Manual testing (no unit tests for layout changes)
-**Target Platform**: Web (Chrome, Firefox, Safari, Edge)
-**Project Type**: Single SPA (Angular)
-**Performance Goals**: Animation transitions ≤300ms
-**Constraints**: RTL support required, mobile responsive (320px - 2560px)
-**Scale/Scope**: Affects all pages through default-layout component
+<!--
+  ACTION REQUIRED: Replace the content in this section with the technical details
+  for the project. The structure here is presented in advisory capacity to guide
+  the iteration process.
+-->
+
+**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
+**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
+**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
+**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
+**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Project Type**: [single/web/mobile - determines source structure]  
+**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
+**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
+**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-| Rule | Status | Notes |
-|------|--------|-------|
-| Absolute paths only | PASS | Will use absolute paths in all file operations |
-| Standalone components | PASS | All modified components are already standalone |
-| OnPush change detection | PASS | Existing components use OnPush |
-| inject() for DI | PASS | Existing components use inject() |
-| Signal APIs | PASS | Will maintain existing signal patterns |
-| @if/@for/@switch | PASS | Will use modern control flow |
-| os- selector prefix | N/A | No new components with selectors |
-| SCSS @use syntax | PASS | Will use @use for all imports |
-| CSS variables for colors | PASS | Will use --os-color-* variables |
-| English documentation | PASS | All code comments in English |
-| Search before creating | PASS | Modifying existing components only |
-
-**Constitution Compliance: PASS** - No violations detected.
+[Gates determined based on constitution file]
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```text
-specs/017-gmail-layout/
-├── spec.md              # Feature specification (complete)
-├── plan.md              # This file
-├── research.md          # Phase 0 output (minimal - frontend only)
-├── quickstart.md        # Phase 1 output
-└── tasks.md             # Phase 2 output (/speckit.tasks)
+specs/[###-feature]/
+├── plan.md              # This file (/speckit.plan command output)
+├── research.md          # Phase 0 output (/speckit.plan command)
+├── data-model.md        # Phase 1 output (/speckit.plan command)
+├── quickstart.md        # Phase 1 output (/speckit.plan command)
+├── contracts/           # Phase 1 output (/speckit.plan command)
+└── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
 ```
 
-### Source Code (files to modify)
+### Source Code (repository root)
+<!--
+  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
+  for this feature. Delete unused options and expand the chosen structure with
+  real paths (e.g., apps/admin, packages/something). The delivered plan must
+  not include Option labels.
+-->
 
 ```text
-src/app/containers/default-layout/
-├── default-layout.component.ts      # Main layout container
-├── default-layout.component.html    # Layout template
-├── default-layout.component.scss    # Layout styles (MAJOR CHANGES)
-├── components/
-│   ├── header/
-│   │   ├── header.component.ts      # Add search bar, remove breadcrumb
-│   │   ├── header.component.html    # New header structure
-│   │   └── header.component.scss    # Full-width header styles
-│   └── sidebar/
-│       ├── sidebar.component.ts     # Adjust positioning
-│       ├── sidebar.component.html   # Minor template adjustments
-│       └── sidebar.component.scss   # Top offset, height calc
+# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
+src/
+├── models/
 ├── services/
-│   └── layout.service.ts            # No changes expected
-└── models/
-    └── layout.model.ts              # No changes expected
+├── cli/
+└── lib/
 
-src/scss/
-├── _variables.scss                  # Add border-radius variable if needed
-└── _layout.scss                     # Global layout adjustments
+tests/
+├── contract/
+├── integration/
+└── unit/
+
+# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
+backend/
+├── src/
+│   ├── models/
+│   ├── services/
+│   └── api/
+└── tests/
+
+frontend/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   └── services/
+└── tests/
+
+# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
+api/
+└── [same as backend above]
+
+ios/ or android/
+└── [platform-specific structure: feature modules, UI flows, platform tests]
 ```
 
-**Structure Decision**: Modifying existing Angular layout components. No new components created. Pure refactoring of CSS positioning and minor template changes.
-
-## Architecture Changes
-
-### Current Layout CSS Model
-
-```
-┌──────────────────────────────────────────┐
-│ .sidebar { position: fixed; top: 0;      │
-│            height: 100vh; left: 0; }     │
-├──────────┬───────────────────────────────┤
-│ SIDEBAR  │ .header { position: fixed;    │
-│ (100vh)  │          left: 256px; }       │
-│          ├───────────────────────────────┤
-│          │ .content { margin-left: 256px;│
-│          │            padding-top: 64px; }│
-└──────────┴───────────────────────────────┘
-```
-
-### Target Layout CSS Model
-
-```
-┌──────────────────────────────────────────┐
-│ .header { position: fixed; top: 0;       │
-│           left: 0; right: 0; z-index: 1001 }
-├──────────┬───────────────────────────────┤
-│ SIDEBAR  │ .content-wrapper {            │
-│ top: 64px│   background: sidebar-bg;     │
-│ height:  │   padding-top: 64px;          │
-│ calc()   │ }                             │
-│          │ .content {                    │
-│          │   background: white;          │
-│          │   border-radius: 16px 16px 0 0│
-│          │ }                             │
-└──────────┴───────────────────────────────┘
-```
-
-### Component Responsibility Matrix
-
-| Component | Current | Target |
-|-----------|---------|--------|
-| **Header** | Breadcrumb, user menu | Search bar, disabled dropdown, user menu |
-| **Sidebar** | Logo, nav, toggle (100vh) | Logo, nav, toggle (calc(100vh - 64px)) |
-| **Content** | Flat background | Rounded corners, breadcrumb inside |
-| **Layout** | Sidebar-first hierarchy | Header-first hierarchy |
-
-## Implementation Phases
-
-### Phase 1: Header Restructure
-1. Update header.component.scss: `left: 0; right: 0;` (full width)
-2. Update header.component.html: add search bar, add disabled dropdown button
-3. Remove breadcrumb from header (will move to content)
-4. Adjust z-index hierarchy (header > sidebar)
-
-### Phase 2: Sidebar Repositioning
-1. Update sidebar.component.scss: `top: 64px; height: calc(100vh - 64px);`
-2. Ensure logo remains in sidebar (already there)
-3. Verify toggle button works with new positioning
-4. Test hover-expand behavior
-
-### Phase 3: Content Area Styling
-1. Update default-layout.component.scss:
-   - Add wrapper with sidebar background color
-   - Add content container with border-radius
-2. Move breadcrumb component into content area
-3. Ensure proper spacing and alignment
-
-### Phase 4: Mobile Adaptation
-1. Update mobile breakpoint styles
-2. Enlarge toggle button on mobile
-3. Test sidebar slide-in animation
-4. Verify overlay behavior
-
-### Phase 5: RTL Support
-1. Mirror all directional properties
-2. Test with Hebrew language
-3. Verify animations work in RTL
-
-## CSS Variables to Add/Use
-
-```scss
-// Existing (use these)
---os-color-dark          // Sidebar background
---os-color-light         // Content background
---os-color-primary       // Active states
-
-// New (if needed)
-$layout-header-height: 64px;
-$layout-sidebar-width: 256px;
-$layout-sidebar-collapsed: 56px;
-$layout-content-radius: 16px;
-```
-
-## Risk Assessment
-
-| Risk | Mitigation |
-|------|------------|
-| RTL positioning complex | Test early with Hebrew locale |
-| Mobile sidebar timing | Use existing animation duration (300ms) |
-| Z-index conflicts | Document hierarchy: header(1001) > sidebar(1000) > content |
-| Breadcrumb placement | Ensure consistent padding in all views |
+**Structure Decision**: [Document the selected structure and reference the real
+directories captured above]
 
 ## Complexity Tracking
 
-> No constitution violations requiring justification.
+> **Fill ONLY if Constitution Check has violations that must be justified**
 
-## Dependencies
-
-- No external dependencies
-- No backend changes
-- No new npm packages
-
-## Success Verification
-
-After implementation, verify:
-1. [ ] Header spans full width on all viewport sizes
-2. [ ] Sidebar starts at 64px from top
-3. [ ] Content has visible rounded corners
-4. [ ] Breadcrumbs appear inside content area
-5. [ ] Mobile toggle is enlarged and functional
-6. [ ] RTL layout mirrors correctly
-7. [ ] All existing navigation works
-8. [ ] Animations complete in ≤300ms
+| Violation | Why Needed | Simpler Alternative Rejected Because |
+|-----------|------------|-------------------------------------|
+| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
