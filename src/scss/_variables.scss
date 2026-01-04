@@ -225,6 +225,7 @@
   /* Frame (Header + Sidebar) - Light Theme */
   --layout-frame-bg: #f1f3f4;
   --layout-frame-bg-hover: #e8eaed;
+  --layout-frame-bg-hover-alpha: rgba(0, 0, 0, 0.06);
   --layout-frame-bg-active: rgba(var(--os-color-primary-rgb), 0.15);
   --layout-frame-text: #202124;
   --layout-frame-text-muted: #5f6368;
@@ -278,6 +279,7 @@ html.dark,
   /* Frame (Header + Sidebar) - Dark Theme */
   --layout-frame-bg: #1f1f1f;
   --layout-frame-bg-hover: #2d2d2d;
+  --layout-frame-bg-hover-alpha: rgba(255, 255, 255, 0.08);
   --layout-frame-bg-active: rgba(var(--os-color-primary-rgb), 0.2);
   --layout-frame-text: #e8eaed;
   --layout-frame-text-muted: #9aa0a6;

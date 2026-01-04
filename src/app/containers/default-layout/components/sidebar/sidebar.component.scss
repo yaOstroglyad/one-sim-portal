@@ -35,6 +35,11 @@
       // Show children on hover if parent is expanded
       .sidebar__nav-children {
         display: block;
+
+        // Restore indent line visibility on hover when expanded
+        &--expanded::before {
+          opacity: 1;
+        }
       }
 
       // Show skeleton text on hover
@@ -142,13 +147,19 @@
       position: relative;
 
       &:hover {
-        background: var(--layout-frame-bg-hover);
+        background: var(--layout-frame-bg-hover-alpha);
         text-decoration: none;
       }
 
       &--active {
         color: var(--os-color-primary);
         background: var(--layout-frame-bg-active);
+
+        // When parent is expanded with active child, remove parent background
+        // to avoid large rectangle effect
+        &.sidebar__nav-link--expanded {
+          background: transparent;
+        }
       }
 
       &--child {
@@ -281,9 +292,33 @@
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease;
+      position: relative;
+
+      // Indent guide line (vertical bar showing nesting level)
+      &::before {
+        content: '';
+        position: absolute;
+        top: map.get(vars.$os-spacing, '2');
+        bottom: map.get(vars.$os-spacing, '2');
+        left: 1.5rem;
+        width: 2px;
+        background: var(--os-color-primary);
+        border-radius: 1px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+
+        .sidebar--rtl & {
+          left: auto;
+          right: 1.5rem;
+        }
+      }
 
       &--expanded {
         max-height: 1000px;
+
+        &::before {
+          opacity: 1;
+        }
       }
     }
 
@@ -466,6 +501,11 @@
 
   .sidebar__nav-children {
     display: none;
+
+    // Hide indent guide when collapsed
+    &::before {
+      opacity: 0;
+    }
   }
 
   .sidebar__skeleton-text {
