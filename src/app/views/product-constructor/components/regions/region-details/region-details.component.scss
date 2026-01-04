@@ -29,14 +29,18 @@
       flex-wrap: wrap;
       gap: 0.5rem;
 
+      // Country tag - uses badge base styles
       .country-tag {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 0.25rem;
+        white-space: nowrap;
         background-color: rgba(var(--os-color-primary-rgb), 0.1);
         border: 1px solid var(--os-color-primary);
-        border-radius: 0.25rem;
         color: var(--os-color-primary);
-        font-size: 0.875rem;
       }
     }
 

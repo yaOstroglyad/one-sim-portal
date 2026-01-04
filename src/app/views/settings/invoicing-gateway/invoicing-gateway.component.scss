@@ -1,23 +1,13 @@
 @use "../../../../scss/custom";
+@use "../../../../scss/mixins" as mixins;
 
 // ==============================================
-// LOADING SPINNER
+// LOADING SPINNER - uses spinner base
 // ==============================================
 
 .loading-spinner {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+  @include mixins.os-spinner-base(14px, 2px);
   margin-right: 0.5rem;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 // ==============================================
@@ -40,17 +30,16 @@
 }
 
 // ==============================================
-// ADMIN MESSAGE
+// ADMIN MESSAGE - uses alert base
 // ==============================================
 
 .admin-account-message {
+  @include mixins.os-alert-base(danger);
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 16px;
-  background-color: rgba(var(--os-color-danger-rgb), 0.1);
-  border-radius: 4px;
   color: var(--layout-content-text);
+  border-radius: 4px;
 
   mat-icon {
     font-size: 24px;

@@ -1,3 +1,5 @@
+@use "../../../../../scss/mixins" as mixins;
+
 .rich-text-container {
   display: flex;
   flex-direction: column;
@@ -11,44 +13,24 @@
   color: var(--layout-content-text);
 }
 
+// Toolbar - uses surface base
 .rich-text-toolbar {
+  @include mixins.os-surface-base(--layout-frame-bg, --layout-content-border, 0);
   display: flex;
   gap: 4px;
-  background-color: var(--layout-frame-bg);
   padding: 4px 8px;
-  border: 1px solid var(--layout-content-border);
   border-bottom: none;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
 
+// Toolbar button - uses icon button base
 .toolbar-button {
-  background: none;
-  border: none;
-  color: var(--layout-content-text-muted);
-  cursor: pointer;
-  border-radius: 4px;
+  @include mixins.os-icon-button-base(28px);
   padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
 
   &:hover {
-    background-color: var(--layout-menu-hover);
     color: var(--os-color-primary);
-  }
-
-  &:active {
-    background-color: var(--layout-menu-hover);
-    transform: scale(0.95);
-  }
-
-  &:disabled {
-    color: var(--layout-content-text-muted);
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
   }
 
   .material-icons {
@@ -56,13 +38,13 @@
   }
 }
 
+// Editor area - uses input base concepts
 .rich-text-editor {
+  @include mixins.os-surface-base(--layout-input-bg, --layout-content-border, 0);
   min-height: 100px;
-  border: 1px solid var(--layout-content-border);
   border-radius: 0 0 4px 4px;
   padding: 12px;
   overflow-y: auto;
-  background-color: var(--layout-input-bg);
   color: var(--layout-input-text);
   font-size: 14px;
   line-height: 1.5;
@@ -122,14 +104,13 @@
   }
 }
 
+// HTML dialog - uses card base
 .html-dialog {
-  border: 1px solid var(--layout-content-border);
-  border-radius: 4px;
-  padding: 0;
+  @include mixins.os-card-base(0, 4px);
+  background-color: var(--layout-menu-bg);
   width: 400px;
   max-width: 90vw;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  background-color: var(--layout-menu-bg);
 
   &::backdrop {
     background-color: rgba(0, 0, 0, 0.3);

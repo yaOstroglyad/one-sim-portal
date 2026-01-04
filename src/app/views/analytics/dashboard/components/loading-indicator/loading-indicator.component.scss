@@ -35,59 +35,37 @@
   align-items: center;
 }
 
+// Spinner - uses spinner base
 .spinner {
-  width: 48px;
-  height: 48px;
-  border: 3px solid rgba(var(--os-color-medium-rgb), 0.2);
-  border-top-color: var(--os-color-primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+  @include mixins.os-spinner-base(48px, 3px);
 }
 
 .loading-message {
-  @extend .mb-4; // 1rem
-  
+  margin-bottom: 1rem;
+
   h3 {
-    @extend .text-lg; // 1.125rem
-    @extend .font-semibold;
-    color: var(--os-color-dark);
-    margin: 0 0 map.get(vars.$os-spacing, '2') 0; // 0.5rem
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--layout-content-text);
+    margin: 0 0 map.get(vars.$os-spacing, '2') 0;
   }
-  
+
   p {
-    @extend .text-sm; // 0.875rem
-    color: var(--os-color-medium);
-    @extend .m-0;
+    font-size: 0.875rem;
+    color: var(--layout-content-text-muted);
+    margin: 0;
   }
 }
 
-// Animations
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================
 
-// Dark theme support
-:host-context(.dark-theme) {
-  .loading-container {
-    &.fullscreen {
-      background-color: rgba(0, 0, 0, 0.95);
-    }
-    
-    .loading-message {
-      h3 {
-        color: var(--os-color-light);
-      }
-      
-      p {
-        color: var(--os-color-medium);
-      }
-    }
-    
-    .spinner {
-      border-color: rgba(255, 255, 255, 0.2);
-      border-top-color: var(--os-color-primary);
-    }
+:host-context(.dark-theme),
+:host-context(html.dark) {
+  .loading-container.fullscreen {
+    background-color: rgba(0, 0, 0, 0.95);
   }
 }

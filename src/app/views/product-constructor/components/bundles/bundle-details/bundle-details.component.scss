@@ -31,14 +31,13 @@
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
 
+    // Usage unit card - uses card base
     .usage-unit-card {
+      @include mixins.os-card-base(1rem, 0.5rem);
+      background: var(--layout-frame-bg);
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 1rem;
-      background: var(--layout-frame-bg);
-      border-radius: 0.5rem;
-      border: 1px solid var(--layout-content-border);
       transition: all 0.2s ease;
 
       &:hover {
@@ -118,12 +117,15 @@
         color: var(--layout-content-text);
       }
 
+      // Status badge - uses badge base styles
       .status-badge {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         padding: 0.25rem 0.75rem;
-        border-radius: 0.25rem;
         font-size: 0.875rem;
         font-weight: 500;
+        border-radius: 0.25rem;
+        white-space: nowrap;
 
         &.active {
           background: rgba(var(--os-color-success-rgb), 0.1);

@@ -44,14 +44,13 @@
     }
   }
 
+  // Coverage card - uses card base
   .coverage-card {
+    @include mixins.os-card-base(1rem, 0.5rem);
+    background: var(--layout-frame-bg);
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1rem;
-    background: var(--layout-frame-bg);
-    border-radius: 0.5rem;
-    border: 1px solid var(--layout-content-border);
 
     .coverage-icon {
       width: 48px;
@@ -85,6 +84,7 @@
   }
 
   .status-container {
+    // Status badge - uses badge base styles
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -93,6 +93,7 @@
       border-radius: 0.375rem;
       font-size: 0.875rem;
       font-weight: 500;
+      white-space: nowrap;
 
       &.active {
         background: rgba(var(--os-color-success-rgb), 0.1);
@@ -109,12 +110,11 @@
   }
 
   .product-data-container {
+    // Product data section - uses surface base
     .product-data-section {
+      @include mixins.os-surface-base(--layout-frame-bg, --layout-content-border, 0.5rem);
       margin-bottom: 1.5rem;
       padding: 1rem;
-      background: var(--layout-frame-bg);
-      border-radius: 0.5rem;
-      border: 1px solid var(--layout-content-border);
 
       &:last-child {
         margin-bottom: 0;

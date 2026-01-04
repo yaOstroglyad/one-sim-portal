@@ -1,11 +1,12 @@
+@use "../../../../scss/mixins" as mixins;
+
+// HTML Dialog - uses card base
 .html-dialog {
-  padding: 0;
-  border: none;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  @include mixins.os-card-base(0, 0.5rem);
+  background-color: var(--layout-content-bg);
   max-width: 500px;
   width: 100%;
-  background-color: var(--layout-content-bg);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   &::backdrop {
     background-color: rgba(0, 0, 0, 0.5);

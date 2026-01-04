@@ -5,17 +5,13 @@
 .bundle-form-container {
   width: 100%;
 
-  // Error alert styling
+  // Error alert styling - uses alert base
   .error-alert {
+    @include mixins.os-alert-base(danger);
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.75rem 1rem;
     margin-bottom: 1.5rem;
-    background-color: rgba(var(--os-color-danger-rgb), 0.1);
-    border: 1px solid var(--os-color-danger);
-    border-radius: 0.375rem;
-    color: var(--os-color-danger);
 
     .icon {
       font-size: 1.125rem;

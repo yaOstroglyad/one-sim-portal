@@ -1,3 +1,5 @@
+@use "../../../../../../scss/mixins" as mixins;
+
 /* Основной контейнер */
 .content-b {
   display: flex;
@@ -34,25 +36,17 @@
   gap: 20px;
 }
 
-/* Кнопки навигации */
+/* Кнопки навигации - uses icon button base */
 .nav-button {
-  background: var(--layout-menu-bg);
+  @include mixins.os-icon-button-base(40px);
   border: 1px solid var(--layout-content-border);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
   font-size: 20px;
-  color: var(--layout-content-text-muted);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s;
-}
 
-.nav-button:hover {
-  background: var(--layout-menu-hover);
-  color: var(--layout-content-text);
+  &:hover {
+    background: var(--layout-menu-hover);
+    color: var(--layout-content-text);
+  }
 }
 

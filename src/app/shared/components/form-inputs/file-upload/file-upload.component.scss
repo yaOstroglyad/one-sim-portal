@@ -1,6 +1,7 @@
 @use "sass:map";
 @use "../../../../../scss/variables" as vars;
 @use "../../../../../scss/utilities" as utils;
+@use "../../../../../scss/mixins" as mixins;
 
 .upload-container {
   display: flex;
@@ -9,12 +10,13 @@
   width: 100%;
 }
 
+// Drop zone - uses surface base with interactive concepts
 .drop-zone {
-  border: 2px dashed var(--layout-content-border);
-  border-radius: 6px;
+  @include mixins.os-surface-base(--layout-frame-bg, --layout-content-border, 6px);
+  border-width: 2px;
+  border-style: dashed;
   padding: 3rem 2rem;
   text-align: center;
-  background-color: var(--layout-frame-bg);
   transition: all 0.3s ease;
   cursor: pointer;
   min-height: 180px;

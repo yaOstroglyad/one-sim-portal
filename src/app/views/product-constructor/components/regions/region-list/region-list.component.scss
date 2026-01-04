@@ -2,67 +2,7 @@
 @use "../../../../../../scss/mixins" as mixins;
 @use "sass:map";
 
-// Spinner animation
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-// Reusable button styles
-%btn-base {
-  border-radius: 0.375rem;
-  border: 1px solid;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.15s ease-in-out;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  .icon {
-    font-size: 0.875rem;
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  .loading-spinner {
-    width: 1rem;
-    height: 1rem;
-    border: 2px solid transparent;
-    border-top: 2px solid currentColor;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    display: inline-block;
-    margin-right: 0.5rem;
-  }
-}
-
-%btn-primary {
-  @extend %btn-base;
-  background-color: var(--os-color-primary);
-  border-color: var(--os-color-primary);
-  color: var(--os-color-primary-contrast);
-
-  &:hover:not(:disabled) {
-    background-color: var(--os-color-primary-shade);
-    border-color: var(--os-color-primary-shade);
-  }
-}
-
-%btn-outline-secondary {
-  @extend %btn-base;
-  background-color: transparent;
-  border-color: var(--layout-content-border);
-  color: var(--layout-content-text-muted);
-
-  &:hover:not(:disabled) {
-    background-color: var(--layout-menu-hover);
-    color: var(--layout-content-text);
-  }
-}
+// Note: Using mixins instead of @extend placeholders per constitution rules
 
 .region-list-container {
   max-width: 1200px;
@@ -110,13 +50,42 @@
 
     .btn {
       padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      border: 1px solid;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s ease-in-out;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .icon {
+        font-size: 0.875rem;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
 
       &.btn-primary {
-        @extend %btn-primary;
+        background-color: var(--os-color-primary);
+        border-color: var(--os-color-primary);
+        color: var(--os-color-primary-contrast);
+
+        &:hover:not(:disabled) {
+          background-color: var(--os-color-primary-shade);
+        }
       }
 
       &.btn-outline-secondary {
-        @extend %btn-outline-secondary;
+        background-color: transparent;
+        border-color: var(--layout-content-border);
+        color: var(--layout-content-text-muted);
+
+        &:hover:not(:disabled) {
+          background-color: var(--layout-menu-hover);
+        }
       }
     }
   }
@@ -129,12 +98,7 @@
   color: var(--layout-content-text-muted);
 
   .loading-spinner {
-    width: 2rem;
-    height: 2rem;
-    border: 2px solid var(--layout-content-border);
-    border-top: 2px solid var(--os-color-primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+    @include mixins.os-spinner-base(2rem, 2px);
     margin-bottom: 1rem;
   }
 }
@@ -164,20 +128,27 @@
     .btn {
       padding: 0.5rem 1.5rem;
       border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s ease-in-out;
 
       &.btn-primary {
-        @extend %btn-primary;
+        background-color: var(--os-color-primary);
+        color: var(--os-color-primary-contrast);
+
+        &:hover {
+          background-color: var(--os-color-primary-shade);
+        }
       }
     }
   }
 }
 
 .simple-card {
+  @include mixins.os-card-base(1.5rem, 0.5rem);
   background: var(--layout-content-bg);
-  border: 1px solid var(--layout-content-border);
-  border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
 }
 
 .regions-list {

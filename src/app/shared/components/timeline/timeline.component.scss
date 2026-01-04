@@ -1,9 +1,12 @@
+@use "../../../../scss/mixins" as mixins;
+
 .timeline {
   position: relative;
   padding-left: 40px;
   margin-top: 20px;
   max-height: 400px;
   overflow-y: auto;
+  @include mixins.os-scrollbar(8px);
 }
 
 .timeline-item {
@@ -40,13 +43,13 @@
     z-index: 1;
   }
 
+  // Timeline content - uses card base
   .timeline-content {
-    position: relative;
+    @include mixins.os-card-base(10px 15px, 4px);
     background-color: var(--layout-frame-bg);
-    border-radius: 4px;
-    padding: 10px 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
     margin-left: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     /* Треугольник */
     &::before {
@@ -86,16 +89,4 @@
   }
 }
 
-/* Стилизация полосы прокрутки */
-.timeline::-webkit-scrollbar {
-  width: 8px;
-}
-
-.timeline::-webkit-scrollbar-thumb {
-  background-color: var(--layout-content-border);
-  border-radius: 4px;
-}
-
-.timeline::-webkit-scrollbar-thumb:hover {
-  background-color: var(--layout-content-text-muted);
-}
+// Scrollbar is handled by os-scrollbar mixin above

@@ -6,30 +6,21 @@
   display: block;
 }
 
+// Period selector - uses surface base
 .period-selector {
+  @include mixins.os-surface-base(--layout-menu-bg, --layout-menu-bg, map.get(vars.$os-border-radius, 'lg'));
   display: flex;
-  gap: map.get(vars.$os-spacing, '1'); // 4px
-  background-color: var(--layout-menu-bg);
-  padding: map.get(vars.$os-spacing, '1'); // 4px
-  border-radius: map.get(vars.$os-border-radius, 'lg'); // 8px
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  gap: map.get(vars.$os-spacing, '1');
+  padding: map.get(vars.$os-spacing, '1');
+  box-shadow: map.get(vars.$os-shadows, 'sm');
 
+  // Period button - uses list item base
   .period-btn {
-    padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '4'); // 8px 16px
-    border: none;
-    background: transparent;
-    color: var(--layout-content-text-muted);
-    font-size: map.get(vars.$os-font-sizes, 'sm'); // 0.875rem
+    @include mixins.os-list-item-base(map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '4'));
+    font-size: map.get(vars.$os-font-sizes, 'sm');
     font-weight: 500;
-    border-radius: map.get(vars.$os-border-radius, 'md'); // 6px
-    cursor: pointer;
-    transition: all 0.2s ease;
+    border-radius: map.get(vars.$os-border-radius, 'md');
     white-space: nowrap;
-
-    &:hover {
-      background-color: var(--layout-menu-hover);
-      color: var(--layout-content-text);
-    }
 
     &.active {
       background-color: var(--os-color-primary);
@@ -38,13 +29,12 @@
   }
 }
 
-// Custom Date Picker
+// Custom Date Picker - uses card base
 .custom-date-picker {
-  margin-top: map.get(vars.$os-spacing, '4'); // 16px
-  padding: map.get(vars.$os-spacing, '4'); // 16px
+  @include mixins.os-card-base(map.get(vars.$os-spacing, '4'), map.get(vars.$os-border-radius, 'lg'));
   background-color: var(--layout-menu-bg);
-  border-radius: map.get(vars.$os-border-radius, 'lg'); // 8px
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-top: map.get(vars.$os-spacing, '4');
+  box-shadow: map.get(vars.$os-shadows, 'sm');
 
   .date-inputs {
     display: flex;
