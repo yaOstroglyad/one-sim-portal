@@ -76,7 +76,8 @@
   .text-muted {
     font-size: 0.875rem;
     font-style: italic;
-    color: var(--layout-content-text-muted);
+    // Override CoreUI's !important with our layout variable
+    color: var(--layout-content-text-muted) !important;
   }
 }
 

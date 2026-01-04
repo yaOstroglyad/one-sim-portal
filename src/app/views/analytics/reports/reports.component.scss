@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "../../../../scss/variables" as vars;
 @use "../../../../scss/mixins" as mixins;
 
@@ -87,20 +88,20 @@
   }
 }
 
-// Action Buttons - uses icon button base
+// Action Buttons - matches period-selector visual style
 .action-buttons {
+  @include mixins.os-surface-base(--layout-frame-bg, --layout-content-border, map.get(vars.$os-border-radius, 'large'));
   display: flex;
-  gap: 0.5rem;
+  gap: map.get(vars.$os-spacing, '1');
+  padding: map.get(vars.$os-spacing, '1');
+  box-shadow: map.get(vars.$os-shadows, 'sm');
 
   .btn-icon {
-    @include mixins.os-icon-button-base(40px);
-    border: 1px solid var(--layout-content-border);
-    border-radius: 8px;
+    @include mixins.os-icon-button-base(36px);
+    border-radius: map.get(vars.$os-border-radius, 'medium');
 
     &:hover:not(:disabled) {
       background: var(--layout-menu-hover);
-      border-color: var(--os-color-primary);
-      color: var(--layout-content-text);
     }
 
     &:disabled {

@@ -40,7 +40,7 @@ export const navItems: any[] = [
 	{
 		name: 'nav.providers',
 		url: 'providers',
-		iconComponent: {name: 'cil-apps-settings'},
+		iconComponent: {name: 'cil-spreadsheet'},
 		permissions: [ADMIN_PERMISSION]
 	},
 	{

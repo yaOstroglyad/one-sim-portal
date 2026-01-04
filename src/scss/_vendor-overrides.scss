@@ -335,24 +335,6 @@ colgroup col {
   width: 100%;
 }
 
-.ag-grid-pagination {
-  display: flex;
-  justify-content: flex-end;
-  padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '4');
-}
-
-.ag-paging-button {
-  transition: color 0.15s ease-in-out;
-  &:not(.disabled):hover {
-    color: var(--os-color-primary);
-  }
-}
-
-.ag-paging-description {
-  margin: 0 map.get(vars.$os-spacing, '3');
-  color: var(--layout-content-text-muted);
-}
-
 /* AG-Grid Checkboxes */
 .ag-checkbox,
 .ag-header-checkbox {

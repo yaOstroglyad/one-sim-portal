@@ -66,6 +66,7 @@
   color: var(--layout-content-text);
   background-color: var(--layout-frame-bg);
   border: 1px solid var(--layout-content-border);
+  border-radius: map.get(vars.$os-border-radius, 'medium');
 
   &:hover:not(.disabled) {
     background-color: var(--layout-frame-bg-hover);

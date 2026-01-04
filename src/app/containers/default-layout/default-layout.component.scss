@@ -55,10 +55,15 @@
     min-height: calc(100vh - vars.$layout-header-height);
     color: var(--layout-content-text);
     transition: background 0.3s ease, color 0.3s ease;
+    margin-inline-end: map.get(vars.$os-spacing, '4'); // 16px margin from screen edge
 
     .layout--rtl & {
       border-top-left-radius: vars.$layout-content-radius;
       border-top-right-radius: vars.$layout-content-radius;
+    }
+
+    @media (max-width: 768px) {
+      margin-inline-end: map.get(vars.$os-spacing, '3'); // 12px on mobile
     }
 
     &--with-collapsed-sidebar {
