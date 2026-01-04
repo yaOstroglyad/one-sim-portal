@@ -8,7 +8,7 @@
 
 // Period selector - uses surface base
 .period-selector {
-  @include mixins.os-surface-base(--layout-menu-bg, --layout-menu-bg, map.get(vars.$os-border-radius, 'lg'));
+  @include mixins.os-surface-base(--layout-menu-bg, --layout-menu-bg, map.get(vars.$os-border-radius, 'large'));
   display: flex;
   gap: map.get(vars.$os-spacing, '1');
   padding: map.get(vars.$os-spacing, '1');
@@ -19,7 +19,7 @@
     @include mixins.os-list-item-base(map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '4'));
     font-size: map.get(vars.$os-font-sizes, 'sm');
     font-weight: 500;
-    border-radius: map.get(vars.$os-border-radius, 'md');
+    border-radius: map.get(vars.$os-border-radius, 'medium');
     white-space: nowrap;
 
     &.active {
@@ -31,7 +31,7 @@
 
 // Custom Date Picker - uses card base
 .custom-date-picker {
-  @include mixins.os-card-base(map.get(vars.$os-spacing, '4'), map.get(vars.$os-border-radius, 'lg'));
+  @include mixins.os-card-base(map.get(vars.$os-spacing, '4'), map.get(vars.$os-border-radius, 'large'));
   background-color: var(--layout-menu-bg);
   margin-top: map.get(vars.$os-spacing, '4');
   box-shadow: map.get(vars.$os-shadows, 'sm');

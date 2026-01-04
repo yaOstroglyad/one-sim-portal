@@ -1,10 +1,9 @@
 @use "sass:map";
 @use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
 
 :host {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @include mixins.flex-between();
   width: 100%;
   flex-wrap: wrap;
 
@@ -26,9 +25,7 @@
 }
 
 .simple-filters-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: map.get(vars.$os-spacing, '4');
+  @include mixins.responsive-grid(180px, map.get(vars.$os-spacing, '4'));
   width: 100%;
   align-items: center;
 
@@ -58,8 +55,7 @@
   white-space: nowrap;
 
   svg {
-    width: 1rem;
-    height: 1rem;
+    @include mixins.icon-size(1rem);
   }
 }
 
@@ -103,10 +99,7 @@
   }
 
   .chip-value {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100px;
+    @include mixins.text-truncate(100px);
   }
 
   .chip-remove {
@@ -147,9 +140,7 @@
 }
 
 .advanced-filters-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: map.get(vars.$os-spacing, '4');
+  @include mixins.responsive-grid(280px, map.get(vars.$os-spacing, '4'));
   padding: map.get(vars.$os-spacing, '4') 0;
 
   > *:last-child {

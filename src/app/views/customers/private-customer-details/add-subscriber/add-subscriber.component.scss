@@ -2,6 +2,7 @@
 // Add subscriber dialog specific styles
 
 @use "../../../../../scss/variables" as vars;
+@use "../../../../../scss/mixins" as mixins;
 @use "sass:map";
 
 // Form generator spacing in dialog
@@ -11,9 +12,7 @@ app-form-generator {
 
 // Loader component styling in dialog
 app-loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include mixins.flex-center();
   min-height: map.get(vars.$os-spacing, '20'); // 80px
   width: 100%;
 }

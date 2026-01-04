@@ -254,7 +254,7 @@
     color: var(--layout-content-text);
     background: transparent;
     border: none;
-    border-radius: map.get(vars.$os-border-radius, 'md'); // 6px
+    border-radius: map.get(vars.$os-border-radius, 'medium'); // 6px
     cursor: pointer;
     transition: all 0.15s ease-in-out;
 

@@ -1,13 +1,13 @@
 // Form Generator specific styles
 @use "../../../../scss/form-utilities" as form-utils;
+@use "../../../../scss/mixins" as mixins;
 
 // Apply Material Form Field overrides
 @include form-utils.material-form-field-overrides();
 
 // Flex layout replacement (previously fxLayout="column" fxLayoutAlign="start start")
 .form-generator-layout {
-  display: flex;
-  flex-direction: column;
+  @include mixins.flex-column();
   justify-content: flex-start;
   align-items: flex-start;
 }

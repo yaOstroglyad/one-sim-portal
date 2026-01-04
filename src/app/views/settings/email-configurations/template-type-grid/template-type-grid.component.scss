@@ -1,8 +1,8 @@
+@use "mixins" as mixins;
+
 .template-type-grid-container {
   .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include mixins.flex-between();
     margin-bottom: 20px;
 
     h2 {

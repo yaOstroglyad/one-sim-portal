@@ -1,37 +1,37 @@
-@use "../../../scss/custom";
+@use "mixins" as mixins;
 
 .Gigabyte-badge,
 .Byte-badge,
 .Kilobyte-badge,
 .Megabyte-badge {
-  background: #306fe1;
+  background: var(--os-color-primary);
 }
 
 .Sms-badge {
-  background: #7130e1;
+  background: var(--os-color-info);
 }
 
 .Voice-badge, .Min-badge {
-  background: #2fadea;
+  background: var(--os-color-info-shade);
 }
 
 .active-badge {
-  background: #55a961;
+  background: var(--os-color-success);
 }
 
 .inactive-badge {
-  background: #a7a943;
+  background: var(--os-color-warning);
 }
 
 .suspended-badge {
-  background: #ff8484;
+  background: var(--os-color-danger-subtle-bg);
+  color: var(--os-color-danger-text);
 }
 
 .terminated-badge {
-  background: #ff4c4c;
+  background: var(--os-color-danger);
 }
 
 .badge-display {
-  display: flex;
-  justify-content: space-between;
+  @include mixins.flex-between();
 }

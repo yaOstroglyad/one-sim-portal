@@ -1,5 +1,6 @@
 @use "sass:map";
 @use "variables" as vars;
+@use "mixins" as mixins;
 
 .price-preview {
   background-color: var(--os-color-surface-tertiary);
@@ -29,10 +30,9 @@
   }
 
   .arrow-icon {
+    @include mixins.icon-size(1.125rem);
     color: var(--os-color-text-tertiary);
     font-size: 1.125rem;
-    width: 1.125rem;
-    height: 1.125rem;
   }
 
   .new-price {

@@ -1,15 +1,13 @@
+@use "mixins" as mixins;
+
 table.mat-elevation-z8, .mat-mdc-elevation-specific.mat-elevation-z8 {
   box-shadow: none;
 }
+
 table {
-  width: 100%;
-  max-width: 100%;
-  table-layout: auto;
-  border-collapse: collapse;
+  @include mixins.os-table-base();
 }
 
 th, td {
-  padding: 8px;
-  text-align: left;
-  white-space: nowrap;
+  @include mixins.os-table-cell-base();
 }

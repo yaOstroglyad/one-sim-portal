@@ -2,6 +2,7 @@
 // Add subscriber product dialog specific styles
 
 @use "../../../../../scss/variables" as vars;
+@use "../../../../../scss/mixins" as mixins;
 @use "sass:map";
 
 // Form generator spacing in dialog
@@ -19,20 +20,17 @@ app-form-generator {
   color: var(--os-color-info);
   border-radius: map.get(vars.$os-border-radius, 'medium');
   font-size: map.get(vars.$os-font-sizes, 'sm');
-  
+
   mat-icon {
+    @include mixins.icon-size(1rem);
     margin-right: map.get(vars.$os-spacing, '2');
     font-size: 1rem;
-    width: 1rem;
-    height: 1rem;
   }
 }
 
 // Loader component styling in dialog
 app-loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include mixins.flex-center();
   min-height: map.get(vars.$os-spacing, '20'); // 80px
   width: 100%;
 }

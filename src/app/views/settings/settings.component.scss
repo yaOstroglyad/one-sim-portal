@@ -1,3 +1,5 @@
+@use "mixins" as mixins;
+
 :host {
   ::ng-deep .mat-mdc-tab-body-wrapper {
     padding: 15px !important;

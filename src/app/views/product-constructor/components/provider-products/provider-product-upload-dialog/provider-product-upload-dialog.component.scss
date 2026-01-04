@@ -1,7 +1,7 @@
-@use "../../../../../../scss/variables" as vars;
+@use "mixins" as mixins;
 
 .dialog-header {
-  border-bottom: 1px solid var(--layout-content-border);
+  @include mixins.dialog-section-border(bottom);
 }
 
 .dialog-content {
@@ -12,7 +12,7 @@
 }
 
 .dialog-footer {
-  border-top: 1px solid var(--layout-content-border);
+  @include mixins.dialog-section-border(top);
 
   button + button {
     margin-left: 0.75rem;

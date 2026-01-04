@@ -1,3 +1,5 @@
+@use "mixins" as mixins;
+
 :host {
   mat-card {
     margin-bottom: 20px;

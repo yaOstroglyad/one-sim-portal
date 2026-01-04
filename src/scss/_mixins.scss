@@ -184,17 +184,134 @@
   }
 }
 
-// Flexbox utilities
+// ==============================================
+// UTILITY MIXINS
+// Common patterns used across multiple components
+// ==============================================
+
+// -----------------------------------------------------------------------------
+// Layout Utilities
+// -----------------------------------------------------------------------------
+
+/// Flexbox center - centers content horizontally and vertically
+/// @example
+///   .container { @include flex-center(); }
 @mixin flex-center() {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/// Flexbox space-between with center alignment
+/// @example
+///   .header { @include flex-between(); }
 @mixin flex-between() {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+/// Flexbox column layout with optional gap
+/// @param {Length} $gap [null] - Gap between items
+/// @example
+///   .form { @include flex-column(1rem); }
+@mixin flex-column($gap: null) {
+  display: flex;
+  flex-direction: column;
+  @if $gap {
+    gap: $gap;
+  }
+}
+
+/// Responsive grid with auto-fit columns
+/// @param {Length} $min-width [200px] - Minimum column width
+/// @param {Length} $gap [1rem] - Gap between items
+/// @example
+///   .grid { @include responsive-grid(250px, 1.5rem); }
+@mixin responsive-grid($min-width: 200px, $gap: 1rem) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
+// -----------------------------------------------------------------------------
+// Interactive Utilities
+// -----------------------------------------------------------------------------
+
+/// Primary color focus outline for accessibility
+/// @param {Length} $offset [2px] - Outline offset
+/// @example
+///   .button { @include focus-primary-outline(); }
+@mixin focus-primary-outline($offset: 2px) {
+  &:focus {
+    outline: 2px solid var(--os-color-primary);
+    outline-offset: $offset;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+/// Active/selected state with primary color
+/// @example
+///   .tab { @include active-primary-state(); }
+@mixin active-primary-state() {
+  &--active,
+  &.active {
+    background-color: var(--os-color-primary);
+    color: var(--os-color-primary-contrast);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Text Utilities
+// -----------------------------------------------------------------------------
+
+/// Text truncation with ellipsis
+/// @param {Length} $max-width [100%] - Maximum width before truncation
+/// @example
+///   .label { @include text-truncate(200px); }
+@mixin text-truncate($max-width: 100%) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: $max-width;
+}
+
+// -----------------------------------------------------------------------------
+// Icon Utilities
+// -----------------------------------------------------------------------------
+
+/// Fixed icon sizing with flex-shrink protection
+/// @param {Length} $size - Icon width and height
+/// @example
+///   .icon { @include icon-size(24px); }
+@mixin icon-size($size) {
+  flex-shrink: 0;
+  width: $size;
+  height: $size;
+}
+
+// -----------------------------------------------------------------------------
+// Dialog Utilities
+// -----------------------------------------------------------------------------
+
+/// Dialog section border (header/footer separation)
+/// @param {String} $position [bottom] - Border position: 'top' or 'bottom'
+/// @example
+///   .dialog-header { @include dialog-section-border(bottom); }
+///   .dialog-footer { @include dialog-section-border(top); }
+@mixin dialog-section-border($position: bottom) {
+  @if $position == bottom {
+    border-bottom: 1px solid var(--layout-content-border);
+    padding-bottom: map.get(vars.$os-spacing, '3');
+    margin-bottom: map.get(vars.$os-spacing, '3');
+  } @else if $position == top {
+    border-top: 1px solid var(--layout-content-border);
+    padding-top: map.get(vars.$os-spacing, '3');
+    margin-top: map.get(vars.$os-spacing, '3');
+  }
 }
 
 // ==============================================
@@ -1384,21 +1501,21 @@
 // -----------------------------------------------------------------------------
 /**
  * Dropdown Base - Floating popup containers
+ * Note: No padding - content (e.g. os-menu) provides its own padding
  * @param {Number} $min-width - Minimum width (default: 280px)
- * @param {String} $padding - Container padding (default: from $os-spacing '4')
  * @example
  *   .my-dropdown { @include os-dropdown-base(300px); }
  */
-@mixin os-dropdown-base($min-width: 280px, $padding: map.get(vars.$os-spacing, '4')) {
+@mixin os-dropdown-base($min-width: 280px) {
   // Inherit from Level 1 surface base
-  @include os-surface-base(--layout-menu-bg, --layout-content-border, map.get(vars.$os-border-radius, 'lg'));
+  @include os-surface-base(--layout-menu-bg, --layout-content-border, map.get(vars.$os-border-radius, 'large'));
 
   // Dropdown-specific styles
   position: absolute;
   z-index: 1050;
   min-width: $min-width;
-  padding: $padding;
-  box-shadow: var(--layout-menu-shadow, 0 4px 12px rgba(0, 0, 0, 0.1));
+  overflow: hidden; // Ensures inner content respects border-radius
+  box-shadow: var(--layout-menu-shadow);
 }
 
 // Dropdown animation
@@ -1452,6 +1569,8 @@
   padding: $padding;
   font-size: 0.875rem;
   color: var(--layout-content-text);
+  background: none;
+  border: none;
   cursor: pointer;
   transition: background-color 0.15s ease-in-out;
 
@@ -1573,7 +1692,7 @@
   padding: 0;
   background: transparent;
   border: none;
-  border-radius: map.get(vars.$os-border-radius, 'md');
+  border-radius: map.get(vars.$os-border-radius, 'medium');
   color: var(--layout-content-text-muted);
   cursor: pointer;
   transition: all 0.15s ease-in-out;
@@ -1630,7 +1749,7 @@
   color: var(--layout-content-text);
   background: transparent;
   border: none;
-  border-radius: map.get(vars.$os-border-radius, 'md');
+  border-radius: map.get(vars.$os-border-radius, 'medium');
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   position: relative;

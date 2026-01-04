@@ -1,8 +1,8 @@
+@use "../../../../scss/mixins" as mixins;
+
 .empty-state {
-  display: flex;
+  @include mixins.flex-center();
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   text-align: center;
   padding: 20px;
   color: var(--layout-content-text);

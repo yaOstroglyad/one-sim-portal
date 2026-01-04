@@ -1,4 +1,5 @@
 @use "src/scss/variables" as vars;
+@use "mixins" as mixins;
 
 * {
   box-sizing: border-box;
@@ -16,9 +17,7 @@
 }
 
 .login-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include mixins.flex-center();
   min-height: 100vh;
   background: linear-gradient(90deg, vars.$primary-with-opacity-03, vars.$primary-with-opacity-05);
   width: 100%;
@@ -40,56 +39,56 @@
 .login__icon {
   position: absolute;
   top: 30px;
-  color: vars.$primary-color;
+  color: var(--os-color-primary);
 }
 
 .login__input {
   border: none;
-  border-bottom: 2px solid var(--ion-color-light-shade);
+  border-bottom: 2px solid var(--layout-content-border);
   background: none;
   padding: 10px 10px 10px 24px;
   font-weight: 700;
   width: 75%;
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .login__input:active,
 .login__input:focus,
 .login__input:hover {
   outline: none;
-  border-bottom-color: vars.$primary-color-border;
+  border-bottom-color: var(--os-color-primary);
 }
 
 .login__submit {
-  background: var(--ion-color-medium-contrast);
+  @include mixins.flex-center();
+  background: var(--layout-content-bg);
   font-size: 14px;
   margin-top: 30px;
   padding: 16px 20px;
   border-radius: 26px;
-  border: 1px solid var(--ion-color-light-shade);
+  border: 1px solid var(--layout-content-border);
   text-transform: uppercase;
   font-weight: 700;
-  display: flex;
-  align-items: center;
   width: 100%;
-  color: vars.$primary-color-shade;
-  box-shadow: 0 2px 2px vars.$primary-color;
+  color: var(--os-color-primary);
+  box-shadow: var(--os-shadow-sm);
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .login__submit:active,
 .login__submit:focus,
 .login__submit:hover {
-  border-color: vars.$primary-color-border;
+  border-color: var(--os-color-primary);
   outline: none;
 }
 
 .button__icon {
   font-size: 24px;
   margin-left: auto;
-  color: vars.$primary-color;
+  color: var(--os-color-primary);
 }
+
 .button__text {
-  color: vars.$primary-color;
+  color: var(--os-color-primary);
 }

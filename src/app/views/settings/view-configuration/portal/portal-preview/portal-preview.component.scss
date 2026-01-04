@@ -1,3 +1,5 @@
+@use "mixins" as mixins;
+
 // Note: Removed @extend per constitution rules - using inline styles
 
 :host {
@@ -9,12 +11,11 @@
 }
 
 .portal-preview-svg {
+  @include mixins.os-surface-base(--layout-frame-bg, --layout-frame-bg, 8px);
   width: 100%;
   height: auto;
   max-height: calc(100% - 48px);
-  background-color: var(--layout-frame-bg);
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--os-shadow-md);
   padding: 16px;
 
   text {

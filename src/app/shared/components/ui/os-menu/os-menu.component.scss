@@ -6,6 +6,8 @@
   padding: map.get(vars.$os-spacing, '2');
   min-width: 280px;
   outline: none;
+  border-radius: map.get(vars.$os-border-radius, 'large');
+  overflow: hidden;
   // Ensure menu content uses isolated menu colors
   color: var(--layout-menu-text);
 
@@ -37,6 +39,7 @@
     color: var(--layout-menu-text);
     gap: map.get(vars.$os-spacing, '2');
     user-select: none;
+    border-radius: map.get(vars.$os-border-radius, 'medium');
 
     &:focus {
       outline: 2px solid var(--os-color-primary);

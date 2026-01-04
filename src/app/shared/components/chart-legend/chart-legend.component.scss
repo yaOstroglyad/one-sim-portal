@@ -1,4 +1,4 @@
-@use "variables" as vars;
+@use "../../../../scss/mixins" as mixins;
 
 :host {
   display: block;
@@ -9,29 +9,13 @@
 }
 
 .chart-legend {
+  @include mixins.os-scrollbar(4px);
   width: 100%;
   padding: 8px 0;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--layout-content-border) transparent;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--layout-content-border);
-    border-radius: 2px;
-  }
 
   &__controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @include mixins.flex-between();
     padding: 0 0 8px 0;
     margin-bottom: 4px;
     border-bottom: 1px solid var(--layout-content-border);

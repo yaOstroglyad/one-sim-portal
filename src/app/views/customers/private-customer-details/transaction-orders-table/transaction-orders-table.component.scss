@@ -1,16 +1,15 @@
+@use "mixins" as mixins;
+
 .trans-wrapper {
   overflow-x: auto;
   display: block;
   max-width: 100%;
 }
+
 table {
-  width: 100%;
-  table-layout: auto;
-  border-collapse: collapse;
+  @include mixins.os-table-base();
 }
 
 th, td {
-  padding: 8px;
-  text-align: left;
-  white-space: nowrap;
+  @include mixins.os-table-cell-base();
 }

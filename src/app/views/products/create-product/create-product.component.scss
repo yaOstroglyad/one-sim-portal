@@ -1,12 +1,14 @@
+@use "mixins" as mixins;
+
 // Global dialog styles from _vendor-overrides.scss
 // Component-specific overrides only
 
 .dialog-header {
-  border-bottom: 1px solid var(--layout-content-border);
-  padding-bottom: 0.625rem;
+  @include mixins.dialog-section-border(bottom);
 }
 
 .dialog-content {
+  @include mixins.os-scrollbar();
   display: block;
   padding-top: 1.25rem;
   max-height: 400px;
@@ -14,14 +16,11 @@
 }
 
 .dialog-footer {
-  border-top: 1px solid var(--layout-content-border);
-  padding-top: 0.625rem;
+  @include mixins.dialog-section-border(top);
 }
 
 .grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.25rem;
+  @include mixins.responsive-grid(240px, 1.25rem);
 }
 
 .grid-item {
@@ -37,15 +36,11 @@
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  @include mixins.flex-column(1rem);
 }
 
 .input-group, .usage-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  @include mixins.flex-column(0.5rem);
 }
 
 .usage-item {
