@@ -20,20 +20,20 @@
     color: #fff;
 
     &.bg-success {
-      background-color: var(--cui-success);
+      background-color: var(--os-color-success);
     }
 
     &.bg-danger {
-      background-color: var(--cui-danger);
+      background-color: var(--os-color-danger);
     }
 
     &.bg-warning {
-      background-color: var(--cui-warning);
-      color: var(--cui-dark);
+      background-color: var(--os-color-warning);
+      color: var(--layout-content-text);
     }
 
     &.bg-info {
-      background-color: var(--cui-info);
+      background-color: var(--os-color-info);
     }
 
     mat-icon {

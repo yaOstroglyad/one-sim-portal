@@ -9,17 +9,17 @@
 // Custom template content styling
 .category-label {
   font-size: map.get(vars.$os-font-sizes, 'sm');
-  color: var(--cui-body-color);
+  color: var(--layout-content-text);
 }
 
 .assignee-info {
   .assignee-name {
     font-weight: 500;
-    color: var(--cui-body-color);
+    color: var(--layout-content-text);
   }
 
   .text-muted {
-    color: var(--cui-body-color-rgb);
+    color: var(--layout-content-text);
     opacity: 0.6;
     font-style: italic;
   }

@@ -1,8 +1,12 @@
-@use 'src/scss/_view-configuration.scss';
+// Note: Removed @extend per constitution rules - using inline styles
 
 :host {
-  @extend .preview-component;
-  
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+
   ::ng-deep {
     .text-primary {
       color: var(--retail-primary-color) !important;
@@ -11,5 +15,23 @@
 }
 
 .retail-preview-svg {
-  @extend .preview-svg;
+  width: 100%;
+  height: auto;
+  max-height: calc(100% - 48px);
+  background-color: var(--layout-frame-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+
+  text {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+}
+
+:host([dir="rtl"]) .retail-preview-svg {
+  direction: rtl;
+
+  text {
+    unicode-bidi: bidi-override;
+  }
 }

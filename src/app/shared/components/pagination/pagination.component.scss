@@ -1,20 +1,20 @@
 @use "sass:map";
 @use "../../../../scss/variables" as vars;
-@use "../../../../scss/utilities" as utils;
 @use "../../../../scss/mixins" as mixins;
 
 // ==============================================
 // AG-GRID STYLE PAGINATION COMPONENT
 // Optimized using global mixins and variables
+// Note: Removed @extend per constitution rules
 // ==============================================
 
 .ag-pagination {
-  @extend .w-full;
+  width: 100%;
 
   .ag-pagination-panel {
-    @extend .d-flex;
-    @extend .align-center;
-    @extend .justify-end; // ag-grid выравнивает всё справа
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; // ag-grid выравнивает всё справа
     gap: map.get(vars.$os-spacing, '4'); // 16px между элементами
     padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '4'); // 12px vertical, 16px horizontal
     border-top: 1px solid var(--layout-content-border);
@@ -31,8 +31,8 @@
 
 // Page size selector
 .ag-pagination-page-size {
-  @extend .d-flex;
-  @extend .align-center;
+  display: flex;
+  align-items: center;
   gap: map.get(vars.$os-spacing, '2'); // 8px
 
   .ag-pagination-label {
@@ -54,8 +54,8 @@
 
 // Navigation controls container
 .ag-pagination-controls {
-  @extend .d-flex;
-  @extend .align-center;
+  display: flex;
+  align-items: center;
   gap: map.get(vars.$os-spacing, '2'); // 8px между кнопками
 }
 
@@ -90,23 +90,24 @@
   }
 }
 
-// Records range info - using utility class
+// Records range info
 .ag-pagination-range {
-  @extend .ag-grid-text;
+  @include mixins.ag-grid-text();
   color: var(--layout-content-text-muted);
 }
 
 // Page info
 .ag-pagination-info {
-  @extend .px-3;
-  @extend .ag-grid-text;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  @include mixins.ag-grid-text();
   color: var(--layout-content-text);
 }
 
 // Page numbers container
 .ag-pagination-numbers {
-  @extend .d-flex;
-  @extend .align-center;
+  display: flex;
+  align-items: center;
   gap: 4px;
 }
 
@@ -133,7 +134,7 @@
 
 // Ellipsis
 .ag-pagination-ellipsis {
-  @extend .ag-grid-text;
+  @include mixins.ag-grid-text();
   padding: 0 8px;
   color: var(--layout-content-text-muted);
 }

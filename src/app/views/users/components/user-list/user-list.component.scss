@@ -6,12 +6,12 @@
   height: 100%;
   
   .text-danger {
-    color: var(--cui-danger) !important;
+    color: var(--os-color-danger) !important;
   }
 
   .roles-display {
     .text-muted {
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
       font-style: italic;
       font-size: 0.875rem;
     }

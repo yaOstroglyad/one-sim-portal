@@ -118,7 +118,7 @@
   left: 0;
   right: 0;
   background-color: var(--os-color-danger);
-  color: var(--os-color-light);
+  color: var(--os-color-danger-contrast);
   padding: map.get(vars.$os-spacing, '2');
   font-size: map.get(vars.$os-font-sizes, 'xs');
   text-align: center;

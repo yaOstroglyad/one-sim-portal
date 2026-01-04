@@ -76,8 +76,8 @@ html, body {
   height: 100%;
   font-family: vars.$primary-font;
   line-height: 1.5;
-  color: var(--os-color-dark);
-  background-color: var(--os-color-light);
+  color: var(--layout-content-text);
+  background-color: var(--layout-content-bg);
 }
 
 body {

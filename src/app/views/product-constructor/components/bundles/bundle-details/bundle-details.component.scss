@@ -134,7 +134,7 @@
         }
 
         &.inactive {
-          background: rgba(var(--os-color-medium-rgb), 0.1);
+          background: var(--layout-frame-bg);
           color: var(--layout-content-text-muted);
           border: 1px solid var(--layout-content-border);
         }

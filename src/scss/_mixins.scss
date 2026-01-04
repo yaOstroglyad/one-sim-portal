@@ -1056,15 +1056,15 @@
 
 // Base ag-grid button styles
 @mixin ag-grid-button($size: 26px) {
-  @extend .d-flex;
-  @extend .align-center;
-  @extend .justify-center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: $size;
   height: $size;
   padding: 0;
   border: none;
-  @extend .rounded-small;
-  @extend .cursor-pointer;
+  border-radius: map.get(vars.$os-border-radius, 'sm');
+  cursor: pointer;
   background-color: vars.$ag-grid-button-bg;
   color: #666;
   transition: background-color 0.15s ease;
@@ -1086,8 +1086,8 @@
   }
 
   &.disabled {
-    @extend .cursor-not-allowed;
-    @extend .opacity-50;
+    cursor: not-allowed;
+    opacity: 0.5;
     background-color: vars.$ag-grid-button-bg;
     color: vars.$ag-grid-button-disabled;
 
@@ -1119,9 +1119,9 @@
   @include ag-grid-text();
   padding: 4px 8px;
   border: 1px solid vars.$ag-grid-border-color;
-  @extend .rounded-small;
+  border-radius: map.get(vars.$os-border-radius, 'sm');
   background-color: var(--os-color-white);
-  @extend .cursor-pointer;
+  cursor: pointer;
   min-width: 60px;
 
   @include ag-grid-focus();

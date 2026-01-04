@@ -289,12 +289,12 @@ $font-sizes: (
 // BORDER UTILITIES
 // ==============================================
 
-.border { border: 1px solid var(--os-color-medium) !important; }
+.border { border: 1px solid var(--layout-content-border) !important; }
 .border-0 { border: 0 !important; }
-.border-top { border-top: 1px solid var(--os-color-medium) !important; }
-.border-right { border-right: 1px solid var(--os-color-medium) !important; }
-.border-bottom { border-bottom: 1px solid var(--os-color-medium) !important; }
-.border-left { border-left: 1px solid var(--os-color-medium) !important; }
+.border-top { border-top: 1px solid var(--layout-content-border) !important; }
+.border-right { border-right: 1px solid var(--layout-content-border) !important; }
+.border-bottom { border-bottom: 1px solid var(--layout-content-border) !important; }
+.border-left { border-left: 1px solid var(--layout-content-border) !important; }
 
 // Border styles
 .border-solid { border-style: solid !important; }

@@ -61,7 +61,7 @@
   }
   
   &.os-badge--text-dark {
-    color: var(--os-color-dark); // dark text for light backgrounds
+    color: var(--layout-content-text); // dark text for light backgrounds
     text-shadow: 0 1px 2px rgba(var(--os-color-white-rgb), 0.1); // subtle shadow for better readability
   }
   
@@ -84,8 +84,8 @@
   // Additional outline customization (global mixin handles most cases)
   &.os-badge--outline {
     &.os-badge--light {
-      color: var(--os-color-medium);
-      border-color: var(--os-color-light-shade);
+      color: var(--layout-content-text-muted);
+      border-color: var(--layout-content-border);
     }
   }
   

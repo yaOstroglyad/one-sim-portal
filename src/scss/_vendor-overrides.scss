@@ -470,7 +470,7 @@ colgroup col {
 }
 
 .disabled-badge {
-  background: var(--os-color-medium);
+  background: var(--layout-content-text-muted);
 }
 
 /* Spinner Animation */
@@ -540,11 +540,11 @@ select,
 
 .mat-form-field {
   .mat-form-field-label {
-    color: var(--os-color-medium-text);
+    color: var(--layout-content-text-muted);
   }
 
   .mat-form-field-underline {
-    background-color: var(--os-color-medium-subtle-bg);
+    background-color: var(--layout-content-border);
   }
 
   &.mat-focused .mat-form-field-underline {
@@ -592,7 +592,7 @@ h6.mat-mdc-dialog-title,
   font-weight: 700 !important; // font-bold - matches breadcrumb active
   line-height: 1.33 !important; // leading-tight - clean proportions (32px / 24px = 1.33)
   letter-spacing: -0.025em !important; // tracking-tight - Tailwind standard
-  color: var(--os-color-dark) !important; // Strong, clean color
+  color: var(--layout-content-text) !important; // Strong, clean color
 
   // Clean Tailwind design - minimal styling
   border: none !important;
@@ -683,7 +683,7 @@ h6.mat-mdc-dialog-title,
 .mat-mdc-dialog-actions {
   padding: 1rem 1.5rem 1rem !important;
   margin: 0 !important;
-  border-top: 1px solid var(--os-color-medium-subtle-bg);
+  border-top: 1px solid var(--layout-content-border);
   display: flex;
   justify-content: flex-end;
   gap: map.get(vars.$os-spacing, '3');
@@ -755,7 +755,7 @@ h6.mat-mdc-dialog-title,
 
   // Info sections in dialogs
   .original-info, .info-section {
-    background-color: var(--os-color-light);
+    background-color: var(--layout-frame-bg);
     padding: 1rem;
     border-radius: map.get(vars.$os-border-radius, 'medium');
     margin-bottom: 1.5rem;
@@ -764,7 +764,7 @@ h6.mat-mdc-dialog-title,
       margin: 0 0 0.75rem 0;
       font-size: map.get(vars.$os-font-sizes, 'sm');
       font-weight: 600;
-      color: var(--os-color-medium-text);
+      color: var(--layout-content-text-muted);
       text-transform: uppercase;
       letter-spacing: 0.025em;
     }
@@ -777,13 +777,13 @@ h6.mat-mdc-dialog-title,
 
       .label {
         font-size: map.get(vars.$os-font-sizes, 'sm');
-        color: var(--os-color-medium-text);
+        color: var(--layout-content-text-muted);
       }
 
       .value {
         font-size: map.get(vars.$os-font-sizes, 'sm');
         font-weight: 600;
-        color: var(--os-color-dark-text);
+        color: var(--layout-content-text);
       }
     }
   }
@@ -794,7 +794,7 @@ h6.mat-mdc-dialog-title,
       margin: 0 0 1rem 0;
       font-size: map.get(vars.$os-font-sizes, 'sm');
       font-weight: 600;
-      color: var(--os-color-medium-text);
+      color: var(--layout-content-text-muted);
       text-transform: uppercase;
       letter-spacing: 0.025em;
     }
@@ -840,13 +840,13 @@ h6.mat-mdc-dialog-title,
   .upload-info {
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background-color: var(--os-color-light);
+    background-color: var(--layout-frame-bg);
     border-radius: map.get(vars.$os-border-radius, 'medium');
 
     p {
       margin: 0.5rem 0;
       font-size: map.get(vars.$os-font-sizes, 'sm');
-      color: var(--os-color-dark-text);
+      color: var(--layout-content-text);
 
       strong {
         color: var(--os-color-primary);
@@ -917,7 +917,7 @@ h6.mat-mdc-dialog-title,
 
 .dialog-footer {
   padding: 1rem 1.5rem 1rem;
-  border-top: 1px solid var(--os-color-medium-subtle-bg);
+  border-top: 1px solid var(--layout-content-border);
   display: flex;
   justify-content: flex-end;
   gap: map.get(vars.$os-spacing, '3');
@@ -1201,12 +1201,12 @@ html.dark,
 
 .card {
   border-radius: map.get(vars.$os-border-radius, 'large');
-  border: 1px solid var(--os-color-medium-subtle-bg);
+  border: 1px solid var(--layout-content-border);
   box-shadow: map.get(vars.$os-shadows, 'sm');
 
   .card-header {
-    background-color: var(--os-color-light);
-    border-bottom: 1px solid var(--os-color-medium-subtle-bg);
+    background-color: var(--layout-frame-bg);
+    border-bottom: 1px solid var(--layout-content-border);
     padding: map.get(vars.$os-spacing, '4');
   }
 
@@ -1223,7 +1223,7 @@ html.dark,
 
 .form-control {
   border-radius: map.get(vars.$os-border-radius, 'medium');
-  border: 1px solid var(--os-color-medium-subtle-bg);
+  border: 1px solid var(--layout-content-border);
   font-family: var(--os-font-family);
 
   &:focus {
@@ -1237,8 +1237,8 @@ html.dark,
 // ==============================================
 
 .chartjs-tooltip {
-  background-color: var(--os-color-dark);
-  color: var(--os-color-light);
+  background-color: var(--layout-content-text);
+  color: var(--layout-content-bg);
   border-radius: map.get(vars.$os-border-radius, 'medium');
   box-shadow: map.get(vars.$os-shadows, 'lg');
   font-family: var(--os-font-family);
@@ -1256,12 +1256,12 @@ html.dark,
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--os-color-light);
+  background: var(--layout-frame-bg);
   border-radius: map.get(vars.$os-border-radius, 'full');
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--os-color-medium);
+  background: var(--layout-content-text-muted);
   border-radius: map.get(vars.$os-border-radius, 'full');
 
   &:hover {
@@ -1272,7 +1272,7 @@ html.dark,
 // Firefox scrollbars
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--os-color-medium) var(--os-color-light);
+  scrollbar-color: var(--layout-content-text-muted) var(--layout-frame-bg);
 }
 
 // ==============================================
@@ -1349,7 +1349,7 @@ html.dark,
   --cui-btn-active-bg: var(--os-color-primary-shade);
   --cui-btn-active-border-color: var(--os-color-primary-shade);
 
-  --cui-btn-disabled-color: var(--os-color-medium);
+  --cui-btn-disabled-color: var(--layout-content-text-muted);
   --cui-btn-disabled-bg: var(--os-color-primary-opacity);
   --cui-btn-disabled-border-color: var(--os-color-primary-opacity);
 }

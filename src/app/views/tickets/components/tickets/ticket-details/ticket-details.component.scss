@@ -16,14 +16,14 @@
       h3 {
         font-size: map.get(vars.$os-font-sizes, 'xl');
         font-weight: 600;
-        color: var(--cui-body-color);
+        color: var(--layout-content-text);
         margin-bottom: map.get(vars.$os-spacing, '2');
         line-height: 1.4;
       }
 
       .ticket-number {
         font-size: map.get(vars.$os-font-sizes, 'sm');
-        color: var(--cui-body-color-rgb);
+        color: var(--layout-content-text);
         opacity: 0.7;
         font-weight: 500;
       }
@@ -52,7 +52,7 @@
           display: block;
           font-size: map.get(vars.$os-font-sizes, 'xs');
           font-weight: 600;
-          color: var(--cui-body-color-rgb);
+          color: var(--layout-content-text);
           opacity: 0.8;
           text-transform: uppercase;
           letter-spacing: 0.5px; // Design-specific value
@@ -61,11 +61,11 @@
 
         span {
           font-size: map.get(vars.$os-font-sizes, 'sm');
-          color: var(--cui-body-color);
+          color: var(--layout-content-text);
           font-weight: 500;
 
           &.text-muted {
-            color: var(--cui-body-color-rgb);
+            color: var(--layout-content-text);
             opacity: 0.6;
             font-style: italic;
           }
@@ -86,14 +86,14 @@
       h4 {
         font-size: map.get(vars.$os-font-sizes, 'lg');
         font-weight: 600;
-        color: var(--cui-body-color);
+        color: var(--layout-content-text);
         margin: 0;
       }
     }
 
     .description-content {
       p {
-        color: var(--cui-body-color);
+        color: var(--layout-content-text);
         line-height: 1.6;
         margin: 0;
         white-space: pre-wrap;
