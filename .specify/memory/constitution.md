@@ -98,6 +98,49 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
 **Rule:** ANY service that might use HttpClient (directly or transitively) MUST be lazy-loaded via Injector in HTTP Interceptors.
 
+### Barrel Import Circular Dependencies (NON-NEGOTIABLE)
+
+> **⚠️ CRITICAL:** Importing from `@shared` barrel in files that are exported BY `@shared` creates circular dependencies.
+
+**Problem:** When a file exported from `@shared` imports something from `@shared`, TypeScript loads the entire barrel, creating a cycle:
+```
+deep-links.registry.ts
+  → @shared (imports ADMIN_PERMISSION)
+    → ./services/search (barrel loads all exports)
+      → ./providers/client-search.provider
+        → deep-links.registry.ts (CIRCULAR!)
+```
+
+**Solution:** Use the `@shared/constants` module for dependency-free imports:
+
+```typescript
+// ✅ CORRECT - Import from constants (no dependencies)
+import { ADMIN_PERMISSION } from '@shared/constants';
+import { ADMIN_PERMISSION } from '../../constants';
+
+// ✅ CORRECT - Import from @shared in components/views (not exported by @shared)
+import { ADMIN_PERMISSION } from '@shared';
+
+// ❌ FORBIDDEN - Import from @shared in files exported by @shared barrel
+import { ADMIN_PERMISSION } from '@shared';  // Creates cycle!
+```
+
+**Architecture:**
+```
+shared/
+├── constants/                    ← NO dependencies, safe to import anywhere
+│   ├── index.ts
+│   └── permissions.constants.ts  ← ADMIN_PERMISSION, CUSTOMER_PERMISSION, etc.
+├── auth/
+│   └── auth.service.ts           ← Re-exports from constants (backwards compatible)
+├── services/
+│   └── search/
+│       └── deep-links.registry.ts ← Imports from constants, NOT @shared
+└── index.ts                      ← Exports constants FIRST
+```
+
+**Rule:** Files inside `/shared/` that need constants MUST import from `@shared/constants` or relative `../../constants`, NEVER from `@shared` barrel.
+
 ### Signal APIs (Angular 21)
 
 #### Component Inputs/Outputs
@@ -675,6 +718,7 @@ Level 3: Sub-component Mixins (for complex components like tables)
 - [ ] **SCSS uses mixins for repeated patterns** (see Section VII DRY Principle)
 - [ ] English documentation
 - [ ] Searched for existing code before creating
+- [ ] **Files in `/shared/` import constants from `@shared/constants`** (not `@shared` barrel)
 
 ### Build Execution Policy
 - **NEVER run `npm run build` automatically** after code changes
@@ -805,4 +849,4 @@ specs/{feature-name}/
 
 ---
 
-**Version:** 1.8.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-04
+**Version:** 1.9.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-04

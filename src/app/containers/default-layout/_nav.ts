@@ -27,43 +27,43 @@ export const navItems: any[] = [
 	},
 	{
 		name: 'nav.companies',
-		url: 'companies',
+		url: '/home/companies',
 		iconComponent: {name: 'cil-industry'},
 		permissions: [ADMIN_PERMISSION]
 	},
 	{
 		name: 'nav.customers',
-		url: 'customers',
+		url: '/home/customers',
 		iconComponent: {name: 'cil-group'},
 		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION, SUPPORT_PERMISSION]
 	},
 	{
 		name: 'nav.providers',
-		url: 'providers',
+		url: '/home/providers',
 		iconComponent: {name: 'cil-spreadsheet'},
 		permissions: [ADMIN_PERMISSION]
 	},
 	{
 		name: 'nav.orders',
-		url: 'orders',
+		url: '/home/orders',
 		iconComponent: {name: 'cil-basket'},
 		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
 	},
 	{
 		name: 'nav.emailLogs',
-		url: 'email-logs',
+		url: '/home/email-logs',
 		iconComponent: {name: 'cil-envelope-closed'},
 		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
 	},
 	{
 		name: 'nav.inventory',
-		url: 'inventory',
+		url: '/home/inventory',
 		iconComponent: {name: 'cil-sim'},
 		permissions: [ADMIN_PERMISSION, CUSTOMER_PERMISSION]
 	},
 	{
 		name: 'nav.products',
-		url: 'company-products',
+		url: '/home/company-products',
 		iconComponent: {name: 'cil3d'},
 		permissions: [CUSTOMER_PERMISSION]
 	},
@@ -75,7 +75,7 @@ export const navItems: any[] = [
 	},
 	{
 		name: 'nav.productconstructor',
-		url: 'product-constructor',
+		url: '/home/product-constructor',
 		iconComponent: {name: 'cil-layers'},
 		permissions: [ADMIN_PERMISSION],
 		featureToggle: 'productConstructor'
@@ -136,7 +136,7 @@ export const navItems: any[] = [
 	},
 	{
 		name: 'Storybook',
-		url: 'storybook',
+		url: '/home/storybook',
 		iconComponent: {name: 'cil-library'},
 		permissions: [ADMIN_PERMISSION],
 		featureToggle: 'storybook'

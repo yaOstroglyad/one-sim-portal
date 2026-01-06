@@ -7,12 +7,14 @@ import { catchError, map, takeUntil, tap, shareReplay } from 'rxjs/operators';
 import { LoginRequest, LoginResponse } from '@shared/models';
 import { Router } from '@angular/router';
 
-export const ADMIN_PERMISSION = 'ADMIN';
-// TODO: SPECIAL is a workaround role - consider reviewing and refactoring in the future
-export const SPECIAL_PERMISSION = 'SPECIAL';
-export const CUSTOMER_PERMISSION = 'CUSTOMER';
-export const SUPPORT_PERMISSION = 'SUPPORT';
-export const ANALYTICS_PERMISSION = 'ANALYTICS';
+// Re-export permissions from constants for backwards compatibility
+export {
+  ADMIN_PERMISSION,
+  SPECIAL_PERMISSION,
+  CUSTOMER_PERMISSION,
+  SUPPORT_PERMISSION,
+  ANALYTICS_PERMISSION,
+} from '../constants';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {

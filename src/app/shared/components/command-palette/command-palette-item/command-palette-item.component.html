@@ -1,0 +1,39 @@
+<div class="os-command-palette-item__content">
+  <!-- Icon -->
+  @if (item().icon) {
+    <span class="os-command-palette-item__icon">
+      <svg [cIcon]="item().icon" size="lg"></svg>
+    </span>
+  } @else {
+    <span class="os-command-palette-item__icon os-command-palette-item__icon--placeholder">
+      <svg cIcon="cilFile" size="lg"></svg>
+    </span>
+  }
+
+  <!-- Text content -->
+  <div class="os-command-palette-item__text">
+    <span
+      class="os-command-palette-item__label"
+      [innerHTML]="getHighlightedLabel()"
+    ></span>
+
+    <span
+      class="os-command-palette-item__url"
+      [innerHTML]="getHighlightedUrl()"
+    ></span>
+  </div>
+
+  <!-- Matched keyword indicator -->
+  @if (item().matchedOn === MATCH_SOURCES.KEYWORD && item().matchedKeyword) {
+    <span class="os-command-palette-item__keyword">
+      {{ 'common.search.matchedKeyword' | translate: { keyword: item().matchedKeyword } }}
+    </span>
+  }
+
+  <!-- Backend result badge -->
+  @if (isBackendResult()) {
+    <span class="os-command-palette-item__badge">
+      <svg cIcon="cilCloudDownload" size="sm"></svg>
+    </span>
+  }
+</div>

@@ -1,0 +1,9 @@
+<button
+  type="button"
+  class="os-search-trigger__button"
+  (click)="openPalette()"
+  [attr.aria-label]="'search.openPalette' | translate">
+  <svg cIcon="cilSearch" class="os-search-trigger__icon"></svg>
+  <span class="os-search-trigger__text">{{ 'search.placeholder' | translate }}</span>
+  <kbd class="os-search-trigger__shortcut">⌘K</kbd>
+</button>

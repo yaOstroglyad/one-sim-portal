@@ -1,0 +1,135 @@
+@if (searchService.isOpen()) {
+  <!-- Backdrop -->
+  <div
+    class="os-command-palette__backdrop"
+    (click)="onBackdropClick()"
+  ></div>
+
+  <!-- Dialog -->
+  <div class="os-command-palette__dialog" role="dialog" aria-modal="true">
+    <!-- Search input -->
+    <div class="os-command-palette__header">
+      <svg cIcon="cilSearch" size="lg" class="os-command-palette__search-icon"></svg>
+      <input
+        #searchInput
+        type="text"
+        class="os-command-palette__input"
+        [placeholder]="'common.search.placeholder' | translate"
+        [value]="query()"
+        (input)="onSearchInput($event)"
+        autocomplete="off"
+        spellcheck="false"
+        autofocus
+      />
+      @if (isLoading()) {
+        <div class="os-command-palette__loader">
+          <div class="os-command-palette__spinner"></div>
+        </div>
+      }
+      <button
+        type="button"
+        class="os-command-palette__close"
+        (click)="onBackdropClick()"
+        aria-label="Close"
+      >
+        <svg cIcon="cilX" size="lg"></svg>
+      </button>
+    </div>
+
+    <!-- Results -->
+    <div class="os-command-palette__content" role="listbox">
+      @if (showRecent()) {
+        <!-- Recent items -->
+        <div class="os-command-palette__section">
+          <div class="os-command-palette__section-header">
+            {{ 'common.search.categories.recent' | translate }}
+          </div>
+          @for (item of recentItems(); track trackByItemId($index, item)) {
+            <os-command-palette-item
+              [item]="item"
+              [isSelected]="isItemSelected(item)"
+              [query]="query()"
+              (select)="onItemSelect($event)"
+            />
+          }
+        </div>
+      } @else if (hasResults()) {
+        <!-- Navigation results -->
+        @if (groupedResults().navigation.length > 0) {
+          <div class="os-command-palette__section">
+            <div class="os-command-palette__section-header">
+              {{ 'common.search.categories.navigation' | translate }}
+            </div>
+            @for (item of groupedResults().navigation; track trackByItemId($index, item)) {
+              <os-command-palette-item
+                [item]="item"
+                [isSelected]="isItemSelected(item)"
+                [query]="query()"
+                (select)="onItemSelect($event)"
+              />
+            }
+          </div>
+        }
+
+        <!-- Actions results -->
+        @if (groupedResults().actions.length > 0) {
+          <div class="os-command-palette__section">
+            <div class="os-command-palette__section-header">
+              {{ 'common.search.categories.actions' | translate }}
+            </div>
+            @for (item of groupedResults().actions; track trackByItemId($index, item)) {
+              <os-command-palette-item
+                [item]="item"
+                [isSelected]="isItemSelected(item)"
+                [query]="query()"
+                (select)="onItemSelect($event)"
+              />
+            }
+          </div>
+        }
+
+        <!-- Backend results -->
+        @if (groupedResults().backend.length > 0) {
+          <div class="os-command-palette__section">
+            <div class="os-command-palette__section-header">
+              {{ 'common.search.categories.backend' | translate }}
+            </div>
+            @for (item of groupedResults().backend; track trackByItemId($index, item)) {
+              <os-command-palette-item
+                [item]="item"
+                [isSelected]="isItemSelected(item)"
+                [query]="query()"
+                (select)="onItemSelect($event)"
+              />
+            }
+          </div>
+        }
+      } @else if (query()) {
+        <!-- No results -->
+        <div class="os-command-palette__empty">
+          <p>{{ 'common.search.noResults' | translate }}</p>
+        </div>
+      } @else {
+        <!-- Initial state -->
+        <div class="os-command-palette__hint">
+          <p>{{ 'common.search.hint' | translate }}</p>
+        </div>
+      }
+    </div>
+
+    <!-- Footer -->
+    <div class="os-command-palette__footer">
+      <div class="os-command-palette__shortcuts">
+        <span class="os-command-palette__shortcut">
+          <kbd>↑</kbd><kbd>↓</kbd> {{ 'common.search.shortcuts.navigate' | translate }}
+        </span>
+        <span class="os-command-palette__shortcut">
+          <kbd>↵</kbd> {{ 'common.search.shortcuts.select' | translate }}
+        </span>
+        <span class="os-command-palette__shortcut">
+          <kbd>esc</kbd> {{ 'common.search.shortcuts.close' | translate }}
+        </span>
+      </div>
+    </div>
+  </div>
+}

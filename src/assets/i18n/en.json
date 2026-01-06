@@ -217,7 +217,24 @@
       "fr": "Fr",
       "sa": "Sa"
     },
-    "search": "Search",
+    "search": {
+      "placeholder": "Search navigation...",
+      "openPalette": "Open search",
+      "hint": "Type to search pages and actions",
+      "noResults": "No results found",
+      "matchedKeyword": "matched: {{keyword}}",
+      "categories": {
+        "recent": "Recent",
+        "navigation": "Navigation",
+        "actions": "Actions",
+        "backend": "Search Results"
+      },
+      "shortcuts": {
+        "navigate": "navigate",
+        "select": "select",
+        "close": "close"
+      }
+    },
     "deselectAll": "Deselect All",
     "noResultsFound": "No results found",
     "noItemsAvailable": "No items available",
@@ -505,6 +522,13 @@
     "ticketsList": "Tickets List",
     "companyProducts": "Company Products",
     "productconstructor": "Product Constructor",
+    "pcOverview": "Overview",
+    "pcRegions": "Regions",
+    "pcBundles": "Mobile Bundles",
+    "pcProviderProducts": "Provider Products",
+    "pcCompanyProducts": "Company Products",
+    "pcProducts": "Products",
+    "pcTariffOffers": "Tariff Offers",
     "settings": "Settings",
     "general": "General",
     "paymentGateway": "Payment Gateway",

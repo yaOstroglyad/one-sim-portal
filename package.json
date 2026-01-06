@@ -36,6 +36,7 @@
     "@coreui/utils": "^2.0.2",
     "@ngx-translate/core": "^16.0.4",
     "@ngx-translate/http-loader": "^8.0.0",
+    "@tanstack/match-sorter-utils": "^8.19.4",
     "chart.js": "^4.4.2",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",

@@ -36,3 +36,4 @@ export * from './ui';
 export * from './payment';
 export * from './feature';
 export * from './product';
+export * from './search';

@@ -1,3 +1,6 @@
+// Constants - no dependencies, safe to import first
+export * from './constants';
+
 // Models - organized by domain categories
 export * from './models';
 
@@ -37,6 +40,7 @@ export * from './components/icon/icon.component'
 export * from './components/contextual-text'
 export * from './components/detail-row'
 export * from './components/price-comparison'
+export * from './components/command-palette'
 
 // UI Components - New organized structure
 export * from './components/ui/os-dropdown'
@@ -57,6 +61,7 @@ export * from './services/core';        // Core/foundational services
 export * from './services/feature-toggle';  // Feature toggle service
 export * from './services/cache-hub';   // Cache service
 export * from './services/excel-export.service';  // Excel export service
+export * from './services/search';      // Global search service
 
 // Named exports for specific services
 export { Language } from './services/ui/language.service';

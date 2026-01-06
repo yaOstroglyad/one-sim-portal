@@ -1,4 +1,5 @@
 <div
+  osGlobalSearch
   class="layout"
   [class.layout--dark]="layoutConfig.darkTheme"
   [class.layout--rtl]="languageService.isRtl()"
@@ -42,4 +43,7 @@
 
   <!-- Flyout Layout -->
   <app-flyout-layout></app-flyout-layout>
+
+  <!-- Command Palette (Global Search) -->
+  <os-command-palette></os-command-palette>
 </div>

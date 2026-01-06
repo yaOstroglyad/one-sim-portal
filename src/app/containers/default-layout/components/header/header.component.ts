@@ -23,7 +23,8 @@ import {
   Language,
   OsMenuComponent,
   OsMenuItem,
-  OsMenuSection
+  OsMenuSection,
+  HeaderSearchComponent
 } from '@shared';
 
 const DEFAULT_USER_NAME = 'John Doe';
@@ -39,7 +40,8 @@ const DEFAULT_NOTIFICATION_COUNT = 3;
     IconDirective,
     TranslateModule,
     UserAvatarComponent,
-    OsMenuComponent
+    OsMenuComponent,
+    HeaderSearchComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './header.component.html',

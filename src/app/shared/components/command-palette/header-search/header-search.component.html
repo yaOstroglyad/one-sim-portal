@@ -1,0 +1,51 @@
+<!-- Desktop/Tablet: Full search input with dropdown -->
+<div class="os-header-search__desktop">
+  <div class="os-header-search__input-wrapper">
+    <svg cIcon name="cilSearch" class="os-header-search__icon" width="18" height="18"></svg>
+
+    <input
+      #searchInput
+      type="text"
+      class="os-header-search__input"
+      [placeholder]="'common.search.placeholder' | translate"
+      [value]="query()"
+      (input)="onSearchInput($event)"
+      (focus)="onInputFocus()"
+      (blur)="onInputBlur()"
+      autocomplete="off"
+      spellcheck="false"
+    />
+
+    @if (query()) {
+      <button
+        type="button"
+        class="os-header-search__clear"
+        (mousedown)="onClearClick($event)"
+        [attr.aria-label]="'common.clear' | translate">
+        <svg cIcon="cilX" size="sm"></svg>
+      </button>
+    } @else {
+      <kbd class="os-header-search__shortcut">⌘K</kbd>
+    }
+  </div>
+
+  <!-- Dropdown -->
+  <os-search-dropdown
+    [results]="groupedResults()"
+    [isLoading]="isLoading()"
+    [query]="query()"
+    [isOpen]="isDropdownOpen()"
+    [selectedIndex]="selectedIndex()"
+    (selectItem)="onItemSelect($event)"
+    (close)="onDropdownClose()"
+  />
+</div>
+
+<!-- Mobile: Icon button that opens overlay -->
+<button
+  type="button"
+  class="os-header-search__mobile"
+  (click)="onMobileSearchClick()"
+  [attr.aria-label]="'common.search.openPalette' | translate">
+  <svg cIcon="cilSearch" size="lg"></svg>
+</button>

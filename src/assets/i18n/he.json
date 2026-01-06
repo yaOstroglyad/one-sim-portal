@@ -114,6 +114,24 @@
     "submit": "שלח",
     "clear": "נקה",
     "today": "היום",
+    "search": {
+      "placeholder": "חיפוש בניווט...",
+      "openPalette": "פתח חיפוש",
+      "hint": "הקלד לחיפוש דפים ופעולות",
+      "noResults": "לא נמצאו תוצאות",
+      "matchedKeyword": "התאמה: {{keyword}}",
+      "categories": {
+        "recent": "אחרונים",
+        "navigation": "ניווט",
+        "actions": "פעולות",
+        "backend": "תוצאות חיפוש"
+      },
+      "shortcuts": {
+        "navigate": "ניווט",
+        "select": "בחר",
+        "close": "סגור"
+      }
+    },
     "selectAll": "בחר הכל",
     "deselectAll": "בטל בחירת הכל",
     "noResultsFound": "לא נמצאו תוצאות עבור",
@@ -239,6 +257,13 @@
     "ticketsList": "רשימת כרטיסים",
     "companyProducts": "מוצרי חברה",
     "productconstructor": "בניית מוצרים",
+    "pcOverview": "סקירה כללית",
+    "pcRegions": "אזורים",
+    "pcBundles": "חבילות נייד",
+    "pcProviderProducts": "מוצרי ספק",
+    "pcCompanyProducts": "מוצרי חברה",
+    "pcProducts": "מוצרים",
+    "pcTariffOffers": "הצעות תעריף",
     "settings": "הגדרות",
     "general": "כללי",
     "paymentGateway": "שער תשלום",

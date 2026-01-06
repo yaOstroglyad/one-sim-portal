@@ -22,7 +22,15 @@
     border-radius: map.get(vars.$os-border-radius, 'medium');
     white-space: nowrap;
 
-    &.active {
+    // Non-active hover - uses theme-aware frame hover color
+    &:not(.active):hover:not(:disabled):not(.disabled) {
+      background-color: var(--layout-frame-bg-hover);
+    }
+
+    // Active state - must override mixin hover styles
+    &.active,
+    &.active:hover,
+    &.active:hover:not(:disabled):not(.disabled) {
       background-color: var(--os-color-primary);
       color: var(--os-color-primary-contrast);
     }
