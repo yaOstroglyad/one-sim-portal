@@ -57,6 +57,11 @@ This gives you complete project knowledge without iterative exploration.
 ### 5. Documentation Language
 - **English only** for all code, comments, commit messages
 
+### 6. Build Verification
+- **DO NOT run `ng build` after every change** — dev server (`npm start`) already handles incremental compilation
+- **Run build only:** before commit, or when specifically asked
+- Trust IDE and dev server to show compilation errors
+
 📖 **Full rules:** [.specify/memory/constitution.md](./.specify/memory/constitution.md)
 
 ---

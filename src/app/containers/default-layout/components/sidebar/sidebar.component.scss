@@ -15,7 +15,19 @@
   flex-direction: column;
   z-index: 1000;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, color 0.3s ease;
-  overflow: hidden;
+
+  // Inverted corner at right edge of sidebar
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: vars.$layout-content-radius;
+    height: vars.$layout-content-radius;
+    background: radial-gradient(farthest-side at bottom right, transparent 100%, var(--layout-frame-bg) 100%);
+    transform: translateX(100%);
+    z-index: 1;
+  }
 
   &--collapsed {
     width: vars.$layout-sidebar-collapsed;
@@ -66,6 +78,14 @@
   &--rtl {
     right: 0;
     left: auto;
+
+    // Inverted corner for RTL - at left edge
+    &::after {
+      right: auto;
+      left: 0;
+      transform: translateX(-100%);
+      background: radial-gradient(farthest-side at bottom left, transparent 100%, var(--layout-frame-bg) 100%);
+    }
   }
 
   // Brand Section
@@ -451,6 +471,11 @@
     height: calc(100vh - vars.$layout-header-height);
     transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
     z-index: 1001;
+
+    // Hide inverted corner on mobile (sidebar slides off-screen)
+    &::after {
+      display: none;
+    }
 
     // Enlarged toggle button on mobile
     .sidebar__toggle {

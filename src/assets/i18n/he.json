@@ -113,6 +113,8 @@
     "apply": "החל",
     "submit": "שלח",
     "clear": "נקה",
+    "clearAll": "נקה הכל",
+    "noFilters": "אין מסננים זמינים",
     "today": "היום",
     "search": {
       "placeholder": "חיפוש בניווט...",

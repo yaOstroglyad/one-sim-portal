@@ -83,6 +83,11 @@ src/scss/
 | **GenericRightPanelComponent** | `/shared/components/generic-right-panel/` | Side panel overlays |
 | **HeaderModule** | `/shared/components/header/` | Page headers with filters |
 | **AccountSelectorComponent** | `/shared/components/account-selector/` | Account switching |
+| **PageHeaderComponent** | `/shared/components/page-header/` | Dynamic page header slots |
+| **PageSubHeaderComponent** | `/shared/components/page-sub-header/` | Subheader with filters (responsive) |
+| **PageTitleComponent** | `/shared/components/page-title/` | Simple page title component |
+| **FilterDrawerComponent** | `/shared/components/filter-drawer/` | Mobile filter drawer |
+| **MobileFilterButtonComponent** | `/shared/components/mobile-filter-button/` | Filter button for mobile |
 
 ### UI Elements
 | Component | Location | Use For |
@@ -115,6 +120,7 @@ src/scss/
 | **FeatureToggleService** | Feature flags |
 | **LanguageService** | i18n state |
 | **ThemeService** | Theme switching |
+| **PageLayoutService** | Dynamic page layout slots (header/subheader) |
 
 ### Service Pattern
 ```typescript

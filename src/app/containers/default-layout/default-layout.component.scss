@@ -23,9 +23,25 @@
     flex-direction: column;
     margin-left: vars.$layout-sidebar-width;
     overflow-x: hidden;
+    overflow-y: auto;
     padding-top: vars.$layout-header-height;
-    min-height: 100vh;
+    height: 100vh;
+    box-sizing: border-box;
     transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    // Inverted corner - right only (left corner is on sidebar)
+    &::before {
+      content: "";
+      position: sticky;
+      top: 0;
+      right: 0;
+      width: calc(100% - map.get(vars.$os-spacing, '4')); // Account for content margin-inline-end
+      height: vars.$layout-content-radius;
+      background: radial-gradient(farthest-side at bottom left, transparent 100%, var(--layout-frame-bg) 100%) right top / vars.$layout-content-radius vars.$layout-content-radius no-repeat;
+      flex-shrink: 0;
+      margin-bottom: calc(-1 * vars.$layout-content-radius);
+      z-index: 11;
+    }
 
     .layout--sidebar-collapsed & {
       margin-left: vars.$layout-sidebar-collapsed;
@@ -35,6 +51,11 @@
       margin-left: 0;
       margin-right: vars.$layout-sidebar-width;
       transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &::before {
+        // Right corner for RTL - at left side of content
+        background: radial-gradient(farthest-side at bottom right, transparent 100%, var(--layout-frame-bg) 100%) left top / vars.$layout-content-radius vars.$layout-content-radius no-repeat;
+      }
     }
 
     .layout--sidebar-collapsed.layout--rtl & {
@@ -50,17 +71,9 @@
   &__content {
     flex: 1;
     background: var(--layout-content-bg);
-    border-top-left-radius: vars.$layout-content-radius;
-    border-top-right-radius: vars.$layout-content-radius;
-    min-height: calc(100vh - vars.$layout-header-height);
     color: var(--layout-content-text);
     transition: background 0.3s ease, color 0.3s ease;
     margin-inline-end: map.get(vars.$os-spacing, '4'); // 16px margin from screen edge
-
-    .layout--rtl & {
-      border-top-left-radius: vars.$layout-content-radius;
-      border-top-right-radius: vars.$layout-content-radius;
-    }
 
     @media (max-width: 768px) {
       margin-inline-end: map.get(vars.$os-spacing, '3'); // 12px on mobile

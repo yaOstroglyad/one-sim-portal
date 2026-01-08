@@ -1,0 +1,74 @@
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
+
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--layout-content-bg);
+}
+
+.os-page-header {
+  display: flex;
+  align-items: center;
+  gap: map.get(vars.$os-spacing, '3');
+  padding: map.get(vars.$os-spacing, '4') map.get(vars.$os-spacing, '4');
+  min-height: 56px;
+
+  // RTL Support
+  &--rtl {
+    direction: rtl;
+  }
+
+  &__start {
+    display: flex;
+    align-items: center;
+    gap: map.get(vars.$os-spacing, '2');
+    flex: 1;
+    min-width: 0; // Allow text truncation
+  }
+
+  &__center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__end {
+    display: flex;
+    align-items: center;
+    gap: map.get(vars.$os-spacing, '2');
+    flex-shrink: 0;
+  }
+
+  // === Mobile Responsive ===
+  @media (max-width: 767px) {
+    padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '3');
+    min-height: 48px;
+    gap: map.get(vars.$os-spacing, '2');
+
+    &__start {
+      gap: map.get(vars.$os-spacing, '1');
+    }
+
+    &__end {
+      gap: map.get(vars.$os-spacing, '1');
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .os-page-header {
+    border-bottom-width: 2px;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .os-page-header {
+    transition: none;
+  }
+}

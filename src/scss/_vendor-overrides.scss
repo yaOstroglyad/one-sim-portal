@@ -28,6 +28,20 @@
   --ag-min-rows: 10; /* Default minimum rows */
   --ag-foreground-color: var(--layout-content-text);
   --ag-background-color: var(--layout-content-bg);
+
+  // Page Layout Slots - Table offset for scrollable tables
+  // Override per-page if needed: .my-page { --table-offset: 300px; }
+  --table-offset: 280px;
+  --page-header-height: 56px;
+  --page-subheader-height: 52px;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --table-offset: 220px;
+    --page-header-height: 48px;
+    --page-subheader-height: 48px;
+  }
 }
 
 /* AG-Grid Dark Theme Overrides */
@@ -105,9 +119,26 @@ html.dark,
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  min-height: calc(var(--ag-row-height) * var(--ag-min-rows));
   overflow: hidden;
   position: relative;
+
+  // Fill available viewport height when loading or empty overlay is present
+  &:has(.ag-overlay-wrapper) {
+    height: calc(100vh - var(--table-offset, 280px));
+  }
+
+  // Cover scrollbar track in header area so it appears to start from first row
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px; // scrollbar width
+    height: calc(var(--ag-header-height, 40px) - 1px);
+    background: var(--ag-header-background-color);
+    z-index: 10;
+    pointer-events: none;
+  }
 }
 
 /* AG-Grid Toolbar */
@@ -152,7 +183,26 @@ html.dark,
   flex: 1 1 auto;
   min-width: 0;
   overflow-x: auto;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  // Default max-height for scrollable tables
+  max-height: calc(100vh - var(--table-offset, 280px));
+
+  // Sticky header - always enabled
+  .ag-header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--ag-header-background-color);
+  }
+
+  // Sticky footer - always enabled
+  .ag-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    background: var(--layout-content-bg);
+  }
 }
 
 /* AG-Grid Table */
@@ -306,7 +356,6 @@ colgroup col {
 /* Actions Column */
 .sticky-column.actions-column {
   border-left: none;
-  box-shadow: -1px 0 0 var(--ag-cell-horizontal-border) inset;
 }
 
 .ag-header-cell.actions-column {

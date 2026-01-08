@@ -1,0 +1,171 @@
+@use "sass:map";
+@use "../../../../scss/variables" as vars;
+@use "../../../../scss/mixins" as mixins;
+
+// z-index similar to flyout (1055) but slightly higher for modal priority
+$filter-drawer-z-index: 1060;
+
+.os-filter-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: $filter-drawer-z-index;
+  display: flex;
+  justify-content: flex-end;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  &__panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+    height: 100%;
+    background: var(--layout-content-bg);
+    box-shadow: map.get(vars.$os-shadows, 'xl');
+    animation: slideInRight 0.25s ease-out;
+
+    @media (max-width: 359px) {
+      max-width: 100%;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: map.get(vars.$os-spacing, '4');
+    border-bottom: 1px solid var(--layout-content-border);
+    flex-shrink: 0;
+
+    h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--layout-content-text);
+    }
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--layout-content-text-muted);
+    cursor: pointer;
+    border-radius: map.get(vars.$os-border-radius, 'medium');
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background-color: var(--layout-frame-bg-hover);
+      color: var(--layout-content-text);
+    }
+
+    &:focus {
+      outline: 2px solid var(--os-color-primary);
+      outline-offset: -2px;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: map.get(vars.$os-spacing, '4');
+    display: flex;
+    flex-direction: column;
+    gap: map.get(vars.$os-spacing, '4');
+  }
+
+  &__item {
+    // Filter components render here
+  }
+
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: map.get(vars.$os-spacing, '6');
+    color: var(--layout-content-text-muted);
+    font-style: italic;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: map.get(vars.$os-spacing, '2');
+    padding: map.get(vars.$os-spacing, '4');
+    border-top: 1px solid var(--layout-content-border);
+    flex-shrink: 0;
+    background: var(--layout-content-bg);
+
+    button {
+      min-height: 44px;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+// RTL Support
+:host-context([dir="rtl"]) {
+  .os-filter-drawer {
+    justify-content: flex-start;
+
+    &__panel {
+      animation-name: slideInLeft;
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .os-filter-drawer {
+    &__backdrop {
+      animation: none;
+    }
+
+    &__panel {
+      animation: none;
+    }
+
+    &__close {
+      transition: none;
+    }
+  }
+}

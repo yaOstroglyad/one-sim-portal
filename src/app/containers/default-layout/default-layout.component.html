@@ -20,10 +20,24 @@
     <main
       class="layout__content"
       [class.layout__content--with-collapsed-sidebar]="layoutConfig.sidebarCollapsed">
-      <!-- Breadcrumbs -->
-      <div class="layout__breadcrumb">
-        <app-breadcrumb></app-breadcrumb>
-      </div>
+
+      <!-- Page Header (dynamic slot) -->
+      @if (pageLayoutService.hasHeader()) {
+        <os-page-header [zones]="pageLayoutService.header()" />
+      } @else {
+        <!-- Default: Breadcrumbs -->
+        <div class="layout__breadcrumb">
+          <app-breadcrumb></app-breadcrumb>
+        </div>
+      }
+
+      <!-- Page Subheader (dynamic slot) -->
+      @if (pageLayoutService.hasSubheader()) {
+        <os-page-sub-header [zones]="pageLayoutService.subheader()">
+          <os-mobile-filter-button mobileFilter />
+        </os-page-sub-header>
+      }
+
       <div class="layout__container">
         <router-outlet></router-outlet>
       </div>
@@ -46,4 +60,7 @@
 
   <!-- Command Palette (Global Search) -->
   <os-command-palette></os-command-palette>
+
+  <!-- Mobile Filter Drawer -->
+  <os-filter-drawer></os-filter-drawer>
 </div>

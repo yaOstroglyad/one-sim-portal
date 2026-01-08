@@ -26,7 +26,9 @@ import {
   GenericTableComponent,
   HeaderComponent,
   SearchableSelectComponent,
-  SmartFilterHeaderComponent
+  SmartFilterHeaderComponent,
+  PageLayoutService,
+  BreadcrumbComponent,
 } from '@shared';
 import { CustomersTableService } from './customers-table.service';
 import { CustomersUtils, CustomersFilterParams } from './customers.utils';
@@ -66,13 +68,20 @@ interface FilterFieldConfig {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomersComponent implements OnInit, OnDestroy {
-	private cdr = inject(ChangeDetectorRef);
-	private tableService = inject(CustomersTableService);
-	private customersDataService = inject(CustomersDataService);
-	private companiesDataService = inject(CompaniesDataService);
-	private router = inject(Router);
-	private dialog = inject(MatDialog);
-	private authService = inject(AuthService);
+	private readonly cdr = inject(ChangeDetectorRef);
+	private readonly tableService = inject(CustomersTableService);
+	private readonly customersDataService = inject(CustomersDataService);
+	private readonly companiesDataService = inject(CompaniesDataService);
+	private readonly router = inject(Router);
+	private readonly dialog = inject(MatDialog);
+	private readonly authService = inject(AuthService);
+	private readonly layout = inject(PageLayoutService);
+
+	constructor() {
+		this.layout.header.set({
+			start: [{ component: BreadcrumbComponent }],
+		});
+	}
 
 	protected readonly CustomerType = CustomerType;
 	private unsubscribe$ = new Subject<void>();

@@ -190,6 +190,8 @@
     "none": "None",
     "retry": "Retry",
     "clear": "Clear",
+    "clearAll": "Clear All",
+    "noFilters": "No filters available",
     "today": "Today",
     "selectAll": "Select All",
     "all": "All",

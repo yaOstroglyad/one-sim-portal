@@ -41,6 +41,12 @@ export * from './components/contextual-text'
 export * from './components/detail-row'
 export * from './components/price-comparison'
 export * from './components/command-palette'
+export * from './components/page-header'
+export * from './components/page-sub-header'
+export * from './components/page-title'
+export * from './components/back-button'
+export * from './components/mobile-filter-button'
+export * from './components/filter-drawer'
 
 // UI Components - New organized structure
 export * from './components/ui/os-dropdown'
