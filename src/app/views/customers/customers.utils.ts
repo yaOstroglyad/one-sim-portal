@@ -168,7 +168,7 @@ export class CustomersDialogUtils {
 // Navigation utilities
 export class CustomersNavigationUtils {
   static navigateToCustomerDetails(router: Router, customer: Customer): void {
-    if (customer.type.toUpperCase() === CustomerType.Private.toUpperCase()) {
+    if (customer.type === CustomerType.Private) {
       router.navigate([`home/customers/customer-details/${customer.type}/${customer.id}`]);
     }
   }

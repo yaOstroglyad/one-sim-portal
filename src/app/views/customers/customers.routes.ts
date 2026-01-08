@@ -28,14 +28,14 @@ export const CUSTOMERS_ROUTES: Routes = [
     ]
   },
   {
-    path: 'customer-details/private/:id',
+    path: 'customer-details/PRIVATE/:id',
     data: {
       title: 'nav.customer-details'
     },
     component: PrivateCustomerDetailsComponent
   },
   {
-    path: 'customer-details/corporate',
+    path: 'customer-details/CORPORATE',
     data: {
       title: 'nav.customer-details'
     },

@@ -2,8 +2,8 @@ import { Subscriber } from '../subscriber/subscriber-info.model';
 import { Company } from './company.model';
 
 export enum CustomerType {
-  Corporate = 'Corporate',
-  Private = 'Private'
+  Corporate = 'CORPORATE',
+  Private = 'PRIVATE'
 }
 
 export interface Customer {
