@@ -1,0 +1,66 @@
+@if (isOpen()) {
+  <div class="os-search-dropdown__container" role="listbox">
+    @if (isLoading()) {
+      <div class="os-search-dropdown__loading">
+        <div class="os-search-dropdown__spinner"></div>
+        <span>{{ 'common.loading' | translate }}</span>
+      </div>
+    } @else if (hasResults()) {
+      <!-- Navigation results -->
+      @if (results().navigation.length > 0) {
+        <div class="os-search-dropdown__section">
+          <div class="os-search-dropdown__section-header">
+            {{ 'common.search.categories.navigation' | translate }}
+          </div>
+          @for (item of results().navigation; track trackByItemId($index, item)) {
+            <os-command-palette-item
+              [item]="item"
+              [isSelected]="isItemSelected(item)"
+              [query]="query()"
+              (select)="onItemSelect($event)"
+            />
+          }
+        </div>
+      }
+
+      <!-- Actions results -->
+      @if (results().actions.length > 0) {
+        <div class="os-search-dropdown__section">
+          <div class="os-search-dropdown__section-header">
+            {{ 'common.search.categories.actions' | translate }}
+          </div>
+          @for (item of results().actions; track trackByItemId($index, item)) {
+            <os-command-palette-item
+              [item]="item"
+              [isSelected]="isItemSelected(item)"
+              [query]="query()"
+              (select)="onItemSelect($event)"
+            />
+          }
+        </div>
+      }
+
+      <!-- Backend results -->
+      @if (results().backend.length > 0) {
+        <div class="os-search-dropdown__section">
+          <div class="os-search-dropdown__section-header">
+            {{ 'common.search.categories.backend' | translate }}
+          </div>
+          @for (item of results().backend; track trackByItemId($index, item)) {
+            <os-command-palette-item
+              [item]="item"
+              [isSelected]="isItemSelected(item)"
+              [query]="query()"
+              (select)="onItemSelect($event)"
+            />
+          }
+        </div>
+      }
+    } @else if (query()) {
+      <!-- No results -->
+      <div class="os-search-dropdown__empty">
+        <span>{{ 'common.search.noResults' | translate }}</span>
+      </div>
+    }
+  </div>
+}

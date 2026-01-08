@@ -1,6 +1,7 @@
 @use "sass:map";
 @use "../../../../../scss/variables" as vars;
 @use "../../../../../scss/utilities" as utils;
+@use "../../../../../scss/mixins" as mixins;
 
 .upload-container {
   display: flex;
@@ -9,12 +10,13 @@
   width: 100%;
 }
 
+// Drop zone - uses surface base with interactive concepts
 .drop-zone {
-  border: 2px dashed var(--os-color-medium, #92949c);
-  border-radius: 6px;
+  @include mixins.os-surface-base(--layout-frame-bg, --layout-content-border, 6px);
+  border-width: 2px;
+  border-style: dashed;
   padding: 3rem 2rem;
   text-align: center;
-  background-color: rgba(var(--os-color-light-rgb, 244, 245, 248), 0.6);
   transition: all 0.3s ease;
   cursor: pointer;
   min-height: 180px;
@@ -25,33 +27,33 @@
 
   &:hover:not(.disabled),
   &.drag-over:not(.disabled) {
-    border-color: var(--os-color-primary, #f9a743);
-    background-color: hsla(var(--os-color-primary-h, 32), var(--os-color-primary-s, 93%), var(--os-color-primary-l, 61%), 0.1);
+    border-color: var(--os-color-primary);
+    background-color: rgba(var(--os-color-primary-rgb), 0.1);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   &.has-file {
-    border-color: var(--os-color-info, #06b6d4);
-    background-color: rgba(var(--os-color-info-rgb, 6, 182, 212), 0.1);
+    border-color: var(--os-color-info);
+    background-color: rgba(var(--os-color-info-rgb), 0.1);
   }
 
   &.uploading {
-    border-color: var(--os-color-warning, #f59e0b);
-    background-color: rgba(var(--os-color-warning-rgb, 245, 158, 11), 0.1);
+    border-color: var(--os-color-warning);
+    background-color: rgba(var(--os-color-warning-rgb), 0.1);
     animation: pulse 2s infinite;
     cursor: default;
   }
 
   &.success {
-    border-color: var(--os-color-success, #10b981);
-    background-color: rgba(var(--os-color-success-rgb, 16, 185, 129), 0.1);
+    border-color: var(--os-color-success);
+    background-color: rgba(var(--os-color-success-rgb), 0.1);
     cursor: default;
   }
 
   &.error {
-    border-color: var(--os-color-danger, #ef4444);
-    background-color: rgba(var(--os-color-danger-rgb, 239, 68, 68), 0.1);
+    border-color: var(--os-color-danger);
+    background-color: rgba(var(--os-color-danger-rgb), 0.1);
   }
 
   &.disabled {
@@ -81,41 +83,41 @@
 .drop-zone-icon {
   font-size: 3rem;
   opacity: 0.8;
-  
+
   svg {
-    fill: var(--os-color-medium, #92949c);
+    fill: var(--layout-content-text-muted);
     transition: all 0.3s ease;
   }
   
   .uploading-icon {
-    fill: var(--os-color-warning, #f59e0b);
+    fill: var(--os-color-warning);
     animation: pulse 2s infinite;
   }
-  
+
   .success-icon {
-    fill: var(--os-color-success, #10b981);
+    fill: var(--os-color-success);
   }
-  
+
   .error-icon {
-    fill: var(--os-color-danger, #ef4444);
+    fill: var(--os-color-danger);
   }
 }
 
 .drop-zone-text {
   font-size: 1rem;
-  color: var(--os-color-medium, #92949c);
+  color: var(--layout-content-text-muted);
   line-height: 1.5;
   text-align: center;
-  
+
   strong {
-    color: var(--os-color-dark, #222428);
+    color: var(--layout-content-text);
     font-size: 1.1rem;
     display: block;
     margin-bottom: 0.25rem;
   }
-  
+
   small {
-    color: var(--os-color-medium, #92949c);
+    color: var(--layout-content-text-muted);
     font-size: 0.875rem;
   }
 }
@@ -126,23 +128,23 @@
   font-weight: 600;
   font-size: 1rem;
   border-radius: 8px;
-  border: 2px solid var(--os-color-primary, #f9a743);
-  color: var(--os-color-primary, #f9a743);
+  border: 2px solid var(--os-color-primary);
+  color: var(--os-color-primary);
   background-color: transparent;
   transition: all 0.3s ease;
   cursor: pointer;
   align-self: center;
   
   &:hover:not(:disabled) {
-    background-color: var(--os-color-primary, #f9a743);
-    color: white;
+    background-color: var(--os-color-primary);
+    color: var(--os-color-primary-contrast);
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(249, 167, 67, 0.3);
+    box-shadow: 0 4px 8px rgba(var(--os-color-primary-rgb), 0.3);
   }
   
   &:active {
     transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(249, 167, 67, 0.2);
+    box-shadow: 0 2px 4px rgba(var(--os-color-primary-rgb), 0.2);
   }
 
   &:disabled {
@@ -160,24 +162,24 @@
   font-size: 1rem;
   border-radius: 8px;
   border: none;
-  background-color: var(--os-color-primary, #f9a743);
-  color: white;
+  background-color: var(--os-color-primary);
+  color: var(--os-color-primary-contrast);
   transition: all 0.3s ease;
   cursor: pointer;
   align-self: center;
-  box-shadow: 0 2px 4px rgba(249, 167, 67, 0.2);
-  
+  box-shadow: 0 2px 4px rgba(var(--os-color-primary-rgb), 0.2);
+
   &:hover:not(:disabled) {
-    background-color: var(--os-color-primary-shade, #e8953b);
+    background-color: var(--os-color-primary-shade);
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(249, 167, 67, 0.3);
+    box-shadow: 0 4px 8px rgba(var(--os-color-primary-rgb), 0.3);
   }
-  
+
   &:active {
     transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(249, 167, 67, 0.2);
+    box-shadow: 0 2px 4px rgba(var(--os-color-primary-rgb), 0.2);
   }
-  
+
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -192,13 +194,13 @@
   font-weight: 500;
   font-size: 0.9rem;
   border-radius: 6px;
-  color: var(--os-color-medium, #92949c);
+  color: var(--layout-content-text-muted);
   align-self: center;
   transition: all 0.3s ease;
-  
+
   &:hover:not(:disabled) {
-    color: var(--os-color-danger, #ef4444);
-    background-color: rgba(var(--os-color-danger-rgb, 239, 68, 68), 0.1);
+    color: var(--os-color-danger);
+    background-color: rgba(var(--os-color-danger-rgb), 0.1);
   }
 
   &:disabled {
@@ -206,3 +208,9 @@
     cursor: not-allowed;
   }
 }
+
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

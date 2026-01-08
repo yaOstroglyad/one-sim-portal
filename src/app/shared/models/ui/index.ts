@@ -16,3 +16,4 @@ export * from './user-view-config.model';
 export * from './brand-full.model';
 export * from './brand-narrow.model';
 export * from './period-selector.model';
+export * from './page-layout.model';

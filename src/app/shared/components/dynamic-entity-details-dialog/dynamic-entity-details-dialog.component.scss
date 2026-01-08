@@ -1,23 +1,22 @@
+@use "../../../../scss/mixins" as mixins;
+
 // Global dialog styles are now available from src/scss/_vendor-overrides.scss
-// All dialog structure styles (.dialog-header, .dialog-content, .dialog-footer, 
+// All dialog structure styles (.dialog-header, .dialog-content, .dialog-footer,
 // .grid-container, .grid-item, .full-width, .half-width) are globally available
 
 // Component-specific styles
 .dialog-content {
+  @include mixins.os-scrollbar();
   max-height: 400px;
   overflow-y: auto;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  @include mixins.flex-column(16px);
 }
 
 .input-group, .usage-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  @include mixins.flex-column(8px);
 }
 
 .usage-item {

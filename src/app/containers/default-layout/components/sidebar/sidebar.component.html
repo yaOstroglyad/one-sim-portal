@@ -16,15 +16,17 @@
     } @else {
       <!-- Actual images (only render after skeleton) -->
       <img
-        [src]="brandConfig.full.src"
+        [src]="fullLogoSrc()"
         [alt]="brandConfig.full.alt"
         [style.height.px]="brandConfig.full.height"
-        class="sidebar__brand-full">
+        class="sidebar__brand-full"
+        [class.sidebar__brand--use-filter]="useLogoFilter()">
       <img
-        [src]="brandConfig.narrow.src"
+        [src]="narrowLogoSrc()"
         [alt]="brandConfig.narrow.alt"
         [style.width.px]="brandConfig.narrow.width"
-        class="sidebar__brand-narrow">
+        class="sidebar__brand-narrow"
+        [class.sidebar__brand--use-filter]="useLogoFilter()">
     }
   </div>
 
@@ -86,7 +88,7 @@
                                 {{ child.name | translate }}
                               </span>
                               <span class="sidebar__nav-arrow">
-                                <app-icon [icon]="'chevron-down'"></app-icon>
+                                <app-icon [icon]="'chevron-down'" [size]="'sm'"></app-icon>
                               </span>
                             </button>
                             <ul

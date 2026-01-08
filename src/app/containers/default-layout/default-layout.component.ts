@@ -15,7 +15,21 @@ import { Subject, takeUntil, skip } from 'rxjs';
 import { navItems } from './_nav';
 import { NavItem, BrandConfig, LayoutConfig } from './models';
 import { LayoutService } from './services';
-import { ActiveThemeConfig, ActiveThemeService, isToggleActive, AuthService, LanguageService } from '@shared';
+import {
+  ActiveThemeConfig,
+  ActiveThemeService,
+  isToggleActive,
+  AuthService,
+  LanguageService,
+  BreadcrumbComponent,
+  CommandPaletteComponent,
+  GlobalSearchDirective,
+  PageHeaderComponent,
+  PageSubHeaderComponent,
+  MobileFilterButtonComponent,
+  FilterDrawerComponent,
+} from '@shared';
+import { PageLayoutService } from '@shared/services/ui';
 import { SidebarComponent } from './components';
 import { HeaderComponent } from './components';
 import { GlobalFabComponent, FlyoutLayoutComponent } from '@shared/components/fab-layout';
@@ -29,7 +43,14 @@ import { GlobalFabComponent, FlyoutLayoutComponent } from '@shared/components/fa
     SidebarComponent,
     HeaderComponent,
     GlobalFabComponent,
-    FlyoutLayoutComponent
+    FlyoutLayoutComponent,
+    BreadcrumbComponent,
+    CommandPaletteComponent,
+    GlobalSearchDirective,
+    PageHeaderComponent,
+    PageSubHeaderComponent,
+    MobileFilterButtonComponent,
+    FilterDrawerComponent,
 ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './default-layout.component.html',
@@ -43,6 +64,7 @@ export class DefaultLayoutComponent implements OnInit, OnDestroy {
 
   readonly layoutService = inject(LayoutService);
   readonly languageService = inject(LanguageService);
+  protected readonly pageLayoutService = inject(PageLayoutService);
 
   private unsubscribe$ = new Subject<void>();
 

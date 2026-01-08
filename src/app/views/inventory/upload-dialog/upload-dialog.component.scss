@@ -1,5 +1,7 @@
+@use "mixins" as mixins;
+
 // Global dialog styles are now available from src/scss/_vendor-overrides.scss
-// All dialog structure and common patterns (.dialog-header, .dialog-content, 
+// All dialog structure and common patterns (.dialog-header, .dialog-content,
 // .dialog-footer, .upload-info, .upload-status) are globally available
 
 // Component-specific sizing adjustments

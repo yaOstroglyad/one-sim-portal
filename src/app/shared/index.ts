@@ -1,3 +1,6 @@
+// Constants - no dependencies, safe to import first
+export * from './constants';
+
 // Models - organized by domain categories
 export * from './models';
 
@@ -25,7 +28,7 @@ export * from './components/tabs'
 export * from './components/tooltip'
 export * from './components/debug-display'
 export * from './components/pagination'
-export * from './components/date-picker-wrapper'
+export * from './components/datepicker'
 export * from './components/period-selector/period-selector.component'
 export * from './components/generic-right-panel'
 export * from './components/delete-confirmation'
@@ -37,6 +40,13 @@ export * from './components/icon/icon.component'
 export * from './components/contextual-text'
 export * from './components/detail-row'
 export * from './components/price-comparison'
+export * from './components/command-palette'
+export * from './components/page-header'
+export * from './components/page-sub-header'
+export * from './components/page-title'
+export * from './components/back-button'
+export * from './components/mobile-filter-button'
+export * from './components/filter-drawer'
 
 // UI Components - New organized structure
 export * from './components/ui/os-dropdown'
@@ -57,6 +67,7 @@ export * from './services/core';        // Core/foundational services
 export * from './services/feature-toggle';  // Feature toggle service
 export * from './services/cache-hub';   // Cache service
 export * from './services/excel-export.service';  // Excel export service
+export * from './services/search';      // Global search service
 
 // Named exports for specific services
 export { Language } from './services/ui/language.service';

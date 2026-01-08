@@ -68,7 +68,7 @@
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid var(--os-color-light);
+  border: 4px solid var(--layout-frame-bg);
   border-top: 4px solid var(--os-color-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -96,14 +96,14 @@
   display: block;
   margin-bottom: map.get(vars.$os-spacing, '1');
   font-weight: 500;
-  color: var(--os-color-dark);
+  color: var(--layout-content-text);
   font-size: map.get(vars.$os-font-sizes, 'sm');
 }
 
 .form-control {
   width: 100%;
   padding: map.get(vars.$os-spacing, '2-5') map.get(vars.$os-spacing, '4');
-  border: 1px solid var(--os-color-medium);
+  border: 1px solid var(--layout-content-border);
   border-radius: map.get(vars.$os-border-radius, 'medium');
   font-size: map.get(vars.$os-font-sizes, 'base');
   line-height: 1.3;
@@ -116,7 +116,7 @@
   }
 
   &:disabled {
-    background-color: var(--os-color-light);
+    background-color: var(--layout-frame-bg);
     opacity: 0.6;
     cursor: not-allowed;
   }
@@ -163,13 +163,13 @@
 
 .dialog-header {
   padding: map.get(vars.$os-spacing, '6') map.get(vars.$os-spacing, '6') map.get(vars.$os-spacing, '4');
-  border-bottom: 1px solid var(--os-color-medium);
+  border-bottom: 1px solid var(--layout-content-border);
 }
 
 .dialog-title {
   font-size: map.get(vars.$os-font-sizes, 'lg');
   font-weight: 600;
-  color: var(--os-color-dark);
+  color: var(--layout-content-text);
   margin: 0;
 }
 
@@ -179,7 +179,7 @@
 
 .dialog-footer {
   padding: map.get(vars.$os-spacing, '4') map.get(vars.$os-spacing, '6') map.get(vars.$os-spacing, '6');
-  border-top: 1px solid var(--os-color-medium);
+  border-top: 1px solid var(--layout-content-border);
   display: flex;
   justify-content: flex-end;
   gap: map.get(vars.$os-spacing, '3');

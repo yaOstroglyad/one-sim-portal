@@ -91,6 +91,12 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
 
   private chart: Chart | null = null;
   private initialized = false;
+  private themeObserver: MutationObserver | null = null;
+  private currentThemeIsDark: boolean | null = null;
+  /** Store original data values for restoring when showing hidden bars */
+  private originalDataValues: (number | null)[][] = [];
+  /** Store original labels for restoring when showing hidden bars */
+  private originalLabels: string[] = [];
 
   // Color palette from project configuration
   private colors = {
@@ -124,88 +130,110 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
     zinc: '#71717a'
   };
 
-  private readonly defaultOptions: BarChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    indexAxis: 'x',
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-        labels: {
-          usePointStyle: true,
-          pointStyle: 'circle',
-          padding: 20,
-          font: {
-            size: 12,
-            family: 'Inter, system-ui, sans-serif'
+  private getDefaultOptions(): BarChartOptions {
+    const isDarkTheme = this.isDarkTheme();
+    const gridColor = isDarkTheme ? 'rgba(255, 255, 255, 0.1)' : '#e5e7eb';
+    const ticksColor = isDarkTheme ? 'rgba(255, 255, 255, 0.7)' : '#6b7280';
+    const legendColor = isDarkTheme ? 'rgba(255, 255, 255, 0.8)' : '#374151';
+
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: 'x',
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'circle',
+            padding: 20,
+            color: legendColor,
+            font: {
+              size: 12,
+              family: 'Inter, system-ui, sans-serif'
+            }
           }
+        },
+        tooltip: {
+          enabled: true,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#ffffff',
+          bodyColor: '#ffffff',
+          borderColor: 'rgba(255, 255, 255, 0.1)',
+          borderWidth: 1,
+          cornerRadius: 6,
+          displayColors: true
         }
       },
-      tooltip: {
-        enabled: true,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: '#ffffff',
-        bodyColor: '#ffffff',
-        borderColor: 'rgba(255, 255, 255, 0.1)',
-        borderWidth: 1,
-        cornerRadius: 6,
-        displayColors: true
-      }
-    },
-    scales: {
-      x: {
-        display: true,
-        grid: {
+      scales: {
+        x: {
           display: true,
-          color: '#e5e7eb',
-          lineWidth: 1
-        },
-        ticks: {
-          display: true,
-          color: '#6b7280',
-          font: {
-            size: 11,
-            family: 'Inter, system-ui, sans-serif'
+          grid: {
+            display: true,
+            color: gridColor,
+            lineWidth: 1
           },
-          maxRotation: 45,
-          minRotation: 0
-        }
-      },
-      y: {
-        display: true,
-        beginAtZero: true,
-        grid: {
-          display: true,
-          color: '#e5e7eb',
-          lineWidth: 1
+          ticks: {
+            display: true,
+            color: ticksColor,
+            font: {
+              size: 11,
+              family: 'Inter, system-ui, sans-serif'
+            },
+            maxRotation: 45,
+            minRotation: 0,
+            autoSkip: false,
+            callback: function(value: string | number, index: number) {
+              const label = this.getLabelForValue(index);
+              if (typeof label === 'string' && label.length > 15) {
+                return label.substring(0, 12) + '...';
+              }
+              return label;
+            }
+          }
         },
-        ticks: {
+        y: {
           display: true,
-          color: '#6b7280',
-          font: {
-            size: 11,
-            family: 'Inter, system-ui, sans-serif'
+          beginAtZero: true,
+          grid: {
+            display: true,
+            color: gridColor,
+            lineWidth: 1
+          },
+          ticks: {
+            display: true,
+            color: ticksColor,
+            font: {
+              size: 11,
+              family: 'Inter, system-ui, sans-serif'
+            }
           }
         }
+      },
+      animation: {
+        duration: 750
+      },
+      interaction: {
+        intersect: false,
+        mode: 'index'
+      },
+      layout: {
+        padding: {
+          top: 20,
+          right: 20,
+          bottom: 20,
+          left: 20
+        }
       }
-    },
-    animation: {
-      duration: 750
-    },
-    interaction: {
-      intersect: false,
-      mode: 'index'
-    },
-    layout: {
-      padding: {
-        top: 20,
-        right: 20,
-        bottom: 20,
-        left: 20
-      }
-    }
-  };
+    };
+  }
+
+  private isDarkTheme(): boolean {
+    if (typeof document === 'undefined') return false;
+    return document.documentElement.classList.contains('dark') ||
+           document.body.classList.contains('layout--dark');
+  }
 
   constructor() {
     // Get primary color from view configuration
@@ -262,10 +290,45 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.initializeChart();
     this.initialized = true;
+    this.setupThemeObserver();
   }
 
   ngOnDestroy(): void {
     this.destroyChart();
+    this.disconnectThemeObserver();
+  }
+
+  private setupThemeObserver(): void {
+    if (typeof document === 'undefined' || typeof MutationObserver === 'undefined') {
+      return;
+    }
+
+    this.currentThemeIsDark = this.isDarkTheme();
+
+    this.themeObserver = new MutationObserver(() => {
+      const newThemeIsDark = this.isDarkTheme();
+      if (newThemeIsDark !== this.currentThemeIsDark) {
+        this.currentThemeIsDark = newThemeIsDark;
+        this.updateChart();
+      }
+    });
+
+    // Observe class changes on both html and body elements
+    this.themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+    this.themeObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  }
+
+  private disconnectThemeObserver(): void {
+    if (this.themeObserver) {
+      this.themeObserver.disconnect();
+      this.themeObserver = null;
+    }
   }
 
   private initializeChart(): void {
@@ -288,7 +351,7 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     // Merge default options with provided options
-    const chartOptions = this.mergeOptions(this.defaultOptions, this.options());
+    const chartOptions = this.mergeOptions(this.getDefaultOptions(), this.options());
 
     // Set chart type specific options
     if (this.chartType() === 'horizontalBar') {
@@ -312,6 +375,9 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
       options: chartOptions as any
     });
 
+    // Store original data values for single-dataset charts
+    this.storeOriginalValues();
+
     // Apply initial visibility from legend items
     this.applyInitialVisibility();
 
@@ -319,9 +385,36 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Apply initial visibility state from legend items to chart datasets
-   * Hides datasets that correspond to hidden legend items
-   * Note: Does NOT update toggledIndices - that tracks only user toggles
+   * Store original data values and labels for restoring when showing hidden bars
+   */
+  private storeOriginalValues(): void {
+    if (!this.chart) return;
+
+    this.originalDataValues = this.chart.data.datasets.map(dataset =>
+      (dataset.data as (number | null)[]).slice()
+    );
+    this.originalLabels = (this.chart.data.labels as string[] || []).slice();
+  }
+
+  /**
+   * Check if this is a single-dataset chart with category-based legend
+   * (legend items map to data point indices, not datasets)
+   */
+  private isSingleDatasetCategoryChart(): boolean {
+    if (!this.chart) return false;
+
+    const datasets = this.chart.data.datasets;
+    const legendItems = this.legendItems();
+
+    // Single dataset with legend items matching data point count
+    return datasets.length === 1 &&
+           legendItems.length > 0 &&
+           legendItems.length === (datasets[0].data?.length || 0);
+  }
+
+  /**
+   * Apply initial visibility state from legend items
+   * Handles both multi-dataset charts and single-dataset category charts
    */
   private applyInitialVisibility(): void {
     if (!this.chart) return;
@@ -329,19 +422,32 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
     const items = this.legendItems();
     if (!items.length) return;
 
-    const datasets = this.chart.data.datasets;
-
-    items.forEach((item) => {
-      if (item.hidden) {
-        // Find datasets matching this legend item and hide them
-        datasets.forEach((dataset, datasetIndex) => {
-          if (dataset.label?.includes(item.label)) {
-            const meta = this.chart!.getDatasetMeta(datasetIndex);
-            meta.hidden = true;
+    if (this.isSingleDatasetCategoryChart()) {
+      // Single dataset: hide individual data points by setting to null and clear labels
+      const dataset = this.chart.data.datasets[0];
+      const labels = this.chart.data.labels as string[];
+      items.forEach((item, index) => {
+        if (item.hidden) {
+          (dataset.data as (number | null)[])[index] = null;
+          if (labels && labels[index] !== undefined) {
+            labels[index] = '';
           }
-        });
-      }
-    });
+        }
+      });
+    } else {
+      // Multi-dataset: hide entire datasets
+      const datasets = this.chart.data.datasets;
+      items.forEach((item) => {
+        if (item.hidden) {
+          datasets.forEach((dataset, datasetIndex) => {
+            if (dataset.label?.includes(item.label)) {
+              const meta = this.chart!.getDatasetMeta(datasetIndex);
+              meta.hidden = true;
+            }
+          });
+        }
+      });
+    }
 
     this.chart.update();
   }
@@ -363,8 +469,14 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
     // Update chart data
     this.chart.data = data;
 
+    // Re-store original values when data changes
+    this.storeOriginalValues();
+
+    // Reset toggled state when data changes
+    this.toggledIndices.set(new Set());
+
     // Update chart options
-    const chartOptions = this.mergeOptions(this.defaultOptions, this.options());
+    const chartOptions = this.mergeOptions(this.getDefaultOptions(), this.options());
     if (this.chartType() === 'horizontalBar') {
       chartOptions.indexAxis = 'y';
     }
@@ -378,6 +490,9 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
     }
 
     this.chart.options = chartOptions as any;
+
+    // Re-apply initial visibility from legend items
+    this.applyInitialVisibility();
 
     // Update chart
     this.chart.update('resize');
@@ -434,12 +549,34 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
       };
     }
 
-    // Merge scales if both exist
+    // Deep merge scales to preserve theme-aware grid/ticks colors
     if (defaultOptions.scales && userOptions.scales) {
-      merged.scales = {
-        ...defaultOptions.scales,
-        ...userOptions.scales
-      };
+      merged.scales = { ...defaultOptions.scales };
+
+      // Deep merge each axis
+      for (const axis of ['x', 'y'] as const) {
+        const defaultAxis = (defaultOptions.scales as any)?.[axis];
+        const userAxis = (userOptions.scales as any)?.[axis];
+
+        if (defaultAxis && userAxis) {
+          (merged.scales as any)[axis] = {
+            ...defaultAxis,
+            ...userAxis,
+            // Preserve grid settings from defaults unless explicitly overridden
+            grid: {
+              ...defaultAxis.grid,
+              ...userAxis.grid
+            },
+            // Preserve ticks settings from defaults unless explicitly overridden
+            ticks: {
+              ...defaultAxis.ticks,
+              ...userAxis.ticks
+            }
+          };
+        } else if (userAxis) {
+          (merged.scales as any)[axis] = userAxis;
+        }
+      }
     }
 
     return merged;
@@ -491,22 +628,39 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Handle legend item click - toggle visibility of related datasets
+   * Handle legend item click - toggle visibility of related data
+   * Handles both multi-dataset charts and single-dataset category charts
    */
   onLegendItemClick(event: { index: number; item: ChartLegendItem }): void {
     if (!this.chart) return;
 
-    const clickedLabel = event.item.label;
-    const datasets = this.chart.data.datasets;
+    if (this.isSingleDatasetCategoryChart()) {
+      // Single dataset: toggle individual data point and label
+      const dataset = this.chart.data.datasets[0];
+      const dataArray = dataset.data as (number | null)[];
+      const labels = this.chart.data.labels as string[];
+      const originalValue = this.originalDataValues[0]?.[event.index];
+      const originalLabel = this.originalLabels[event.index];
 
-    // Find all datasets that match this legend item (same color/group)
-    datasets.forEach((dataset, datasetIndex) => {
-      // Match by label containing the group name
-      if (dataset.label?.includes(clickedLabel)) {
-        const meta = this.chart!.getDatasetMeta(datasetIndex);
-        meta.hidden = !meta.hidden;
+      if (dataArray[event.index] === null) {
+        // Show: restore original value and label
+        dataArray[event.index] = originalValue ?? 0;
+        if (labels) labels[event.index] = originalLabel ?? '';
+      } else {
+        // Hide: set to null and clear label
+        dataArray[event.index] = null;
+        if (labels) labels[event.index] = '';
       }
-    });
+    } else {
+      // Multi-dataset: toggle entire datasets matching the label
+      const clickedLabel = event.item.label;
+      this.chart.data.datasets.forEach((dataset, datasetIndex) => {
+        if (dataset.label?.includes(clickedLabel)) {
+          const meta = this.chart!.getDatasetMeta(datasetIndex);
+          meta.hidden = !meta.hidden;
+        }
+      });
+    }
 
     // Update internal toggled state
     this.toggledIndices.update(set => {
@@ -519,7 +673,7 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
       return newSet;
     });
 
-    // Emit updated legend items to parent (for external state management if needed)
+    // Emit updated legend items to parent
     this.legendItemsChange.emit(this.displayLegendItems());
 
     this.chart.update();
@@ -527,24 +681,33 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Show all datasets
+   * Show all data points/datasets
    */
   onShowAll(): void {
     if (!this.chart) return;
 
     const items = this.legendItems();
 
-    // Show all Chart.js datasets
-    this.chart.data.datasets.forEach((_, datasetIndex) => {
-      this.chart!.getDatasetMeta(datasetIndex).hidden = false;
-    });
+    if (this.isSingleDatasetCategoryChart()) {
+      // Single dataset: restore all original values and labels
+      const dataset = this.chart.data.datasets[0];
+      const labels = this.chart.data.labels as string[];
+      const originalValues = this.originalDataValues[0] || [];
+      originalValues.forEach((value, index) => {
+        (dataset.data as (number | null)[])[index] = value;
+        if (labels) labels[index] = this.originalLabels[index] ?? '';
+      });
+    } else {
+      // Multi-dataset: show all datasets
+      this.chart.data.datasets.forEach((_, datasetIndex) => {
+        this.chart!.getDatasetMeta(datasetIndex).hidden = false;
+      });
+    }
 
-    // Reset toggled indices - need to track which items were originally hidden
-    // and toggle them so XOR logic shows them as visible
+    // Reset toggled indices - track which items were originally hidden
     const newToggledSet = new Set<number>();
     items.forEach((item, index) => {
       if (item.hidden) {
-        // If originally hidden, add to toggled so XOR makes it visible
         newToggledSet.add(index);
       }
     });
@@ -556,24 +719,33 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Hide all datasets
+   * Hide all data points/datasets
    */
   onHideAll(): void {
     if (!this.chart) return;
 
     const items = this.legendItems();
 
-    // Hide all Chart.js datasets
-    this.chart.data.datasets.forEach((_, datasetIndex) => {
-      this.chart!.getDatasetMeta(datasetIndex).hidden = true;
-    });
+    if (this.isSingleDatasetCategoryChart()) {
+      // Single dataset: set all values to null and clear labels
+      const dataset = this.chart.data.datasets[0];
+      const dataArray = dataset.data as (number | null)[];
+      const labels = this.chart.data.labels as string[];
+      dataArray.forEach((_, index) => {
+        dataArray[index] = null;
+        if (labels) labels[index] = '';
+      });
+    } else {
+      // Multi-dataset: hide all datasets
+      this.chart.data.datasets.forEach((_, datasetIndex) => {
+        this.chart!.getDatasetMeta(datasetIndex).hidden = true;
+      });
+    }
 
-    // Update toggled indices - need to track which items were originally visible
-    // and toggle them so XOR logic shows them as hidden
+    // Update toggled indices - track which items were originally visible
     const newToggledSet = new Set<number>();
     items.forEach((item, index) => {
       if (!item.hidden) {
-        // If originally visible, add to toggled so XOR makes it hidden
         newToggledSet.add(index);
       }
     });
@@ -585,7 +757,7 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Show only top N datasets by value (reset to initial state)
+   * Show only top N data points/datasets by value (reset to initial state)
    */
   onShowTopN(): void {
     if (!this.chart) return;
@@ -599,21 +771,30 @@ export class OsBarChartComponent implements AfterViewInit, OnDestroy {
       .sort((a, b) => b.value - a.value);
     const topIndices = new Set(sortedByValue.slice(0, topN).map(i => i.index));
 
-    // Update Chart.js visibility
-    items.forEach((item, index) => {
-      const shouldBeVisible = topIndices.has(index);
-      this.chart!.data.datasets.forEach((dataset) => {
-        if (dataset.label?.includes(item.label)) {
-          const datasetIndex = this.chart!.data.datasets.indexOf(dataset);
-          this.chart!.getDatasetMeta(datasetIndex).hidden = !shouldBeVisible;
-        }
+    if (this.isSingleDatasetCategoryChart()) {
+      // Single dataset: show only top N data points and labels
+      const dataset = this.chart.data.datasets[0];
+      const labels = this.chart.data.labels as string[];
+      const originalValues = this.originalDataValues[0] || [];
+      items.forEach((_, index) => {
+        const shouldBeVisible = topIndices.has(index);
+        (dataset.data as (number | null)[])[index] = shouldBeVisible ? originalValues[index] : null;
+        if (labels) labels[index] = shouldBeVisible ? (this.originalLabels[index] ?? '') : '';
       });
-    });
+    } else {
+      // Multi-dataset: hide/show datasets
+      items.forEach((item, index) => {
+        const shouldBeVisible = topIndices.has(index);
+        this.chart!.data.datasets.forEach((dataset) => {
+          if (dataset.label?.includes(item.label)) {
+            const datasetIndex = this.chart!.data.datasets.indexOf(dataset);
+            this.chart!.getDatasetMeta(datasetIndex).hidden = !shouldBeVisible;
+          }
+        });
+      });
+    }
 
-    // Reset toggled indices to match original hidden state
-    // Items that were originally hidden and should stay hidden = not in toggledIndices
-    // Items that were originally visible and should be hidden = add to toggledIndices
-    // Items that were originally hidden and should be visible = add to toggledIndices
+    // Reset toggled indices
     this.toggledIndices.set(new Set());
 
     this.legendItemsChange.emit(this.displayLegendItems());

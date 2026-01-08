@@ -1,11 +1,11 @@
+@use "../../../../scss/mixins" as mixins;
+
 :host {
   .loader-wrapper {
+    @include mixins.flex-center();
     min-height: 100px;
     top: 50%;
     left: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
   .loader {
     width: 15px;

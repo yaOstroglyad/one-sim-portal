@@ -62,6 +62,8 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
 
   private chart: Chart | null = null;
   private unsubscribe$ = new Subject<void>();
+  private themeObserver: MutationObserver | null = null;
+  private currentThemeIsDark: boolean | null = null;
 
   // Color palette from project configuration
   private colors = {
@@ -95,100 +97,114 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
     zinc: '#71717a'
   };
 
-  private readonly defaultOptions: LineChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-        labels: {
-          usePointStyle: true,
-          pointStyle: 'circle',
-          padding: 20,
-          font: {
-            size: 12,
-            family: 'Inter, system-ui, sans-serif'
+  private getDefaultOptions(): LineChartOptions {
+    const isDarkTheme = this.isDarkTheme();
+    const gridColor = isDarkTheme ? 'rgba(255, 255, 255, 0.1)' : '#e5e7eb';
+    const ticksColor = isDarkTheme ? 'rgba(255, 255, 255, 0.7)' : '#6b7280';
+    const legendColor = isDarkTheme ? 'rgba(255, 255, 255, 0.8)' : '#374151';
+
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'circle',
+            padding: 20,
+            color: legendColor,
+            font: {
+              size: 12,
+              family: 'Inter, system-ui, sans-serif'
+            }
           }
+        },
+        tooltip: {
+          enabled: true,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleColor: '#ffffff',
+          bodyColor: '#ffffff',
+          borderColor: 'rgba(255, 255, 255, 0.1)',
+          borderWidth: 1,
+          cornerRadius: 6,
+          displayColors: true,
+          mode: 'index',
+          intersect: false
         }
       },
-      tooltip: {
-        enabled: true,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: '#ffffff',
-        bodyColor: '#ffffff',
-        borderColor: 'rgba(255, 255, 255, 0.1)',
-        borderWidth: 1,
-        cornerRadius: 6,
-        displayColors: true,
-        mode: 'index',
-        intersect: false
-      }
-    },
-    scales: {
-      x: {
-        display: true,
-        grid: {
+      scales: {
+        x: {
           display: true,
-          color: '#e5e7eb',
-          lineWidth: 1
-        },
-        ticks: {
-          display: true,
-          color: '#6b7280',
-          font: {
-            size: 11,
-            family: 'Inter, system-ui, sans-serif'
+          grid: {
+            display: true,
+            color: gridColor,
+            lineWidth: 1
           },
-          maxRotation: 45,
-          minRotation: 0
-        }
-      },
-      y: {
-        display: true,
-        beginAtZero: true,
-        grid: {
-          display: true,
-          color: '#e5e7eb',
-          lineWidth: 1
+          ticks: {
+            display: true,
+            color: ticksColor,
+            font: {
+              size: 11,
+              family: 'Inter, system-ui, sans-serif'
+            },
+            maxRotation: 45,
+            minRotation: 0
+          }
         },
-        ticks: {
+        y: {
           display: true,
-          color: '#6b7280',
-          font: {
-            size: 11,
-            family: 'Inter, system-ui, sans-serif'
+          beginAtZero: true,
+          grid: {
+            display: true,
+            color: gridColor,
+            lineWidth: 1
+          },
+          ticks: {
+            display: true,
+            color: ticksColor,
+            font: {
+              size: 11,
+              family: 'Inter, system-ui, sans-serif'
+            }
           }
         }
-      }
-    },
-    animation: {
-      duration: 750
-    },
-    interaction: {
-      intersect: false,
-      mode: 'index'
-    },
-    layout: {
-      padding: {
-        top: 20,
-        right: 20,
-        bottom: 20,
-        left: 20
-      }
-    },
-    elements: {
-      line: {
-        tension: 0.4, // Default smooth curves
-        borderWidth: 2
       },
-      point: {
-        radius: 4,
-        hoverRadius: 6,
-        borderWidth: 2
+      animation: {
+        duration: 750
+      },
+      interaction: {
+        intersect: false,
+        mode: 'index'
+      },
+      layout: {
+        padding: {
+          top: 20,
+          right: 20,
+          bottom: 20,
+          left: 20
+        }
+      },
+      elements: {
+        line: {
+          tension: 0.4, // Default smooth curves
+          borderWidth: 2
+        },
+        point: {
+          radius: 4,
+          hoverRadius: 6,
+          borderWidth: 2
+        }
       }
-    }
-  };
+    };
+  }
+
+  private isDarkTheme(): boolean {
+    if (typeof document === 'undefined') return false;
+    return document.documentElement.classList.contains('dark') ||
+           document.body.classList.contains('layout--dark');
+  }
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -232,6 +248,7 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
 
   ngAfterViewInit(): void {
     this.initializeChart();
+    this.setupThemeObserver();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -251,8 +268,42 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
 
   ngOnDestroy(): void {
     this.destroyChart();
+    this.disconnectThemeObserver();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  private setupThemeObserver(): void {
+    if (typeof document === 'undefined' || typeof MutationObserver === 'undefined') {
+      return;
+    }
+
+    this.currentThemeIsDark = this.isDarkTheme();
+
+    this.themeObserver = new MutationObserver(() => {
+      const newThemeIsDark = this.isDarkTheme();
+      if (newThemeIsDark !== this.currentThemeIsDark) {
+        this.currentThemeIsDark = newThemeIsDark;
+        this.updateChart();
+      }
+    });
+
+    // Observe class changes on both html and body elements
+    this.themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+    this.themeObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  }
+
+  private disconnectThemeObserver(): void {
+    if (this.themeObserver) {
+      this.themeObserver.disconnect();
+      this.themeObserver = null;
+    }
   }
 
   private initializeChart(): void {
@@ -273,7 +324,7 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     // Merge default options with provided options
-    const chartOptions = this.mergeOptions(this.defaultOptions, this.options);
+    const chartOptions = this.mergeOptions(this.getDefaultOptions(), this.options);
 
     // Apply smoothness setting
     this.applySmoothnessSetting(chartOptions);
@@ -302,7 +353,7 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
     this.chart.data = this.data;
 
     // Update chart options
-    const chartOptions = this.mergeOptions(this.defaultOptions, this.options);
+    const chartOptions = this.mergeOptions(this.getDefaultOptions(), this.options);
     this.applySmoothnessSetting(chartOptions);
 
     this.chart.options = chartOptions as any;
@@ -327,7 +378,7 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
       return;
     }
 
-    const chartOptions = this.mergeOptions(this.defaultOptions, this.options);
+    const chartOptions = this.mergeOptions(this.getDefaultOptions(), this.options);
     this.applySmoothnessSetting(chartOptions);
 
     this.chart.options = chartOptions as any;
@@ -426,12 +477,34 @@ export class OsLineChartComponent implements AfterViewInit, OnChanges, OnDestroy
       };
     }
 
-    // Merge scales if both exist
+    // Deep merge scales to preserve theme-aware grid/ticks colors
     if (defaultOptions.scales && userOptions.scales) {
-      merged.scales = {
-        ...defaultOptions.scales,
-        ...userOptions.scales
-      };
+      merged.scales = { ...defaultOptions.scales };
+
+      // Deep merge each axis
+      for (const axis of ['x', 'y'] as const) {
+        const defaultAxis = (defaultOptions.scales as any)?.[axis];
+        const userAxis = (userOptions.scales as any)?.[axis];
+
+        if (defaultAxis && userAxis) {
+          (merged.scales as any)[axis] = {
+            ...defaultAxis,
+            ...userAxis,
+            // Preserve grid settings from defaults unless explicitly overridden
+            grid: {
+              ...defaultAxis.grid,
+              ...userAxis.grid
+            },
+            // Preserve ticks settings from defaults unless explicitly overridden
+            ticks: {
+              ...defaultAxis.ticks,
+              ...userAxis.ticks
+            }
+          };
+        } else if (userAxis) {
+          (merged.scales as any)[axis] = userAxis;
+        }
+      }
     }
 
     // Merge elements if both exist

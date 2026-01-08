@@ -17,7 +17,7 @@
 .refunds-section {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--os-color-border);
+  border-top: 1px solid var(--layout-content-border);
 
   .refunds-header {
     display: flex;
@@ -54,7 +54,7 @@
       .refunds-title {
         font-size: 0.875rem;
         font-weight: 600;
-        color: var(--os-color-text-primary);
+        color: var(--layout-content-text);
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
@@ -73,7 +73,7 @@
         border-radius: 999px;
 
         &.empty {
-          background: var(--os-color-medium);
+          background: var(--layout-content-text-muted);
           opacity: 0.6;
         }
       }
@@ -90,7 +90,7 @@
     }
 
     .expand-icon {
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
       transition: transform 0.2s ease;
 
       &.rotated {
@@ -132,19 +132,19 @@
 
   // Empty state - no refunds
   &.empty .refunds-header.empty-state {
-    background: var(--os-color-light-subtle-bg, rgba(128, 128, 128, 0.05));
-    border-color: var(--os-color-border, rgba(128, 128, 128, 0.2));
+    background: var(--layout-frame-bg);
+    border-color: var(--layout-content-border);
     cursor: default;
 
     &:hover {
-      background: var(--os-color-light-subtle-bg, rgba(128, 128, 128, 0.05));
-      border-color: var(--os-color-border, rgba(128, 128, 128, 0.2));
+      background: var(--layout-frame-bg);
+      border-color: var(--layout-content-border);
     }
 
     .refunds-summary {
       .refunds-icon,
       .refunds-title {
-        color: var(--os-color-medium);
+        color: var(--layout-content-text-muted);
       }
     }
   }

@@ -9,8 +9,8 @@
 .details-section {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--os-color-light);
-  
+  border-bottom: 1px solid var(--layout-content-border);
+
   &:last-child {
     border-bottom: none;
     margin-bottom: 0;
@@ -18,7 +18,7 @@
 }
 
 .section-title {
-  color: var(--os-color-dark);
+  color: var(--layout-content-text);
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -29,7 +29,7 @@
 .detail-label {
   display: block;
   font-weight: 600;
-  color: var(--os-color-medium);
+  color: var(--layout-content-text-muted);
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
   text-transform: uppercase;
@@ -38,10 +38,10 @@
 
 .detail-value {
   font-size: 1rem;
-  color: var(--os-color-dark);
-  
+  color: var(--layout-content-text);
+
   &.text-muted {
-    color: var(--os-color-medium) !important;
+    color: var(--layout-content-text-muted) !important;
     font-family: 'Courier New', monospace;
     font-size: 0.9rem;
   }
@@ -54,8 +54,8 @@
 }
 
 .alert-light {
-  background-color: rgba(var(--os-color-light-rgb), 0.5);
-  border-color: var(--os-color-light);
+  background-color: var(--layout-frame-bg);
+  border-color: var(--layout-content-border);
 }
 
 // Responsive design

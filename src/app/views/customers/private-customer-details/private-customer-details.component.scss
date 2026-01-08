@@ -1,12 +1,12 @@
+@use "mixins" as mixins;
+
 :host {
   mat-card {
     margin-bottom: 20px;
   }
 }
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include mixins.flex-between();
   padding: 16px;
 
   .header-title {

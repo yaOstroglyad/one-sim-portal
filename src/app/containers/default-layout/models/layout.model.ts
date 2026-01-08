@@ -18,17 +18,28 @@ export interface NavItem {
   };
 }
 
+/**
+ * Logo configuration with optional dark theme variant.
+ * If darkSrc is not provided, src is used for both themes
+ * with CSS filter applied in dark mode.
+ */
+export interface LogoConfig {
+  src: string;
+  darkSrc?: string; // Optional: separate logo for dark theme
+  alt: string;
+}
+
+export interface BrandConfigFull extends LogoConfig {
+  height: number;
+}
+
+export interface BrandConfigNarrow extends LogoConfig {
+  width: number;
+}
+
 export interface BrandConfig {
-  full: {
-    src: string;
-    height: number;
-    alt: string;
-  };
-  narrow: {
-    src: string;
-    width: number;
-    alt: string;
-  };
+  full: BrandConfigFull;
+  narrow: BrandConfigNarrow;
 }
 
 export interface UserProfile {

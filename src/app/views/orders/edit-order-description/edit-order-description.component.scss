@@ -1,24 +1,31 @@
+@use "mixins" as mixins;
+
+// Global dialog styles from _vendor-overrides.scss
+// Component-specific overrides only
+
 .dialog-header {
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 10px;
+  @include mixins.dialog-section-border(bottom);
 }
 
 .dialog-content {
   display: block;
-  padding-top: 20px;
+  padding-top: 1.25rem;
 }
 
 .dialog-footer {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 10px;
+  @include mixins.dialog-section-border(top);
 }
 
 .grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  @include mixins.responsive-grid(240px, 1.25rem);
 }
 
 .grid-item {
   width: 100%;
 }
+
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

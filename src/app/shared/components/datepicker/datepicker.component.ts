@@ -8,9 +8,11 @@ import {
   effect,
   ElementRef,
   HostListener,
-  inject
+  inject,
+  forwardRef
 } from '@angular/core';
 
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
   parseISODate,
@@ -33,15 +35,24 @@ import {
  * - Click outside to close
  * - Localization support
  * - Modern design matching CoreUI
+ * - ControlValueAccessor support for reactive forms
  *
  * @example
  * ```html
+ * <!-- With signals -->
  * <app-datepicker
  *   [value]="selectedDate()"
  *   [minDate]="'2025-08-01'"
  *   [maxDate]="'2025-12-31'"
  *   [placeholder]="'Select date'"
  *   (dateChange)="onDateChange($event)">
+ * </app-datepicker>
+ *
+ * <!-- With reactive forms -->
+ * <app-datepicker
+ *   formControlName="dateField"
+ *   [minDate]="'2025-08-01'"
+ *   [placeholder]="'Select date'">
  * </app-datepicker>
  * ```
  */
@@ -51,9 +62,16 @@ import {
   imports: [TranslateModule],
   templateUrl: './datepicker.component.html',
   styleUrls: ['./datepicker.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DatepickerComponent),
+      multi: true
+    }
+  ]
 })
-export class DatepickerComponent {
+export class DatepickerComponent implements ControlValueAccessor {
   private readonly elementRef = inject(ElementRef);
   private readonly translate = inject(TranslateService);
 
@@ -163,6 +181,11 @@ export class DatepickerComponent {
     return `${decade} - ${decade + 11}`;
   });
 
+  // ControlValueAccessor callbacks
+  private onChangeFn: (value: Date | string | null) => void = () => {};
+  private onTouchedFn: () => void = () => {};
+  private cvaDisabled = false;
+
   constructor() {
     // Effect to sync value input with internal state
     effect(() => {
@@ -173,11 +196,62 @@ export class DatepickerComponent {
     });
   }
 
+  // =============== ControlValueAccessor Implementation ===============
+
+  /**
+   * Write value from form control
+   * Accepts Date, ISO string, or null
+   */
+  writeValue(value: Date | string | null): void {
+    if (value === null || value === undefined || value === '') {
+      this.selectedDate.set(null);
+      this.displayValue.set('');
+      return;
+    }
+
+    if (value instanceof Date) {
+      this.selectedDate.set(value);
+      this.displayValue.set(formatDateDisplay(value));
+      this.currentMonth.set(value.getMonth());
+      this.currentYear.set(value.getFullYear());
+    } else if (typeof value === 'string') {
+      this.setDateFromString(value);
+    }
+  }
+
+  /**
+   * Register change callback
+   */
+  registerOnChange(fn: (value: Date | string | null) => void): void {
+    this.onChangeFn = fn;
+  }
+
+  /**
+   * Register touched callback
+   */
+  registerOnTouched(fn: () => void): void {
+    this.onTouchedFn = fn;
+  }
+
+  /**
+   * Set disabled state from form control
+   */
+  setDisabledState(isDisabled: boolean): void {
+    this.cvaDisabled = isDisabled;
+  }
+
+  /**
+   * Check if component is disabled (from input or CVA)
+   */
+  isComponentDisabled(): boolean {
+    return this.disabled() || this.cvaDisabled;
+  }
+
   /**
    * Toggle calendar popup
    */
   toggleCalendar(): void {
-    if (this.disabled()) return;
+    if (this.isComponentDisabled()) return;
     this.isOpen.update(v => !v);
   }
 
@@ -185,7 +259,7 @@ export class DatepickerComponent {
    * Open calendar
    */
   openCalendar(): void {
-    if (this.disabled()) return;
+    if (this.isComponentDisabled()) return;
     this.isOpen.set(true);
     // Reset year picker when opening
     this.showYearPicker.set(false);
@@ -291,6 +365,10 @@ export class DatepickerComponent {
     const isoString = formatDateISO(date);
     this.dateChange.emit(isoString);
 
+    // CVA: notify form control (emit Date for compatibility)
+    this.onChangeFn(date);
+    this.onTouchedFn();
+
     this.closeCalendar();
   }
 
@@ -308,6 +386,10 @@ export class DatepickerComponent {
     const isoString = formatDateISO(today);
     this.dateChange.emit(isoString);
 
+    // CVA: notify form control (emit Date for compatibility)
+    this.onChangeFn(today);
+    this.onTouchedFn();
+
     this.closeCalendar();
   }
 
@@ -318,6 +400,11 @@ export class DatepickerComponent {
     this.selectedDate.set(null);
     this.displayValue.set('');
     this.dateChange.emit('');
+
+    // CVA: notify form control
+    this.onChangeFn(null);
+    this.onTouchedFn();
+
     this.closeCalendar();
   }
 

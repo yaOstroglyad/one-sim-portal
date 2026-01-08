@@ -1,5 +1,6 @@
 @use "sass:map";
 @use "variables" as vars;
+@use "mixins" as mixins;
 
 .price-info {
   background-color: var(--os-color-gray-50);
@@ -9,9 +10,7 @@
 }
 
 .info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include mixins.flex-between();
   padding: map.get(vars.$os-spacing, '2') 0; // 0.5rem
 
   &:first-child {

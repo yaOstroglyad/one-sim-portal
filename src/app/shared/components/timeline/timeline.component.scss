@@ -1,9 +1,12 @@
+@use "../../../../scss/mixins" as mixins;
+
 .timeline {
   position: relative;
   padding-left: 40px;
   margin-top: 20px;
   max-height: 400px;
-  overflow-y: auto; /* Добавляем вертикальный скролл */
+  overflow-y: auto;
+  @include mixins.os-scrollbar(8px);
 }
 
 .timeline-item {
@@ -19,34 +22,34 @@
     left: -25px;
     width: 2px;
     height: 100%;
-    background-color: #e0e0e0;
+    background-color: var(--layout-content-border);
     z-index: 0;
   }
 
   /* Обрезаем линию для последнего элемента */
   &:last-child::before {
-    height: 50%; /* Линия рисуется только наполовину */
+    height: 50%;
   }
 
   .timeline-marker {
     position: absolute;
-    left: -30px; /* Расположение маркера */
-    top: 9px; /* Выравнивание точки */
+    left: -30px;
+    top: 9px;
     width: 12px;
     height: 12px;
-    background-color: #2196f3; /* Цвет точки */
-    border-radius: 50%; /* Круглая точка */
-    border: 2px solid #fff; /* Белая граница */
-    z-index: 1; /* Маркер поверх линии */
+    background-color: var(--os-color-primary);
+    border-radius: 50%;
+    border: 2px solid var(--layout-menu-bg);
+    z-index: 1;
   }
 
+  // Timeline content - uses card base
   .timeline-content {
+    @include mixins.os-card-base(10px 15px, 4px);
+    background-color: var(--layout-frame-bg);
     position: relative;
-    background-color: #ebedef;
-    border-radius: 4px;
-    padding: 10px 15px;
+    margin-left: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-left: 10px; /* Для отступа от линии */
 
     /* Треугольник */
     &::before {
@@ -58,12 +61,12 @@
       height: 0;
       border-style: solid;
       border-width: 6px 10px 6px 0;
-      border-color: transparent #ebedef transparent transparent;
+      border-color: transparent var(--layout-frame-bg) transparent transparent;
     }
 
     .timeline-date {
       font-size: 14px;
-      color: #757575;
+      color: var(--layout-content-text-muted);
       font-weight: bold;
       margin-bottom: 5px;
     }
@@ -71,11 +74,12 @@
     .timeline-description {
       font-size: 16px;
       margin: 0;
+      color: var(--layout-content-text);
     }
 
     .timeline-link {
       font-size: 14px;
-      color: #2196f3;
+      color: var(--os-color-primary);
       text-decoration: none;
 
       &:hover {
@@ -85,16 +89,4 @@
   }
 }
 
-/* Стилизация полосы прокрутки (опционально) */
-.timeline::-webkit-scrollbar {
-  width: 8px;
-}
-
-.timeline::-webkit-scrollbar-thumb {
-  background-color: #efefef; /* Цвет полосы прокрутки */
-  border-radius: 4px; /* Скругление */
-}
-
-.timeline::-webkit-scrollbar-thumb:hover {
-  background-color: #b0b0b0; /* Цвет при наведении */
-}
+// Scrollbar is handled by os-scrollbar mixin above

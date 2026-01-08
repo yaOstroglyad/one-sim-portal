@@ -197,9 +197,28 @@
     "print": "Печать",
     "retry": "Повторить",
     "clear": "Очистить",
+    "clearAll": "Очистить все",
+    "noFilters": "Нет доступных фильтров",
     "today": "Сегодня",
     "all": "Все",
-    "search": "Поиск",
+    "search": {
+      "placeholder": "Поиск по навигации...",
+      "openPalette": "Открыть поиск",
+      "hint": "Введите для поиска страниц и действий",
+      "noResults": "Ничего не найдено",
+      "matchedKeyword": "совпадение: {{keyword}}",
+      "categories": {
+        "recent": "Недавние",
+        "navigation": "Навигация",
+        "actions": "Действия",
+        "backend": "Результаты поиска"
+      },
+      "shortcuts": {
+        "navigate": "навигация",
+        "select": "выбрать",
+        "close": "закрыть"
+      }
+    },
     "noResultsFound": "Ничего не найдено",
     "loadingStatistics": "Загрузка статистики...",
     "unableToLoadStatistics": "Не удалось загрузить статистику",
@@ -365,6 +384,13 @@
     "ticketsList": "Список тикетов",
     "companyProducts": "Продукты компании",
     "productconstructor": "Конструктор продуктов",
+    "pcOverview": "Обзор",
+    "pcRegions": "Регионы",
+    "pcBundles": "Мобильные пакеты",
+    "pcProviderProducts": "Продукты провайдера",
+    "pcCompanyProducts": "Продукты компании",
+    "pcProducts": "Продукты",
+    "pcTariffOffers": "Тарифные предложения",
     "settings": "Настройки",
     "general": "Общие",
     "paymentGateway": "Платежный шлюз",

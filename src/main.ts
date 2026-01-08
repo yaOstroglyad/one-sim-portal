@@ -32,6 +32,8 @@ import { HttpErrorInterceptor } from '@shared/interceptors';
 import { IconSetService } from '@coreui/icons-angular';
 import { Title } from '@angular/platform-browser';
 import { provideFabLayout, provideFeature, provideFabButton } from '@shared/components/fab-layout';
+import { NAV_ITEMS } from '@shared/services/search';
+import { navItems } from './app/containers/default-layout/_nav';
 
 // Import routes
 import { Page404Component } from './app/views/pages/page404/page404.component';
@@ -172,6 +174,14 @@ bootstrapApplication(AppComponent, {
 			useExisting: FeatureToggleService
 		},
 		AuthGuardService,
+
+		// ============================================
+		// Global Search (Command Palette)
+		// ============================================
+		{
+			provide: NAV_ITEMS,
+			useValue: navItems
+		},
 
 		// ============================================
 		// FAB Layout System (via DI Tokens)

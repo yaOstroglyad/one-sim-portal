@@ -1,16 +1,13 @@
 @use "sass:map";
 @use "variables" as vars;
+@use "mixins" as mixins;
 
 .tariff-table-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  @include mixins.flex-column(1rem);
 }
 
 .tariff-table-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include mixins.flex-between();
   padding-block-end: 0.5rem;
   border-block-end: 1px solid var(--os-color-border);
 
@@ -29,12 +26,9 @@
 }
 
 .loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  @include mixins.flex-column(1rem);
+  @include mixins.flex-center();
   padding: 2rem;
-  gap: 1rem;
 
   p {
     margin: 0;
@@ -43,19 +37,15 @@
 }
 
 .empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  @include mixins.flex-column();
+  @include mixins.flex-center();
   padding: 3rem 2rem;
   text-align: center;
   background: var(--os-color-background-secondary);
   border-radius: map.get(vars.$os-border-radius, 'medium');
 
   mat-icon {
-    font-size: 3rem;
-    width: 3rem;
-    height: 3rem;
+    @include mixins.icon-size(3rem);
     color: var(--os-color-text-tertiary);
     margin-block-end: 1rem;
   }

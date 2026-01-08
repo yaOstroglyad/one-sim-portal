@@ -71,7 +71,27 @@
     "apply": "Застосувати",
     "submit": "Надіслати",
     "clear": "Очистити",
+    "clearAll": "Очистити все",
+    "noFilters": "Немає доступних фільтрів",
     "today": "Сьогодні",
+    "search": {
+      "placeholder": "Пошук по навігації...",
+      "openPalette": "Відкрити пошук",
+      "hint": "Введіть для пошуку сторінок та дій",
+      "noResults": "Нічого не знайдено",
+      "matchedKeyword": "збіг: {{keyword}}",
+      "categories": {
+        "recent": "Нещодавні",
+        "navigation": "Навігація",
+        "actions": "Дії",
+        "backend": "Результати пошуку"
+      },
+      "shortcuts": {
+        "navigate": "навігація",
+        "select": "вибрати",
+        "close": "закрити"
+      }
+    },
     "select_account_hint_message": "Будь ласка, спочатку виберіть обліковий запис",
     "months": {
       "january": "Січень",
@@ -153,6 +173,13 @@
     "ticketsList": "Список тікетів",
     "companyProducts": "Продукти компанії",
     "productConstructor": "Конструктор продуктів",
+    "pcOverview": "Огляд",
+    "pcRegions": "Регіони",
+    "pcBundles": "Мобільні пакети",
+    "pcProviderProducts": "Продукти провайдера",
+    "pcCompanyProducts": "Продукти компанії",
+    "pcProducts": "Продукти",
+    "pcTariffOffers": "Тарифні пропозиції",
     "settings": "Налаштування",
     "general": "Загальні",
     "paymentGateway": "Платіжний шлюз",

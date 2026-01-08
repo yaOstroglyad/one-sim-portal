@@ -216,6 +216,111 @@
   --os-sidebar-hover: var(--os-color-light-shade);
   --os-sidebar-active: var(--os-color-primary);
   --os-sidebar-text-dark: var(--os-color-dark-contrast);
+
+  /* ═══════════════════════════════════════════════════════════════
+     LAYOUT THEME VARIABLES (Gmail-style layout)
+     Frame = Header + Sidebar, Content = Main content area
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* Frame (Header + Sidebar) - Light Theme */
+  --layout-frame-bg: #f1f3f4;
+  --layout-frame-bg-hover: #e8eaed;
+  --layout-frame-bg-hover-alpha: rgba(0, 0, 0, 0.06);
+  --layout-frame-bg-active: rgba(var(--os-color-primary-rgb), 0.15);
+  --layout-frame-text: #202124;
+  --layout-frame-text-muted: #5f6368;
+  --layout-frame-icon: #5f6368;
+  --layout-frame-border: #dadce0;
+
+  /* Content - Light Theme */
+  --layout-content-bg: #ffffff;
+  --layout-content-text: #202124;
+  --layout-content-text-muted: #5f6368;
+  --layout-content-border: #dadce0;
+
+  /* Form inputs - Light Theme */
+  --layout-input-bg: #ffffff;
+  --layout-input-border: #dadce0;
+  --layout-input-text: #202124;
+  --layout-input-placeholder: #5f6368;
+
+  /* Search in Header - Light Theme */
+  --layout-search-bg: rgba(0, 0, 0, 0.04);
+  --layout-search-bg-focus: #ffffff;
+  --layout-search-text: #202124;
+  --layout-search-placeholder: #5f6368;
+  --layout-search-border-focus: var(--os-color-primary);
+
+  /* Dropdown/Menu - Light Theme */
+  --layout-menu-bg: #ffffff;
+  --layout-menu-text: #202124;
+  --layout-menu-text-muted: #5f6368;
+  --layout-menu-hover: #f1f3f4;
+  --layout-menu-border: #dadce0;
+  --layout-menu-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  /* Logo filter (for dark logos on light bg - no filter needed) */
+  --layout-logo-filter: none;
+
+  /* Scrollbar - Light Theme */
+  --layout-scrollbar-thumb: rgba(0, 0, 0, 0.3);
+
+  /* Overlay - Light Theme */
+  --layout-overlay-bg: rgba(255, 255, 255, 0.8);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DARK THEME OVERRIDES
+   html.dark - for CDK overlays (dialogs, menus, tooltips)
+   .layout--dark - for layout container and its children
+   ═══════════════════════════════════════════════════════════════ */
+html.dark,
+.layout--dark {
+  /* Frame (Header + Sidebar) - Dark Theme */
+  --layout-frame-bg: #1f1f1f;
+  --layout-frame-bg-hover: #2d2d2d;
+  --layout-frame-bg-hover-alpha: rgba(255, 255, 255, 0.08);
+  --layout-frame-bg-active: rgba(var(--os-color-primary-rgb), 0.2);
+  --layout-frame-text: #e8eaed;
+  --layout-frame-text-muted: #9aa0a6;
+  --layout-frame-icon: #9aa0a6;
+  --layout-frame-border: #4d4d4d;
+
+  /* Content - Dark Theme (lighter than frame for contrast) */
+  --layout-content-bg: #292a2d;
+  --layout-content-text: #e8eaed;
+  --layout-content-text-muted: #9aa0a6;
+  --layout-content-border: #4d4d4d;
+
+  /* Form inputs - Dark Theme (slightly elevated surface) */
+  --layout-input-bg: #2d2d2d;
+  --layout-input-border: #4a4a4a;
+  --layout-input-text: #e8eaed;
+  --layout-input-placeholder: #9aa0a6;
+
+  /* Search in Header - Dark Theme */
+  --layout-search-bg: rgba(255, 255, 255, 0.08);
+  --layout-search-bg-focus: #303134;
+  --layout-search-text: #e8eaed;
+  --layout-search-placeholder: #9aa0a6;
+  --layout-search-border-focus: var(--os-color-primary);
+
+  /* Dropdown/Menu - Dark Theme */
+  --layout-menu-bg: #2d2d2d;
+  --layout-menu-text: #e8eaed;
+  --layout-menu-text-muted: #9aa0a6;
+  --layout-menu-hover: #3c4043;
+  --layout-menu-border: #4d4d4d;
+  --layout-menu-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+  /* Logo filter (for dark logos - invert to white) */
+  --layout-logo-filter: brightness(0) invert(1);
+
+  /* Scrollbar - Dark Theme */
+  --layout-scrollbar-thumb: rgba(255, 255, 255, 0.3);
+
+  /* Overlay - Dark Theme */
+  --layout-overlay-bg: rgba(0, 0, 0, 0.6);
 }
 
 $primary-font: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
@@ -515,6 +620,16 @@ $os-font-sizes: (
   '4xl': 2.25rem,
   '5xl': 3rem
 ) !default;
+
+// ==============================================
+// LAYOUT VARIABLES
+// Gmail-style layout dimensions
+// ==============================================
+
+$layout-header-height: 64px !default;
+$layout-sidebar-width: 256px !default;
+$layout-sidebar-collapsed: 56px !default;
+$layout-content-radius: 16px !default;
 
 // ==============================================
 // AG-GRID STYLE VARIABLES

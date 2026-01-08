@@ -184,17 +184,134 @@
   }
 }
 
-// Flexbox utilities
+// ==============================================
+// UTILITY MIXINS
+// Common patterns used across multiple components
+// ==============================================
+
+// -----------------------------------------------------------------------------
+// Layout Utilities
+// -----------------------------------------------------------------------------
+
+/// Flexbox center - centers content horizontally and vertically
+/// @example
+///   .container { @include flex-center(); }
 @mixin flex-center() {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/// Flexbox space-between with center alignment
+/// @example
+///   .header { @include flex-between(); }
 @mixin flex-between() {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+/// Flexbox column layout with optional gap
+/// @param {Length} $gap [null] - Gap between items
+/// @example
+///   .form { @include flex-column(1rem); }
+@mixin flex-column($gap: null) {
+  display: flex;
+  flex-direction: column;
+  @if $gap {
+    gap: $gap;
+  }
+}
+
+/// Responsive grid with auto-fit columns
+/// @param {Length} $min-width [200px] - Minimum column width
+/// @param {Length} $gap [1rem] - Gap between items
+/// @example
+///   .grid { @include responsive-grid(250px, 1.5rem); }
+@mixin responsive-grid($min-width: 200px, $gap: 1rem) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
+// -----------------------------------------------------------------------------
+// Interactive Utilities
+// -----------------------------------------------------------------------------
+
+/// Primary color focus outline for accessibility
+/// @param {Length} $offset [2px] - Outline offset
+/// @example
+///   .button { @include focus-primary-outline(); }
+@mixin focus-primary-outline($offset: 2px) {
+  &:focus {
+    outline: 2px solid var(--os-color-primary);
+    outline-offset: $offset;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+/// Active/selected state with primary color
+/// @example
+///   .tab { @include active-primary-state(); }
+@mixin active-primary-state() {
+  &--active,
+  &.active {
+    background-color: var(--os-color-primary);
+    color: var(--os-color-primary-contrast);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Text Utilities
+// -----------------------------------------------------------------------------
+
+/// Text truncation with ellipsis
+/// @param {Length} $max-width [100%] - Maximum width before truncation
+/// @example
+///   .label { @include text-truncate(200px); }
+@mixin text-truncate($max-width: 100%) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: $max-width;
+}
+
+// -----------------------------------------------------------------------------
+// Icon Utilities
+// -----------------------------------------------------------------------------
+
+/// Fixed icon sizing with flex-shrink protection
+/// @param {Length} $size - Icon width and height
+/// @example
+///   .icon { @include icon-size(24px); }
+@mixin icon-size($size) {
+  flex-shrink: 0;
+  width: $size;
+  height: $size;
+}
+
+// -----------------------------------------------------------------------------
+// Dialog Utilities
+// -----------------------------------------------------------------------------
+
+/// Dialog section border (header/footer separation)
+/// @param {String} $position [bottom] - Border position: 'top' or 'bottom'
+/// @example
+///   .dialog-header { @include dialog-section-border(bottom); }
+///   .dialog-footer { @include dialog-section-border(top); }
+@mixin dialog-section-border($position: bottom) {
+  @if $position == bottom {
+    border-bottom: 1px solid var(--layout-content-border);
+    padding-bottom: map.get(vars.$os-spacing, '3');
+    margin-bottom: map.get(vars.$os-spacing, '3');
+  } @else if $position == top {
+    border-top: 1px solid var(--layout-content-border);
+    padding-top: map.get(vars.$os-spacing, '3');
+    margin-top: map.get(vars.$os-spacing, '3');
+  }
 }
 
 // ==============================================
@@ -216,14 +333,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--os-color-light);
-    border: 1px solid var(--os-color-medium-subtle-bg);
+    background-color: var(--layout-frame-bg);
+    border: 1px solid var(--layout-content-border);
     border-radius: map.get(vars.$os-border-radius, 'medium');
     padding: map.get(vars.$os-spacing, '4');
     transition: all 0.15s ease-in-out;
 
     &:hover {
-      border-color: var(--os-color-medium);
+      border-color: var(--os-color-primary);
       box-shadow: map.get(vars.$os-shadows, 'sm');
     }
   }
@@ -241,7 +358,7 @@
     margin: 0;
     padding: map.get(vars.$os-spacing, '4');
     text-align: center;
-    color: var(--os-color-medium-text);
+    color: var(--layout-content-text-muted);
     font-size: map.get(vars.$os-font-sizes, 'sm');
     font-style: italic;
 
@@ -264,17 +381,7 @@
     }
   }
 
-  // Theme variants
-  &--dark {
-    .#{$component-name}__container {
-      background-color: var(--os-color-dark);
-      border-color: var(--os-color-medium);
-    }
-
-    .#{$component-name}__fallback {
-      color: var(--os-color-light-text);
-    }
-  }
+  // Note: Dark theme is now handled automatically via --layout-* CSS variables
 }
 
 // Size variants - small, medium, large, xl
@@ -323,9 +430,9 @@
     .#{$component-name}__container {
       background: linear-gradient(
         90deg,
-        var(--os-color-light) 0%,
-        var(--os-color-medium-subtle-bg) 50%,
-        var(--os-color-light) 100%
+        var(--layout-frame-bg) 0%,
+        var(--layout-content-border) 50%,
+        var(--layout-frame-bg) 100%
       );
       background-size: 200% 100%;
       animation: chart-loading-shimmer 2s infinite;
@@ -338,7 +445,7 @@
         transform: translate(-50%, -50%);
         width: 24px;
         height: 24px;
-        border: 2px solid var(--os-color-medium-subtle-bg);
+        border: 2px solid var(--layout-content-border);
         border-top: 2px solid var(--os-color-primary);
         border-radius: 50%;
         animation: chart-loading-spin 1s linear infinite;
@@ -372,9 +479,9 @@
   // No data state
   &--no-data {
     .#{$component-name}__container {
-      background-color: var(--os-color-medium-subtle-bg);
+      background-color: var(--layout-frame-bg);
       border-style: dashed;
-      border-color: var(--os-color-medium);
+      border-color: var(--layout-content-border);
     }
 
     .#{$component-name}__fallback {
@@ -683,7 +790,7 @@
     margin: 0;
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--os-color-dark);
+    color: var(--layout-content-text);
   }
 }
 
@@ -724,7 +831,7 @@
       align-items: center;
       gap: 0.5rem;
       font-size: 0.875rem;
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
 
       .legend-color {
         width: 12px;
@@ -770,7 +877,7 @@
 
     .label {
       font-size: 0.75rem;
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -801,14 +908,14 @@
     .reason-label {
       min-width: 120px;
       font-size: 0.875rem;
-      color: var(--os-color-dark);
+      color: var(--layout-content-text);
       font-weight: 500;
     }
 
     .reason-bar {
       flex: 1;
       height: 8px;
-      background-color: var(--os-color-light);
+      background-color: var(--layout-frame-bg);
       border-radius: 4px;
       overflow: hidden;
 
@@ -822,7 +929,7 @@
     .reason-value {
       min-width: 40px;
       font-size: 0.875rem;
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
       text-align: right;
     }
   }
@@ -839,7 +946,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 0;
-    border-bottom: 1px solid var(--os-color-light);
+    border-bottom: 1px solid var(--layout-content-border);
 
     &:last-child {
       border-bottom: none;
@@ -847,14 +954,14 @@
 
     .label {
       font-size: 0.875rem;
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
       font-weight: 500;
     }
 
     .value {
       font-size: 1rem;
       font-weight: 600;
-      color: var(--os-color-dark);
+      color: var(--layout-content-text);
 
       &.negative {
         color: var(--os-color-danger);
@@ -879,12 +986,12 @@
         font-size: 0.875rem;
 
         th {
-          background-color: var(--os-color-light-subtle-bg);
-          color: var(--os-color-dark);
+          background-color: var(--layout-frame-bg);
+          color: var(--layout-content-text);
           font-weight: 600;
           padding: 0.75rem;
           text-align: left;
-          border-bottom: 2px solid var(--os-color-light);
+          border-bottom: 2px solid var(--layout-content-border);
           font-size: 0.8125rem;
           text-transform: uppercase;
           letter-spacing: 0.05em;
@@ -892,12 +999,12 @@
 
         td {
           padding: 0.75rem;
-          border-bottom: 1px solid var(--os-color-light);
+          border-bottom: 1px solid var(--layout-content-border);
           vertical-align: middle;
 
           &.name-cell {
             font-weight: 500;
-            color: var(--os-color-dark);
+            color: var(--layout-content-text);
           }
 
           &.amount-cell {
@@ -911,7 +1018,7 @@
           }
 
           &.date-cell {
-            color: var(--os-color-medium);
+            color: var(--layout-content-text-muted);
             font-size: 0.8125rem;
           }
 
@@ -946,7 +1053,7 @@
           transition: background-color 0.15s ease;
 
           &:hover {
-            background-color: var(--os-color-light-subtle-bg);
+            background-color: var(--layout-menu-hover);
           }
         }
       }
@@ -960,7 +1067,7 @@
   flex-direction: column;
   gap: 0.75rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--os-color-light);
+  border-top: 1px solid var(--layout-content-border);
 
   .detail-item {
     display: flex;
@@ -969,14 +1076,14 @@
 
     .detail-label {
       font-size: 0.875rem;
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
       font-weight: 500;
     }
 
     .detail-value {
       font-size: 1rem;
       font-weight: 600;
-      color: var(--os-color-dark);
+      color: var(--layout-content-text);
     }
   }
 }
@@ -989,69 +1096,71 @@
 }
 
 // Dashboard dark theme support
+// Uses CSS variables that automatically adapt to theme
 @mixin dashboard-dark-theme() {
-  :host-context(.dark-theme) & {
+  :host-context(html.dark) &,
+  :host-context(.layout--dark) & {
     .card-header h3 {
-      color: #ffffff;
+      color: var(--layout-content-text);
     }
 
     .chart-legend .legend-item {
-      color: #9ca3af;
+      color: var(--layout-content-text-muted);
     }
 
     .metric {
       .label {
-        color: #9ca3af;
+        color: var(--layout-content-text-muted);
       }
 
       .value {
-        color: #10b981;
+        color: var(--os-color-success);
 
         &.negative {
-          color: #ef4444;
+          color: var(--os-color-danger);
         }
       }
     }
 
     .reason-item {
       .reason-label {
-        color: #ffffff;
+        color: var(--layout-content-text);
       }
 
       .reason-bar {
-        background-color: #374151;
+        background-color: var(--layout-frame-bg);
       }
 
       .reason-value {
-        color: #9ca3af;
+        color: var(--layout-content-text-muted);
       }
     }
 
     .breakdown-item {
-      border-color: #374151;
+      border-color: var(--layout-content-border);
 
       .label {
-        color: #9ca3af;
+        color: var(--layout-content-text-muted);
       }
 
       .value {
-        color: #ffffff;
+        color: var(--layout-content-text);
 
         &.negative {
-          color: #ef4444;
+          color: var(--os-color-danger);
         }
       }
     }
 
     .detail-item {
-      border-color: #374151;
+      border-color: var(--layout-content-border);
 
       .detail-label {
-        color: #9ca3af;
+        color: var(--layout-content-text-muted);
       }
 
       .detail-value {
-        color: #ffffff;
+        color: var(--layout-content-text);
       }
     }
   }
@@ -1064,15 +1173,15 @@
 
 // Base ag-grid button styles
 @mixin ag-grid-button($size: 26px) {
-  @extend .d-flex;
-  @extend .align-center;
-  @extend .justify-center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: $size;
   height: $size;
   padding: 0;
   border: none;
-  @extend .rounded-small;
-  @extend .cursor-pointer;
+  border-radius: map.get(vars.$os-border-radius, 'sm');
+  cursor: pointer;
   background-color: vars.$ag-grid-button-bg;
   color: #666;
   transition: background-color 0.15s ease;
@@ -1094,8 +1203,8 @@
   }
 
   &.disabled {
-    @extend .cursor-not-allowed;
-    @extend .opacity-50;
+    cursor: not-allowed;
+    opacity: 0.5;
     background-color: vars.$ag-grid-button-bg;
     color: vars.$ag-grid-button-disabled;
 
@@ -1127,9 +1236,9 @@
   @include ag-grid-text();
   padding: 4px 8px;
   border: 1px solid vars.$ag-grid-border-color;
-  @extend .rounded-small;
+  border-radius: map.get(vars.$os-border-radius, 'sm');
   background-color: var(--os-color-white);
-  @extend .cursor-pointer;
+  cursor: pointer;
   min-width: 60px;
 
   @include ag-grid-focus();
@@ -1263,4 +1372,807 @@
 // Transition mixin for smooth animations
 @mixin transition($properties: all, $duration: 0.15s, $timing: ease) {
   transition: $properties $duration $timing;
+}
+
+// ==============================================
+// LEVEL 1: ABSTRACT BASE MIXINS
+// Foundation mixins that all specialized mixins inherit from.
+// Use these directly only for custom components.
+// ==============================================
+
+/**
+ * Surface Base - Foundation for any themed container
+ * @param {String} $bg - CSS variable for background (e.g., --layout-content-bg)
+ * @param {String} $border - CSS variable for border (e.g., --layout-content-border)
+ * @param {Number} $radius - Border radius value (default: 0.375rem)
+ * @example
+ *   .my-panel { @include os-surface-base(--layout-menu-bg, --layout-menu-border, 0.5rem); }
+ */
+@mixin os-surface-base($bg, $border, $radius: 0.375rem) {
+  background-color: var(#{$bg});
+  border: 1px solid var(#{$border});
+  border-radius: $radius;
+}
+
+/**
+ * Interactive Base - Foundation for clickable/interactive elements
+ * @param {Number} $transition - Transition duration (default: 0.15s)
+ * @example
+ *   .my-button { @include os-interactive-base(0.2s); }
+ */
+@mixin os-interactive-base($transition: 0.15s) {
+  cursor: pointer;
+  transition: all $transition ease-in-out;
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled,
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+/**
+ * Feedback Base - Foundation for status indicators (alerts, badges, spinners)
+ * @param {String} $color-var - CSS variable for the feedback color
+ * @example
+ *   .my-alert { @include os-feedback-base(--os-color-danger); }
+ */
+@mixin os-feedback-base($color-var) {
+  color: var(#{$color-var});
+}
+
+// ==============================================
+// LEVEL 2: SPECIALIZED COMPONENT MIXINS
+// Built on top of Level 1 bases.
+// Use these for standard UI components.
+// ==============================================
+
+// ==============================================
+// COMPONENT UI MIXINS (DRY PRINCIPLE)
+// IMPORTANT: Always use these mixins instead of
+// duplicating styles across components!
+// See constitution.md Section VII for details.
+// ==============================================
+
+// -----------------------------------------------------------------------------
+// Input Field Base Styles (Level 2 - inherits from os-surface-base)
+// Use for: search inputs, text inputs, form fields
+// -----------------------------------------------------------------------------
+/**
+ * Input Base - Styled text input fields
+ * @param {Number} $height - Input height (default: 44px)
+ * @param {String} $padding - Input padding (default: 0.5rem 0.875rem)
+ * @example
+ *   .my-input { @include os-input-base(40px); }
+ */
+@mixin os-input-base($height: 44px, $padding: 0.5rem 0.875rem) {
+  // Inherit from Level 1 surface base
+  @include os-surface-base(--layout-input-bg, --layout-input-border, 0.375rem);
+
+  // Input-specific styles
+  width: 100%;
+  height: $height;
+  padding: $padding;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--layout-input-text);
+  background-clip: padding-box;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &::placeholder {
+    color: var(--layout-input-placeholder);
+    opacity: 1;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--os-color-primary);
+  }
+
+  &:focus {
+    color: var(--layout-input-text);
+    background-color: var(--layout-input-bg);
+    border-color: var(--os-color-primary);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(var(--os-color-primary-rgb), 0.25);
+  }
+
+  &:disabled {
+    background-color: var(--layout-frame-bg);
+    color: var(--layout-input-placeholder);
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Dropdown/Popup Base Styles (Level 2 - inherits from os-surface-base)
+// Use for: select dropdowns, datepicker popups, menus
+// -----------------------------------------------------------------------------
+/**
+ * Dropdown Base - Floating popup containers
+ * Note: No padding - content (e.g. os-menu) provides its own padding
+ * @param {Number} $min-width - Minimum width (default: 280px)
+ * @example
+ *   .my-dropdown { @include os-dropdown-base(300px); }
+ */
+@mixin os-dropdown-base($min-width: 280px) {
+  // Inherit from Level 1 surface base
+  @include os-surface-base(--layout-menu-bg, --layout-content-border, map.get(vars.$os-border-radius, 'large'));
+
+  // Dropdown-specific styles
+  position: absolute;
+  z-index: 1050;
+  min-width: $min-width;
+  overflow: hidden; // Ensures inner content respects border-radius
+  box-shadow: var(--layout-menu-shadow);
+}
+
+// Dropdown animation
+@mixin os-dropdown-animation() {
+  animation: os-slide-down 0.2s ease-out;
+
+  @keyframes os-slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Card/Section Base Styles (Level 2 - inherits from os-surface-base)
+// Use for: detail sections, panels, containers
+// -----------------------------------------------------------------------------
+/**
+ * Card Base - Container sections and panels
+ * @param {String} $padding - Card padding (default: 1.25rem)
+ * @param {Number} $radius - Border radius (default: 0.375rem)
+ * @example
+ *   .my-card { @include os-card-base(1.5rem); }
+ */
+@mixin os-card-base($padding: 1.25rem, $radius: 0.375rem) {
+  // Inherit from Level 1 surface base
+  @include os-surface-base(--layout-frame-bg, --layout-content-border, $radius);
+
+  // Card-specific styles
+  padding: $padding;
+}
+
+// -----------------------------------------------------------------------------
+// List Item Base Styles (Level 2 - inherits from os-interactive-base)
+// Use for: select options, list items, menu items
+// -----------------------------------------------------------------------------
+/**
+ * List Item Base - Interactive list/menu items
+ * @param {String} $padding - Item padding (default: 0.5rem 0.75rem)
+ * @example
+ *   .my-list-item { @include os-list-item-base(); }
+ */
+@mixin os-list-item-base($padding: 0.5rem 0.75rem) {
+  display: flex;
+  align-items: center;
+  padding: $padding;
+  font-size: 0.875rem;
+  color: var(--layout-content-text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+
+  &:hover:not(:disabled):not(.disabled) {
+    background-color: var(--layout-menu-hover);
+  }
+
+  &.highlighted {
+    background-color: rgba(var(--os-color-primary-rgb), 0.1);
+  }
+
+  &.selected:not(.disabled) {
+    background-color: rgba(var(--os-color-primary-rgb), 0.1);
+    color: var(--os-color-primary);
+  }
+
+  &:disabled,
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// Alias for backwards compatibility
+@mixin os-option-item() {
+  @include os-list-item-base();
+}
+
+// -----------------------------------------------------------------------------
+// Detail Row Styles (Label + Value)
+// Use for: info displays, detail panels, key-value pairs
+// -----------------------------------------------------------------------------
+@mixin os-detail-row($label-width: 140px) {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .label,
+  .detail-label {
+    flex: 0 0 $label-width;
+    font-weight: 500;
+    color: var(--layout-content-text-muted);
+    margin-right: 1rem;
+  }
+
+  .value,
+  .detail-value {
+    flex: 1;
+    color: var(--layout-content-text);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+
+    &.fw-bold {
+      font-weight: 600;
+    }
+
+    &.text-muted {
+      color: var(--layout-content-text-muted) !important;
+      font-family: monospace;
+      font-size: 0.8125rem;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Button Outline Styles
+// Use for: secondary actions, toggle buttons
+// -----------------------------------------------------------------------------
+@mixin os-btn-outline-primary() {
+  background-color: transparent;
+  border: 1px solid var(--os-color-primary);
+  color: var(--os-color-primary);
+  transition: all 0.15s ease-in-out;
+
+  &:hover:not(:disabled) {
+    background-color: var(--os-color-primary);
+    color: var(--os-color-primary-contrast);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--os-color-primary-rgb), 0.25);
+  }
+}
+
+@mixin os-btn-outline-secondary() {
+  background-color: transparent;
+  border: 1px solid var(--layout-content-text-muted);
+  color: var(--layout-content-text-muted);
+  transition: all 0.15s ease-in-out;
+
+  &:hover:not(:disabled) {
+    background-color: var(--layout-content-text-muted);
+    color: var(--layout-menu-bg);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Navigation Button Styles
+// Use for: calendar nav, pagination, carousel controls
+// -----------------------------------------------------------------------------
+@mixin os-nav-button($size: 28px) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $size;
+  height: $size;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: map.get(vars.$os-border-radius, 'medium');
+  color: var(--layout-content-text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+
+  &:hover {
+    background: var(--layout-menu-hover);
+    color: var(--layout-content-text);
+  }
+
+  &:active {
+    background: var(--layout-menu-hover);
+  }
+
+  svg {
+    width: $size * 0.43;
+    height: $size * 0.43;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Scrollbar Styles
+// Use for: scrollable containers, lists
+// -----------------------------------------------------------------------------
+@mixin os-scrollbar($width: 4px) {
+  scrollbar-width: thin;
+  scrollbar-color: var(--layout-content-border) transparent;
+
+  &::-webkit-scrollbar {
+    width: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--layout-content-border);
+    border-radius: calc($width / 2);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Calendar Grid Styles
+// Use for: datepicker days, month grids
+// -----------------------------------------------------------------------------
+@mixin os-calendar-day($size: 36px) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: $size;
+  padding: 0;
+  font-size: map.get(vars.$os-font-sizes, 'sm');
+  font-weight: 500;
+  color: var(--layout-content-text);
+  background: transparent;
+  border: none;
+  border-radius: map.get(vars.$os-border-radius, 'medium');
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  position: relative;
+
+  &:hover:not(:disabled) {
+    background: var(--layout-menu-hover);
+    color: var(--os-color-primary);
+  }
+
+  &.today:not(.selected) {
+    color: var(--os-color-primary);
+    font-weight: 600;
+  }
+
+  &.selected {
+    background: var(--os-color-primary);
+    color: var(--os-color-primary-contrast);
+    font-weight: 600;
+
+    &:hover {
+      background: var(--os-color-primary);
+      color: var(--os-color-primary-contrast);
+    }
+  }
+
+  &.disabled,
+  &.other-month {
+    color: var(--layout-content-text-muted);
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    &:hover {
+      background: transparent;
+      color: var(--layout-content-text-muted);
+    }
+  }
+}
+
+// ==============================================
+// ADDITIONAL LEVEL 2 MIXINS
+// ==============================================
+
+// -----------------------------------------------------------------------------
+// Panel Base Styles (Level 2 - inherits from os-surface-base)
+// Use for: panels with header and content areas
+// -----------------------------------------------------------------------------
+/**
+ * Panel Base - Panels with distinct header/content areas
+ * @param {String} $padding - Content padding (default: 1rem)
+ * @example
+ *   .my-panel { @include os-panel-base(); }
+ */
+@mixin os-panel-base($padding: 1rem) {
+  @include os-surface-base(--layout-content-bg, --layout-content-border, 0.5rem);
+
+  &__header {
+    padding: $padding;
+    border-bottom: 1px solid var(--layout-content-border);
+    font-weight: 600;
+    color: var(--layout-content-text);
+  }
+
+  &__content {
+    padding: $padding;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Overlay Base Styles (Level 2 - inherits from os-surface-base)
+// Use for: modal backdrops, loading overlays
+// -----------------------------------------------------------------------------
+/**
+ * Overlay Base - Full-screen overlays and backdrops
+ * @param {Number} $opacity - Backdrop opacity (default: 0.5)
+ * @example
+ *   .my-overlay { @include os-overlay-base(0.7); }
+ */
+@mixin os-overlay-base($opacity: 0.5) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1040;
+  background-color: rgba(0, 0, 0, $opacity);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// -----------------------------------------------------------------------------
+// Button Base Styles (Level 2 - inherits from os-surface-base + os-interactive-base)
+// Use for: all button variants
+// -----------------------------------------------------------------------------
+/**
+ * Button Base - Interactive buttons
+ * @param {Number} $height - Button height (default: 40px)
+ * @param {String} $padding - Button padding (default: 0.5rem 1rem)
+ * @example
+ *   .my-button { @include os-button-base(36px); }
+ */
+@mixin os-button-base($height: 40px, $padding: 0.5rem 1rem) {
+  @include os-surface-base(--os-color-primary, --os-color-primary-shade, 0.375rem);
+  @include os-interactive-base(0.15s);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: $height;
+  padding: $padding;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--os-color-primary-contrast);
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background-color: var(--os-color-primary-shade);
+    opacity: 1;
+  }
+
+  &:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(var(--os-color-primary-rgb), 0.25);
+  }
+}
+
+// Alias for os-nav-button -> os-icon-button-base
+/**
+ * Icon Button Base - Icon-only buttons
+ * @param {Number} $size - Button size (default: 32px)
+ * @example
+ *   .my-icon-btn { @include os-icon-button-base(40px); }
+ */
+@mixin os-icon-button-base($size: 32px) {
+  @include os-nav-button($size);
+}
+
+// -----------------------------------------------------------------------------
+// Spinner Base Styles (Level 2 - inherits from os-feedback-base)
+// Use for: loading spinners
+// -----------------------------------------------------------------------------
+/**
+ * Spinner Base - Loading spinner animation
+ * @param {Number} $size - Spinner size (default: 24px)
+ * @param {Number} $border-width - Border width (default: 2px)
+ * @example
+ *   .my-spinner { @include os-spinner-base(32px, 3px); }
+ */
+@mixin os-spinner-base($size: 24px, $border-width: 2px) {
+  width: $size;
+  height: $size;
+  border: $border-width solid var(--layout-content-border);
+  border-top-color: var(--os-color-primary);
+  border-radius: 50%;
+  animation: os-spin 0.8s linear infinite;
+
+  @keyframes os-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Alert Base Styles (Level 2 - inherits from os-feedback-base)
+// Use for: alert messages, notifications
+// -----------------------------------------------------------------------------
+/**
+ * Alert Base - Status alert messages
+ * @param {String} $variant - Color variant (success, danger, warning, info)
+ * @example
+ *   .my-alert { @include os-alert-base(danger); }
+ */
+@mixin os-alert-base($variant: 'info') {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.375rem;
+
+  @if $variant == 'success' {
+    background-color: rgba(var(--os-color-success-rgb), 0.1);
+    border: 1px solid var(--os-color-success);
+    color: var(--os-color-success-shade);
+  } @else if $variant == 'danger' {
+    background-color: rgba(var(--os-color-danger-rgb), 0.1);
+    border: 1px solid var(--os-color-danger);
+    color: var(--os-color-danger-shade);
+  } @else if $variant == 'warning' {
+    background-color: rgba(var(--os-color-warning-rgb), 0.1);
+    border: 1px solid var(--os-color-warning);
+    color: var(--os-color-warning-shade);
+  } @else {
+    background-color: rgba(var(--os-color-info-rgb), 0.1);
+    border: 1px solid var(--os-color-info);
+    color: var(--os-color-info-shade);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Badge Base Styles (Level 2 - inherits from os-feedback-base)
+// Use for: status badges, tags, labels
+// -----------------------------------------------------------------------------
+/**
+ * Badge Base - Small status indicators
+ * @param {String} $variant - Color variant (success, danger, warning, info, primary)
+ * @example
+ *   .my-badge { @include os-badge-base(success); }
+ */
+@mixin os-badge-base($variant: 'primary') {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+
+  @if $variant == 'success' {
+    background-color: rgba(var(--os-color-success-rgb), 0.1);
+    color: var(--os-color-success-shade);
+  } @else if $variant == 'danger' {
+    background-color: rgba(var(--os-color-danger-rgb), 0.1);
+    color: var(--os-color-danger-shade);
+  } @else if $variant == 'warning' {
+    background-color: rgba(var(--os-color-warning-rgb), 0.1);
+    color: var(--os-color-warning-shade);
+  } @else if $variant == 'info' {
+    background-color: rgba(var(--os-color-info-rgb), 0.1);
+    color: var(--os-color-info-shade);
+  } @else {
+    background-color: rgba(var(--os-color-primary-rgb), 0.1);
+    color: var(--os-color-primary-shade);
+  }
+}
+
+// ==============================================
+// TABLE MIXINS (Level 2 + Level 3)
+// ==============================================
+
+// -----------------------------------------------------------------------------
+// Table Base Styles (Level 2 - inherits from os-surface-base)
+// Use for: table containers
+// -----------------------------------------------------------------------------
+/**
+ * Table Base - Table container with theme support
+ * @example
+ *   .my-table { @include os-table-base(); }
+ */
+@mixin os-table-base() {
+  @include os-surface-base(--layout-content-bg, --layout-content-border, 0.375rem);
+
+  width: 100%;
+  overflow: hidden;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Table Sortable Base (Level 2 - inherits from os-interactive-base)
+// Use for: sortable table headers
+// -----------------------------------------------------------------------------
+/**
+ * Table Sortable Base - Sortable column headers
+ * @example
+ *   .sortable-header { @include os-table-sortable-base(); }
+ */
+@mixin os-table-sortable-base() {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease-in-out;
+
+  &:hover {
+    background-color: var(--layout-menu-hover);
+  }
+
+  .sort-icon {
+    margin-left: 0.25rem;
+    opacity: 0.5;
+    transition: opacity 0.15s ease-in-out;
+  }
+
+  &.sorted {
+    .sort-icon {
+      opacity: 1;
+      color: var(--os-color-primary);
+    }
+  }
+
+  &.sorted-asc .sort-icon {
+    transform: rotate(0deg);
+  }
+
+  &.sorted-desc .sort-icon {
+    transform: rotate(180deg);
+  }
+}
+
+// ==============================================
+// LEVEL 3: TABLE SUB-COMPONENT MIXINS
+// ==============================================
+
+// -----------------------------------------------------------------------------
+// Table Header Base (Level 3 - inherits from os-table-base)
+// Use for: table header rows
+// -----------------------------------------------------------------------------
+/**
+ * Table Header Base - Table header row styling
+ * @example
+ *   thead { @include os-table-header-base(); }
+ */
+@mixin os-table-header-base() {
+  background-color: var(--layout-frame-bg);
+
+  th {
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: var(--layout-content-text);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--layout-content-border);
+    white-space: nowrap;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Table Row Base (Level 3 - inherits from os-table-base)
+// Use for: table body rows
+// -----------------------------------------------------------------------------
+/**
+ * Table Row Base - Table body row styling with hover/selected states
+ * @example
+ *   tbody tr { @include os-table-row-base(); }
+ */
+@mixin os-table-row-base() {
+  border-bottom: 1px solid var(--layout-content-border);
+  transition: background-color 0.15s ease-in-out;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: var(--layout-menu-hover);
+  }
+
+  &.selected {
+    background-color: rgba(var(--os-color-primary-rgb), 0.08);
+  }
+
+  &.clickable {
+    cursor: pointer;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Table Cell Base (Level 3 - inherits from os-table-base)
+// Use for: table cells
+// -----------------------------------------------------------------------------
+/**
+ * Table Cell Base - Table cell styling
+ * @param {String} $padding - Cell padding (default: 0.75rem 1rem)
+ * @example
+ *   td { @include os-table-cell-base(); }
+ */
+@mixin os-table-cell-base($padding: 0.75rem 1rem) {
+  padding: $padding;
+  font-size: 0.875rem;
+  color: var(--layout-content-text);
+  vertical-align: middle;
+
+  &.text-muted {
+    color: var(--layout-content-text-muted);
+  }
+
+  &.text-right {
+    text-align: right;
+  }
+
+  &.text-center {
+    text-align: center;
+  }
+
+  &.fw-bold {
+    font-weight: 600;
+  }
+
+  &.truncate {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Table Actions Base (Level 3 - inherits from os-table-base)
+// Use for: table action button columns
+// -----------------------------------------------------------------------------
+/**
+ * Table Actions Base - Action buttons column styling
+ * @example
+ *   .actions-column { @include os-table-actions-base(); }
+ */
+@mixin os-table-actions-base() {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-end;
+
+  .action-btn {
+    @include os-icon-button-base(28px);
+    opacity: 0.7;
+    transition: opacity 0.15s ease-in-out;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
 }

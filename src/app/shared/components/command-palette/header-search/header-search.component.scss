@@ -1,0 +1,183 @@
+@use "sass:map";
+@use "../../../../../scss/variables" as vars;
+@use "../../../../../scss/mixins" as mixins;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.os-header-search {
+  &__desktop {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  &__input-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    padding: 0 map.get(vars.$os-spacing, '4');
+    background: var(--layout-search-bg);
+    border: 1px solid transparent;
+    border-radius: map.get(vars.$os-border-radius, 'large');
+    transition: all 0.2s ease;
+    gap: map.get(vars.$os-spacing, '2');
+
+    &:focus-within {
+      background: var(--layout-search-bg-focus);
+      border-color: var(--layout-search-border-focus);
+      box-shadow: 0 0 0 2px rgba(var(--os-color-primary-rgb), 0.2);
+    }
+  }
+
+  &__icon {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    color: var(--layout-frame-icon);
+    flex-shrink: 0;
+
+    // Ensure SVG inside inherits color
+    svg {
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+  }
+
+  &__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    font-family: var(--os-font-family);
+    color: var(--os-color-text-primary);
+    min-width: 0;
+
+    &::placeholder {
+      color: var(--layout-search-placeholder);
+    }
+  }
+
+  &__clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background: var(--os-color-light);
+    border-radius: map.get(vars.$os-border-radius, 'small');
+    cursor: pointer;
+    color: var(--os-color-text-secondary);
+    flex-shrink: 0;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: var(--os-color-border);
+    }
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  &__shortcut {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 22px;
+    padding: 0 6px;
+    font-family: var(--os-font-family);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--layout-search-placeholder);
+    background: var(--layout-frame-bg);
+    border: 1px solid var(--layout-search-border-focus);
+    border-radius: map.get(vars.$os-border-radius, 'small');
+    flex-shrink: 0;
+  }
+
+  &__mobile {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: var(--layout-search-bg);
+    border-radius: map.get(vars.$os-border-radius, 'medium');
+    cursor: pointer;
+    color: var(--layout-frame-icon);
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: var(--layout-search-bg-focus);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+// Mobile: show icon button, hide full input
+@include mixins.tablet {
+  .os-header-search {
+    &__desktop {
+      display: none;
+    }
+
+    &__mobile {
+      display: flex;
+    }
+  }
+}
+
+// Dark theme
+:host-context(.layout--dark) {
+  .os-header-search {
+    &__input {
+      color: var(--layout-search-text);
+
+      &::placeholder {
+        color: var(--layout-search-placeholder);
+      }
+    }
+
+    &__clear {
+      background: var(--os-color-dark-shade);
+
+      &:hover {
+        background: var(--os-color-dark-tint);
+      }
+    }
+
+    &__shortcut {
+      border-color: var(--os-color-dark-tint);
+    }
+  }
+}
+
+// RTL support
+:host-context(.layout--rtl) {
+  .os-header-search {
+    &__input-wrapper {
+      flex-direction: row-reverse;
+    }
+
+    &__input {
+      text-align: right;
+    }
+  }
+}

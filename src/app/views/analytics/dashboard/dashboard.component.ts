@@ -83,6 +83,15 @@ export class DashboardComponent implements OnInit {
       });
     });
 
+    // React to URL fragment changes (for deep linking from global search)
+    effect(() => {
+      this.route.fragment.subscribe(fragment => {
+        if (fragment && this.tabs().find(t => t.id === fragment)) {
+          this.activeTab.set(fragment as DashboardTab['id']);
+        }
+      });
+    });
+
     // React to account readiness - trigger period update to reload data
     effect(() => {
       const accountReady = this.isAccountReady();

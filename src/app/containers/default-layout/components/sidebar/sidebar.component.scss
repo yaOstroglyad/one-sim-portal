@@ -5,24 +5,36 @@
 
 .sidebar {
   position: fixed;
-  top: 0;
+  top: vars.$layout-header-height;
   left: 0;
-  width: 256px;
-  height: 100vh;
-  border-right: 3px solid var(--os-color-primary-border);
-  box-shadow: 0 0 12px var(--os-color-medium-shade);
+  width: vars.$layout-sidebar-width;
+  height: calc(100vh - vars.$layout-header-height);
+  background: var(--layout-frame-bg);
+  color: var(--layout-frame-text);
   display: flex;
   flex-direction: column;
   z-index: 1000;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease, color 0.3s ease;
+
+  // Inverted corner at right edge of sidebar
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: vars.$layout-content-radius;
+    height: vars.$layout-content-radius;
+    background: radial-gradient(farthest-side at bottom right, transparent 100%, var(--layout-frame-bg) 100%);
+    transform: translateX(100%);
+    z-index: 1;
+  }
 
   &--collapsed {
-    width: 56px;
+    width: vars.$layout-sidebar-collapsed;
 
     // Hover expand functionality
     &:hover {
-      width: 256px;
+      width: vars.$layout-sidebar-width;
 
       // Show text and badges on hover
       .sidebar__nav-text,
@@ -35,6 +47,11 @@
       // Show children on hover if parent is expanded
       .sidebar__nav-children {
         display: block;
+
+        // Restore indent line visibility on hover when expanded
+        &--expanded::before {
+          opacity: 1;
+        }
       }
 
       // Show skeleton text on hover
@@ -58,27 +75,22 @@
     }
   }
 
-  &--dark {
-    background: var(--os-sidebar-bg-dark);
-    border-right: 3px solid var(--os-color-primary-border);
-    color: var(--os-sidebar-text-dark);
-  }
-
   &--rtl {
     right: 0;
     left: auto;
-    border-right: none;
-    border-left: 3px solid var(--os-color-primary-border);
-    box-shadow: 0 0 12px var(--os-color-medium-shade);
 
-    &.sidebar--dark {
-      border-left: 3px solid var(--os-color-primary-border);
+    // Inverted corner for RTL - at left edge
+    &::after {
+      right: auto;
+      left: 0;
+      transform: translateX(-100%);
+      background: radial-gradient(farthest-side at bottom left, transparent 100%, var(--layout-frame-bg) 100%);
     }
   }
 
   // Brand Section
   &__brand {
-    position: relative; // Add this for skeleton positioning
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -91,7 +103,14 @@
     &-narrow {
       max-width: 100%;
       height: auto;
+      max-height: 40px;
       object-fit: contain;
+      transition: filter 0.3s ease;
+    }
+
+    // Apply filter only when no dark variant is provided (controlled by component)
+    &--use-filter {
+      filter: var(--layout-logo-filter);
     }
 
     &-full {
@@ -118,12 +137,8 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.2);
+      background: var(--layout-frame-border);
       border-radius: 2px;
-    }
-
-    .sidebar--dark &::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
     }
 
     &-list {
@@ -141,7 +156,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 0.75rem 1rem;
-      color: var(--os-sidebar-text);
+      color: var(--layout-frame-text);
       text-decoration: none;
       border: none;
       background: none;
@@ -152,13 +167,19 @@
       position: relative;
 
       &:hover {
-        background: var(--os-sidebar-hover);
+        background: var(--layout-frame-bg-hover-alpha);
         text-decoration: none;
       }
 
       &--active {
-        color: var(--os-sidebar-active);
-        background: transparent;
+        color: var(--os-color-primary);
+        background: var(--layout-frame-bg-active);
+
+        // When parent is expanded with active child, remove parent background
+        // to avoid large rectangle effect
+        &.sidebar__nav-link--expanded {
+          background: transparent;
+        }
       }
 
       &--child {
@@ -210,11 +231,16 @@
       width: 20px;
       height: 20px;
       flex-shrink: 0;
+      color: var(--layout-frame-icon);
 
       svg {
         width: 20px;
         height: 20px;
         fill: currentColor;
+      }
+
+      .sidebar__nav-link--active & {
+        color: var(--os-color-primary);
       }
     }
 
@@ -232,6 +258,7 @@
       height: 16px;
       flex-shrink: 0;
       transition: transform 0.2s ease;
+      color: var(--layout-frame-icon);
 
       svg {
         width: 16px;
@@ -285,9 +312,33 @@
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease;
+      position: relative;
+
+      // Indent guide line (vertical bar showing nesting level)
+      &::before {
+        content: '';
+        position: absolute;
+        top: map.get(vars.$os-spacing, '2');
+        bottom: map.get(vars.$os-spacing, '2');
+        left: 1.5rem;
+        width: 2px;
+        background: var(--os-color-primary);
+        border-radius: 1px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+
+        .sidebar--rtl & {
+          left: auto;
+          right: 1.5rem;
+        }
+      }
 
       &--expanded {
         max-height: 1000px;
+
+        &::before {
+          opacity: 1;
+        }
       }
     }
 
@@ -314,12 +365,8 @@
   // Divider
   &__divider {
     height: 1px;
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--layout-frame-border);
     margin: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '4');
-
-    .sidebar--dark & {
-      background: rgba(255, 255, 255, 0.1);
-    }
   }
 
   // Toggle Button
@@ -332,11 +379,16 @@
     width: 100%;
     padding: 0;
     border: none;
-    background: var(--os-color-primary-border);
+    border-top: 1px solid var(--layout-frame-border);
+    background: var(--os-color-primary);
     cursor: pointer;
-    color: var(--os-sidebar-text);
+    color: var(--os-color-primary-contrast);
     transition: all 0.2s ease;
     overflow: hidden;
+
+    &:hover {
+      background: var(--os-color-primary-shade);
+    }
 
     // SVG arrow icon using ::before
     &::before {
@@ -350,30 +402,28 @@
       background-repeat: no-repeat;
       background-position: center;
       transition: transform 0.2s ease;
-      transform: rotate(90deg); // Point left by default (chevron-down rotated 90deg = chevron-left)
+      transform: rotate(90deg);
+      opacity: 1;
+      filter: brightness(0);
     }
 
     .sidebar--collapsed & {
       &::before {
-        transform: rotate(-90deg); // Point right when collapsed (chevron-down rotated -90deg = chevron-right)
+        transform: rotate(-90deg);
       }
-    }
-
-    .sidebar--dark & {
-      border-top-color: rgba(255, 255, 255, 0.1);
     }
 
     .sidebar--rtl & {
       justify-content: start;
 
       &::before {
-        transform: rotate(-90deg); // Point right in RTL (chevron-down rotated -90deg = chevron-right)
+        transform: rotate(-90deg);
       }
     }
 
     .sidebar--rtl.sidebar--collapsed & {
       &::before {
-        transform: rotate(90deg); // Point left when collapsed in RTL (chevron-down rotated 90deg = chevron-left)
+        transform: rotate(90deg);
       }
     }
   }
@@ -392,14 +442,10 @@
     &-icon {
       width: 20px;
       height: 20px;
-      background: rgba(0, 0, 0, 0.1);
+      background: var(--layout-frame-border);
       border-radius: map.get(vars.$os-border-radius, 'small');
       margin-right: map.get(vars.$os-spacing, '3');
       animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
-
-      .sidebar--dark & {
-        background: rgba(255, 255, 255, 0.1);
-      }
 
       .sidebar--rtl & {
         margin-right: 0;
@@ -410,13 +456,9 @@
     &-text {
       flex: 1;
       height: 14px;
-      background: rgba(0, 0, 0, 0.1);
+      background: var(--layout-frame-border);
       border-radius: map.get(vars.$os-border-radius, 'small');
       animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
-
-      .sidebar--dark & {
-        background: rgba(255, 255, 255, 0.1);
-      }
     }
   }
 }
@@ -424,22 +466,40 @@
 // Responsive behavior
 @media (max-width: 768px) {
   .sidebar {
-    left: -260px; // Hide sidebar off-screen (256px width + 3px border + 1px safe margin)
-    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1001; // Above overlay
+    top: vars.$layout-header-height;
+    left: calc(-1 * vars.$layout-sidebar-width - 4px);
+    height: calc(100vh - vars.$layout-header-height);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+    z-index: 1001;
+
+    // Hide inverted corner on mobile (sidebar slides off-screen)
+    &::after {
+      display: none;
+    }
+
+    // Enlarged toggle button on mobile
+    .sidebar__toggle {
+      height: 56px;
+
+      &::before {
+        width: 24px;
+        height: 24px;
+      }
+    }
   }
 
   .sidebar.sidebar--rtl {
     left: auto;
-    right: -260px; // Hide sidebar off-screen in RTL (256px width + 3px border + 1px safe margin)
+    right: calc(-1 * vars.$layout-sidebar-width - 4px);
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
   }
 
   .sidebar.sidebar--rtl.sidebar--mobile-open {
-    right: 260px !important; // Show sidebar in RTL
+    right: 0 !important;
   }
 
   .sidebar.sidebar--mobile-open {
-    left: 260px !important; // Show sidebar - higher specificity
+    left: 0 !important;
   }
 }
 
@@ -466,6 +526,11 @@
 
   .sidebar__nav-children {
     display: none;
+
+    // Hide indent guide when collapsed
+    &::before {
+      opacity: 0;
+    }
   }
 
   .sidebar__skeleton-text {
@@ -496,11 +561,7 @@
 
   &-full,
   &-narrow {
-    background: linear-gradient(90deg,
-      rgba(var(--os-color-medium-rgb), 0.1) 25%,
-      rgba(var(--os-color-medium-rgb), 0.2) 50%,
-      rgba(var(--os-color-medium-rgb), 0.1) 75%
-    );
+    background: var(--layout-frame-border);
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s infinite;
     border-radius: 4px;
@@ -529,14 +590,17 @@
 // Brand image transitions
 .sidebar__brand-full,
 .sidebar__brand-narrow {
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out, filter 0.3s ease;
 }
 
 @keyframes skeleton-loading {
   0% {
-    background-position: -200% 0;
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
   }
   100% {
-    background-position: 200% 0;
+    opacity: 0.5;
   }
 }

@@ -146,7 +146,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--os-color-medium);
+    background: var(--layout-content-text-muted);
     color: white;
     font-weight: 600;
     text-transform: uppercase;
@@ -193,11 +193,11 @@
     }
     
     &--offline {
-      background: var(--os-color-medium);
+      background: var(--layout-content-text-muted);
     }
 
     .layout--dark & {
-      border-color: var(--os-color-dark);
+      border-color: var(--layout-content-bg);
     }
   }
 }

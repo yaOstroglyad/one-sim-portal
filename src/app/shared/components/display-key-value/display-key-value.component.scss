@@ -1,15 +1,14 @@
+@use "../../../../scss/mixins" as mixins;
+
 .key-value-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  @include mixins.flex-column(8px);
 }
 
 .key-value-entry {
-  display: flex;
-  justify-content: space-between;
+  @include mixins.flex-between();
   align-items: flex-start;
   padding: 8px 0;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--layout-content-border);
 }
 
 .key-value-entry:last-child {
@@ -19,13 +18,13 @@
 .key {
   flex: 0 0 25%;
   font-weight: 600;
-  color: #3f51b5;
+  color: var(--os-color-primary);
   word-break: break-word;
 }
 
 .value {
   flex: 1;
-  color: #616161;
+  color: var(--layout-content-text-muted);
   word-break: break-word;
   margin-left: 16px;
 }
@@ -42,7 +41,7 @@ li {
 .nested-object-card {
   margin-top: 8px;
   padding: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--layout-frame-bg);
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }

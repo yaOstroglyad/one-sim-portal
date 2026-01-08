@@ -35,7 +35,7 @@
 
             c-icon {
               font-size: 1.5rem;
-              color: #fff;
+              color: var(--os-color-primary-contrast);
             }
 
             &.primary {
@@ -65,7 +65,7 @@
 
             .kpi-label {
               font-size: 0.875rem;
-              color: var(--os-color-text-secondary, #6b7280);
+              color: var(--layout-content-text-muted);
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
@@ -74,7 +74,7 @@
             .kpi-value {
               font-size: 1.5rem;
               font-weight: 600;
-              color: var(--os-color-text-primary, #1f2937);
+              color: var(--layout-content-text);
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
@@ -112,7 +112,7 @@
     justify-content: center;
     padding: 3rem;
     text-align: center;
-    color: var(--os-color-text-secondary, #6b7280);
+    color: var(--layout-content-text-muted);
 
     c-icon {
       margin-bottom: 1rem;

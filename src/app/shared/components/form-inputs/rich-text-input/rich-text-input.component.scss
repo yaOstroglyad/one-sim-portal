@@ -1,3 +1,5 @@
+@use "../../../../../scss/mixins" as mixins;
+
 .rich-text-container {
   display: flex;
   flex-direction: column;
@@ -8,46 +10,27 @@
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--layout-content-text);
 }
 
+// Toolbar - uses surface base
 .rich-text-toolbar {
+  @include mixins.os-surface-base(--layout-frame-bg, --layout-content-border, 0);
   display: flex;
   gap: 4px;
-  background-color: #f5f5f5;
   padding: 4px 8px;
-  border: 1px solid #e0e0e0;
   border-bottom: none;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
 
+// Toolbar button - uses icon button base
 .toolbar-button {
-  background: none;
-  border: none;
-  color: rgba(0, 0, 0, 0.6);
-  cursor: pointer;
-  border-radius: 4px;
+  @include mixins.os-icon-button-base(28px);
   padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease-in-out;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: var(--os-color-primary, #f9a743);
-  }
-
-  &:active {
-    background-color: rgba(0, 0, 0, 0.1);
-    transform: scale(0.95);
-  }
-
-  &:disabled {
-    color: rgba(0, 0, 0, 0.3);
-    cursor: not-allowed;
-    transform: none;
+    color: var(--os-color-primary);
   }
 
   .material-icons {
@@ -55,32 +38,32 @@
   }
 }
 
+// Editor area - uses input base concepts
 .rich-text-editor {
+  @include mixins.os-surface-base(--layout-input-bg, --layout-content-border, 0);
   min-height: 100px;
-  border: 1px solid #e0e0e0;
   border-radius: 0 0 4px 4px;
   padding: 12px;
   overflow-y: auto;
-  background-color: white;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--layout-input-text);
   font-size: 14px;
   line-height: 1.5;
 
   &:focus {
     outline: none;
-    border-color: var(--os-color-primary, #f9a743);
+    border-color: var(--os-color-primary);
   }
 
   &.disabled {
-    background-color: #f5f5f5;
-    color: rgba(0, 0, 0, 0.38);
+    background-color: var(--layout-frame-bg);
+    color: var(--layout-content-text-muted);
     cursor: not-allowed;
     user-select: none;
   }
 
   &[placeholder]:empty:before {
     content: attr(placeholder);
-    color: rgba(0, 0, 0, 0.38);
+    color: var(--layout-input-placeholder);
     pointer-events: none;
   }
 }
@@ -93,10 +76,10 @@
 
 .char-counter {
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--layout-content-text-muted);
 
   &.limit-reached {
-    color: #f44336;
+    color: var(--os-color-danger);
     font-weight: 500;
   }
 }
@@ -121,13 +104,13 @@
   }
 }
 
+// HTML dialog - uses card base
 .html-dialog {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 0;
+  @include mixins.os-card-base(0, 4px);
+  background-color: var(--layout-menu-bg);
   width: 400px;
   max-width: 90vw;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 
   &::backdrop {
     background-color: rgba(0, 0, 0, 0.3);
@@ -142,16 +125,19 @@
     margin-bottom: 16px;
     font-size: 18px;
     font-weight: 500;
+    color: var(--layout-content-text);
   }
 
   textarea {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--layout-content-border);
     border-radius: 4px;
     font-family: monospace;
     resize: vertical;
     min-height: 100px;
+    background-color: var(--layout-input-bg);
+    color: var(--layout-input-text);
   }
 
   .html-dialog-buttons {
@@ -166,18 +152,19 @@
       border-radius: 4px;
       cursor: pointer;
       font-weight: 500;
-      background-color: #f0f0f0;
+      background-color: var(--layout-frame-bg);
+      color: var(--layout-content-text);
 
       &:hover {
-        background-color: #e0e0e0;
+        background-color: var(--layout-menu-hover);
       }
 
       &.primary {
-        background-color: var(--os-color-primary, #f9a743);
-        color: white;
+        background-color: var(--os-color-primary);
+        color: var(--os-color-primary-contrast);
 
         &:hover {
-          background-color: color-mix(in srgb, #f9a743 90%, black);
+          background-color: var(--os-color-primary-shade);
         }
       }
     }

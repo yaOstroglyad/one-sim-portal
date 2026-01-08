@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "../../../../scss/variables" as vars;
 @use "../../../../scss/mixins" as mixins;
 
@@ -27,7 +28,7 @@
 
 .reports-description {
   font-size: 0.875rem;
-  color: var(--os-color-text-secondary);
+  color: var(--layout-content-text-muted);
   margin: 0;
   line-height: 1.5;
 }
@@ -37,7 +38,7 @@
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid var(--os-color-border);
+  border-bottom: 2px solid var(--layout-content-border);
 
   .tab-button {
     display: flex;
@@ -46,15 +47,23 @@
     padding: 1rem 1.5rem;
     border: none;
     background: transparent;
-    color: var(--os-color-text-secondary);
+    color: var(--layout-content-text-muted);
     font-size: 0.9375rem;
     font-weight: 500;
     cursor: pointer;
     position: relative;
     transition: all 0.2s ease;
 
+    app-icon {
+      color: inherit;
+
+      ::ng-deep svg {
+        fill: currentColor;
+      }
+    }
+
     &:hover:not(.disabled) {
-      color: var(--os-color-text-primary);
+      color: var(--layout-content-text);
     }
 
     &.active {
@@ -79,30 +88,20 @@
   }
 }
 
-// Action Buttons (reuses dashboard button pattern)
+// Action Buttons - matches period-selector visual style
 .action-buttons {
+  @include mixins.os-surface-base(--layout-frame-bg, --layout-content-border, map.get(vars.$os-border-radius, 'large'));
   display: flex;
-  gap: 0.5rem;
+  gap: map.get(vars.$os-spacing, '1');
+  padding: map.get(vars.$os-spacing, '1');
+  box-shadow: map.get(vars.$os-shadows, 'sm');
 
   .btn-icon {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--os-color-border);
-    background-color: var(--os-color-white);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    @include mixins.os-icon-button-base(36px);
+    border-radius: map.get(vars.$os-border-radius, 'medium');
 
     &:hover:not(:disabled) {
-      background-color: var(--os-color-bg-hover);
-      border-color: var(--os-color-primary);
-
-      app-icon {
-        color: var(--os-color-primary);
-      }
+      background: var(--layout-menu-hover);
     }
 
     &:disabled {
@@ -111,8 +110,11 @@
     }
 
     app-icon {
-      color: var(--os-color-text-secondary);
-      transition: color 0.2s ease;
+      color: inherit;
+
+      ::ng-deep svg {
+        fill: currentColor;
+      }
     }
   }
 }
@@ -136,7 +138,7 @@
   justify-content: center;
   min-height: 400px;
   text-align: center;
-  background-color: var(--os-color-white);
+  background-color: var(--layout-menu-bg);
   border-radius: 12px;
   padding: 3rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -150,13 +152,13 @@
   h3 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--os-color-text-primary);
+    color: var(--layout-content-text);
     margin: 0 0 0.75rem 0;
   }
 
   p {
     font-size: 1rem;
-    color: var(--os-color-text-secondary);
+    color: var(--layout-content-text-muted);
     margin: 0;
     max-width: 500px;
   }

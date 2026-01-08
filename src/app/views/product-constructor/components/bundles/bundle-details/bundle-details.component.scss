@@ -8,19 +8,19 @@
     h3 {
       font-size: 1.5rem;
       font-weight: 600;
-      color: var(--os-color-dark);
+      color: var(--layout-content-text);
       margin: 0 0 0.5rem 0;
     }
 
     h4 {
       font-size: 1.125rem;
       font-weight: 600;
-      color: var(--os-color-dark);
+      color: var(--layout-content-text);
       margin: 0 0 1rem 0;
     }
 
     .bundle-description {
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
       margin: 0;
       line-height: 1.5;
     }
@@ -30,21 +30,20 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
-    
+
+    // Usage unit card - uses card base
     .usage-unit-card {
+      @include mixins.os-card-base(1rem, 0.5rem);
+      background: var(--layout-frame-bg);
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 1rem;
-      background: var(--os-color-light);
-      border-radius: 0.5rem;
-      border: 1px solid var(--os-color-light-shade);
       transition: all 0.2s ease;
 
       &:hover {
         border-color: var(--os-color-primary);
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
       &[data-type="data"] {
@@ -84,13 +83,13 @@
         .unit-value {
           font-size: 1.25rem;
           font-weight: 600;
-          color: var(--os-color-dark);
+          color: var(--layout-content-text);
           margin-bottom: 0.25rem;
         }
 
         .unit-type {
           font-size: 0.875rem;
-          color: var(--os-color-medium);
+          color: var(--layout-content-text-muted);
           text-transform: capitalize;
         }
       }
@@ -109,21 +108,24 @@
 
       .info-label {
         font-size: 0.875rem;
-        color: var(--os-color-medium);
+        color: var(--layout-content-text-muted);
         font-weight: 500;
       }
 
       .info-value {
         font-size: 1rem;
-        color: var(--os-color-dark);
+        color: var(--layout-content-text);
       }
 
+      // Status badge - uses badge base styles
       .status-badge {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         padding: 0.25rem 0.75rem;
-        border-radius: 0.25rem;
         font-size: 0.875rem;
         font-weight: 500;
+        border-radius: 0.25rem;
+        white-space: nowrap;
 
         &.active {
           background: rgba(var(--os-color-success-rgb), 0.1);
@@ -132,35 +134,11 @@
         }
 
         &.inactive {
-          background: rgba(var(--os-color-medium-rgb), 0.1);
-          color: var(--os-color-medium);
-          border: 1px solid var(--os-color-medium);
+          background: var(--layout-frame-bg);
+          color: var(--layout-content-text-muted);
+          border: 1px solid var(--layout-content-border);
         }
       }
-    }
-  }
-}
-
-// Dark theme support
-:host-context(.dark-theme) {
-  .bundle-details {
-    .detail-section {
-      h3, h4 {
-        color: var(--os-color-light);
-      }
-    }
-
-    .usage-units-grid .usage-unit-card {
-      background: rgba(0, 0, 0, 0.2);
-      border-color: rgba(255, 255, 255, 0.1);
-
-      .unit-info .unit-value {
-        color: var(--os-color-light);
-      }
-    }
-
-    .info-grid .info-item .info-value {
-      color: var(--os-color-light);
     }
   }
 }

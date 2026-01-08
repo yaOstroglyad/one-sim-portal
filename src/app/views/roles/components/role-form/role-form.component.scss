@@ -1,5 +1,6 @@
 @use "../../../../../scss/variables" as vars;
 @use "../../../../../scss/utilities" as utils;
+@use "../../../../../scss/mixins" as mixins;
 
 .role-form {
   padding: 0;
@@ -15,17 +16,17 @@
   .form-label {
     font-weight: 500;
     margin-bottom: 0.5rem;
-    color: var(--cui-body-color);
+    color: var(--layout-content-text);
 
     &.required::after {
       content: ' *';
-      color: var(--cui-danger);
+      color: var(--os-color-danger);
     }
   }
 
   .form-control {
     &.is-invalid {
-      border-color: var(--cui-danger);
+      border-color: var(--os-color-danger);
       box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
     }
   }
@@ -35,13 +36,13 @@
     width: 100%;
     margin-top: 0.25rem;
     font-size: 0.875rem;
-    color: var(--cui-danger);
+    color: var(--os-color-danger);
   }
 
   .form-text {
     margin-top: 0.25rem;
     font-size: 0.875rem;
-    color: var(--cui-secondary);
+    color: var(--layout-content-text-muted);
   }
 
   textarea.form-control {

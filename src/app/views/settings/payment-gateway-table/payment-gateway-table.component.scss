@@ -1,32 +1,48 @@
 @use "../../../../scss/custom";
+@use "../../../../scss/mixins" as mixins;
+
+// ==============================================
+// BADGE STYLES
+// ==============================================
 
 .primary-badge {
-  background: #0083e1;
+  background: var(--os-color-primary);
+  color: var(--os-color-primary-contrast);
 }
 
 .active-badge {
-  background: #55a961;
+  background-color: var(--os-color-success);
+  color: var(--os-color-success-contrast);
 }
 
 .disabled-badge {
-  background: #909190;
+  background-color: var(--layout-content-text-muted);
+  color: white;
 }
 
+// ==============================================
+// ADMIN MESSAGE - uses alert base
+// ==============================================
+
 .admin-account-message {
+  @include mixins.os-alert-base(danger);
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 16px;
-  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--layout-content-text);
   border-radius: 4px;
-  color: rgba(0, 0, 0, 0.87);
 
   mat-icon {
     font-size: 24px;
     width: 24px;
     height: 24px;
+    color: var(--os-color-danger);
   }
 }
+
+// ==============================================
+// ACCOUNT SELECTOR
+// ==============================================
 
 .account-selector {
   .helper-text {
@@ -34,8 +50,8 @@
     align-items: center;
     gap: 8px;
     margin-top: 8px;
-    color: rgba(0, 0, 0, 0.6);
-    
+    color: var(--layout-content-text-muted);
+
     mat-icon {
       font-size: 18px;
       width: 18px;
@@ -44,39 +60,27 @@
   }
 }
 
+// ==============================================
+// BADGE DISPLAY
+// ==============================================
+
 .badge-display {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.active-badge {
-  background-color: #4caf50;
-  color: white;
-}
-
-.primary-badge {
-  background-color: #2196f3;
-  color: white;
-}
-
-.disabled-badge {
-  background-color: #9e9e9e;
-  color: white;
-}
+// ==============================================
+// LOADING SPINNER - uses spinner base
+// ==============================================
 
 .loading-spinner {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+  @include mixins.os-spinner-base(14px, 2px);
   margin-right: 0.5rem;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

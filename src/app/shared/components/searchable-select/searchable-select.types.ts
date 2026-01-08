@@ -10,6 +10,7 @@ export interface SearchableSelectConfig {
   searchPlaceholder?: string;
   noResultsText?: string;
   clearable?: boolean;
+  clearOptionLabel?: string;
   disabled?: boolean;
   multiple?: boolean;
   maxHeight?: string;

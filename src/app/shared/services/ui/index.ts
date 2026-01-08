@@ -11,3 +11,4 @@ export * from './language.service';
 export * from './theme.service';
 export * from './active-theme.service';
 export * from './notification.service';
+export * from './page-layout.service';

@@ -6,45 +6,43 @@
   display: block;
 }
 
+// Period selector - uses surface base with contrasting background
 .period-selector {
+  @include mixins.os-surface-base(--layout-frame-bg, --layout-content-border, map.get(vars.$os-border-radius, 'large'));
   display: flex;
-  gap: map.get(vars.$os-spacing, '1'); // 4px
-  background-color: var(--os-color-primary-white);
-  padding: map.get(vars.$os-spacing, '1'); // 4px
-  border-radius: map.get(vars.$os-border-radius, 'lg'); // 8px
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  gap: map.get(vars.$os-spacing, '1');
+  padding: map.get(vars.$os-spacing, '1');
+  box-shadow: map.get(vars.$os-shadows, 'sm');
 
+  // Period button - uses list item base
   .period-btn {
-    padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '4'); // 8px 16px
-    border: none;
-    background: transparent;
-    color: var(--os-color-text-secondary);
-    font-size: map.get(vars.$os-font-sizes, 'sm'); // 0.875rem
+    @include mixins.os-list-item-base(map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '4'));
+    font-size: map.get(vars.$os-font-sizes, 'sm');
     font-weight: 500;
-    border-radius: map.get(vars.$os-border-radius, 'md'); // 6px
-    cursor: pointer;
-    transition: all 0.2s ease;
+    border-radius: map.get(vars.$os-border-radius, 'medium');
     white-space: nowrap;
 
-    &:hover {
-      background-color: var(--os-color-gray-100);
-      color: var(--os-color-text-primary);
+    // Non-active hover - uses theme-aware frame hover color
+    &:not(.active):hover:not(:disabled):not(.disabled) {
+      background-color: var(--layout-frame-bg-hover);
     }
 
-    &.active {
+    // Active state - must override mixin hover styles
+    &.active,
+    &.active:hover,
+    &.active:hover:not(:disabled):not(.disabled) {
       background-color: var(--os-color-primary);
-      color: var(--os-color-primary-white);
+      color: var(--os-color-primary-contrast);
     }
   }
 }
 
-// Custom Date Picker
+// Custom Date Picker - uses card base
 .custom-date-picker {
-  margin-top: map.get(vars.$os-spacing, '4'); // 16px
-  padding: map.get(vars.$os-spacing, '4'); // 16px
-  background-color: var(--os-color-primary-white);
-  border-radius: map.get(vars.$os-border-radius, 'lg'); // 8px
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  @include mixins.os-card-base(map.get(vars.$os-spacing, '4'), map.get(vars.$os-border-radius, 'large'));
+  background-color: var(--layout-menu-bg);
+  margin-top: map.get(vars.$os-spacing, '4');
+  box-shadow: map.get(vars.$os-shadows, 'sm');
 
   .date-inputs {
     display: flex;
@@ -58,7 +56,7 @@
     }
 
     .date-separator {
-      color: var(--os-color-text-secondary);
+      color: var(--layout-content-text-muted);
       font-weight: 500;
     }
   }
@@ -67,37 +65,6 @@
     display: flex;
     justify-content: flex-end;
     gap: map.get(vars.$os-spacing, '2'); // 8px
-  }
-}
-
-// Dark theme support
-:host-context(.dark-theme) {
-  .period-selector {
-    background-color: var(--os-color-gray-800);
-
-    .period-btn {
-      color: var(--os-color-gray-400);
-
-      &:hover {
-        background-color: var(--os-color-gray-700);
-        color: var(--os-color-gray-100);
-      }
-
-      &.active {
-        background-color: var(--os-color-primary);
-        color: var(--os-color-primary-white);
-      }
-    }
-  }
-
-  .custom-date-picker {
-    background-color: var(--os-color-gray-800);
-
-    .date-separator {
-      color: var(--os-color-gray-400);
-    }
-
-    // Date input styles are handled by app-datepicker component (supports dark theme natively)
   }
 }
 

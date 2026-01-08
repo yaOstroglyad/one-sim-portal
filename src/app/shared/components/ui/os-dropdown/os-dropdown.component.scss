@@ -10,14 +10,9 @@
     display: inline-block;
   }
 
-  // Backdrop overlay
+  // Backdrop overlay - uses overlay base concepts
   &__backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.1);
+    @include mixins.os-overlay-base(0.1);
     z-index: 998;
     opacity: 0;
     animation: fadeIn 0.2s ease forwards;
@@ -27,22 +22,13 @@
     }
   }
 
-  // Dropdown panel
+  // Dropdown panel - uses dropdown base mixin
   &__panel {
-    position: absolute;
-    background: var(--os-color-light);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: map.get(vars.$os-border-radius, 'large');
-    box-shadow: map.get(vars.$os-shadows, 'lg');
+    @include mixins.os-dropdown-base();
+    color: var(--layout-menu-text);
     z-index: 1000;
     opacity: 0;
     animation: slideDown 0.2s ease forwards;
-
-    // Dark theme
-    .layout--dark & {
-      background: var(--os-color-dark);
-      border-color: rgba(255, 255, 255, 0.1);
-    }
 
     // Positioning variants - using CSS logical properties for automatic RTL support
     &--bottom-right {

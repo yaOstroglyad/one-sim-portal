@@ -54,10 +54,10 @@
   gap: 8px;
   border-radius: 29px;
   padding: 9px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
   min-height: 55px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--layout-content-border);
+  background-color: var(--layout-menu-bg);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
 
@@ -93,14 +93,14 @@
     border-radius: 18px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-    background: var(--os-color-light);
-    color: var(--os-color-text-secondary);
+    background: var(--layout-frame-bg);
+    color: var(--layout-content-text-muted);
     min-width: 62px;
     position: relative;
 
     &:hover {
-      background-color: var(--os-color-light-shade);
-      color: var(--os-color-text);
+      background-color: var(--layout-menu-hover);
+      color: var(--layout-content-text);
     }
 
     &:active {
@@ -118,7 +118,7 @@
         content: '';
         position: absolute;
         inset: 0;
-        background-color: var(--os-color-primary-subtle-bg);
+        background-color: rgba(var(--os-color-primary-rgb), 0.1);
         border-radius: 18px;
         z-index: -1;
       }
@@ -176,12 +176,12 @@
     gap: 8px;
     min-width: 240px;
     padding: 12px;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: var(--layout-menu-bg);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15), 0 2px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), 0 2px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--layout-content-border);
     animation: menuSlideUp 0.3s ease-out;
   }
 
@@ -196,7 +196,7 @@
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-    color: var(--os-color-text-secondary);
+    color: var(--layout-content-text-muted);
     text-decoration: none;
     font-size: 14px;
     font-weight: 400;
@@ -204,8 +204,8 @@
     position: relative;
 
     &:hover {
-      background-color: var(--os-color-hover-bg);
-      color: var(--os-color-text);
+      background-color: var(--layout-menu-hover);
+      color: var(--layout-content-text);
     }
 
     &:active {
@@ -223,7 +223,7 @@
     justify-content: center;
     width: 20px;
     height: 20px;
-    color: var(--os-color-text-secondary);
+    color: var(--layout-content-text-muted);
   }
 
   &__menu-badge {

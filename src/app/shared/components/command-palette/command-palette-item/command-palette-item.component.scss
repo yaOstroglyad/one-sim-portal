@@ -1,0 +1,167 @@
+@use "sass:map";
+@use "../../../../../scss/variables" as vars;
+@use "../../../../../scss/mixins" as mixins;
+
+:host {
+  display: block;
+  padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '6');
+  cursor: pointer;
+  border-radius: map.get(vars.$os-border-radius, 'small');
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--os-color-light);
+  }
+
+  &.selected {
+    background-color: rgba(var(--os-color-primary-rgb), 0.12);
+  }
+
+  &.backend {
+    .os-command-palette-item__badge {
+      display: flex;
+    }
+  }
+}
+
+.os-command-palette-item {
+  &__content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: map.get(vars.$os-spacing, '2');
+  }
+
+  // Hide icon section entirely - navigation items don't need icons
+  &__icon {
+    display: none;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    flex: 1;
+    min-width: 0;
+    gap: map.get(vars.$os-spacing, '2');
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--os-color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // Allow some shrinking but prioritize label over URL
+    flex-shrink: 1;
+    min-width: 80px;
+    max-width: 60%;
+
+    // Style for highlighted matches (inserted via innerHTML)
+    strong {
+      color: var(--os-color-primary);
+      font-weight: 600;
+    }
+  }
+
+  &__url {
+    font-size: 12px;
+    color: var(--os-color-text-tertiary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+
+    // Style for highlighted matches (inserted via innerHTML)
+    strong {
+      color: var(--os-color-primary);
+      font-weight: 600;
+    }
+  }
+
+  &__keyword {
+    font-size: 11px;
+    color: var(--os-color-text-tertiary);
+    background-color: var(--os-color-light);
+    padding: 2px 6px;
+    border-radius: map.get(vars.$os-border-radius, 'small');
+    white-space: nowrap;
+  }
+
+  &__badge {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: var(--os-color-info);
+    flex-shrink: 0;
+  }
+}
+
+// Mobile styles
+@include mixins.tablet {
+  :host {
+    padding: map.get(vars.$os-spacing, '4');
+    min-height: 56px; // Larger touch target
+  }
+
+  .os-command-palette-item {
+    &__icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    &__label {
+      font-size: 16px;
+    }
+
+    &__url {
+      font-size: 13px;
+    }
+  }
+}
+
+// Dark theme support
+:host-context(.layout--dark) {
+  &:hover {
+    background-color: var(--layout-menu-hover);
+  }
+
+  &.selected {
+    background-color: rgba(var(--os-color-primary-rgb), 0.2);
+  }
+
+  .os-command-palette-item {
+    &__label {
+      color: var(--layout-menu-text);
+    }
+
+    &__url {
+      color: var(--layout-menu-text-muted);
+    }
+
+    &__icon {
+      color: var(--layout-menu-text-muted);
+    }
+
+    &__keyword {
+      background-color: var(--os-color-dark-shade);
+    }
+  }
+}
+
+// RTL support
+:host-context(.layout--rtl) {
+  .os-command-palette-item {
+    &__content {
+      flex-direction: row-reverse;
+    }
+
+    &__text {
+      text-align: right;
+    }
+  }
+}

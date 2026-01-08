@@ -1,4 +1,4 @@
-@use "variables" as vars;
+@use "../../../../scss/mixins" as mixins;
 
 :host {
   display: block;
@@ -9,38 +9,22 @@
 }
 
 .chart-legend {
+  @include mixins.os-scrollbar(4px);
   width: 100%;
   padding: 8px 0;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--os-color-border, #e5e7eb) transparent;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--os-color-border, #e5e7eb);
-    border-radius: 2px;
-  }
 
   &__controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @include mixins.flex-between();
     padding: 0 0 8px 0;
     margin-bottom: 4px;
-    border-bottom: 1px solid var(--os-color-border, #e5e7eb);
+    border-bottom: 1px solid var(--layout-content-border);
   }
 
   &__counter {
     font-size: 11px;
     font-weight: 500;
-    color: var(--os-color-text-tertiary, #6b7280);
+    color: var(--layout-content-text-muted);
   }
 
   &__buttons {
@@ -53,9 +37,9 @@
     font-size: 10px;
     font-weight: 500;
     font-family: inherit;
-    color: var(--os-color-text-secondary, #4b5563);
-    background: var(--os-color-bg-secondary, #f3f4f6);
-    border: 1px solid var(--os-color-border, #e5e7eb);
+    color: var(--layout-content-text);
+    background: var(--layout-frame-bg);
+    border: 1px solid var(--layout-content-border);
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -63,8 +47,8 @@
     letter-spacing: 0.3px;
 
     &:hover:not(:disabled) {
-      background: var(--os-color-bg-tertiary, #e5e7eb);
-      border-color: var(--os-color-border, #d1d5db);
+      background: var(--layout-menu-hover);
+      border-color: var(--layout-content-border);
     }
 
     &:active:not(:disabled) {
@@ -77,7 +61,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--cui-primary, #0d6efd);
+      outline: 2px solid var(--os-color-primary);
       outline-offset: 1px;
     }
   }
@@ -95,7 +79,7 @@
     gap: 6px;
     padding: 4px 8px;
     border: 1px solid transparent;
-    background: var(--os-color-bg-secondary, #f9fafb);
+    background: var(--layout-frame-bg);
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -105,15 +89,15 @@
 
     // Hover - more visible indication
     &:hover {
-      background: var(--os-color-bg-tertiary, #e5e7eb);
-      border-color: var(--os-color-border, #d1d5db);
+      background: var(--layout-menu-hover);
+      border-color: var(--layout-content-border);
       transform: translateY(-1px);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
     // Focus - accessibility
     &:focus-visible {
-      outline: 2px solid var(--cui-primary, #0d6efd);
+      outline: 2px solid var(--os-color-primary);
       outline-offset: 1px;
     }
 
@@ -126,22 +110,22 @@
     // Hidden/disabled state - more prominent
     &--hidden {
       opacity: 0.5;
-      background: var(--os-color-bg-tertiary, #f3f4f6);
+      background: var(--layout-frame-bg);
       border-color: transparent;
 
       .chart-legend__color {
-        background-color: var(--os-color-text-tertiary, #9ca3af) !important;
+        background-color: var(--layout-content-text-muted) !important;
         opacity: 0.6;
       }
 
       .chart-legend__label {
         text-decoration: line-through;
-        color: var(--os-color-text-tertiary, #9ca3af);
+        color: var(--layout-content-text-muted);
       }
 
       &:hover {
         opacity: 0.7;
-        background: var(--os-color-bg-tertiary, #e5e7eb);
+        background: var(--layout-menu-hover);
         transform: none;
         box-shadow: none;
       }
@@ -158,7 +142,7 @@
   &__label {
     font-size: 11px;
     font-weight: 500;
-    color: var(--os-color-text-secondary, #4b5563);
+    color: var(--layout-content-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -166,47 +150,8 @@
   }
 }
 
-// Dark theme support
-[data-coreui-theme="dark"] {
-  .chart-legend {
-    &__controls {
-      border-bottom-color: var(--cui-border-color, #374151);
-    }
-
-    &__counter {
-      color: var(--cui-secondary-color, #9ca3af);
-    }
-
-    &__btn {
-      color: var(--cui-secondary-color, #a0aec0);
-      background: var(--cui-dark-bg-subtle, #2d3748);
-      border-color: var(--cui-border-color, #4b5563);
-
-      &:hover:not(:disabled) {
-        background: var(--cui-tertiary-bg, #374151);
-      }
-    }
-
-    &__item {
-      background: var(--cui-dark-bg-subtle, #2d3748);
-
-      &:hover {
-        background: var(--cui-tertiary-bg, #374151);
-        border-color: var(--cui-border-color, #4b5563);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      }
-
-      &--hidden {
-        background: var(--cui-dark, #1a202c);
-
-        &:hover {
-          background: var(--cui-dark-bg-subtle, #2d3748);
-        }
-      }
-    }
-
-    &__label {
-      color: var(--cui-secondary-color, #a0aec0);
-    }
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

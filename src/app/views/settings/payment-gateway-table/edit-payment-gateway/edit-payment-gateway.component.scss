@@ -1,37 +1,26 @@
+@use "mixins" as mixins;
+
 .payment-gateway-form {
   // Simple container, no special styling needed
   // Panel content already provides proper padding
 }
 
 .loading-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include mixins.flex-center();
   flex-direction: column;
   gap: 12px;
   padding: 2rem;
   text-align: center;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--layout-content-text-muted);
 }
 
 .loading-spinner {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  border-top: 2px solid #0083e1;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  @include mixins.os-spinner-base(24px, 2px);
 }
 
 .no-fields-message {
   padding: 2rem;
   text-align: center;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--layout-content-text-muted);
   font-style: italic;
 }

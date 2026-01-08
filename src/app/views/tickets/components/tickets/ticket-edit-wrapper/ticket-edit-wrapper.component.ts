@@ -64,20 +64,20 @@ import { TICKET_ALLOWED_MIME_TYPES, TICKET_MAX_FILE_SIZE, TICKET_PENDING_AUTHOR_
       .attachments-section {
         margin-top: 2rem;
         padding: 1.5rem;
-        border: 1px solid var(--cui-border-color);
+        border: 1px solid var(--layout-content-border);
         border-radius: 0.375rem;
-        background-color: var(--cui-bg);
+        background-color: var(--layout-menu-bg);
 
         .section-header {
           margin-bottom: 1rem;
           padding-bottom: 0.75rem;
-          border-bottom: 1px solid var(--cui-border-color);
+          border-bottom: 1px solid var(--layout-content-border);
 
           h4 {
             margin: 0;
             font-size: 1.125rem;
             font-weight: 600;
-            color: var(--cui-body-color);
+            color: var(--layout-content-text);
           }
         }
       }

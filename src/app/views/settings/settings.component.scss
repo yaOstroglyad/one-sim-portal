@@ -1,3 +1,5 @@
+@use "mixins" as mixins;
+
 :host {
   ::ng-deep .mat-mdc-tab-body-wrapper {
     padding: 15px !important;
@@ -6,8 +8,8 @@
 
 mat-card {
   min-height: 780px;
-  background: white;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  background: var(--layout-menu-bg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .tab-group {

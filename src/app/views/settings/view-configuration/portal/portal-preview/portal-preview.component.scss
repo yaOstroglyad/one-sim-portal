@@ -1,9 +1,32 @@
-@use 'src/scss/_view-configuration.scss';
+@use "mixins" as mixins;
+
+// Note: Removed @extend per constitution rules - using inline styles
 
 :host {
-  @extend .preview-component;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .portal-preview-svg {
-  @extend .preview-svg;
+  @include mixins.os-surface-base(--layout-frame-bg, --layout-frame-bg, 8px);
+  width: 100%;
+  height: auto;
+  max-height: calc(100% - 48px);
+  box-shadow: var(--os-shadow-md);
+  padding: 16px;
+
+  text {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+}
+
+:host([dir="rtl"]) .portal-preview-svg {
+  direction: rtl;
+
+  text {
+    unicode-bidi: bidi-override;
+  }
 }

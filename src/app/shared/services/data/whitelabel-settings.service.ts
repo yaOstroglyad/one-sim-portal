@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { EditCompanySettings } from '@shared/models';
 
 export interface ApplicationTypeOption {
@@ -43,8 +44,14 @@ export class WhitelabelSettingsService {
 
   /**
    * Get all available application types (used for domain configuration)
+   * API returns string[] but we transform to ApplicationTypeOption[] for form compatibility
    */
   getApplicationTypes(): Observable<ApplicationTypeOption[]> {
-    return this.http.get<ApplicationTypeOption[]>('/api/v1/whitelabel/common/application-types');
+    return this.http.get<string[]>('/api/v1/whitelabel/common/application-types').pipe(
+      map(types => types.map(type => ({
+        value: type,
+        displayValue: type
+      })))
+    );
   }
 }

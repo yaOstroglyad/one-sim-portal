@@ -6,7 +6,7 @@
   // RTL support
   &--rtl {
     direction: rtl;
-    
+
     button[cButton] {
       svg {
         transform: scaleX(-1);
@@ -15,44 +15,8 @@
   }
 }
 
-// Fix header form inputs styling with searchable-select
-:host {
-  ::ng-deep {
-    app-header {
-      .header-form {
-        align-items: center;
-        gap: 0.5rem;
-        
-        // Style searchable-select components within custom slot
-        app-searchable-select {
-          flex: 1;
-          max-width: 250px;
-          min-width: 180px;
-          
-          @media (max-width: 768px) {
-            max-width: none;
-            width: 100%;
-          }
-        }
-        
-        // Ensure buttons are properly aligned
-        button[cButton] {
-          flex-shrink: 0;
-        }
-        
-        // Custom inputs container
-        [header-custom-inputs] {
-          display: contents; // Make the container transparent to flex
-        }
-      }
-    }
-  }
-}
-
-// Dark theme support  
-[data-theme="dark"] {
-  .provider-product-list-container {
-    // Dark theme styles are primarily handled by generic components
-    // Add specific overrides here if needed
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

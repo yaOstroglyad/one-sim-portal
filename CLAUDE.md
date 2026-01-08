@@ -57,6 +57,11 @@ This gives you complete project knowledge without iterative exploration.
 ### 5. Documentation Language
 - **English only** for all code, comments, commit messages
 
+### 6. Build Verification
+- **DO NOT run `ng build` after every change** — dev server (`npm start`) already handles incremental compilation
+- **Run build only:** before commit, or when specifically asked
+- Trust IDE and dev server to show compilation errors
+
 📖 **Full rules:** [.specify/memory/constitution.md](./.specify/memory/constitution.md)
 
 ---
@@ -194,6 +199,8 @@ specs/                      # Feature specifications
 - TypeScript 5.9, Angular 21.0.5 + Angular Core, Angular Material, CoreUI, RxJS, Chart.js (014-zoneless)
 - N/A (frontend-only change) (014-zoneless)
 - TypeScript 5.9, Angular 21.0.5 (Zoneless) + Angular HttpClient, RxJS, Chart.js, Angular Material (015-traffic-dashboard)
+- TypeScript 5.9 + CoreUI, Angular Material, RxJS (017-gmail-layout)
+- N/A (no backend changes) (017-gmail-layout)
 
 ## Recent Changes
 - 013-angular-21-upgrade: Upgraded Angular 19.2.15 → 21.0.5, TypeScript 5.8 → 5.9, removed @angular/flex-layout

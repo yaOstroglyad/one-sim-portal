@@ -3,8 +3,16 @@
   [ngClass]="headerClasses()">
 
   <div class="header__container">
-    <!-- Left side: Mobile toggle and breadcrumb -->
+    <!-- Left side: Dropdown menu button and mobile toggle -->
     <div class="header__left">
+      <!-- Dropdown menu button (disabled for now) -->
+      <button
+        class="header__dropdown-btn"
+        disabled
+        [attr.aria-label]="'Sections menu (coming soon)'">
+        <svg cIcon name="cil-hamburger-menu" width="24" height="24"></svg>
+      </button>
+
       <!-- Mobile menu toggle -->
       <button
         class="header__mobile-toggle"
@@ -12,15 +20,28 @@
         [attr.aria-label]="'Toggle mobile menu'">
         <svg cIcon name="cil-menu" width="24" height="24"></svg>
       </button>
+    </div>
 
-      <!-- Breadcrumb -->
-      <div class="header__breadcrumb">
-        <app-breadcrumb></app-breadcrumb>
-      </div>
+    <!-- Center: Search bar -->
+    <div class="header__center">
+      <os-header-search />
     </div>
 
     <!-- Right side: User actions -->
     <div class="header__right">
+      <!-- Theme toggle -->
+      <button
+        class="header__action-btn"
+        (click)="toggleTheme()"
+        [attr.aria-label]="isDarkTheme() ? 'Switch to light theme' : 'Switch to dark theme'"
+        [attr.aria-pressed]="isDarkTheme()">
+        @if (isDarkTheme()) {
+          <svg cIcon name="cil-sun" width="18" height="18"></svg>
+        } @else {
+          <svg cIcon name="cil-moon" width="18" height="18"></svg>
+        }
+      </button>
+
       <!-- User menu with os-menu -->
       <os-menu
         [isOpen]="isUserDropdownOpen()"

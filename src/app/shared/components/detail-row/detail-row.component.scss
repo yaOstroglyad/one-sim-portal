@@ -1,25 +1,24 @@
-@use "variables" as vars;
+@use "../../../../scss/mixins" as mixins;
 
 :host {
   display: block;
 }
 
 .detail-row {
-  display: flex;
-  justify-content: space-between;
+  @include mixins.flex-between();
   align-items: flex-start;
   padding: 0.625rem 0;
   gap: 1rem;
 
   &:not(:last-child):not(.no-border) {
-    border-bottom: 1px solid var(--cui-border-color-translucent, rgba(0, 0, 0, 0.075));
+    border-bottom: 1px solid var(--layout-content-border);
     margin-bottom: 0.5rem;
     padding-bottom: 0.625rem;
   }
 
   .detail-label {
     font-size: 0.875rem;
-    color: var(--cui-secondary-color, var(--cui-gray-600));
+    color: var(--layout-content-text-muted);
     font-weight: 500;
     min-width: 130px;
     flex-shrink: 0;
@@ -27,7 +26,7 @@
 
   .detail-value {
     font-size: 0.875rem;
-    color: var(--cui-body-color, var(--cui-gray-800));
+    color: var(--layout-content-text);
     font-weight: 500;
     text-align: right;
     flex: 1;
@@ -41,7 +40,7 @@
     &.text-muted {
       font-family: monospace;
       font-size: 0.8125rem;
-      color: var(--cui-secondary-color) !important;
+      color: var(--layout-content-text-muted) !important;
     }
 
     // Bold style for prices
@@ -50,27 +49,14 @@
     }
 
     mat-icon {
+      @include mixins.icon-size(1rem);
       font-size: 1rem;
-      width: 1rem;
-      height: 1rem;
-      flex-shrink: 0;
     }
   }
 }
 
-// Dark theme support
-[data-coreui-theme="dark"] {
-  .detail-row {
-    &:not(:last-child):not(.no-border) {
-      border-bottom-color: var(--cui-border-color-translucent, rgba(255, 255, 255, 0.1));
-    }
-
-    .detail-label {
-      color: var(--cui-secondary-color, var(--cui-gray-400));
-    }
-
-    .detail-value {
-      color: var(--cui-body-color, var(--cui-gray-100));
-    }
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

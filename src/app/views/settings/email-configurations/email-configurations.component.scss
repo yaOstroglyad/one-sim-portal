@@ -22,16 +22,14 @@
   }
 }
 
+// Template type card - uses surface and interactive base mixins
 .template-type-card {
-  background: white;
-  border: 1px solid var(--os-color-light);
-  border-radius: map.get(vars.$os-border-radius, 'medium');
-  cursor: pointer;
-  transition: all 0.2s ease;
+  @include mixins.os-surface-base(--layout-menu-bg, --layout-content-border, map.get(vars.$os-border-radius, 'medium'));
+  @include mixins.os-interactive-base();
 
   &:hover:not(&--disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(var(--os-color-dark-rgb), 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-color: var(--os-color-primary);
   }
 
@@ -66,7 +64,7 @@
     margin-bottom: map.get(vars.$os-spacing, '4');
 
     svg {
-      fill: var(--os-color-medium);
+      fill: var(--layout-content-text-muted);
       transition: fill 0.2s ease;
     }
   }
@@ -74,42 +72,14 @@
   &__title {
     font-size: map.get(vars.$os-font-sizes, 'lg');
     font-weight: 600;
-    color: var(--os-color-dark);
+    color: var(--layout-content-text);
     margin: 0;
     transition: color 0.2s ease;
   }
 }
 
-// Dark theme support
-[data-theme="dark"] {
-  .template-type-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
-
-    &:hover:not(&--disabled) {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: var(--os-color-primary);
-    }
-
-    &--selected {
-      background: rgba(var(--os-color-primary-rgb), 0.1);
-      border-color: var(--os-color-primary);
-    }
-
-    &__title {
-      color: var(--os-color-light);
-    }
-
-    &__icon svg {
-      fill: rgba(255, 255, 255, 0.7);
-    }
-
-    &--selected &__icon svg {
-      fill: var(--os-color-primary);
-    }
-
-    &--selected &__title {
-      color: var(--os-color-primary);
-    }
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

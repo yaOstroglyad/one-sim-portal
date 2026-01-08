@@ -1,0 +1,97 @@
+@use "sass:map";
+@use "../../../../../scss/variables" as vars;
+@use "../../../../../scss/mixins" as mixins;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.os-search-trigger {
+  &__button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    height: 40px;
+    padding: 0 map.get(vars.$os-spacing, '4');
+    background: var(--layout-search-bg);
+    border: 1px solid transparent;
+    border-radius: map.get(vars.$os-border-radius, 'large');
+    cursor: pointer;
+    transition: all 0.2s ease;
+    gap: map.get(vars.$os-spacing, '2');
+
+    &:hover {
+      background: var(--layout-search-bg-focus);
+      border-color: var(--layout-search-border-focus);
+    }
+
+    &:focus {
+      outline: none;
+      background: var(--layout-search-bg-focus);
+      border-color: var(--layout-search-border-focus);
+      box-shadow: 0 0 0 2px rgba(var(--os-color-primary-rgb), 0.2);
+    }
+  }
+
+  &__icon {
+    width: 18px;
+    height: 18px;
+    fill: var(--layout-frame-icon);
+    flex-shrink: 0;
+  }
+
+  &__text {
+    flex: 1;
+    text-align: start;
+    font-size: 14px;
+    color: var(--layout-search-placeholder);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__shortcut {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 22px;
+    padding: 0 6px;
+    font-family: var(--os-font-family);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--layout-search-placeholder);
+    background: var(--layout-frame-bg);
+    border: 1px solid var(--layout-search-border-focus);
+    border-radius: map.get(vars.$os-border-radius, 'small');
+    flex-shrink: 0;
+  }
+}
+
+// Dark theme - shortcut border adjustment
+:host-context(.layout--dark) {
+  .os-search-trigger {
+    &__shortcut {
+      border-color: var(--os-color-dark-tint);
+    }
+  }
+}
+
+// Mobile: hide shortcut, show only icon
+@include mixins.tablet {
+  .os-search-trigger {
+    &__button {
+      max-width: 100%;
+    }
+
+    &__text {
+      display: none;
+    }
+
+    &__shortcut {
+      display: none;
+    }
+  }
+}

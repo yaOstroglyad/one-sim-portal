@@ -39,13 +39,13 @@
   .overview-title {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--os-color-dark);
+    color: var(--layout-content-text);
     margin-bottom: 0.5rem;
   }
 
   .overview-subtitle {
     font-size: 1rem;
-    color: var(--os-color-medium);
+    color: var(--layout-content-text-muted);
     margin: 0 auto;
     max-width: 500px;
     line-height: 1.4;
@@ -58,22 +58,13 @@
   align-items: center;
   justify-content: center;
   padding: 3rem;
-  color: var(--os-color-medium);
+  color: var(--layout-content-text-muted);
 
+  // Loading spinner - uses spinner base
   .loading-spinner {
-    width: 2rem;
-    height: 2rem;
-    border: 2px solid var(--os-color-light);
-    border-top: 2px solid var(--os-color-primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+    @include mixins.os-spinner-base(2rem, 2px);
     margin-bottom: 1rem;
   }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 .error-container {
@@ -89,7 +80,7 @@
     }
 
     p {
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
       margin-bottom: 1.5rem;
     }
 
@@ -103,7 +94,7 @@
 
       &.btn-primary {
         background-color: var(--os-color-primary);
-        color: white;
+        color: var(--os-color-primary-contrast);
 
         &:hover {
           background-color: var(--os-color-primary-shade);
@@ -133,7 +124,7 @@
       h3 {
         font-size: 1.25rem;
         font-weight: 600;
-        color: var(--os-color-dark);
+        color: var(--layout-content-text);
         margin: 0;
       }
     }
@@ -192,7 +183,7 @@
           h3 {
             font-size: 1rem;
             font-weight: 600;
-            color: var(--os-color-dark);
+            color: var(--layout-content-text);
             margin: 0;
           }
 
@@ -252,7 +243,7 @@
             }
 
             &.medium {
-              background-color: var(--os-color-medium);
+              background-color: var(--layout-content-text-muted);
             }
           }
 
@@ -262,7 +253,7 @@
 
             .action-description {
               font-size: 0.95rem;
-              color: var(--os-color-medium);
+              color: var(--layout-content-text-muted);
               margin: 0;
               line-height: 1.4;
             }
@@ -277,7 +268,7 @@
             svg {
               width: 1.25rem;
               height: 1.25rem;
-              fill: var(--os-color-medium);
+              fill: var(--layout-content-text-muted);
             }
           }
 
@@ -289,7 +280,7 @@
             svg {
               width: 1.25rem;
               height: 1.25rem;
-              fill: var(--os-color-medium);
+              fill: var(--layout-content-text-muted);
             }
           }
         }
@@ -332,103 +323,8 @@
   }
 }
 
-// Dark theme support
-[data-theme="dark"] {
-  .overview-header {
-    .overview-title {
-      color: var(--os-color-light);
-    }
-    
-    .overview-subtitle {
-      color: var(--os-color-medium);
-    }
-  }
-
-  .loading-container {
-    color: var(--os-color-medium);
-    
-    .loading-spinner {
-      border-color: var(--os-color-dark);
-      border-top-color: var(--os-color-primary);
-    }
-  }
-
-  .error-container {
-    .error-content {
-      h3 {
-        color: var(--os-color-danger);
-      }
-      
-      p {
-        color: var(--os-color-medium);
-      }
-      
-      .error-icon {
-        fill: var(--os-color-danger);
-      }
-      
-      .btn-primary {
-        background-color: var(--os-color-primary);
-        color: var(--os-color-light);
-        
-        &:hover {
-          background-color: var(--os-color-primary-shade);
-        }
-      }
-    }
-  }
-
-  .card-header h3 {
-    color: var(--os-color-light);
-  }
-
-  .action-card {
-    background: var(--os-color-dark);
-    border-color: var(--os-color-medium-shade);
-    
-    &:hover:not(.disabled) {
-      background: var(--os-color-dark);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    }
-    
-    .card-header h3 {
-      color: var(--os-color-light);
-    }
-    
-    .action-description {
-      color: var(--os-color-medium);
-    }
-    
-    .action-arrow svg,
-    .action-status svg {
-      fill: var(--os-color-medium);
-    }
-  }
-}
-
-// Modern dark theme support (CSS custom properties based)
-:host-context([data-theme="dark"]) {
-  .overview-header {
-    .overview-title {
-      color: var(--os-color-light);
-    }
-    
-    .overview-subtitle {
-      color: var(--os-color-medium);
-    }
-  }
-
-  .card-header h3 {
-    color: var(--os-color-light);
-  }
-
-  .action-card {
-    .card-header h3 {
-      color: var(--os-color-light);
-    }
-    
-    .action-description {
-      color: var(--os-color-medium);
-    }
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

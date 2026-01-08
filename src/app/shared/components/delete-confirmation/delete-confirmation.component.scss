@@ -13,7 +13,7 @@
   }
 
   h3 {
-    color: var(--os-color-dark);
+    color: var(--layout-content-text);
     margin-bottom: 1rem;
     font-size: 1.5rem;
     font-weight: 600;
@@ -21,9 +21,9 @@
 
   p {
     margin-bottom: 0.5rem;
-    
+
     &.message {
-      color: var(--os-color-medium);
+      color: var(--layout-content-text-muted);
       font-size: 1rem;
     }
 
@@ -36,9 +36,8 @@
   }
 }
 
-// Dark theme support
-:host-context(.dark-theme) {
-  .delete-confirmation h3 {
-    color: var(--os-color-light);
-  }
-}
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

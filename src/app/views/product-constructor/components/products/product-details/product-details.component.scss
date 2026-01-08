@@ -1,15 +1,14 @@
 @use "detail-section" as shared;
+@use "mixins" as mixins;
 
 .product-details {
+  @include mixins.flex-column(1rem);
   padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem; // Отступ между всеми дочерними элементами
 }
 
 // Helper classes
 .text-muted {
-  color: var(--cui-secondary-color) !important;
+  color: var(--layout-content-text-muted) !important;
   font-family: monospace;
   font-size: 0.8125rem;
 }

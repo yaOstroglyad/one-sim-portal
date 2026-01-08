@@ -99,7 +99,13 @@
       "SlashCommand(/speckit.implement)",
       "// === Search (Claude) ===",
       "WebSearch",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Skill(speckit.specify)",
+      "Skill(speckit.plan)",
+      "WebFetch(domain:material.angular.dev)",
+      "WebFetch(domain:angular-material.dev)",
+      "WebFetch(domain:v21.material.angular.io)",
+      "WebFetch(domain:trailheadtechnology.com)"
     ],
     "deny": [
       "// === Blocked for Security ===",

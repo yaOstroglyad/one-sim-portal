@@ -3,35 +3,23 @@
 @use "../../../../../scss/mixins" as mixins;
 @use "../../../../../scss/utilities" as utils;
 
+// Override CoreUI header variables
+header.header {
+  --cui-header-border: none;
+  --cui-header-border-color: transparent;
+}
+
 .header {
   position: fixed;
   top: 0;
-  left: 256px;
+  left: 0;
   right: 0;
-  height: 64px;
-  background: var(--os-color-light);
-  border-bottom: none;
-  z-index: 999;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &--with-collapsed-sidebar {
-    left: 56px;
-  }
-
-  &--dark {
-    background: var(--os-color-dark);
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-    color: var(--os-color-light);
-  }
-
-  &--rtl {
-    left: 0;
-    right: 256px;
-
-    &.header--with-collapsed-sidebar {
-      right: 56px;
-    }
-  }
+  height: vars.$layout-header-height;
+  background: var(--layout-frame-bg);
+  color: var(--layout-frame-text);
+  border: none;
+  z-index: 1001;
+  transition: background 0.3s ease, color 0.3s ease;
 
   &__container {
     display: flex;
@@ -39,12 +27,22 @@
     justify-content: space-between;
     height: 100%;
     width: 100%;
+    padding: 0 map.get(vars.$os-spacing, '4');
   }
 
   &__left {
     display: flex;
     align-items: center;
+    gap: map.get(vars.$os-spacing, '2');
+  }
+
+  &__center {
     flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 map.get(vars.$os-spacing, '4');
   }
 
   &__right {
@@ -53,25 +51,98 @@
     gap: map.get(vars.$os-spacing, '2');
   }
 
-  &__mobile-toggle {
-    display: none;
+  // Dropdown menu button (disabled for now)
+  // Hidden until feature is ready (remove display:none when implementing)
+  &__dropdown-btn {
+    display: none; // TODO: Change to flex when sections menu is implemented
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border: none;
     background: none;
     border-radius: map.get(vars.$os-border-radius, 'medium');
     cursor: pointer;
-    color: inherit;
+    color: var(--layout-frame-text);
+    transition: all 0.2s ease;
+
+    svg {
+      fill: currentColor;
+    }
+
+    &:hover {
+      background: var(--layout-frame-bg-hover);
+    }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  // Search bar
+  &__search {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    height: 40px;
+    background: var(--layout-search-bg);
+    border: 1px solid transparent;
+    border-radius: map.get(vars.$os-border-radius, 'large');
+    padding: 0 map.get(vars.$os-spacing, '3');
+    transition: all 0.2s ease;
+
+    &:focus-within {
+      background: var(--layout-search-bg-focus);
+      border-color: var(--layout-search-border-focus);
+      box-shadow: 0 0 0 2px rgba(var(--os-color-primary-rgb), 0.2);
+    }
+
+    &-icon {
+      fill: var(--layout-frame-icon);
+      flex-shrink: 0;
+      margin-right: map.get(vars.$os-spacing, '2');
+
+      .header--rtl & {
+        margin-right: 0;
+        margin-left: map.get(vars.$os-spacing, '2');
+      }
+    }
+
+    &-input {
+      flex: 1;
+      border: none;
+      background: none;
+      outline: none;
+      color: var(--layout-search-text);
+      font-size: map.get(vars.$os-font-sizes, 'sm');
+      font-family: var(--os-font-family);
+
+      &::placeholder {
+        color: var(--layout-search-placeholder);
+      }
+    }
+
+    @media (max-width: 768px) {
+      max-width: 100%;
+    }
+  }
+
+  &__mobile-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: none;
+    border-radius: map.get(vars.$os-border-radius, 'medium');
+    cursor: pointer;
+    color: var(--layout-frame-icon);
     transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.05);
-    }
-
-    .header--dark &:hover {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--layout-frame-bg-hover);
     }
 
     svg {
@@ -83,57 +154,31 @@
     }
   }
 
-  &__breadcrumb {
-    flex: 1;
-    margin-left: map.get(vars.$os-spacing, '4');
-
-    .header--rtl & {
-      margin-left: 0;
-      margin-right: map.get(vars.$os-spacing, '4');
-    }
-
-    .header__left & {
-      margin-left: map.get(vars.$os-spacing, '3');
-    }
-
-    @media (max-width: 768px) {
-      margin-left: map.get(vars.$os-spacing, '2');
-
-      .header--rtl & {
-        margin-left: 0;
-        margin-right: map.get(vars.$os-spacing, '2');
-      }
-
-      .header__left & {
-        margin-left: map.get(vars.$os-spacing, '2');
-      }
-    }
-  }
-
   &__action-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border: none;
     background: none;
     border-radius: map.get(vars.$os-border-radius, 'medium');
     cursor: pointer;
-    color: inherit;
+    color: var(--layout-frame-text);
     transition: all 0.2s ease;
     position: relative;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.05);
-    }
-
-    .header--dark &:hover {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--layout-frame-bg-hover);
     }
 
     svg {
       fill: currentColor;
+    }
+
+    // Theme toggle specific styles
+    &--theme {
+      color: var(--layout-frame-text);
     }
 
     &--notification {

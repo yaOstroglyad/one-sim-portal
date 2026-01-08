@@ -98,7 +98,52 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
 **Rule:** ANY service that might use HttpClient (directly or transitively) MUST be lazy-loaded via Injector in HTTP Interceptors.
 
+### Barrel Import Circular Dependencies (NON-NEGOTIABLE)
+
+> **⚠️ CRITICAL:** Importing from `@shared` barrel in files that are exported BY `@shared` creates circular dependencies.
+
+**Problem:** When a file exported from `@shared` imports something from `@shared`, TypeScript loads the entire barrel, creating a cycle:
+```
+deep-links.registry.ts
+  → @shared (imports ADMIN_PERMISSION)
+    → ./services/search (barrel loads all exports)
+      → ./providers/client-search.provider
+        → deep-links.registry.ts (CIRCULAR!)
+```
+
+**Solution:** Use the `@shared/constants` module for dependency-free imports:
+
+```typescript
+// ✅ CORRECT - Import from constants (no dependencies)
+import { ADMIN_PERMISSION } from '@shared/constants';
+import { ADMIN_PERMISSION } from '../../constants';
+
+// ✅ CORRECT - Import from @shared in components/views (not exported by @shared)
+import { ADMIN_PERMISSION } from '@shared';
+
+// ❌ FORBIDDEN - Import from @shared in files exported by @shared barrel
+import { ADMIN_PERMISSION } from '@shared';  // Creates cycle!
+```
+
+**Architecture:**
+```
+shared/
+├── constants/                    ← NO dependencies, safe to import anywhere
+│   ├── index.ts
+│   └── permissions.constants.ts  ← ADMIN_PERMISSION, CUSTOMER_PERMISSION, etc.
+├── auth/
+│   └── auth.service.ts           ← Re-exports from constants (backwards compatible)
+├── services/
+│   └── search/
+│       └── deep-links.registry.ts ← Imports from constants, NOT @shared
+└── index.ts                      ← Exports constants FIRST
+```
+
+**Rule:** Files inside `/shared/` that need constants MUST import from `@shared/constants` or relative `../../constants`, NEVER from `@shared` barrel.
+
 ### Signal APIs (Angular 21)
+
+#### Component Inputs/Outputs
 - **Use `input()` instead of `@Input()`**
 - **Use `output()` instead of `@Output()`**
 - **Use `effect()` for input synchronization**
@@ -112,6 +157,70 @@ public readonly valueChange = output<string>();
 @Input() value?: string;
 @Output() valueChange = new EventEmitter<string>();
 ```
+
+#### State Management with Signals (NON-NEGOTIABLE)
+- **Use `signal()` for component local state** (not BehaviorSubject/Observable)
+- **Use `computed()` for derived state**
+- **Use `effect()` for side effects on signal changes**
+- **Services exposing reactive data MUST use `Signal<T>`**
+
+```typescript
+// ✅ CORRECT - Component state with signals
+@Component({ ... })
+export class MyComponent {
+  // Local state
+  readonly isOpen = signal(false);
+  readonly query = signal('');
+  readonly items = signal<Item[]>([]);
+
+  // Derived state
+  readonly filteredItems = computed(() =>
+    this.items().filter(item => item.name.includes(this.query()))
+  );
+
+  readonly isEmpty = computed(() => this.filteredItems().length === 0);
+
+  // Side effects
+  constructor() {
+    effect(() => {
+      console.log('Query changed:', this.query());
+    });
+  }
+
+  // Updating state
+  toggle(): void {
+    this.isOpen.update(v => !v);
+  }
+}
+
+// ✅ CORRECT - Service with signals
+@Injectable({ providedIn: 'root' })
+export class SearchService {
+  readonly results = signal<SearchResult[]>([]);
+  readonly isLoading = signal(false);
+
+  search(query: string): void {
+    this.isLoading.set(true);
+    // ...
+  }
+}
+
+// ❌ FORBIDDEN - Using BehaviorSubject for local state
+private readonly isOpen$ = new BehaviorSubject(false);
+
+// ❌ FORBIDDEN - Observable for simple derived state
+readonly filteredItems$ = combineLatest([...]).pipe(...);
+```
+
+**When to use Observable vs Signal:**
+| Use Case | Use |
+|----------|-----|
+| Component local state | `signal()` |
+| Derived/computed values | `computed()` |
+| HTTP requests | `Observable` (from HttpClient) |
+| Complex async streams (debounce, switchMap) | `Observable` |
+| Service exposing current value | `signal()` |
+| Cross-component communication | `signal()` in shared service |
 
 ### Control Flow Syntax
 - **Use `@if/@for/@switch`** instead of `*ngIf/*ngFor/*ngSwitch`
@@ -288,6 +397,67 @@ Until refactoring is complete:
 - **Interfaces:** PascalCase without `I` prefix (`User`, not `IUser`)
 - **Request/Response:** `CreateCustomerRequest`, `CustomerResponse`
 
+### Const Type Definitions (NON-NEGOTIABLE)
+
+**ALWAYS use `as const` objects with derived types instead of inline union types.**
+
+```typescript
+// ✅ CORRECT - Const object with derived type
+export const ORDER_STATUSES = {
+  PENDING: 'pending',
+  PROCESSING: 'processing',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
+} as const;
+export type OrderStatus = typeof ORDER_STATUSES[keyof typeof ORDER_STATUSES];
+
+// Usage in interface
+interface Order {
+  id: string;
+  status: OrderStatus;  // Type-safe, uses const
+}
+
+// Usage in code
+if (order.status === ORDER_STATUSES.COMPLETED) { ... }
+
+// ❌ FORBIDDEN - Inline union types
+interface Order {
+  status: 'pending' | 'processing' | 'completed' | 'cancelled';
+}
+
+// ❌ FORBIDDEN - Enum (less flexible, worse tree-shaking)
+enum OrderStatus {
+  PENDING = 'pending',
+  PROCESSING = 'processing',
+}
+```
+
+**Benefits of const types:**
+- **Single source of truth** — values defined once
+- **Refactoring safe** — rename in one place
+- **Runtime access** — can iterate over values, use in dropdowns
+- **Better tree-shaking** than enums
+
+**Pattern for related types:**
+```typescript
+// search.types.ts
+export const SEARCH_ITEM_TYPES = {
+  NAVIGATION: 'navigation',
+  ACTION: 'action',
+} as const;
+export type SearchItemType = typeof SEARCH_ITEM_TYPES[keyof typeof SEARCH_ITEM_TYPES];
+
+export const MATCH_SOURCES = {
+  LABEL: 'label',
+  KEYWORD: 'keyword',
+  URL: 'url',
+} as const;
+export type MatchSource = typeof MATCH_SOURCES[keyof typeof MATCH_SOURCES];
+
+// All type values accessible at runtime
+const allTypes = Object.values(SEARCH_ITEM_TYPES); // ['navigation', 'action']
+```
+
 ---
 
 ## V. Services Organization
@@ -373,6 +543,105 @@ color: #2c2c2c;
 - **NEVER use `@media (prefers-color-scheme: dark)`**
 - Wait for official dark mode implementation
 
+### Mixin Hierarchy Architecture (NON-NEGOTIABLE)
+
+The SCSS architecture uses a 3-level hierarchical mixin system to eliminate code duplication:
+
+```
+Level 1: Abstract Bases (foundation)
+    ↓
+Level 2: Specialized Mixins (inherit from Level 1)
+    ↓
+Level 3: Sub-component Mixins (for complex components like tables)
+```
+
+**Level 1 - Abstract Bases:**
+| Mixin | Purpose | Parameters |
+|-------|---------|------------|
+| `os-surface-base($bg, $border, $radius)` | Any themed container | CSS var names, radius |
+| `os-interactive-base($transition)` | Clickable elements | Transition duration |
+| `os-feedback-base($color-var)` | Status indicators | CSS var name |
+
+**Level 2 - Specialized Mixins (prefer these for standard patterns):**
+| Mixin | Inherits | Use For |
+|-------|----------|---------|
+| `os-input-base($height, $padding)` | surface | Input fields, search boxes |
+| `os-dropdown-base($min-width, $padding)` | surface | Dropdowns, popups, menus |
+| `os-card-base($padding, $radius)` | surface | Cards, sections, panels |
+| `os-panel-base($padding)` | surface | Panels with header/content |
+| `os-overlay-base($opacity)` | - | Modal backdrops, overlays |
+| `os-table-base()` | surface | Table containers |
+| `os-button-base($height, $padding)` | surface + interactive | All buttons |
+| `os-list-item-base($padding)` | interactive | List items, menu items |
+| `os-icon-button-base($size)` | interactive | Icon-only buttons |
+| `os-table-sortable-base()` | interactive | Sortable table headers |
+| `os-spinner-base($size, $border-width)` | feedback | Loading spinners |
+| `os-alert-base($variant)` | feedback | Alert messages |
+| `os-badge-base($variant)` | feedback | Status badges |
+
+**Level 3 - Table Sub-components:**
+| Mixin | Inherits | Use For |
+|-------|----------|---------|
+| `os-table-header-base()` | table | Table header row |
+| `os-table-row-base()` | table | Body rows with hover/selected |
+| `os-table-cell-base($padding)` | table | Cell padding/alignment |
+| `os-table-actions-base()` | table | Action buttons column |
+
+### DRY Principle for Component Styles (NON-NEGOTIABLE)
+
+**Before writing ANY component styles, check `_mixins.scss` for existing patterns!**
+
+```scss
+// ✅ CORRECT - Use Level 2 mixins directly
+.my-dropdown { @include mixins.os-dropdown-base(); }
+.my-input { @include mixins.os-input-base(40px); }
+.my-card { @include mixins.os-card-base(1.5rem); }
+
+// ✅ CORRECT - Compose from Level 1 for custom surfaces
+.my-custom-surface {
+  @include mixins.os-surface-base(--layout-frame-bg, --layout-frame-border, 0.5rem);
+  padding: map.get(vars.$os-spacing, '4');
+}
+
+// ✅ CORRECT - Multiple inheritance for complex components
+.my-interactive-card {
+  @include mixins.os-surface-base(--layout-menu-bg, --layout-content-border);
+  @include mixins.os-interactive-base();
+}
+
+// ✅ CORRECT - Table composition
+.my-table {
+  @include mixins.os-table-base();
+  &__header { @include mixins.os-table-header-base(); }
+  &__row { @include mixins.os-table-row-base(); }
+  &__cell { @include mixins.os-table-cell-base(); }
+}
+
+// ❌ FORBIDDEN - Duplicating existing patterns
+.my-dropdown {
+  background: var(--layout-menu-bg);
+  border: 1px solid var(--layout-content-border);
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  // This pattern already exists in mixins!
+}
+```
+
+**Additional Utility Mixins:**
+| Mixin | Use For |
+|-------|---------|
+| `os-dropdown-animation()` | Dropdown open animation |
+| `os-detail-row($label-width)` | Label + value pairs |
+| `os-nav-button($size)` | Navigation arrows, controls |
+| `os-scrollbar($width)` | Custom scrollbars |
+| `os-calendar-day($size)` | Calendar day cells |
+
+**When to create a NEW mixin:**
+1. Pattern is used in 3+ components
+2. Pattern has consistent structure with only size/color variations
+3. Determine the correct level (base if abstract, specialized if inherits)
+4. Add to `_mixins.scss` under appropriate section
+
 ---
 
 ## VIII. Icons & SVG
@@ -435,6 +704,8 @@ color: #2c2c2c;
 - [ ] Standalone component with OnPush
 - [ ] `inject()` for dependencies
 - [ ] Signal inputs/outputs in new code
+- [ ] **`signal()`/`computed()` for local state** (not BehaviorSubject)
+- [ ] **`as const` types** (not inline unions or enums)
 - [ ] `@if/@for/@switch` in new templates
 - [ ] `os-` selector prefix
 - [ ] `:host { display: block }` for block-level components
@@ -444,8 +715,15 @@ color: #2c2c2c;
 - [ ] Services do NOT show notifications (component responsibility)
 - [ ] CSS variables for colors
 - [ ] `map.get()` for SCSS values
+- [ ] **SCSS uses mixins for repeated patterns** (see Section VII DRY Principle)
 - [ ] English documentation
 - [ ] Searched for existing code before creating
+- [ ] **Files in `/shared/` import constants from `@shared/constants`** (not `@shared` barrel)
+
+### Build Execution Policy
+- **NEVER run `npm run build` automatically** after code changes
+- **Run build ONLY when user explicitly requests it**
+- User may ask: "запусти билд", "run build", "проверь билд", etc.
 
 ---
 
@@ -571,4 +849,4 @@ specs/{feature-name}/
 
 ---
 
-**Version:** 1.5.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2025-12-22
+**Version:** 1.9.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-04

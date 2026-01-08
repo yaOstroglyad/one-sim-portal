@@ -1,8 +1,12 @@
 <div
+  osGlobalSearch
   class="layout"
   [class.layout--dark]="layoutConfig.darkTheme"
   [class.layout--rtl]="languageService.isRtl()"
   [class.layout--sidebar-collapsed]="layoutConfig.sidebarCollapsed">
+
+  <!-- Header (full-width, above sidebar) -->
+  <app-header></app-header>
 
   <!-- Sidebar -->
   <app-sidebar
@@ -12,13 +16,28 @@
 
   <!-- Main Content Area -->
   <div class="layout__main">
-    <!-- Header -->
-    <app-header></app-header>
-
     <!-- Content -->
     <main
       class="layout__content"
       [class.layout__content--with-collapsed-sidebar]="layoutConfig.sidebarCollapsed">
+
+      <!-- Page Header (dynamic slot) -->
+      @if (pageLayoutService.hasHeader()) {
+        <os-page-header [zones]="pageLayoutService.header()" />
+      } @else {
+        <!-- Default: Breadcrumbs -->
+        <div class="layout__breadcrumb">
+          <app-breadcrumb></app-breadcrumb>
+        </div>
+      }
+
+      <!-- Page Subheader (dynamic slot) -->
+      @if (pageLayoutService.hasSubheader()) {
+        <os-page-sub-header [zones]="pageLayoutService.subheader()">
+          <os-mobile-filter-button mobileFilter />
+        </os-page-sub-header>
+      }
+
       <div class="layout__container">
         <router-outlet></router-outlet>
       </div>
@@ -38,4 +57,10 @@
 
   <!-- Flyout Layout -->
   <app-flyout-layout></app-flyout-layout>
+
+  <!-- Command Palette (Global Search) -->
+  <os-command-palette></os-command-palette>
+
+  <!-- Mobile Filter Drawer -->
+  <os-filter-drawer></os-filter-drawer>
 </div>

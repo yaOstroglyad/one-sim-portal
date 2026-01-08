@@ -11,6 +11,7 @@
 
 // Attribute Directives - modify element behavior
 export * from './attribute/copy-to-clipboard/copy-to-clipboard.directive';
+export * from './attribute/global-search/global-search.directive';
 
 // Structural Directives - conditionally show/hide content
 export * from './structural/feature-toggle/feature-toggle.directive';

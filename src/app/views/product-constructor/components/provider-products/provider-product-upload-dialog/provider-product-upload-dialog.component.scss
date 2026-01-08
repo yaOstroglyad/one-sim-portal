@@ -1,7 +1,7 @@
-@use "../../../../../../scss/variables" as vars;
+@use "mixins" as mixins;
 
 .dialog-header {
-  border-bottom: 1px solid var(--os-color-light-shade, #f4f5f8);
+  @include mixins.dialog-section-border(bottom);
 }
 
 .dialog-content {
@@ -12,9 +12,15 @@
 }
 
 .dialog-footer {
-  border-top: 1px solid var(--os-color-light-shade, #f4f5f8);
+  @include mixins.dialog-section-border(top);
 
   button + button {
     margin-left: 0.75rem;
   }
 }
+
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================
