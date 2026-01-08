@@ -1,19 +1,69 @@
 @use "mixins" as mixins;
+@use "../../../../scss/variables" as vars;
+@use "sass:map";
 
 :host {
+  // Mat-card dark theme support
   mat-card {
     margin-bottom: 20px;
+    background: var(--layout-content-bg);
+    border: 1px solid var(--layout-content-border);
+
+    mat-card-header {
+      mat-card-title {
+        color: var(--layout-content-text);
+      }
+    }
+
+    mat-card-content {
+      color: var(--layout-content-text);
+
+      p {
+        color: var(--layout-content-text);
+
+        strong {
+          color: var(--layout-content-text-muted);
+        }
+      }
+    }
+  }
+
+  // Mat-tabs dark theme support
+  ::ng-deep {
+    .mat-mdc-tab-group {
+      .mat-mdc-tab {
+        color: var(--layout-content-text);
+
+        &.mdc-tab--active {
+          color: var(--os-color-primary);
+        }
+      }
+
+      .mat-mdc-tab:not(.mat-mdc-tab-disabled) .mdc-tab__text-label {
+        color: var(--layout-content-text);
+      }
+
+      .mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label {
+        color: var(--os-color-primary);
+      }
+    }
   }
 }
+
 .header {
   @include mixins.flex-between();
   padding: 16px;
+  background: var(--layout-content-bg);
+  border: 1px solid var(--layout-content-border);
+  border-radius: map.get(vars.$os-border-radius, 'medium');
+  margin-bottom: 16px;
 
   .header-title {
     h1 {
       margin: 0;
       font-size: 24px;
       font-weight: bold;
+      color: var(--layout-content-text);
     }
   }
 
@@ -21,6 +71,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
+
+    button {
+      color: var(--layout-content-text);
+    }
   }
 }
 
