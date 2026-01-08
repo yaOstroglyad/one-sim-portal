@@ -59,10 +59,9 @@ html[dir="rtl"] {
 // ==============================================
 // VENDOR FRAMEWORKS
 // ==============================================
-@import "@coreui/coreui/scss/coreui";
-@import "@coreui/chartjs/scss/coreui-chartjs";
+@import "@coreui/coreui/dist/css/coreui.css";
+@import "@coreui/chartjs/dist/css/coreui-chartjs.css";
 
-//TODO remove there style lib
 // ==============================================
 // VENDOR OVERRIDES (must come AFTER vendor imports)
 // ==============================================
