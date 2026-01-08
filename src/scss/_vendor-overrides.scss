@@ -122,7 +122,6 @@ html.dark,
   overflow: hidden;
   position: relative;
 
-  // Fill available viewport height when loading or empty overlay is present
   &:has(.ag-overlay-wrapper) {
     height: calc(100vh - var(--table-offset, 280px));
   }
