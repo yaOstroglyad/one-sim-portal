@@ -1,11 +1,10 @@
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, inject, signal, computed, effect } from '@angular/core';
 
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
   GenericTableComponent,
-  Account,
   AuthService,
   ADMIN_PERMISSION,
   PeriodSelectorComponent,
@@ -15,12 +14,13 @@ import {
   formatDateForAPI,
   createPeriodFromPreset,
   IconComponent,
-  ExcelExportService
+  ExcelExportService,
+  AccountContextService
 } from '@shared';
 import { mapDataForExcel } from '@shared/utils/data';
-import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 import { BundlePurchasesTableService } from './services/bundle-purchases-table.service';
 import { BundleLeftoversTableService } from './services/bundle-leftovers-table.service';
+import { TrafficUsageTableService } from './services/traffic-usage-table.service';
 import { DEFAULT_REPORT_TABS, ReportTab, ReportTabId } from './models/report-tab.model';
 import { ReportStrategyService } from './services/report-strategy.service';
 import { ReportStrategy } from './models/report-strategy.interface';
@@ -31,7 +31,6 @@ import { ReportStrategy } from './models/report-strategy.interface';
   imports: [
     TranslateModule,
     GenericTableComponent,
-    AccountSelectorComponent,
     PeriodSelectorComponent,
     IconComponent
 ],
@@ -43,9 +42,11 @@ export class ReportsComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private readonly bundlePurchasesTableService = inject(BundlePurchasesTableService);
   private readonly bundleLeftoversTableService = inject(BundleLeftoversTableService);
+  private readonly trafficUsageTableService = inject(TrafficUsageTableService);
   private readonly excelExportService = inject(ExcelExportService);
   private readonly translateService = inject(TranslateService);
   private readonly strategyService = inject(ReportStrategyService);
+  private readonly accountContext = inject(AccountContextService);
   private readonly unsubscribe$ = new Subject<void>();
 
   // Tab Management
@@ -81,6 +82,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
         return this.bundlePurchasesTableService;
       case ReportTabId.BUNDLE_LEFTOVERS:
         return this.bundleLeftoversTableService;
+      case ReportTabId.TRAFFIC_USAGE:
+        return this.trafficUsageTableService;
       default:
         return this.bundlePurchasesTableService;
     }
@@ -88,11 +91,20 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   // General Signals
   public readonly isAdmin = signal(false);
-  public readonly selectedAccountId = signal<string | null>(null);
   public readonly selectedPeriod = signal<PeriodPreset>(PeriodPresets.CURRENT_MONTH);
   public readonly loading = signal(false);
   public readonly hasData = signal(false);
   public readonly currentPeriod = signal<PeriodDateRange | null>(null);
+
+  constructor() {
+    // React to account changes from global context
+    effect(() => {
+      const account = this.accountContext.selectedAccount();
+      if (account && this.currentPeriod()) {
+        this.loadReport();
+      }
+    });
+  }
 
   // Table Configuration (dynamic based on active tab)
   public get tableConfig$(): BehaviorSubject<any> {
@@ -105,26 +117,23 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.checkPermissions();
-    this.initializeAccount();
     this.initializePeriod();
+
+    // Configure account context for this page
+    this.accountContext.configure({
+      visible: true,
+      required: true
+    });
   }
 
   ngOnDestroy(): void {
+    this.accountContext.reset();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
   private checkPermissions(): void {
     this.isAdmin.set(this.authService.hasPermission(ADMIN_PERMISSION));
-  }
-
-  private initializeAccount(): void {
-    if (!this.isAdmin()) {
-      const loggedUser = this.authService.loggedUser;
-      if (loggedUser?.accountId) {
-        this.selectedAccountId.set(loggedUser.accountId);
-      }
-    }
   }
 
   private initializePeriod(): void {
@@ -136,14 +145,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
     // For admins: load data for all accounts (without accountId)
     // For non-admins: load data for their account
     this.loadReport();
-  }
-
-  public onAccountSelected(account: Account): void {
-    this.selectedAccountId.set(account.id);
-    // Reload data with new account if period is already selected
-    if (this.currentPeriod()) {
-      this.loadReport();
-    }
   }
 
   public onTabChange(tabId: string): void {
@@ -182,10 +183,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
     const strategy = this.currentStrategy();
     const params = {
       period,
-      // Pass accountId only if explicitly selected
+      // Pass accountId from global context
       // For admins without selection: undefined (get data for all accounts)
       // For non-admins: their accountId
-      accountId: this.selectedAccountId() || undefined
+      accountId: this.accountContext.selectedAccountId() || undefined
     };
 
     strategy.loadData(params)
@@ -223,7 +224,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
     }
 
     // Determine footer visibility based on role and account selection
-    const shouldShowFooter = !this.isAdmin() || this.selectedAccountId() !== null;
+    const shouldShowFooter = !this.isAdmin() || this.accountContext.selectedAccountId() !== null;
     currentConfig.footer.enabled = shouldShowFooter;
 
     // If footer is disabled, clear values and skip calculation

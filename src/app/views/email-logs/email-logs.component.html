@@ -1,11 +1,3 @@
-<!-- Account Selector (только для админов) -->
-@if (isAdmin) {
-  <app-account-selector
-    [helperText]="'COMMON.select_account_hint_message'"
-    (accountSelected)="onAccountSelected($event)">
-  </app-account-selector>
-}
-
 <!-- Header with filters -->
 <app-header class="os-header-sticky"
   [formGroup]="filterForm"

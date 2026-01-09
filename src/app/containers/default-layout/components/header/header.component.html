@@ -29,6 +29,11 @@
 
     <!-- Right side: User actions -->
     <div class="header__right">
+      <!-- Account selector chip (admin only, when visible) -->
+      @if (accountContext.isVisible()) {
+        <os-account-selector-chip class="header__account-chip" />
+      }
+
       <!-- Theme toggle -->
       <button
         class="header__action-btn"

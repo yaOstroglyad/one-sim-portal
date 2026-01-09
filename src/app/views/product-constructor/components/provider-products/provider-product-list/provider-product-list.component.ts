@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, BehaviorSubject, Subject, of } from 'rxjs';
@@ -14,8 +14,7 @@ import {
   GenericTableComponent,
   HeaderComponent,
   TableConfig,
-  CountryService,
-  LanguageService
+  CountryService
 } from '@shared';
 import { ProviderProductDetailsComponent } from '../provider-product-details/provider-product-details.component';
 import { ProviderProductUploadDialogComponent } from '../provider-product-upload-dialog';
@@ -67,14 +66,6 @@ export class ProviderProductListComponent implements OnInit, OnDestroy {
   public regionOptions$: Observable<SearchableSelectOption[]>;
 
   private unsubscribe$ = new Subject<void>();
-
-  // RTL support
-  private readonly languageService = inject(LanguageService);
-
-  readonly containerClasses = computed(() => ({
-    'provider-product-list-container': true,
-    'provider-product-list-container--rtl': this.languageService.isRtl()
-  }));
 
   // Panel states
   showDetailsPanel = false;

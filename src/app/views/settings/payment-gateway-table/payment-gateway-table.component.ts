@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, OnDestroy, ChangeDetectorRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, OnDestroy, ChangeDetectorRef, AfterViewInit, ChangeDetectionStrategy, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,8 +12,7 @@ import { PaymentGatewayService } from './payment-gateway.service';
 import { EditPaymentGatewayComponent } from './edit-payment-gateway/edit-payment-gateway.component';
 import { PaymentStrategy } from '@shared/models/payment';
 import { GenericTableComponent } from 'src/app/shared/components/generic-table/generic-table.component';
-import { ADMIN_PERMISSION, AuthService, TableConfig, Account } from 'src/app/shared';
-import { AccountSelectorComponent } from 'src/app/shared/components/account-selector/account-selector.component';
+import { ADMIN_PERMISSION, AuthService, TableConfig, Account, AccountContextService } from 'src/app/shared';
 import { GenericRightPanelComponent, PanelAction } from 'src/app/shared/components/generic-right-panel/generic-right-panel.component';
 
 @Component({
@@ -33,7 +32,6 @@ import { GenericRightPanelComponent, PanelAction } from 'src/app/shared/componen
         BadgeModule,
         ButtonModule,
         DropdownModule,
-        AccountSelectorComponent,
         GenericRightPanelComponent,
         EditPaymentGatewayComponent
     ],
@@ -47,11 +45,11 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 	@ViewChild('isPrimaryFlag') isPrimaryFlagTemplate: TemplateRef<any>;
 	@ViewChild('paymentGatewayFormRef', { static: false }) paymentGatewayFormRef?: EditPaymentGatewayComponent;
 	private unsubscribe$ = new Subject<void>();
+	private readonly accountContext = inject(AccountContextService);
 	public isAdmin: boolean;
 	public tableConfig$: BehaviorSubject<TableConfig>;
 	public dataList$: Observable<any[]>;
 	public strategyTypes$: Observable<string[]>;
-	public selectedAccount: Account | null = null;
 
 	// Right panel properties
 	public isPanelOpen: boolean = false;
@@ -75,16 +73,35 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 				serverSide: true
 			}
 		});
+
+		// React to account changes from global context
+		effect(() => {
+			const account = this.accountContext.selectedAccount();
+			if (account && !account.isAdmin) {
+				this.loadPaymentGateways(account.id);
+			}
+		});
 	}
 
 	get shouldShowContent(): boolean {
 		if (!this.isAdmin) {
 			return true;
 		}
-		return this.selectedAccount && !this.selectedAccount.isAdmin;
+		const account = this.accountContext.selectedAccount();
+		return account !== null && !account.isAdmin;
+	}
+
+	get selectedAccount(): Account | null {
+		return this.accountContext.selectedAccount();
 	}
 
 	ngOnInit(): void {
+		// Configure account context for this page
+		this.accountContext.configure({
+			visible: true,
+			required: true
+		});
+
 		if (!this.isAdmin) {
 			this.loadPaymentGateways();
 		} else {
@@ -105,15 +122,9 @@ export class PaymentGatewayTableComponent implements OnInit, OnDestroy, AfterVie
 	}
 
 	ngOnDestroy(): void {
+		this.accountContext.reset();
 		this.unsubscribe$.next();
 		this.unsubscribe$.complete();
-	}
-
-	public onAccountSelected(account: Account): void {
-		this.selectedAccount = account;
-		if (!account.isAdmin) {
-			this.loadPaymentGateways(account.id);
-		}
 	}
 
 	private loadPaymentGateways(accountId?: string): void {

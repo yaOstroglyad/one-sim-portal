@@ -8,13 +8,11 @@
 
     // KPI Cards Row - 5 columns for subscriber metrics
     .kpi-row {
-      margin-bottom: 1.5rem;
       @include mixins.dashboard-kpi-grid(5);
     }
 
     // Chart section (full width)
     .chart-section {
-      margin-bottom: 1.5rem;
 
       .chart-card {
         overflow: hidden; // Prevent chart overflow
@@ -62,7 +60,6 @@
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
-      margin-bottom: 1.5rem;
 
       .bundle-card,
       .country-card {

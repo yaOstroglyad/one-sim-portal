@@ -293,7 +293,8 @@
       "loadReport": "טען דוח",
       "tabs": {
         "bundlePurchases": "רכישות חבילות",
-        "bundleLeftovers": "שאריות חבילות"
+        "bundleLeftovers": "שאריות חבילות",
+        "trafficUsage": "שימוש בתעבורה"
       },
       "bundlePurchases": {
         "title": "דוח רכישות חבילות",
@@ -338,6 +339,19 @@
         "percentLeftovers": "אחוז שאריות",
         "providerPriceMb": "מחיר ספק/MB",
         "leftovers": "ערך שאריות"
+      },
+      "trafficUsage": {
+        "description": "צפייה בשימוש תעבורה לפי מדינה וחברה עם פירוט עלויות",
+        "title": "דוח שימוש תעבורה",
+        "emptyState": {
+          "title": "לא נמצאו נתוני שימוש תעבורה",
+          "description": "בחר טווח תאריכים לצפייה בנתוני שימוש תעבורה לתקופה שנבחרה"
+        },
+        "country": "מדינה",
+        "company": "חברה",
+        "usageMb": "שימוש (MB)",
+        "totalCost": "עלות כוללת",
+        "costPerMb": "עלות ל-MB"
       }
     },
     "adminOverview": {
@@ -409,6 +423,10 @@
     "type": "סוג",
     "description": "תיאור",
     "company": "חברה",
+    "companySearch": "חברה",
+    "companySearchPlaceholder": "בחר חברה",
+    "companySearchInputPlaceholder": "חפש חברה לפי שם...",
+    "companySearchNoResults": "לא נמצאו חברות",
     "iccid": "ICCID",
     "externalId": "מזהה חיצוני",
     "externalTransactionId": "מזהה עסקה חיצוני",

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject, computed } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
@@ -15,10 +15,9 @@ import {
   SearchableSelectComponent,
   SearchableSelectOption,
   UserRoleService,
-  LanguageService,
-  Account,
   Country,
-  CountryService
+  CountryService,
+  AccountContextService
 } from '@shared';
 import { CompanyProductDetailsComponent } from '../company-product-details/company-product-details.component';
 import { CompanyProductFormComponent } from '../company-product-form/company-product-form.component';
@@ -33,7 +32,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CompanyProductService, RegionService } from '../../../services';
 import { CompanyProduct, CompanyProductSearchRequest, RegionSummary } from '../../../models';
 import { CompanyProductsTableService } from '../company-products-table.service';
-import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 
 @Component({
     standalone: true,
@@ -48,7 +46,6 @@ import { AccountSelectorComponent } from '@shared/components/account-selector/ac
         CompanyProductFormComponent,
         GenericTableComponent,
         HeaderComponent,
-        AccountSelectorComponent,
         MatMenuModule,
         MatIconModule,
         MatButtonModule,
@@ -90,9 +87,8 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   // Panel actions
   detailsPanelActions: PanelAction[] = [];
 
-  // Permission check and account selection
+  // Permission check
   isAdmin = false;
-  selectedAccountId: string | null = null;
 
   // Dropdown data
   countries$: Observable<Country[]>;
@@ -100,13 +96,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
   countryOptions$: Observable<SearchableSelectOption[]>;
   regionOptions$: Observable<SearchableSelectOption[]>;
 
-  // RTL support
-  private readonly languageService = inject(LanguageService);
-
-  readonly containerClasses = computed(() => ({
-    'company-product-list-container': true,
-    'company-product-list-container--rtl': this.languageService.isRtl()
-  }));
+  private readonly accountContext = inject(AccountContextService);
 
   constructor(
     private companyProductService: CompanyProductService,
@@ -162,22 +152,33 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
         } as SearchableSelectOption));
       })
     );
+
+    // React to account changes from global context
+    effect(() => {
+      const account = this.accountContext.selectedAccount();
+      if (account) {
+        this.loading = true;
+        this.cdr.markForCheck();
+        this.resetForm();
+      }
+    });
   }
 
   ngOnInit(): void {
     this.checkPermissions();
-    this.initializeAccount();
     this.setupFilters();
 
-    // Only load data if user is not admin (non-admin users have account already set)
-    if (!this.isAdmin) {
-      this.loading = true;
-      this.loadData(); // Load initial data for non-admin users
-    }
-    // For admins, don't load data until they select an account
+    // Configure account context for this page
+    this.accountContext.configure({
+      visible: true,
+      required: true
+    });
+
+    // Data loading is now handled by the effect reacting to account changes
   }
 
   ngOnDestroy(): void {
+    this.accountContext.reset();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -208,9 +209,10 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     regionId?: number;
     accountId?: string;
   } = { page: 0, size: 15 }): void {
+    const selectedAccountId = this.accountContext.selectedAccountId();
 
     // For admins, ensure we have a selected account before making the request
-    if (this.isAdmin && !params.accountId && !this.selectedAccountId) {
+    if (this.isAdmin && !params.accountId && !selectedAccountId) {
       // No account selected, don't make the request
       this.companyProducts$ = of([]);
       this.loading = false;
@@ -223,7 +225,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
         countryId: params.countryId || undefined,
         regionId: params.regionId || undefined,
         // Only send accountId for admin users
-        accountId: this.isAdmin ? (params.accountId || this.selectedAccountId || undefined) : undefined
+        accountId: this.isAdmin ? (params.accountId || selectedAccountId || undefined) : undefined
       },
       page: {
         page: params.page,
@@ -272,13 +274,8 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
       this.genericTable.currentPage = 0;
     }
 
-    // For admins, keep the selected account when resetting other filters
-    if (this.isAdmin && this.selectedAccountId) {
-      this.filterForm.reset({ accountId: this.selectedAccountId });
-    } else {
-      // For non-admin users, reset without accountId
-      this.filterForm.reset();
-    }
+    // Reset the form (account is now managed globally)
+    this.filterForm.reset();
     this.applyFilter();
   }
 
@@ -429,28 +426,7 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
     this.isAdmin = this.userRoleService.isAdmin();
   }
 
-  private initializeAccount(): void {
-    if (!this.isAdmin) {
-      const loggedUser = this.userRoleService.getLoggedUser();
-      if (loggedUser?.accountId) {
-        this.selectedAccountId = loggedUser.accountId;
-        // Don't set accountId in form for non-admin users
-        // this.filterForm.patchValue({ accountId: this.selectedAccountId });
-      }
-    }
-  }
-
-  public onAccountSelected(account: Account): void {
-    this.selectedAccountId = account.id;
-    this.filterForm.patchValue({ accountId: account.id }, { emitEvent: false });
-
-    // For admins, this is the first time we load data after account selection
-    if (this.isAdmin) {
-      this.loading = true;
-      this.cdr.markForCheck();
-    }
-
-    // Reset form (which also resets pagination) when account changes
-    this.resetForm();
+  get selectedAccountId(): string | null {
+    return this.accountContext.selectedAccountId();
   }
 }

@@ -11,6 +11,7 @@ export enum FieldType {
 	datepicker = 'datepicker',
 	textarea = 'textarea',
 	select = 'select',
+	searchableSelect = 'searchableSelect',
 	chips = 'chips',
 	checkbox = 'checkbox',
 	slide = 'slide',
@@ -116,6 +117,16 @@ export interface FieldConfig {
 		uploadButtonText?: string;
 		showUploadButton?: boolean;
 		autoUpload?: boolean;
+	};
+
+	//searchableSelect
+	searchableSelectConfig?: {
+		placeholder?: string;
+		searchPlaceholder?: string;
+		noResultsText?: string;
+		clearable?: boolean;
+		maxHeight?: string;
+		searchFn: (searchTerm: string) => Observable<Array<{ value: any; label: string }>>;
 	};
 
 	dependsOn?: string[];

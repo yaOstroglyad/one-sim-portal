@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal, Signal, computed } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { JwtHelperService } from './jwt-helper.service';
@@ -24,13 +24,29 @@ export class AuthService {
 	private $SessionStorageService = inject(SessionStorageService);
 	private $LocalStorageService = inject(LocalStorageService);
 
+	/**
+	 * @deprecated Use permissionsSignal() instead for reactive access
+	 */
 	public permissions: string[] = [];
-	private permissions$: Observable<string[]> | null = null;
+	private permissionsObservable$: Observable<string[]> | null = null;
 	private unsubscribe$ = new Subject<void>();
 	private static AUTH_URL = '/auth/login';
 	private static RE_AUTH_URL = '/auth/refresh';
 	private rememberMe: boolean = false;
 	reLoginTimeout: any;
+
+	// === Signal-based permissions (reactive) ===
+	private readonly permissionsSignal = signal<string[]>([]);
+
+	/**
+	 * Reactive Signal<string[]> containing current user permissions.
+	 * Use this in effects and computed signals for automatic reactivity.
+	 * Note: This is a Signal, not an Observable.
+	 */
+	readonly currentPermissions = this.permissionsSignal.asReadonly();
+
+	// Cache for hasPermission$ computed signals
+	private readonly permissionCache = new Map<string, Signal<boolean>>();
 
 	get loggedUser() {
 		const loginResponse = this.$SessionStorageService.retrieve('loginResponse')
@@ -54,22 +70,46 @@ export class AuthService {
 	}
 
 	loadPermissions(): Observable<string[]> {
-		if (this.permissions$) {
-			return this.permissions$;
+		if (this.permissionsObservable$) {
+			return this.permissionsObservable$;
 		}
 
-		this.permissions$ = this.http.get<{ id: string; name: string; displayName: string }[]>('/api/v1/users/roles')
+		this.permissionsObservable$ = this.http.get<{ id: string; name: string; displayName: string }[]>('/api/v1/users/roles')
 			.pipe(
 				map(res => res.map(role => role.name)),
-				tap(roles => this.permissions = roles),
+				tap(roles => {
+					this.permissions = roles;
+					this.permissionsSignal.set(roles);
+				}),
 				shareReplay(1)
 			);
 
-		return this.permissions$;
+		return this.permissionsObservable$;
 	}
 
+	/**
+	 * @deprecated Use hasPermission$() for reactive permission checking in effects/computed
+	 */
 	hasPermission(permission: string): boolean {
 		return this.permissions?.includes(permission) || false;
+	}
+
+	/**
+	 * Reactive permission check - returns a Signal<boolean>.
+	 * Use this in effects and computed signals for automatic reactivity.
+	 * @example
+	 * effect(() => {
+	 *   const isAdmin = this.authService.hasPermission$(ADMIN_PERMISSION)();
+	 *   // This will re-run when permissions change
+	 * });
+	 */
+	hasPermission$(permission: string): Signal<boolean> {
+		let cached = this.permissionCache.get(permission);
+		if (!cached) {
+			cached = computed(() => this.permissionsSignal().includes(permission));
+			this.permissionCache.set(permission, cached);
+		}
+		return cached;
 	}
 
 
@@ -178,7 +218,8 @@ export class AuthService {
 		clearInterval(this.reLoginTimeout);
 		this.deleteLoginResponse();
 		this.permissions = [];
-		this.permissions$ = null;
+		this.permissionsSignal.set([]);
+		this.permissionsObservable$ = null;
 	}
 
 	/**

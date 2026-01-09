@@ -2,24 +2,22 @@
 @use "../../../../../../scss/mixins" as mixins;
 
 .company-product-list-container {
-  // RTL support
-  &--rtl {
-    direction: rtl;
-
-    .text-end {
-      text-align: left !important;
-    }
-
-    .reset-button {
-      svg {
-        transform: scaleX(-1);
-      }
-    }
-  }
-
   // Text muted uses layout variables that auto-switch
   .text-muted {
     color: var(--layout-content-text-muted) !important;
+  }
+}
+
+// RTL support - uses :host-context to check ancestor [dir="rtl"]
+:host-context([dir="rtl"]) {
+  .text-end {
+    text-align: left !important;
+  }
+
+  .reset-button {
+    svg {
+      transform: scaleX(-1);
+    }
   }
 }
 

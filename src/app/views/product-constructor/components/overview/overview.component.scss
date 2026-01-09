@@ -6,29 +6,27 @@
 .overview-container {
   max-width: 1200px;
   margin: 0 auto;
-  
-  // RTL Support
-  &--rtl {
-    direction: rtl;
-    
-    .action-icon {
-      margin-right: 0;
-      margin-left: map.get(vars.$os-spacing, '4');
+}
+
+// RTL support - uses :host-context to check ancestor [dir="rtl"]
+:host-context([dir="rtl"]) {
+  .action-icon {
+    margin-right: 0;
+    margin-left: map.get(vars.$os-spacing, '4');
+  }
+
+  .action-arrow {
+    margin-left: 0;
+    margin-right: map.get(vars.$os-spacing, '4');
+
+    svg {
+      transform: rotate(180deg);
     }
-    
-    .action-arrow {
-      margin-left: 0;
-      margin-right: map.get(vars.$os-spacing, '4');
-      
-      svg {
-        transform: rotate(180deg);
-      }
-    }
-    
-    .coming-soon-badge {
-      margin-left: 0;
-      margin-right: map.get(vars.$os-spacing, '2');
-    }
+  }
+
+  .coming-soon-badge {
+    margin-left: 0;
+    margin-right: map.get(vars.$os-spacing, '2');
   }
 }
 

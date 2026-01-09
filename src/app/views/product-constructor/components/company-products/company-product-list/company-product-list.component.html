@@ -1,12 +1,4 @@
-<div [ngClass]="containerClasses()">
-
-  @if (isAdmin) {
-    <app-account-selector
-      [helperText]="'COMMON.select_account_hint_message'"
-      (accountSelected)="onAccountSelected($event)">
-    </app-account-selector>
-  }
-
+<div class="company-product-list-container">
   <app-header class="os-header-sticky"
     [formGroup]="filterForm"
     [tableConfig$]="tableConfig$"

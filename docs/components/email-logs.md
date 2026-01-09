@@ -1,7 +1,7 @@
 # Email Logs Component
 
 > **Status:** Active
-> **Last Updated:** 2025-11-26
+> **Last Updated:** 2026-01-08
 > **Location:** `src/app/views/email-logs/`
 
 ## Overview
@@ -12,8 +12,8 @@ Displays email event logs with filtering by ICCID, email, and date range. Suppor
 
 | Role | Behavior |
 |------|----------|
-| Admin | Shows account selector, can view any account's logs |
-| Regular User | Auto-uses own accountId, no selector shown |
+| Admin | Account selector shown in header via `AccountContextService`, can view any account's logs |
+| Regular User | No selector shown, auto-uses own accountId |
 
 ## Filters
 
@@ -78,6 +78,6 @@ iccids: item.iccids?.join(', ') || '-'
 
 - `GenericTableComponent` - Table display
 - `HeaderComponent` - Filters toolbar
-- `AccountSelectorComponent` - Account selection (admin only)
+- `AccountContextService` - Global account selection (admin only, in header)
 - `DatePickerWrapperComponent` - Date filters
 - `EmailLogsTableConfigService` - Table config and data loading

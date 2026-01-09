@@ -1,0 +1,24 @@
+<div class="os-account-chip" [class.os-account-chip--attention]="accountContext.needsAttention()">
+  @if (accountContext.isLoading()) {
+    <div class="os-account-chip__loading">
+      <mat-spinner diameter="16"></mat-spinner>
+    </div>
+  } @else if (accountContext.isEmpty()) {
+    <div class="os-account-chip__empty">
+      {{ 'common.noAccounts' | translate }}
+    </div>
+  } @else {
+    <mat-form-field appearance="outline" class="os-account-chip__field">
+      <mat-select
+        [value]="accountContext.selectedAccountId()"
+        (selectionChange)="onAccountChange($event.value)"
+        panelClass="os-account-chip-panel">
+        @for (account of accountContext.accounts(); track account.id) {
+          <mat-option [value]="account.id">
+            {{ getDisplayName(account) }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+</div>

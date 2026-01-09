@@ -45,6 +45,8 @@ import {
 	MultiselectGridComponent,
 	RichTextInputComponent
 } from '../form-inputs';
+import { SearchableSelectComponent } from '../searchable-select/searchable-select.component';
+import { SearchableSelectOption, SearchableSelectConfig } from '../searchable-select/searchable-select.types';
 
 @Component({
     standalone: true,
@@ -74,12 +76,17 @@ import {
         RichTextInputComponent,
         MultiselectGridComponent,
         FormArrayItemComponent,
-        FileUploadComponent
+        FileUploadComponent,
+        SearchableSelectComponent
     ]
 })
 export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 	private unsubscribe$ = new Subject<void>();
 	private fieldsHintState$ = new BehaviorSubject<Record<string, boolean>>({});
+
+	// Searchable select options storage per field
+	private searchableSelectOptionsMap = new Map<string, SearchableSelectOption[]>();
+	private searchableSelectLoadingMap = new Map<string, boolean>();
 
 	addingItem = false;
 
@@ -385,6 +392,50 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 		};
 
 		return defaultMessages[errorKey] || 'Invalid value';
+	}
+
+	// Searchable Select Methods
+	getSearchableSelectOptions(fieldName: string): SearchableSelectOption[] {
+		return this.searchableSelectOptionsMap.get(fieldName) || [];
+	}
+
+	getSearchableSelectConfig(field: FieldConfig): SearchableSelectConfig {
+		const config = field.searchableSelectConfig;
+		return {
+			placeholder: config?.placeholder || field.placeholder || 'Select...',
+			searchPlaceholder: config?.searchPlaceholder || 'Search...',
+			noResultsText: config?.noResultsText || 'No results found',
+			clearable: config?.clearable ?? true,
+			maxHeight: config?.maxHeight || '200px',
+			searchable: true,
+			loading: this.searchableSelectLoadingMap.get(field.name) || false
+		};
+	}
+
+	onSearchableSelectSearch(searchTerm: string, field: FieldConfig): void {
+		const config = field.searchableSelectConfig;
+		if (!config?.searchFn) {
+			return;
+		}
+
+		// Set loading state
+		this.searchableSelectLoadingMap.set(field.name, true);
+		this.cdr.markForCheck();
+
+		config.searchFn(searchTerm).pipe(
+			takeUntil(this.unsubscribe$)
+		).subscribe({
+			next: (options) => {
+				this.searchableSelectOptionsMap.set(field.name, options);
+				this.searchableSelectLoadingMap.set(field.name, false);
+				this.cdr.markForCheck();
+			},
+			error: () => {
+				this.searchableSelectOptionsMap.set(field.name, []);
+				this.searchableSelectLoadingMap.set(field.name, false);
+				this.cdr.markForCheck();
+			}
+		});
 	}
 
 }

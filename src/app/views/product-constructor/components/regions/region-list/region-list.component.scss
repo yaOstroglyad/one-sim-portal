@@ -7,17 +7,16 @@
 .region-list-container {
   max-width: 1200px;
   margin: 0 auto;
+}
 
-  &--rtl {
-    direction: rtl;
+// RTL support - uses :host-context to check ancestor [dir="rtl"]
+:host-context([dir="rtl"]) {
+  .page-header .header-actions .btn .icon {
+    transform: scaleX(-1);
+  }
 
-    .page-header .header-actions .btn .icon {
-      transform: scaleX(-1);
-    }
-
-    .regions-list .region-item .region-actions {
-      justify-content: flex-start;
-    }
+  .regions-list .region-item .region-actions {
+    justify-content: flex-start;
   }
 }
 

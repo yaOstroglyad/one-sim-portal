@@ -24,7 +24,8 @@ export interface ReportTab {
  */
 export enum ReportTabId {
   BUNDLE_PURCHASES = 'bundlePurchases',
-  BUNDLE_LEFTOVERS = 'bundleLeftovers'
+  BUNDLE_LEFTOVERS = 'bundleLeftovers',
+  TRAFFIC_USAGE = 'trafficUsage'
 }
 
 /**
@@ -44,5 +45,12 @@ export const DEFAULT_REPORT_TABS: ReportTab[] = [
     descriptionKey: 'analytics.reports.bundleLeftovers.description',
     icon: 'chart-line',
     disabled: false // Now implemented
+  },
+  {
+    id: ReportTabId.TRAFFIC_USAGE,
+    label: 'analytics.reports.tabs.trafficUsage',
+    descriptionKey: 'analytics.reports.trafficUsage.description',
+    icon: 'globe',
+    disabled: false
   }
 ];

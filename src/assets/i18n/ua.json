@@ -73,6 +73,7 @@
     "clear": "Очистити",
     "clearAll": "Очистити все",
     "noFilters": "Немає доступних фільтрів",
+    "noAccounts": "Немає акаунтів",
     "today": "Сьогодні",
     "search": {
       "placeholder": "Пошук по навігації...",
@@ -207,7 +208,8 @@
       "loadReport": "Завантажити звіт",
       "tabs": {
         "bundlePurchases": "Покупки бандлів",
-        "bundleLeftovers": "Залишки бандлів"
+        "bundleLeftovers": "Залишки бандлів",
+        "trafficUsage": "Використання трафіку"
       },
       "bundlePurchases": {
         "title": "Звіт по покупках бандлів",
@@ -252,6 +254,19 @@
         "percentLeftovers": "Залишок %",
         "providerPriceMb": "Ціна провайдера/МБ",
         "leftovers": "Вартість залишків"
+      },
+      "trafficUsage": {
+        "description": "Перегляд використання трафіку по країнах та компаніях з розбивкою вартості",
+        "title": "Звіт по використанню трафіку",
+        "emptyState": {
+          "title": "Дані про використання трафіку не знайдено",
+          "description": "Виберіть діапазон дат для перегляду даних про використання трафіку за вибраний період"
+        },
+        "country": "Країна",
+        "company": "Компанія",
+        "usageMb": "Використання (МБ)",
+        "totalCost": "Загальна вартість",
+        "costPerMb": "Вартість за МБ"
       }
     },
     "adminOverview": {
@@ -323,6 +338,10 @@
     "type": "Тип",
     "description": "Опис",
     "company": "Компанія",
+    "companySearch": "Компанія",
+    "companySearchPlaceholder": "Виберіть компанію",
+    "companySearchInputPlaceholder": "Пошук компанії за назвою...",
+    "companySearchNoResults": "Компанії не знайдено",
     "iccid": "ICCID",
     "externalId": "Зовнішній ID",
     "externalTransactionId": "Зовнішній ID транзакції",

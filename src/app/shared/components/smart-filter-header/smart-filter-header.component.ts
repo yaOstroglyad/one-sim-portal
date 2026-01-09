@@ -51,9 +51,19 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
   formGroup = input.required<FormGroup>();
   config = input<SmartFilterConfig>(DEFAULT_SMART_FILTER_CONFIG);
 
+  /**
+   * When true, the panel is NOT rendered inside this component.
+   * Use panelOpen output and showFilterPanel() to control external panel.
+   * This is needed when smart-filter-header is inside a sticky/positioned container.
+   */
+  useExternalPanel = input<boolean>(false);
+
   // Outputs using output()
   resetFilters = output<void>();
   filtersChanged = output<any>();
+
+  /** Emits when panel should open/close. Use with useExternalPanel=true */
+  panelOpenChange = output<boolean>();
 
   // Content children
   @ContentChild('simpleFilters', { static: true }) simpleFiltersTemplate: TemplateRef<any>;
@@ -78,7 +88,9 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
     Math.max(0, this.activeFilters().length - this.config().maxVisibleChips)
   );
   protected readonly hasOverflowChips = computed(() => this.hiddenChipsCount() > 0);
-  protected readonly hasActiveFilters = computed(() => this.activeFilters().length > 0);
+
+  /** Public for external panel usage */
+  readonly hasActiveFilters = computed(() => this.activeFilters().length > 0);
   protected readonly hiddenChipsTooltip = computed(() => {
     const hiddenChips = this.activeFilters().slice(this.config().maxVisibleChips);
     return hiddenChips.map(chip => `• ${chip.label}: ${chip.displayValue}`).join('\n');
@@ -280,10 +292,12 @@ export class SmartFilterHeaderComponent implements OnInit, OnDestroy {
 
   public openFilters(): void {
     this.showFilterPanel.set(true);
+    this.panelOpenChange.emit(true);
   }
 
   public closeFilters(): void {
     this.showFilterPanel.set(false);
+    this.panelOpenChange.emit(false);
   }
 
   public onResetFilters(): void {

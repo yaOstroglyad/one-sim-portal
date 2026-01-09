@@ -14,9 +14,9 @@ import {
   SearchableSelectComponent,
   SearchableSelectOption,
   SearchableSelectConfig,
-  Account,
   AuthService,
-  ADMIN_PERMISSION
+  ADMIN_PERMISSION,
+  AccountContextService
 } from '@shared';
 import { TicketDetailsWrapperComponent } from '../ticket-details-wrapper/ticket-details-wrapper.component';
 import { TicketEditWrapperComponent } from '../ticket-edit-wrapper/ticket-edit-wrapper.component';
@@ -31,7 +31,6 @@ import { TicketService, TicketEventService } from '../../../services';
 import { Ticket, TicketSearchRequest, TicketStatus, TicketPriority, TicketCategory } from '../../../models';
 import { TicketsTableService } from '../tickets-table.service';
 import { MatDividerModule } from '@angular/material/divider';
-import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 
 @Component({
     standalone: true,
@@ -52,8 +51,7 @@ import { AccountSelectorComponent } from '@shared/components/account-selector/ac
         BadgeComponent,
         IconDirective,
         SearchableSelectComponent,
-        MatDividerModule,
-        AccountSelectorComponent
+        MatDividerModule
     ],
     providers: [TicketsTableService],
     templateUrl: './ticket-list.component.html',
@@ -75,6 +73,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   private router = inject(Router);
   private ticketEventService = inject(TicketEventService);
   private authService = inject(AuthService);
+  private accountContext = inject(AccountContextService);
 
   // Observable for GenericTable compatibility
   tickets$: Observable<Ticket[]>;
@@ -111,7 +110,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Account selector properties as signals
   isAdmin = signal(false);
-  selectedAccountId = signal<string | null>(null);
 
   // Sort state as signal
   currentSort = signal<{ column: string; direction: 'asc' | 'desc' } | null>(null);
@@ -142,6 +140,14 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Effects for signal-based event service
     this.setupEventEffects();
+
+    // React to account changes from global context
+    effect(() => {
+      const account = this.accountContext.selectedAccount();
+      if (account) {
+        this.loadData();
+      }
+    });
   }
 
   private setupEventEffects(): void {
@@ -156,22 +162,21 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Check permissions and initialize account
     this.checkPermissions();
-    this.initializeAccount();
-
-    // Setup filters first
     this.setupFilters();
+
+    // Configure account context for this page
+    this.accountContext.configure({
+      visible: true,
+      required: true
+    });
 
     // Then check for query parameters from quick actions
     this.route.queryParams.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
       let filtersApplied = false;
 
-      // Handle accountId from overview navigation
-      if (params['accountId'] && this.isAdmin()) {
-        this.selectedAccountId.set(params['accountId']);
-        filtersApplied = true;
-      }
+      // Note: accountId from query params is no longer handled here
+      // Account selection is now managed by global AccountContextService
 
       if (params['priority']) {
         // Set priority filter from quick action
@@ -195,6 +200,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.accountContext.reset();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -211,21 +217,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private checkPermissions(): void {
     this.isAdmin.set(this.authService.hasPermission(ADMIN_PERMISSION));
-  }
-
-  private initializeAccount(): void {
-    if (!this.isAdmin()) {
-      // For non-admin users, use account from loggedUser
-      const loggedUser = this.authService.loggedUser;
-      if (loggedUser?.accountId) {
-        this.selectedAccountId.set(loggedUser.accountId);
-      }
-    }
-  }
-
-  public onAccountSelected(account: Account): void {
-    this.selectedAccountId.set(account.id);
-    this.loadData();
   }
 
   private initializeFilterOptions(): void {
@@ -314,7 +305,8 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   } = { page: 0, size: 15 }): void {
 
     // Don't load data if admin hasn't selected an account yet
-    if (this.isAdmin() && !this.selectedAccountId()) {
+    const selectedAccountId = this.accountContext.selectedAccountId();
+    if (this.isAdmin() && !selectedAccountId) {
       return;
     }
 
@@ -325,7 +317,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
         priority: params.priority || undefined,
         category: params.category || undefined,
         search: params.search || undefined,
-        accountId: this.selectedAccountId() || undefined
+        accountId: selectedAccountId || undefined
       },
       page: {
         page: params.page,

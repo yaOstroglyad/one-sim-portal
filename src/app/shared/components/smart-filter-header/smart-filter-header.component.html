@@ -78,41 +78,43 @@
     </button>
   </div>
 
-  <!-- Right panel для advanced фильтров -->
-  <app-generic-right-panel
-    [isOpen]="showFilterPanel()"
-    [title]="'smartFilter.advancedFilters' | translate"
-    [subtitle]="'smartFilter.configureSearchCriteria' | translate"
-    [hasFooter]="true"
-    (close)="closeFilters()">
+  <!-- Right panel для advanced фильтров (only when NOT using external panel) -->
+  @if (!useExternalPanel()) {
+    <app-generic-right-panel
+      [isOpen]="showFilterPanel()"
+      [title]="'smartFilter.advancedFilters' | translate"
+      [subtitle]="'smartFilter.configureSearchCriteria' | translate"
+      [hasFooter]="true"
+      (close)="closeFilters()">
 
-    <!-- Panel content with all filters -->
-    <div panel-content class="advanced-filters-content">
-      <ng-container *ngTemplateOutlet="advancedFiltersTemplate"></ng-container>
-    </div>
+      <!-- Panel content with all filters -->
+      <div panel-content class="advanced-filters-content">
+        <ng-container *ngTemplateOutlet="advancedFiltersTemplate"></ng-container>
+      </div>
 
-    <!-- Panel actions -->
-    <ng-container panel-actions>
-      <button
-        type="button"
-        class="btn btn-outline-secondary"
-        (click)="closeFilters()">
-        {{ 'common.cancel' | translate }}
-      </button>
-      <button
-        type="button"
-        class="btn btn-outline-danger"
-        (click)="onResetFilters()"
-        [disabled]="!hasActiveFilters()">
-        {{ 'smartFilter.resetAll' | translate }}
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="closeFilters()">
-        {{ 'smartFilter.applyFilters' | translate }}
-      </button>
-    </ng-container>
+      <!-- Panel actions -->
+      <ng-container panel-actions>
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="closeFilters()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          (click)="onResetFilters()"
+          [disabled]="!hasActiveFilters()">
+          {{ 'smartFilter.resetAll' | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="closeFilters()">
+          {{ 'smartFilter.applyFilters' | translate }}
+        </button>
+      </ng-container>
 
-  </app-generic-right-panel>
+    </app-generic-right-panel>
+  }
 }

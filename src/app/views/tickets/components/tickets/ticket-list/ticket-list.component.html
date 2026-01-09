@@ -1,12 +1,3 @@
-<!-- Account Selector (only for admins) -->
-@if (isAdmin()) {
-<app-account-selector [helperText]="'COMMON.select_account_hint_message'"
-                      [defaultAccountName]="'only-sim'"
-                      [preSelectedAccountId]="selectedAccountId()"
-                      (accountSelected)="onAccountSelected($event)">
-</app-account-selector>
-}
-
 <app-header class="os-header-sticky"
             [formGroup]="filterForm"
             [tableConfig$]="tableConfig$"

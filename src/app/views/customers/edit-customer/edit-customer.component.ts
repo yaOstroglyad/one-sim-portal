@@ -8,8 +8,8 @@ import {
   FormConfig,
   ProductsDataService,
   FormGeneratorComponent,
-  AccountsDataService,
-  UserRoleService
+  UserRoleService,
+  CompaniesDataService
 } from '@shared';
 import { Subject } from 'rxjs';
 import { getCustomerCreateRequest, getEditCustomerFormConfig } from './edit-customer.utils';
@@ -31,7 +31,7 @@ export class EditCustomerComponent implements OnInit, OnDestroy {
   private readonly dialogRef = inject(MatDialogRef<EditCustomerComponent>);
   private readonly providersDataService = inject(ProvidersDataService);
   private readonly productsDataService = inject(ProductsDataService);
-  private readonly accountsDataService = inject(AccountsDataService);
+  private readonly companiesDataService = inject(CompaniesDataService);
   private readonly userRoleService = inject(UserRoleService);
   readonly data = inject(MAT_DIALOG_DATA);
 
@@ -48,7 +48,7 @@ export class EditCustomerComponent implements OnInit, OnDestroy {
       this.productsDataService,
       this.data,
       this.isAdmin,
-      this.accountsDataService
+      this.companiesDataService
     );
   }
 

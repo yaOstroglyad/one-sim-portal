@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -14,8 +14,7 @@ import {
   TableConfig,
   DeleteConfirmationComponent,
   CountryService,
-  Country,
-  LanguageService
+  Country
 } from '@shared';
 import { RegionFormComponent } from '../region-form/region-form.component';
 import { RegionDetailsComponent } from '../region-details/region-details.component';
@@ -80,12 +79,6 @@ export class RegionListComponent implements OnInit, OnDestroy {
   private readonly countryService = inject(CountryService);
   private readonly tableService = inject(RegionsTableService);
   private readonly cdr = inject(ChangeDetectorRef);
-  private readonly languageService = inject(LanguageService);
-  
-  readonly containerClasses = computed(() => ({
-    'region-list-container': true,
-    'region-list-container--rtl': this.languageService.isRtl()
-  }));
 
   constructor() {
     // Initialize form

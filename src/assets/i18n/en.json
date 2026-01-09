@@ -192,6 +192,7 @@
     "clear": "Clear",
     "clearAll": "Clear All",
     "noFilters": "No filters available",
+    "noAccounts": "No accounts",
     "today": "Today",
     "selectAll": "Select All",
     "all": "All",
@@ -559,7 +560,8 @@
       "loadReport": "Load Report",
       "tabs": {
         "bundlePurchases": "Bundle Purchases",
-        "bundleLeftovers": "Bundle Leftovers"
+        "bundleLeftovers": "Bundle Leftovers",
+        "trafficUsage": "Traffic Usage"
       },
       "bundlePurchases": {
         "description": "View bundle purchase history with transaction details and pricing information",
@@ -604,6 +606,19 @@
         "percentLeftovers": "Leftover %",
         "providerPriceMb": "Provider Price/MB",
         "leftovers": "Leftovers Value"
+      },
+      "trafficUsage": {
+        "description": "View traffic usage by country and company with cost breakdown",
+        "title": "Traffic Usage Report",
+        "emptyState": {
+          "title": "No Traffic Usage Found",
+          "description": "Select a date range to view traffic usage data for the selected period"
+        },
+        "country": "Country",
+        "company": "Company",
+        "usageMb": "Usage (MB)",
+        "totalCost": "Total Cost",
+        "costPerMb": "Cost per MB"
       }
     },
     "adminOverview": {
@@ -680,6 +695,10 @@
     "descriptionPlaceholder": "Enter description",
     "company": "Company",
     "companyPlaceholder": "Select a company",
+    "companySearch": "Company",
+    "companySearchPlaceholder": "Select company",
+    "companySearchInputPlaceholder": "Search company by name...",
+    "companySearchNoResults": "No companies found",
     "email": "Email",
     "emailPlaceholder": "Enter email address",
     "emailHint": "Email will be sent to register the user, hence this field is mandatory.",

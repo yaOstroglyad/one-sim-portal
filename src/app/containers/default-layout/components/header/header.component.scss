@@ -28,27 +28,51 @@ header.header {
     height: 100%;
     width: 100%;
     padding: 0 map.get(vars.$os-spacing, '4');
+    position: relative;
   }
 
   &__left {
     display: flex;
     align-items: center;
     gap: map.get(vars.$os-spacing, '2');
+    z-index: 1;
   }
 
   &__center {
-    flex: 1;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     justify-content: center;
-    max-width: 600px;
-    margin: 0 map.get(vars.$os-spacing, '4');
+    width: 100%;
+    max-width: 500px;
+    pointer-events: none;
+
+    > * {
+      pointer-events: auto;
+    }
   }
 
   &__right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: map.get(vars.$os-spacing, '2');
+    z-index: 1;
+  }
+
+  &__account-chip {
+    margin-right: map.get(vars.$os-spacing, '2');
+
+    .header--rtl & {
+      margin-right: 0;
+      margin-left: map.get(vars.$os-spacing, '2');
+    }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   // Dropdown menu button (disabled for now)

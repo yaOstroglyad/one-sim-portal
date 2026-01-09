@@ -199,6 +199,7 @@
     "clear": "Очистить",
     "clearAll": "Очистить все",
     "noFilters": "Нет доступных фильтров",
+    "noAccounts": "Нет аккаунтов",
     "today": "Сегодня",
     "all": "Все",
     "search": {
@@ -418,7 +419,8 @@
       "loadReport": "Загрузить отчет",
       "tabs": {
         "bundlePurchases": "Покупки бандлов",
-        "bundleLeftovers": "Остатки бандлов"
+        "bundleLeftovers": "Остатки бандлов",
+        "trafficUsage": "Использование трафика"
       },
       "bundlePurchases": {
         "description": "Просмотр истории покупок бандлов с деталями транзакций и информацией о ценах",
@@ -463,6 +465,19 @@
         "percentLeftovers": "Остаток %",
         "providerPriceMb": "Цена провайдера/МБ",
         "leftovers": "Стоимость остатков"
+      },
+      "trafficUsage": {
+        "description": "Просмотр использования трафика по странам и компаниям с разбивкой стоимости",
+        "title": "Отчет по использованию трафика",
+        "emptyState": {
+          "title": "Данные об использовании трафика не найдены",
+          "description": "Выберите диапазон дат для просмотра данных об использовании трафика за выбранный период"
+        },
+        "country": "Страна",
+        "company": "Компания",
+        "usageMb": "Использование (МБ)",
+        "totalCost": "Общая стоимость",
+        "costPerMb": "Стоимость за МБ"
       }
     },
     "adminOverview": {
@@ -538,6 +553,10 @@
     "descriptionPlaceholder": "Введите описание",
     "company": "Компания",
     "companyPlaceholder": "Выберите компанию",
+    "companySearch": "Компания",
+    "companySearchPlaceholder": "Выберите компанию",
+    "companySearchInputPlaceholder": "Поиск компании по названию...",
+    "companySearchNoResults": "Компании не найдены",
     "email": "Email",
     "emailPlaceholder": "Введите email адрес",
     "emailHint": "На этот email будет отправлено письмо для регистрации пользователя.",

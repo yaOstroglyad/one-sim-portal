@@ -1,11 +1,3 @@
-<!-- Account Selector (только для админов) -->
-@if (isAdmin()) {
-  <app-account-selector
-    [helperText]="'analytics.reports.selectAccountHint'"
-    (accountSelected)="onAccountSelected($event)">
-  </app-account-selector>
-}
-
 <!-- Header with Description, Period Selector and Actions -->
 <div class="reports-header mt-2">
   <div class="header-left">

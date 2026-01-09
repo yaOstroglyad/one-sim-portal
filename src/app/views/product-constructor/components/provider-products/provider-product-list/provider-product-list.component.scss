@@ -2,15 +2,11 @@
 @use "../../../../../../scss/variables" as vars;
 @use "../../../../../../scss/mixins" as mixins;
 
-.provider-product-list-container {
-  // RTL support
-  &--rtl {
-    direction: rtl;
-
-    button[cButton] {
-      svg {
-        transform: scaleX(-1);
-      }
+// RTL support - uses :host-context to check ancestor [dir="rtl"]
+:host-context([dir="rtl"]) {
+  button[cButton] {
+    svg {
+      transform: scaleX(-1);
     }
   }
 }

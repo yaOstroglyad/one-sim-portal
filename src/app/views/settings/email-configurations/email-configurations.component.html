@@ -1,15 +1,5 @@
 
 <div class="email-configurations">
-  <!-- Account Selector -->
-  @if (isAdmin) {
-    <div class="email-configurations__account-selector">
-      <app-account-selector 
-        [helperText]="'COMMON.select_account_hint_message'"
-        (accountSelected)="onAccountSelected($event)">
-      </app-account-selector>
-    </div>
-  }
-
   <!-- Template Type Cards -->
   <div class="email-configurations__template-types">
     @for (type of templateTypes$ | async; track type) {

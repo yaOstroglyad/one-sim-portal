@@ -1,12 +1,4 @@
 <div class="container">
-  <!-- Account selector for admins only -->
-  @if (isAdmin) {
-    <app-account-selector
-      [helperText]="'COMMON.select_account_hint_message'"
-      (accountSelected)="onAccountSelected($event)">
-    </app-account-selector>
-  }
-
   <!-- Admin warning for admin accounts -->
   @if (isAdmin && selectedAccount?.isAdmin) {
     <div class="admin-account-message mx-3">

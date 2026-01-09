@@ -3,6 +3,7 @@ import { ReportStrategy } from '../models/report-strategy.interface';
 import { ReportTabId } from '../models/report-tab.model';
 import { BundlePurchasesStrategy } from '../strategies/bundle-purchases.strategy';
 import { BundleLeftoversStrategy } from '../strategies/bundle-leftovers.strategy';
+import { TrafficUsageStrategy } from '../strategies/traffic-usage.strategy';
 
 /**
  * Factory service for creating report strategies
@@ -17,6 +18,7 @@ import { BundleLeftoversStrategy } from '../strategies/bundle-leftovers.strategy
 export class ReportStrategyService {
   private readonly bundlePurchasesStrategy = inject(BundlePurchasesStrategy);
   private readonly bundleLeftoversStrategy = inject(BundleLeftoversStrategy);
+  private readonly trafficUsageStrategy = inject(TrafficUsageStrategy);
 
   /**
    * Get strategy instance for the given tab ID
@@ -31,6 +33,9 @@ export class ReportStrategyService {
 
       case ReportTabId.BUNDLE_LEFTOVERS:
         return this.bundleLeftoversStrategy;
+
+      case ReportTabId.TRAFFIC_USAGE:
+        return this.trafficUsageStrategy;
 
       default:
         throw new Error(`Unknown report tab ID: ${tabId}`);
@@ -49,7 +54,10 @@ export class ReportStrategyService {
         return true;
 
       case ReportTabId.BUNDLE_LEFTOVERS:
-        return true; // Implemented
+        return true;
+
+      case ReportTabId.TRAFFIC_USAGE:
+        return true;
 
       default:
         return false;

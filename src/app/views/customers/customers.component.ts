@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
@@ -27,6 +27,7 @@ import {
   HeaderComponent,
   SearchableSelectComponent,
   SmartFilterHeaderComponent,
+  GenericRightPanelComponent,
   PageLayoutService,
   BreadcrumbComponent,
 } from '@shared';
@@ -57,6 +58,7 @@ interface FilterFieldConfig {
         MatIconModule,
         SearchableSelectComponent,
         SmartFilterHeaderComponent,
+        GenericRightPanelComponent,
         FormControlDirective,
         IconDirective,
         ButtonDirective,
@@ -91,6 +93,10 @@ export class CustomersComponent implements OnInit, OnDestroy {
 	public filterForm: FormGroup;
 	public companyOptions$: Observable<SearchableSelectOption[]>;
 	public smartFilterConfig: SmartFilterConfig;
+
+	// External panel state (for z-index fix)
+	protected readonly showFilterPanel = signal(false);
+	protected readonly smartFilterRef = viewChild<SmartFilterHeaderComponent>('smartFilter');
 
 	// Filter fields configuration for template
 	public filterFieldsConfig: FilterFieldConfig[] = [
@@ -142,6 +148,18 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
 	public resetForm(): void {
 		this.filterForm.reset();
+	}
+
+	public onPanelOpenChange(isOpen: boolean): void {
+		this.showFilterPanel.set(isOpen);
+	}
+
+	public closeFilterPanel(): void {
+		this.showFilterPanel.set(false);
+	}
+
+	public onResetFilters(): void {
+		this.smartFilterRef()?.onResetFilters();
 	}
 
 	private initFormControls(): void {

@@ -3,9 +3,11 @@
   (onAddAction)="createCustomer()"
   (columnSelectionChange)="onColumnSelectionChanged($event)">
   <ng-container header-custom-inputs>
-    <app-smart-filter-header
+    <app-smart-filter-header #smartFilter
       [formGroup]="filterForm"
       [config]="smartFilterConfig"
+      [useExternalPanel]="true"
+      (panelOpenChange)="onPanelOpenChange($event)"
       (resetFilters)="resetForm()">
 
       <!-- Shared filter fields -->
@@ -103,3 +105,41 @@
         }
       </mat-menu>
     </ng-template>
+
+<!-- External filter panel (outside sticky header for proper z-index) -->
+<app-generic-right-panel
+  [isOpen]="showFilterPanel()"
+  [title]="'smartFilter.advancedFilters' | translate"
+  [subtitle]="'smartFilter.configureSearchCriteria' | translate"
+  [hasFooter]="true"
+  (close)="closeFilterPanel()">
+
+  <!-- Panel content with all filters -->
+  <div panel-content class="advanced-filters-content">
+    <ng-container *ngTemplateOutlet="filterFields; context: { mode: 'advanced' }"></ng-container>
+  </div>
+
+  <!-- Panel actions -->
+  <ng-container panel-actions>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="closeFilterPanel()">
+      {{ 'common.cancel' | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-danger"
+      (click)="onResetFilters()"
+      [disabled]="!smartFilterRef()?.hasActiveFilters()">
+      {{ 'smartFilter.resetAll' | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="closeFilterPanel()">
+      {{ 'smartFilter.applyFilters' | translate }}
+    </button>
+  </ng-container>
+
+</app-generic-right-panel>

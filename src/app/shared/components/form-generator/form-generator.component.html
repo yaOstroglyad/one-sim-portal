@@ -31,6 +31,10 @@
             <ng-container [ngTemplateOutlet]="selectTemplate"
             [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
           }
+          @case (FieldType.searchableSelect) {
+            <ng-container [ngTemplateOutlet]="searchableSelectTemplate"
+            [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
+          }
           @case (FieldType.checkbox) {
             <ng-container [ngTemplateOutlet]="checkboxTemplate"
             [ngTemplateOutletContext]="{ $implicit: field }"></ng-container>
@@ -201,6 +205,21 @@
                       }
                     </mat-select>
                   </mat-form-field>
+                  <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
+                </div>
+              </ng-template>
+              <ng-template #searchableSelectTemplate let-field>
+                <div [attr.class]="'w-100 ' + getFormFieldClass(field)">
+                  <app-searchable-select
+                    [formControlName]="field.name"
+                    [label]="field.label | translate"
+                    [required]="isRequired(field)"
+                    [options]="getSearchableSelectOptions(field.name)"
+                    [config]="getSearchableSelectConfig(field)"
+                    [className]="'mat-input-height'"
+                    (searchChange)="onSearchableSelectSearch($event, field)"
+                    (selectionChange)="onInputChange($event, field)">
+                  </app-searchable-select>
                   <ng-container *ngTemplateOutlet="hintTemplate; context: { $implicit: field }"></ng-container>
                 </div>
               </ng-template>

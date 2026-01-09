@@ -4,9 +4,11 @@
 @use "../../../../scss/utilities" as utils;
 
 // Panel backdrop - uses overlay base mixin
+// z-index: 1100 to be above header (1001) and sidebar (1000)
+// See docs/architecture/right-panel-z-index.md for proper solution
 .panel-backdrop {
   @include mixins.os-overlay-base(0.5);
-  z-index: 998;
+  z-index: 1100;
   opacity: 0;
   animation: backdropFadeIn 0.3s ease-out forwards;
 }
@@ -17,7 +19,7 @@
   background: var(--layout-content-bg);
   border-left: 1px solid var(--layout-content-border);
   box-shadow: var(--layout-menu-shadow);
-  z-index: 999;
+  z-index: 1101;
   display: flex;
   flex-direction: column;
 

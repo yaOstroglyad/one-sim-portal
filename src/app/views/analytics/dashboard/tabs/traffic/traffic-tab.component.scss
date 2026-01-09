@@ -7,7 +7,6 @@
 
     // KPI Cards Row - 4 columns for traffic metrics
     .kpi-cards-row {
-      margin-bottom: 1.5rem;
       @include mixins.dashboard-kpi-grid(4);
 
       .kpi-card {
@@ -86,7 +85,6 @@
 
     // Charts Row (single column layout like finance tab)
     .charts-row {
-      margin-bottom: 1.5rem;
 
       &.single {
         display: block;

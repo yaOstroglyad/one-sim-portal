@@ -2,7 +2,7 @@
 
 > **Purpose:** Complete project knowledge for instant context
 > **Read:** At session start to avoid iterative exploration
-> **Last Updated:** 2025-12-03
+> **Last Updated:** 2026-01-08
 
 ---
 
@@ -82,7 +82,8 @@ src/scss/
 |-----------|----------|---------|
 | **GenericRightPanelComponent** | `/shared/components/generic-right-panel/` | Side panel overlays |
 | **HeaderModule** | `/shared/components/header/` | Page headers with filters |
-| **AccountSelectorComponent** | `/shared/components/account-selector/` | Account switching |
+| **AccountContextService** | `/shared/services/account-context/` | Global account state (signals) |
+| **AccountSelectorChipComponent** | `/shared/components/account-selector-chip/` | Header account dropdown |
 | **PageHeaderComponent** | `/shared/components/page-header/` | Dynamic page header slots |
 | **PageSubHeaderComponent** | `/shared/components/page-sub-header/` | Subheader with filters (responsive) |
 | **PageTitleComponent** | `/shared/components/page-title/` | Simple page title component |

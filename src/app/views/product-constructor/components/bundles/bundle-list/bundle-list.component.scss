@@ -7,17 +7,16 @@
 .bundle-list-container {
   max-width: 1200px;
   margin: 0 auto;
+}
 
-  &--rtl {
-    direction: rtl;
+// RTL support - uses :host-context to check ancestor [dir="rtl"]
+:host-context([dir="rtl"]) {
+  .page-header .header-actions .btn .icon {
+    transform: scaleX(-1);
+  }
 
-    .page-header .header-actions .btn .icon {
-      transform: scaleX(-1);
-    }
-
-    .bundles-list .bundle-item .bundle-actions {
-      justify-content: flex-start;
-    }
+  .bundles-list .bundle-item .bundle-actions {
+    justify-content: flex-start;
   }
 }
 

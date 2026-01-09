@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, inject, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -6,8 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import {
   CardComponent,
   MetricCardComponent,
-  MetricCard,
-  LanguageService
+  MetricCard
 } from '@shared';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconDirective, IconModule } from '@coreui/icons-angular';
@@ -40,12 +39,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
   quickActions: QuickAction[] = QUICK_ACTIONS;
   kpiMetrics: MetricCard[] = [];
-
-  private languageService = inject(LanguageService);
-
-  readonly containerClasses = computed(() => ({
-    'overview-container--rtl': this.languageService.isRtl()
-  }));
 
   constructor(
     private cdr: ChangeDetectorRef,

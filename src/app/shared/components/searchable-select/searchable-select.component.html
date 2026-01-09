@@ -1,7 +1,8 @@
 <div class="searchable-select"
   [class.disabled]="config.disabled"
   [class.error]="!!error"
-  [class.open]="isOpen">
+  [class.open]="isOpen"
+  [ngClass]="className">
 
   <!-- Label -->
   @if (label) {

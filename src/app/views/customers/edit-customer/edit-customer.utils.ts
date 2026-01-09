@@ -5,9 +5,8 @@ import {
   Customer,
   CustomerType,
   ProductsDataService,
-  AccountsDataService,
-  SelectOption,
-  FieldConfig
+  FieldConfig,
+  CompaniesDataService
 } from '@shared';
 import { Validators } from '@angular/forms';
 import { of } from 'rxjs';
@@ -16,19 +15,27 @@ import { map } from 'rxjs/operators';
 
 const emailHintMessage = 'customer.emailHint';
 
-function createCompanySelectionField(accountsService: AccountsDataService): FieldConfig {
+function createCompanySearchField(companiesService: CompaniesDataService): FieldConfig {
   return {
-    type: FieldType.select,
-    name: 'accountId',
-    label: 'customer.company',
-    placeholder: 'customer.companyPlaceholder',
+    type: FieldType.searchableSelect,
+    name: 'companyId',
+    label: 'customer.companySearch',
+    placeholder: 'customer.companySearchPlaceholder',
     validators: [Validators.required],
-    options: accountsService.ownerAccounts().pipe(
-      map(accounts => accounts.map(account => ({
-        value: account.id,
-        displayValue: account.name || account.email || account.id
-      } as SelectOption)))
-    )
+    searchableSelectConfig: {
+      placeholder: 'customer.companySearchPlaceholder',
+      searchPlaceholder: 'customer.companySearchInputPlaceholder',
+      noResultsText: 'customer.companySearchNoResults',
+      clearable: false,
+      searchFn: (searchTerm: string) => {
+        return companiesService.paginatedCompanies({ name: searchTerm }, 0, 20).pipe(
+          map(response => response.content?.map((company: any) => ({
+            value: company.id,
+            label: company.name || company.id
+          })) || [])
+        );
+      }
+    }
   };
 }
 
@@ -36,7 +43,7 @@ export function getCustomerCreateRequest(form: any, isAdmin: boolean = false) {
   return {
     customerCommand: {
       id: form?.id || null,
-      accountId: isAdmin ? form.accountId : undefined,
+      companyId: isAdmin ? form.companyId : undefined,
       name: form.name,
       description: form.description,
       externalId: form.externalId || '',
@@ -57,7 +64,7 @@ export function getEditCustomerFormConfig(
   productsDataService: ProductsDataService,
   data: Customer,
   isAdmin: boolean = false,
-  accountsService?: AccountsDataService
+  companiesService?: CompaniesDataService
 ): FormConfig {
   const fields: FieldConfig[] = [
     {
@@ -80,9 +87,9 @@ export function getEditCustomerFormConfig(
     }
   ];
 
-  // Add company selection for admin at the beginning
-  if (isAdmin && accountsService) {
-    fields.push(createCompanySelectionField(accountsService));
+  // Add company search for admin
+  if (isAdmin && companiesService) {
+    fields.push(createCompanySearchField(companiesService));
   }
 
   fields.push(
@@ -124,16 +131,16 @@ export function getEditCustomerFormConfig(
       label: 'customer.product',
       placeholder: 'customer.productPlaceholder',
       validators: [],
-      dependsOnValue: isAdmin ? ['serviceProviderId', 'accountId'] : ['serviceProviderId'],
+      dependsOnValue: isAdmin ? ['serviceProviderId', 'companyId'] : ['serviceProviderId'],
       disabled: true,
       options: (values) => {
-        const { serviceProviderId, accountId } = values;
+        const { serviceProviderId, companyId } = values;
         if (!serviceProviderId) return of([]);
 
-        // For admin, pass accountId as customerId to get products available for that company
+        // For admin, pass companyId to get products available for that company
         const filterParams: any = { serviceProviderId };
-        if (isAdmin && accountId) {
-          filterParams.accountId = accountId;
+        if (isAdmin && companyId) {
+          filterParams.companyId = companyId;
         }
 
         return productsDataService.listFiltered(filterParams).pipe(

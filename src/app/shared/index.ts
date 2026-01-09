@@ -47,6 +47,7 @@ export * from './components/page-title'
 export * from './components/back-button'
 export * from './components/mobile-filter-button'
 export * from './components/filter-drawer'
+export * from './components/account-selector-chip/account-selector-chip.component'
 
 // UI Components - New organized structure
 export * from './components/ui/os-dropdown'
@@ -68,6 +69,7 @@ export * from './services/feature-toggle';  // Feature toggle service
 export * from './services/cache-hub';   // Cache service
 export * from './services/excel-export.service';  // Excel export service
 export * from './services/search';      // Global search service
+export * from './services/account-context';  // Account context service
 
 // Named exports for specific services
 export { Language } from './services/ui/language.service';

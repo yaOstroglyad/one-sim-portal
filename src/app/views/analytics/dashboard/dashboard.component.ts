@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject, signal, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject, signal, effect } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
@@ -8,14 +8,13 @@ import {
   ThemeService,
   AuthService,
   ADMIN_PERMISSION,
-  Account,
   PeriodSelectorComponent,
   PeriodDateRange,
   PeriodPreset,
   PeriodPresets,
-  DEFAULT_PERIOD_PRESETS
+  DEFAULT_PERIOD_PRESETS,
+  AccountContextService
 } from '@shared';
-import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 import { DashboardTab } from './models/dashboard.types';
 import { DashboardDataService } from './services/dashboard-data.service';
 
@@ -33,7 +32,6 @@ import { FinanceTabComponent } from './tabs/finance';
     RouterModule,
     TranslateModule,
     IconModule,
-    AccountSelectorComponent,
     PeriodSelectorComponent,
     ExecutiveTabComponent,
     SubscribersTabComponent,
@@ -44,12 +42,13 @@ import { FinanceTabComponent } from './tabs/finance';
     styleUrls: ['./dashboard.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly dashboardService = inject(DashboardDataService);
   private readonly themeService = inject(ThemeService);
   private readonly authService = inject(AuthService);
+  private readonly accountContext = inject(AccountContextService);
 
   // Tab configuration
   tabs = signal<DashboardTab[]>([
@@ -69,8 +68,6 @@ export class DashboardComponent implements OnInit {
 
   // Account selector for admins
   isAdmin = signal<boolean>(false);
-  selectedAccountId = signal<string | null>(null);
-  isAccountReady = signal<boolean>(false); // Flag to track if account is ready for data loading
 
   constructor() {
     // React to route query params changes
@@ -92,13 +89,12 @@ export class DashboardComponent implements OnInit {
       });
     });
 
-    // React to account readiness - trigger period update to reload data
+    // React to account changes from global context
     effect(() => {
-      const accountReady = this.isAccountReady();
-      const accountId = this.selectedAccountId();
-
-      if (accountReady && accountId) {
-        // Account is ready, trigger data reload by setting period
+      const account = this.accountContext.selectedAccount();
+      if (account) {
+        // Account selected, set account ID and trigger data reload
+        this.dashboardService.setAccountId(account.id);
         const currentPeriod = this.dashboardService.getCurrentPeriod();
         this.dashboardService.setPeriod(currentPeriod);
       }
@@ -114,11 +110,19 @@ export class DashboardComponent implements OnInit {
     // Check if user is admin
     this.checkPermissions();
 
-    // Initialize account based on user role
-    this.initializeAccount();
-
     // Filter tabs based on user permissions
     this.filterTabsByPermissions();
+
+    // Configure account context for this page
+    this.accountContext.configure({
+      visible: true,
+      required: false,
+      selectFirstByDefault: true
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.accountContext.reset();
   }
 
   /**
@@ -126,33 +130,6 @@ export class DashboardComponent implements OnInit {
    */
   private checkPermissions(): void {
     this.isAdmin.set(this.authService.hasPermission(ADMIN_PERMISSION));
-  }
-
-  /**
-   * Initialize account ID based on user role
-   * For admins: wait for account-selector
-   * For non-admins: use logged user's accountId immediately
-   */
-  private initializeAccount(): void {
-    if (!this.isAdmin()) {
-      // For non-admins, use account from logged user immediately
-      const loggedUser = this.authService.loggedUser;
-      if (loggedUser?.accountId) {
-        this.selectedAccountId.set(loggedUser.accountId);
-        this.dashboardService.setAccountId(loggedUser.accountId);
-        this.isAccountReady.set(true); // Mark as ready immediately for non-admins
-      }
-    }
-    // For admins: isAccountReady will be set to true when account is selected via onAccountSelected
-  }
-
-  /**
-   * Handle account selection change (for admins)
-   */
-  onAccountSelected(account: Account): void {
-    this.selectedAccountId.set(account.id);
-    this.dashboardService.setAccountId(account.id);
-    this.isAccountReady.set(true); // Mark account as ready after selection
   }
 
   /**

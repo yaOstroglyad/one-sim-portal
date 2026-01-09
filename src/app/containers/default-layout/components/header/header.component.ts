@@ -24,7 +24,9 @@ import {
   OsMenuComponent,
   OsMenuItem,
   OsMenuSection,
-  HeaderSearchComponent
+  HeaderSearchComponent,
+  AccountSelectorChipComponent,
+  AccountContextService
 } from '@shared';
 
 const DEFAULT_USER_NAME = 'John Doe';
@@ -41,7 +43,8 @@ const DEFAULT_NOTIFICATION_COUNT = 3;
     TranslateModule,
     UserAvatarComponent,
     OsMenuComponent,
-    HeaderSearchComponent
+    HeaderSearchComponent,
+    AccountSelectorChipComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './header.component.html',
@@ -52,6 +55,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   authService = inject(AuthService);
   translateService = inject(TranslateService);
   languageService = inject(LanguageService);
+  accountContext = inject(AccountContextService);
 
   // Layout signals
   layoutConfig = signal<LayoutConfig>({
@@ -141,7 +145,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initializeLayoutConfig();
-    this.initializeUserData();
   }
 
   private initializeLayoutConfig(): void {
@@ -150,11 +153,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe(config => {
         this.layoutConfig.set(config);
       });
-  }
-
-  private initializeUserData(): void {
-    // TODO: Get actual user data from AuthService
-    // Language is now handled by LanguageService automatically
   }
 
   ngOnDestroy(): void {

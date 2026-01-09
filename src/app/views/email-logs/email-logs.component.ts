@@ -1,22 +1,20 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, inject, effect } from '@angular/core';
 
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   GenericTableComponent,
   TableConfig,
   HeaderComponent,
-  Account,
   AuthService,
   ADMIN_PERMISSION,
   EmailLog,
   EmailLogFilterParams,
-  DatepickerComponent
+  DatepickerComponent,
+  AccountContextService
 } from '@shared';
 import { Subject, BehaviorSubject, Observable, of } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
-
-import { AccountSelectorComponent } from '@shared/components/account-selector/account-selector.component';
 import { EmailLogsTableConfigService } from './index';
 import { FormControlDirective, ButtonDirective } from '@coreui/angular';
 import { IconDirective } from '@coreui/icons-angular';
@@ -29,7 +27,6 @@ import { IconDirective } from '@coreui/icons-angular';
     DatepickerComponent,
     TranslateModule,
     GenericTableComponent,
-    AccountSelectorComponent,
     HeaderComponent,
     FormControlDirective,
     ButtonDirective,
@@ -44,6 +41,10 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
   @ViewChild('genericTable') genericTable: GenericTableComponent;
 
   private unsubscribe$ = new Subject<void>();
+  private readonly accountContext = inject(AccountContextService);
+  private readonly tableConfigService = inject(EmailLogsTableConfigService);
+  private readonly authService = inject(AuthService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   // Form Controls
   public filterForm: FormGroup = new FormGroup({
@@ -59,19 +60,27 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
 
   // Permission check
   isAdmin = false;
-  selectedAccountId: string | null = null;
 
-  constructor(
-    private tableConfigService: EmailLogsTableConfigService,
-    private authService: AuthService,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor() {
+    // React to account changes from global context
+    effect(() => {
+      const account = this.accountContext.selectedAccount();
+      if (account) {
+        this.resetForm();
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.checkPermissions();
-    this.initializeAccount();
     this.initializeTable();
     this.setupFilters();
+
+    // Configure account context for this page
+    this.accountContext.configure({
+      visible: true,
+      required: true
+    });
   }
 
   private initializeTable(): void {
@@ -80,23 +89,13 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.accountContext.reset();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
   private checkPermissions(): void {
     this.isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
-  }
-
-  private initializeAccount(): void {
-    if (!this.isAdmin) {
-      // Для не-админов используем аккаунт из loggedUser
-      const loggedUser = this.authService.loggedUser;
-      if (loggedUser?.accountId) {
-        this.selectedAccountId = loggedUser.accountId;
-        this.applyFilter(); // Загружаем данные сразу для не-админов
-      }
-    }
   }
 
   private setupFilters(): void {
@@ -108,21 +107,16 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public onAccountSelected(account: Account): void {
-    this.selectedAccountId = account.id;
-    // Reset form (which also resets pagination) when account changes
-    this.resetForm();
-  }
-
   public applyFilter(): void {
-    if (!this.selectedAccountId) return;
+    const selectedAccountId = this.accountContext.selectedAccountId();
+    if (!selectedAccountId) return;
 
     const formValues = this.filterForm.getRawValue();
 
     const params = {
       page: 0,
       size: 15,
-      accountId: this.selectedAccountId,
+      accountId: selectedAccountId,
       ...formValues
     };
 
@@ -130,12 +124,13 @@ export class EmailLogsComponent implements OnInit, OnDestroy {
   }
 
   public onPageChange({page, size}: { page: number; size: number }): void {
-    if (!this.selectedAccountId) return;
+    const selectedAccountId = this.accountContext.selectedAccountId();
+    if (!selectedAccountId) return;
 
     const params = {
       page,
       size,
-      accountId: this.selectedAccountId,
+      accountId: selectedAccountId,
       ...this.filterForm.getRawValue()
     };
     this.loadData(params);

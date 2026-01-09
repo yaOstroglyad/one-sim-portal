@@ -1,13 +1,4 @@
 <div class="dashboard-container" [class.dark-theme]="isDarkTheme()">
-  <!-- Account Selector (only for admins) -->
-  @if (isAdmin()) {
-    <app-account-selector
-      [helperText]="'COMMON.select_account_hint_message'"
-      [selectFirstByDefault]="true"
-      (accountSelected)="onAccountSelected($event)">
-    </app-account-selector>
-  }
-
   <!-- Dashboard Header -->
   <div class="dashboard-header mt-2">
     <div class="header-left">
