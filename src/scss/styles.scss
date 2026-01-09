@@ -22,6 +22,7 @@
 @use "./custom";             // Legacy custom styles (to be migrated)
 @use "./fab-layout";         // FAB Layout system styles
 @use "./notifications";      // Notification snackbar styles
+@use "./dashboard-layout";   // Dashboard tab utility classes
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 

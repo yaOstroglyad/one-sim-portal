@@ -860,6 +860,11 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 
+  // Single column modifier
+  &.single {
+    grid-template-columns: 1fr;
+  }
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
@@ -1163,6 +1168,183 @@
         color: var(--layout-content-text);
       }
     }
+  }
+}
+
+// Dashboard chart card (combines header + container)
+// Use this instead of separate dashboard-card-header + dashboard-chart-container
+@mixin dashboard-chart-card($height: 300px) {
+  .card-header {
+    @include dashboard-card-header();
+  }
+
+  .chart-container {
+    @include dashboard-chart-container($height);
+  }
+}
+
+// Dashboard empty state (no data placeholder)
+@mixin dashboard-empty-state($min-height: 200px, $with-icon: false) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: $min-height;
+  color: var(--layout-content-text-muted);
+
+  @if $with-icon {
+    text-align: center;
+    padding: 3rem;
+
+    c-icon {
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+}
+
+// Dashboard KPI icon (colored icon container)
+@mixin dashboard-kpi-icon($size: 48px) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $size;
+  height: $size;
+  min-width: $size;
+  border-radius: 12px;
+  flex-shrink: 0;
+
+  c-icon {
+    font-size: $size * 0.3125; // 15px for 48px icon
+    color: var(--os-color-primary-contrast);
+  }
+
+  &.primary {
+    background-color: var(--os-color-primary, #3b82f6);
+  }
+
+  &.success {
+    background-color: var(--os-color-success, #10b981);
+  }
+
+  &.info {
+    background-color: var(--os-color-info, #06b6d4);
+  }
+
+  &.warning {
+    background-color: var(--os-color-warning, #f59e0b);
+  }
+
+  &.danger {
+    background-color: var(--os-color-danger, #ef4444);
+  }
+}
+
+// Dashboard KPI card content layout
+@mixin dashboard-kpi-content() {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+
+  .kpi-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+
+    .kpi-label {
+      font-size: 0.875rem;
+      color: var(--layout-content-text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .kpi-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--layout-content-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+// Dashboard status card (with healthy/warning/critical/disabled states)
+@mixin dashboard-status-card() {
+  padding: 1rem;
+  border-radius: map.get(vars.$os-border-radius, 'medium');
+  border: 2px solid var(--layout-content-border);
+  background-color: var(--layout-frame-bg);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    @include elevation(2);
+  }
+
+  &.status-healthy {
+    border-color: var(--os-color-success);
+    background-color: var(--os-color-success-subtle-bg);
+  }
+
+  &.status-warning {
+    border-color: var(--os-color-warning);
+    background-color: var(--os-color-warning-subtle-bg);
+  }
+
+  &.status-critical {
+    border-color: var(--os-color-danger);
+    background-color: var(--os-color-danger-subtle-bg);
+  }
+
+  &.status-disabled {
+    opacity: 0.5;
+    border-color: var(--layout-content-border);
+    border-style: dashed;
+    cursor: not-allowed;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  .item-label {
+    font-size: 0.875rem;
+    color: var(--layout-content-text-muted);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .item-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--layout-content-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .item-percentage {
+    font-size: 0.8125rem;
+    color: var(--layout-content-text-muted);
+  }
+
+  .item-note {
+    font-size: 0.75rem;
+    color: var(--layout-content-text-muted);
+    margin-top: 0.25rem;
+    font-style: italic;
   }
 }
 

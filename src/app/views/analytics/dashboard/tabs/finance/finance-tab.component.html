@@ -16,16 +16,16 @@
 
   <!-- Data Content -->
   @if (data && !loading && !error) {
-    <div class="finance-content">
+    <div class="db-content">
 
       <!-- Revenue by Bundle - Stacked Bar Chart -->
-      <div class="charts-row single">
-        <os-card class="chart-card" variant="default">
-          <div class="card-header">
+      <div class="db-row">
+        <os-card class="db-chart" variant="default">
+          <div class="db-chart__header">
             <h3>{{ 'dashboard.finance.revenueByBundle' | translate }}</h3>
           </div>
           @if (data.topBundles.chartConfig) {
-            <div class="chart-container">
+            <div class="db-chart__container">
               <os-bar-chart
                 [data]="$any(data.topBundles.chartConfig.data)"
                 [options]="data.topBundles.chartConfig.options || {}"
@@ -38,13 +38,13 @@
       </div>
 
       <!-- Revenue by Country - Stacked Bar Chart -->
-      <div class="charts-row single">
-        <os-card class="chart-card" variant="default">
-          <div class="card-header">
+      <div class="db-row">
+        <os-card class="db-chart" variant="default">
+          <div class="db-chart__header">
             <h3>{{ 'dashboard.finance.revenueByCountry' | translate }}</h3>
           </div>
           @if (data.topCountries.chartConfig) {
-            <div class="chart-container">
+            <div class="db-chart__container">
               <os-bar-chart
                 [data]="$any(data.topCountries.chartConfig.data)"
                 [options]="data.topCountries.chartConfig.options || {}"
@@ -57,13 +57,13 @@
       </div>
 
       <!-- Margin by Month - Stacked Bar Chart -->
-      <div class="charts-row single">
-        <os-card class="chart-card" variant="default">
-          <div class="card-header">
+      <div class="db-row">
+        <os-card class="db-chart" variant="default">
+          <div class="db-chart__header">
             <h3>{{ 'dashboard.finance.marginByMonth' | translate }}</h3>
           </div>
           @if (data.marginByMonth.chartConfig) {
-            <div class="chart-container">
+            <div class="db-chart__container">
               <os-bar-chart
                 [data]="$any(data.marginByMonth.chartConfig.data)"
                 [options]="data.marginByMonth.chartConfig.options || {}"

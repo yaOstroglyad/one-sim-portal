@@ -17,31 +17,31 @@
   <!-- Data Content -->
   @if (data(); as execData) {
     @if (!loading() && !error()) {
-      <div class="executive-content">
+      <div class="db-content">
 
         <!-- Revenue Row (Full Width) -->
-        <div class="revenue-row">
-          <os-card class="revenue-card" variant="default">
-            <div class="card-header">
+        <div class="db-row">
+          <os-card variant="default">
+            <div class="db-chart__header">
               <h3>{{ 'dashboard.executive.totalRevenue' | translate }}</h3>
-              <div class="revenue-amount">
+              <div class="db-amount">
                 {{ execData.revenue.total | currency:currency() }}
               </div>
             </div>
 
             <!-- Revenue Breakdown -->
-            <div class="revenue-breakdown">
-              <div class="breakdown-item">
-                <span class="label">{{ 'dashboard.executive.totalCost' | translate }}</span>
-                <span class="value">{{ execData.revenue.totalCost | currency:currency() }}</span>
+            <div class="db-breakdown">
+              <div class="db-breakdown__item">
+                <span class="db-breakdown__label">{{ 'dashboard.executive.totalCost' | translate }}</span>
+                <span class="db-breakdown__value">{{ execData.revenue.totalCost | currency:currency() }}</span>
               </div>
-              <div class="breakdown-item">
-                <span class="label">{{ 'dashboard.executive.totalMargin' | translate }}</span>
-                <span class="value positive">{{ execData.revenue.totalMargin | currency:currency() }}</span>
+              <div class="db-breakdown__item">
+                <span class="db-breakdown__label">{{ 'dashboard.executive.totalMargin' | translate }}</span>
+                <span class="db-breakdown__value positive">{{ execData.revenue.totalMargin | currency:currency() }}</span>
               </div>
-              <div class="breakdown-item">
-                <span class="label">{{ 'dashboard.executive.totalBundlesSold' | translate }}</span>
-                <span class="value">{{ execData.subscribersByBundle.total | number }}</span>
+              <div class="db-breakdown__item">
+                <span class="db-breakdown__label">{{ 'dashboard.executive.totalBundlesSold' | translate }}</span>
+                <span class="db-breakdown__value">{{ execData.subscribersByBundle.total | number }}</span>
               </div>
             </div>
 
@@ -55,13 +55,13 @@
 
         <!-- Charts Row - Conditional -->
         @if (execData.availableSections?.bundleCharts) {
-          <div class="charts-row">
+          <div class="db-row--2col">
             <!-- Subscribers by Bundle Chart -->
-            <os-card class="chart-card" variant="default">
-              <div class="card-header">
+            <os-card class="db-chart db-chart--sm" variant="default">
+              <div class="db-chart__header">
                 <h3>{{ 'dashboard.executive.subscribersByBundle' | translate }}</h3>
               </div>
-              <div class="chart-container">
+              <div class="db-chart__container">
                 <os-bar-chart
                   [data]="execData.subscribersByBundle.chartConfig?.data || {labels: [], datasets: []}"
                   [options]="execData.subscribersByBundle.chartConfig?.options || {}">
@@ -70,11 +70,11 @@
             </os-card>
 
             <!-- Revenue by Bundle Chart -->
-            <os-card class="chart-card" variant="default">
-              <div class="card-header">
+            <os-card class="db-chart db-chart--sm" variant="default">
+              <div class="db-chart__header">
                 <h3>{{ 'dashboard.executive.revenueByBundle' | translate }}</h3>
               </div>
-              <div class="chart-container">
+              <div class="db-chart__container">
                 <os-bar-chart
                   [data]="execData.revenueByBundle.chartConfig?.data || {labels: [], datasets: []}"
                   [options]="execData.revenueByBundle.chartConfig?.options || {}">
@@ -86,30 +86,30 @@
 
         <!-- Inventory Status - Conditional -->
         @if (execData.availableSections?.inventory) {
-          <div class="inventory-row">
-            <os-card class="inventory-card" variant="default">
-              <div class="card-header">
+          <div class="db-row">
+            <os-card variant="default">
+              <div class="db-chart__header">
                 <h3>{{ 'dashboard.executive.inventoryStatus' | translate }}</h3>
-                <div class="total-esims">
+                <div class="db-subtitle">
                   {{ execData.inventoryStatus.totalESIMs | number }} {{ 'dashboard.executive.totalEsims' | translate }}
                 </div>
               </div>
-              <div class="inventory-grid">
+              <div class="db-status-grid">
                 @for (item of execData.inventoryStatus.breakdown; track item.label) {
                   <div
-                    class="inventory-item"
+                    class="db-status-card"
                     [class]="'status-' + item.status">
-                    <div class="item-label">{{ item.label }}</div>
-                    <div class="item-value">{{ item.value | number }}</div>
-                    <div class="item-percentage">{{ item.percentage | number:'1.0-1' }}%</div>
+                    <div class="db-status-card__label">{{ item.label }}</div>
+                    <div class="db-status-card__value">{{ item.value | number }}</div>
+                    <div class="db-status-card__percentage">{{ item.percentage | number:'1.0-1' }}%</div>
                   </div>
                 }
 
                 <!-- Note about missing "Expired" data -->
-                <div class="inventory-item status-disabled">
-                  <div class="item-label">{{ 'dashboard.executive.expired' | translate }}</div>
-                  <div class="item-value">—</div>
-                  <div class="item-note">{{ 'dashboard.dataNotAvailable' | translate }}</div>
+                <div class="db-status-card status-disabled">
+                  <div class="db-status-card__label">{{ 'dashboard.executive.expired' | translate }}</div>
+                  <div class="db-status-card__value">—</div>
+                  <div class="db-status-card__note">{{ 'dashboard.dataNotAvailable' | translate }}</div>
                 </div>
               </div>
             </os-card>

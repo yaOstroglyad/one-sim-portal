@@ -16,7 +16,7 @@
 
   <!-- Empty State -->
   @if (!loading() && !error() && !hasData()) {
-    <div class="empty-state">
+    <div class="db-empty db-empty--icon">
       <c-icon name="cilChartPie" size="3xl"></c-icon>
       <p>{{ 'dashboard.traffic.noData' | translate }}</p>
     </div>
@@ -24,59 +24,59 @@
 
   <!-- Data Content -->
   @if (!loading() && !error() && hasData()) {
-    <div class="traffic-content">
+    <div class="db-content">
 
       <!-- KPI Cards Row -->
       @if (kpiValues()) {
-        <div class="kpi-cards-row">
+        <div class="db-kpi-grid cols-4">
           <!-- Total Traffic Card -->
-          <os-card class="kpi-card" variant="default">
-            <div class="kpi-content">
-              <div class="kpi-icon primary">
+          <os-card class="db-kpi-card" variant="default">
+            <div class="db-kpi">
+              <div class="db-kpi__icon primary">
                 <c-icon name="cilCloudUpload"></c-icon>
               </div>
-              <div class="kpi-info">
-                <span class="kpi-label">{{ 'dashboard.traffic.totalTraffic' | translate }}</span>
-                <span class="kpi-value">{{ kpiValues()?.totalTraffic }}</span>
+              <div class="db-kpi__info">
+                <span class="db-kpi__label">{{ 'dashboard.traffic.totalTraffic' | translate }}</span>
+                <span class="db-kpi__value">{{ kpiValues()?.totalTraffic }}</span>
               </div>
             </div>
           </os-card>
 
           <!-- Active Countries Card -->
-          <os-card class="kpi-card" variant="default">
-            <div class="kpi-content">
-              <div class="kpi-icon success">
+          <os-card class="db-kpi-card" variant="default">
+            <div class="db-kpi">
+              <div class="db-kpi__icon success">
                 <c-icon name="cilGlobeAlt"></c-icon>
               </div>
-              <div class="kpi-info">
-                <span class="kpi-label">{{ 'dashboard.traffic.activeCountries' | translate }}</span>
-                <span class="kpi-value">{{ kpiValues()?.activeCountries }}</span>
+              <div class="db-kpi__info">
+                <span class="db-kpi__label">{{ 'dashboard.traffic.activeCountries' | translate }}</span>
+                <span class="db-kpi__value">{{ kpiValues()?.activeCountries }}</span>
               </div>
             </div>
           </os-card>
 
           <!-- Top Country Card -->
-          <os-card class="kpi-card" variant="default">
-            <div class="kpi-content">
-              <div class="kpi-icon info">
+          <os-card class="db-kpi-card" variant="default">
+            <div class="db-kpi">
+              <div class="db-kpi__icon info">
                 <c-icon name="cilLocationPin"></c-icon>
               </div>
-              <div class="kpi-info">
-                <span class="kpi-label">{{ 'dashboard.traffic.topCountry' | translate }}</span>
-                <span class="kpi-value" [osTooltip]="kpiValues()?.topCountry || ''" tooltipPosition="bottom">{{ kpiValues()?.topCountry }}</span>
+              <div class="db-kpi__info">
+                <span class="db-kpi__label">{{ 'dashboard.traffic.topCountry' | translate }}</span>
+                <span class="db-kpi__value" [osTooltip]="kpiValues()?.topCountry || ''" tooltipPosition="bottom">{{ kpiValues()?.topCountry }}</span>
               </div>
             </div>
           </os-card>
 
           <!-- Avg Traffic/Subscriber Card -->
-          <os-card class="kpi-card" variant="default">
-            <div class="kpi-content">
-              <div class="kpi-icon warning">
+          <os-card class="db-kpi-card" variant="default">
+            <div class="db-kpi">
+              <div class="db-kpi__icon warning">
                 <c-icon name="cilSpeedometer"></c-icon>
               </div>
-              <div class="kpi-info">
-                <span class="kpi-label">{{ 'dashboard.traffic.avgTrafficPerSubscriber' | translate }}</span>
-                <span class="kpi-value">{{ kpiValues()?.avgTrafficPerSubscriber }}</span>
+              <div class="db-kpi__info">
+                <span class="db-kpi__label">{{ 'dashboard.traffic.avgTrafficPerSubscriber' | translate }}</span>
+                <span class="db-kpi__value">{{ kpiValues()?.avgTrafficPerSubscriber }}</span>
               </div>
             </div>
           </os-card>
@@ -85,12 +85,12 @@
 
       <!-- Traffic by Country Chart -->
       @if (trafficChartConfig()) {
-        <div class="charts-row single">
-          <os-card class="chart-card" variant="default">
-            <div class="card-header">
+        <div class="db-row">
+          <os-card class="db-chart db-chart--lg" variant="default">
+            <div class="db-chart__header">
               <h3>{{ 'dashboard.traffic.trafficByCountry' | translate }}</h3>
             </div>
-            <div class="chart-container">
+            <div class="db-chart__container">
               <os-bar-chart
                 [data]="$any(trafficChartConfig().data)"
                 [options]="trafficChartConfig().options || {}"
@@ -104,12 +104,12 @@
 
       <!-- Subscribers by Country Chart -->
       @if (subscribersChartConfig()) {
-        <div class="charts-row single">
-          <os-card class="chart-card" variant="default">
-            <div class="card-header">
+        <div class="db-row">
+          <os-card class="db-chart db-chart--lg" variant="default">
+            <div class="db-chart__header">
               <h3>{{ 'dashboard.traffic.subscribersByCountry' | translate }}</h3>
             </div>
-            <div class="chart-container">
+            <div class="db-chart__container">
               <os-bar-chart
                 [data]="$any(subscribersChartConfig().data)"
                 [options]="subscribersChartConfig().options || {}"
@@ -123,12 +123,12 @@
 
       <!-- Line Chart Row (Average Traffic Trend) -->
       @if (avgTrafficChartConfig()) {
-        <div class="charts-row single">
-          <os-card class="chart-card" variant="default">
-            <div class="card-header">
+        <div class="db-row">
+          <os-card class="db-chart db-chart--lg" variant="default">
+            <div class="db-chart__header">
               <h3>{{ 'dashboard.traffic.avgTrafficTrend' | translate }}</h3>
             </div>
-            <div class="chart-container">
+            <div class="db-chart__container">
               <os-line-chart
                 [data]="$any(avgTrafficChartConfig().data)"
                 [options]="avgTrafficChartConfig().options || {}">

@@ -1,0 +1,362 @@
+// ==============================================
+// DASHBOARD LAYOUT UTILITIES
+// Reusable utility classes for dashboard tabs
+// Uses CSS Custom Properties for flexibility
+// ==============================================
+
+@use "variables" as vars;
+@use "sass:map";
+
+// ==============================================
+// CSS CUSTOM PROPERTIES DEFAULTS
+// ==============================================
+
+:root {
+  --db-content-gap: 1.5rem;
+  --db-row-gap: 1rem;
+  --db-chart-height: 300px;
+  --db-kpi-icon-size: 48px;
+}
+
+// ==============================================
+// CONTENT CONTAINER
+// ==============================================
+
+.db-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--db-content-gap);
+}
+
+// ==============================================
+// ROW LAYOUTS
+// ==============================================
+
+// Base row (single column)
+.db-row {
+  display: block;
+
+  // Two column grid
+  &--2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--db-row-gap);
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // Vertical stack
+  &--stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--db-content-gap);
+  }
+}
+
+// KPI Grid (uses CSS custom property for columns)
+.db-kpi-grid {
+  --db-kpi-cols: 4;
+
+  display: grid;
+  grid-template-columns: repeat(var(--db-kpi-cols), 1fr);
+  gap: var(--db-row-gap);
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  // Column modifiers
+  &.cols-3 { --db-kpi-cols: 3; }
+  &.cols-4 { --db-kpi-cols: 4; }
+  &.cols-5 { --db-kpi-cols: 5; }
+}
+
+// ==============================================
+// CHART CARD
+// ==============================================
+
+.db-chart {
+  // Card header
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--layout-content-text);
+    }
+  }
+
+  // Chart container (height via CSS variable)
+  &__container {
+    height: var(--db-chart-height);
+
+    .chart-wrapper {
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  // Size modifiers (set on parent card)
+  &--sm { --db-chart-height: 250px; }
+  &--md { --db-chart-height: 300px; }
+  &--lg { --db-chart-height: 350px; }
+
+  // Waterfall specific (needs overflow handling)
+  &--waterfall {
+    --db-chart-height: 350px;
+    overflow: hidden;
+
+    .db-chart__container {
+      overflow: hidden;
+
+      os-waterfall-chart {
+        display: block;
+        width: 100%;
+        height: var(--db-chart-height);
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+// ==============================================
+// EMPTY STATE
+// ==============================================
+
+.db-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--layout-content-text-muted);
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  // With icon variant
+  &--icon {
+    text-align: center;
+    padding: 3rem;
+
+    c-icon {
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+  }
+}
+
+// ==============================================
+// KPI CARD
+// ==============================================
+
+.db-kpi {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+
+  // Icon container
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--db-kpi-icon-size);
+    height: var(--db-kpi-icon-size);
+    min-width: var(--db-kpi-icon-size);
+    border-radius: 12px;
+    flex-shrink: 0;
+
+    c-icon {
+      font-size: calc(var(--db-kpi-icon-size) * 0.3125);
+      color: var(--os-color-primary-contrast);
+    }
+
+    // Color variants
+    &.primary { background-color: var(--os-color-primary); }
+    &.success { background-color: var(--os-color-success); }
+    &.info { background-color: var(--os-color-info); }
+    &.warning { background-color: var(--os-color-warning); }
+    &.danger { background-color: var(--os-color-danger); }
+  }
+
+  // Info section
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    color: var(--layout-content-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--layout-content-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// KPI card wrapper (for grid items)
+.db-kpi-card {
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+// ==============================================
+// STATUS CARD (inventory items, etc.)
+// ==============================================
+
+.db-status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--db-row-gap);
+}
+
+.db-status-card {
+  padding: 1rem;
+  border-radius: map.get(vars.$os-border-radius, 'medium');
+  border: 2px solid var(--layout-content-border);
+  background-color: var(--layout-frame-bg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: map.get(vars.$os-shadows, 'default');
+  }
+
+  // Status variants
+  &.status-healthy {
+    border-color: var(--os-color-success);
+    background-color: var(--os-color-success-subtle-bg);
+  }
+
+  &.status-warning {
+    border-color: var(--os-color-warning);
+    background-color: var(--os-color-warning-subtle-bg);
+  }
+
+  &.status-critical {
+    border-color: var(--os-color-danger);
+    background-color: var(--os-color-danger-subtle-bg);
+  }
+
+  &.status-disabled {
+    opacity: 0.5;
+    border-style: dashed;
+    cursor: not-allowed;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  // Content elements
+  &__label {
+    font-size: 0.875rem;
+    color: var(--layout-content-text-muted);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  &__value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--layout-content-text);
+    margin-bottom: 0.25rem;
+  }
+
+  &__percentage {
+    font-size: 0.8125rem;
+    color: var(--layout-content-text-muted);
+  }
+
+  &__note {
+    font-size: 0.75rem;
+    color: var(--layout-content-text-muted);
+    margin-top: 0.25rem;
+    font-style: italic;
+  }
+}
+
+// ==============================================
+// BREAKDOWN ITEMS (revenue, etc.)
+// ==============================================
+
+.db-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--layout-content-border);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    color: var(--layout-content-text-muted);
+    font-weight: 500;
+  }
+
+  &__value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--layout-content-text);
+
+    &.negative { color: var(--os-color-danger); }
+    &.positive { color: var(--os-color-success); }
+  }
+}
+
+// ==============================================
+// TYPOGRAPHY UTILITIES
+// ==============================================
+
+.db-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--os-color-primary);
+  margin-top: 0.5rem;
+}
+
+.db-subtitle {
+  font-size: 0.875rem;
+  color: var(--layout-content-text-muted);
+  font-weight: 500;
+}

@@ -16,10 +16,10 @@
 
   <!-- Data Content -->
   @if (summaryData() && !loading() && !error()) {
-    <div class="subscribers-content">
+    <div class="db-content">
 
       <!-- KPI Cards Row -->
-      <div class="kpi-row">
+      <div class="db-kpi-grid cols-5">
         @for (card of kpiCards(); track card.id) {
           <app-metric-card [metric]="card"></app-metric-card>
         }
@@ -27,12 +27,12 @@
 
       <!-- Network Status Chart -->
       @if (networkStatusData()?.periodStatuses?.length) {
-        <div class="chart-section">
-          <os-card class="chart-card" variant="default">
-            <div class="card-header">
+        <div class="db-row">
+          <os-card class="db-chart" variant="default">
+            <div class="db-chart__header">
               <h3>{{ 'dashboard.subscribers.networkStatus' | translate }}</h3>
             </div>
-            <div class="chart-container">
+            <div class="db-chart__container">
               <os-bar-chart
                 [data]="networkStatusChartData()"
                 [options]="chartOptions"
@@ -44,27 +44,27 @@
           </os-card>
         </div>
       } @else {
-        <div class="chart-section">
-          <os-card class="chart-card" variant="default">
-            <div class="card-header">
+        <div class="db-row">
+          <os-card class="db-chart" variant="default">
+            <div class="db-chart__header">
               <h3>{{ 'dashboard.subscribers.networkStatus' | translate }}</h3>
             </div>
-            <div class="empty-state">
+            <div class="db-empty">
               <p>{{ 'dashboard.noData' | translate }}</p>
             </div>
           </os-card>
         </div>
       }
 
-      <!-- Bundle Subscribers Charts (side by side) -->
-      <div class="bundle-row">
+      <!-- Bundle Subscribers Charts (stacked) -->
+      <div class="db-row--stack">
         <!-- By Bundle Name -->
-        <os-card class="bundle-card" variant="default">
-          <div class="card-header">
+        <os-card class="db-chart" variant="default">
+          <div class="db-chart__header">
             <h3>{{ 'dashboard.subscribers.byBundle' | translate }}</h3>
           </div>
           @if (bundleSubscribersData()?.subscribersByBundle?.length) {
-            <div class="chart-container">
+            <div class="db-chart__container">
               <os-bar-chart
                 [data]="bundleChartData()"
                 [options]="chartOptions"
@@ -73,19 +73,19 @@
               </os-bar-chart>
             </div>
           } @else {
-            <div class="empty-state">
+            <div class="db-empty">
               <p>{{ 'dashboard.noData' | translate }}</p>
             </div>
           }
         </os-card>
 
         <!-- By Country -->
-        <os-card class="country-card" variant="default">
-          <div class="card-header">
+        <os-card class="db-chart" variant="default">
+          <div class="db-chart__header">
             <h3>{{ 'dashboard.subscribers.byCountry' | translate }}</h3>
           </div>
           @if (bundleSubscribersData()?.subscribersByCountry?.length) {
-            <div class="chart-container">
+            <div class="db-chart__container">
               <os-bar-chart
                 [data]="countryChartData()"
                 [options]="chartOptions"
@@ -94,7 +94,7 @@
               </os-bar-chart>
             </div>
           } @else {
-            <div class="empty-state">
+            <div class="db-empty">
               <p>{{ 'dashboard.noData' | translate }}</p>
             </div>
           }
@@ -103,12 +103,12 @@
 
       <!-- Bundle Statuses Waterfall Chart -->
       @if (bundleStatusWaterfallData()?.length) {
-        <div class="chart-section">
-          <os-card class="chart-card" variant="default">
-            <div class="card-header">
+        <div class="db-row">
+          <os-card class="db-chart db-chart--waterfall" variant="default">
+            <div class="db-chart__header">
               <h3>{{ 'dashboard.subscribers.bundleStatuses' | translate }}</h3>
             </div>
-            <div class="chart-container">
+            <div class="db-chart__container">
               <os-waterfall-chart
                 [data]="bundleStatusWaterfallData()"
                 [height]="350">
@@ -117,12 +117,12 @@
           </os-card>
         </div>
       } @else {
-        <div class="chart-section">
-          <os-card class="chart-card" variant="default">
-            <div class="card-header">
+        <div class="db-row">
+          <os-card class="db-chart" variant="default">
+            <div class="db-chart__header">
               <h3>{{ 'dashboard.subscribers.bundleStatuses' | translate }}</h3>
             </div>
-            <div class="empty-state">
+            <div class="db-empty">
               <p>{{ 'dashboard.noData' | translate }}</p>
             </div>
           </os-card>
