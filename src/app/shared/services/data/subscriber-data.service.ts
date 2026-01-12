@@ -7,7 +7,7 @@ import { SimLocations } from '@shared/models';
 
 export interface CreateSubscriberDto {
 	customerId: string;
-	serviceProviderId: string;
+	serviceProviderId?: string;
 	productId: string;
 	subscriberName: string;
 	email: string;

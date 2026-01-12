@@ -260,6 +260,27 @@
       "custom": "Custom",
       "startDate": "Start Date",
       "endDate": "End Date"
+    },
+    "searchableSelect": {
+      "placeholder": "Select {{entity}}",
+      "searchPlaceholder": "Search {{entity}}...",
+      "noResults": "No {{entity}} found",
+      "loading": "Loading...",
+      "fallbackEntity": "item"
+    },
+    "entities": {
+      "product": "product",
+      "company": "company",
+      "country": "country",
+      "region": "region",
+      "account": "account",
+      "provider": "provider",
+      "user": "user",
+      "ticket": "ticket",
+      "status": "status",
+      "priority": "priority",
+      "category": "category",
+      "userType": "user type"
     }
   },
   "smartFilter": {
@@ -671,6 +692,7 @@
   },
   "add-subscriber-product": {
     "title": "Add Subscriber Product",
+    "product": "Product",
     "noProducts": "No products were found."
   },
   "company": {

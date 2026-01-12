@@ -263,6 +263,27 @@
     },
     "table": {
       "filterPlaceholder": "Фильтровать данные таблицы"
+    },
+    "searchableSelect": {
+      "placeholder": "Выберите {{entity}}",
+      "searchPlaceholder": "Поиск {{entity}}...",
+      "noResults": "{{entity}} не найден",
+      "loading": "Загрузка...",
+      "fallbackEntity": "элемент"
+    },
+    "entities": {
+      "product": "продукт",
+      "company": "компанию",
+      "country": "страну",
+      "region": "регион",
+      "account": "аккаунт",
+      "provider": "провайдера",
+      "user": "пользователя",
+      "ticket": "тикет",
+      "status": "статус",
+      "priority": "приоритет",
+      "category": "категорию",
+      "userType": "тип пользователя"
     }
   },
   "smartFilter": {
@@ -530,6 +551,7 @@
   },
   "add-subscriber-product": {
     "title": "Добавить подписной продукт",
+    "product": "Продукт",
     "noProducts": "Продукты не найдены."
   },
   "company": {

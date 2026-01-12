@@ -1,18 +1,23 @@
-// Global dialog styles are now available from src/scss/_vendor-overrides.scss
-// Add subscriber dialog specific styles
+@use "mixins" as mixins;
 
-@use "../../../../../scss/variables" as vars;
-@use "../../../../../scss/mixins" as mixins;
-@use "sass:map";
+// Global dialog styles from _vendor-overrides.scss
+// Component-specific overrides only
 
-// Form generator spacing in dialog
-app-form-generator {
+.dialog-header {
+  @include mixins.dialog-section-border(bottom);
+}
+
+.dialog-content {
   display: block;
+  padding-top: 1.25rem;
 }
 
-// Loader component styling in dialog
-app-loader {
-  @include mixins.flex-center();
-  min-height: map.get(vars.$os-spacing, '20'); // 80px
-  width: 100%;
+.dialog-footer {
+  @include mixins.dialog-section-border(top);
 }
+
+// ==============================================
+// DARK THEME SUPPORT
+// Handled via layout CSS variables in _variables.scss
+// Variables auto-switch in html.dark / .layout--dark contexts
+// ==============================================

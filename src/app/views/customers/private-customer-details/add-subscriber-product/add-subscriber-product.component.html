@@ -3,13 +3,6 @@
   @if (!loading) {
     <app-form-generator [config]="formConfig"
     (formChanges)="handleFormChanges($event)"></app-form-generator>
-    @if (subscriberProducts.length === 0) {
-      <mat-hint
-        class="hint mb-1">
-        <mat-icon fontIcon="info_outline"></mat-icon>
-        {{ 'add-subscriber-product.noProducts' | translate }}
-      </mat-hint>
-    }
   }
   @if (loading) {
     <app-loader></app-loader>

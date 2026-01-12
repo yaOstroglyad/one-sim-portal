@@ -7,26 +7,22 @@
     <ng-container header-custom-inputs>
       <app-searchable-select
         [options]="countryOptions$ | async"
-                [config]="{
-                        placeholder: ('product.selectCountry' | translate),
-                        searchPlaceholder: ('common.search' | translate) + '...',
-                        noResultsText: ('common.noResultsFound' | translate),
-                        clearable: true,
-                        searchable: true
-                    }"
+        [config]="{
+          entityKey: 'common.entities.country',
+          clearable: true,
+          searchable: true
+        }"
         formControlName="countryId"
         class="w-100">
       </app-searchable-select>
 
       <app-searchable-select
         [options]="regionOptions$ | async"
-                [config]="{
-                        placeholder: ('product.selectRegion' | translate),
-                        searchPlaceholder: ('common.search' | translate) + '...',
-                        noResultsText: ('common.noResultsFound' | translate),
-                        clearable: true,
-                        searchable: true
-                    }"
+        [config]="{
+          entityKey: 'common.entities.region',
+          clearable: true,
+          searchable: true
+        }"
         formControlName="regionId"
         class="w-100">
       </app-searchable-select>

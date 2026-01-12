@@ -115,6 +115,7 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 
 		this.initDynamicOptions();
 		this.initHintStateTracking();
+		this.initSearchableSelectOptions();
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -395,6 +396,30 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 	}
 
 	// Searchable Select Methods
+	private initSearchableSelectOptions(): void {
+		this.config.fields
+			.filter(field => field.type === FieldType.searchableSelect && field.searchableSelectConfig?.options$)
+			.forEach(field => {
+				const config = field.searchableSelectConfig!;
+				this.searchableSelectLoadingMap.set(field.name, true);
+
+				config.options$!.pipe(
+					takeUntil(this.unsubscribe$)
+				).subscribe({
+					next: (options) => {
+						this.searchableSelectOptionsMap.set(field.name, options);
+						this.searchableSelectLoadingMap.set(field.name, false);
+						this.cdr.markForCheck();
+					},
+					error: () => {
+						this.searchableSelectOptionsMap.set(field.name, []);
+						this.searchableSelectLoadingMap.set(field.name, false);
+						this.cdr.markForCheck();
+					}
+				});
+			});
+	}
+
 	getSearchableSelectOptions(fieldName: string): SearchableSelectOption[] {
 		return this.searchableSelectOptionsMap.get(fieldName) || [];
 	}
@@ -402,18 +427,25 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 	getSearchableSelectConfig(field: FieldConfig): SearchableSelectConfig {
 		const config = field.searchableSelectConfig;
 		return {
-			placeholder: config?.placeholder || field.placeholder || 'Select...',
-			searchPlaceholder: config?.searchPlaceholder || 'Search...',
-			noResultsText: config?.noResultsText || 'No results found',
+			placeholder: config?.placeholder,
+			searchPlaceholder: config?.searchPlaceholder,
+			noResultsText: config?.noResultsText,
 			clearable: config?.clearable ?? true,
 			maxHeight: config?.maxHeight || '200px',
 			searchable: true,
-			loading: this.searchableSelectLoadingMap.get(field.name) || false
+			loading: this.searchableSelectLoadingMap.get(field.name) || false,
+			entityKey: config?.entityKey
 		};
 	}
 
 	onSearchableSelectSearch(searchTerm: string, field: FieldConfig): void {
 		const config = field.searchableSelectConfig;
+
+		// If using options$ (pre-loaded options), let searchable-select handle local filtering
+		if (config?.options$) {
+			return;
+		}
+
 		if (!config?.searchFn) {
 			return;
 		}
@@ -436,6 +468,24 @@ export class FormGeneratorComponent implements OnInit, OnDestroy, OnChanges, Aft
 				this.cdr.markForCheck();
 			}
 		});
+	}
+
+	/**
+	 * Update searchable select options for a specific field
+	 * Used when options need to be loaded dynamically based on other field values
+	 */
+	updateSearchableSelectOptions(fieldName: string, options: SearchableSelectOption[]): void {
+		this.searchableSelectOptionsMap.set(fieldName, options);
+		this.searchableSelectLoadingMap.set(fieldName, false);
+		this.cdr.markForCheck();
+	}
+
+	/**
+	 * Set loading state for a searchable select field
+	 */
+	setSearchableSelectLoading(fieldName: string, loading: boolean): void {
+		this.searchableSelectLoadingMap.set(fieldName, loading);
+		this.cdr.markForCheck();
 	}
 
 }

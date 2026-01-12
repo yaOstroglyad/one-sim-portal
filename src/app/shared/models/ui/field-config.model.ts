@@ -126,7 +126,21 @@ export interface FieldConfig {
 		noResultsText?: string;
 		clearable?: boolean;
 		maxHeight?: string;
-		searchFn: (searchTerm: string) => Observable<Array<{ value: any; label: string }>>;
+		/**
+		 * Translation key for the entity name (e.g., 'common.entities.product').
+		 * Used to interpolate {{entity}} in placeholder, searchPlaceholder, noResultsText.
+		 */
+		entityKey?: string;
+		/**
+		 * Function for server-side search. Called on each search change.
+		 * searchTerm is passed for server-side filtering.
+		 */
+		searchFn?: (searchTerm: string) => Observable<Array<{ value: any; label: string }>>;
+		/**
+		 * Observable for pre-loaded options with local search.
+		 * Options are loaded once on init and filtered locally.
+		 */
+		options$?: Observable<Array<{ value: any; label: string }>>;
 	};
 
 	dependsOn?: string[];

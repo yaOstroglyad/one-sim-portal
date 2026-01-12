@@ -25,13 +25,11 @@
             <app-searchable-select
               id="companyAccountId"
               [options]="companyOptions$ | async"
-                            [config]="{
-                                    placeholder: ('company.name' | translate),
-                                    searchPlaceholder: ('common.search' | translate) + '...',
-                                    noResultsText: ('common.noResultsFound' | translate),
-                                    clearable: true,
-                                    searchable: true
-                                }"
+              [config]="{
+                entityKey: 'common.entities.company',
+                clearable: true,
+                searchable: true
+              }"
               formControlName="companyAccountId"
               class="w-100">
             </app-searchable-select>
@@ -50,13 +48,11 @@
           <app-searchable-select
             id="type"
             [options]="userTypeOptions"
-                            [config]="{
-                                    placeholder: ('users.selectType' | translate),
-                                    searchPlaceholder: ('common.search' | translate) + '...',
-                                    noResultsText: ('common.noResultsFound' | translate),
-                                    clearable: true,
-                                    searchable: true
-                                }"
+            [config]="{
+              entityKey: 'common.entities.userType',
+              clearable: true,
+              searchable: true
+            }"
             formControlName="type"
             class="w-100">
           </app-searchable-select>

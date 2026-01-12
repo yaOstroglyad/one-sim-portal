@@ -1,74 +1,28 @@
-// Global dialog styles are now available from src/scss/_vendor-overrides.scss
-// Add subscriber product dialog specific styles
+@use "mixins" as mixins;
 
-@use "../../../../../scss/variables" as vars;
-@use "../../../../../scss/mixins" as mixins;
-@use "sass:map";
+// Allow dropdown to overflow dialog boundaries
+:host ::ng-deep {
+  .mat-mdc-dialog-content {
+    overflow: visible !important;
+  }
+  .mat-mdc-dialog-surface {
+    overflow: visible !important;
+  }
+}
+// Global dialog styles from _vendor-overrides.scss
+// Component-specific overrides only
 
-// Form generator spacing in dialog
-app-form-generator {
+.dialog-header {
+  @include mixins.dialog-section-border(bottom);
+}
+
+.dialog-content {
   display: block;
+  padding-top: 1.25rem;
 }
 
-// Mat hint styling for no products message
-.hint {
-  display: flex;
-  align-items: center;
-  margin-top: map.get(vars.$os-spacing, '3');
-  padding: map.get(vars.$os-spacing, '3');
-  background-color: rgba(var(--os-color-info-rgb), 0.1);
-  color: var(--os-color-info);
-  border-radius: map.get(vars.$os-border-radius, 'medium');
-  font-size: map.get(vars.$os-font-sizes, 'sm');
-
-  mat-icon {
-    @include mixins.icon-size(1rem);
-    margin-right: map.get(vars.$os-spacing, '2');
-    font-size: 1rem;
-  }
-}
-
-// Loader component styling in dialog
-app-loader {
-  @include mixins.flex-center();
-  min-height: map.get(vars.$os-spacing, '20'); // 80px
-  width: 100%;
-}
-
-// Custom loader styles (if still needed)
-.loader-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-}
-
-.loader {
-  width: 15px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  animation: l5 1s infinite linear alternate;
-}
-
-@keyframes l5 {
-  0%  {
-    box-shadow: 20px 0 var(--os-color-primary), -20px 0 rgba(var(--os-color-primary-rgb), 0.2);
-    background: var(--os-color-primary);
-  }
-  33% {
-    box-shadow: 20px 0 var(--os-color-primary), -20px 0 rgba(var(--os-color-primary-rgb), 0.2);
-    background: rgba(var(--os-color-primary-rgb), 0.2);
-  }
-  66% {
-    box-shadow: 20px 0 rgba(var(--os-color-primary-rgb), 0.2), -20px 0 var(--os-color-primary);
-    background: rgba(var(--os-color-primary-rgb), 0.2);
-  }
-  100% {
-    box-shadow: 20px 0 rgba(var(--os-color-primary-rgb), 0.2), -20px 0 var(--os-color-primary);
-    background: var(--os-color-primary);
-  }
+.dialog-footer {
+  @include mixins.dialog-section-border(top);
 }
 
 // ==============================================
@@ -76,3 +30,4 @@ app-loader {
 // Handled via layout CSS variables in _variables.scss
 // Variables auto-switch in html.dark / .layout--dark contexts
 // ==============================================
+

@@ -1,50 +1,35 @@
-import { FormConfig, FieldType, ProductsDataService } from '@shared';
-import { Observable, of } from 'rxjs';
-import { Provider } from '@shared/models/business';
+import { FormConfig, FieldType } from '@shared';
 import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { Validators } from '@angular/forms';
+import { AddSubscriberProductService } from '../add-subscriber-product/add-subscriber-product.service';
 
 export function getAddSubscriberFormConfig(
-  providers$: Observable<Provider[]>,
-  productsDataService: ProductsDataService,
-  customerId: string
+  addSubscriberProductService: AddSubscriberProductService,
+  subscriberId: string | undefined
 ): FormConfig {
+  // If no subscriberId, return empty options
+  const productOptions$ = subscriberId
+    ? addSubscriberProductService.list(subscriberId).pipe(
+        map(options => options.map(option => ({
+          value: option.value?.id,
+          label: option.displayValue
+        })))
+      )
+    : of([]);
+
   return {
     fields: [
       {
-        type: FieldType.select,
-        name: 'serviceProviderId',
-        label: 'add-subscriber.provider',
-        validators: [Validators.required],
-        options: providers$.pipe(
-          map(providers => providers.map(
-            provider => ({ value: provider.id, displayValue: provider.name })
-          ))
-        ),
-        placeholder: 'add-subscriber.select-provider'
-      },
-      {
-        type: FieldType.select,
+        type: FieldType.searchableSelect,
         name: 'productId',
         label: 'add-subscriber.product',
-        dependsOnValue: ['serviceProviderId'],
-        disabled: true,
         validators: [Validators.required],
-        options: (values) => {
-          const { serviceProviderId } = values;
-          if (!serviceProviderId) return of([]);
-
-          return productsDataService.listFiltered({
-            serviceProviderId: serviceProviderId,
-            customerId
-          }).pipe(
-            map(products => products.map(p => ({
-              value: p.id,
-              displayValue: p.name
-            })))
-          );
-        },
-        placeholder: 'add-subscriber.select-product'
+        searchableSelectConfig: {
+          entityKey: 'common.entities.product',
+          clearable: false,
+          options$: productOptions$
+        }
       },
       {
         type: FieldType.text,

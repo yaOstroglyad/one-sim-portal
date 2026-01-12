@@ -205,6 +205,7 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 		const data = {id: subscriber.id};
 		const dialogRef = this.dialog.open(AddSubscriberProductComponent, {
 			width: '600px',
+			height: '300px',
 			data
 		});
 
@@ -214,7 +215,8 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	public addSubscriber() {
 		const data = {
 			customerId: this.customerId,
-			email: this.customerDetails?.userProfile?.email
+			email: this.customerDetails?.userProfile?.email,
+			subscriberId: this.customerDetails?.subscribers[0]?.id // workaround to get products by subscriberId
 		};
 		const dialogRef = this.dialog.open(AddSubscriberComponent, {
 			width: '600px',

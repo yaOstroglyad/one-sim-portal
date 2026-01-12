@@ -28,13 +28,11 @@
                     <app-searchable-select
                       [id]="field.key"
                       [options]="companyOptions$ | async"
-                                        [config]="{
-                                            placeholder: (field.label | translate),
-                                            searchPlaceholder: ('common.search' | translate) + '...',
-                                            noResultsText: ('common.noResultsFound' | translate),
-                                            clearable: true,
-                                            searchable: true
-                                        }"
+                      [config]="{
+                        entityKey: 'common.entities.company',
+                        clearable: true,
+                        searchable: true
+                      }"
                       [formControlName]="field.key"
                       class="w-100">
                     </app-searchable-select>
@@ -51,13 +49,11 @@
                     <app-searchable-select
                       [id]="field.key + '-simple'"
                       [options]="companyOptions$ | async"
-                                    [config]="{
-                                        placeholder: (field.label | translate),
-                                        searchPlaceholder: ('common.search' | translate) + '...',
-                                        noResultsText: ('common.noResultsFound' | translate),
-                                        clearable: true,
-                                        searchable: true
-                                    }"
+                      [config]="{
+                        entityKey: 'common.entities.company',
+                        clearable: true,
+                        searchable: true
+                      }"
                       [formControlName]="field.key"
                       class="w-100">
                     </app-searchable-select>

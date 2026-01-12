@@ -32,7 +32,7 @@
             <span>{{ displayText }}</span>
           }
           @if (hasPlaceholder) {
-            <span>{{ config.placeholder | translate }}</span>
+            <span>{{ translatedPlaceholder }}</span>
           }
         </span>
       }
@@ -43,7 +43,7 @@
           <!-- Show placeholder text when no selections -->
           @if (hasPlaceholder) {
             <span class="placeholder">
-              {{ config.placeholder | translate }}
+              {{ translatedPlaceholder }}
             </span>
           }
           <!-- Show chips when items are selected -->
@@ -76,9 +76,7 @@
 
     <!-- Loading spinner -->
     @if (showLoadingState) {
-      <div class="loading-spinner">
-        <svg cIcon name="cilReload" width="16" height="16" class="spinning"></svg>
-      </div>
+        <span class="ag-loading-icon"></span>
     }
 
     <!-- Dropdown arrow -->
@@ -100,7 +98,7 @@
           type="text"
           class="search-input"
           [formControl]="searchControl"
-          [placeholder]="config.searchPlaceholder | translate"
+          [placeholder]="translatedSearchPlaceholder"
           (click)="$event.stopPropagation()">
       </div>
     }
@@ -110,13 +108,13 @@
       @if (showLoadingState) {
         <div class="option loading">
           <svg cIcon name="cilReload" width="16" height="16" class="spinning"></svg>
-          {{ config.loadingText | translate }}
+          {{ translatedLoadingText }}
         </div>
       }
       <!-- No results -->
       @if (showNoResults) {
         <div class="option no-results">
-          {{ config.noResultsText | translate }}
+          {{ translatedNoResultsText }}
         </div>
       }
       <!-- Options -->

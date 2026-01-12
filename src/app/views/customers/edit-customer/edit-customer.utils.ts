@@ -1,40 +1,35 @@
 import {
   FieldType,
-  ProvidersDataService,
   FormConfig,
   Customer,
   CustomerType,
-  ProductsDataService,
   FieldConfig,
-  CompaniesDataService
+  CompaniesDataService,
+  Company
 } from '@shared';
 import { Validators } from '@angular/forms';
 import { of } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { map } from 'rxjs/operators';
+import { CompanyProductService } from '../../product-constructor/services';
 
 const emailHintMessage = 'customer.emailHint';
 
 function createCompanySearchField(companiesService: CompaniesDataService): FieldConfig {
   return {
     type: FieldType.searchableSelect,
-    name: 'companyId',
+    name: 'company',
     label: 'customer.companySearch',
-    placeholder: 'customer.companySearchPlaceholder',
     validators: [Validators.required],
     searchableSelectConfig: {
-      placeholder: 'customer.companySearchPlaceholder',
-      searchPlaceholder: 'customer.companySearchInputPlaceholder',
-      noResultsText: 'customer.companySearchNoResults',
+      entityKey: 'common.entities.company',
       clearable: false,
-      searchFn: (searchTerm: string) => {
-        return companiesService.paginatedCompanies({ name: searchTerm }, 0, 20).pipe(
-          map(response => response.content?.map((company: any) => ({
-            value: company.id,
-            label: company.name || company.id
-          })) || [])
-        );
-      }
+      options$: companiesService.list().pipe(
+        map(companies => companies.map((company: Company) => ({
+          value: company,
+          label: company.name || company.id
+        })))
+      )
     }
   };
 }
@@ -43,25 +38,33 @@ export function getCustomerCreateRequest(form: any, isAdmin: boolean = false) {
   return {
     customerCommand: {
       id: form?.id || null,
-      companyId: isAdmin ? form.companyId : undefined,
+      companyId: isAdmin ? form.company?.id : undefined,
       name: form.name,
       description: form.description,
       externalId: form.externalId || '',
       tags: form?.tags || [],
       type: form?.type || ''
     },
-    subscriberCommand: form?.type === CustomerType.Private ? {
-      serviceProviderId: form.serviceProviderId || '',
-      externalId: form.subscriberExternalId || null
-    } : null,
+    subscriberCommand: null,
     productId: form.productId || null,
     userProfileEmail: form.email || ''
   };
 }
 
+export function getProductOptions$(companyProductService: CompanyProductService, accountId?: string) {
+  return companyProductService.searchCompanyProducts({
+    searchParams: accountId ? { accountId } : {},
+    page: { page: 0, size: 1000 }
+  }).pipe(
+    map(response => response.content?.map(product => ({
+      value: product.id,
+      label: product.name
+    })) || [])
+  );
+}
+
 export function getEditCustomerFormConfig(
-  serviceProviderDataService: ProvidersDataService,
-  productsDataService: ProductsDataService,
+  companyProductService: CompanyProductService,
   data: Customer,
   isAdmin: boolean = false,
   companiesService?: CompaniesDataService
@@ -111,44 +114,16 @@ export function getEditCustomerFormConfig(
       validators: [Validators.required]
     },
     {
-      type: FieldType.select,
-      name: 'serviceProviderId',
-      label: 'customer.serviceProvider',
-      placeholder: 'customer.serviceProviderPlaceholder',
-      validators: [Validators.required],
-      options: serviceProviderDataService.list().pipe(
-        map(providers => providers.map(
-          provider => ({
-            value: provider.id,
-            displayValue: provider.name
-          })
-        ))
-      )
-    },
-    {
-      type: FieldType.select,
+      type: FieldType.searchableSelect,
       name: 'productId',
       label: 'customer.product',
-      placeholder: 'customer.productPlaceholder',
       validators: [],
-      dependsOnValue: isAdmin ? ['serviceProviderId', 'companyId'] : ['serviceProviderId'],
-      disabled: true,
-      options: (values) => {
-        const { serviceProviderId, companyId } = values;
-        if (!serviceProviderId) return of([]);
-
-        // For admin, pass companyId to get products available for that company
-        const filterParams: any = { serviceProviderId };
-        if (isAdmin && companyId) {
-          filterParams.companyId = companyId;
-        }
-
-        return productsDataService.listFiltered(filterParams).pipe(
-          map(products => products.map(p => ({
-            value: p.id,
-            displayValue: p.name
-          })))
-        );
+      searchableSelectConfig: {
+        entityKey: 'common.entities.product',
+        clearable: true,
+        // For admin: products will be loaded when company is selected
+        // For non-admin: load all available products
+        options$: isAdmin ? of([]) : getProductOptions$(companyProductService)
       }
     },
     {

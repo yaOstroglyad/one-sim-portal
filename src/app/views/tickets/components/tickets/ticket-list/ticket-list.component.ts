@@ -257,9 +257,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   private initializeSelectConfigurations(): void {
     // Status select configuration
     this.statusSelectConfig = {
-      placeholder: 'tickets.filter.selectStatus',
-      searchPlaceholder: 'common.search',
-      noResultsText: 'common.noResultsFound',
+      entityKey: 'common.entities.status',
       clearable: true,
       searchable: true,
       multiple: true
@@ -267,9 +265,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Priority select configuration
     this.prioritySelectConfig = {
-      placeholder: 'tickets.filter.selectPriority',
-      searchPlaceholder: 'common.search',
-      noResultsText: 'common.noResultsFound',
+      entityKey: 'common.entities.priority',
       clearable: true,
       searchable: true,
       multiple: true
@@ -277,9 +273,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Category select configuration
     this.categorySelectConfig = {
-      placeholder: 'tickets.filter.selectCategory',
-      searchPlaceholder: 'common.search',
-      noResultsText: 'common.noResultsFound',
+      entityKey: 'common.entities.category',
       clearable: true,
       searchable: true,
       multiple: true

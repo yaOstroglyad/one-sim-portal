@@ -65,6 +65,12 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   // Pre-computed option states for template
   optionStates: { [key: string]: { selected: boolean, highlighted: boolean, disabled: boolean } } = {};
 
+  // Cached translations
+  cachedPlaceholder = '';
+  cachedSearchPlaceholder = '';
+  cachedNoResultsText = '';
+  cachedLoadingText = '';
+
   // ControlValueAccessor
   private value: any = null;
   private onTouched: () => void = () => {};
@@ -74,9 +80,9 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
 
   // Default configuration
   defaultConfig: SearchableSelectConfig = {
-    placeholder: 'Select an option',
-    searchPlaceholder: 'Search...',
-    noResultsText: 'No results found',
+    placeholder: 'common.searchableSelect.placeholder',
+    searchPlaceholder: 'common.searchableSelect.searchPlaceholder',
+    noResultsText: 'common.searchableSelect.noResults',
     clearable: true,
     clearOptionLabel: 'common.none',
     disabled: false,
@@ -84,7 +90,7 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     maxHeight: '200px',
     searchable: true,
     loading: false,
-    loadingText: 'Loading...'
+    loadingText: 'common.searchableSelect.loading'
   };
 
   constructor(
@@ -94,8 +100,19 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   ) {}
 
   ngOnInit(): void {
-    // Merge default config with provided config
-    this.config = { ...this.defaultConfig, ...this.config };
+    // Merge default config with provided config, filtering out undefined values
+    this.config = this.mergeConfig(this.defaultConfig, this.config);
+
+    // Initialize translations
+    this.updateTranslations();
+
+    // Subscribe to language changes
+    this.translate.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.updateTranslations();
+        this.cdr.markForCheck();
+      });
 
     // Initialize filtered options with safe fallback
     this.filteredOptions = this.options ? [...this.options] : [];
@@ -123,8 +140,9 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     }
 
     if (changes['config']) {
-      // Merge config when it changes
-      this.config = { ...this.defaultConfig, ...this.config };
+      // Merge config when it changes, filtering out undefined values
+      this.config = this.mergeConfig(this.defaultConfig, this.config);
+      this.updateTranslations();
     }
   }
 
@@ -517,5 +535,72 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
 
   trackByOptionValue(index: number, option: SearchableSelectOption): any {
     return option?.value;
+  }
+
+  /**
+   * Merges two config objects, filtering out undefined/null values from the override config.
+   */
+  private mergeConfig(defaultConfig: SearchableSelectConfig, overrideConfig: SearchableSelectConfig): SearchableSelectConfig {
+    const filtered: Partial<SearchableSelectConfig> = {};
+
+    if (overrideConfig) {
+      Object.keys(overrideConfig).forEach(key => {
+        const value = overrideConfig[key as keyof SearchableSelectConfig];
+        if (value !== undefined && value !== null) {
+          (filtered as any)[key] = value;
+        }
+      });
+    }
+
+    return { ...defaultConfig, ...filtered };
+  }
+
+  /**
+   * Updates all cached translations.
+   */
+  private updateTranslations(): void {
+    const entityKey = this.config.entityKey || 'common.searchableSelect.fallbackEntity';
+    const entity = this.translate.instant(entityKey);
+
+    const placeholderKey = this.config.placeholder || this.defaultConfig.placeholder!;
+    const searchPlaceholderKey = this.config.searchPlaceholder || this.defaultConfig.searchPlaceholder!;
+    const noResultsKey = this.config.noResultsText || this.defaultConfig.noResultsText!;
+    const loadingKey = this.config.loadingText || this.defaultConfig.loadingText!;
+
+    this.cachedPlaceholder = this.translate.instant(placeholderKey, { entity });
+    this.cachedSearchPlaceholder = this.translate.instant(searchPlaceholderKey, { entity });
+    this.cachedNoResultsText = this.translate.instant(noResultsKey, { entity });
+    this.cachedLoadingText = this.translate.instant(loadingKey);
+  }
+
+  /**
+   * Gets the translated placeholder with entity interpolation.
+   */
+  get translatedPlaceholder(): string {
+    if (!this.cachedPlaceholder) {
+      this.updateTranslations();
+    }
+    return this.cachedPlaceholder || '';
+  }
+
+  /**
+   * Gets the translated search placeholder with entity interpolation.
+   */
+  get translatedSearchPlaceholder(): string {
+    return this.cachedSearchPlaceholder || '';
+  }
+
+  /**
+   * Gets the translated no results text with entity interpolation.
+   */
+  get translatedNoResultsText(): string {
+    return this.cachedNoResultsText || '';
+  }
+
+  /**
+   * Gets the translated loading text.
+   */
+  get translatedLoadingText(): string {
+    return this.cachedLoadingText || '';
   }
 }

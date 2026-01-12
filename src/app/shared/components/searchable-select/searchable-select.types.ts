@@ -17,6 +17,12 @@ export interface SearchableSelectConfig {
   searchable?: boolean;
   loading?: boolean;
   loadingText?: string;
+  /**
+   * Translation key for the entity name (e.g., 'common.entities.product', 'common.entities.company').
+   * Used to interpolate {{entity}} in placeholder, searchPlaceholder, noResultsText.
+   * Falls back to 'common.searchableSelect.fallbackEntity' if not provided.
+   */
+  entityKey?: string;
 }
 
 export interface SearchableSelectChangeEvent {

@@ -1521,7 +1521,7 @@
 // LTR/RTL property setter mixin
 @mixin ltr-rtl($property, $value) {
   #{$property}: $value;
-  
+
   [dir="rtl"] & {
     @if $property == "padding-left" {
       padding-left: 0;

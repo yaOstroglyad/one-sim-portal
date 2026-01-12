@@ -131,6 +131,27 @@
     },
     "table": {
       "filterPlaceholder": "Фільтрувати дані таблиці"
+    },
+    "searchableSelect": {
+      "placeholder": "Оберіть {{entity}}",
+      "searchPlaceholder": "Пошук {{entity}}...",
+      "noResults": "{{entity}} не знайдено",
+      "loading": "Завантаження...",
+      "fallbackEntity": "елемент"
+    },
+    "entities": {
+      "product": "продукт",
+      "company": "компанію",
+      "country": "країну",
+      "region": "регіон",
+      "account": "акаунт",
+      "provider": "провайдера",
+      "user": "користувача",
+      "ticket": "тікет",
+      "status": "статус",
+      "priority": "пріоритет",
+      "category": "категорію",
+      "userType": "тип користувача"
     }
   },
   "smartFilter": {
@@ -319,6 +340,7 @@
   },
   "add-subscriber-product": {
     "title": "Додати продукт підписки",
+    "product": "Продукт",
     "noProducts": "Продукти не знайдено."
   },
   "company": {

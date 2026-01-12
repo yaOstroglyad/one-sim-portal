@@ -176,6 +176,27 @@
     },
     "table": {
       "filterPlaceholder": "סנן נתוני טבלה"
+    },
+    "searchableSelect": {
+      "placeholder": "בחר {{entity}}",
+      "searchPlaceholder": "חפש {{entity}}...",
+      "noResults": "לא נמצא {{entity}}",
+      "loading": "טוען...",
+      "fallbackEntity": "פריט"
+    },
+    "entities": {
+      "product": "מוצר",
+      "company": "חברה",
+      "country": "מדינה",
+      "region": "אזור",
+      "account": "חשבון",
+      "provider": "ספק",
+      "user": "משתמש",
+      "ticket": "כרטיס",
+      "status": "סטטוס",
+      "priority": "עדיפות",
+      "category": "קטגוריה",
+      "userType": "סוג משתמש"
     }
   },
   "smartFilter": {
@@ -404,6 +425,7 @@
   },
   "add-subscriber-product": {
     "title": "הוסף מוצר מנוי",
+    "product": "מוצר",
     "noProducts": "לא נמצאו מוצרים."
   },
   "company": {
