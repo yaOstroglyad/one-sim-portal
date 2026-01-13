@@ -110,15 +110,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Check if user is admin
     this.checkPermissions();
 
-    // Filter tabs based on user permissions
-    this.filterTabsByPermissions();
-
-    // Configure account context for this page
+    // Configure account context for this page (only works for admins)
     this.accountContext.configure({
       visible: true,
       required: false,
       selectFirstByDefault: true
     });
+
+    // For non-admin users, load data immediately without account context
+    if (!this.isAdmin()) {
+      this.dashboardService.setAccountId(null);
+      this.dashboardService.setPeriod(this.dashboardService.getCurrentPeriod());
+    }
   }
 
   ngOnDestroy(): void {
@@ -133,36 +136,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Filter tabs based on user permissions
-   */
-  private filterTabsByPermissions(): void {
-    // For now, show all tabs for authenticated users
-    // In future, can add specific permissions per tab
-    const currentActiveTab = this.activeTab();
-    this.tabs.update(tabs => tabs.map(tab => ({
-      ...tab,
-      active: tab.id === currentActiveTab
-    })));
-  }
-
-  /**
    * Change active tab
    */
   onTabChange(tabId: DashboardTab['id']): void {
     this.activeTab.set(tabId);
 
-    // Update route query params
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { tab: tabId },
       queryParamsHandling: 'merge'
     });
-
-    // Update tab active state
-    this.tabs.update(tabs => tabs.map(tab => ({
-      ...tab,
-      active: tab.id === tabId
-    })));
   }
 
   /**

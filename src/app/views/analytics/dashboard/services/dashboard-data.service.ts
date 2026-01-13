@@ -35,6 +35,7 @@ export class DashboardDataService {
   // Expose state signals for backward compatibility
   public readonly period = this.stateService.period;
   public readonly accountId = this.stateService.accountId;
+  public readonly isReady = this.stateService.isReady;
 
   // ===== Executive Tab =====
 

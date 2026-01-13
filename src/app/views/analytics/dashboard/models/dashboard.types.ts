@@ -117,8 +117,6 @@ export interface DashboardTab {
   id: 'executive' | 'subscribers' | 'traffic' | 'finance';
   label: string;
   icon?: string;
-  permissions?: string[];
-  active?: boolean;
   disabled?: boolean;
 }
 

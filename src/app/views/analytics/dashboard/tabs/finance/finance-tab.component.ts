@@ -1,75 +1,77 @@
-import { Component, OnInit, ChangeDetectorRef, effect, inject } from '@angular/core';
-
+import {
+  Component,
+  ChangeDetectionStrategy,
+  DestroyRef,
+  effect,
+  inject,
+  signal,
+  untracked
+} from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { IconModule } from '@coreui/icons-angular';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { CardComponent, OsBarChartComponent } from '@shared';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
-
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { FinanceAnalytics } from '../../models/finance.types';
-import { DashboardError } from '../../models/dashboard.types';
+import { DashboardError, DashboardResponse } from '../../models/dashboard.types';
+import { parseDashboardError } from '../../utils';
 
 @Component({
-	standalone: true,
-	selector: 'app-finance-tab',
-	imports: [
+  standalone: true,
+  selector: 'app-finance-tab',
+  imports: [
     TranslateModule,
-    IconModule,
     CardComponent,
+    OsBarChartComponent,
     LoadingIndicatorComponent,
-    ErrorDisplayComponent,
-    OsBarChartComponent
-],
-	templateUrl: './finance-tab.component.html',
-	styleUrls: ['./finance-tab.component.scss']
+    ErrorDisplayComponent
+  ],
+  templateUrl: './finance-tab.component.html',
+  styleUrls: ['./finance-tab.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FinanceTabComponent implements OnInit {
-	private readonly dashboardDataService = inject(DashboardDataService);
-	private readonly cdr = inject(ChangeDetectorRef);
+export class FinanceTabComponent {
+  private readonly dashboardDataService = inject(DashboardDataService);
+  private readonly destroyRef = inject(DestroyRef);
 
-	data: FinanceAnalytics | null = null;
-	loading = true;
-	error: DashboardError | null = null;
+  readonly loading = signal(true);
+  readonly error = signal<DashboardError | null>(null);
+  readonly data = signal<FinanceAnalytics | null>(null);
 
-	constructor() {
-		// React to period and accountId changes using effect
-		effect(() => {
-			const period = this.dashboardDataService.period();
-			const accountId = this.dashboardDataService.accountId();
+  constructor() {
+    effect(() => {
+      this.dashboardDataService.accountId();
+      if (this.dashboardDataService.isReady()) {
+        untracked(() => this.loadData());
+      }
+    });
+  }
 
-			// Only load data if accountId is set (required for API calls)
-			if (accountId) {
-				this.loadData();
-			}
-		});
-	}
+  onRetry(): void {
+    this.loadData();
+  }
 
-	ngOnInit(): void {
-		// Initial data load is handled by effect
-	}
+  private loadData(): void {
+    this.loading.set(true);
+    this.error.set(null);
 
-	loadData(): void {
-		this.loading = true;
-		this.error = null;
-
-		this.dashboardDataService.getFinanceData()
-			.subscribe({
-				next: (response) => {
-					this.data = response.data;
-					this.loading = false;
-					this.cdr.detectChanges();
-				},
-				error: (error) => {
-					this.error = {
-						code: error.status || error.code || 'UNKNOWN',
-						message: error.message || 'Failed to load finance data',
-						details: error,
-						timestamp: new Date()
-					};
-					this.loading = false;
-				}
-			});
-	}
+    this.dashboardDataService.getFinanceData()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response: DashboardResponse<FinanceAnalytics>) => {
+          if (response.status === 'success') {
+            this.data.set(response.data);
+          } else {
+            this.error.set(parseDashboardError(response.error, response.message));
+          }
+          this.loading.set(false);
+        },
+        error: (err) => {
+          this.error.set(parseDashboardError(err, 'Failed to load finance data'));
+          this.loading.set(false);
+        }
+      });
+  }
 }

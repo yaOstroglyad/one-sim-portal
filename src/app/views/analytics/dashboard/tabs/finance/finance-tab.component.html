@@ -1,21 +1,21 @@
 <div class="finance-tab">
   <!-- Loading State -->
-  @if (loading) {
+  @if (loading()) {
     <app-loading-indicator
       [status]="{ state: 'loading', message: 'Fetching finance data...' }">
     </app-loading-indicator>
   }
 
   <!-- Error State -->
-  @if (error && !loading) {
+  @if (error() && !loading()) {
     <app-error-display
-      [error]="error"
-      (retry)="loadData()">
+      [error]="error()!"
+      (retry)="onRetry()">
     </app-error-display>
   }
 
   <!-- Data Content -->
-  @if (data && !loading && !error) {
+  @if (data() && !loading() && !error()) {
     <div class="db-content">
 
       <!-- Revenue by Bundle - Stacked Bar Chart -->
@@ -24,12 +24,12 @@
           <div class="db-chart__header">
             <h3>{{ 'dashboard.finance.revenueByBundle' | translate }}</h3>
           </div>
-          @if (data.topBundles.chartConfig) {
+          @if (data()!.topBundles.chartConfig) {
             <div class="db-chart__container">
               <os-bar-chart
-                [data]="$any(data.topBundles.chartConfig.data)"
-                [options]="data.topBundles.chartConfig.options || {}"
-                [legendItems]="$any(data.topBundles.chartConfig).legendItems || []"
+                [data]="$any(data()!.topBundles.chartConfig.data)"
+                [options]="data()!.topBundles.chartConfig.options || {}"
+                [legendItems]="$any(data()!.topBundles.chartConfig).legendItems || []"
                 [legendMaxHeight]="80">
               </os-bar-chart>
             </div>
@@ -43,12 +43,12 @@
           <div class="db-chart__header">
             <h3>{{ 'dashboard.finance.revenueByCountry' | translate }}</h3>
           </div>
-          @if (data.topCountries.chartConfig) {
+          @if (data()!.topCountries.chartConfig) {
             <div class="db-chart__container">
               <os-bar-chart
-                [data]="$any(data.topCountries.chartConfig.data)"
-                [options]="data.topCountries.chartConfig.options || {}"
-                [legendItems]="$any(data.topCountries.chartConfig).legendItems || []"
+                [data]="$any(data()!.topCountries.chartConfig.data)"
+                [options]="data()!.topCountries.chartConfig.options || {}"
+                [legendItems]="$any(data()!.topCountries.chartConfig).legendItems || []"
                 [legendMaxHeight]="80">
               </os-bar-chart>
             </div>
@@ -62,12 +62,12 @@
           <div class="db-chart__header">
             <h3>{{ 'dashboard.finance.marginByMonth' | translate }}</h3>
           </div>
-          @if (data.marginByMonth.chartConfig) {
+          @if (data()!.marginByMonth.chartConfig) {
             <div class="db-chart__container">
               <os-bar-chart
-                [data]="$any(data.marginByMonth.chartConfig.data)"
-                [options]="data.marginByMonth.chartConfig.options || {}"
-                [legendItems]="$any(data.marginByMonth.chartConfig).legendItems || []"
+                [data]="$any(data()!.marginByMonth.chartConfig.data)"
+                [options]="data()!.marginByMonth.chartConfig.options || {}"
+                [legendItems]="$any(data()!.marginByMonth.chartConfig).legendItems || []"
                 [legendMaxHeight]="80">
               </os-bar-chart>
             </div>

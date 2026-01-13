@@ -113,7 +113,8 @@
       "Bash(git diff:*)",
       "Bash(echo:*)",
       "Bash(done)",
-      "Skill(speckit.clarify)"
+      "Skill(speckit.clarify)",
+      "Bash(git reset:*)"
     ],
     "deny": [
       "// === Blocked for Security ===",

@@ -1,25 +1,38 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject, signal, effect } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  DestroyRef,
+  effect,
+  inject,
+  signal,
+  untracked
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IconModule } from '@coreui/icons-angular';
 
-import { CardComponent, OsBarChartComponent, OsLineChartComponent, TooltipDirective } from '@shared';
+import {
+  CardComponent,
+  OsBarChartComponent,
+  OsLineChartComponent,
+  TooltipDirective
+} from '@shared';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
-
 import { DashboardDataService } from '../../services/dashboard-data.service';
-import {
-  TrafficUsagePeriodResponse,
-  TrafficKpiValues,
-  TrafficChartLegendItem
-} from '../../models/traffic.types';
 import { DashboardError } from '../../models/dashboard.types';
 import {
+  TrafficUsagePeriodResponse,
+  TrafficKpiValues
+} from '../../models/traffic.types';
+import {
+  parseDashboardError,
   calculateKpiValues,
   buildTrafficByCountryChartConfig,
   buildSubscribersByCountryChartConfig,
   buildAverageTrafficChartConfig
-} from '../../utils/traffic.utils';
+} from '../../utils';
 
 @Component({
   standalone: true,
@@ -30,10 +43,10 @@ import {
     IconModule,
     CardComponent,
     TooltipDirective,
-    LoadingIndicatorComponent,
-    ErrorDisplayComponent,
     OsBarChartComponent,
-    OsLineChartComponent
+    OsLineChartComponent,
+    LoadingIndicatorComponent,
+    ErrorDisplayComponent
   ],
   templateUrl: './traffic-tab.component.html',
   styleUrls: ['./traffic-tab.component.scss'],
@@ -41,81 +54,34 @@ import {
 })
 export class TrafficTabComponent {
   private readonly dashboardDataService = inject(DashboardDataService);
-  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
 
-  // State signals
+  // UI state
   readonly loading = signal(true);
   readonly error = signal<DashboardError | null>(null);
-  readonly data = signal<TrafficUsagePeriodResponse | null>(null);
 
-  // Computed values for template
+  // Data signals
+  readonly data = signal<TrafficUsagePeriodResponse | null>(null);
   readonly kpiValues = signal<TrafficKpiValues | null>(null);
-  readonly trafficChartConfig = signal<any>(null);
-  readonly subscribersChartConfig = signal<any>(null);
-  readonly avgTrafficChartConfig = signal<any>(null);
+
+  // Chart config signals
+  readonly trafficChartConfig = signal<ReturnType<typeof buildTrafficByCountryChartConfig> | null>(null);
+  readonly subscribersChartConfig = signal<ReturnType<typeof buildSubscribersByCountryChartConfig> | null>(null);
+  readonly avgTrafficChartConfig = signal<ReturnType<typeof buildAverageTrafficChartConfig> | null>(null);
 
   constructor() {
-    // React to period and accountId changes
     effect(() => {
-      const period = this.dashboardDataService.period();
-      const accountId = this.dashboardDataService.accountId();
-
-      if (accountId) {
-        this.loadData();
+      this.dashboardDataService.accountId();
+      if (this.dashboardDataService.isReady()) {
+        untracked(() => this.loadData());
       }
     });
-  }
-
-  loadData(): void {
-    this.loading.set(true);
-    this.error.set(null);
-
-    this.dashboardDataService.getTrafficData().subscribe({
-      next: (response) => {
-        if (response) {
-          this.data.set(response);
-          this.processData(response);
-        } else {
-          // Empty response
-          this.data.set(null);
-          this.kpiValues.set(null);
-          this.trafficChartConfig.set(null);
-          this.subscribersChartConfig.set(null);
-          this.avgTrafficChartConfig.set(null);
-        }
-        this.loading.set(false);
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        this.error.set({
-          code: err.status || err.code || 'UNKNOWN',
-          message: err.message || 'Failed to load traffic data',
-          details: err,
-          timestamp: new Date()
-        });
-        this.loading.set(false);
-        this.cdr.detectChanges();
-      }
-    });
-  }
-
-  private processData(data: TrafficUsagePeriodResponse): void {
-    // Calculate KPI values
-    this.kpiValues.set(calculateKpiValues(data));
-
-    // Build chart configurations
-    this.trafficChartConfig.set(buildTrafficByCountryChartConfig(data.trafficByCountry));
-    this.subscribersChartConfig.set(buildSubscribersByCountryChartConfig(data.subscribersByCountry));
-    this.avgTrafficChartConfig.set(buildAverageTrafficChartConfig(data.subscriberAverageTraffic));
   }
 
   onRetry(): void {
     this.loadData();
   }
 
-  /**
-   * Check if there is any data to display
-   */
   hasData(): boolean {
     const data = this.data();
     if (!data) return false;
@@ -126,5 +92,43 @@ export class TrafficTabComponent {
       data.subscribersByCountry?.length ||
       data.subscriberAverageTraffic?.length
     );
+  }
+
+  private loadData(): void {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.dashboardDataService.getTrafficData()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.data.set(response);
+            this.processData(response);
+          } else {
+            this.clearData();
+          }
+          this.loading.set(false);
+        },
+        error: (err) => {
+          this.error.set(parseDashboardError(err, 'Failed to load traffic data'));
+          this.loading.set(false);
+        }
+      });
+  }
+
+  private processData(data: TrafficUsagePeriodResponse): void {
+    this.kpiValues.set(calculateKpiValues(data));
+    this.trafficChartConfig.set(buildTrafficByCountryChartConfig(data.trafficByCountry));
+    this.subscribersChartConfig.set(buildSubscribersByCountryChartConfig(data.subscribersByCountry));
+    this.avgTrafficChartConfig.set(buildAverageTrafficChartConfig(data.subscriberAverageTraffic));
+  }
+
+  private clearData(): void {
+    this.data.set(null);
+    this.kpiValues.set(null);
+    this.trafficChartConfig.set(null);
+    this.subscribersChartConfig.set(null);
+    this.avgTrafficChartConfig.set(null);
   }
 }

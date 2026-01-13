@@ -12,12 +12,13 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { ExecutiveTabData, DashboardResponse, DashboardError } from '../../models/dashboard.types';
-import { DashboardDataService } from '../../services/dashboard-data.service';
+import { CardComponent, OsBarChartComponent } from '@shared';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
 import { RefundsSummaryComponent } from '../../components/refunds-summary/refunds-summary.component';
-import { CardComponent, OsBarChartComponent } from '@shared';
+import { DashboardDataService } from '../../services/dashboard-data.service';
+import { ExecutiveTabData, DashboardResponse, DashboardError } from '../../models/dashboard.types';
+import { parseDashboardError } from '../../utils';
 
 @Component({
   standalone: true,
@@ -25,11 +26,11 @@ import { CardComponent, OsBarChartComponent } from '@shared';
   imports: [
     CommonModule,
     TranslateModule,
+    CardComponent,
+    OsBarChartComponent,
     LoadingIndicatorComponent,
     ErrorDisplayComponent,
-    RefundsSummaryComponent,
-    CardComponent,
-    OsBarChartComponent
+    RefundsSummaryComponent
   ],
   templateUrl: './executive-tab.component.html',
   styleUrls: ['./executive-tab.component.scss'],
@@ -39,23 +40,23 @@ export class ExecutiveTabComponent {
   private readonly dashboardService = inject(DashboardDataService);
   private readonly destroyRef = inject(DestroyRef);
 
-  // Signals for reactive state
-  readonly data = signal<ExecutiveTabData | null>(null);
   readonly loading = signal(true);
   readonly error = signal<DashboardError | null>(null);
+  readonly data = signal<ExecutiveTabData | null>(null);
 
-  // Computed signals for template optimization
   readonly currency = computed(() => this.data()?.revenue?.currency || 'EUR');
 
   constructor() {
     effect(() => {
-      const period = this.dashboardService.period();
-      const accountId = this.dashboardService.accountId();
-
-      if (accountId) {
+      this.dashboardService.accountId();
+      if (this.dashboardService.isReady()) {
         untracked(() => this.loadData());
       }
     });
+  }
+
+  onRetry(): void {
+    this.loadData();
   }
 
   private loadData(): void {
@@ -69,30 +70,14 @@ export class ExecutiveTabComponent {
           if (response.status === 'success') {
             this.data.set(response.data);
           } else {
-            this.error.set(this.parseError(response.error, response.message));
+            this.error.set(parseDashboardError(response.error, response.message));
           }
           this.loading.set(false);
         },
-        error: (error) => {
-          this.error.set(this.parseError(error?.error || error));
+        error: (err) => {
+          this.error.set(parseDashboardError(err?.error || err, 'An unexpected error occurred'));
           this.loading.set(false);
         }
       });
-  }
-
-  private parseError(error: any, fallbackMessage?: string): DashboardError {
-    if (error && typeof error === 'object' && error.code) {
-      return error;
-    }
-    return {
-      code: error?.code || error?.status?.toString() || '500',
-      message: error?.message || fallbackMessage || 'An unexpected error occurred',
-      details: error?.details,
-      timestamp: new Date()
-    };
-  }
-
-  onRetry(): void {
-    this.loadData();
   }
 }

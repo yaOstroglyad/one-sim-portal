@@ -1,15 +1,16 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, effect, inject, signal } from '@angular/core';
-
+import {
+  Component,
+  ChangeDetectionStrategy,
+  DestroyRef,
+  effect,
+  inject,
+  signal,
+  untracked
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { forkJoin } from 'rxjs';
-import {
-  DashboardError,
-  SubscriberSummaryResponse,
-  PeriodStatusesResponse,
-  BundleSubscribersResponse
-} from '../../models/dashboard.types';
-import { DashboardDataService } from '../../services/dashboard-data.service';
-import { getChartColor, getChartColors, applyDefaultVisibility, buildBundleStatusWaterfallData } from '../../utils';
+
 import {
   CardComponent,
   MetricCardComponent,
@@ -23,58 +24,73 @@ import {
 } from '@shared';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
+import { DashboardDataService } from '../../services/dashboard-data.service';
+import {
+  DashboardError,
+  SubscriberSummaryResponse,
+  PeriodStatusesResponse,
+  BundleSubscribersResponse
+} from '../../models/dashboard.types';
+import {
+  parseDashboardError,
+  calculateStatusTotals,
+  buildBundleStatusWaterfallData,
+  buildSubscriberKpiCards,
+  buildPeriodStatusesChartConfig,
+  buildBundleSubscribersChartConfig,
+  buildCountrySubscribersChartConfig
+} from '../../utils';
 
 @Component({
   standalone: true,
   selector: 'app-subscribers-tab',
   imports: [
     TranslateModule,
-    MetricCardComponent,
-    LoadingIndicatorComponent,
-    ErrorDisplayComponent,
     CardComponent,
+    MetricCardComponent,
     OsBarChartComponent,
-    OsWaterfallChartComponent
-],
+    OsWaterfallChartComponent,
+    LoadingIndicatorComponent,
+    ErrorDisplayComponent
+  ],
   templateUrl: './subscribers-tab.component.html',
   styleUrls: ['./subscribers-tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SubscribersTabComponent implements OnInit {
+export class SubscribersTabComponent {
   private readonly dashboardService = inject(DashboardDataService);
   private readonly translateService = inject(TranslateService);
-  private readonly cdr = inject(ChangeDetectorRef);
-
-  // Data signals for each API response
-  summaryData = signal<SubscriberSummaryResponse | null>(null);
-  networkStatusData = signal<PeriodStatusesResponse | null>(null);
-  bundleSubscribersData = signal<BundleSubscribersResponse | null>(null);
-  bundleStatusData = signal<PeriodStatusesResponse | null>(null);
+  private readonly destroyRef = inject(DestroyRef);
 
   // UI state
-  loading = signal<boolean>(false);
-  error = signal<DashboardError | null>(null);
+  readonly loading = signal(false);
+  readonly error = signal<DashboardError | null>(null);
 
-  // KPI cards computed from summary data
-  kpiCards = signal<MetricCard[]>([]);
+  // Data signals
+  readonly summaryData = signal<SubscriberSummaryResponse | null>(null);
+  readonly networkStatusData = signal<PeriodStatusesResponse | null>(null);
+  readonly bundleSubscribersData = signal<BundleSubscribersResponse | null>(null);
+  readonly bundleStatusData = signal<PeriodStatusesResponse | null>(null);
 
-  // Chart configurations
-  networkStatusChartData = signal<BarChartData>({ labels: [], datasets: [] });
-  networkStatusLegendItems = signal<ChartLegendItem[]>([]);
-  bundleChartData = signal<BarChartData>({ labels: [], datasets: [] });
-  bundleLegendItems = signal<ChartLegendItem[]>([]);
-  countryChartData = signal<BarChartData>({ labels: [], datasets: [] });
-  countryLegendItems = signal<ChartLegendItem[]>([]);
+  // KPI cards
+  readonly kpiCards = signal<MetricCard[]>([]);
 
-  // T025: Waterfall data for bundle statuses
-  bundleStatusWaterfallData = signal<WaterfallDataPoint[]>([]);
+  // Chart data signals
+  readonly networkStatusChartData = signal<BarChartData>({ labels: [], datasets: [] });
+  readonly networkStatusLegendItems = signal<ChartLegendItem[]>([]);
+  readonly bundleChartData = signal<BarChartData>({ labels: [], datasets: [] });
+  readonly bundleLegendItems = signal<ChartLegendItem[]>([]);
+  readonly countryChartData = signal<BarChartData>({ labels: [], datasets: [] });
+  readonly countryLegendItems = signal<ChartLegendItem[]>([]);
+  readonly bundleStatusWaterfallData = signal<WaterfallDataPoint[]>([]);
 
-  chartOptions: BarChartOptions = {
+  // Chart options
+  readonly chartOptions: BarChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false // Using custom legend component
+        display: false
       }
     },
     scales: {
@@ -85,268 +101,75 @@ export class SubscribersTabComponent implements OnInit {
   };
 
   constructor() {
-    // React to period and accountId changes using effect
     effect(() => {
-      const period = this.dashboardService.period();
-      const accountId = this.dashboardService.accountId();
-
-      // Only load data if accountId is set (required for API calls)
-      if (accountId) {
-        this.loadData();
+      this.dashboardService.accountId();
+      if (this.dashboardService.isReady()) {
+        untracked(() => this.loadData());
       }
     });
   }
 
-  ngOnInit(): void {
-    // Initial data load is handled by effect
+  onRetry(): void {
+    this.loadData();
   }
 
   private loadData(): void {
     this.loading.set(true);
     this.error.set(null);
-    this.cdr.markForCheck();
 
-    // Call all 4 API endpoints in parallel
     forkJoin({
       summary: this.dashboardService.getSubscriberSummary(),
       networkStatuses: this.dashboardService.getNetworkStatuses(),
       bundleSubscribers: this.dashboardService.getBundleSubscribers(),
       bundleStatuses: this.dashboardService.getBundleStatuses()
-    }).subscribe({
-      next: (response) => {
-        this.loading.set(false);
-
-        // Store raw data
-        this.summaryData.set(response.summary);
-        this.networkStatusData.set(response.networkStatuses);
-        this.bundleSubscribersData.set(response.bundleSubscribers);
-        this.bundleStatusData.set(response.bundleStatuses);
-
-        // Build KPI cards from summary
-        this.buildKpiCards(response.summary);
-
-        // Build chart configurations
-        this.buildNetworkStatusChartConfig(response.networkStatuses);
-        this.buildBundleChartConfig(response.bundleSubscribers);
-        this.buildCountryChartConfig(response.bundleSubscribers);
-        this.buildBundleStatusWaterfallDataFromResponse(response.bundleStatuses);
-
-        this.error.set(null);
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        this.loading.set(false);
-        this.error.set({
-          code: 'NETWORK_ERROR',
-          message: err.message || 'An error occurred while loading subscriber analytics',
-          timestamp: new Date()
-        });
-        this.cdr.markForCheck();
-      }
-    });
-  }
-
-  /**
-   * Build KPI cards from subscriber summary response
-   */
-  private buildKpiCards(summary: SubscriberSummaryResponse): void {
-    const cards: MetricCard[] = [
-      {
-        id: 'new-subscribers',
-        title: 'dashboard.subscribers.newSubscribers',
-        value: summary.newSubscribers,
-        format: 'number',
-        icon: 'cilUserFollow'
-      },
-      {
-        id: 'downloaded-sims',
-        title: 'dashboard.subscribers.downloadedSims',
-        value: summary.downloadedSims,
-        format: 'number',
-        icon: 'cilCloudDownload'
-      },
-      {
-        id: 'active-subscribers',
-        title: 'dashboard.subscribers.activeSubscribers',
-        value: summary.activeSubscribers,
-        format: 'number',
-        icon: 'cilPeople'
-      },
-      {
-        id: 'spent-bundles',
-        title: 'dashboard.subscribers.spentBundles',
-        value: summary.spentBundles,
-        format: 'number',
-        icon: 'cilLayers'
-      },
-      {
-        id: 'avg-bundle-size',
-        title: 'dashboard.subscribers.avgBundleSize',
-        value: summary.avrBundleSize,
-        format: 'number',
-        unit: 'GB',
-        icon: 'cilChart'
-      }
-    ];
-
-    this.kpiCards.set(cards);
-  }
-
-  /**
-   * Build network status chart configuration
-   */
-  private buildNetworkStatusChartConfig(data: PeriodStatusesResponse): void {
-    if (!data.periodStatuses || data.periodStatuses.length === 0) {
-      this.networkStatusChartData.set({ labels: [], datasets: [] });
-      this.networkStatusLegendItems.set([]);
-      return;
-    }
-
-    // Get all unique statuses across all periods
-    const allStatuses = new Set<string>();
-    data.periodStatuses.forEach(period => {
-      period.statuses.forEach(s => allStatuses.add(s.status));
-    });
-
-    const statusList = Array.from(allStatuses);
-    const labels = data.periodStatuses.map(p => p.period);
-
-    // Calculate totals per status for legend
-    const statusTotals = new Map<string, number>();
-    data.periodStatuses.forEach(period => {
-      period.statuses.forEach(s => {
-        const current = statusTotals.get(s.status) || 0;
-        statusTotals.set(s.status, current + s.count);
+    })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.processResponse(response);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          this.error.set(parseDashboardError(err, 'An error occurred while loading subscriber analytics'));
+          this.loading.set(false);
+        }
       });
-    });
-
-    // Create a dataset for each status
-    const datasets = statusList.map((status, index) => ({
-      label: status,
-      data: data.periodStatuses.map(period => {
-        const found = period.statuses.find(s => s.status === status);
-        return found ? found.count : 0;
-      }),
-      backgroundColor: getChartColor(index),
-      borderWidth: 0
-    }));
-
-    // Build legend items
-    const legendItems: ChartLegendItem[] = statusList.map((status, index) => ({
-      label: status,
-      color: getChartColor(index),
-      value: statusTotals.get(status) || 0,
-      hidden: false
-    }));
-
-    const chartData: BarChartData = { labels, datasets };
-    this.networkStatusChartData.set(chartData);
-    this.networkStatusLegendItems.set(legendItems);
   }
 
-  /**
-   * Build bundle subscribers chart configuration (by bundle name)
-   */
-  private buildBundleChartConfig(data: BundleSubscribersResponse): void {
-    if (!data.subscribersByBundle || data.subscribersByBundle.length === 0) {
-      this.bundleChartData.set({ labels: [], datasets: [] });
-      this.bundleLegendItems.set([]);
-      return;
-    }
+  private processResponse(response: {
+    summary: SubscriberSummaryResponse;
+    networkStatuses: PeriodStatusesResponse;
+    bundleSubscribers: BundleSubscribersResponse;
+    bundleStatuses: PeriodStatusesResponse;
+  }): void {
+    // Store raw data
+    this.summaryData.set(response.summary);
+    this.networkStatusData.set(response.networkStatuses);
+    this.bundleSubscribersData.set(response.bundleSubscribers);
+    this.bundleStatusData.set(response.bundleStatuses);
 
-    const labels = data.subscribersByBundle.map(b => b.groupName);
-    const values = data.subscribersByBundle.map(b => b.subscribers);
-    const colors = getChartColors(labels.length);
+    // Build KPI cards
+    this.kpiCards.set(buildSubscriberKpiCards(response.summary));
 
+    // Build network status chart
+    const networkConfig = buildPeriodStatusesChartConfig(response.networkStatuses);
+    this.networkStatusChartData.set(networkConfig.chartData);
+    this.networkStatusLegendItems.set(networkConfig.legendItems);
+
+    // Build bundle chart
     const subscribersLabel = this.translateService.instant('dashboard.subscribers.chartLabels.subscribers');
+    const bundleConfig = buildBundleSubscribersChartConfig(response.bundleSubscribers, subscribersLabel);
+    this.bundleChartData.set(bundleConfig.chartData);
+    this.bundleLegendItems.set(bundleConfig.legendItems);
 
-    const chartData: BarChartData = {
-      labels,
-      datasets: [{
-        label: subscribersLabel,
-        data: values,
-        backgroundColor: colors,
-        borderWidth: 0
-      }]
-    };
+    // Build country chart
+    const countryConfig = buildCountrySubscribersChartConfig(response.bundleSubscribers, subscribersLabel);
+    this.countryChartData.set(countryConfig.chartData);
+    this.countryLegendItems.set(countryConfig.legendItems);
 
-    // Build legend items for each bundle with default visibility (top 3 visible)
-    const legendItems: ChartLegendItem[] = applyDefaultVisibility(
-      labels.map((label, index) => ({
-        label,
-        color: colors[index],
-        value: values[index]
-      }))
-    );
-
-    this.bundleChartData.set(chartData);
-    this.bundleLegendItems.set(legendItems);
-  }
-
-  /**
-   * Build country subscribers chart configuration
-   */
-  private buildCountryChartConfig(data: BundleSubscribersResponse): void {
-    if (!data.subscribersByCountry || data.subscribersByCountry.length === 0) {
-      this.countryChartData.set({ labels: [], datasets: [] });
-      this.countryLegendItems.set([]);
-      return;
-    }
-
-    const labels = data.subscribersByCountry.map(c => c.groupName);
-    const values = data.subscribersByCountry.map(c => c.subscribers);
-    const colors = getChartColors(labels.length);
-    const subscribersLabel = this.translateService.instant('dashboard.subscribers.chartLabels.subscribers');
-
-    const chartData: BarChartData = {
-      labels,
-      datasets: [{
-        label: subscribersLabel,
-        data: values,
-        backgroundColor: colors,
-        borderWidth: 0
-      }]
-    };
-
-    // Build legend items for each country with default visibility (top 3 visible)
-    const legendItems: ChartLegendItem[] = applyDefaultVisibility(
-      labels.map((label, index) => ({
-        label,
-        color: colors[index],
-        value: values[index]
-      }))
-    );
-
-    this.countryChartData.set(chartData);
-    this.countryLegendItems.set(legendItems);
-  }
-
-  /**
-   * T024: Build bundle status waterfall data.
-   * Uses utility function from bundle-status.utils.ts
-   */
-  private buildBundleStatusWaterfallDataFromResponse(data: PeriodStatusesResponse): void {
-    if (!data.periodStatuses || data.periodStatuses.length === 0) {
-      this.bundleStatusWaterfallData.set([]);
-      return;
-    }
-
-    // Calculate totals per status across all periods
-    const statusTotals = new Map<string, number>();
-    data.periodStatuses.forEach(period => {
-      period.statuses.forEach(s => {
-        const current = statusTotals.get(s.status) || 0;
-        statusTotals.set(s.status, current + s.count);
-      });
-    });
-
-    // Use utility function with translation
+    // Build waterfall chart
+    const statusTotals = calculateStatusTotals(response.bundleStatuses);
     const translateFn = (key: string) => this.translateService.instant(key);
-    const points = buildBundleStatusWaterfallData(statusTotals, translateFn);
-    this.bundleStatusWaterfallData.set(points);
-  }
-
-  onRetry(): void {
-    this.loadData();
+    this.bundleStatusWaterfallData.set(buildBundleStatusWaterfallData(statusTotals, translateFn));
   }
 }

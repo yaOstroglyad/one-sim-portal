@@ -1,6 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { DashboardPeriod } from '../models/dashboard.types';
-import { getDefaultPeriod } from '@shared';
+import { getDefaultPeriod, AccountContextService } from '@shared';
 
 /**
  * Shared state service for dashboard
@@ -10,6 +10,8 @@ import { getDefaultPeriod } from '@shared';
   providedIn: 'root'
 })
 export class DashboardStateService {
+  private readonly accountContext = inject(AccountContextService);
+
   // Period management with Signals
   private readonly selectedPeriodSignal = signal<DashboardPeriod>(getDefaultPeriod());
   public readonly period = this.selectedPeriodSignal.asReadonly();
@@ -17,6 +19,15 @@ export class DashboardStateService {
   // Account ID for filtering data (used by admins)
   private readonly accountIdSignal = signal<string | null>(null);
   public readonly accountId = this.accountIdSignal.asReadonly();
+
+  /**
+   * Ready to load data - combines period and account context readiness
+   * - Non-admins: ready when period is set
+   * - Admins: ready when period is set AND account context is initialized
+   */
+  public readonly isReady = computed(() =>
+    this.selectedPeriodSignal() && this.accountContext.isReady()
+  );
 
   /**
    * Update selected period

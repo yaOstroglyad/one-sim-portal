@@ -3,7 +3,7 @@ import { take } from 'rxjs';
 import { Account } from '@shared/models';
 import { AccountContextOptions } from '@shared/models/ui/account-context.model';
 import { AccountsDataService } from '../data';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '@shared/auth';
 import { ADMIN_PERMISSION } from '@shared/constants';
 
 const STORAGE_KEY = 'os_account_context_selected_id';
@@ -25,11 +25,29 @@ export class AccountContextService {
 
   // === Computed Signals ===
   readonly selectedAccountId = computed(() => this.selectedAccount()?.id ?? null);
+  readonly isEmpty = computed(() => this.accounts().length === 0);
   readonly needsAttention = computed(() =>
     this.isVisible() && this.isRequired() && !this.selectedAccount()
   );
-  readonly hasSelection = computed(() => this.selectedAccount() !== null);
-  readonly isEmpty = computed(() => this.accounts().length === 0);
+
+  /**
+   * Indicates if the account context is ready for data loading.
+   * - Non-admins: always ready (context is dormant)
+   * - Admins: ready when accounts are loaded and selection is complete
+   */
+  readonly isReady = computed(() => {
+    // If not initialized (non-admin or not yet configured), ready immediately
+    if (!this.initialized) {
+      return true;
+    }
+    // For admins: wait until loading is complete
+    if (this.isLoading()) {
+      return false;
+    }
+    // Loading complete - ready to proceed
+    // (either account is selected or no accounts available)
+    return true;
+  });
 
   // === Internal State ===
   private initialized = false;
