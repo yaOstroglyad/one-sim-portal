@@ -19,8 +19,8 @@ import { IconDirective } from '@coreui/icons-angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 
-import { SearchResult } from '../../../models/search';
-import { SearchIndexService } from '../../../services/search';
+import { SearchResult } from '@models';
+import { SearchIndexService } from '@shared/services/search';
 import { SearchDropdownComponent } from '../search-dropdown';
 
 @Component({

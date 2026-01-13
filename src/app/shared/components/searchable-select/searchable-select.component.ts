@@ -2,6 +2,7 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
+  DestroyRef,
   ElementRef,
   ViewChild,
   HostListener,
@@ -13,6 +14,7 @@ import {
   output,
   effect
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConnectedPosition, Overlay, ScrollStrategy } from '@angular/cdk/overlay';
 import { CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
 
@@ -84,6 +86,7 @@ export class SearchableSelectComponent implements OnInit, ControlValueAccessor {
   private onChange: (value: any) => void = () => {};
 
   // Injected services
+  private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject(ElementRef);
   private readonly translate = inject(TranslateService);
   private readonly overlay = inject(Overlay);
@@ -108,7 +111,7 @@ export class SearchableSelectComponent implements OnInit, ControlValueAccessor {
     maxHeight: '200px',
     searchable: true,
     loading: false,
-    loadingText: 'common.searchableSelect.loading'
+    loadingText: 'common.loading'
   };
 
   // Computed: merged config
@@ -246,12 +249,13 @@ export class SearchableSelectComponent implements OnInit, ControlValueAccessor {
   readonly isDisabled = computed(() => !!this.mergedConfig().disabled);
 
   // Computed: active descendant ID for ARIA
-  readonly activeDescendantId = computed(() => {
+  // Returns undefined when no item is highlighted so the attribute is not rendered
+  readonly activeDescendantId = computed((): string | undefined => {
     const index = this.highlightedIndex();
     if (index >= 0) {
       return `${this.componentId}-option-${index}`;
     }
-    return null;
+    return undefined;
   });
 
   // Cached translations
@@ -270,10 +274,12 @@ export class SearchableSelectComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit(): void {
-    // Subscribe to language changes
-    this.translate.onLangChange.subscribe(() => {
-      this.updateTranslations(this.mergedConfig());
-    });
+    // Subscribe to language changes with automatic cleanup
+    this.translate.onLangChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.updateTranslations(this.mergedConfig());
+      });
   }
 
   // ControlValueAccessor implementation

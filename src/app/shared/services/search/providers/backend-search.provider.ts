@@ -1,61 +1,66 @@
 /**
  * Backend Search Provider
  *
- * Provides search over backend entities via /api/search endpoint.
- * Disabled by default - can be enabled for testing or when API is ready.
+ * Orchestrates search across all registered entity adapters.
+ * Collects results from adapters and transforms them to SearchResult format.
  */
 
 import { Injectable, inject, InjectionToken } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, catchError, map, timeout } from 'rxjs';
+import { Observable, of, forkJoin, map } from 'rxjs';
 
 import {
   SearchResult,
-  BackendSearchResponse,
-  BackendSearchItem,
   SEARCH_ITEM_TYPES,
   MATCH_SOURCES,
   RESULT_SOURCES,
   SEARCH_CONFIG,
 } from '../../../models/search';
 import { SearchProvider } from './search-provider.interface';
+import {
+  EntitySearchAdapter,
+  GenericSearchEntity,
+  ENTITY_ICONS,
+} from './adapters';
+import { CustomerSearchAdapter } from './adapters/customer-search.adapter';
 
 /**
  * Injection token to enable/disable backend search
  */
 export const BACKEND_SEARCH_ENABLED = new InjectionToken<boolean>(
   'BACKEND_SEARCH_ENABLED',
-  { providedIn: 'root', factory: () => false }
+  { providedIn: 'root', factory: () => true }
 );
-
-/**
- * Injection token for backend search timeout
- */
-export const BACKEND_SEARCH_TIMEOUT = new InjectionToken<number>(
-  'BACKEND_SEARCH_TIMEOUT',
-  { providedIn: 'root', factory: () => SEARCH_CONFIG.BACKEND_TIMEOUT_MS }
-);
-
-/** Icon mapping for backend entity types (CoreUI naming convention) */
-const ENTITY_ICONS: Record<string, string> = {
-  customer: 'cilUser',
-  order: 'cilBasket',
-  product: 'cil3d',
-  ticket: 'cilSpeech',
-  provider: 'cilSpreadsheet',
-};
 
 @Injectable({ providedIn: 'root' })
 export class BackendSearchProvider implements SearchProvider {
   readonly name = 'backend';
   readonly priority = 1;
 
-  private http = inject(HttpClient);
-  private enabled = inject(BACKEND_SEARCH_ENABLED);
-  private timeoutMs = inject(BACKEND_SEARCH_TIMEOUT);
+  private readonly enabled = inject(BACKEND_SEARCH_ENABLED);
+  private readonly customerAdapter = inject(CustomerSearchAdapter);
+
+  /** Registered entity adapters */
+  private readonly adapters: EntitySearchAdapter[] = [];
+
+  constructor() {
+    // Register default adapters
+    this.registerAdapter(this.customerAdapter);
+    // Future: this.registerAdapter(this.subscriberAdapter);
+    // Future: this.registerAdapter(this.orderAdapter);
+  }
+
+  /**
+   * Register an entity search adapter
+   */
+  registerAdapter(adapter: EntitySearchAdapter): void {
+    if (!this.adapters.some(a => a.name === adapter.name)) {
+      this.adapters.push(adapter);
+      this.adapters.sort((a, b) => a.priority - b.priority);
+    }
+  }
 
   isAvailable(): boolean {
-    return this.enabled;
+    return this.enabled && this.adapters.some(a => a.isEnabled());
   }
 
   search(query: string): Observable<SearchResult[]> {
@@ -63,41 +68,49 @@ export class BackendSearchProvider implements SearchProvider {
       return of([]);
     }
 
-    if (!query || query.trim().length < SEARCH_CONFIG.MIN_QUERY_LENGTH) {
+    const trimmedQuery = query?.trim();
+    if (!trimmedQuery || trimmedQuery.length < SEARCH_CONFIG.MIN_QUERY_LENGTH) {
       return of([]);
     }
 
-    const encodedQuery = encodeURIComponent(query.trim());
+    return this.executeAdapterSearches(trimmedQuery);
+  }
+
+  private executeAdapterSearches(query: string): Observable<SearchResult[]> {
+    const enabledAdapters = this.adapters.filter(a => a.isEnabled());
+
+    if (enabledAdapters.length === 0) {
+      return of([]);
+    }
+
     const limit = SEARCH_CONFIG.MAX_RESULTS_PER_CATEGORY;
+    const searches$ = enabledAdapters.map(adapter => adapter.search(query, limit));
 
-    return this.http
-      .get<BackendSearchResponse>(`/api/search?q=${encodedQuery}&limit=${limit}`)
-      .pipe(
-        timeout(this.timeoutMs),
-        map(response => this.transformResults(response.results)),
-        catchError(error => {
-          console.warn('Backend search failed:', error);
-          return of([]);
-        })
-      );
+    return forkJoin(searches$).pipe(
+      map(resultsArrays => {
+        const allEntities = resultsArrays.flat();
+        return this.transformToSearchResults(allEntities);
+      })
+    );
   }
 
-  private transformResults(items: BackendSearchItem[]): SearchResult[] {
-    return items.map(item => this.transformItem(item));
+  private transformToSearchResults(entities: GenericSearchEntity[]): SearchResult[] {
+    return entities.map(entity => this.transformEntity(entity));
   }
 
-  private transformItem(item: BackendSearchItem): SearchResult {
+  private transformEntity(entity: GenericSearchEntity): SearchResult {
     return {
-      id: item.id,
-      label: item.label,
-      url: item.url,
-      icon: item.icon || ENTITY_ICONS[item.type] || 'cilFile',
+      id: `${entity.entityType}-${entity.id}`,
+      label: entity.name,
+      url: entity.routePath,
+      icon: ENTITY_ICONS[entity.entityType] || 'cilFile',
       type: SEARCH_ITEM_TYPES.NAVIGATION,
-      score: 1, // Backend doesn't provide score, use default
+      score: 1,
       matchedOn: MATCH_SOURCES.LABEL,
       source: RESULT_SOURCES.BACKEND,
+      parentLabel: entity.parentName,
       searchMeta: {
-        category: item.type,
+        category: entity.entityType,
       },
     };
   }

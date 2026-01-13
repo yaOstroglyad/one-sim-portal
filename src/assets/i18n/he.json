@@ -91,7 +91,6 @@
     }
   },
   "table": {
-    "loading": "טוען נתונים...",
     "noData": "אין נתונים להצגה"
   },
   "pagination": {
@@ -112,6 +111,7 @@
     "save": "שמור",
     "apply": "החל",
     "submit": "שלח",
+    "loading": "טוען...",
     "clear": "נקה",
     "clearAll": "נקה הכל",
     "noFilters": "אין מסננים זמינים",
@@ -181,7 +181,6 @@
       "placeholder": "בחר {{entity}}",
       "searchPlaceholder": "חפש {{entity}}...",
       "noResults": "לא נמצא {{entity}}",
-      "loading": "טוען...",
       "fallbackEntity": "פריט"
     },
     "entities": {
@@ -306,7 +305,6 @@
       "description": "צפייה בהיסטוריית רכישת חבילות עם פרטי עסקאות ומידע על מחירים",
       "selectAccountHint": "בחר חשבון לצפייה בדוחות",
       "export": "ייצוא ל-Excel",
-      "loading": "טוען נתוני דוח...",
       "dateFrom": "תאריך מ",
       "dateFromPlaceholder": "בחר תאריך התחלה",
       "dateTo": "תאריך עד",
@@ -384,7 +382,6 @@
     "supportchattitle": "צ'אטי תמיכה"
   },
   "supportchat": {
-    "loading": "טוען...",
     "searchtitle": "חיפוש שיחות עם לקוחות",
     "searchdescription": "הזן ICCID לצפייה בשיחות תמיכה",
     "iccidplaceholder": "הזן ICCID",
@@ -494,8 +491,7 @@
     "noEventsFound": "אין אירועים עדיין",
     "timeStamp": "חותם זמן",
     "notificationPoint": "נקודת התראה",
-    "status": "מצב",
-    "loading": "טוען אירועים..."
+    "status": "מצב"
   },
   "purchasedProducts": {
     "noPurchasedProductsFound": "לא נמצאה היסטוריית מוצרים שנרכשו",
@@ -509,8 +505,7 @@
     "updatedAt": "עודכן ב-",
     "updatedBy": "עודכן על ידי",
     "usageStartedAt": "תחילת שימוש ב-",
-    "usageExpiredAt": "תום שימוש ב-",
-    "loading": "טוען הזמנות עסקה..."
+    "usageExpiredAt": "תום שימוש ב-"
   },
   "subscriberDetails": {
     "location": "מיקום",
@@ -553,8 +548,7 @@
     "updatedAt": "עודכן ב-",
     "updatedBy": "עודכן על ידי",
     "externalTransactionId": "מזהה חיצוני",
-    "triggerType": "סוג טריגר",
-    "loading": "טוען הזמנות עסקה..."
+    "triggerType": "סוג טריגר"
   },
   "order": {
     "id": "מזהה",

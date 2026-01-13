@@ -164,7 +164,6 @@
     "no-data": "No data"
   },
   "table": {
-    "loading": "Loading data...",
     "noData": "No data to display"
   },
   "pagination": {
@@ -187,6 +186,7 @@
     "submit": "Submit",
     "submitting": "Submitting...",
     "done": "Done",
+    "loading": "Loading...",
     "none": "None",
     "retry": "Retry",
     "clear": "Clear",
@@ -265,7 +265,6 @@
       "placeholder": "Select {{entity}}",
       "searchPlaceholder": "Search {{entity}}...",
       "noResults": "No {{entity}} found",
-      "loading": "Loading...",
       "fallbackEntity": "item"
     },
     "entities": {
@@ -304,8 +303,7 @@
     "placeholder": "Write a comment...",
     "required": "Comment is required",
     "minLength": "Comment must be at least 3 characters long",
-    "maxLength": "Comment is too long",
-    "loading": "Loading comments..."
+    "maxLength": "Comment is too long"
   },
   "attachments": {
     "noAttachments": "No attachments",
@@ -313,8 +311,7 @@
     "uploading": "Uploading...",
     "uploadHint": "Maximum file size: 10MB. Supported formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, PNG, JPG, JPEG, GIF",
     "uploadedBy": "by",
-    "download": "Download",
-    "loading": "Loading attachments..."
+    "download": "Download"
   },
   "product": {
     "companyName": "Company Name",
@@ -573,7 +570,6 @@
       "description": "View bundle purchase history with transaction details and pricing information",
       "selectAccountHint": "Select an account to view reports",
       "export": "Export to Excel",
-      "loading": "Loading report data...",
       "dateFrom": "Date From",
       "dateFromPlaceholder": "Select start date",
       "dateTo": "Date To",
@@ -651,7 +647,6 @@
     "supportchattitle": "Support Chats"
   },
   "supportchat": {
-    "loading": "Loading...",
     "searchtitle": "Find Customer Conversations",
     "searchdescription": "Enter an ICCID to view customer support conversations",
     "iccidplaceholder": "Enter ICCID",
@@ -773,8 +768,7 @@
     "noEventsFound": "No any events yet",
     "timeStamp": "Time Stamp",
     "notificationPoint": "Notification Point",
-    "status": "Status",
-    "loading": "Loading events..."
+    "status": "Status"
   },
   "purchasedProducts": {
     "noPurchasedProductsFound": "No purchased products history found",
@@ -788,8 +782,7 @@
     "updatedAt": "Updated At",
     "updatedBy": "Updated By",
     "usageStartedAt": "Usage Started At",
-    "usageExpiredAt": "Usage Expired At",
-    "loading": "Loading transaction orders..."
+    "usageExpiredAt": "Usage Expired At"
   },
   "subscriberDetails": {
     "location": "Location",
@@ -832,8 +825,7 @@
     "updatedAt": "Updated At",
     "updatedBy": "Updated By",
     "externalTransactionId": "External ID",
-    "triggerType": "Trigger Type",
-    "loading": "Loading transaction orders..."
+    "triggerType": "Trigger Type"
   },
   "order": {
     "id": "ID",

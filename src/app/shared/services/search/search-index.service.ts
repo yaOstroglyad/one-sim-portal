@@ -23,10 +23,10 @@ import {
   SEARCH_ITEM_TYPES,
   RESULT_SOURCES,
   SEARCH_CONFIG,
-} from '../../models/search';
-import { ClientSearchProvider } from './providers/client-search.provider';
-import { BackendSearchProvider } from './providers/backend-search.provider';
-import { SearchProvider } from './providers/search-provider.interface';
+} from '@models';
+import { ClientSearchProvider } from '@shared/services/search/providers';
+import { BackendSearchProvider } from '@shared/services/search/providers';
+import { SearchProvider } from '@shared/services/search/providers';
 
 @Injectable({ providedIn: 'root' })
 export class SearchIndexService {

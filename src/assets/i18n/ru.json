@@ -174,7 +174,6 @@
     }
   },
   "table": {
-    "loading": "Загрузка данных...",
     "noData": "Нет данных для отображения"
   },
   "pagination": {
@@ -193,6 +192,7 @@
     "apply": "Применить",
     "submit": "Отправить",
     "done": "Готово",
+    "loading": "Загрузка...",
     "close": "Закрыть",
     "print": "Печать",
     "retry": "Повторить",
@@ -268,7 +268,6 @@
       "placeholder": "Выберите {{entity}}",
       "searchPlaceholder": "Поиск {{entity}}...",
       "noResults": "{{entity}} не найден",
-      "loading": "Загрузка...",
       "fallbackEntity": "элемент"
     },
     "entities": {
@@ -307,8 +306,7 @@
     "placeholder": "Написать комментарий...",
     "required": "Комментарий обязателен",
     "minLength": "Комментарий должен содержать минимум 3 символа",
-    "maxLength": "Комментарий слишком длинный",
-    "loading": "Загрузка комментариев..."
+    "maxLength": "Комментарий слишком длинный"
   },
   "attachments": {
     "noAttachments": "Нет вложений",
@@ -316,8 +314,7 @@
     "uploading": "Загрузка...",
     "uploadHint": "Максимальный размер файла: 10МБ. Поддерживаемые форматы: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, PNG, JPG, JPEG, GIF",
     "uploadedBy": "от",
-    "download": "Скачать",
-    "loading": "Загрузка вложений..."
+    "download": "Скачать"
   },
   "product": {
     "companyName": "Название компании",
@@ -432,7 +429,6 @@
       "description": "Просмотр истории покупок бандлов с деталями транзакций и информацией о ценах",
       "selectAccountHint": "Выберите аккаунт для просмотра отчетов",
       "export": "Экспорт в Excel",
-      "loading": "Загрузка данных отчета...",
       "dateFrom": "Дата с",
       "dateFromPlaceholder": "Выберите дату начала",
       "dateTo": "Дата по",
@@ -510,7 +506,6 @@
     "supportchattitle": "Чаты поддержки"
   },
   "supportchat": {
-    "loading": "Загрузка...",
     "searchtitle": "Поиск разговоров с клиентами",
     "searchdescription": "Введите ICCID для просмотра разговоров с поддержкой",
     "iccidplaceholder": "Введите ICCID",
@@ -631,8 +626,7 @@
     "noEventsFound": "События еще не зарегистрированы",
     "timeStamp": "Временная метка",
     "notificationPoint": "Точка уведомления",
-    "status": "Статус",
-    "loading": "Загрузка событий..."
+    "status": "Статус"
   },
   "purchasedProducts": {
     "noPurchasedProductsFound": "История покупок продуктов не найдена",
@@ -646,8 +640,7 @@
     "updatedAt": "Обновлено в",
     "updatedBy": "Обновлено пользователем",
     "usageStartedAt": "Использование начато в",
-    "usageExpiredAt": "Использование истекло в",
-    "loading": "Загрузка заказов транзакций..."
+    "usageExpiredAt": "Использование истекло в"
   },
   "subscriberDetails": {
     "location": "Местоположение",
@@ -690,8 +683,7 @@
     "updatedAt": "Обновлено в",
     "updatedBy": "Обновлено пользователем",
     "externalTransactionId": "Внешний ID",
-    "triggerType": "Тип триггера",
-    "loading": "Загрузка заказов транзакций..."
+    "triggerType": "Тип триггера"
   },
   "order": {
     "id": "ID",
