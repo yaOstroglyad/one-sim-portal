@@ -1,0 +1,117 @@
+// ==============================================
+// SEARCHABLE SELECT - CDK OVERLAY PANEL STYLES
+// These styles apply to the dropdown panel rendered
+// in the CDK overlay container (outside component DOM)
+// ==============================================
+
+@use "sass:map";
+@use "./variables" as vars;
+@use "./mixins" as mixins;
+
+// CDK Overlay container for searchable-select dropdown
+.searchable-select-panel {
+  // Dropdown base styling
+  .select-dropdown {
+    @include mixins.os-dropdown-base(100%);
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    padding: 0;
+    overflow: hidden;
+
+    // Search input container
+    .search-container {
+      position: relative;
+      padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+      border-bottom: 1px solid var(--layout-content-border);
+
+      .search-icon {
+        position: absolute;
+        left: 0.875rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--layout-content-text-muted);
+        pointer-events: none;
+      }
+
+      .search-input {
+        @include mixins.os-input-base(38px);
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+      }
+    }
+
+    // Options list container
+    .options-list {
+      max-height: inherit;
+      overflow-y: auto;
+
+      .option {
+        @include mixins.os-list-item-base();
+
+        &.loading,
+        &.no-results {
+          justify-content: center;
+          color: var(--layout-content-text-muted);
+          cursor: default;
+          pointer-events: none;
+        }
+
+        // Checkbox for multiple selection
+        .option-checkbox {
+          width: 20px;
+          height: 20px;
+          border: 1px solid var(--layout-input-border);
+          border-radius: 0.25rem;
+          margin-right: 0.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: var(--layout-input-bg);
+
+          .check-icon {
+            color: var(--os-color-primary);
+          }
+        }
+
+        // Option label
+        .option-label {
+          flex: 1;
+          color: var(--layout-content-text);
+        }
+
+        // Selected indicator for single selection
+        .selected-icon {
+          color: var(--os-color-primary);
+          margin-left: 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+// Animation for spinning loader inside overlay
+.searchable-select-panel .spinning {
+  animation: searchable-select-spin 1s linear infinite;
+}
+
+@keyframes searchable-select-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive design for overlay panel
+@media (max-width: 768px) {
+  .searchable-select-panel {
+    .select-dropdown {
+      .options-list {
+        max-height: 200px;
+      }
+    }
+  }
+}

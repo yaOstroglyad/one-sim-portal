@@ -1,55 +1,59 @@
 <div class="searchable-select"
-  [class.disabled]="config.disabled"
-  [class.error]="!!error"
-  [class.open]="isOpen"
-  [ngClass]="className">
+  [class.disabled]="mergedConfigWithCva().disabled"
+  [class.error]="!!error()"
+  [class.open]="isOpen()"
+  [ngClass]="className()">
 
   <!-- Label -->
-  @if (label) {
+  @if (label()) {
     <label class="select-label">
-      {{ label | translate }}
-      @if (required) {
+      {{ label() | translate }}
+      @if (required()) {
         <span class="required">*</span>
       }
     </label>
   }
 
-  <!-- Main select button -->
+  <!-- Main select button with CDK Overlay Origin -->
   <div class="select-trigger"
+    #trigger
+    cdkOverlayOrigin
+    #overlayOrigin="cdkOverlayOrigin"
     (click)="toggle($event)"
-    [attr.tabindex]="config.disabled ? -1 : 0"
+    [attr.tabindex]="mergedConfigWithCva().disabled ? -1 : 0"
     role="combobox"
-    [attr.aria-expanded]="isOpen"
-    [attr.aria-haspopup]="true"
-    [attr.aria-disabled]="config.disabled">
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-haspopup]="'listbox'"
+    [attr.aria-disabled]="mergedConfigWithCva().disabled"
+    [attr.aria-activedescendant]="activeDescendantId()">
 
     <!-- Selected value display -->
-    <div class="select-value" [class.placeholder]="hasPlaceholder">
+    <div class="select-value" [class.placeholder]="hasPlaceholder()">
       <!-- Single selection display -->
-      @if (!config.multiple) {
-        <span class="single-value" [class.placeholder]="hasPlaceholder">
-          @if (!hasPlaceholder) {
-            <span>{{ displayText }}</span>
+      @if (!mergedConfigWithCva().multiple) {
+        <span class="single-value" [class.placeholder]="hasPlaceholder()">
+          @if (!hasPlaceholder()) {
+            <span>{{ displayText() }}</span>
           }
-          @if (hasPlaceholder) {
+          @if (hasPlaceholder()) {
             <span>{{ translatedPlaceholder }}</span>
           }
         </span>
       }
 
       <!-- Multiple selection display -->
-      @if (config.multiple) {
+      @if (mergedConfigWithCva().multiple) {
         <div class="multiple-values">
           <!-- Show placeholder text when no selections -->
-          @if (hasPlaceholder) {
+          @if (hasPlaceholder()) {
             <span class="placeholder">
               {{ translatedPlaceholder }}
             </span>
           }
           <!-- Show chips when items are selected -->
-          @if (hasSelectedChips) {
+          @if (hasSelectedChips()) {
             <div class="selected-chips">
-              @for (option of selectedMultipleOptions; track option) {
+              @for (option of selectedMultipleOptions(); track option.value) {
                 <span class="chip" (click)="removeOption(option, $event)">
                   {{ option.label }}
                   <svg cIcon name="cilX"
@@ -66,97 +70,105 @@
 
     <!-- Controls -->
     <div class="select-controls">
-      <!-- Clear button disabled -->
-      <!-- <svg *ngIf="showClearButton"
-      cIcon name="cilX"
-      class="clear-button"
-      (click)="clear($event); $event.stopPropagation()"
-      width="16" height="16">
-    </svg> -->
-
-    <!-- Loading spinner -->
-    @if (showLoadingState) {
+      <!-- Loading spinner -->
+      @if (showLoadingState()) {
         <span class="ag-loading-icon"></span>
-    }
+      }
 
-    <!-- Dropdown arrow -->
-    <mat-icon class="dropdown-arrow"
-      [class.rotated]="isOpen">
-      expand_more
-    </mat-icon>
-  </div>
-</div>
-
-<!-- Dropdown -->
-@if (isOpen) {
-  <div class="select-dropdown" [style.max-height]="dropdownMaxHeight">
-    <!-- Search input -->
-    @if (showSearchInput) {
-      <div class="search-container">
-        <svg cIcon name="cilSearch" class="search-icon" width="16" height="16"></svg>
-        <input #searchInput
-          type="text"
-          class="search-input"
-          [formControl]="searchControl"
-          [placeholder]="translatedSearchPlaceholder"
-          (click)="$event.stopPropagation()">
-      </div>
-    }
-    <!-- Options list -->
-    <div class="options-list" #dropdown>
-      <!-- Loading state -->
-      @if (showLoadingState) {
-        <div class="option loading">
-          <svg cIcon name="cilReload" width="16" height="16" class="spinning"></svg>
-          {{ translatedLoadingText }}
-        </div>
-      }
-      <!-- No results -->
-      @if (showNoResults) {
-        <div class="option no-results">
-          {{ translatedNoResultsText }}
-        </div>
-      }
-      <!-- Options -->
-      @for (option of filteredOptions; track trackByOptionValue(i, option); let i = $index) {
-        <div
-          class="option"
-          [class.selected]="isOptionSelected(option)"
-          [class.highlighted]="i === highlightedIndex"
-          [class.disabled]="option.disabled"
-          (click)="selectOption(option, $event)">
-          <!-- Checkbox for multiple selection -->
-          @if (config.multiple) {
-            <div class="option-checkbox">
-              @if (isOptionSelected(option)) {
-                <svg
-                  cIcon name="cilCheckAlt"
-                  width="16" height="16"
-                  class="check-icon">
-                </svg>
-              }
-            </div>
-          }
-          <!-- Option label -->
-          <span class="option-label">{{ option.label }}</span>
-          <!-- Selected indicator for single selection -->
-          @if (!config.multiple && isOptionSelected(option)) {
-            <svg
-              cIcon name="cilCheckAlt"
-              width="16" height="16"
-              class="selected-icon">
-            </svg>
-          }
-        </div>
-      }
+      <!-- Dropdown arrow -->
+      <mat-icon class="dropdown-arrow"
+        [class.rotated]="isOpen()">
+        expand_more
+      </mat-icon>
     </div>
   </div>
-}
 
-<!-- Error message -->
-@if (error) {
-  <div class="error-message">
-    {{ error | translate }}
-  </div>
-}
+  <!-- CDK Connected Overlay for Dropdown -->
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="overlayOrigin"
+    [cdkConnectedOverlayOpen]="isOpen()"
+    [cdkConnectedOverlayPositions]="positions"
+    [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
+    [cdkConnectedOverlayWidth]="triggerWidth()"
+    [cdkConnectedOverlayPanelClass]="'searchable-select-panel'"
+    [cdkConnectedOverlayHasBackdrop]="false"
+    (overlayOutsideClick)="onOverlayOutsideClick()"
+    (detach)="close()">
+
+    <div class="select-dropdown" [style.max-height]="dropdownMaxHeight()">
+      <!-- Search input -->
+      @if (showSearchInput()) {
+        <div class="search-container">
+          <svg cIcon name="cilSearch" class="search-icon" width="16" height="16"></svg>
+          <input #searchInput
+            type="text"
+            class="search-input"
+            [value]="searchTerm()"
+            (input)="onSearchInput($event)"
+            [placeholder]="translatedSearchPlaceholder"
+            (click)="$event.stopPropagation()">
+        </div>
+      }
+      <!-- Options list -->
+      <div class="options-list" #dropdown role="listbox" [attr.aria-label]="label() || 'Options'">
+        <!-- Loading state -->
+        @if (showLoadingState()) {
+          <div class="option loading">
+            <svg cIcon name="cilReload" width="16" height="16" class="spinning"></svg>
+            {{ translatedLoadingText }}
+          </div>
+        }
+        <!-- No results -->
+        @if (showNoResults()) {
+          <div class="option no-results">
+            {{ translatedNoResultsText }}
+          </div>
+        }
+        <!-- Options -->
+        @for (option of filteredOptions(); track trackByOptionValue(i, option); let i = $index) {
+          <div
+            [id]="getOptionId(i)"
+            class="option"
+            role="option"
+            [class.selected]="isOptionSelected(option)"
+            [class.highlighted]="i === highlightedIndex()"
+            [class.disabled]="option.disabled"
+            [attr.aria-selected]="isOptionSelected(option)"
+            [attr.aria-disabled]="option.disabled"
+            (click)="selectOption(option, $event)">
+            <!-- Checkbox for multiple selection -->
+            @if (mergedConfigWithCva().multiple) {
+              <div class="option-checkbox">
+                @if (isOptionSelected(option)) {
+                  <svg
+                    cIcon name="cilCheckAlt"
+                    width="16" height="16"
+                    class="check-icon">
+                  </svg>
+                }
+              </div>
+            }
+            <!-- Option label -->
+            <span class="option-label">{{ option.label }}</span>
+            <!-- Selected indicator for single selection -->
+            @if (!mergedConfigWithCva().multiple && isOptionSelected(option)) {
+              <svg
+                cIcon name="cilCheckAlt"
+                width="16" height="16"
+                class="selected-icon">
+              </svg>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Error message -->
+  @if (error()) {
+    <div class="error-message">
+      {{ error() | translate }}
+    </div>
+  }
 </div>

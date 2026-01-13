@@ -222,6 +222,108 @@ readonly filteredItems$ = combineLatest([...]).pipe(...);
 | Service exposing current value | `signal()` |
 | Cross-component communication | `signal()` in shared service |
 
+### Code Organization Order (NON-NEGOTIABLE)
+
+**Components and services MUST follow a consistent ordering of members for readability.**
+
+```typescript
+// ✅ CORRECT - Consistent ordering in Components
+@Component({ ... })
+export class MyComponent {
+  // 1. STATIC MEMBERS (if any)
+  static readonly SOME_CONSTANT = 'value';
+
+  // 2. DEPENDENCY INJECTIONS (all together)
+  private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
+  private readonly notification = inject(NotificationService);
+
+  // 3. INPUTS & OUTPUTS (signal-based)
+  readonly data = input<Data>();
+  readonly config = input<Config>({});
+  readonly valueChange = output<string>();
+
+  // 4. VIEW CHILDREN / CONTENT CHILDREN
+  @ViewChild('trigger') triggerElement!: ElementRef;
+  @ViewChild(TemplateRef) templateRef!: TemplateRef<unknown>;
+
+  // 5. INTERNAL STATE (signals)
+  readonly isOpen = signal(false);
+  readonly searchTerm = signal('');
+  readonly items = signal<Item[]>([]);
+
+  // 6. COMPUTED PROPERTIES (derived state)
+  readonly filteredItems = computed(() => ...);
+  readonly displayText = computed(() => ...);
+  readonly isEmpty = computed(() => ...);
+
+  // 7. PRIVATE VARIABLES
+  private searchTimeout: ReturnType<typeof setTimeout>;
+  private readonly positions: ConnectedPosition[] = [...];
+
+  // 8. CONSTRUCTOR (only for effects, minimal logic)
+  constructor() {
+    effect(() => { ... });
+  }
+
+  // 9. LIFECYCLE HOOKS (in execution order)
+  ngOnInit(): void { ... }
+  ngAfterViewInit(): void { ... }
+  ngOnDestroy(): void { ... }
+
+  // 10. PUBLIC METHODS (API for template and external use)
+  open(): void { ... }
+  close(): void { ... }
+  toggle(): void { ... }
+
+  // 11. EVENT HANDLERS (template events)
+  onSearchInput(event: Event): void { ... }
+  onOptionSelect(option: Option): void { ... }
+
+  // 12. PRIVATE METHODS (internal logic)
+  private updateWidth(): void { ... }
+  private filterOptions(): void { ... }
+
+  // 13. INTERFACE IMPLEMENTATIONS (ControlValueAccessor, etc.)
+  writeValue(val: unknown): void { ... }
+  registerOnChange(fn: Function): void { ... }
+}
+
+// ✅ CORRECT - Consistent ordering in Services
+@Injectable({ providedIn: 'root' })
+export class MyService {
+  // 1. DEPENDENCY INJECTIONS
+  private readonly http = inject(HttpClient);
+  private readonly cache = inject(CacheHubService);
+
+  // 2. STATE (signals or observables)
+  readonly isLoading = signal(false);
+  readonly data = signal<Data[]>([]);
+
+  // 3. COMPUTED / DERIVED STATE
+  readonly isEmpty = computed(() => this.data().length === 0);
+
+  // 4. PRIVATE VARIABLES
+  private readonly baseUrl = '/api/resource';
+
+  // 5. PUBLIC METHODS (service API)
+  loadData(): Observable<Data[]> { ... }
+  createItem(item: Data): Observable<Data> { ... }
+  updateItem(id: string, item: Data): Observable<Data> { ... }
+  deleteItem(id: string): Observable<void> { ... }
+
+  // 6. PRIVATE METHODS (internal helpers)
+  private transformResponse(data: RawData[]): Data[] { ... }
+  private buildUrl(path: string): string { ... }
+}
+```
+
+**Key principles:**
+- **Group similar members together** — all injections, all signals, all computed, etc.
+- **Order by visibility** — public before private within each group
+- **Order by usage** — lifecycle hooks in execution order, CRUD methods in logical order
+- **Consistency across files** — same order in every component/service
+
 ### Control Flow Syntax
 - **Use `@if/@for/@switch`** instead of `*ngIf/*ngFor/*ngSwitch`
 - New components MUST use modern control flow
@@ -587,6 +689,34 @@ Level 3: Sub-component Mixins (for complex components like tables)
 | `os-table-cell-base($padding)` | table | Cell padding/alignment |
 | `os-table-actions-base()` | table | Action buttons column |
 
+### Global Styles for Components (NON-NEGOTIABLE)
+
+**When adding global styles related to a specific component, create a SEPARATE SCSS file.**
+
+This applies to:
+- CDK Overlay panels (rendered outside component DOM)
+- Third-party library overrides for specific components
+- Global modifiers that only affect one component
+
+```scss
+// ✅ CORRECT - Separate file for component-related global styles
+// src/scss/_searchable-select-overlay.scss
+.searchable-select-panel {
+  .select-dropdown { @include mixins.os-dropdown-base(); }
+}
+
+// Then import in styles.scss:
+@use "./searchable-select-overlay";
+
+// ❌ FORBIDDEN - Adding component-specific globals to styles.scss directly
+// styles.scss
+.searchable-select-panel { ... }  // Clutters main file!
+```
+
+**Naming convention:** `_{component-name}-{context}.scss`
+- `_searchable-select-overlay.scss` — CDK overlay styles
+- `_datepicker-global.scss` — global datepicker overrides
+
 ### DRY Principle for Component Styles (NON-NEGOTIABLE)
 
 **Before writing ANY component styles, check `_mixins.scss` for existing patterns!**
@@ -849,4 +979,4 @@ specs/{feature-name}/
 
 ---
 
-**Version:** 1.9.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-04
+**Version:** 1.10.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-13

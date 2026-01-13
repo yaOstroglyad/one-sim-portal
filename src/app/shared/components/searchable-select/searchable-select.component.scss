@@ -140,12 +140,13 @@
     }
   }
 
-  // Dropdown
+  // Dropdown styles (now rendered in CDK overlay, but kept here for encapsulation)
   .select-dropdown {
     @include mixins.os-dropdown-base(100%);
-    top: calc(100% + 2px);
-    left: 0;
-    right: 0;
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
     padding: 0;
     overflow: hidden;
 

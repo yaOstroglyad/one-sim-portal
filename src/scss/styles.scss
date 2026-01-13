@@ -23,6 +23,7 @@
 @use "./fab-layout";         // FAB Layout system styles
 @use "./notifications";      // Notification snackbar styles
 @use "./dashboard-layout";   // Dashboard tab utility classes
+@use "./searchable-select-overlay"; // CDK Overlay styles for searchable-select
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 

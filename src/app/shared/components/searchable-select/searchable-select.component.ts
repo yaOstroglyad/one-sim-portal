@@ -1,34 +1,43 @@
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
   OnInit,
-  OnDestroy,
-  OnChanges,
-  SimpleChanges,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   ElementRef,
   ViewChild,
   HostListener,
-  forwardRef
+  forwardRef,
+  inject,
+  signal,
+  computed,
+  input,
+  output,
+  effect
 } from '@angular/core';
+import { ConnectedPosition, Overlay, ScrollStrategy } from '@angular/cdk/overlay';
+import { CdkOverlayOrigin, CdkConnectedOverlay } from '@angular/cdk/overlay';
 
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
 import { IconDirective } from '@coreui/icons-angular';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { SearchableSelectOption, SearchableSelectConfig, SearchableSelectChangeEvent } from './searchable-select.types';
 
+let nextId = 0;
+
 @Component({
     standalone: true,
     selector: 'app-searchable-select',
-    imports: [CommonModule, ReactiveFormsModule, IconDirective, MatIconModule, TranslateModule],
+    imports: [
+      CommonModule,
+      FormsModule,
+      IconDirective,
+      MatIconModule,
+      TranslateModule,
+      CdkOverlayOrigin,
+      CdkConnectedOverlay
+    ],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -40,46 +49,55 @@ import { SearchableSelectOption, SearchableSelectConfig, SearchableSelectChangeE
     styleUrls: ['./searchable-select.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
+export class SearchableSelectComponent implements OnInit, ControlValueAccessor {
 
-  @Input() options: SearchableSelectOption[] = [];
-  @Input() config: SearchableSelectConfig = {};
-  @Input() label?: string;
-  @Input() required = false;
-  @Input() error?: string;
-  @Input() className?: string;
+  // Signal inputs
+  readonly options = input<SearchableSelectOption[]>([]);
+  readonly config = input<SearchableSelectConfig>({});
+  readonly label = input<string>();
+  readonly required = input(false);
+  readonly error = input<string>();
+  readonly className = input<string>();
 
-  @Output() selectionChange = new EventEmitter<SearchableSelectChangeEvent>();
-  @Output() searchChange = new EventEmitter<string>();
+  // Signal outputs
+  readonly selectionChange = output<SearchableSelectChangeEvent>();
+  readonly searchChange = output<string>();
 
   @ViewChild('dropdown', { static: false }) dropdown!: ElementRef;
   @ViewChild('searchInput', { static: false }) searchInput!: ElementRef;
+  @ViewChild('trigger', { static: false }) triggerElement!: ElementRef;
 
-  // Internal state
-  isOpen = false;
-  searchControl = new FormControl('');
-  filteredOptions: SearchableSelectOption[] = [];
-  selectedOption: SearchableSelectOption | SearchableSelectOption[] | null = null;
-  highlightedIndex = -1;
+  // Unique component ID for ARIA
+  readonly componentId = `searchable-select-${nextId++}`;
 
-  // Pre-computed option states for template
-  optionStates: { [key: string]: { selected: boolean, highlighted: boolean, disabled: boolean } } = {};
+  // Internal state signals
+  readonly isOpen = signal(false);
+  readonly searchTerm = signal('');
+  readonly highlightedIndex = signal(-1);
+  readonly triggerWidth = signal(0);
 
-  // Cached translations
-  cachedPlaceholder = '';
-  cachedSearchPlaceholder = '';
-  cachedNoResultsText = '';
-  cachedLoadingText = '';
+  // CVA value signal
+  private readonly internalValue = signal<any>(null);
 
-  // ControlValueAccessor
-  private value: any = null;
+  // CVA callbacks
   private onTouched: () => void = () => {};
   private onChange: (value: any) => void = () => {};
 
-  private destroy$ = new Subject<void>();
+  // Injected services
+  private readonly elementRef = inject(ElementRef);
+  private readonly translate = inject(TranslateService);
+  private readonly overlay = inject(Overlay);
+
+  // CDK Overlay configuration
+  readonly positions: ConnectedPosition[] = [
+    { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 2 },
+    { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -2 }
+  ];
+
+  readonly scrollStrategy: ScrollStrategy = this.overlay.scrollStrategies.reposition();
 
   // Default configuration
-  defaultConfig: SearchableSelectConfig = {
+  private readonly defaultConfig: SearchableSelectConfig = {
     placeholder: 'common.searchableSelect.placeholder',
     searchPlaceholder: 'common.searchableSelect.searchPlaceholder',
     noResultsText: 'common.searchableSelect.noResults',
@@ -93,69 +111,174 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
     loadingText: 'common.searchableSelect.loading'
   };
 
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private elementRef: ElementRef,
-    private translate: TranslateService
-  ) {}
+  // Computed: merged config
+  readonly mergedConfig = computed(() => {
+    const cfg = this.config();
+    const filtered: Partial<SearchableSelectConfig> = {};
+    if (cfg) {
+      Object.keys(cfg).forEach(key => {
+        const value = cfg[key as keyof SearchableSelectConfig];
+        if (value !== undefined && value !== null) {
+          (filtered as any)[key] = value;
+        }
+      });
+    }
+    return { ...this.defaultConfig, ...filtered };
+  });
+
+  // Computed: filtered options based on search
+  readonly filteredOptions = computed(() => {
+    const opts = this.options();
+    const term = this.searchTerm().toLowerCase();
+    const cfg = this.mergedConfig();
+
+    if (!opts || !Array.isArray(opts)) {
+      return [];
+    }
+
+    let filtered: SearchableSelectOption[];
+    if (!term) {
+      filtered = [...opts];
+    } else {
+      filtered = opts.filter(option =>
+        option.label.toLowerCase().includes(term)
+      );
+    }
+
+    // Add "None" option for single select with clearable enabled
+    if (!cfg.multiple && cfg.clearable) {
+      const clearOption: SearchableSelectOption = {
+        value: null,
+        label: this.translate.instant(cfg.clearOptionLabel || 'common.none'),
+        disabled: this.internalValue() === null
+      };
+      filtered = [clearOption, ...filtered];
+    }
+
+    return filtered;
+  });
+
+  // Computed: selected option(s)
+  readonly selectedOption = computed(() => {
+    const opts = this.options();
+    const val = this.internalValue();
+    const cfg = this.mergedConfig();
+
+    if (!opts || !Array.isArray(opts)) {
+      return cfg.multiple ? [] : null;
+    }
+
+    if (cfg.multiple) {
+      if (Array.isArray(val)) {
+        return opts.filter(option => val.includes(option.value));
+      }
+      return [];
+    }
+
+    return opts.find(option => option.value === val) || null;
+  });
+
+  // Computed: selected options for multiple mode
+  readonly selectedMultipleOptions = computed((): SearchableSelectOption[] => {
+    const selected = this.selectedOption();
+    const cfg = this.mergedConfig();
+    return cfg.multiple && Array.isArray(selected) ? selected : [];
+  });
+
+  // Computed: selected option for single mode
+  readonly selectedSingleOption = computed((): SearchableSelectOption | null => {
+    const selected = this.selectedOption();
+    const cfg = this.mergedConfig();
+    return !cfg.multiple && selected && !Array.isArray(selected) ? selected : null;
+  });
+
+  // Computed: display text
+  readonly displayText = computed(() => {
+    const cfg = this.mergedConfig();
+    if (cfg.multiple) {
+      const multipleOptions = this.selectedMultipleOptions();
+      if (multipleOptions.length === 0) {
+        return '';
+      } else if (multipleOptions.length === 1) {
+        return multipleOptions[0].label;
+      } else {
+        return `${multipleOptions.length} items selected`;
+      }
+    } else {
+      const singleOption = this.selectedSingleOption();
+      if (singleOption) {
+        return singleOption.label;
+      }
+    }
+    return '';
+  });
+
+  // Computed: has placeholder (no selection)
+  readonly hasPlaceholder = computed(() => {
+    const cfg = this.mergedConfig();
+    if (cfg.multiple) {
+      return this.selectedMultipleOptions().length === 0;
+    }
+    return !this.selectedSingleOption();
+  });
+
+  // Computed: has selected chips
+  readonly hasSelectedChips = computed(() => {
+    const cfg = this.mergedConfig();
+    return cfg.multiple && this.selectedMultipleOptions().length > 0;
+  });
+
+  // Computed: show loading state
+  readonly showLoadingState = computed(() => !!this.mergedConfig().loading);
+
+  // Computed: show no results
+  readonly showNoResults = computed(() => {
+    return !this.mergedConfig().loading && this.filteredOptions().length === 0;
+  });
+
+  // Computed: show search input
+  readonly showSearchInput = computed(() => !!this.mergedConfig().searchable);
+
+  // Computed: dropdown max height
+  readonly dropdownMaxHeight = computed(() => this.mergedConfig().maxHeight || '200px');
+
+  // Computed: disabled state
+  readonly isDisabled = computed(() => !!this.mergedConfig().disabled);
+
+  // Computed: active descendant ID for ARIA
+  readonly activeDescendantId = computed(() => {
+    const index = this.highlightedIndex();
+    if (index >= 0) {
+      return `${this.componentId}-option-${index}`;
+    }
+    return null;
+  });
+
+  // Cached translations
+  private cachedPlaceholder = '';
+  private cachedSearchPlaceholder = '';
+  private cachedNoResultsText = '';
+  private cachedLoadingText = '';
+
+  constructor() {
+    // Effect to update translations when language changes
+    effect(() => {
+      // Track mergedConfig to re-run when config changes
+      const cfg = this.mergedConfig();
+      this.updateTranslations(cfg);
+    });
+  }
 
   ngOnInit(): void {
-    // Merge default config with provided config, filtering out undefined values
-    this.config = this.mergeConfig(this.defaultConfig, this.config);
-
-    // Initialize translations
-    this.updateTranslations();
-
     // Subscribe to language changes
-    this.translate.onLangChange
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.updateTranslations();
-        this.cdr.markForCheck();
-      });
-
-    // Initialize filtered options with safe fallback
-    this.filteredOptions = this.options ? [...this.options] : [];
-
-    // Setup search
-    this.searchControl.valueChanges
-      .pipe(
-        takeUntil(this.destroy$),
-        debounceTime(300),
-        distinctUntilChanged()
-      )
-      .subscribe(searchTerm => {
-        this.filterOptions(searchTerm || '');
-        this.searchChange.emit(searchTerm || '');
-      });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['options']) {
-      // Update filtered options when options change
-      this.filteredOptions = this.options ? [...this.options] : [];
-      // Update selected options when options change
-      this.updateSelectedOption();
-      this.cdr.markForCheck();
-    }
-
-    if (changes['config']) {
-      // Merge config when it changes, filtering out undefined values
-      this.config = this.mergeConfig(this.defaultConfig, this.config);
-      this.updateTranslations();
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.translate.onLangChange.subscribe(() => {
+      this.updateTranslations(this.mergedConfig());
+    });
   }
 
   // ControlValueAccessor implementation
   writeValue(value: any): void {
-    this.value = value;
-    this.updateSelectedOption();
-    this.cdr.markForCheck();
+    this.internalValue.set(value);
   }
 
   registerOnChange(fn: (value: any) => void): void {
@@ -167,45 +290,73 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.config.disabled = isDisabled;
-    this.cdr.markForCheck();
+    // Update config with disabled state - we need to create a new config object
+    const currentConfig = this.config();
+    // Note: Since config is an input signal, we can't directly modify it
+    // The disabled state will be handled through mergedConfig
+    // For CVA, we store the disabled state separately and merge it in mergedConfig
+    this.cvaDisabled.set(isDisabled);
   }
+
+  // CVA disabled state (separate from config.disabled)
+  private readonly cvaDisabled = signal(false);
+
+  // Update mergedConfig to include CVA disabled state
+  readonly mergedConfigWithCva = computed(() => {
+    const base = this.mergedConfig();
+    const cvaDisabled = this.cvaDisabled();
+    if (cvaDisabled) {
+      return { ...base, disabled: true };
+    }
+    return base;
+  });
 
   // Public methods
   toggle(event?: Event): void {
-    if (this.config.disabled) return;
+    if (this.mergedConfigWithCva().disabled) return;
 
-    // Prevent toggle when clicking on chip (multi-select) - let chip handle its own click
+    // Prevent toggle when clicking on chip (multi-select)
     if (event && (event.target as HTMLElement).closest('.chip')) {
       return;
     }
 
-    this.isOpen ? this.close() : this.open();
+    this.isOpen() ? this.close() : this.open();
   }
 
   open(): void {
-    if (this.config.disabled) return;
+    if (this.mergedConfigWithCva().disabled) return;
 
-    this.isOpen = true;
-    this.highlightedIndex = -1;
-    this.searchControl.setValue('');
-    // Use filterOptions to ensure clear option is added for single select
-    this.filterOptions('');
+    // Update trigger width for overlay
+    if (this.triggerElement) {
+      this.triggerWidth.set(this.triggerElement.nativeElement.offsetWidth);
+    }
+
+    this.isOpen.set(true);
+    this.highlightedIndex.set(-1);
+    this.searchTerm.set('');
 
     setTimeout(() => {
-      if (this.config.searchable && this.searchInput) {
+      if (this.mergedConfigWithCva().searchable && this.searchInput) {
         this.searchInput.nativeElement.focus();
       }
     }, 0);
-
-    this.cdr.markForCheck();
   }
 
   close(): void {
-    this.isOpen = false;
-    this.highlightedIndex = -1;
+    this.isOpen.set(false);
+    this.highlightedIndex.set(-1);
     this.onTouched();
-    this.cdr.markForCheck();
+  }
+
+  onOverlayOutsideClick(): void {
+    this.close();
+  }
+
+  onSearchInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchTerm.set(value);
+    this.highlightedIndex.set(-1);
+    this.searchChange.emit(value);
   }
 
   selectOption(option: SearchableSelectOption, event?: Event): void {
@@ -216,13 +367,14 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
 
     if (option.disabled) return;
 
-    if (this.config.multiple) {
+    const cfg = this.mergedConfigWithCva();
+    if (cfg.multiple) {
       this.handleMultipleSelection(option);
     } else {
       this.handleSingleSelection(option);
     }
 
-    if (!this.config.multiple) {
+    if (!cfg.multiple) {
       this.close();
     }
   }
@@ -233,48 +385,45 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
       event.stopPropagation();
     }
 
-    this.value = this.config.multiple ? [] : null;
-    this.selectedOption = this.config.multiple ? [] : null;
-    this.onChange(this.value);
+    const cfg = this.mergedConfigWithCva();
+    const newValue = cfg.multiple ? [] : null;
+    this.internalValue.set(newValue);
+    this.onChange(newValue);
 
     const changeEvent: SearchableSelectChangeEvent = {
-      value: this.value,
-      option: this.selectedOption
+      value: newValue,
+      option: cfg.multiple ? [] : null
     };
 
     this.selectionChange.emit(changeEvent);
-    this.cdr.markForCheck();
   }
 
   removeOption(option: SearchableSelectOption, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
 
-    if (!this.config.multiple || !Array.isArray(this.selectedOption)) return;
+    const cfg = this.mergedConfigWithCva();
+    if (!cfg.multiple) return;
 
-    const index = this.selectedOption.findIndex(selected => selected.value === option.value);
-    if (index > -1) {
-      const newSelection = [...this.selectedOption];
-      newSelection.splice(index, 1);
+    const currentSelection = this.selectedMultipleOptions();
+    const newSelection = currentSelection.filter(selected => selected.value !== option.value);
+    const newValue = newSelection.map(opt => opt.value);
 
-      this.selectedOption = newSelection;
-      this.value = newSelection.map(opt => opt.value);
-      this.onChange(this.value);
+    this.internalValue.set(newValue);
+    this.onChange(newValue);
 
-      const changeEvent: SearchableSelectChangeEvent = {
-        value: this.value,
-        option: this.selectedOption
-      };
+    const changeEvent: SearchableSelectChangeEvent = {
+      value: newValue,
+      option: newSelection
+    };
 
-      this.selectionChange.emit(changeEvent);
-      this.cdr.markForCheck();
-    }
+    this.selectionChange.emit(changeEvent);
   }
 
   // Keyboard navigation
   @HostListener('keydown', ['$event'])
   onKeydown(event: KeyboardEvent): void {
-    if (!this.isOpen) {
+    if (!this.isOpen()) {
       if (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown') {
         event.preventDefault();
         this.open();
@@ -297,275 +446,105 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
         break;
       case 'Enter':
         event.preventDefault();
-        if (this.highlightedIndex >= 0 && this.filteredOptions && this.filteredOptions[this.highlightedIndex]) {
-          this.selectOption(this.filteredOptions[this.highlightedIndex]);
+        const index = this.highlightedIndex();
+        const opts = this.filteredOptions();
+        if (index >= 0 && opts && opts[index]) {
+          this.selectOption(opts[index]);
         }
         break;
     }
   }
 
-  // Click outside handler
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: Event): void {
-    if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.close();
-    }
-  }
-
   // Private methods
-  private filterOptions(searchTerm: string): void {
-    // Safe check for options array
-    if (!this.options || !Array.isArray(this.options)) {
-      this.filteredOptions = [];
-      this.highlightedIndex = -1;
-      this.updateOptionStates();
-      this.cdr.markForCheck();
-      return;
-    }
-
-    let filtered: SearchableSelectOption[];
-
-    if (!searchTerm) {
-      filtered = [...this.options];
-    } else {
-      filtered = this.options.filter(option =>
-        option.label.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Add "None" option for single select with clearable enabled
-    if (!this.config.multiple && this.config.clearable) {
-      const clearOption: SearchableSelectOption = {
-        value: null,
-        label: this.translate.instant(this.config.clearOptionLabel || 'common.none'),
-        disabled: this.value === null // Disabled when nothing is selected
-      };
-      filtered = [clearOption, ...filtered];
-    }
-
-    this.filteredOptions = filtered;
-    this.highlightedIndex = -1;
-    this.updateOptionStates();
-    this.cdr.markForCheck();
-  }
-
-  private updateSelectedOption(): void {
-    // Safe check for options array
-    if (!this.options || !Array.isArray(this.options)) {
-      this.selectedOption = this.config.multiple ? [] : null;
-      this.updateOptionStates();
-      return;
-    }
-
-    if (this.config.multiple) {
-      if (Array.isArray(this.value)) {
-        this.selectedOption = this.options.filter(option =>
-          this.value.includes(option.value)
-        );
-      } else {
-        this.selectedOption = [];
-      }
-    } else {
-      this.selectedOption = this.options.find(option => option.value === this.value) || null;
-    }
-
-    this.updateOptionStates();
-  }
-
-  private updateOptionStates(): void {
-    this.optionStates = {};
-
-    if (this.filteredOptions && Array.isArray(this.filteredOptions)) {
-      this.filteredOptions.forEach((option, index) => {
-        if (option && option.value !== undefined) {
-          const isSelected = this.isOptionSelected(option);
-          const isHighlighted = index === this.highlightedIndex;
-          const isDisabled = !!option.disabled;
-
-          this.optionStates[option.value] = {
-            selected: isSelected,
-            highlighted: isHighlighted,
-            disabled: isDisabled
-          };
-        }
-      });
-    }
-  }
-
   private handleSingleSelection(option: SearchableSelectOption): void {
-    this.selectedOption = option;
-    this.value = option.value;
-    this.onChange(this.value);
+    this.internalValue.set(option.value);
+    this.onChange(option.value);
 
     const changeEvent: SearchableSelectChangeEvent = {
-      value: this.value,
-      option: this.selectedOption
+      value: option.value,
+      option: option
     };
 
     this.selectionChange.emit(changeEvent);
   }
 
   private handleMultipleSelection(option: SearchableSelectOption): void {
-    if (!Array.isArray(this.selectedOption)) {
-      this.selectedOption = [];
-    }
+    const currentSelection = this.selectedMultipleOptions();
+    const isSelected = currentSelection.some(selected => selected.value === option.value);
 
-    const isSelected = this.selectedOption.some(selected => selected.value === option.value);
-
+    let newSelection: SearchableSelectOption[];
     if (isSelected) {
-      this.selectedOption = this.selectedOption.filter(selected => selected.value !== option.value);
+      newSelection = currentSelection.filter(selected => selected.value !== option.value);
     } else {
-      this.selectedOption = [...this.selectedOption, option];
+      newSelection = [...currentSelection, option];
     }
 
-    this.value = this.selectedOption.map(opt => opt.value);
-    this.onChange(this.value);
+    const newValue = newSelection.map(opt => opt.value);
+    this.internalValue.set(newValue);
+    this.onChange(newValue);
 
     const changeEvent: SearchableSelectChangeEvent = {
-      value: this.value,
-      option: this.selectedOption
+      value: newValue,
+      option: newSelection
     };
 
     this.selectionChange.emit(changeEvent);
   }
 
   private highlightNext(): void {
-    const maxIndex = this.filteredOptions ? this.filteredOptions.length - 1 : -1;
-    this.highlightedIndex = Math.min(this.highlightedIndex + 1, maxIndex);
-    this.updateOptionStates();
+    const maxIndex = this.filteredOptions().length - 1;
+    const current = this.highlightedIndex();
+    this.highlightedIndex.set(Math.min(current + 1, maxIndex));
     this.scrollToHighlighted();
-    this.cdr.markForCheck();
   }
 
   private highlightPrevious(): void {
-    this.highlightedIndex = Math.max(this.highlightedIndex - 1, -1);
-    this.updateOptionStates();
+    const current = this.highlightedIndex();
+    this.highlightedIndex.set(Math.max(current - 1, 0));
     this.scrollToHighlighted();
-    this.cdr.markForCheck();
   }
 
   private scrollToHighlighted(): void {
-    if (this.dropdown && this.highlightedIndex >= 0) {
-      const optionElement = this.dropdown.nativeElement.children[this.highlightedIndex];
+    const index = this.highlightedIndex();
+    if (this.dropdown && index >= 0) {
+      const optionElement = this.dropdown.nativeElement.querySelector(`#${this.componentId}-option-${index}`);
       if (optionElement) {
         optionElement.scrollIntoView({ block: 'nearest' });
       }
     }
   }
 
-  // Getter methods for template
-  get displayText(): string {
-    if (this.config.multiple) {
-      const multipleOptions = this.selectedMultipleOptions;
-      if (multipleOptions.length === 0) {
-        return this.config.placeholder || '';
-      } else if (multipleOptions.length === 1) {
-        return multipleOptions[0].label;
-      } else {
-        return `${multipleOptions.length} items selected`;
-      }
-    } else {
-      const singleOption = this.selectedSingleOption;
-      if (singleOption) {
-        return singleOption.label;
-      }
-    }
-    return this.config.placeholder || '';
-  }
-
-  get showClearButton(): boolean {
-    return this.config.clearable && !this.config.disabled &&
-           ((this.config.multiple && this.selectedMultipleOptions.length > 0) ||
-            (!this.config.multiple && this.selectedSingleOption !== null));
-  }
-
+  // Check if option is selected
   isOptionSelected(option: SearchableSelectOption): boolean {
-    if (this.config.multiple) {
-      return this.selectedMultipleOptions.some(selected => selected.value === option.value);
+    const cfg = this.mergedConfigWithCva();
+    if (cfg.multiple) {
+      return this.selectedMultipleOptions().some(selected => selected.value === option.value);
     }
-    return this.selectedSingleOption ?
-           this.selectedSingleOption.value === option.value : false;
+    const single = this.selectedSingleOption();
+    return single ? single.value === option.value : false;
   }
 
-  get selectedMultipleOptions(): SearchableSelectOption[] {
-    return this.config.multiple && Array.isArray(this.selectedOption) ?
-           this.selectedOption : [];
-  }
-
-  get selectedSingleOption(): SearchableSelectOption | null {
-    return !this.config.multiple && this.selectedOption && !Array.isArray(this.selectedOption) ?
-           this.selectedOption : null;
-  }
-
-  get hasPlaceholder(): boolean {
-    if (this.config.multiple) {
-      return this.selectedMultipleOptions.length === 0;
-    } else {
-      return !this.selectedSingleOption;
-    }
-  }
-
-  get hasSelectedChips(): boolean {
-    return this.config.multiple && this.selectedMultipleOptions.length > 0;
-  }
-
-  get showLoadingState(): boolean {
-    return !!this.config.loading;
-  }
-
-  get showNoResults(): boolean {
-    return !this.config.loading && (!this.filteredOptions || this.filteredOptions.length === 0);
-  }
-
-  get showSearchInput(): boolean {
-    return !!this.config.searchable;
-  }
-
-  get dropdownMaxHeight(): string {
-    return this.config.maxHeight || '200px';
-  }
-
-  getOptionState(option: SearchableSelectOption, index: number): { selected: boolean, highlighted: boolean, disabled: boolean } {
-    return this.optionStates[option.value] || {
-      selected: this.isOptionSelected(option),
-      highlighted: index === this.highlightedIndex,
-      disabled: !!option.disabled
-    };
-  }
-
+  // Track by function
   trackByOptionValue(index: number, option: SearchableSelectOption): any {
     return option?.value;
   }
 
-  /**
-   * Merges two config objects, filtering out undefined/null values from the override config.
-   */
-  private mergeConfig(defaultConfig: SearchableSelectConfig, overrideConfig: SearchableSelectConfig): SearchableSelectConfig {
-    const filtered: Partial<SearchableSelectConfig> = {};
-
-    if (overrideConfig) {
-      Object.keys(overrideConfig).forEach(key => {
-        const value = overrideConfig[key as keyof SearchableSelectConfig];
-        if (value !== undefined && value !== null) {
-          (filtered as any)[key] = value;
-        }
-      });
-    }
-
-    return { ...defaultConfig, ...filtered };
+  // Get option ID for ARIA
+  getOptionId(index: number): string {
+    return `${this.componentId}-option-${index}`;
   }
 
   /**
    * Updates all cached translations.
    */
-  private updateTranslations(): void {
-    const entityKey = this.config.entityKey || 'common.searchableSelect.fallbackEntity';
+  private updateTranslations(cfg: SearchableSelectConfig): void {
+    const entityKey = cfg.entityKey || 'common.searchableSelect.fallbackEntity';
     const entity = this.translate.instant(entityKey);
 
-    const placeholderKey = this.config.placeholder || this.defaultConfig.placeholder!;
-    const searchPlaceholderKey = this.config.searchPlaceholder || this.defaultConfig.searchPlaceholder!;
-    const noResultsKey = this.config.noResultsText || this.defaultConfig.noResultsText!;
-    const loadingKey = this.config.loadingText || this.defaultConfig.loadingText!;
+    const placeholderKey = cfg.placeholder || this.defaultConfig.placeholder!;
+    const searchPlaceholderKey = cfg.searchPlaceholder || this.defaultConfig.searchPlaceholder!;
+    const noResultsKey = cfg.noResultsText || this.defaultConfig.noResultsText!;
+    const loadingKey = cfg.loadingText || this.defaultConfig.loadingText!;
 
     this.cachedPlaceholder = this.translate.instant(placeholderKey, { entity });
     this.cachedSearchPlaceholder = this.translate.instant(searchPlaceholderKey, { entity });
@@ -578,7 +557,7 @@ export class SearchableSelectComponent implements OnInit, OnDestroy, OnChanges, 
    */
   get translatedPlaceholder(): string {
     if (!this.cachedPlaceholder) {
-      this.updateTranslations();
+      this.updateTranslations(this.mergedConfigWithCva());
     }
     return this.cachedPlaceholder || '';
   }

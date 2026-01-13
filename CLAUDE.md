@@ -203,6 +203,8 @@ specs/                      # Feature specifications
 - N/A (no backend changes) (017-gmail-layout)
 - TypeScript 5.9 + Angular 21.0.5 (Zoneless), RxJS, Angular Material (MatSelect, MatFormField) (021-global-account-context)
 - localStorage for persistence (021-global-account-context)
+- TypeScript 5.9, Angular 21.0.5 (Zoneless) + @angular/cdk@^21.0.3 (Overlay, A11y), @angular/core (Signals), RxJS (ControlValueAccessor) (022-searchable-select-cdk)
+- N/A (UI component, no persistent storage) (022-searchable-select-cdk)
 
 ## Recent Changes
 - 013-angular-21-upgrade: Upgraded Angular 19.2.15 → 21.0.5, TypeScript 5.8 → 5.9, removed @angular/flex-layout

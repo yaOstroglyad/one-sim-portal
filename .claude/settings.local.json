@@ -112,7 +112,8 @@
       "Bash(.specify/scripts/bash/update-agent-context.sh:*)",
       "Bash(git diff:*)",
       "Bash(echo:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Skill(speckit.clarify)"
     ],
     "deny": [
       "// === Blocked for Security ===",
