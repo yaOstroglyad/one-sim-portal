@@ -1,4 +1,20 @@
 {
+  "docs": {
+    "title": "API Documentation",
+    "search": "Search docs...",
+    "searchPlaceholder": "Search documentation",
+    "onThisPage": "On this page",
+    "loading": "Loading documentation...",
+    "loadError": "Failed to load documentation",
+    "retry": "Try Again",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "copyFailed": "Failed to copy",
+    "lightMode": "Switch to light mode",
+    "darkMode": "Switch to dark mode",
+    "navigation": "Documentation",
+    "sectionNotFound": "Section not found"
+  },
   "page500": {
     "serverError": "Houston, we have a problem!",
     "unavailableMessage": "The page you are looking for is temporarily unavailable."

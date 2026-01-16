@@ -37,6 +37,9 @@ export class SearchIndexService {
   /** Registered search providers */
   private providers: SearchProvider[] = [];
 
+  /** Disabled provider names */
+  private disabledProviders = new Set<string>();
+
   /** Search query input */
   private querySubject$ = new Subject<string>();
 
@@ -102,6 +105,27 @@ export class SearchIndexService {
       // Sort by priority (lower = first)
       this.providers.sort((a, b) => a.priority - b.priority);
     }
+  }
+
+  /**
+   * Unregister a search provider by name
+   */
+  unregisterProvider(name: string): void {
+    this.providers = this.providers.filter(p => p.name !== name);
+  }
+
+  /**
+   * Temporarily disable a provider by name
+   */
+  disableProvider(name: string): void {
+    this.disabledProviders.add(name);
+  }
+
+  /**
+   * Re-enable a previously disabled provider
+   */
+  enableProvider(name: string): void {
+    this.disabledProviders.delete(name);
   }
 
   /**
@@ -172,8 +196,10 @@ export class SearchIndexService {
     this.isLoading.set(true);
     this.error.set(null);
 
-    // Get available providers
-    const availableProviders = this.providers.filter(p => p.isAvailable());
+    // Get available providers (exclude disabled ones)
+    const availableProviders = this.providers.filter(
+      p => p.isAvailable() && !this.disabledProviders.has(p.name)
+    );
 
     if (availableProviders.length === 0) {
       this.isLoading.set(false);

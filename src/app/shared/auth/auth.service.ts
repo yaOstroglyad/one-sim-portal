@@ -70,6 +70,11 @@ export class AuthService {
 	}
 
 	loadPermissions(): Observable<string[]> {
+		// Skip API call if user is not authenticated (e.g., on public pages like /docs)
+		if (!this.loggedUser) {
+			return of([]);
+		}
+
 		if (this.permissionsObservable$) {
 			return this.permissionsObservable$;
 		}

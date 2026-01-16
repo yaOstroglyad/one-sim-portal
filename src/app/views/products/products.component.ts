@@ -20,26 +20,7 @@ import {
 	DynamicEntityDetailsDialogComponent
 } from '@shared/components/dynamic-entity-details-dialog/dynamic-entity-details-dialog.component';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
-import {
-	BadgeComponent,
-	ButtonCloseDirective,
-	ButtonDirective,
-	CardComponent,
-	ColComponent,
-	FormControlDirective,
-	FormDirective,
-	FormLabelDirective,
-	FormSelectDirective,
-	InputGroupComponent,
-	ModalBodyComponent,
-	ModalComponent,
-	ModalFooterComponent,
-	ModalHeaderComponent,
-	ModalTitleDirective,
-	RowComponent,
-	TableDirective
-} from '@coreui/angular';
-import { IconDirective } from '@coreui/icons-angular';
+import { BadgeComponent } from '@coreui/angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -53,35 +34,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { ItemNamesPipe } from '@shared/pipes/item-names/item-names.pipe';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
-import { HasPermissionDirective } from '@shared';
 
 @Component({
     standalone: true,
     selector: 'app-products',
     imports: [
-    TableDirective,
     BadgeComponent,
-    CardComponent,
-    IconDirective,
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalBodyComponent,
-    ModalFooterComponent,
-    ModalTitleDirective,
-    ButtonCloseDirective,
-    ButtonDirective,
     ReactiveFormsModule,
-    FormDirective,
-    FormLabelDirective,
-    FormControlDirective,
-    RowComponent,
-    ColComponent,
-    FormSelectDirective,
     MatFormFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    InputGroupComponent,
     GenericTableComponent,
     HeaderComponent,
     MatDialogModule,
@@ -92,11 +55,7 @@ import { HasPermissionDirective } from '@shared';
     ItemNamesPipe,
     MatTooltipModule,
     MatMenuModule,
-    HasPermissionDirective,
     TranslateModule,
-    EditProductComponent,
-    CreateProductComponent,
-    ChangeStatusDialogComponent
 ],
     templateUrl: './products.component.html',
     styleUrls: ['./products.component.scss'],

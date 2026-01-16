@@ -13,7 +13,7 @@
 
   /** primary **/
   --os-color-primary: #f9a743;
-  --os-color-primary-rgb: 249, 67, 143;
+  --os-color-primary-rgb: 249, 167, 67;
   --os-color-primary-contrast: #3a3a3a;
   --os-color-primary-white: #ffffff;
   --os-color-primary-contrast-rgb: 255, 255, 255;
@@ -44,7 +44,7 @@
 
   /** tertiary **/
   --os-color-tertiary: var(--os-color-primary);
-  --os-color-tertiary-rgb: 249, 67, 143;
+  --os-color-tertiary-rgb: 249, 167, 67;
   --os-color-tertiary-contrast: #ffffff;
   --os-color-tertiary-contrast-rgb: 255, 255, 255;
   --os-color-tertiary-shade: var(--os-color-primary-shade);
@@ -276,6 +276,11 @@
    ═══════════════════════════════════════════════════════════════ */
 html.dark,
 .layout--dark {
+  /* Semantic text colors - Dark Theme */
+  --os-color-text-primary: #e8eaed;
+  --os-color-text-secondary: #9aa0a6;
+  --os-color-text-muted: #6b7280;
+
   /* Frame (Header + Sidebar) - Dark Theme */
   --layout-frame-bg: #1f1f1f;
   --layout-frame-bg-hover: #2d2d2d;

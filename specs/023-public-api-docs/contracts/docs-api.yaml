@@ -1,0 +1,197 @@
+openapi: 3.1.0
+info:
+  title: Public API Documentation
+  version: 1.0.0
+  description: |
+    API for fetching public developer documentation.
+    This endpoint is publicly accessible without authentication.
+
+servers:
+  - url: /api/public
+    description: Public API (no auth required)
+
+paths:
+  /docs:
+    get:
+      summary: Get full documentation
+      description: Returns the complete API documentation with all sections
+      operationId: getDocumentation
+      tags:
+        - Documentation
+      responses:
+        '200':
+          description: Documentation retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDocumentationResponse'
+              example:
+                data:
+                  title: "1-eSIM API Documentation"
+                  version: "1.0.0"
+                  lastUpdated: "2026-01-14T10:00:00Z"
+                  sections:
+                    - id: "overview"
+                      title: "Overview"
+                      content: "# Overview\n\nWelcome to the 1-eSIM API..."
+                      order: 0
+                    - id: "authentication"
+                      title: "Authentication"
+                      content: "# Authentication\n\nAll API requests require..."
+                      order: 1
+                    - id: "balance-api"
+                      title: "Balance & Usage API"
+                      content: "# Balance & Usage API\n\n## Get Customer Balance..."
+                      order: 2
+                      children:
+                        - id: "get-customer-balance"
+                          title: "Get Customer Balance Usage"
+                          content: "## 1.1 Get Customer Balance Usage\n\nRetrieves aggregated..."
+                          order: 0
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /docs/sections/{sectionId}:
+    get:
+      summary: Get specific section
+      description: Returns a single documentation section by ID
+      operationId: getSection
+      tags:
+        - Documentation
+      parameters:
+        - name: sectionId
+          in: path
+          required: true
+          description: Section identifier (URL-safe slug)
+          schema:
+            type: string
+            pattern: '^[a-z0-9-]+$'
+          example: "balance-api"
+      responses:
+        '200':
+          description: Section retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSectionResponse'
+        '404':
+          description: Section not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error:
+                  code: "NOT_FOUND"
+                  message: "Section not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    Documentation:
+      type: object
+      required:
+        - title
+        - version
+        - lastUpdated
+        - sections
+      properties:
+        title:
+          type: string
+          description: Documentation title
+          example: "1-eSIM API Documentation"
+        version:
+          type: string
+          description: API version
+          example: "1.0.0"
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Last update timestamp (ISO 8601)
+          example: "2026-01-14T10:00:00Z"
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocSection'
+          description: Top-level documentation sections
+
+    DocSection:
+      type: object
+      required:
+        - id
+        - title
+        - content
+        - order
+      properties:
+        id:
+          type: string
+          description: URL-safe section identifier
+          pattern: '^[a-z0-9-]+$'
+          example: "balance-api"
+        title:
+          type: string
+          description: Section display title
+          example: "Balance & Usage API"
+        content:
+          type: string
+          description: Raw Markdown content
+          example: "# Balance API\n\nThis section describes..."
+        order:
+          type: integer
+          minimum: 0
+          description: Sort order within parent
+          example: 2
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocSection'
+          description: Nested subsections
+
+    GetDocumentationResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/Documentation'
+
+    GetSectionResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          $ref: '#/components/schemas/DocSection'
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              description: Error code
+              example: "NOT_FOUND"
+            message:
+              type: string
+              description: Human-readable error message
+              example: "Section not found"
+
+tags:
+  - name: Documentation
+    description: Public API documentation endpoints

@@ -205,6 +205,8 @@ specs/                      # Feature specifications
 - localStorage for persistence (021-global-account-context)
 - TypeScript 5.9, Angular 21.0.5 (Zoneless) + @angular/cdk@^21.0.3 (Overlay, A11y), @angular/core (Signals), RxJS (ControlValueAccessor) (022-searchable-select-cdk)
 - N/A (UI component, no persistent storage) (022-searchable-select-cdk)
+- TypeScript 5.9, Angular 21.0.5 (Zoneless) + Angular HttpClient, Angular CDK, marked (Markdown parsing), highlight.js (syntax highlighting) (023-public-api-docs)
+- N/A (content fetched from API, no local persistence) (023-public-api-docs)
 
 ## Recent Changes
 - 013-angular-21-upgrade: Upgraded Angular 19.2.15 → 21.0.5, TypeScript 5.8 → 5.9, removed @angular/flex-layout

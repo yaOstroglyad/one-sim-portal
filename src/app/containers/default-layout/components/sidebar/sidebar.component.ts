@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, Input, OnDestroy, OnInit, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { IconDirective } from '@coreui/icons-angular';
@@ -41,8 +41,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   readonly expandedItems = signal<Set<string>>(new Set<string>());
   readonly currentRoute = signal<string>('');
+  readonly currentFragment = signal<string | null>(null);
   readonly imageLoaded = signal<boolean>(false);
   readonly isMenuLoading = signal<boolean>(true);
+
+  // Output for fragment navigation (parent component handles scrolling)
+  readonly fragmentNavigation = output<string>();
 
   // Computed signals
   readonly sidebarClasses = computed(() => {
@@ -120,16 +124,57 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   isParentActive(item: NavItem): boolean {
     if (!item.children) return false;
-    const currentRoute = this.currentRoute();
     return item.children.some(child => {
-      if (child.url && currentRoute.startsWith(child.url)) return true;
+      if (this.isLinkActive(child)) return true;
       if (child.children) {
-        return child.children.some(nestedChild =>
-          nestedChild.url && currentRoute.startsWith(nestedChild.url)
-        );
+        return child.children.some(nestedChild => this.isLinkActive(nestedChild));
       }
       return false;
     });
+  }
+
+  /**
+   * Check if a navigation item is active based on URL and fragment
+   */
+  isLinkActive(item: NavItem): boolean {
+    // For fragment-based navigation
+    if (item.fragment) {
+      return this.currentFragment() === item.fragment;
+    }
+
+    // For regular URL navigation (without fragment)
+    if (item.url) {
+      const currentRoute = this.currentRoute();
+      // Remove any fragment from current route for path comparison
+      const hashIndex = currentRoute.indexOf('#');
+      // With hash routing, URL is /#/path
+      const currentPath = hashIndex > -1
+        ? currentRoute.substring(hashIndex + 1).split('#')[0]
+        : currentRoute;
+
+      return currentPath === item.url || item.url === currentPath;
+    }
+
+    return false;
+  }
+
+  /**
+   * Navigate to a fragment (for docs-style navigation)
+   */
+  navigateToFragment(item: NavItem, event: Event): void {
+    if (item.fragment) {
+      event.preventDefault();
+      this.currentFragment.set(item.fragment);
+      this.fragmentNavigation.emit(item.fragment);
+
+      // Also navigate to the base URL if different from current
+      if (item.url) {
+        const currentPath = this.currentRoute().replace(/^#/, '').split('#')[0];
+        if (currentPath !== item.url) {
+          this.router.navigate([item.url]);
+        }
+      }
+    }
   }
 
   toggleParent(item: NavItem): void {

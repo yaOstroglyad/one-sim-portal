@@ -1,0 +1,18 @@
+<div class="docs-content">
+  @if (document(); as doc) {
+    <article class="docs-content__article">
+      <!-- Render content segments -->
+      @for (segment of renderedSegments(); track $index) {
+        @if (segment.type === 'html') {
+          <div class="docs-content__html" [innerHTML]="segment.safeHtml"></div>
+        } @else if (segment.type === 'code') {
+          <os-code-block [code]="segment.code" [language]="segment.language" />
+        }
+      }
+    </article>
+  } @else {
+    <div class="docs-content__empty">
+      <p>Documentation not found.</p>
+    </div>
+  }
+</div>

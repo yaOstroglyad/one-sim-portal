@@ -64,6 +64,14 @@ const routes: Routes = [
 		}
 	},
 	{
+		path: 'docs',
+		loadChildren: () => import('./app/views/docs/docs.routes').then((m) => m.DOCS_ROUTES),
+		data: {
+			title: 'API Documentation'
+		}
+		// NOTE: No AuthGuardService - public route
+	},
+	{
 		path: '404',
 		component: Page404Component,
 		data: {

@@ -1,0 +1,82 @@
+// ============================================
+// DocsToc Component - GitBook-inspired style
+// Right sidebar with table of contents
+// Supports: Dark theme (CSS vars), RTL (logical properties)
+// ============================================
+
+.docs-toc {
+  padding: 0;
+}
+
+.docs-toc__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.docs-toc__item {
+  margin: 0;
+
+  // Group consecutive level-2/3 items with a left border
+  &--has-border {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--os-color-border);
+    }
+  }
+}
+
+.docs-toc__link {
+  display: block;
+  padding: 6px 0;
+  color: var(--os-color-text-secondary);
+  font-size: 0.875rem; // 14px
+  line-height: 1.4;
+  text-decoration: none;
+  transition: color 0.15s;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--os-color-text-primary);
+  }
+
+  // Level 1 (h1) - Main section headers
+  &--level-1 {
+    font-weight: 500;
+    color: var(--os-color-text-primary);
+  }
+
+  // Level 2 (h2) - Subsections with left border
+  &--level-2 {
+    padding-inline-start: 12px;
+    margin-inline-start: 0;
+    border-inline-start: 1px solid var(--os-color-border);
+    font-size: 0.8125rem; // 13px
+  }
+
+  // Level 3 (h3) - Sub-subsections
+  &--level-3 {
+    padding-inline-start: 24px;
+    margin-inline-start: 0;
+    border-inline-start: 1px solid var(--os-color-border);
+    font-size: 0.8125rem; // 13px
+  }
+
+  // Active state - primary color
+  &--active {
+    color: var(--os-color-primary);
+    font-weight: 500;
+
+    &.docs-toc__link--level-2,
+    &.docs-toc__link--level-3 {
+      border-inline-start-color: var(--os-color-primary);
+    }
+  }
+}

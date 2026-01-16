@@ -1,0 +1,38 @@
+<header
+  class="header"
+  [ngClass]="headerClasses()">
+
+  <div class="header__container">
+    <!-- Left side: Mobile toggle -->
+    <div class="header__left">
+      <!-- Mobile menu toggle -->
+      <button
+        class="header__mobile-toggle"
+        (click)="toggleMobileSidebar()"
+        [attr.aria-label]="'Toggle mobile menu'">
+        <svg cIcon name="cil-menu" width="24" height="24"></svg>
+      </button>
+    </div>
+
+    <!-- Center: Search bar -->
+    <div class="header__center">
+      <os-header-search />
+    </div>
+
+    <!-- Right side: Theme toggle only -->
+    <div class="header__right">
+      <!-- Theme toggle -->
+      <button
+        class="header__action-btn"
+        (click)="toggleTheme()"
+        [attr.aria-label]="isDarkTheme() ? 'Switch to light theme' : 'Switch to dark theme'"
+        [attr.aria-pressed]="isDarkTheme()">
+        @if (isDarkTheme()) {
+          <svg cIcon name="cil-sun" width="18" height="18"></svg>
+        } @else {
+          <svg cIcon name="cil-moon" width="18" height="18"></svg>
+        }
+      </button>
+    </div>
+  </div>
+</header>

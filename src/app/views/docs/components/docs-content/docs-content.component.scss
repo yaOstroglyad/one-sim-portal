@@ -1,0 +1,252 @@
+@use "sass:map";
+@use "variables" as vars;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.docs-content {
+  max-width: var(--docs-content-max-width, 900px);
+  margin: 0 auto;
+  padding: map.get(vars.$os-spacing, '4') map.get(vars.$os-spacing, '6');
+
+  &__article {
+    color: var(--os-color-text-primary);
+    line-height: 1.7;
+    font-size: map.get(vars.$os-font-sizes, 'base');
+  }
+
+  &__html {
+    color: var(--os-color-text-primary);
+  }
+
+  &__empty {
+    text-align: center;
+    padding: map.get(vars.$os-spacing, '8');
+    color: var(--os-color-gray-500);
+  }
+}
+
+// Documentation section styling
+:host ::ng-deep {
+  .docs-section {
+    margin-bottom: map.get(vars.$os-spacing, '8');
+    scroll-margin-top: map.get(vars.$os-spacing, '4');
+
+    &--level-1 {
+      padding-top: map.get(vars.$os-spacing, '6');
+      border-top: 1px solid var(--docs-section-border, var(--os-color-gray-200));
+
+      &:first-child {
+        border-top: none;
+        padding-top: 0;
+      }
+    }
+
+    &__title {
+      color: var(--os-color-text-primary);
+      margin-bottom: map.get(vars.$os-spacing, '4');
+      font-weight: 600;
+    }
+
+    &__content {
+      color: var(--os-color-text-secondary);
+    }
+
+    &__children {
+      margin-top: map.get(vars.$os-spacing, '6');
+      padding-left: map.get(vars.$os-spacing, '4');
+      border-left: 2px solid var(--docs-sidebar-border, var(--os-color-gray-200));
+    }
+  }
+
+  // Typography
+  h1 {
+    font-size: map.get(vars.$os-font-sizes, '3xl');
+    margin-bottom: map.get(vars.$os-spacing, '4');
+  }
+
+  h2 {
+    font-size: map.get(vars.$os-font-sizes, '2xl');
+    margin-top: map.get(vars.$os-spacing, '8');
+    margin-bottom: map.get(vars.$os-spacing, '4');
+  }
+
+  h3 {
+    font-size: map.get(vars.$os-font-sizes, 'xl');
+    margin-top: map.get(vars.$os-spacing, '6');
+    margin-bottom: map.get(vars.$os-spacing, '3');
+  }
+
+  h4, h5, h6 {
+    font-size: map.get(vars.$os-font-sizes, 'lg');
+    margin-top: map.get(vars.$os-spacing, '4');
+    margin-bottom: map.get(vars.$os-spacing, '2');
+  }
+
+  p {
+    margin-bottom: map.get(vars.$os-spacing, '4');
+  }
+
+  // Lists
+  ul, ol {
+    margin-bottom: map.get(vars.$os-spacing, '4');
+    padding-left: map.get(vars.$os-spacing, '6');
+
+    li {
+      margin-bottom: map.get(vars.$os-spacing, '2');
+    }
+  }
+
+  // Code blocks
+  .docs-code-block {
+    position: relative;
+    margin: map.get(vars.$os-spacing, '4') 0;
+    background-color: var(--docs-code-bg, #1e1e1e);
+    border-radius: map.get(vars.$os-border-radius, 'md');
+    overflow: hidden;
+    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-size: map.get(vars.$os-font-sizes, 'sm');
+
+    code {
+      display: block;
+      padding: map.get(vars.$os-spacing, '4');
+      color: var(--docs-code-text, #e5e7eb);
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+  }
+
+  // Code block header with copy button
+  .docs-code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '3');
+    background-color: var(--docs-code-header-bg, #2d2d2d);
+    border-bottom: 1px solid var(--docs-code-border, #3d3d3d);
+  }
+
+  .docs-code-lang {
+    font-size: map.get(vars.$os-font-sizes, 'xs');
+    font-weight: 500;
+    color: var(--docs-code-lang-color, #6b7280);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .docs-code-copy-btn {
+    display: flex;
+    align-items: center;
+    gap: map.get(vars.$os-spacing, '1');
+    padding: map.get(vars.$os-spacing, '1') map.get(vars.$os-spacing, '2');
+    background-color: transparent;
+    border: 1px solid var(--docs-code-border, #3d3d3d);
+    border-radius: map.get(vars.$os-border-radius, 'sm');
+    color: var(--docs-code-copy-color, #9ca3af);
+    font-size: map.get(vars.$os-font-sizes, 'xs');
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--docs-code-copy-hover-bg, #3d3d3d);
+      color: var(--docs-code-copy-hover-color, #e5e7eb);
+      border-color: var(--docs-code-copy-hover-border, #4d4d4d);
+    }
+
+    &:focus {
+      outline: 2px solid var(--os-color-primary);
+      outline-offset: 2px;
+    }
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &--success {
+      color: #4ade80 !important;
+      border-color: #22c55e !important;
+    }
+
+    &--error {
+      color: #f87171 !important;
+      border-color: #ef4444 !important;
+    }
+  }
+
+  // Inline code (not inside code blocks)
+  :not(pre) > code {
+    background-color: var(--docs-inline-code-bg);
+    color: var(--docs-inline-code-text);
+    padding: 0.2rem 0.4rem;
+    border-radius: map.get(vars.$os-border-radius, 'sm');
+    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-size: 0.875em;
+    white-space: nowrap;
+  }
+
+  // Links
+  a {
+    color: var(--os-color-primary);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Blockquotes
+  blockquote {
+    margin: map.get(vars.$os-spacing, '4') 0;
+    padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '4');
+    border-left: 4px solid var(--os-color-primary);
+    background-color: var(--docs-blockquote-bg, var(--os-color-gray-50));
+    color: var(--os-color-text-secondary);
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Tables
+  table {
+    width: 100%;
+    margin: map.get(vars.$os-spacing, '4') 0;
+    border-collapse: collapse;
+    font-size: map.get(vars.$os-font-sizes, 'sm');
+
+    th, td {
+      padding: map.get(vars.$os-spacing, '3');
+      text-align: left;
+      border: 1px solid var(--docs-table-border, var(--os-color-gray-200));
+    }
+
+    th {
+      background-color: var(--docs-table-header-bg, var(--os-color-gray-50));
+      font-weight: 600;
+      color: var(--os-color-text-primary);
+    }
+
+    tr:nth-child(even) {
+      background-color: var(--docs-table-row-alt, var(--os-color-gray-25));
+    }
+  }
+
+  // Horizontal rules
+  hr {
+    margin: map.get(vars.$os-spacing, '8') 0;
+    border: none;
+    border-top: 1px solid var(--os-color-gray-200);
+  }
+
+  // Images
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: map.get(vars.$os-border-radius, 'md');
+    margin: map.get(vars.$os-spacing, '4') 0;
+  }
+}

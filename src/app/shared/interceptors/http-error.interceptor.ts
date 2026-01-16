@@ -12,7 +12,9 @@ import { catchError, retry } from 'rxjs/operators';
 import {
 	AuthService,
   NotificationService,
-  transformHttpError
+  transformHttpError,
+  shouldIgnore401,
+  isAuthRoute
 } from '@shared';
 import { DEFAULT_RETRY_CONFIG } from '@models';
 
@@ -115,7 +117,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
 		// 401 Unauthorized - Session expired or not authenticated
 		if (error.status === 401) {
-			return this.handle401();
+			return this.handle401(error);
 		}
 
 		// 403 Forbidden - No permission
@@ -135,25 +137,37 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
 	/**
 	 * Handle 401 Unauthorized
-	 * - First occurrence: redirect to /login?returnUrl=...
-	 * - Second consecutive for same URL: redirect to /login without returnUrl, show info
+	 * - /docs routes: pass through error (so service can fallback to mock data)
+	 * - /login, /register routes: pass through error (so form can show "invalid credentials")
+	 * - Other routes: redirect to /login with returnUrl
 	 */
-	private handle401(): Observable<never> {
+	private handle401(error: HttpErrorResponse): Observable<never> {
 		// Use window.location to get the actual browser URL
 		// (router.url may be "/" during APP_INITIALIZER when routing hasn't completed yet)
 		const currentUrl = this.getCurrentUrl();
 
+		// /docs routes - pass through 401 so service can handle fallback
+		if (shouldIgnore401(currentUrl)) {
+			if (isDevMode()) {
+				console.log(`[HttpErrorInterceptor] Route ${currentUrl} ignores 401, passing to service for fallback`);
+			}
+			const apiError = transformHttpError(error);
+			return throwError(() => apiError);
+		}
+
+		// Auth routes (/login, /register) - pass through error to component
+		// so it can show "invalid credentials" message
+		if (isAuthRoute(currentUrl)) {
+			if (isDevMode()) {
+				console.log(`[HttpErrorInterceptor] Auth route ${currentUrl}, passing 401 to component`);
+			}
+			const apiError = transformHttpError(error);
+			return throwError(() => apiError);
+		}
+
+		// All other routes - redirect to login
 		// Clear auth state (without navigation - we handle it here)
 		this.authService.clearAuth();
-
-		// Don't set returnUrl if already on login page (prevents redirect loop)
-		const isLoginPage = currentUrl.startsWith('/login');
-		if (isLoginPage) {
-			if (isDevMode()) {
-				console.log('[HttpErrorInterceptor] Already on login page, skipping redirect');
-			}
-			return EMPTY;
-		}
 
 		// Check for consecutive 401s (infinite loop prevention)
 		const count = this.consecutive401Count.get(currentUrl) || 0;

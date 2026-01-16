@@ -1,0 +1,167 @@
+@use "variables" as vars;
+@use "mixins" as mixins;
+@use "sass:map";
+
+// Reuse the same layout styles as DefaultLayout
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--layout-frame-bg);
+  color: var(--layout-frame-text);
+  transition: background 0.3s ease, color 0.3s ease;
+
+  &--rtl {
+    direction: rtl;
+  }
+
+  &__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: vars.$layout-sidebar-width;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-top: vars.$layout-header-height;
+    height: 100vh;
+    box-sizing: border-box;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .layout--sidebar-collapsed & {
+      margin-left: vars.$layout-sidebar-collapsed;
+    }
+
+    .layout--rtl & {
+      margin-left: 0;
+      margin-right: vars.$layout-sidebar-width;
+      transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .layout--sidebar-collapsed.layout--rtl & {
+      margin-right: vars.$layout-sidebar-collapsed;
+    }
+
+    @media (max-width: 768px) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    background: var(--layout-content-bg);
+    color: var(--layout-content-text);
+    transition: background 0.3s ease, color 0.3s ease;
+    margin-inline-end: map.get(vars.$os-spacing, '4');
+
+    @media (max-width: 768px) {
+      margin-inline-end: map.get(vars.$os-spacing, '3');
+    }
+  }
+
+  &__container {
+    max-width: 100%;
+    padding: map.get(vars.$os-spacing, '4');
+    margin: 0 auto;
+
+    @media (max-width: 768px) {
+      padding: map.get(vars.$os-spacing, '4');
+    }
+
+    @media (max-width: 480px) {
+      padding: map.get(vars.$os-spacing, '3');
+    }
+  }
+
+  &__loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+
+  &__mobile-overlay {
+    position: fixed;
+    top: vars.$layout-header-height;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+
+    &--visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    @media (min-width: 769px) {
+      display: none;
+    }
+  }
+}
+
+// ============================================
+// Docs-specific grid layout
+// Content + TOC (right sidebar)
+// ============================================
+
+.docs-grid {
+  --docs-toc-width: 240px;
+
+  display: grid;
+  grid-template-columns: 1fr var(--docs-toc-width);
+  gap: map.get(vars.$os-spacing, '5');
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: map.get(vars.$os-spacing, '4');
+  min-height: calc(100vh - vars.$layout-header-height - #{map.get(vars.$os-spacing, '4')} * 2);
+
+  // Large screens (> 1200px): Full TOC
+  @media (max-width: 1200px) {
+    --docs-toc-width: 200px;
+    gap: map.get(vars.$os-spacing, '4');
+  }
+
+  // Tablet (992px): Hide TOC, full width content
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+
+  // Mobile
+  @media (max-width: 768px) {
+    padding: map.get(vars.$os-spacing, '3');
+  }
+}
+
+.docs-grid__content {
+  min-width: 0; // Prevent grid blowout
+  max-width: 900px;
+}
+
+.docs-grid__toc {
+  position: sticky;
+  top: calc(vars.$layout-header-height + #{map.get(vars.$os-spacing, '4')});
+  align-self: start;
+  max-height: calc(100vh - vars.$layout-header-height - #{map.get(vars.$os-spacing, '4')} * 2);
+  overflow-y: auto;
+
+  // Subtle scrollbar
+  scrollbar-width: thin;
+  scrollbar-color: var(--os-color-border) transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--os-color-border);
+    border-radius: 2px;
+  }
+
+  // Hide on tablet and mobile
+  @media (max-width: 992px) {
+    display: none;
+  }
+}

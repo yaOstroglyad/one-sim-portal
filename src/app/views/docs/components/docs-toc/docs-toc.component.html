@@ -1,0 +1,20 @@
+<nav class="docs-toc" aria-label="Table of contents">
+  @if (sections().length) {
+    <ul class="docs-toc__list">
+      @for (section of sections(); track section.id) {
+        <li class="docs-toc__item">
+          <a
+            class="docs-toc__link"
+            [class.docs-toc__link--active]="activeSection() === section.id"
+            [class.docs-toc__link--level-1]="section.level === 1"
+            [class.docs-toc__link--level-2]="section.level === 2"
+            [class.docs-toc__link--level-3]="section.level === 3"
+            (click)="onSectionClick(section.id, $event)"
+            [attr.href]="'#' + section.id">
+            {{ section.title }}
+          </a>
+        </li>
+      }
+    </ul>
+  }
+</nav>

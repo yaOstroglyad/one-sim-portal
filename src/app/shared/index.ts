@@ -54,6 +54,7 @@ export * from './components/ui/os-dropdown'
 export * from './components/ui/os-menu'
 
 export * from './components/header-component/header.component';
+export * from './components/public-header/public-header.component';
 export * from './pipes/format-time/format-time.pipe';
 export * from './components/generic-table/generic-table.component';
 export * from './components/column-control/column-control.component'

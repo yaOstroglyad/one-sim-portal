@@ -73,6 +73,7 @@
                         @if (!child.children) {
                           <a
                             [routerLink]="child.url"
+                            [fragment]="child.fragment"
                             class="sidebar__nav-link sidebar__nav-link--child"
                             routerLinkActive="sidebar__nav-link--active">
                             {{ child.name | translate }}
@@ -98,6 +99,7 @@
                                 <li>
                                   <a
                                     [routerLink]="nestedChild.url"
+                                    [fragment]="nestedChild.fragment"
                                     class="sidebar__nav-link sidebar__nav-link--nested-child"
                                     routerLinkActive="sidebar__nav-link--active">
                                     {{ nestedChild.name | translate }}
@@ -117,6 +119,7 @@
               @default {
                 <a
                   [routerLink]="item.url"
+                  [fragment]="item.fragment"
                   class="sidebar__nav-link"
                   routerLinkActive="sidebar__nav-link--active">
                   <span class="sidebar__nav-content">

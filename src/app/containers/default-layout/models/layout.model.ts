@@ -7,6 +7,7 @@ export interface LayoutConfig {
 export interface NavItem {
   name: string;
   url?: string;
+  fragment?: string; // URL fragment for anchor navigation (e.g., #section-id)
   iconComponent?: { name: string };
   permissions?: string[];
   featureToggle?: string;

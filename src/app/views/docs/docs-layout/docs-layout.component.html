@@ -1,0 +1,63 @@
+<div
+  osGlobalSearch
+  class="layout"
+  [class.layout--dark]="layoutConfig()?.darkTheme"
+  [class.layout--rtl]="languageService.isRtl()"
+  [class.layout--sidebar-collapsed]="layoutConfig()?.sidebarCollapsed">
+
+  <!-- Header (public version - no auth required) -->
+  <os-public-header></os-public-header>
+
+  <!-- Sidebar (left - categories navigation) -->
+  <app-sidebar
+    [navItems]="navItems()"
+    [brandConfig]="brandConfig()">
+  </app-sidebar>
+
+  <!-- Main Content Area -->
+  <div class="layout__main">
+    <main
+      class="layout__content"
+      [class.layout__content--with-collapsed-sidebar]="layoutConfig()?.sidebarCollapsed">
+
+      <!-- Loading State -->
+      @if (isLoading()) {
+        <div class="layout__loader">
+          <app-loader />
+        </div>
+      }
+
+      <!-- Content with TOC grid -->
+      @if (!isLoading()) {
+        <div class="docs-grid">
+          <!-- Main content (center) -->
+          <article class="docs-grid__content">
+            <router-outlet></router-outlet>
+          </article>
+
+          <!-- TOC sidebar (right) -->
+          @if (tocSections().length > 0) {
+            <aside class="docs-grid__toc">
+              <os-docs-toc
+                [sections]="tocSections()"
+                [activeSection]="activeSection()"
+                (sectionClick)="onTocSectionClick($event)">
+              </os-docs-toc>
+            </aside>
+          }
+        </div>
+      }
+    </main>
+  </div>
+
+  <!-- Mobile Overlay -->
+  <div
+    class="layout__mobile-overlay"
+    [class.layout__mobile-overlay--visible]="isMobileSidebarOpen()"
+    (click)="closeMobileSidebar()"
+    [attr.aria-hidden]="!isMobileSidebarOpen()">
+  </div>
+
+  <!-- Command Palette (Global Search) -->
+  <os-command-palette></os-command-palette>
+</div>
