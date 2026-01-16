@@ -1,46 +1,36 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import * as QRCode from 'qrcode';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 import { EmptyStateComponent } from '../empty-state/empty-state.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-    standalone: true,
-    selector: 'app-qr-code',
-    template: `
-    <div class="text-center" [class.no-height]="!qrCodeValue">
-      <canvas #qrCanvas></canvas>
-    </div>
-    @if (!qrCodeValue) {
+  standalone: true,
+  selector: 'app-qr-code',
+  template: `
+    @if (qrCodeValue()) {
+      <div class="qr-wrapper">
+        <qrcode
+          [qrdata]="qrCodeValue()"
+          [width]="256"
+          errorCorrectionLevel="M"
+        />
+      </div>
+    } @else {
       <app-empty-state
         [title]="'qrCode.noQrCode' | translate"
-        [imageSrc]="'assets/img/empty-states/file-not-found.svg'">
-      </app-empty-state>
+        [imageSrc]="'assets/img/empty-states/file-not-found.svg'"
+      />
     }
-    `,
-    imports: [
+  `,
+  imports: [
+    QRCodeComponent,
     EmptyStateComponent,
     TranslateModule
-],
-    styleUrls: ['./qr-code.component.scss']
+  ],
+  styleUrls: ['./qr-code.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class QrCodeComponent implements OnInit {
-  @ViewChild('qrCanvas', { static: true }) qrCanvas!: ElementRef<HTMLCanvasElement>;
-  @Input() qrCodeValue: string = null;
-
-  ngOnInit(): void {
-    if(this.qrCodeValue) {
-      this.generateQRCode(this.qrCodeValue);
-    }
-  }
-
-  generateQRCode(data: string): void {
-    QRCode.toCanvas(this.qrCanvas.nativeElement, data, (error) => {
-      if (error) {
-        console.error('Error generating QR code:', error);
-      } else {
-        console.log('QR code generated!');
-      }
-    });
-  }
+export class QrCodeComponent {
+  readonly qrCodeValue = input<string | null>(null);
 }

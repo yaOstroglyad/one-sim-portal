@@ -48,6 +48,7 @@ export class ExecutiveTabComponent {
 
   constructor() {
     effect(() => {
+      this.dashboardService.period();
       this.dashboardService.accountId();
       if (this.dashboardService.isReady()) {
         untracked(() => this.loadData());

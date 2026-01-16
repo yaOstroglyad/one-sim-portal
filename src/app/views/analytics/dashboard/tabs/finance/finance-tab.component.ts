@@ -42,6 +42,7 @@ export class FinanceTabComponent {
 
   constructor() {
     effect(() => {
+      this.dashboardDataService.period();
       this.dashboardDataService.accountId();
       if (this.dashboardDataService.isReady()) {
         untracked(() => this.loadData());

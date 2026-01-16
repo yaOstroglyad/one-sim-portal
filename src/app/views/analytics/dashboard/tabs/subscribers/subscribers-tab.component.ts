@@ -102,6 +102,7 @@ export class SubscribersTabComponent {
 
   constructor() {
     effect(() => {
+      this.dashboardService.period();
       this.dashboardService.accountId();
       if (this.dashboardService.isReady()) {
         untracked(() => this.loadData());
