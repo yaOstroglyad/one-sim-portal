@@ -859,18 +859,78 @@ This applies to:
 
 ## XIII. Documentation Maintenance
 
+### Knowledge Base Maintenance (NON-NEGOTIABLE)
+
+> **Purpose:** Keep the AI knowledge base current so every new session starts with accurate project context.
+
+**After completing ANY significant work, update the knowledge base:**
+
+#### What Triggers an Update
+
+| Trigger | Example |
+|---------|---------|
+| New component created | Added `SearchableSelectComponent` |
+| New service created | Added `SearchIndexService` |
+| New model/interface created | Added `SearchTypes` |
+| New feature implemented | Completed global search |
+| Architecture pattern changed | Switched to signals |
+| New reusable utility added | Added `formatDate()` |
+| New documentation added | Created `docs/components/x.md` |
+
+#### What to Update
+
+| Change Type | Document to Update | Section |
+|-------------|-------------------|---------|
+| New component | `project-map.md` | Reusable Components |
+| New service | `project-map.md` | Key Services |
+| New model | `project-map.md` | Models |
+| New utility | `project-map.md` | Utilities |
+| New pipe/directive | `project-map.md` | Pipes & Directives |
+| New view/feature | `project-map.md` | Directory Structure, Views |
+| Complex component | `docs/components/{name}.md` | Create new doc |
+| New pattern/rule | `constitution.md` | Appropriate section |
+| New Skill | `.claude/skills/` + `CLAUDE.md` | Skills section |
+| Feature via Spec-Kit | `specs/{name}/` | Mark status "Done" |
+| New translation prefix | `project-map.md` | Translation Prefixes |
+| New icon | `project-map.md` | Icons |
+
+#### Post-Work Checklist
+
+**Copy this checklist before finishing any significant work:**
+
+```markdown
+## Knowledge Base Update Checklist
+- [ ] `project-map.md` — Added new component/service/model (if created)
+- [ ] `project-map.md` — Updated statistics (if counts changed)
+- [ ] `docs/components/` — Created documentation (if complex component)
+- [ ] `constitution.md` — Added new pattern/rule (if introduced)
+- [ ] `CLAUDE.md` — Updated (only if structure changed)
+- [ ] Feature spec — Marked "Done" (if Spec-Kit used)
+- [ ] Dates updated — `Last Updated` in modified files
+```
+
+#### Why This Matters
+
+```
+Session 1: AI reads docs → creates component → updates docs
+    ↓
+Session 2: AI reads CURRENT docs → knows about new component → no duplicates
+    ↓
+Session N: Knowledge base stays accurate → AI always effective
+```
+
+**Without this rule:** Each session starts with outdated context, leading to duplicates, missed patterns, and inconsistent code.
+
+---
+
 ### File Size Guidelines
+
 | File | Max Lines | Action if Exceeded |
 |------|-----------|-------------------|
-| CLAUDE.md | 200 | Move details to constitution/project-map |
-| constitution.md | 400 | Split into focused sections |
-| project-map.md | 400 | Archive old entries |
+| CLAUDE.md | 250 | Move details to constitution/project-map |
+| constitution.md | 1000 | Split into focused sections |
+| project-map.md | 500 | Archive old entries |
 | Spec files | 300 | Split into sub-specs |
-
-### Maintenance Schedule
-- **Weekly:** Update project-map.md with new components/services
-- **Monthly:** Review constitution for outdated information
-- **After Feature:** Update relevant spec, add to project-map if reusable
 
 ### Critical Maintenance Rules
 
@@ -878,11 +938,13 @@ This applies to:
 - ❌ Delete specs without documenting why
 - ❌ Add rules without checking for duplicates
 - ❌ Change structure without updating CLAUDE.md
+- ❌ Complete significant work without updating knowledge base
 
 **ALWAYS:**
 - ✅ Update dates when making significant changes
 - ✅ Search for duplicates before adding new rules
 - ✅ Test that file paths in examples are correct
+- ✅ Run the Post-Work Checklist after significant changes
 
 ---
 
@@ -979,4 +1041,4 @@ specs/{feature-name}/
 
 ---
 
-**Version:** 1.10.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-13
+**Version:** 1.11.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-16

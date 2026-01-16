@@ -114,7 +114,10 @@
       "Bash(echo:*)",
       "Bash(done)",
       "Skill(speckit.clarify)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(for i in /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/specs/*/)",
+      "Bash(for dir in /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/components/*/)",
+      "Bash(do basename \"$dir\")"
     ],
     "deny": [
       "// === Blocked for Security ===",
