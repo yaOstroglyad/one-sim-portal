@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { IconDirective } from '@coreui/icons-angular';
 import { TranslatePipe } from '@ngx-translate/core';
 
-import { SearchIndexService } from '../../../services/search';
+import { SearchIndexService } from '@shared/services/search';
 
 /**
  * Search Trigger Component

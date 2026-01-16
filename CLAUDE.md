@@ -1,213 +1,236 @@
-# CLAUDE.md - Spec-Kit Integration
+# CLAUDE.md — AI Developer Guide
 
-> **Last Updated:** 2025-12-03
-> **Documentation System:** Spec-Kit (Spec-Driven Development)
+> **Version:** 5.0 | **Last Updated:** 2026-01-16
+> **For:** AI assistants (Claude, GPT, etc.) working on this project
 
 ---
 
-## 🚀 Session Start
+## Documentation Hierarchy
 
-**Before starting any task, read:**
+This project uses a 4-level documentation system optimized for AI development:
+
+```
+LEVEL 0: ENTRY POINT (this file)
+    │
+    │   You are here. Start by reading project-map.md
+    │
+    ▼
+LEVEL 1: KNOWLEDGE BASE (always in context)
+    │
+    │   constitution.md  →  ALL rules (source of truth)
+    │   project-map.md   →  Project structure, components, services
+    │
+    ▼
+LEVEL 2: PROCEDURES (loaded on trigger)
+    │
+    │   Skills (.claude/skills/)  →  HOW to do specific tasks
+    │
+    ▼
+LEVEL 3: REFERENCE (loaded on demand)
+    │
+    │   docs/   →  Component guides, architecture decisions
+    │   specs/  →  Feature specifications, plans, tasks
+```
+
+**Key Principle:** Rules are in `constitution.md` only. Everything else references it.
+
+---
+
+## Quick Start
+
+**Step 1:** Read project structure
 ```
 .specify/memory/project-map.md
 ```
-This gives you complete project knowledge without iterative exploration.
+
+**Step 2:** For any task, check if a Skill exists (see Skills section below)
+
+**Step 3:** Follow rules from `constitution.md`
 
 ---
 
-## 🚨 CRITICAL RULES (Quick Reference)
+## Critical Rules (Quick Reference)
 
-### 0. Spec-Kit Workflow for New Features (MANDATORY)
+> **Full rules:** `.specify/memory/constitution.md`
+> Below are the most critical ones. Always check constitution for complete rules.
+
+| Rule | Reference |
+|------|-----------|
+| Absolute paths only | Constitution Section I |
+| `standalone: true` + OnPush | Constitution Section II |
+| `inject()` for DI (no constructor injection) | Constitution Section II |
+| Signal APIs: `input()`, `output()`, `signal()` | Constitution Section II |
+| Member ordering in components | Constitution Section II |
+| `os-` selector prefix | Constitution Section II |
+| `@use "variables"` (no relative paths) | Constitution Section VII |
+| CSS variables for colors | Constitution Section VII |
+| Error handling: 4-layer architecture | Constitution Section III |
+| English only for code/comments | Constitution Section IX |
+
+---
+
+## Skills (Automated Procedures)
+
+Skills are triggered automatically when your request matches their description.
+
+| Skill | Trigger Examples | What It Does |
+|-------|------------------|--------------|
+| **create-component** | "create component", "new component" | Creates Angular component with templates |
+| **create-service** | "create service", "new service" | Creates Angular service with templates |
+| **create-model** | "create model", "new interface" | Creates TypeScript model/interface |
+| **document-component** | "document this", "add docs" | Creates component documentation |
+| **add-translations** | "add translation", "translate" | Adds i18n keys to all 4 language files |
+| **review-code** | "review code", "check code" | Reviews code against constitution |
+| **fix-errors** | "fix errors", "fix build" | Diagnoses and fixes build/lint errors |
+| **refactor-legacy** | "refactor", "modernize" | Updates legacy code to current standards |
+
+**Location:** `.claude/skills/`
+
+**How Skills work:**
+1. AI detects trigger keywords in your request
+2. Skill is loaded with procedure + templates
+3. Skill references constitution for rules (no duplication)
+
+---
+
+## Spec-Kit Workflow (New Features)
+
 **Before starting ANY new feature (more than a single line change):**
 
-1. **ASK FIRST**: "Это большой фитчер или я могу начать делать сразу?"
-2. **If big feature** → Follow FULL Spec-Kit workflow:
-   - `/speckit.specify` → Create spec.md
-   - `/speckit.clarify` → Resolve ambiguities (if needed)
-   - `/speckit.plan` → Create plan.md
-   - `/speckit.tasks` → Generate tasks.md
-   - `/speckit.implement` → Execute tasks
+1. **ASK FIRST:** "Это большой фичер или можно делать сразу?"
+2. **If big feature** → Follow Spec-Kit workflow:
 
-**NEVER skip straight to implementation for features involving:**
+```
+/speckit.specify   →  spec.md      # Define requirements
+/speckit.plan      →  plan.md      # Plan architecture
+/speckit.tasks     →  tasks.md     # Generate task list
+/speckit.implement →  code         # Execute tasks
+```
+
+**Optional steps:**
+```
+/speckit.clarify   →  Resolve ambiguities
+/speckit.analyze   →  Check consistency
+/speckit.checklist →  Validate requirements
+```
+
+**Never skip to implementation for:**
 - Multiple files
 - New API integrations
 - New components/services
 - Architecture changes
 
-### 1. Absolute Paths ONLY
-```
-❌ WRONG: ../../../../path/to/file
-✅ CORRECT: /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/path/to/file
-```
-
-### 2. Component Architecture
-- **Standalone components only:** `standalone: true`
-- **OnPush change detection:** `changeDetection: ChangeDetectionStrategy.OnPush`
-- **Use inject():** `private readonly service = inject(MyService);`
-- **No HttpClientModule** - HttpClient provided globally
-
-### 3. SCSS
-- **Always use @use:** `@use "../../../../scss/variables" as vars;`
-- **Use CSS variables:** `var(--os-color-text-primary)` not `#2c2c2c`
-
-### 4. HTTP Errors
-- **Use error handlers:** `handleArrayError<T>()`, `handleObjectError<T>()`
-- **Import from utils:** `import { ... } from '@shared/utils'`
-
-### 5. Documentation Language
-- **English only** for all code, comments, commit messages
-
-### 6. Build Verification
-- **DO NOT run `ng build` after every change** — dev server (`npm start`) already handles incremental compilation
-- **Run build only:** before commit, or when specifically asked
-- Trust IDE and dev server to show compilation errors
-
-📖 **Full rules:** [.specify/memory/constitution.md](./.specify/memory/constitution.md)
-
 ---
 
-## 📂 Spec-Kit Structure
+## Project Structure
 
 ```
-.specify/
-├── memory/
-│   ├── constitution.md     # All project rules
-│   └── project-map.md      # Project structure & components (READ FIRST)
-├── templates/              # Spec-Kit templates
-├── scripts/                # Spec-Kit scripts
-├── plans/                  # Implementation plans
-└── tasks/                  # Task breakdowns
-
-specs/                      # Feature specifications
-├── 001-tickets/spec.md
-├── 002-product-constructor/spec.md
-├── 003-dashboard/spec.md
-├── 004-fab-layout/spec.md
-└── 005-data-cache/spec.md
+/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/
+│
+├── CLAUDE.md                    ← You are here (L0)
+│
+├── .specify/memory/
+│   ├── constitution.md          ← ALL rules (L1)
+│   └── project-map.md           ← Project structure (L1)
+│
+├── .claude/skills/              ← Procedures (L2)
+│   ├── create-component/
+│   ├── create-service/
+│   ├── create-model/
+│   ├── document-component/
+│   ├── add-translations/
+│   ├── review-code/
+│   ├── fix-errors/
+│   └── refactor-legacy/
+│
+├── docs/                        ← Reference (L3)
+│   ├── components/
+│   └── architecture/
+│
+├── specs/                       ← Feature specs (L3)
+│   ├── 001-tickets/
+│   ├── ...
+│   └── 023-public-api-docs/
+│
+└── src/app/                     ← Source code
+    ├── shared/                  ← Reusable code
+    ├── views/                   ← Feature modules
+    └── layout/                  ← Layout components
 ```
 
 ---
 
-## 🔄 Spec-Kit Commands Cheatsheet
+## Key Locations
 
-**Copy-paste these commands (no autocomplete available):**
-
-### Core Workflow (in order)
-```
-/speckit.specify      # 1. Create spec.md from requirements
-/speckit.clarify      # 2. (Optional) Clarify ambiguities
-/speckit.plan         # 3. Create plan.md with architecture
-/speckit.tasks        # 4. Generate tasks.md with task list
-/speckit.analyze      # 5. (Optional) Check consistency
-/speckit.checklist    # 6. (Optional) Validate requirements
-/speckit.implement    # 7. Execute tasks, write code
-```
-
-### Auxiliary Commands
-```
-/speckit.constitution    # View/edit project rules
-/speckit.taskstoissues   # Convert tasks to GitHub Issues
-```
-
-### Quick Reference
-| Step | Command | Creates |
-|------|---------|---------|
-| 1 | `/speckit.specify` | `spec.md` |
-| 2 | `/speckit.clarify` | updates `spec.md` |
-| 3 | `/speckit.plan` | `plan.md` |
-| 4 | `/speckit.tasks` | `tasks.md` |
-| 5 | `/speckit.analyze` | report (stdout) |
-| 6 | `/speckit.checklist` | `checklists/*.md` |
-| 7 | `/speckit.implement` | code files |
-
-> **Note:** Claude will remind you of the next command during development.
+| What | Where |
+|------|-------|
+| **Rules (source of truth)** | `.specify/memory/constitution.md` |
+| **Project map** | `.specify/memory/project-map.md` |
+| **Skills** | `.claude/skills/` |
+| **Shared components** | `src/app/shared/components/` |
+| **Shared services** | `src/app/shared/services/` |
+| **Shared models** | `src/app/shared/models/` |
+| **Feature views** | `src/app/views/{feature}/` |
+| **Translations** | `src/assets/i18n/{en,he,ru,ua}.json` |
+| **SCSS variables** | `src/scss/_variables.scss` |
+| **SCSS mixins** | `src/scss/_mixins.scss` |
 
 ---
 
-## 📋 Available Specifications
+## Tech Stack
 
-| Feature | Spec File | Status |
-|---------|-----------|--------|
-| **Tickets** | [specs/001-tickets/spec.md](./specs/001-tickets/spec.md) | Implemented |
-| **Product Constructor** | [specs/002-product-constructor/spec.md](./specs/002-product-constructor/spec.md) | Implemented |
-| **Dashboard** | [specs/003-dashboard/spec.md](./specs/003-dashboard/spec.md) | Implemented |
-| **FAB Layout** | [specs/004-fab-layout/spec.md](./specs/004-fab-layout/spec.md) | Implemented |
-| **CacheHub** | [specs/005-data-cache/spec.md](./specs/005-data-cache/spec.md) | Implemented |
+| Category | Technology |
+|----------|------------|
+| Framework | Angular 21.0.5 (Zoneless, standalone) |
+| Language | TypeScript 5.9 |
+| UI | CoreUI + Angular Material |
+| Charts | Chart.js |
+| i18n | @ngx-translate (en, he, ru, uk) |
+| Reactive | RxJS + Angular Signals |
 
----
+**Dev Server:** `npm start` → http://localhost:4200
 
-## 💻 Templates
-
-| Template | Purpose |
-|----------|---------|
-| [component.template.ts](./.claude/templates/component.template.ts) | New component scaffold |
-| [service.template.ts](./.claude/templates/service.template.ts) | New service scaffold |
-| [model.template.ts](./.claude/templates/model.template.ts) | New model/interface scaffold |
+**API Proxy:** `/api/*` → `https://esim-server.dev.global-sim.app`
 
 ---
 
-## 📚 Additional Documentation (`docs/`)
+## Build Policy
 
-| Category | Location | Content |
-|----------|----------|---------|
-| **Component Guides** | `docs/components/` | GenericTable, AccountSelector, EmailLogs |
-| **Architecture** | `docs/architecture/` | Mock Server, Table Menu decisions |
-| **Optimizations** | `docs/optimizations/` | Form Generator hints |
+- **DO NOT** run `npm run build` automatically after changes
+- **Dev server** (`npm start`) handles incremental compilation
+- **Run build only** when explicitly asked or before commit
 
 ---
 
-## 📊 Project Info
+## For New AI Developers
 
-**Framework:** Angular 21.0.5 (standalone components)
+1. **Read first:** `project-map.md` — gives complete project context
+2. **Check Skills:** Before starting a task, see if a Skill exists
+3. **Follow constitution:** All rules are there, Skills reference it
+4. **Ask if unsure:** "Это большой фичер или можно делать сразу?"
 
-**Key Libraries:**
-- CoreUI + Angular Material (UI)
-- Chart.js (analytics)
-- @ngx-translate (i18n: en, he, ru, uk)
-- RxJS (reactive programming)
-
-**Root Directory:** `/Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/`
-
-**Dev Server:** `npm start` (http://localhost:4200)
-
-**API Proxy:** All `/api/*` → `https://esim-server.dev.global-sim.app`
+**The hierarchy ensures:**
+- No conflicting rules (single source of truth)
+- No duplication (Skills reference, not copy)
+- Clear responsibilities (each document = one purpose)
 
 ---
 
-## 🛠️ Maintaining Documentation
+## Maintaining This System
 
-**Adding new feature?**
-1. Create spec: `/speckit.specify`
-2. Generate plan: `/speckit.plan`
+| Action | How |
+|--------|-----|
+| Update rules | Edit `constitution.md` only |
+| Add new Skill | Create `.claude/skills/{name}/SKILL.md` |
+| Update project map | Edit `project-map.md` |
+| Add feature spec | Use `/speckit.specify` |
 
-**Updating rules?**
-- Edit [.specify/memory/constitution.md](./.specify/memory/constitution.md)
-
-**Updating project map?**
-- Edit [.specify/memory/project-map.md](./.specify/memory/project-map.md)
+**Never:**
+- Duplicate rules in Skills (reference instead)
+- Add rules to CLAUDE.md (link to constitution)
+- Create conflicting documentation
 
 ---
 
-**Documentation System Version:** 4.1 (Spec-Kit)
-**Last Major Update:** 2025-12-03 (Migrated to Spec-Kit format)
-
-## Active Technologies
-- TypeScript 5.9, Angular 21.0.5 + Angular HttpClient, RxJS, Chart.js, CoreUI, Angular Material (010-subscribers-api)
-- N/A (read-only API integration) (010-subscribers-api)
-- TypeScript 5.9, Angular 21.0.5 + Chart.js (existing), @angular/core, RxJS (012-waterfall-chart)
-- N/A (visualization component only) (012-waterfall-chart)
-- TypeScript 5.9, Angular 21.0.5 + Angular Core, Angular Material, CoreUI, RxJS, Chart.js (014-zoneless)
-- N/A (frontend-only change) (014-zoneless)
-- TypeScript 5.9, Angular 21.0.5 (Zoneless) + Angular HttpClient, RxJS, Chart.js, Angular Material (015-traffic-dashboard)
-- TypeScript 5.9 + CoreUI, Angular Material, RxJS (017-gmail-layout)
-- N/A (no backend changes) (017-gmail-layout)
-- TypeScript 5.9 + Angular 21.0.5 (Zoneless), RxJS, Angular Material (MatSelect, MatFormField) (021-global-account-context)
-- localStorage for persistence (021-global-account-context)
-- TypeScript 5.9, Angular 21.0.5 (Zoneless) + @angular/cdk@^21.0.3 (Overlay, A11y), @angular/core (Signals), RxJS (ControlValueAccessor) (022-searchable-select-cdk)
-- N/A (UI component, no persistent storage) (022-searchable-select-cdk)
-- TypeScript 5.9, Angular 21.0.5 (Zoneless) + Angular HttpClient, Angular CDK, marked (Markdown parsing), highlight.js (syntax highlighting) (023-public-api-docs)
-- N/A (content fetched from API, no local persistence) (023-public-api-docs)
-
-## Recent Changes
-- 013-angular-21-upgrade: Upgraded Angular 19.2.15 → 21.0.5, TypeScript 5.8 → 5.9, removed @angular/flex-layout
-- 010-subscribers-api: Added TypeScript 5.9, Angular 21.0.5 + Angular HttpClient, RxJS, Chart.js, CoreUI, Angular Material
+**Documentation System Version:** 5.0 (Hierarchical AI-Ready)
+**Last Major Update:** 2026-01-16
