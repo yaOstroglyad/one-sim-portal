@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, ElementRef, inject, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, ElementRef, inject, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,7 +22,7 @@ import {
 } from '@shared';
 import { forkJoin, Observable, of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import {
 	combineAndSortEvents,
 	mapPurchaseEvents,
@@ -67,15 +68,16 @@ import { MatMenuModule } from '@angular/material/menu';
 export class PrivateCustomerDetailsComponent implements OnInit {
 	@ViewChild('tabGroup', { static: false, read: ElementRef }) tabGroup: ElementRef;
 
-	private route = inject(ActivatedRoute);
-	private customerDataService = inject(CustomersDataService);
-	private transactionDataService = inject(TransactionDataService);
-	private purchasedProductsDataService = inject(PurchasedProductsDataService);
-	private subscriberDataService = inject(SubscriberDataService);
-	private renderer = inject(Renderer2);
-	private dialog = inject(MatDialog);
-	private cdr = inject(ChangeDetectorRef);
-	private authService = inject(AuthService);
+	private readonly route = inject(ActivatedRoute);
+	private readonly destroyRef = inject(DestroyRef);
+	private readonly customerDataService = inject(CustomersDataService);
+	private readonly transactionDataService = inject(TransactionDataService);
+	private readonly purchasedProductsDataService = inject(PurchasedProductsDataService);
+	private readonly subscriberDataService = inject(SubscriberDataService);
+	private readonly renderer = inject(Renderer2);
+	private readonly dialog = inject(MatDialog);
+	private readonly cdr = inject(ChangeDetectorRef);
+	private readonly authService = inject(AuthService);
 
 	customerDetailsView$: Observable<DataObject>;
 	timelineEvents: TimelineEvent[] = [];
@@ -91,10 +93,28 @@ export class PrivateCustomerDetailsComponent implements OnInit {
 	selectedSubscriber: Subscriber;
 
 	ngOnInit(): void {
-		this.customerId = this.route.snapshot.paramMap.get('id') || '';
-		this.loadCustomerDetails();
+		this.route.paramMap
+			.pipe(
+				map(params => params.get('id') || ''),
+				distinctUntilChanged(),
+				takeUntilDestroyed(this.destroyRef)
+			)
+			.subscribe(id => {
+				this.customerId = id;
+				this.resetState();
+				this.loadCustomerDetails();
+				this.loadTimelineEvents();
+			});
+	}
 
-		this.loadTimelineEvents();
+	private resetState(): void {
+		this.timelineEvents = [];
+		this.customerDetails = null;
+		this.subscribers = [];
+		this.selectedSubscriber = null;
+		this.simLocations = [];
+		this.totalSpent = 0;
+		this.totalUsedGB = 0;
 	}
 
 	private loadTimelineEvents(): void {
