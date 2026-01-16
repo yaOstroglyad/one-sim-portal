@@ -22,9 +22,9 @@ import {
   SearchIndexService,
 } from '@shared';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
-import { DocsDataService } from '../services/docs-data.service';
-import { DocsSearchProvider } from '../services/docs-search.provider';
-import { DocsStateService } from '../services/docs-state.service';
+import { DocsDataService } from '../services';
+import { DocsSearchProvider } from '../services';
+import { DocsStateService } from '../services';
 import { DocsTocComponent } from '../components/docs-toc/docs-toc.component';
 
 // Default brand config
