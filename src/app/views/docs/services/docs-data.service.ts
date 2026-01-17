@@ -35,7 +35,7 @@ export class DocsDataService {
     this.isLoading.set(true);
     this.isUsingMock.set(false);
 
-    return this.http.get<DocDocument[]>('/api/open-api/v1/docs').pipe(
+    return this.http.get<DocDocument[]>('/open-api/v1/docs').pipe(
       tap(data => {
         this.rawDocuments.set(data);
         this.isLoading.set(false);
