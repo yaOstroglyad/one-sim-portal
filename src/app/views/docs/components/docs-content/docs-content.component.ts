@@ -17,7 +17,7 @@ import { map, filter, skip } from 'rxjs/operators';
 import { DocsDataService } from '../../services';
 import { DocsStateService } from '../../services';
 import { TocSection } from '../../models';
-import { parseMarkdownToSegments, ContentSegment } from '../../utils/markdown.util';
+import { parseMarkdownToSegments, ContentSegment, generateHeadingId } from '../../utils/markdown.util';
 import { CodeBlockComponent } from '../code-block/code-block.component';
 import { DiagramBlockComponent } from '../diagram-block/diagram-block.component';
 import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.component';
@@ -185,27 +185,23 @@ export class DocsContentComponent implements OnDestroy {
   private extractTocSections(content: string): TocSection[] {
     const headingRegex = /^(#{1,3})\s+(.+)$/gm;
     const sections: TocSection[] = [];
+    const idCounts = new Map<string, number>();
     let match;
 
     while ((match = headingRegex.exec(content)) !== null) {
       const level = match[1].length;
       const title = match[2].trim();
-      const id = this.generateHeadingId(title);
+      const baseId = generateHeadingId(title);
+
+      // Handle duplicate IDs by appending a counter
+      const count = idCounts.get(baseId) || 0;
+      const id = count > 0 ? `${baseId}-${count}` : baseId;
+      idCounts.set(baseId, count + 1);
 
       sections.push({ id, title, level });
     }
 
     return sections;
-  }
-
-  /**
-   * Generate heading ID from title (same logic as markdown.util.ts)
-   */
-  private generateHeadingId(title: string): string {
-    return title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-');
   }
 
   /**
