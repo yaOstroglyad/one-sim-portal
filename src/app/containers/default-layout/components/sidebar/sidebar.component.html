@@ -31,7 +31,7 @@
   </div>
 
   <!-- Navigation -->
-  <nav class="sidebar__nav" [class.sidebar__nav--loading]="isMenuLoading() || !navItems.length">
+  <nav class="sidebar__nav" [class.sidebar__nav--loading]="isMenuLoading()">
     @if (!isMenuLoading() && navItems.length) {
       <ul class="sidebar__nav-list">
         @for (item of navItems; track item.name) {
@@ -143,7 +143,7 @@
           </li>
         }
       </ul>
-    } @else {
+    } @else if (isMenuLoading()) {
       <!-- Loading skeleton -->
       <div class="sidebar__skeleton">
         @for (i of [1,2,3,4,5,6,7,8]; track i) {
@@ -152,6 +152,31 @@
             <div class="sidebar__skeleton-text"></div>
           </div>
         }
+      </div>
+    } @else {
+      <!-- Empty state -->
+      <div class="sidebar__empty">
+        <svg class="sidebar__empty-illustration" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Folder background -->
+          <rect x="20" y="35" width="80" height="60" rx="4" fill="currentColor" opacity="0.1"/>
+          <!-- Folder tab -->
+          <path d="M20 39C20 36.7909 21.7909 35 24 35H45L50 42H96C98.2091 42 100 43.7909 100 46V91C100 93.2091 98.2091 95 96 95H24C21.7909 95 20 93.2091 20 91V39Z" fill="currentColor" opacity="0.15"/>
+          <!-- Document 1 -->
+          <rect x="35" y="50" width="30" height="38" rx="2" fill="currentColor" opacity="0.2"/>
+          <rect x="40" y="56" width="20" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+          <rect x="40" y="62" width="16" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+          <rect x="40" y="68" width="18" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+          <!-- Document 2 (offset) -->
+          <rect x="55" y="54" width="30" height="38" rx="2" fill="currentColor" opacity="0.15"/>
+          <rect x="60" y="60" width="20" height="2" rx="1" fill="currentColor" opacity="0.2"/>
+          <rect x="60" y="66" width="16" height="2" rx="1" fill="currentColor" opacity="0.2"/>
+          <!-- Magnifying glass -->
+          <circle cx="82" cy="38" r="12" stroke="currentColor" stroke-width="3" opacity="0.3"/>
+          <line x1="91" y1="47" x2="100" y2="56" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+          <!-- Question mark in magnifier -->
+          <text x="82" y="43" text-anchor="middle" font-size="14" font-weight="600" fill="currentColor" opacity="0.4">?</text>
+        </svg>
+        <p class="sidebar__empty-text">No sections yet</p>
       </div>
     }
   </nav>
