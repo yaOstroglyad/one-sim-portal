@@ -14,11 +14,12 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, filter, skip } from 'rxjs/operators';
 
-import { DocsDataService } from '../../services/docs-data.service';
-import { DocsStateService } from '../../services/docs-state.service';
+import { DocsDataService } from '../../services';
+import { DocsStateService } from '../../services';
 import { TocSection } from '../../models';
 import { parseMarkdownToSegments, ContentSegment } from '../../utils/markdown.util';
 import { CodeBlockComponent } from '../code-block/code-block.component';
+import { DiagramBlockComponent } from '../diagram-block/diagram-block.component';
 import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.component';
 
 /**
@@ -26,7 +27,8 @@ import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.
  */
 type RenderedSegment =
   | { type: 'html'; safeHtml: SafeHtml }
-  | { type: 'code'; code: string; language: string };
+  | { type: 'code'; code: string; language: string }
+  | { type: 'diagram'; code: string };
 
 /**
  * Documentation content component
@@ -36,7 +38,7 @@ type RenderedSegment =
 @Component({
   selector: 'os-docs-content',
   standalone: true,
-  imports: [CodeBlockComponent, EmptyStateComponent],
+  imports: [CodeBlockComponent, DiagramBlockComponent, EmptyStateComponent],
   templateUrl: './docs-content.component.html',
   styleUrl: './docs-content.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -162,6 +164,12 @@ export class DocsContentComponent implements OnDestroy {
           type: 'code',
           code: segment.code,
           language: segment.language
+        };
+      }
+      if (segment.type === 'diagram') {
+        return {
+          type: 'diagram',
+          code: segment.code
         };
       }
       return {

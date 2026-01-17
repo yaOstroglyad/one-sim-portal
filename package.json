@@ -43,6 +43,7 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "marked": "^17.0.1",
+    "mermaid": "^11.12.2",
     "ngx-cookie-service": "^21.1.0",
     "ngx-scrollbar": "^18.0.0",
     "ngx-webstorage": "^21.0.1",
@@ -69,6 +70,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "sass": "^1.97.2",
+    "type-fest": "^5.4.1",
     "typescript": "~5.9.3"
   },
   "engines": {

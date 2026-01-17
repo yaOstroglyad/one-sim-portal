@@ -5,7 +5,8 @@ import { marked, Renderer } from 'marked';
  */
 export type ContentSegment =
   | { type: 'html'; content: string }
-  | { type: 'code'; code: string; language: string };
+  | { type: 'code'; code: string; language: string }
+  | { type: 'diagram'; code: string };
 
 /**
  * Custom renderer that doesn't render code blocks
@@ -28,6 +29,12 @@ renderer.code = ({ text, lang }): string => {
   // Use a unique placeholder that we can split on
   // btoa works with UTF-8 via encodeURIComponent
   const encoded = btoa(encodeURIComponent(text));
+
+  // Mermaid diagrams get a separate placeholder
+  if (language === 'mermaid') {
+    return `<!--DIAGRAM_BLOCK:${encoded}-->`;
+  }
+
   return `<!--CODE_BLOCK:${language}:${encoded}-->`;
 };
 
@@ -39,8 +46,8 @@ marked.setOptions({
 });
 
 /**
- * Parse Markdown content into segments (HTML and code blocks)
- * This allows rendering code blocks as Angular components
+ * Parse Markdown content into segments (HTML, code blocks, and diagrams)
+ * This allows rendering code blocks and diagrams as Angular components
  */
 export function parseMarkdownToSegments(markdown: string): ContentSegment[] {
   if (!markdown) {
@@ -50,28 +57,45 @@ export function parseMarkdownToSegments(markdown: string): ContentSegment[] {
   const html = marked.parse(markdown) as string;
   const segments: ContentSegment[] = [];
 
-  // Split by code block placeholders
-  const parts = html.split(/<!--CODE_BLOCK:([^:]+):([^-]+)-->/);
+  // Combined regex to match both CODE_BLOCK and DIAGRAM_BLOCK placeholders
+  const blockRegex = /<!--(CODE_BLOCK|DIAGRAM_BLOCK):([^:>]+)(?::([^>]+))?-->/g;
 
-  for (let i = 0; i < parts.length; i++) {
-    if (i % 3 === 0) {
-      // Regular HTML content
-      const content = parts[i].trim();
-      if (content) {
-        segments.push({ type: 'html', content });
-      }
-    } else if (i % 3 === 1) {
-      // Language (next part will be code)
-      const language = parts[i];
-      const codeBase64 = parts[i + 1];
-      try {
+  let lastIndex = 0;
+  let match;
+
+  while ((match = blockRegex.exec(html)) !== null) {
+    // Add HTML content before this block
+    const htmlContent = html.slice(lastIndex, match.index).trim();
+    if (htmlContent) {
+      segments.push({ type: 'html', content: htmlContent });
+    }
+
+    const blockType = match[1];
+
+    try {
+      if (blockType === 'DIAGRAM_BLOCK') {
+        // Diagram block: <!--DIAGRAM_BLOCK:base64-->
+        const codeBase64 = match[2];
+        const code = decodeURIComponent(atob(codeBase64));
+        segments.push({ type: 'diagram', code });
+      } else {
+        // Code block: <!--CODE_BLOCK:language:base64-->
+        const language = match[2];
+        const codeBase64 = match[3];
         const code = decodeURIComponent(atob(codeBase64));
         segments.push({ type: 'code', code, language });
-      } catch {
-        // If base64 decode fails, skip this block
       }
-      i++; // Skip the code part since we processed it
+    } catch {
+      // If base64 decode fails, skip this block
     }
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  // Add any remaining HTML content
+  const remainingHtml = html.slice(lastIndex).trim();
+  if (remainingHtml) {
+    segments.push({ type: 'html', content: remainingHtml });
   }
 
   return segments;

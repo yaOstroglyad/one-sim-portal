@@ -32,7 +32,7 @@ export class DocsDataService {
     this.isLoading.set(true);
     this.error.set(null);
 
-    return this.http.get<DocDocument[]>('/open-api/v1/docs').pipe(
+    return this.http.get<DocDocument[]>('/api/docs').pipe(
       tap(data => {
         this.rawDocuments.set(data);
         this.isLoading.set(false);
