@@ -8,8 +8,9 @@ export const DOCS_ROUTES: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'public-api',
-        pathMatch: 'full'
+        pathMatch: 'full',
+        loadComponent: () => import('./components/docs-default-redirect/docs-default-redirect.component')
+          .then(m => m.DocsDefaultRedirectComponent)
       },
       {
         path: ':categoryId',

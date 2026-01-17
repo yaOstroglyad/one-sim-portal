@@ -22,6 +22,7 @@ import {
   SearchIndexService,
 } from '@shared';
 import { LoaderComponent } from '@shared/components/loader/loader.component';
+import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.component';
 import { DocsDataService } from '../services';
 import { DocsSearchProvider } from '../services';
 import { DocsStateService } from '../services';
@@ -42,6 +43,7 @@ const DEFAULT_FAVICON_URL = 'assets/img/brand/1esim-logo-small.png';
     CommandPaletteComponent,
     GlobalSearchDirective,
     LoaderComponent,
+    EmptyStateComponent,
     DocsTocComponent,
   ],
   providers: [
@@ -103,8 +105,9 @@ export class DocsLayoutComponent implements OnInit, OnDestroy {
   // Mobile sidebar state
   readonly isMobileSidebarOpen = this.layoutService.isMobileSidebarOpen;
 
-  // Loading state
+  // Loading and error state
   readonly isLoading = this.docsDataService.isLoading;
+  readonly error = this.docsDataService.error;
 
   // TOC state from shared service (right sidebar)
   readonly tocSections = this.docsStateService.tocSections;
