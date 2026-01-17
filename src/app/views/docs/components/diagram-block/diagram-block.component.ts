@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   input,
   signal,
+  computed,
   inject,
   effect,
   HostListener,
@@ -51,6 +52,7 @@ let diagramIdCounter = 0;
         <div class="diagram-block__header">
           <span class="diagram-block__label">Diagram</span>
           <button
+            type="button"
             class="diagram-block__expand"
             (click)="openFullscreen()"
             title="Open fullscreen (click diagram or press F)">
@@ -76,27 +78,30 @@ let diagramIdCounter = 0;
         <div class="diagram-fullscreen__toolbar">
           <div class="diagram-fullscreen__zoom-controls">
             <button
+              type="button"
               class="diagram-fullscreen__btn"
-              (click)="zoomOut()"
-              [disabled]="zoom() <= 0.25"
+              (click)="zoomOut(); $event.stopPropagation()"
+              [disabled]="isZoomMin()"
               title="Zoom out (-)">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                 <path fill-rule="evenodd" d="M3.75 12a.75.75 0 01.75-.75h15a.75.75 0 010 1.5h-15a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
               </svg>
             </button>
-            <span class="diagram-fullscreen__zoom-level">{{ Math.round(zoom() * 100) }}%</span>
+            <span class="diagram-fullscreen__zoom-level">{{ zoomPercent() }}%</span>
             <button
+              type="button"
               class="diagram-fullscreen__btn"
-              (click)="zoomIn()"
-              [disabled]="zoom() >= 3"
+              (click)="zoomIn(); $event.stopPropagation()"
+              [disabled]="isZoomMax()"
               title="Zoom in (+)">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                 <path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
               </svg>
             </button>
             <button
+              type="button"
               class="diagram-fullscreen__btn"
-              (click)="resetZoom()"
+              (click)="resetZoom(); $event.stopPropagation()"
               title="Reset zoom (0)">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
                 <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 100 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388zm15.408 3.352a.75.75 0 00-.919.53 7.5 7.5 0 01-12.548 3.364l-1.902-1.903h3.183a.75.75 0 000-1.5H2.984a.75.75 0 00-.75.75v4.992a.75.75 0 001.5 0v-3.18l1.9 1.9a9 9 0 0015.059-4.035.75.75 0 00-.53-.918z" clip-rule="evenodd" />
@@ -104,6 +109,7 @@ let diagramIdCounter = 0;
             </button>
           </div>
           <button
+            type="button"
             class="diagram-fullscreen__btn diagram-fullscreen__btn--close"
             (click)="closeFullscreen()"
             title="Close (Escape)">
@@ -114,11 +120,20 @@ let diagramIdCounter = 0;
         </div>
         <div
           class="diagram-fullscreen__content"
-          [style.transform]="'scale(' + zoom() + ')'"
-          [innerHTML]="renderedDiagram()">
+          [class.diagram-fullscreen__content--dragging]="dragging()"
+          (mousedown)="onDragStart($event)"
+          (mousemove)="onDragMove($event)"
+          (mouseup)="onDragEnd()"
+          (mouseleave)="onDragEnd()">
+          <div
+            class="diagram-fullscreen__diagram"
+            [class.diagram-fullscreen__diagram--dragging]="dragging()"
+            [style.transform]="diagramTransform()"
+            [innerHTML]="renderedDiagram()">
+          </div>
         </div>
         <div class="diagram-fullscreen__hint">
-          Ctrl+Scroll to zoom | Press Escape to close
+          Drag to pan | Ctrl+Scroll to zoom | Press Escape to close
         </div>
       </div>
     }
@@ -244,6 +259,14 @@ let diagramIdCounter = 0;
     }
 
     .diagram-fullscreen {
+      // Override CSS variables for dark fullscreen context
+      --os-color-text-primary: #ffffff;
+      --os-color-text-secondary: #a0a0a0;
+      --os-color-bg-secondary: #2d2d2d;
+      --os-color-bg-tertiary: #1e1e1e;
+      --os-color-bg-hover: #404040;
+      --os-color-border: #404040;
+
       position: fixed;
       top: 0;
       left: 0;
@@ -265,8 +288,8 @@ let diagramIdCounter = 0;
         justify-content: space-between;
         align-items: center;
         padding: 1rem;
-        background: var(--os-color-bg-secondary, #2d2d2d);
-        border-bottom: 1px solid var(--os-color-border, #404040);
+        background: var(--os-color-bg-secondary);
+        border-bottom: 1px solid var(--os-color-border);
       }
 
       &__zoom-controls {
@@ -279,8 +302,9 @@ let diagramIdCounter = 0;
         min-width: 60px;
         text-align: center;
         font-size: 0.875rem;
-        color: var(--os-color-text-primary, #fff);
+        color: var(--os-color-text-primary);
         font-weight: 500;
+        line-height: 36px;
       }
 
       &__btn {
@@ -290,15 +314,15 @@ let diagramIdCounter = 0;
         width: 36px;
         height: 36px;
         border: none;
-        background: var(--os-color-bg-tertiary, #1e1e1e);
-        color: var(--os-color-text-secondary, #888);
+        background: var(--os-color-bg-tertiary);
+        color: var(--os-color-text-secondary);
         cursor: pointer;
         border-radius: 4px;
         transition: all 0.2s ease;
 
         &:hover:not(:disabled) {
-          background: var(--os-color-bg-hover, #404040);
-          color: var(--os-color-text-primary, #fff);
+          background: var(--os-color-bg-hover);
+          color: var(--os-color-text-primary);
         }
 
         &:disabled {
@@ -311,7 +335,7 @@ let diagramIdCounter = 0;
 
           &:hover {
             background: rgba(244, 67, 54, 0.2);
-            color: var(--os-color-error, #f44336);
+            color: #f44336;
           }
         }
       }
@@ -321,14 +345,33 @@ let diagramIdCounter = 0;
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: auto;
+        overflow: hidden;
         padding: 2rem;
+        cursor: grab;
+        user-select: none;
+
+        &--dragging {
+          cursor: grabbing;
+        }
+      }
+
+      &__diagram {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 80vw;
+        min-height: 60vh;
         transition: transform 0.1s ease;
         transform-origin: center center;
 
+        &--dragging {
+          transition: none;
+        }
+
         :host ::ng-deep svg {
+          width: 100% !important;
+          height: auto !important;
           max-width: none;
-          height: auto;
           filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
         }
       }
@@ -337,33 +380,49 @@ let diagramIdCounter = 0;
         padding: 0.75rem;
         text-align: center;
         font-size: 0.75rem;
-        color: var(--os-color-text-secondary, #666);
-        background: var(--os-color-bg-secondary, #2d2d2d);
-        border-top: 1px solid var(--os-color-border, #404040);
+        color: var(--os-color-text-secondary);
+        background: var(--os-color-bg-secondary);
+        border-top: 1px solid var(--os-color-border);
       }
     }
   `]
 })
 export class DiagramBlockComponent implements OnDestroy {
-  protected readonly Math = Math;
+  // Zoom configuration
+  private static readonly ZOOM_MIN = 0.25;
+  private static readonly ZOOM_MAX = 3;
+  private static readonly ZOOM_STEP = 0.25;
 
+  // Injected services
   private readonly sanitizer = inject(DomSanitizer);
-  private wheelHandler: ((e: WheelEvent) => void) | null = null;
 
-  /** Mermaid diagram code */
+  // Inputs
   readonly code = input.required<string>();
 
-  /** Rendered SVG diagram */
+  // Signals
   readonly renderedDiagram = signal<SafeHtml | null>(null);
-
-  /** Error message if rendering fails */
   readonly error = signal<string | null>(null);
-
-  /** Fullscreen mode state */
   readonly isFullscreen = signal(false);
-
-  /** Current zoom level */
   readonly zoom = signal(1);
+  readonly panX = signal(0);
+  readonly panY = signal(0);
+  readonly dragging = signal(false);
+
+  // Computed
+  readonly zoomPercent = computed(() => Math.round(this.zoom() * 100));
+  readonly diagramTransform = computed(() =>
+    `translate(${this.panX()}px, ${this.panY()}px) scale(${this.zoom()})`
+  );
+  readonly isZoomMin = computed(() => this.zoom() <= DiagramBlockComponent.ZOOM_MIN);
+  readonly isZoomMax = computed(() => this.zoom() >= DiagramBlockComponent.ZOOM_MAX);
+
+  // Private state
+  private wheelHandler: ((e: WheelEvent) => void) | null = null;
+  private isDragging = false;
+  private dragStartX = 0;
+  private dragStartY = 0;
+  private panStartX = 0;
+  private panStartY = 0;
 
   constructor() {
     initMermaid();
@@ -429,6 +488,8 @@ export class DiagramBlockComponent implements OnDestroy {
   openFullscreen(): void {
     this.isFullscreen.set(true);
     this.zoom.set(1);
+    this.panX.set(0);
+    this.panY.set(0);
     document.body.style.overflow = 'hidden';
   }
 
@@ -438,28 +499,62 @@ export class DiagramBlockComponent implements OnDestroy {
   }
 
   onOverlayClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
     // Close only if clicking on the overlay background, not the content
-    if ((event.target as HTMLElement).classList.contains('diagram-fullscreen')) {
+    if (target.classList.contains('diagram-fullscreen')) {
       this.closeFullscreen();
     }
   }
 
   zoomIn(): void {
     const currentZoom = this.zoom();
-    if (currentZoom < 3) {
-      this.zoom.set(Math.min(3, currentZoom + 0.25));
+    if (currentZoom < DiagramBlockComponent.ZOOM_MAX) {
+      const newZoom = Math.round((currentZoom + DiagramBlockComponent.ZOOM_STEP) * 100) / 100;
+      this.zoom.set(Math.min(DiagramBlockComponent.ZOOM_MAX, newZoom));
     }
   }
 
   zoomOut(): void {
     const currentZoom = this.zoom();
-    if (currentZoom > 0.25) {
-      this.zoom.set(Math.max(0.25, currentZoom - 0.25));
+    if (currentZoom > DiagramBlockComponent.ZOOM_MIN) {
+      const newZoom = Math.round((currentZoom - DiagramBlockComponent.ZOOM_STEP) * 100) / 100;
+      this.zoom.set(Math.max(DiagramBlockComponent.ZOOM_MIN, newZoom));
     }
   }
 
   resetZoom(): void {
     this.zoom.set(1);
+    this.panX.set(0);
+    this.panY.set(0);
+  }
+
+  onDragStart(event: MouseEvent): void {
+    // Only start drag on left mouse button
+    if (event.button !== 0) return;
+
+    this.isDragging = true;
+    this.dragging.set(true);
+    this.dragStartX = event.clientX;
+    this.dragStartY = event.clientY;
+    this.panStartX = this.panX();
+    this.panStartY = this.panY();
+
+    event.preventDefault();
+  }
+
+  onDragMove(event: MouseEvent): void {
+    if (!this.isDragging) return;
+
+    const deltaX = event.clientX - this.dragStartX;
+    const deltaY = event.clientY - this.dragStartY;
+
+    this.panX.set(this.panStartX + deltaX);
+    this.panY.set(this.panStartY + deltaY);
+  }
+
+  onDragEnd(): void {
+    this.isDragging = false;
+    this.dragging.set(false);
   }
 
   private async renderDiagram(code: string): Promise<void> {

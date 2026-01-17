@@ -14,12 +14,41 @@ export type ContentSegment =
  */
 const renderer = new Renderer();
 
-// Add IDs to headings for anchor links
-renderer.heading = ({ text, depth }): string => {
-  const id = text
+// Track heading IDs to handle duplicates
+let headingIdCounts = new Map<string, number>();
+
+/**
+ * Reset heading ID counter (called internally before parsing)
+ */
+function resetHeadingIds(): void {
+  headingIdCounts = new Map<string, number>();
+}
+
+/**
+ * Generate heading ID from text (without duplicate handling)
+ * Exported for use in TOC extraction
+ */
+export function generateHeadingId(text: string): string {
+  return text
     .toLowerCase()
     .replace(/[^\w\s-]/g, '')
     .replace(/\s+/g, '-');
+}
+
+/**
+ * Generate unique heading ID, handling duplicates
+ */
+function generateUniqueHeadingId(text: string): string {
+  const baseId = generateHeadingId(text);
+  const count = headingIdCounts.get(baseId) || 0;
+  headingIdCounts.set(baseId, count + 1);
+
+  return count > 0 ? `${baseId}-${count}` : baseId;
+}
+
+// Add IDs to headings for anchor links
+renderer.heading = ({ text, depth }): string => {
+  const id = generateUniqueHeadingId(text);
   return `<h${depth} id="${id}">${text}</h${depth}>`;
 };
 
@@ -53,6 +82,9 @@ export function parseMarkdownToSegments(markdown: string): ContentSegment[] {
   if (!markdown) {
     return [];
   }
+
+  // Reset heading ID counter for new document
+  resetHeadingIds();
 
   const html = marked.parse(markdown) as string;
   const segments: ContentSegment[] = [];
