@@ -174,7 +174,11 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
       required: true
     });
 
-    // Data loading is now handled by the effect reacting to account changes
+    // For non-admin users, load data immediately (they don't need account selection)
+    if (!this.isAdmin) {
+      this.loadData();
+    }
+    // For admins, data loading is handled by the effect reacting to account changes
   }
 
   ngOnDestroy(): void {
@@ -213,7 +217,6 @@ export class CompanyProductListComponent implements OnInit, AfterViewInit, OnDes
 
     // For admins, ensure we have a selected account before making the request
     if (this.isAdmin && !params.accountId && !selectedAccountId) {
-      // No account selected, don't make the request
       this.companyProducts$ = of([]);
       this.loading = false;
       this.cdr.detectChanges();
