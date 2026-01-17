@@ -428,6 +428,57 @@
     }
   }
 
+  // Empty State
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: map.get(vars.$os-spacing, '8') map.get(vars.$os-spacing, '4');
+    text-align: center;
+    color: var(--layout-frame-text);
+    opacity: 0.6;
+
+    &-illustration {
+      width: 100px;
+      height: 100px;
+      margin-bottom: map.get(vars.$os-spacing, '4');
+      color: var(--layout-frame-text);
+    }
+
+    &-text {
+      font-size: map.get(vars.$os-font-sizes, 'sm');
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    // Hide text when collapsed
+    .sidebar--collapsed & {
+      &-text {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      &-illustration {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    // Show on hover when collapsed
+    .sidebar--collapsed:hover & {
+      &-text {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      &-illustration {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  }
+
   // Loading Skeleton
   &__skeleton {
     padding: map.get(vars.$os-spacing, '2');
