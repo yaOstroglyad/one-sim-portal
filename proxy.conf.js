@@ -22,11 +22,6 @@ const PROXY_CONFIG = {
     "secure": false,
     "changeOrigin": true
   },
-  "/open-api": {
-    "target": "https://esim-server.dev.global-sim.app",
-    "secure": false,
-    "changeOrigin": true
-  },
   "/auth": {
     "target": "https://esim-server.dev.global-sim.app",
     "secure": false,

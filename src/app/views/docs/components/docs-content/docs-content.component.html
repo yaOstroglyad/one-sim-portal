@@ -16,6 +16,8 @@
             <div class="docs-content__html" [innerHTML]="segment.safeHtml"></div>
           } @else if (segment.type === 'code') {
             <os-code-block [code]="segment.code" [language]="segment.language" />
+          } @else if (segment.type === 'diagram') {
+            <os-diagram-block [code]="segment.code" />
           }
         }
       </article>
