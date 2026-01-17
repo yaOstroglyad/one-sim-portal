@@ -19,6 +19,7 @@ import { DocsStateService } from '../../services/docs-state.service';
 import { TocSection } from '../../models';
 import { parseMarkdownToSegments, ContentSegment } from '../../utils/markdown.util';
 import { CodeBlockComponent } from '../code-block/code-block.component';
+import { EmptyStateComponent } from '@shared/components/empty-state/empty-state.component';
 
 /**
  * Rendered segment for template
@@ -35,7 +36,7 @@ type RenderedSegment =
 @Component({
   selector: 'os-docs-content',
   standalone: true,
-  imports: [CodeBlockComponent],
+  imports: [CodeBlockComponent, EmptyStateComponent],
   templateUrl: './docs-content.component.html',
   styleUrl: './docs-content.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -63,6 +64,13 @@ export class DocsContentComponent implements OnDestroy {
     const id = this.documentId();
     if (!id) return null;
     return this.docsDataService.getDocumentById(id) ?? null;
+  });
+
+  // Check if document has empty content
+  readonly isEmptyContent = computed(() => {
+    const doc = this.document();
+    if (!doc) return false;
+    return !doc.content || doc.content.trim().length === 0;
   });
 
   // Rendered content segments

@@ -27,8 +27,28 @@
         </div>
       }
 
+      <!-- Error State -->
+      @if (!isLoading() && error()) {
+        <div class="layout__empty-state">
+          <app-empty-state
+            title="Documentation Unavailable"
+            [message]="error()!">
+          </app-empty-state>
+        </div>
+      }
+
+      <!-- Empty State (no documents) -->
+      @if (!isLoading() && !error() && navItems().length === 0) {
+        <div class="layout__empty-state">
+          <app-empty-state
+            title="No Documentation"
+            message="Documentation is not available at this time.">
+          </app-empty-state>
+        </div>
+      }
+
       <!-- Content with TOC grid -->
-      @if (!isLoading()) {
+      @if (!isLoading() && !error() && navItems().length > 0) {
         <div class="docs-grid">
           <!-- Main content (center) -->
           <article class="docs-grid__content">

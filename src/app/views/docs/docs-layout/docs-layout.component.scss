@@ -79,6 +79,14 @@
     min-height: 400px;
   }
 
+  &__empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    padding: map.get(vars.$os-spacing, '4');
+  }
+
   &__mobile-overlay {
     position: fixed;
     top: vars.$layout-header-height;

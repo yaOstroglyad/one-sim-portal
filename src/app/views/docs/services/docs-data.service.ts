@@ -3,13 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, catchError, tap } from 'rxjs';
 
 import { DocDocument, ProcessedDocDocument } from '../models';
-import { MOCK_DOCUMENTS } from './mock-docs.data';
 
 /**
  * Service for fetching documentation data
  * Provided at feature level (DocsLayoutComponent) to clean up when leaving /docs
- *
- * Fetches from /api/open-api/docs, falls back to mock data on error
  */
 @Injectable()
 export class DocsDataService {
@@ -18,7 +15,7 @@ export class DocsDataService {
   // State signals
   private readonly rawDocuments = signal<DocDocument[]>([]);
   readonly isLoading = signal(false);
-  readonly isUsingMock = signal(false);
+  readonly error = signal<string | null>(null);
 
   // Processed documents with extracted titles
   readonly documents = computed((): ProcessedDocDocument[] =>
@@ -29,11 +26,11 @@ export class DocsDataService {
   );
 
   /**
-   * Load documentation from API, fallback to mock on error
+   * Load documentation from API
    */
   getDocumentation(): Observable<DocDocument[]> {
     this.isLoading.set(true);
-    this.isUsingMock.set(false);
+    this.error.set(null);
 
     return this.http.get<DocDocument[]>('/open-api/v1/docs').pipe(
       tap(data => {
@@ -41,11 +38,11 @@ export class DocsDataService {
         this.isLoading.set(false);
       }),
       catchError(err => {
-        console.warn('Failed to load docs from API, using mock data:', err.message);
-        this.isUsingMock.set(true);
-        this.rawDocuments.set(MOCK_DOCUMENTS);
+        console.error('Failed to load documentation:', err.message);
+        this.error.set('Failed to load documentation. Please try again later.');
+        this.rawDocuments.set([]);
         this.isLoading.set(false);
-        return of(MOCK_DOCUMENTS);
+        return of([]);
       })
     );
   }

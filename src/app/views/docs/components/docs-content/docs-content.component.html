@@ -1,18 +1,32 @@
 <div class="docs-content">
   @if (document(); as doc) {
-    <article class="docs-content__article">
-      <!-- Render content segments -->
-      @for (segment of renderedSegments(); track $index) {
-        @if (segment.type === 'html') {
-          <div class="docs-content__html" [innerHTML]="segment.safeHtml"></div>
-        } @else if (segment.type === 'code') {
-          <os-code-block [code]="segment.code" [language]="segment.language" />
+    @if (isEmptyContent()) {
+      <!-- Empty content state -->
+      <div class="docs-content__empty">
+        <app-empty-state
+          title="Empty Document"
+          message="This document has no content.">
+        </app-empty-state>
+      </div>
+    } @else {
+      <article class="docs-content__article">
+        <!-- Render content segments -->
+        @for (segment of renderedSegments(); track $index) {
+          @if (segment.type === 'html') {
+            <div class="docs-content__html" [innerHTML]="segment.safeHtml"></div>
+          } @else if (segment.type === 'code') {
+            <os-code-block [code]="segment.code" [language]="segment.language" />
+          }
         }
-      }
-    </article>
+      </article>
+    }
   } @else {
+    <!-- Document not found state -->
     <div class="docs-content__empty">
-      <p>Documentation not found.</p>
+      <app-empty-state
+        title="Document Not Found"
+        message="The requested document could not be found.">
+      </app-empty-state>
     </div>
   }
 </div>
