@@ -1,4 +1,4 @@
-@use "../../../../scss/mixins" as mixins;
+@use "mixins" as mixins;
 
 .empty-state {
   @include mixins.flex-center();

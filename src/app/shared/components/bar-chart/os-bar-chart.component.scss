@@ -1,6 +1,6 @@
 // Bar Chart Component Styles - Using Chart Mixins Architecture
-@use "../../../../scss/variables" as vars;
-@use "../../../../scss/mixins" as mixins;
+@use "variables" as vars;
+@use "mixins" as mixins;
 
 .os-bar-chart {
   @include mixins.chart-complete('os-bar-chart', '📊');

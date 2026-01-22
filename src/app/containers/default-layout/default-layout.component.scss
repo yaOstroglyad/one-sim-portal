@@ -1,7 +1,7 @@
-@use "../../../scss/variables" as vars;
-@use "../../../scss/mixins" as mixins;
-@use "../../../scss/utilities" as utils;
 @use "sass:map";
+@use "variables" as vars;
+@use "mixins" as mixins;
+@use "utilities" as utils;
 
 .layout {
   display: flex;

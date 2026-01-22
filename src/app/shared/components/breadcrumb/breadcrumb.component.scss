@@ -1,6 +1,6 @@
 @use "sass:map";
-@use "../../../../scss/variables" as vars;
-@use "../../../../scss/mixins" as mixins;
+@use "variables" as vars;
+@use "mixins" as mixins;
 
 .os-breadcrumb {
   display: flex;
@@ -79,7 +79,7 @@
     .os-breadcrumb-item {
       font-size: 20px;
       margin-right: map.get(vars.$os-spacing, '1');
-      
+
       &::after {
         margin-left: map.get(vars.$os-spacing, '1');
       }
@@ -88,7 +88,7 @@
       .os-breadcrumb--rtl & {
         margin-right: map.get(vars.$os-spacing, '1');
         margin-left: 0;
-        
+
         &::after {
           margin-left: 0;
           margin-right: map.get(vars.$os-spacing, '1');

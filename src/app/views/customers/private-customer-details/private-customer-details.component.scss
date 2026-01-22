@@ -1,6 +1,6 @@
-@use "mixins" as mixins;
-@use "../../../../scss/variables" as vars;
 @use "sass:map";
+@use "variables" as vars;
+@use "mixins" as mixins;
 
 :host {
   // Mat-card dark theme support

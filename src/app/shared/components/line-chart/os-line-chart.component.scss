@@ -1,7 +1,7 @@
 // Line Chart Component Styles - Using Chart Mixins Architecture
 @use "sass:map";
-@use "../../../../scss/variables" as vars;
-@use "../../../../scss/mixins" as mixins;
+@use "variables" as vars;
+@use "mixins" as mixins;
 
 .os-line-chart {
   @include mixins.chart-complete('os-line-chart', '📈');
