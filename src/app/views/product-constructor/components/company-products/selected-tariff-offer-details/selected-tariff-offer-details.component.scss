@@ -1,7 +1,7 @@
+@use "sass:map";
 @use "variables" as vars;
 @use "mixins" as mixins;
 @use "utilities" as utils;
-@use "sass:map";
 
 .selected-tariff-offer-details {
   margin-top: 1.5rem;

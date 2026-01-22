@@ -1,6 +1,6 @@
 @use "sass:map";
-@use "../../../../scss/variables" as vars;
-@use "../../../../scss/mixins" as mixins;
+@use "variables" as vars;
+@use "mixins" as mixins;
 
 .os-mobile-filter-btn {
   @include mixins.os-list-item-base(map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '3'));

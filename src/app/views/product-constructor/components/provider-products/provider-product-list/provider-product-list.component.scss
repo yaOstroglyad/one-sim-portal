@@ -1,6 +1,6 @@
 @use "sass:map";
-@use "../../../../../../scss/variables" as vars;
-@use "../../../../../../scss/mixins" as mixins;
+@use "variables" as vars;
+@use "mixins" as mixins;
 
 // RTL support - uses :host-context to check ancestor [dir="rtl"]
 :host-context([dir="rtl"]) {

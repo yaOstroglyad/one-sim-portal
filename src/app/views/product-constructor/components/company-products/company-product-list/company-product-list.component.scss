@@ -1,5 +1,5 @@
-@use "../../../../../../scss/variables" as vars;
-@use "../../../../../../scss/mixins" as mixins;
+@use "variables" as vars;
+@use "mixins" as mixins;
 
 .company-product-list-container {
   // Text muted uses layout variables that auto-switch

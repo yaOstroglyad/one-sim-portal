@@ -1,6 +1,6 @@
-@use "../../../../../../scss/variables" as vars;
-@use "../../../../../../scss/mixins" as mixins;
 @use "sass:map";
+@use "variables" as vars;
+@use "mixins" as mixins;
 
 // Note: Using mixins instead of @extend placeholders per constitution rules
 

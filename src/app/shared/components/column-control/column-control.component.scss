@@ -1,6 +1,6 @@
 @use "sass:map";
-@use "../../../../scss/variables" as vars;
-@use "../../../../scss/mixins" as mixins;
+@use "variables" as vars;
+@use "mixins" as mixins;
 
 :host {
   display: inline-block;
@@ -131,7 +131,7 @@
     .button-text {
       display: none;
     }
-    
+
     padding: 0.5rem 0.75rem;
   }
 

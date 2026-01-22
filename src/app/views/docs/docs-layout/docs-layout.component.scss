@@ -1,6 +1,6 @@
+@use "sass:map";
 @use "variables" as vars;
 @use "mixins" as mixins;
-@use "sass:map";
 
 // Reuse the same layout styles as DefaultLayout
 .layout {

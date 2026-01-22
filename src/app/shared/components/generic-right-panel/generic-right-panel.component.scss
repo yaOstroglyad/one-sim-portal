@@ -1,7 +1,7 @@
 @use "sass:map";
-@use "../../../../scss/variables" as vars;
-@use "../../../../scss/mixins" as mixins;
-@use "../../../../scss/utilities" as utils;
+@use "variables" as vars;
+@use "mixins" as mixins;
+@use "utilities" as utils;
 
 // Panel backdrop - uses overlay base mixin
 // z-index: 1100 to be above header (1001) and sidebar (1000)
