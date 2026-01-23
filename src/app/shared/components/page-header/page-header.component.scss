@@ -44,7 +44,7 @@
   }
 
   // === Mobile Responsive ===
-  @media (max-width: 767px) {
+  @include mixins.breakpoint-down('md') {
     padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '3');
     min-height: 48px;
     gap: map.get(vars.$os-spacing, '2');

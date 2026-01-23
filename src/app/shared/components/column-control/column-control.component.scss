@@ -126,7 +126,7 @@
 // ==============================================
 
 // Responsive adjustments
-@media (max-width: 576px) {
+@include mixins.breakpoint-down('sm-plus') {
   .column-control-button {
     .button-text {
       display: none;

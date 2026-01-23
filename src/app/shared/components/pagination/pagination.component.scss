@@ -22,7 +22,7 @@
     min-height: 44px; // минимальная высота для соответствия ag-grid
 
     // Responsive behavior
-    @media (max-width: 768px) {
+    @include mixins.breakpoint-down('md') {
       justify-content: space-between;
       gap: map.get(vars.$os-spacing, '2'); // 8px
     }

@@ -59,7 +59,7 @@
   }
 
   // Responsive adjustments
-  @media (max-width: 768px) {
+  @include mixins.breakpoint-down('md') {
     &__panel {
       // On mobile, make sure dropdown doesn't overflow viewport
       max-width: calc(100vw - map.get(vars.$os-spacing, '8'));

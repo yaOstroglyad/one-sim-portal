@@ -121,7 +121,7 @@
   }
 
   // Responsive adjustments
-  @media (max-width: 768px) {
+  @include mixins.breakpoint-down('md') {
     min-width: 240px;
     padding: map.get(vars.$os-spacing, '1');
 

@@ -234,3 +234,10 @@ Skills are triggered automatically when your request matches their description.
 
 **Documentation System Version:** 5.0 (Hierarchical AI-Ready)
 **Last Major Update:** 2026-01-16
+
+## Active Technologies
+- SCSS (Dart Sass) with Angular 21.0.5 + Angular, CoreUI, Angular Material (024-scss-responsive-refactoring)
+- N/A (CSS-only refactoring) (024-scss-responsive-refactoring)
+
+## Recent Changes
+- 024-scss-responsive-refactoring: Added SCSS (Dart Sass) with Angular 21.0.5 + Angular, CoreUI, Angular Material

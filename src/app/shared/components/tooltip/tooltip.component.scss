@@ -178,7 +178,7 @@
 }
 
 // Responsive adjustments
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .os-tooltip {
     &__content {
       max-width: 250px;

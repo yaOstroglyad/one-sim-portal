@@ -664,7 +664,7 @@
 // Responsive
 // ============================================
 
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .thread-item {
     padding: 0.625rem;
   }
@@ -710,7 +710,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@include mixins.breakpoint-down('sm') {
   .search-state__content {
     padding: 1rem;
   }

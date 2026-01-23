@@ -79,13 +79,13 @@
 }
 
 // Responsive utilities
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   :root {
     --flyout-default-width: 100vw;
   }
 }
 
-@media (max-width: 1024px) {
+@include mixins.breakpoint-down('lg') {
   :root {
     --flyout-max-width: 80vw;
   }

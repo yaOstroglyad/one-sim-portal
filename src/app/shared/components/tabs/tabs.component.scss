@@ -530,7 +530,7 @@
 
 
 // Responsive design
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .os-tabs {
     &--left,
     &--right {

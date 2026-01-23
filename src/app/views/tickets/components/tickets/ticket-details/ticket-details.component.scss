@@ -103,7 +103,7 @@
 }
 
 // Responsive design
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .ticket-details {
     padding: map.get(vars.$os-spacing, '3');
 

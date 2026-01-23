@@ -119,7 +119,7 @@
 }
 
 // Responsive design
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .attachments-container {
     .attachment {
       gap: map.get(vars.$os-spacing, '2');

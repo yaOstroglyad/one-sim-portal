@@ -202,7 +202,7 @@
 // -----------------------------------------------------------------------------
 // Responsive Design
 // -----------------------------------------------------------------------------
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .os-detail-row {
     flex-direction: column;
 

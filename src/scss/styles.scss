@@ -19,7 +19,6 @@
 // PROJECT LAYERS - Modern @use system (before vendor imports)
 // ==============================================
 @use "./layout";             // Layout & grid systems
-@use "./custom";             // Legacy custom styles (to be migrated)
 @use "./fab-layout";         // FAB Layout system styles
 @use "./notifications";      // Notification snackbar styles
 @use "./dashboard-layout";   // Dashboard tab utility classes

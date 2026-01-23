@@ -3,7 +3,7 @@
 @use "mixins" as mixins;
 @use "utilities" as utils;
 
-.sidebar {
+.os-sidebar {
   position: fixed;
   top: vars.$layout-header-height;
   left: 0;
@@ -37,15 +37,15 @@
       width: vars.$layout-sidebar-width;
 
       // Show text and badges on hover
-      .sidebar__nav-text,
-      .sidebar__nav-arrow,
-      .sidebar__nav-badge {
+      .os-sidebar__nav-text,
+      .os-sidebar__nav-arrow,
+      .os-sidebar__nav-badge {
         opacity: 1;
         visibility: visible;
       }
 
       // Show children on hover if parent is expanded
-      .sidebar__nav-children {
+      .os-sidebar__nav-children {
         display: block;
 
         // Restore indent line visibility on hover when expanded
@@ -55,13 +55,13 @@
       }
 
       // Show skeleton text on hover
-      .sidebar__skeleton-text {
+      .os-sidebar__skeleton-text {
         opacity: 1;
         visibility: visible;
       }
 
       // Show full brand on hover
-      .sidebar__brand {
+      .os-sidebar__brand {
         padding: 0 map.get(vars.$os-spacing, '4');
 
         &-full {
@@ -177,7 +177,7 @@
 
         // When parent is expanded with active child, remove parent background
         // to avoid large rectangle effect
-        &.sidebar__nav-link--expanded {
+        &.os-sidebar__nav-link--expanded {
           background: transparent;
         }
       }
@@ -185,7 +185,7 @@
       &--child {
         padding-left: map.get(vars.$os-spacing, '12');
 
-        .sidebar--rtl & {
+        .os-sidebar--rtl & {
           padding-left: map.get(vars.$os-spacing, '4');
           padding-right: map.get(vars.$os-spacing, '12');
         }
@@ -194,7 +194,7 @@
       &--nested {
         padding-left: map.get(vars.$os-spacing, '12');
 
-        .sidebar--rtl & {
+        .os-sidebar--rtl & {
           padding-left: map.get(vars.$os-spacing, '4');
           padding-right: map.get(vars.$os-spacing, '12');
         }
@@ -204,14 +204,14 @@
         padding-left: map.get(vars.$os-spacing, '16');
         font-size: map.get(vars.$os-font-sizes, 'xs');
 
-        .sidebar--rtl & {
+        .os-sidebar--rtl & {
           padding-left: map.get(vars.$os-spacing, '4');
           padding-right: map.get(vars.$os-spacing, '16');
         }
       }
 
       &--expanded {
-        .sidebar__nav-arrow {
+        .os-sidebar__nav-arrow {
           transform: rotate(180deg);
         }
       }
@@ -239,7 +239,7 @@
         fill: currentColor;
       }
 
-      .sidebar__nav-link--active & {
+      .os-sidebar__nav-link--active & {
         color: var(--os-color-primary);
       }
     }
@@ -327,7 +327,7 @@
         opacity: 0;
         transition: opacity 0.2s ease;
 
-        .sidebar--rtl & {
+        .os-sidebar--rtl & {
           left: auto;
           right: 1.5rem;
         }
@@ -407,13 +407,13 @@
       filter: brightness(0);
     }
 
-    .sidebar--collapsed & {
+    .os-sidebar--collapsed & {
       &::before {
         transform: rotate(-90deg);
       }
     }
 
-    .sidebar--rtl & {
+    .os-sidebar--rtl & {
       justify-content: start;
 
       &::before {
@@ -421,7 +421,7 @@
       }
     }
 
-    .sidebar--rtl.sidebar--collapsed & {
+    .os-sidebar--rtl.os-sidebar--collapsed & {
       &::before {
         transform: rotate(90deg);
       }
@@ -453,7 +453,7 @@
     }
 
     // Hide text when collapsed
-    .sidebar--collapsed & {
+    .os-sidebar--collapsed & {
       &-text {
         opacity: 0;
         visibility: hidden;
@@ -466,7 +466,7 @@
     }
 
     // Show on hover when collapsed
-    .sidebar--collapsed:hover & {
+    .os-sidebar--collapsed:hover & {
       &-text {
         opacity: 1;
         visibility: visible;
@@ -498,7 +498,7 @@
       margin-right: map.get(vars.$os-spacing, '3');
       animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
 
-      .sidebar--rtl & {
+      .os-sidebar--rtl & {
         margin-right: 0;
         margin-left: map.get(vars.$os-spacing, '3');
       }
@@ -515,8 +515,8 @@
 }
 
 // Responsive behavior
-@media (max-width: 768px) {
-  .sidebar {
+.os-sidebar {
+  @include mixins.layout-mobile {
     top: vars.$layout-header-height;
     left: calc(-1 * vars.$layout-sidebar-width - 4px);
     height: calc(100vh - vars.$layout-header-height);
@@ -529,7 +529,7 @@
     }
 
     // Enlarged toggle button on mobile
-    .sidebar__toggle {
+    .os-sidebar__toggle {
       height: 56px;
 
       &::before {
@@ -537,20 +537,34 @@
         height: 24px;
       }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
   }
 
-  .sidebar.sidebar--rtl {
-    left: auto;
-    right: calc(-1 * vars.$layout-sidebar-width - 4px);
-    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+  &.os-sidebar--rtl {
+    @include mixins.layout-mobile {
+      left: auto;
+      right: calc(-1 * vars.$layout-sidebar-width - 4px);
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
+    }
   }
 
-  .sidebar.sidebar--rtl.sidebar--mobile-open {
-    right: 0 !important;
+  &.os-sidebar--rtl.os-sidebar--mobile-open {
+    @include mixins.layout-mobile {
+      right: 0;
+    }
   }
 
-  .sidebar.sidebar--mobile-open {
-    left: 0 !important;
+  &.os-sidebar--mobile-open {
+    @include mixins.layout-mobile {
+      left: 0;
+    }
   }
 }
 
@@ -565,17 +579,17 @@
 }
 
 // Collapsed state adjustments
-.sidebar--collapsed {
+.os-sidebar--collapsed {
 
-  .sidebar__nav-text,
-  .sidebar__nav-arrow,
-  .sidebar__nav-badge {
+  .os-sidebar__nav-text,
+  .os-sidebar__nav-arrow,
+  .os-sidebar__nav-badge {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s ease, visibility 0.2s ease;
   }
 
-  .sidebar__nav-children {
+  .os-sidebar__nav-children {
     display: none;
 
     // Hide indent guide when collapsed
@@ -584,13 +598,13 @@
     }
   }
 
-  .sidebar__skeleton-text {
+  .os-sidebar__skeleton-text {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s ease, visibility 0.2s ease;
   }
 
-  .sidebar__brand {
+  .os-sidebar__brand {
     padding: 0 map.get(vars.$os-spacing, '3');
 
     &-full {
@@ -604,7 +618,7 @@
 }
 
 // Brand skeleton styles
-.sidebar__brand-skeleton {
+.os-sidebar__brand-skeleton {
   height: 100%;
   display: flex;
   align-items: center;
@@ -622,7 +636,7 @@
     height: 32px;
     width: 120px;
 
-    .sidebar--collapsed & {
+    .os-sidebar--collapsed & {
       display: none;
     }
   }
@@ -632,15 +646,15 @@
     width: 32px;
     display: none;
 
-    .sidebar--collapsed & {
+    .os-sidebar--collapsed & {
       display: block;
     }
   }
 }
 
 // Brand image transitions
-.sidebar__brand-full,
-.sidebar__brand-narrow {
+.os-sidebar__brand-full,
+.os-sidebar__brand-narrow {
   transition: opacity 0.3s ease-in-out, filter 0.3s ease;
 }
 

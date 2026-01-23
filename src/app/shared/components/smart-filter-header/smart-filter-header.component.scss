@@ -7,7 +7,7 @@
   width: 100%;
   flex-wrap: wrap;
 
-  @media (max-width: 768px) {
+  @include mixins.breakpoint-down('md') {
     flex-direction: column;
     align-items: flex-start;
     gap: map.get(vars.$os-spacing, '4');
@@ -29,7 +29,7 @@
   width: 100%;
   align-items: center;
 
-  @media (max-width: 768px) {
+  @include mixins.breakpoint-down('md') {
     grid-template-columns: 1fr;
     gap: map.get(vars.$os-spacing, '3');
   }
@@ -148,7 +148,7 @@
     margin-bottom: 0;
   }
 
-  @media (max-width: 768px) {
+  @include mixins.breakpoint-down('md') {
     grid-template-columns: 1fr;
     gap: map.get(vars.$os-spacing, '3');
   }
