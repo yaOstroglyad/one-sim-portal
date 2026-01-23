@@ -1,0 +1,55 @@
+<div class="os-responsive-actions">
+  <!-- Desktop: Show all actions as buttons -->
+  <div class="os-responsive-actions__desktop">
+    @for (action of actions(); track action.id) {
+      @if (action.template) {
+        <ng-container *ngTemplateOutlet="action.template"></ng-container>
+      } @else {
+        <button
+          cButton
+          [color]="action.color ?? 'secondary'"
+          [disabled]="action.disabled"
+          [matTooltip]="action.label | translate"
+          (click)="executeAction(action)">
+          <svg cIcon [name]="action.icon"></svg>
+        </button>
+      }
+    }
+  </div>
+
+  <!-- Mobile: Primary actions + more menu -->
+  <div class="os-responsive-actions__mobile">
+    <!-- Primary actions always shown -->
+    @for (action of primaryActions(); track action.id) {
+      @if (action.template) {
+        <ng-container *ngTemplateOutlet="action.template"></ng-container>
+      } @else {
+        <button
+          cButton
+          [color]="action.color ?? 'secondary'"
+          [disabled]="action.disabled"
+          (click)="executeAction(action)">
+          <svg cIcon [name]="action.icon"></svg>
+        </button>
+      }
+    }
+
+    <!-- More menu for secondary actions -->
+    @if (secondaryActions().length > 0) {
+      <os-menu
+        [isOpen]="menuOpen()"
+        [sections]="menuSections()"
+        [position]="menuPosition()"
+        (closed)="closeMenu()">
+        <button
+          menuTrigger
+          cButton
+          color="secondary"
+          [matTooltip]="'common.moreActions' | translate"
+          (click)="toggleMenu(); $event.stopPropagation()">
+          <svg cIcon [name]="moreIcon()"></svg>
+        </button>
+      </os-menu>
+    }
+  </div>
+</div>

@@ -1,7 +1,13 @@
+@use "mixins" as mixins;
+
 :host {
+  display: block;
+  width: 100%;
+
   .header-form {
     align-items: center;
     gap: 0.5rem;
+    flex-wrap: nowrap;
 
     ::ng-deep input[type="text"] {
       flex: 1;
@@ -11,6 +17,20 @@
     button {
       flex-shrink: 0;
     }
-  }
 
+    &__hidden-control {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    // On mobile allow wrapping and align to end
+    @include mixins.layout-mobile {
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+  }
 }

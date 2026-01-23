@@ -1,0 +1,31 @@
+@use "sass:map";
+@use "variables" as vars;
+@use "mixins" as mixins;
+
+.os-responsive-actions {
+  display: flex;
+  align-items: center;
+
+  &__desktop,
+  &__mobile {
+    display: flex;
+    align-items: center;
+    gap: map.get(vars.$os-spacing, '2');
+  }
+
+  &__desktop {
+    display: flex;
+
+    @include mixins.layout-mobile {
+      display: none;
+    }
+  }
+
+  &__mobile {
+    display: none;
+
+    @include mixins.layout-mobile {
+      display: flex;
+    }
+  }
+}

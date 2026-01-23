@@ -188,6 +188,11 @@ html.dark,
   // Default max-height for scrollable tables
   max-height: calc(100vh - var(--table-offset, 280px));
 
+  // Mobile: reduce max-height to account for mobile UI elements
+  @include mixins.layout-mobile {
+    max-height: calc(100vh - var(--table-offset-mobile, 320px));
+  }
+
   // Sticky header - always enabled
   .ag-header {
     position: sticky;
@@ -603,6 +608,16 @@ select,
   max-height: 90vh;
 }
 
+// MDC Dialog mobile responsiveness
+// Override fixed widths on mobile to fit screen
+// Target the overlay pane where inline width is set
+.cdk-overlay-pane.mat-mdc-dialog-panel {
+  @include mixins.layout-mobile {
+    max-width: calc(100vw - #{map.get(vars.$os-spacing, '4')}) !important;
+    width: calc(100vw - #{map.get(vars.$os-spacing, '4')}) !important;
+  }
+}
+
 // Angular Material dialog element styles - Tailwind-inspired title styling
 // More specific selectors to override Angular Material defaults
 h1.mat-mdc-dialog-title,
@@ -648,6 +663,13 @@ h6.mat-mdc-dialog-title,
     outline: 2px solid var(--os-color-primary);
     outline-offset: -2px;
     border-radius: 0.125rem; // rounded-sm
+  }
+
+  // Mobile: smaller title and padding
+  @include mixins.layout-mobile {
+    padding: 0.75rem 1rem 0 !important;
+    font-size: 1.25rem !important;
+    min-height: 3rem;
   }
 }
 
@@ -703,11 +725,20 @@ h6.mat-mdc-dialog-title,
   margin: 0 !important;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  // Prevent horizontal overflow
+  max-width: 100%;
+  box-sizing: border-box;
 
   // Remove default Material typography if using custom
   &:not(.mat-typography) {
     font-size: inherit;
     line-height: inherit;
+  }
+
+  // Mobile: reduce padding and prevent overflow
+  @include mixins.layout-mobile {
+    padding: 1rem !important;
+    overflow-x: hidden;
   }
 }
 
@@ -720,9 +751,15 @@ h6.mat-mdc-dialog-title,
   gap: map.get(vars.$os-spacing, '3');
   min-height: auto;
 
-  // Button spacing in actions
+  // Button spacing in actions (RTL-safe)
   button + button {
-    margin-left: 0.75rem;
+    margin-inline-start: 0.75rem;
+  }
+
+  // Mobile: reduce padding
+  @include mixins.layout-mobile {
+    padding: 0.75rem 1rem !important;
+    gap: map.get(vars.$os-spacing, '2');
   }
 
   // Align options
@@ -745,6 +782,12 @@ h6.mat-mdc-dialog-title,
 .dialog-content {
   padding: 1.5rem;
   min-width: 400px;
+
+  // Mobile: remove min-width constraint
+  @include mixins.layout-mobile {
+    min-width: unset;
+    width: 100%;
+  }
 
   // Error alerts in dialogs
   .error-alert {

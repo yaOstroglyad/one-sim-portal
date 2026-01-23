@@ -1,42 +1,41 @@
 <!-- src/app/shared/components/header-component/header.component.html -->
 <form [formGroup]="headerForm" class="pb-2 d-flex pt-2 header-form">
-  @for (key of formKeys; track key) {
-    @if (config[key].type === 'text') {
-      <input [formControlName]="key"
-        [placeholder]="config[key].placeholder" cFormControl [type]="'text'">
-    }
-    @if (config[key].type === 'select') {
-      <select [formControlName]="key" cSelect>
-        @for (option of config[key].options; track option) {
-          <option [value]="option.value">
-            {{ option.label }}
-          </option>
-        }
-      </select>
+  @for (key of formKeys(); track key) {
+    @if (config(); as cfg) {
+      @if (cfg[key].type === 'text') {
+        <input [formControlName]="key"
+          [placeholder]="cfg[key].placeholder" cFormControl [type]="'text'">
+      }
+      @if (cfg[key].type === 'select') {
+        <select [formControlName]="key" cSelect>
+          @for (option of cfg[key].options; track option) {
+            <option [value]="option.value">
+              {{ option.label }}
+            </option>
+          }
+        </select>
+      }
     }
   }
+
   <!-- Slot for custom inputs -->
   <ng-content select="[header-custom-inputs]"></ng-content>
-  <!-- Column picker -->
-  @if (tableConfig$ | async; as tableConfig) {
-    <column-control [config$]="tableConfig$"
-      [currentSelectedColumns]="currentSelectedColumns"
-    (columnSelectionChange)="onColumnSelectionChanged($event)"></column-control>
-    <!-- Reset button -->
-    @if (tableConfig.showAddButton) {
-      <button
-        cButton color="primary"
-        (click)="addNewEntity()">
-        <svg cIcon name="cilPlus"></svg>
-      </button>
+
+  @if (tableConfig$(); as tblConfig$) {
+    @if (tblConfig$ | async) {
+      <!-- Hidden column control for programmatic access -->
+      <column-control #columnControl
+        class="header-form__hidden-control"
+        [config$]="tblConfig$"
+        [currentSelectedColumns]="currentSelectedColumns"
+        (columnSelectionChange)="onColumnSelectionChanged($event)">
+      </column-control>
+
+      <!-- Responsive actions -->
+      <os-responsive-actions [actions]="headerActions()" />
     }
   }
+
   <!-- Slot for additional actions -->
   <ng-content select="[header-actions]"></ng-content>
-  <!-- Reset button -->
-  @if (formKeys.length > 0) {
-    <button [disabled]="headerForm.pristine" cButton color="secondary" (click)="resetForm()">
-      <svg cIcon name="cilReload"></svg>
-    </button>
-  }
 </form>

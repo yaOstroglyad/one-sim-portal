@@ -12,8 +12,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { IconDirective } from '@coreui/icons-angular';
 import { OsDropdownComponent, DropdownTriggerDirective, DropdownContentDirective } from '@shared/components/ui/os-dropdown';
-import { IconComponent } from '@shared/components/icon';
 import { OsMenuItem, OsMenuSection, OsMenuPosition } from './os-menu.model';
 
 /**
@@ -54,7 +54,7 @@ import { OsMenuItem, OsMenuSection, OsMenuPosition } from './os-menu.model';
     TranslateModule,
     OsDropdownComponent,
     DropdownContentDirective,
-    IconComponent
+    IconDirective
   ],
   templateUrl: './os-menu.component.html',
   styleUrls: ['./os-menu.component.scss'],

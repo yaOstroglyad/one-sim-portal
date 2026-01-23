@@ -114,6 +114,9 @@
     "loading": "טוען...",
     "clear": "נקה",
     "clearAll": "נקה הכל",
+    "add": "הוסף",
+    "reset": "אפס",
+    "moreActions": "עוד פעולות",
     "noFilters": "אין מסננים זמינים",
     "today": "היום",
     "search": {

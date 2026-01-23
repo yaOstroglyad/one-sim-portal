@@ -48,7 +48,7 @@
         <mat-icon>{{ navigationIcons.previous }}</mat-icon>
       </button>
 
-      <!-- Page numbers -->
+      <!-- Page numbers (desktop only when configured) -->
       @if (config.showPageNumbers) {
         <div class="ag-pagination-numbers">
           <!-- Start ellipsis -->
@@ -70,9 +70,13 @@
             <span class="ag-pagination-ellipsis">...</span>
           }
         </div>
+        <!-- Mobile fallback: simple page info when page numbers are hidden -->
+        <div class="ag-pagination-info ag-pagination-info--mobile">
+          <span>{{ currentPage + 1 }} {{ 'pagination.of' | translate }} {{ totalPages }}</span>
+        </div>
       }
 
-      <!-- Page info (when not showing page numbers) -->
+      <!-- Page info (when not showing page numbers - always visible) -->
       @if (!config.showPageNumbers) {
         <div class="ag-pagination-info">
           <span>{{ currentPage + 1 }} {{ 'pagination.of' | translate }} {{ totalPages }}</span>

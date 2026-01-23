@@ -26,6 +26,13 @@
       justify-content: space-between;
       gap: map.get(vars.$os-spacing, '2'); // 8px
     }
+
+    // Mobile: align controls to the right and hide secondary elements
+    @include mixins.layout-mobile {
+      justify-content: flex-end;
+      padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '3');
+      gap: map.get(vars.$os-spacing, '2');
+    }
   }
 }
 
@@ -34,6 +41,11 @@
   display: flex;
   align-items: center;
   gap: map.get(vars.$os-spacing, '2'); // 8px
+
+  // Hide on mobile - too much space, not essential
+  @include mixins.layout-mobile {
+    display: none;
+  }
 
   .ag-pagination-label {
     @include mixins.ag-grid-text();
@@ -89,20 +101,46 @@
     line-height: 16px;
     color: inherit;
   }
+
+  // Larger touch targets on mobile
+  @include mixins.layout-mobile {
+    min-width: 36px;
+    min-height: 36px;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
 }
 
 // Records range info
 .ag-pagination-range {
   @include mixins.ag-grid-text();
   color: var(--layout-content-text-muted);
+
+  // Hide on mobile - page info is sufficient
+  @include mixins.layout-mobile {
+    display: none;
+  }
 }
 
 // Page info
 .ag-pagination-info {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-inline-start: 1rem;
+  padding-inline-end: 1rem;
   @include mixins.ag-grid-text();
   color: var(--layout-content-text);
+
+  // Mobile fallback variant - hidden on desktop, shown on mobile
+  &--mobile {
+    display: none;
+
+    @include mixins.layout-mobile {
+      display: block;
+    }
+  }
 }
 
 // Page numbers container
@@ -110,6 +148,11 @@
   display: flex;
   align-items: center;
   gap: 4px;
+
+  // Hide individual page numbers on mobile - use simple "1 of 5" instead
+  @include mixins.layout-mobile {
+    display: none;
+  }
 }
 
 // Page number buttons - similar to navigation but transparent background
