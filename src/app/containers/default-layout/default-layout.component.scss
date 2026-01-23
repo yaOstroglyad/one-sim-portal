@@ -28,6 +28,11 @@
       flex-shrink: 0;
       margin-bottom: calc(-1 * vars.$layout-content-radius);
       z-index: 11;
+
+      // Hide decorative corner on mobile - no sidebar visible
+      @include mixins.layout-mobile {
+        display: none;
+      }
     }
 
     .layout--sidebar-collapsed & {
@@ -61,7 +66,7 @@
     margin-inline-end: map.get(vars.$os-spacing, '4'); // 16px margin from screen edge
 
     @include mixins.layout-mobile {
-      margin-inline-end: map.get(vars.$os-spacing, '3'); // 12px on mobile
+      margin-inline-end: 0; // No margin on mobile - maximize screen space
     }
 
     &--with-collapsed-sidebar {

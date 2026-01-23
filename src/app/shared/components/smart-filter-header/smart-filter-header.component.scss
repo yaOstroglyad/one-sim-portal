@@ -7,19 +7,18 @@
   width: 100%;
   flex-wrap: wrap;
 
-  @include mixins.breakpoint-down('md') {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: map.get(vars.$os-spacing, '4');
+  @include mixins.layout-mobile {
+    // On mobile, only show the Filters button - hide chips to save space
+    width: auto;
+    flex-shrink: 0;
 
-    .filter-chips-container {
-      max-width: 100%;
-      width: 100%;
+    .filter-chips-container,
+    .empty-filters {
+      display: none;
     }
 
     .filters-button-container {
-      align-self: flex-end;
-      margin-left: 0;
+      margin-inline-start: 0;
     }
   }
 }

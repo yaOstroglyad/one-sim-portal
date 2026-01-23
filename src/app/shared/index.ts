@@ -52,6 +52,7 @@ export * from './components/account-selector-chip/account-selector-chip.componen
 // UI Components - New organized structure
 export * from './components/ui/os-dropdown'
 export * from './components/ui/os-menu'
+export * from './components/ui/os-responsive-actions'
 
 export * from './components/header-component/header.component';
 export * from './components/public-header/public-header.component';

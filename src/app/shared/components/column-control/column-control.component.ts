@@ -8,8 +8,10 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  viewChild
 } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -48,12 +50,20 @@ export class ColumnControlComponent implements OnInit, OnChanges, OnDestroy {
   @Input() currentSelectedColumns: Set<string>;
   @Output() columnSelectionChange = new EventEmitter<Set<string>>();
 
+  /** Reference to menu trigger for programmatic opening */
+  readonly menuTrigger = viewChild<MatMenuTrigger>('menuTrigger');
+
   private destroy$ = new Subject<void>();
   public selectedColumns = new Set<string>();
   public tableConfig: TableConfig | null = null;
   private originalVisibleColumns = new Set<string>();
-  
+
   constructor(private cdr: ChangeDetectorRef) {}
+
+  /** Open the column menu programmatically */
+  openMenu(): void {
+    this.menuTrigger()?.openMenu();
+  }
 
   ngOnInit(): void {
     this.config$.pipe(takeUntil(this.destroy$)).subscribe((config: TableConfig) => {

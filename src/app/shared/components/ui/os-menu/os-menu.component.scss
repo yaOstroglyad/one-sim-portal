@@ -79,6 +79,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      @include mixins.icon-size(1rem);
     }
 
     &-label {

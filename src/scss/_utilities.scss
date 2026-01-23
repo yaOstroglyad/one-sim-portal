@@ -5,6 +5,7 @@
 
 @use "sass:map";
 @use "./variables" as vars;
+@use "./mixins" as mixins;
 
 // ==============================================
 // LAYOUT UTILITIES
@@ -44,7 +45,14 @@
 .os-header-sticky {
   position: sticky;
   top: 64px;
-  z-index: 2;
+  z-index: 100; // High enough for dropdowns to appear above table content
+
+  // On mobile, disable sticky - header content wraps and takes too much space
+  @include mixins.layout-mobile {
+    position: static;
+    top: auto;
+    z-index: auto;
+  }
 }
 
 // ==============================================

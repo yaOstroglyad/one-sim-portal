@@ -8,8 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
-import { ButtonDirective, FormControlDirective } from '@coreui/angular';
-import { IconDirective } from '@coreui/icons-angular';
+import { FormControlDirective } from '@coreui/angular';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -60,8 +59,6 @@ interface FilterFieldConfig {
         SmartFilterHeaderComponent,
         GenericRightPanelComponent,
         FormControlDirective,
-        IconDirective,
-        ButtonDirective,
         TranslateModule
     ],
     providers: [CustomersTableService],

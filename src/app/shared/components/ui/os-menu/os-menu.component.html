@@ -30,11 +30,7 @@
           (click)="onItemClick(item, $event)">
 
           @if (item.icon) {
-            <app-icon
-              [icon]="item.icon"
-              size="16px"
-              class="os-menu__item-icon">
-            </app-icon>
+            <svg cIcon [name]="item.icon" class="os-menu__item-icon"></svg>
           }
 
           <span class="os-menu__item-label">
@@ -78,11 +74,7 @@
               (click)="onItemClick(item, $event)">
 
               @if (item.icon) {
-                <app-icon
-                  [icon]="item.icon"
-                  size="16px"
-                  class="os-menu__item-icon">
-                </app-icon>
+                <svg cIcon [name]="item.icon" class="os-menu__item-icon"></svg>
               }
 
               <span class="os-menu__item-label">

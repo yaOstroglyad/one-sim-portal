@@ -127,7 +127,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           {
             id: 'settings',
             label: 'default-header.settings',
-            icon: 'settings',
+            icon: 'cilSettings',
             action: () => this.goToSettings()
           },
           {

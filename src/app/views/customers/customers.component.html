@@ -72,13 +72,6 @@
           </ng-template>
 
         </app-smart-filter-header>
-
-        <button cButton
-          color="secondary"
-          [disabled]="!filterForm?.dirty"
-          (click)="resetForm()">
-          <svg cIcon name="cilReload"></svg>
-        </button>
       </ng-container>
     </app-header>
     <generic-table [config$]="tableConfig$"
