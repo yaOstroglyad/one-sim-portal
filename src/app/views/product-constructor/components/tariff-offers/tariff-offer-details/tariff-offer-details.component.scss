@@ -59,18 +59,18 @@
 }
 
 // Responsive design
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .tariff-offer-details {
     padding: 1rem;
   }
-  
+
   .section-title {
     font-size: 1.1rem;
   }
-  
+
   .alert .row {
     text-align: center !important;
-    
+
     .col-md-4 {
       margin-top: 1rem;
     }

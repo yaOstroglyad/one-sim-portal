@@ -545,21 +545,205 @@
 // RESPONSIVE & ACCESSIBILITY MIXINS
 // ==============================================
 
-// Responsive breakpoints
+// ==============================================
+// CONTENT BREAKPOINTS
+// Use for component-level responsive styles
+// ==============================================
+
+/// Apply styles at or below a breakpoint
+/// @param {String} $size - Breakpoint name (xs, sm, sm-plus, md, lg, xl, xxl)
+/// @example @include breakpoint-down('md') { display: none; }
+@mixin breakpoint-down($size) {
+  @if $size == 'xs' {
+    @media (max-width: vars.$breakpoint-xs) { @content; }
+  } @else if $size == 'sm' {
+    @media (max-width: vars.$breakpoint-sm) { @content; }
+  } @else if $size == 'sm-plus' {
+    @media (max-width: vars.$breakpoint-sm-plus) { @content; }
+  } @else if $size == 'md' {
+    @media (max-width: vars.$breakpoint-md) { @content; }
+  } @else if $size == 'lg' {
+    @media (max-width: vars.$breakpoint-lg) { @content; }
+  } @else if $size == 'xl' {
+    @media (max-width: vars.$breakpoint-xl) { @content; }
+  } @else if $size == 'xxl' {
+    @media (max-width: vars.$breakpoint-xxl) { @content; }
+  }
+}
+
+/// Apply styles above a breakpoint
+/// @param {String} $size - Breakpoint name (xs, sm, sm-plus, md, lg, xl, xxl)
+/// @example @include breakpoint-up('lg') { display: flex; }
+@mixin breakpoint-up($size) {
+  @if $size == 'xs' {
+    @media (min-width: vars.$breakpoint-xs + 1) { @content; }
+  } @else if $size == 'sm' {
+    @media (min-width: vars.$breakpoint-sm + 1) { @content; }
+  } @else if $size == 'sm-plus' {
+    @media (min-width: vars.$breakpoint-sm-plus + 1) { @content; }
+  } @else if $size == 'md' {
+    @media (min-width: vars.$breakpoint-md + 1) { @content; }
+  } @else if $size == 'lg' {
+    @media (min-width: vars.$breakpoint-lg + 1) { @content; }
+  } @else if $size == 'xl' {
+    @media (min-width: vars.$breakpoint-xl + 1) { @content; }
+  } @else if $size == 'xxl' {
+    @media (min-width: vars.$breakpoint-xxl + 1) { @content; }
+  }
+}
+
+// ==============================================
+// LAYOUT BREAKPOINTS (Sidebar/Header)
+// Use for layout-level responsive styles
+// ==============================================
+
+/// Apply styles when in mobile layout mode (sidebar hidden)
+/// @example @include layout-mobile { margin-left: 0; }
+@mixin layout-mobile {
+  @media (max-width: vars.$layout-breakpoint) {
+    @content;
+  }
+}
+
+/// Apply styles when in desktop layout mode (sidebar visible)
+/// @example @include layout-desktop { display: none; }
+@mixin layout-desktop {
+  @media (min-width: vars.$layout-breakpoint + 1) {
+    @content;
+  }
+}
+
+// ==============================================
+// LAYOUT COMPONENT MIXINS
+// Shared styles for default-layout and docs-layout
+// ==============================================
+
+/// Base layout container styles
+@mixin layout-base {
+  display: flex;
+  min-height: 100vh;
+  background: var(--layout-frame-bg);
+  color: var(--layout-frame-text);
+  transition: background 0.3s ease, color 0.3s ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+/// Main content area styles
+@mixin layout-main-base {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: vars.$layout-sidebar-width;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-top: vars.$layout-header-height;
+  height: 100vh;
+  box-sizing: border-box;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @include layout-mobile {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+/// RTL variant for main content
+@mixin layout-main-rtl {
+  margin-left: 0;
+  margin-right: vars.$layout-sidebar-width;
+
+  @include layout-mobile {
+    margin-right: 0;
+  }
+}
+
+/// Mobile overlay backdrop styles
+@mixin layout-mobile-overlay {
+  position: fixed;
+  top: vars.$layout-header-height;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @include layout-desktop {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+/// Header center element - converts from absolute to flex on mobile
+/// Use inside @include layout-mobile block
+@mixin header-center-mobile {
+  position: static;
+  transform: none;
+  width: auto;
+  max-width: none;
+  flex: 1;
+  justify-content: flex-end;
+  padding: 0 map.get(vars.$os-spacing, '2');
+}
+
+/// Content container styles
+@mixin layout-content-base {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 1.5rem;
+
+  @include layout-mobile {
+    padding: 1rem;
+  }
+}
+
+/// Container wrapper styles
+@mixin layout-container-base {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+// ==============================================
+// LEGACY RESPONSIVE MIXINS (Updated to use centralized variables)
+// ==============================================
+
+// Responsive breakpoints (legacy - use breakpoint-down/up for new code)
 @mixin mobile {
-  @media (max-width: 480px) {
+  @media (max-width: vars.$breakpoint-sm) {
     @content;
   }
 }
 
 @mixin tablet {
-  @media (max-width: 768px) {
+  @media (max-width: vars.$breakpoint-md) {
     @content;
   }
 }
 
 @mixin desktop {
-  @media (min-width: 1024px) {
+  @media (min-width: vars.$breakpoint-lg) {
     @content;
   }
 }
@@ -811,11 +995,11 @@
   grid-template-columns: repeat($columns, 1fr);
   gap: 1rem;
 
-  @media (max-width: 1200px) {
+  @include breakpoint-down('xl') {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 768px) {
+  @include breakpoint-down('md') {
     grid-template-columns: 1fr;
   }
 }
@@ -865,7 +1049,7 @@
     grid-template-columns: 1fr;
   }
 
-  @media (max-width: 768px) {
+  @include breakpoint-down('md') {
     grid-template-columns: 1fr;
   }
 }
@@ -1494,7 +1678,7 @@
     .ag-pagination-panel {
       justify-content: flex-start;
 
-      @media (max-width: 768px) {
+      @include breakpoint-down('md') {
         justify-content: space-between;
       }
     }

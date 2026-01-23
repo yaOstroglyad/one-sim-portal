@@ -131,16 +131,22 @@
   }
 }
 
-// Mobile: show icon button, hide full input
-@include mixins.tablet {
+// Mobile: adaptive search bar (always visible, hide shortcut)
+@include mixins.layout-mobile {
   .os-header-search {
     &__desktop {
-      display: none;
+      max-width: none; // Take available space
     }
 
-    &__mobile {
-      display: flex;
+    &__input-wrapper {
+      padding: 0 map.get(vars.$os-spacing, '3');
     }
+
+    &__shortcut {
+      display: none; // Hide keyboard shortcut on mobile
+    }
+
+    // Mobile button stays hidden - search bar is always visible
   }
 }
 

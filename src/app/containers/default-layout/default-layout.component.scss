@@ -4,11 +4,7 @@
 @use "utilities" as utils;
 
 .layout {
-  display: flex;
-  min-height: 100vh;
-  background: var(--layout-frame-bg);
-  color: var(--layout-frame-text);
-  transition: background 0.3s ease, color 0.3s ease;
+  @include mixins.layout-base;
 
   // Note: Dark theme handled via CSS variables in _variables.scss
   // html.dark, .layout--dark { --layout-frame-bg: #1f1f1f; ... }
@@ -18,16 +14,7 @@
   }
 
   &__main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    margin-left: vars.$layout-sidebar-width;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding-top: vars.$layout-header-height;
-    height: 100vh;
-    box-sizing: border-box;
-    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    @include mixins.layout-main-base;
 
     // Inverted corner - right only (left corner is on sidebar)
     &::before {
@@ -48,23 +35,21 @@
     }
 
     .layout--rtl & {
-      margin-left: 0;
-      margin-right: vars.$layout-sidebar-width;
+      @include mixins.layout-main-rtl;
       transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
       &::before {
         // Right corner for RTL - at left side of content
         background: radial-gradient(farthest-side at bottom right, transparent 100%, var(--layout-frame-bg) 100%) left top / vars.$layout-content-radius vars.$layout-content-radius no-repeat;
       }
+
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
     }
 
     .layout--sidebar-collapsed.layout--rtl & {
       margin-right: vars.$layout-sidebar-collapsed;
-    }
-
-    @media (max-width: 768px) {
-      margin-left: 0;
-      margin-right: 0;
     }
   }
 
@@ -75,19 +60,23 @@
     transition: background 0.3s ease, color 0.3s ease;
     margin-inline-end: map.get(vars.$os-spacing, '4'); // 16px margin from screen edge
 
-    @media (max-width: 768px) {
+    @include mixins.layout-mobile {
       margin-inline-end: map.get(vars.$os-spacing, '3'); // 12px on mobile
     }
 
     &--with-collapsed-sidebar {
       // Any specific styles when sidebar is collapsed
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
   }
 
   &__breadcrumb {
     padding: map.get(vars.$os-spacing, '4') map.get(vars.$os-spacing, '4') 0;
 
-    @media (max-width: 768px) {
+    @include mixins.layout-mobile {
       padding: map.get(vars.$os-spacing, '3') map.get(vars.$os-spacing, '3') 0;
     }
   }
@@ -97,11 +86,11 @@
     padding: map.get(vars.$os-spacing, '4');
     margin: 0 auto;
 
-    @media (max-width: 768px) {
+    @include mixins.breakpoint-down('md') {
       padding: map.get(vars.$os-spacing, '4');
     }
 
-    @media (max-width: 480px) {
+    @include mixins.breakpoint-down('sm') {
       padding: map.get(vars.$os-spacing, '3');
     }
   }
@@ -118,33 +107,19 @@
       font-size: map.get(vars.$os-font-sizes, 'sm');
       text-align: center;
 
-      @media (max-width: 768px) {
+      @include mixins.layout-mobile {
         font-size: map.get(vars.$os-font-sizes, 'xs');
       }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
     }
   }
 
   // Mobile overlay for sidebar
   &__mobile-overlay {
-    position: fixed;
-    top: vars.$layout-header-height;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-
-    &--visible {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    @media (min-width: 769px) {
-      display: none;
-    }
+    @include mixins.layout-mobile-overlay;
   }
 }
 
@@ -162,7 +137,7 @@
       margin-right: 0 !important;
     }
 
-    .sidebar,
+    .os-sidebar,
     .header,
     .layout__footer {
       display: none !important;
@@ -178,15 +153,6 @@
 @media (prefers-contrast: high) {
   .layout {
     border: 2px solid var(--layout-frame-border);
-  }
-}
-
-// Reduced motion support
-@media (prefers-reduced-motion: reduce) {
-  .layout,
-  .layout__main,
-  .layout__mobile-overlay {
-    transition: none !important;
   }
 }
 
@@ -212,6 +178,10 @@
     .layout--rtl & {
       left: auto;
       right: 6px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
     }
   }
 }

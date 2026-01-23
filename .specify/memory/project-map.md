@@ -503,6 +503,20 @@ PUT  /api/v1/customers/command/{id}/update # Update
 @include mixins.os-button-base($height, $padding);
 ```
 
+### Responsive Breakpoints
+```scss
+// Content breakpoints (component adaptation)
+@include mixins.breakpoint-down('md') { }  // <= 768px
+@include mixins.breakpoint-down('sm') { }  // <= 480px
+@include mixins.breakpoint-up('lg') { }    // > 1024px
+
+// Layout breakpoints (sidebar behavior)
+@include mixins.layout-mobile { }    // <= 900px (sidebar hidden)
+@include mixins.layout-desktop { }   // > 900px (sidebar visible)
+```
+
+**Breakpoint Variables:** xs(360), sm(480), sm-plus(576), md(768), lg(1024), xl(1280), xxl(1440)
+
 ---
 
 ## Icons

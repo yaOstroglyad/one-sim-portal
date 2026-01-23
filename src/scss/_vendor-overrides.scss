@@ -5,6 +5,7 @@
 
 @use "sass:map";
 @use "variables" as vars;
+@use "mixins" as mixins;
 
 // ==============================================
 // AG-GRID CUSTOMIZATIONS (complete styles from _ag-grid-styles.scss)
@@ -36,7 +37,7 @@
   --page-subheader-height: 52px;
 }
 
-@media (max-width: 767px) {
+@include mixins.breakpoint-down('md') {
   :root {
     --table-offset: 220px;
     --page-header-height: 48px;
@@ -509,7 +510,7 @@ colgroup col {
 }
 
 /* Responsive AG-Grid */
-@media (max-width: 767px) {
+@include mixins.breakpoint-down('md') {
   .ag-header-cell,
   .ag-cell {
     padding: map.get(vars.$os-spacing, '2');

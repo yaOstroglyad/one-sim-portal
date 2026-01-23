@@ -51,9 +51,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
   // Computed signals
   readonly sidebarClasses = computed(() => {
     return {
-      'sidebar--collapsed': this.layoutConfig().sidebarCollapsed,
-      'sidebar--rtl': this.languageService.isRtl(),
-      'sidebar--mobile-open': this.layoutService.isMobileSidebarOpen()
+      'os-sidebar--collapsed': this.layoutConfig().sidebarCollapsed,
+      'os-sidebar--rtl': this.languageService.isRtl(),
+      'os-sidebar--mobile-open': this.layoutService.isMobileSidebarOpen()
     };
   });
 

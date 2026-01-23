@@ -6,6 +6,7 @@
 
 @use "sass:map";
 @use "variables" as vars;
+@use "mixins" as mixins;
 
 // ==============================================
 // CSS CUSTOM PROPERTIES DEFAULTS
@@ -42,7 +43,7 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--db-row-gap);
 
-    @media (max-width: 768px) {
+    @include mixins.breakpoint-down('md') {
       grid-template-columns: 1fr;
     }
   }
@@ -63,11 +64,11 @@
   grid-template-columns: repeat(var(--db-kpi-cols), 1fr);
   gap: var(--db-row-gap);
 
-  @media (max-width: 1200px) {
+  @include mixins.breakpoint-down('xl') {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 768px) {
+  @include mixins.breakpoint-down('md') {
     grid-template-columns: 1fr;
   }
 

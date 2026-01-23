@@ -162,7 +162,7 @@
   display: none;
 }
 
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .os-login-content {
     padding: 2rem 1.5rem;
     box-shadow: none;
@@ -236,7 +236,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@include mixins.breakpoint-down('sm') {
   .os-login-content {
     padding: 1.5rem 1.25rem;
     padding-top: 12vh;

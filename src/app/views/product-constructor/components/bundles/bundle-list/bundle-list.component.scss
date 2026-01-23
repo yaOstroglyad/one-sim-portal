@@ -239,7 +239,7 @@
 }
 
 // Responsive design
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .bundle-list-container {
     padding: 1rem;
   }

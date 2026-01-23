@@ -290,7 +290,7 @@
 // RESPONSIVE
 // ==============================================
 
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .datepicker-popup {
     min-width: 260px;
     padding: map.get(vars.$os-spacing, '3'); // 12px

@@ -80,7 +80,7 @@
       fill: currentColor;
     }
 
-    @media (max-width: 768px) {
+    @include mixins.breakpoint-down('md') {
       display: flex;
     }
   }
@@ -108,10 +108,10 @@
   }
 }
 
-@media (max-width: 768px) {
+@include mixins.layout-mobile {
   .header {
-    &__container {
-      padding: 0 map.get(vars.$os-spacing, '4');
+    &__center {
+      @include mixins.header-center-mobile;
     }
   }
 }

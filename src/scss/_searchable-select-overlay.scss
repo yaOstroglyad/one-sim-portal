@@ -106,7 +106,7 @@
 }
 
 // Responsive design for overlay panel
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .searchable-select-panel {
     .select-dropdown {
       .options-list {

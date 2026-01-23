@@ -269,46 +269,46 @@
 // ==============================================
 
 // Responsive behavior
-@media (max-width: 768px) {
+@include mixins.breakpoint-down('md') {
   .right-panel {
     width: 100% !important;
-    
+
     .resize-handle {
       display: none;
     }
   }
-  
+
   .panel-header {
     padding: 1rem;
-    
+
     .panel-title {
       font-size: 1.125rem;
     }
-    
+
     .header-actions {
       margin-left: 0.5rem;
-      
+
       // RTL Support
       .right-panel.generic-right-panel--rtl & {
         margin-left: 0;
         margin-right: 0.5rem;
       }
-      
+
       .action-btn {
         width: 36px;
         height: 36px;
       }
     }
   }
-  
+
   .panel-content {
     padding: 1rem;
   }
-  
+
   .panel-footer {
     padding: 1rem;
     flex-wrap: wrap;
-    
+
     :global(.btn) {
       flex: 1;
       min-width: auto;

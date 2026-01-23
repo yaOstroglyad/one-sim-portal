@@ -30,7 +30,7 @@ $filter-drawer-z-index: 1060;
     box-shadow: map.get(vars.$os-shadows, 'xl');
     animation: slideInRight 0.25s ease-out;
 
-    @media (max-width: 359px) {
+    @include mixins.breakpoint-down('xs') {
       max-width: 100%;
     }
   }

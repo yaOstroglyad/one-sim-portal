@@ -627,6 +627,25 @@ $os-font-sizes: (
 ) !default;
 
 // ==============================================
+// RESPONSIVE BREAKPOINTS
+// Mobile-first approach based on content needs
+// ==============================================
+
+// Content breakpoints (for component adaptation)
+$breakpoint-xs: 360px !default;   // Very small phone
+$breakpoint-sm: 480px !default;   // Phone portrait max
+$breakpoint-sm-plus: 576px !default; // Bootstrap sm breakpoint
+$breakpoint-md: 768px !default;   // Tablet portrait max
+$breakpoint-lg: 1024px !default;  // Tablet landscape max
+$breakpoint-xl: 1280px !default;  // Laptop max
+$breakpoint-xxl: 1440px !default; // Desktop
+
+// Layout breakpoint (for sidebar behavior)
+// Sidebar hides when: viewport < sidebar-width + minimum-content-width
+// 256px (sidebar) + 600px (min content) = 856px → rounded to 900px
+$layout-breakpoint: 900px !default;
+
+// ==============================================
 // LAYOUT VARIABLES
 // Gmail-style layout dimensions
 // ==============================================

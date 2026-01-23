@@ -10,7 +10,7 @@
   background: var(--layout-content-bg);
   border-bottom: 1px solid var(--layout-content-border);
 
-  @media (max-width: 767px) {
+  @include mixins.breakpoint-down('md') {
     top: 48px; // Header is 48px on mobile
   }
 }
@@ -27,7 +27,7 @@
     direction: rtl;
   }
 
-  @media (max-width: 767px) {
+  @include mixins.breakpoint-down('md') {
     padding: map.get(vars.$os-spacing, '2') map.get(vars.$os-spacing, '3');
     min-height: 48px;
   }
@@ -48,7 +48,7 @@
     gap: map.get(vars.$os-spacing, '2');
     flex-wrap: wrap;
 
-    @media (max-width: 767px) {
+    @include mixins.breakpoint-down('md') {
       display: none;
     }
   }
@@ -57,7 +57,7 @@
   &__mobile-trigger {
     display: none;
 
-    @media (max-width: 767px) {
+    @include mixins.breakpoint-down('md') {
       display: flex;
     }
   }
@@ -68,7 +68,7 @@
     gap: map.get(vars.$os-spacing, '2');
     flex-shrink: 0;
 
-    @media (max-width: 767px) {
+    @include mixins.breakpoint-down('md') {
       gap: map.get(vars.$os-spacing, '1');
     }
   }

@@ -772,6 +772,57 @@ This applies to:
 3. Determine the correct level (base if abstract, specialized if inherits)
 4. Add to `_mixins.scss` under appropriate section
 
+### Responsive Breakpoints (NON-NEGOTIABLE)
+
+**NEVER use hardcoded pixel values in media queries!** Always use the centralized breakpoint mixins.
+
+**Available Breakpoints:**
+| Name | Value | Use Case |
+|------|-------|----------|
+| `xs` | 360px | Very small phones |
+| `sm` | 480px | Phone portrait |
+| `sm-plus` | 576px | Bootstrap sm compatibility |
+| `md` | 768px | Tablet portrait |
+| `lg` | 1024px | Tablet landscape |
+| `xl` | 1280px | Laptop |
+| `xxl` | 1440px | Desktop |
+
+**Content Breakpoint Mixins:**
+```scss
+// ✅ CORRECT - Use breakpoint mixins
+@include mixins.breakpoint-down('md') {
+  display: none;
+}
+
+@include mixins.breakpoint-up('lg') {
+  display: flex;
+}
+
+// ❌ FORBIDDEN - Hardcoded pixel values
+@media (max-width: 768px) { ... }
+@media (max-width: 767px) { ... }
+```
+
+**Layout Breakpoint (for sidebar behavior):**
+```scss
+// Layout breakpoint: 900px (256px sidebar + 600px min content)
+// Use for sidebar visibility and layout-level changes
+
+@include mixins.layout-mobile {
+  // Styles when sidebar is hidden
+  margin-left: 0;
+}
+
+@include mixins.layout-desktop {
+  // Styles when sidebar is visible
+  margin-left: 256px;
+}
+```
+
+**When to use which:**
+- `breakpoint-down('md')` — Component adapts for mobile content (typography, spacing, visibility)
+- `layout-mobile` — Layout structure changes (sidebar visibility, main content margins)
+
 ---
 
 ## VIII. Icons & SVG
