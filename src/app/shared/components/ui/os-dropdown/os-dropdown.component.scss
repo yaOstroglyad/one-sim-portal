@@ -58,19 +58,27 @@
     }
   }
 
-  // Responsive adjustments
-  @include mixins.breakpoint-down('md') {
+  // Responsive adjustments - use layout-mobile for consistency
+  @include mixins.layout-mobile {
     &__panel {
-      // On mobile, make sure dropdown doesn't overflow viewport
-      max-width: calc(100vw - map.get(vars.$os-spacing, '8'));
+      // Override inline min-width on mobile to prevent overflow
+      // Using !important to override inline styles from [width] input
+      min-width: 0 !important;
+      max-width: calc(100vw - map.get(vars.$os-spacing, '6'));
+      width: calc(100vw - map.get(vars.$os-spacing, '6'));
 
+      // Right-aligned dropdowns: anchor to right edge
       &--bottom-right,
-      &--top-right,
+      &--top-right {
+        inset-inline-end: 0;
+        inset-inline-start: auto;
+      }
+
+      // Left-aligned dropdowns: anchor to left edge
       &--bottom-left,
       &--top-left {
-        inset-inline-start: 50%;
+        inset-inline-start: map.get(vars.$os-spacing, '3');
         inset-inline-end: auto;
-        transform: translateX(-50%);
       }
     }
   }
