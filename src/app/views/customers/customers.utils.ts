@@ -12,6 +12,7 @@ import {
   CompaniesDataService
 } from '@shared';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
+import { CustomerCreateResult } from './edit-customer/edit-customer.utils';
 
 // Constants
 export const CUSTOMERS_CONFIG = {
@@ -155,9 +156,9 @@ export class CustomersDialogUtils {
       data: {}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: CustomerCreateResult | undefined) => {
       if (result) {
-        customersDataService.create(result).subscribe(() => {
+        customersDataService.createCustomer(result.command, result.productId || undefined).subscribe(() => {
           onSuccess();
         });
       }

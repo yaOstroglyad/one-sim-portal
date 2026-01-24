@@ -13,11 +13,11 @@ import {
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { CompanyProductService } from '../../product-constructor/services';
-import { getCustomerCreateRequest, getEditCustomerFormConfig, getProductOptions$ } from './edit-customer.utils';
+import { CustomerCreateResult, getCustomerCreateRequest, getEditCustomerFormConfig, getProductOptions$ } from './edit-customer.utils';
 
 @Component({
   standalone: true,
-  selector: 'app-edit-customer',
+  selector: 'os-edit-customer',
   imports: [
     MatDialogModule,
     MatButtonModule,
@@ -103,7 +103,8 @@ export class EditCustomerComponent implements OnInit, OnDestroy {
 
   submit(): void {
     if (this.form.valid) {
-      this.dialogRef.close(getCustomerCreateRequest(this.form.value, this.isAdmin));
+      const result: CustomerCreateResult = getCustomerCreateRequest(this.form.value, this.isAdmin);
+      this.dialogRef.close(result);
     }
   }
 

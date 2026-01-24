@@ -238,6 +238,8 @@ Skills are triggered automatically when your request matches their description.
 ## Active Technologies
 - SCSS (Dart Sass) with Angular 21.0.5 + Angular, CoreUI, Angular Material (024-scss-responsive-refactoring)
 - N/A (CSS-only refactoring) (024-scss-responsive-refactoring)
+- TypeScript 5.9, Angular 21.0.5 (Zoneless, standalone) + HttpClient, RxJS (025-api-migration-portal)
+- N/A (API calls only) (025-api-migration-portal)
 
 ## Recent Changes
 - 024-scss-responsive-refactoring: Added SCSS (Dart Sass) with Angular 21.0.5 + Angular, CoreUI, Angular Material

@@ -1,18 +1,18 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DataService } from '../core';
-import { Customer, CustomerType, DataObject } from '@shared/models';
+import { CreateCustomerCommand, Customer, CustomerType, DataObject } from '@shared/models';
 import { Pagination } from '@shared/models/ui';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class CustomersDataService extends DataService<Customer> {
-	private apiUrl = '/api/v1/customers/query/all';
+	private readonly apiUrl = '/api/v1/customers/query/all';
 
-	constructor(public http: HttpClient) {
-		super(http, '/api/v1/customers');
+	constructor() {
+		super(inject(HttpClient), '/api/v1/customers');
 	}
 
 	list(type?: CustomerType): Observable<Customer[]> {
@@ -49,7 +49,14 @@ export class CustomersDataService extends DataService<Customer> {
 		return this.http.get<DataObject>(`/api/v1/customers/query/${id}/details`);
 	}
 
-	create(customer: Customer): Observable<any> {
-		return this.http.post<any>(`/api/v1/customers/command/create`, customer);
+	/**
+	 * Creates a new customer via Portal API
+	 * Note: Named createCustomer to avoid conflict with base DataService.create()
+	 */
+	createCustomer(command: CreateCustomerCommand, productId?: string): Observable<any> {
+		const params = productId
+			? new HttpParams().set('productId', productId)
+			: undefined;
+		return this.http.post<any>('/api/v1/portal/command/create-customer', command, { params });
 	}
 }

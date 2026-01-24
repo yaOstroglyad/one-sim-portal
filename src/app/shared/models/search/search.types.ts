@@ -9,7 +9,7 @@ import {
   MATCH_SOURCES,
   RESULT_SOURCES,
   BACKEND_ENTITY_TYPES,
-} from './search.constants';
+} from '@shared/models';
 
 // Derived types from constants
 export type SearchItemType = typeof SEARCH_ITEM_TYPES[keyof typeof SEARCH_ITEM_TYPES];

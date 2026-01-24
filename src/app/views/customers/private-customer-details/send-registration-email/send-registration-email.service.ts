@@ -24,8 +24,6 @@ export class SendRegistrationEmailService {
 	}
 
 	sendEmail(params: SendRegistrationEmailParams): Observable<unknown> {
-		return this.http.get('/api/v1/subscribers/send-registration-email', {
-			params: { subscriberId: params.subscriberId, email: params.email }
-		});
+		return this.http.post('/api/v1/portal/command/send-registration-email', params);
 	}
 }

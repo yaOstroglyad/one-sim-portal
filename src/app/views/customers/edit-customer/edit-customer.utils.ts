@@ -5,7 +5,8 @@ import {
   CustomerType,
   FieldConfig,
   CompaniesDataService,
-  Company
+  Company,
+  CreateCustomerCommand
 } from '@shared';
 import { Validators } from '@angular/forms';
 import { of } from 'rxjs';
@@ -34,20 +35,29 @@ function createCompanySearchField(companiesService: CompaniesDataService): Field
   };
 }
 
-export function getCustomerCreateRequest(form: any, isAdmin: boolean = false) {
+export interface CustomerCreateResult {
+  command: CreateCustomerCommand;
+  productId: string | null;
+}
+
+export function getCustomerCreateRequest(form: any, isAdmin: boolean = false): CustomerCreateResult {
+  const command: CreateCustomerCommand = {
+    name: form.name,
+    description: form.description || undefined,
+    externalId: form.externalId || undefined,
+    tags: form?.tags?.length ? form.tags : undefined,
+    type: form?.type || CustomerType.Private,
+    customerEmail: form.email
+  };
+
+  // Only include companyId for admin users
+  if (isAdmin && form.company?.id) {
+    command.companyId = form.company.id;
+  }
+
   return {
-    customerCommand: {
-      id: form?.id || null,
-      companyId: isAdmin ? form.company?.id : undefined,
-      name: form.name,
-      description: form.description,
-      externalId: form.externalId || '',
-      tags: form?.tags || [],
-      type: form?.type || ''
-    },
-    subscriberCommand: null,
-    productId: form.productId || null,
-    userProfileEmail: form.email || ''
+    command,
+    productId: form.productId || null
   };
 }
 

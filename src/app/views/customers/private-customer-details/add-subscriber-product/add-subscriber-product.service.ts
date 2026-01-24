@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { formatDate } from '@angular/common';
 import { AddSubscriberProduct, RefundableProduct, SubscriberProduct } from '@shared/models/product';
@@ -11,9 +11,8 @@ import { Pagination } from '@shared/models/ui';
 	providedIn: 'root'
 })
 export class AddSubscriberProductService {
-	private apiUrl = '/api/v1/products/query/subscriber';
-
-	constructor(public http: HttpClient) {}
+	private readonly http = inject(HttpClient);
+	private readonly apiUrl = '/api/v1/products/query/subscriber';
 
 	list(id: any, params: { page?: number; size?: number; } = {page: 0, size: 200}): Observable<SelectOption[]> {
 		return this.http.get<Pagination<SubscriberProduct>>(this.apiUrl + `/${id}`, { params }).pipe(
@@ -22,12 +21,6 @@ export class AddSubscriberProductService {
 					value: product,
 					displayValue: this.formatDisplayValue(product)
 				}));
-			}),
-			catchError(() => {
-				console.warn('Error happened, presenting mocked data');
-				return of([
-					{ value: 1, displayValue: 'Product 1' }
-				]);
 			})
 		);
 	}
@@ -55,11 +48,6 @@ export class AddSubscriberProductService {
 		code: number,
 		message: string
 	}> {
-		return this.http.post<any>(`/api/v1/product-purchases/command/create`, product).pipe(
-			catchError(() => {
-				console.warn('error happened, presenting mocked data');
-				return of();
-			})
-		);
+		return this.http.post<any>('/api/v1/portal/command/create-product-purchase', product);
 	}
 }

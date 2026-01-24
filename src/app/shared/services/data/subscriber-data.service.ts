@@ -17,10 +17,10 @@ export interface CreateSubscriberDto {
 	providedIn: 'root'
 })
 export class SubscriberDataService {
-	http = inject(HttpClient);
+	private readonly http = inject(HttpClient);
 
 	createSubscriber(payload: CreateSubscriberDto): Observable<any> {
-		return this.http.post('/api/v1/subscribers/command/create', payload);
+		return this.http.post('/api/v1/portal/command/create-subscriber', payload);
 	}
 
 	getSimDetails(params: {id: string}): Observable<SimInfo | null> {
@@ -33,11 +33,5 @@ export class SubscriberDataService {
 
 	getSimStatusEvents(id: string): Observable<SubscriberStatusEvent[]> {
 		return this.http.get<SubscriberStatusEvent[]>(`/api/v1/sims/query/${id}/status/events`);
-	}
-
-	sendRegistrationEmail(subscriberId: string, email: string): Observable<any> {
-		return this.http.get(`/api/v1/subscribers/send-registration-email`, {
-			params: { subscriberId, email }
-		});
 	}
 }

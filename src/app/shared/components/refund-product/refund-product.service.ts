@@ -39,7 +39,7 @@ export class RefundProductService {
 
 	refund(productId: string): Observable<RefundResponse> {
 		return this.http.post<RefundResponse>(
-			`/api/v1/product-purchases/command/${productId}/refund`,
+			`/api/v1/portal/command/refund-product-purchase/${productId}`,
 			{}
 		);
 	}

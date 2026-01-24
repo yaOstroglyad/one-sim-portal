@@ -1,5 +1,4 @@
-import { Subscriber } from '../subscriber/subscriber-info.model';
-import { Company } from './company.model';
+import { Company, Subscriber } from '@shared/models';
 
 export enum CustomerType {
   Corporate = 'CORPORATE',
@@ -27,4 +26,19 @@ export interface DataObject {
   customer: Customer;
   subscribers: Subscriber[];
   userProfile: any
+}
+
+/**
+ * Command for creating a new customer via Portal API
+ * POST /api/v1/portal/command/create-customer
+ */
+export interface CreateCustomerCommand {
+  companyId?: string;      // Required for admin only
+  name: string;
+  description?: string;
+  externalId?: string;
+  tags?: string[];
+  type: CustomerType;
+  customerEmail: string;
+  customerPhone?: string;  // Not used in UI form (future feature)
 }

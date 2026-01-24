@@ -55,8 +55,25 @@ Review Angular code for compliance with project standards.
 
 | Rule | What to Check |
 |------|---------------|
-| as const | Use const objects, not inline unions/enums |
+| No enums | Use `as const` objects, NOT `enum` (see example below) |
 | Location | Reusable in `/shared/models/` |
+
+**Enum → as const migration:**
+```typescript
+// ❌ FORBIDDEN - enum
+export enum CustomerType {
+  Corporate = 'CORPORATE',
+  Private = 'PRIVATE'
+}
+
+// ✅ CORRECT - as const object + derived type
+export const CUSTOMER_TYPES = {
+  Corporate: 'CORPORATE',
+  Private: 'PRIVATE',
+} as const;
+export type CustomerType = typeof CUSTOMER_TYPES[keyof typeof CUSTOMER_TYPES];
+```
+Why: better tree-shaking, runtime access to values, refactoring safe.
 
 ## Output Format
 
