@@ -13,7 +13,7 @@ import {
   PeriodPresets,
   formatDateForAPI,
   createPeriodFromPreset,
-  IconComponent,
+  OsIconComponent,
   ExcelExportService,
   AccountContextService
 } from '@shared';
@@ -32,7 +32,7 @@ import { ReportStrategy } from './models/report-strategy.interface';
     TranslateModule,
     GenericTableComponent,
     PeriodSelectorComponent,
-    IconComponent
+    OsIconComponent
 ],
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss'],

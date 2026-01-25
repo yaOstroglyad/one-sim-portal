@@ -8,7 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { IconComponent } from '@shared/components/icon/icon.component';
+import { OsIconComponent } from '@shared/components/icon';
 
 export interface RefundsData {
   totalRevenue: number;
@@ -23,7 +23,7 @@ export interface RefundsData {
   imports: [
     CommonModule,
     TranslateModule,
-    IconComponent
+    OsIconComponent
   ],
   templateUrl: './refunds-summary.component.html',
   styleUrls: ['./refunds-summary.component.scss'],

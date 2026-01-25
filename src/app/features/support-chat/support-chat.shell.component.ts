@@ -16,7 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { IconComponent } from '@shared/components/icon';
+import { OsIconComponent } from '@shared/components/icon';
 import { ChatbotApiService, ChatbotStateService, ChatbotPollingService } from './services';
 import { GlobalFlyoutService } from '@shared/components/fab-layout';
 
@@ -38,7 +38,7 @@ import { GlobalFlyoutService } from '@shared/components/fab-layout';
 		MatInputModule,
 		MatButtonModule,
 		MatIconModule,
-		IconComponent
+		OsIconComponent
 	],
 	templateUrl: './support-chat.shell.component.html',
 	styleUrls: ['./support-chat.shell.component.scss'],

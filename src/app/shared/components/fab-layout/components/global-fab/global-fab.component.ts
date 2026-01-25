@@ -15,12 +15,12 @@ import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { GlobalFlyoutService, FabConfigService } from '@shared/components/fab-layout';
 import { FabButtonConfig, FabMenuItem } from '../../models';
-import { IconComponent } from '@shared';
+import { OsIconComponent } from '@shared';
 
 @Component({
 	standalone: true,
 	selector: 'app-global-fab',
-	imports: [TranslateModule, IconComponent],
+	imports: [TranslateModule, OsIconComponent],
 	templateUrl: './global-fab.component.html',
 	styleUrls: ['./global-fab.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush

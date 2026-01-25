@@ -8,7 +8,7 @@ import { filter } from 'rxjs/operators';
 
 import { BrandConfig, LayoutConfig, NavItem } from '../../models';
 import { LayoutService } from '../../services';
-import { IconComponent, LanguageService } from '@shared';
+import { OsIconComponent, LanguageService } from '@shared';
 
 @Component({
   standalone: true,
@@ -17,7 +17,7 @@ import { IconComponent, LanguageService } from '@shared';
     CommonModule,
     RouterModule,
     IconDirective,
-    IconComponent,
+    OsIconComponent,
     TranslateModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
