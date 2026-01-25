@@ -8,7 +8,7 @@
           color="primary"
           (click)="onAdd()"
           [disabled]="loading()">
-          <app-icon icon="plus" size="sm"></app-icon>
+          <os-icon name="plus" size="sm"></os-icon>
           Add Price
         </button>
       }
@@ -68,7 +68,7 @@
                 variant="ghost"
                 [osTooltip]="row.editTooltip"
                 (click)="onEdit(row)">
-                <app-icon icon="edit" size="sm"></app-icon>
+                <os-icon name="edit" size="sm"></os-icon>
               </button>
             } @else if (row.isCurrentPrice) {
               <os-badge variant="primary" size="small" shape="pill" [subtle]="true">

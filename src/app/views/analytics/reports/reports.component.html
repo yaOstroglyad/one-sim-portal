@@ -18,7 +18,7 @@
         (click)="exportData()"
         [disabled]="!hasData()"
         title="{{ 'analytics.reports.export' | translate }}">
-        <app-icon icon="download"></app-icon>
+        <os-icon name="download"></os-icon>
       </button>
     </div>
   </div>
@@ -33,7 +33,7 @@
       [class.disabled]="tab.disabled"
       [disabled]="tab.disabled"
       (click)="!tab.disabled && onTabChange(tab.id)">
-      <app-icon [icon]="tab.icon"></app-icon>
+      <os-icon [name]="tab.icon"></os-icon>
       <span>{{ tab.label | translate }}</span>
     </button>
   }
@@ -58,7 +58,7 @@
 <!-- Empty State -->
 @if (!hasData() && !loading()) {
   <div class="empty-state">
-    <app-icon icon="bars-chart-empty" size="180px" class="empty-icon"></app-icon>
+    <os-icon name="bars-chart-empty" size="180px" class="empty-icon"></os-icon>
     <h3>{{ currentStrategy().getEmptyStateTitleKey() | translate }}</h3>
     <p>{{ currentStrategy().getEmptyStateDescriptionKey() | translate }}</p>
   </div>

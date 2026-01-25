@@ -1,36 +1,36 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { TranslateModule } from '@ngx-translate/core';
-import { IconComponent } from '@shared';
+import { OsIconComponent } from '@shared';
 
 @Component({
   standalone: true,
   selector: 'app-admin-overview',
-  imports: [TranslateModule, IconComponent],
+  imports: [TranslateModule, OsIconComponent],
   template: `
     <div class="admin-overview-container">
       <div class="placeholder-content">
         <div class="placeholder-icon">
-          <app-icon [icon]="'chart-line'"></app-icon>
+          <os-icon [name]="'chart-line'"></os-icon>
         </div>
         <h2>{{ 'analytics.adminOverview.title' | translate }}</h2>
         <p>{{ 'analytics.adminOverview.description' | translate }}</p>
         <div class="feature-list">
           <div class="feature-item">
             <span class="feature-icon">
-              <app-icon [icon]="'check-circle'"></app-icon>
+              <os-icon [name]="'check-circle'"></os-icon>
             </span>
             <span>Multi-tenant analytics across all customers</span>
           </div>
           <div class="feature-item">
             <span class="feature-icon">
-              <app-icon [icon]="'check-circle'"></app-icon>
+              <os-icon [name]="'check-circle'"></os-icon>
             </span>
             <span>Revenue and performance metrics</span>
           </div>
           <div class="feature-item">
             <span class="feature-icon">
-              <app-icon [icon]="'check-circle'"></app-icon>
+              <os-icon [name]="'check-circle'"></os-icon>
             </span>
             <span>Customer comparison and insights</span>
           </div>
