@@ -4,7 +4,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ButtonModule } from '@coreui/angular';
-import { IconComponent, TooltipDirective, BadgeComponent } from '@shared';
+import { OsIconComponent, TooltipDirective, BadgeComponent } from '@shared';
 
 import { CompanyProductPrice } from '../../../models';
 import { PriceValidationUtils } from './utils/price-validation.utils';
@@ -34,7 +34,7 @@ interface PriceTableRow extends CompanyProductPrice {
     MatIconModule,
     MatProgressSpinnerModule,
     ButtonModule,
-    IconComponent,
+    OsIconComponent,
     TooltipDirective,
     BadgeComponent
   ],

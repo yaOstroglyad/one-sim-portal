@@ -15,7 +15,7 @@
       <div class="search-state__content">
         <!-- Fun SVG Illustration -->
         <div class="search-state__illustration">
-          <app-icon [icon]="'chat-search'" [size]="'150px'"></app-icon>
+          <os-icon [name]="'chat-search'" [size]="'150px'"></os-icon>
         </div>
 
         <h2 class="search-state__title">{{ 'supportchat.searchtitle' | translate }}</h2>
@@ -55,7 +55,7 @@
     <div class="support-chat__empty-state">
       <div class="empty-state__content">
         <div class="empty-state__illustration">
-          <app-icon [icon]="'chat-empty'" [size]="'120px'"></app-icon>
+          <os-icon [name]="'chat-empty'" [size]="'120px'"></os-icon>
         </div>
 
         <h2 class="empty-state__title">{{ 'supportchat.nothreadstitle' | translate }}</h2>
@@ -158,11 +158,11 @@
                    [class.message--user]="message.author === 'user'">
                 <div class="message__avatar">
                   @if (message.author === 'assistant' || message.author === 'system') {
-                    <app-icon [icon]="'avatar-assistant'"></app-icon>
+                    <os-icon [name]="'avatar-assistant'"></os-icon>
                   } @else if (message.author === 'operator') {
-                    <app-icon [icon]="'avatar-operator'"></app-icon>
+                    <os-icon [name]="'avatar-operator'"></os-icon>
                   } @else {
-                    <app-icon [icon]="'avatar-user'"></app-icon>
+                    <os-icon [name]="'avatar-user'"></os-icon>
                   }
                 </div>
                 <div class="message__content">
@@ -179,7 +179,7 @@
             @if (stateService.selectedThreadTyping().isTyping) {
               <div class="message message--typing">
                 <div class="message__avatar">
-                  <app-icon [icon]="'avatar-user'"></app-icon>
+                  <os-icon [name]="'avatar-user'"></os-icon>
                 </div>
                 <div class="message__content message__content--typing">
                   <span class="typing-dots">

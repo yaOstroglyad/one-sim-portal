@@ -17,7 +17,7 @@
              [attr.aria-label]="item.label">
             @if (item.icon) {
               <div class="bottom-nav__menu-icon">
-                <app-icon [icon]="item.icon"></app-icon>
+                <os-icon [name]="item.icon"></os-icon>
               </div>
             }
             <span>{{item.label | translate}}</span>
@@ -39,7 +39,7 @@
           [attr.aria-label]="button.label"
           type="button">
           <div class="bottom-nav__icon">
-            <app-icon [icon]="button.icon"></app-icon>
+            <os-icon [name]="button.icon"></os-icon>
 
             <!-- Badge if present -->
             @if (button.menuItems && button.menuItems.length > 0) {
