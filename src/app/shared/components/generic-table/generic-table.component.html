@@ -90,7 +90,7 @@
               @case ('time') {
               {{ item[col.key] | formatTime }}
               }
-              <!--Добавил $implicit: item, чтобы кастомные шаблоны работали проще и привычнее — через let-row, без привязки к имени контекста. -->
+             
               @case ('custom') {
               <ng-container 
               *ngTemplateOutlet="col.customTemplate(); context: { $implicit: item,context: item }">              
