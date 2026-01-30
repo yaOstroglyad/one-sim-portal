@@ -118,7 +118,9 @@
       "Bash(for i in /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/specs/*/)",
       "Bash(for dir in /Users/andreyostroglyad/IdeaProjects/quantum-soft/one-sim-portal/src/app/shared/components/*/)",
       "Bash(do basename \"$dir\")",
-      "Skill(review-code)"
+      "Skill(review-code)",
+      "Bash(gh pr view:*)",
+      "Bash(git log:*)"
     ],
     "deny": [
       "// === Blocked for Security ===",
