@@ -43,6 +43,7 @@ jobs:
   # ==================== TEST ====================
   test:
     needs: [install]
+    if: always() && needs.install.result == 'success'
     uses: ./.github/workflows/_test.yml
     with:
       cache-key: ${{ needs.install.outputs.cache-key }}
@@ -50,23 +51,25 @@ jobs:
   # ==================== BUILD ====================
   build:
     needs: [install]
+    if: always() && needs.install.result == 'success'
     uses: ./.github/workflows/_build.yml
     with:
       cache-key: ${{ needs.install.outputs.cache-key }}
 
-  # ==================== DOCKER ====================
+  # ==================== DOCKER (only on push, not PRs) ====================
   docker:
     needs: [install, test, build]
+    if: github.event_name == 'push'
     uses: ./.github/workflows/_docker.yml
     with:
       version: ${{ needs.install.outputs.version }}
       image-name: ghcr.io/quantum-soft-dev/esim-portal-ui
       push-latest: ${{ github.ref == 'refs/heads/release' }}
 
-  # ==================== DEPLOY ====================
+  # ==================== DEPLOY (only on push, not PRs) ====================
   deploy-test:
     needs: [install, docker]
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     uses: ./.github/workflows/_deploy.yml
     with:
       version: ${{ needs.install.outputs.version }}
