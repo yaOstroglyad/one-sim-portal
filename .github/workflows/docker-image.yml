@@ -59,7 +59,10 @@ jobs:
   # ==================== DOCKER (only on push, not PRs) ====================
   docker:
     needs: [install, test, build]
-    if: github.event_name == 'push'
+    if: |
+      github.event_name == 'push' &&
+      needs.test.result == 'success' &&
+      needs.build.result == 'success'
     uses: ./.github/workflows/_docker.yml
     with:
       version: ${{ needs.install.outputs.version }}
