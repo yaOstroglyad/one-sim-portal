@@ -25,6 +25,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ---- Validate code before Docker build ----
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run tests
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
+
+      - name: Build (validate)
+        run: npm run build-prod
+
+      # ---- Docker build ----
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -46,6 +63,8 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}, ${{ env.IMAGE_NAME }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            BUILDKIT_PROGRESS=plain
 
       - name: Install kubectl
         run: |
@@ -73,13 +92,6 @@ jobs:
           echo "🚀 Deploying PR to TEST on esim-dev..."
           kubectl set image deployment/test-esim-portal test-esim-portal=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           kubectl rollout status deployment/test-esim-portal --timeout=5m
-
-      - name: Deploy to RELEASE (PR to release)
-        if: github.event_name == 'pull_request' && github.base_ref == 'release'
-        run: |
-          echo "🚀 Deploying PR to RELEASE on esim-dev..."
-          kubectl set image deployment/esim-portal esim-portal=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          kubectl rollout status deployment/esim-portal --timeout=5m
 
       # ---- Deploy on pushes ----
       - name: Deploy to TEST (push to main)
