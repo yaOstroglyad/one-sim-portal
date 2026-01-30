@@ -331,7 +331,7 @@ default-layout/
 | **dom/** | `/utils/dom/` | Print functionality |
 | **http/** | `/utils/http/` | Error handlers |
 | **pricing/** | `/utils/pricing/` | Price comparison logic |
-| **testing/** | `/utils/testing/` | Mock utilities |
+| **testing/** | `/utils/testing/` | Mock utilities, `configureTestBed` helper |
 
 ---
 

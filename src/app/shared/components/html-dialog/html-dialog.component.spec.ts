@@ -20,6 +20,10 @@ describe('HtmlDialogComponent', () => {
     fixture = TestBed.createComponent(HtmlDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    // Mock dialog native element methods
+    component.htmlDialog.nativeElement.showModal = jest.fn();
+    component.htmlDialog.nativeElement.close = jest.fn();
   });
 
   it('should create', () => {
@@ -28,7 +32,7 @@ describe('HtmlDialogComponent', () => {
 
   it('should emit htmlInserted event when insertHtml is called', () => {
     // Arrange
-    spyOn(component.htmlInserted, 'emit');
+    jest.spyOn(component.htmlInserted, 'emit');
     const testHtml = '<p>Test HTML</p>';
     component.htmlInput.nativeElement.value = testHtml;
 
@@ -41,7 +45,7 @@ describe('HtmlDialogComponent', () => {
 
   it('should emit dialogCanceled event when cancelHtmlInsert is called', () => {
     // Arrange
-    spyOn(component.dialogCanceled, 'emit');
+    jest.spyOn(component.dialogCanceled, 'emit');
 
     // Act
     component.cancelHtmlInsert();
@@ -52,7 +56,7 @@ describe('HtmlDialogComponent', () => {
 
   it('should open dialog when open method is called', () => {
     // Arrange
-    spyOn(component.htmlDialog.nativeElement, 'showModal');
+    jest.spyOn(component.htmlDialog.nativeElement, 'showModal');
     
     // Act
     component.open();
@@ -64,7 +68,7 @@ describe('HtmlDialogComponent', () => {
 
   it('should close dialog when close method is called', () => {
     // Arrange
-    spyOn(component.htmlDialog.nativeElement, 'close');
+    jest.spyOn(component.htmlDialog.nativeElement, 'close');
     
     // Act
     component.close();

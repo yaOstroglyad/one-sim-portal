@@ -6,10 +6,11 @@ describe('TimelineComponent', () => {
   let component: TimelineComponent;
   let fixture: ComponentFixture<TimelineComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [TimelineComponent]
-    });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TimelineComponent]
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TimelineComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

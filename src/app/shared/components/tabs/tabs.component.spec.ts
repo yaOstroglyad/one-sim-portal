@@ -4,18 +4,19 @@ import { TabComponent } from './tab.component';
 import { Component } from '@angular/core';
 
 @Component({
-    template: `
+  standalone: true,
+  imports: [TabsComponent, TabComponent],
+  template: `
     <os-tabs [(activeTabIndex)]="activeTab" (tabChange)="onTabChange($event)">
       <os-tab label="Tab 1">Content 1</os-tab>
       <os-tab label="Tab 2" [disabled]="true">Content 2</os-tab>
       <os-tab label="Tab 3" [closable]="true">Content 3</os-tab>
     </os-tabs>
-  `,
-    standalone: false
+  `
 })
 class TestHostComponent {
   activeTab = 0;
-  
+
   onTabChange(event: any) {
     this.activeTab = event.index;
   }
@@ -29,13 +30,12 @@ describe('TabsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TabsComponent, TabComponent],
-      declarations: [TestHostComponent]
+      imports: [TabsComponent, TabComponent, TestHostComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TabsComponent);
     component = fixture.componentInstance;
-    
+
     hostFixture = TestBed.createComponent(TestHostComponent);
     hostComponent = hostFixture.componentInstance;
   });
@@ -60,9 +60,13 @@ describe('TabsComponent', () => {
   });
 
   it('should select tab correctly', () => {
-    spyOn(component.tabChange, 'emit');
+    jest.spyOn(component.tabChange, 'emit');
+    component.tabs = [
+      { id: 'tab1', label: 'Tab 1' },
+      { id: 'tab2', label: 'Tab 2' }
+    ];
     component.selectTab(1);
-    
+
     expect(component.activeTabIndex).toBe(1);
     expect(component.tabChange.emit).toHaveBeenCalled();
   });
@@ -80,9 +84,9 @@ describe('TabsComponent', () => {
   });
 
   it('should emit close event for closable tab', () => {
-    spyOn(component.tabClose, 'emit');
+    jest.spyOn(component.tabClose, 'emit');
     const mockEvent = new Event('click');
-    spyOn(mockEvent, 'stopPropagation');
+    jest.spyOn(mockEvent, 'stopPropagation');
     
     component.tabs = [
       { id: 'tab1', label: 'Tab 1', closable: true }
@@ -102,8 +106,8 @@ describe('TabsComponent', () => {
     ];
     
     const mockEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-    spyOn(mockEvent, 'preventDefault');
-    spyOn(component, 'selectTab');
+    jest.spyOn(mockEvent, 'preventDefault');
+    jest.spyOn(component, 'selectTab');
     
     component.navigateTab(1, mockEvent);
     

@@ -26,6 +26,12 @@
       ],
       "@models/*": [
         "src/app/shared/models/*"
+      ],
+      "@env": [
+        "src/environments/environment"
+      ],
+      "@env/*": [
+        "src/environments/*"
       ]
     }
   },

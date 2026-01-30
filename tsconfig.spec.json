@@ -1,18 +1,47 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./out-tsc/spec",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2022",
     "types": [
-      "jasmine",
+      "jest",
+      "node",
       "@angular/localize"
-    ]
+    ],
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "strictNullChecks": false,
+    "declaration": false,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "paths": {
+      "@shared": [
+        "src/app/shared"
+      ],
+      "@shared/*": [
+        "src/app/shared/*"
+      ],
+      "@models": [
+        "src/app/shared/models"
+      ],
+      "@models/*": [
+        "src/app/shared/models/*"
+      ],
+      "@env": [
+        "src/environments/environment"
+      ],
+      "@env/*": [
+        "src/environments/*"
+      ]
+    }
   },
-  "files": [
-    "src/test.ts",
-  ],
   "include": [
     "src/**/*.spec.ts",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "setup-jest.ts"
   ]
 }

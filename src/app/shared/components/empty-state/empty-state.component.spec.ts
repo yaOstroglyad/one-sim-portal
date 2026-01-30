@@ -6,10 +6,11 @@ describe('EmptyStateComponent', () => {
   let component: EmptyStateComponent;
   let fixture: ComponentFixture<EmptyStateComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [EmptyStateComponent]
-    });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [EmptyStateComponent]
+    }).compileComponents();
+
     fixture = TestBed.createComponent(EmptyStateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
