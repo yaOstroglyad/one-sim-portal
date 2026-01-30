@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ADMIN_PERMISSION, AuthService } from '@shared/auth';
-import { of } from 'rxjs';
 import { HasPermissionDirective } from '@shared';
 
 @Component({
@@ -10,7 +9,8 @@ import { HasPermissionDirective } from '@shared';
     <div *appHasPermission="[ADMIN_PERMISSION]">Admin Content</div>
     <div *appHasPermission="['userAccess']">User Content</div>
   `,
-    standalone: false
+    standalone: true,
+    imports: [HasPermissionDirective]
 })
 class TestComponent {
   protected readonly ADMIN_PERMISSION = ADMIN_PERMISSION;
@@ -20,15 +20,15 @@ describe('HasPermissionDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let authService: AuthService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     const authServiceMock = {
-      hasPermission: (permission: string) => of(permission === ADMIN_PERMISSION)
+      hasPermission: (permission: string) => permission === ADMIN_PERMISSION
     };
 
-    TestBed.configureTestingModule({
-      declarations: [TestComponent, HasPermissionDirective],
+    await TestBed.configureTestingModule({
+      imports: [TestComponent],
       providers: [{ provide: AuthService, useValue: authServiceMock }]
-    });
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
     authService = TestBed.inject(AuthService);
@@ -42,7 +42,9 @@ describe('HasPermissionDirective', () => {
   });
 
   it('should not display content for user access', () => {
-    const userContent = fixture.debugElement.query(By.css('div:last-child'));
-    expect(userContent).toBeNull();
+    const allDivs = fixture.debugElement.queryAll(By.css('div'));
+    // Only admin content should be rendered, user content should be hidden
+    expect(allDivs.length).toBe(1);
+    expect(allDivs[0].nativeElement.textContent).toContain('Admin Content');
   });
 });

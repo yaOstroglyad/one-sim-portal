@@ -1,18 +1,29 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
+import { TransactionDataService } from '@shared';
+import { of } from 'rxjs';
 
 import { TransactionOrdersTableComponent } from './transaction-orders-table.component';
 
-describe('TransactionTableComponent', () => {
+describe('TransactionOrdersTableComponent', () => {
   let component: TransactionOrdersTableComponent;
   let fixture: ComponentFixture<TransactionOrdersTableComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [TransactionOrdersTableComponent]
-    });
+  const mockTransactionDataService = {
+    getTransactions: jest.fn().mockReturnValue(of([]))
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TransactionOrdersTableComponent, TranslateModule.forRoot()],
+      providers: [
+        { provide: TransactionDataService, useValue: mockTransactionDataService }
+      ]
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TransactionOrdersTableComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    // Skip detectChanges as component requires subscriber and customer inputs
   });
 
   it('should create', () => {

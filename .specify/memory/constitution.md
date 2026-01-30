@@ -1083,6 +1083,132 @@ specs/{feature-name}/
 
 ---
 
+## XV. Unit Testing (Jest + Angular)
+
+### Test Framework
+- **Jest** with `jest-preset-angular`
+- **Zoneless** test environment (`setupZonelessTestEnv`)
+- **No Karma** — removed from project
+
+### Test File Location
+- **Component tests:** Same directory as component (`*.spec.ts`)
+- **Service tests:** Same directory as service (`*.spec.ts`)
+- **Testing utilities:** `/shared/utils/testing/`
+
+### Test Configuration Files
+```
+jest.config.js       # Jest configuration
+tsconfig.spec.json   # TypeScript config for tests
+setup-jest.ts        # Test environment setup
+```
+
+### Using Test Helpers
+
+**ALWAYS use `configureTestBed` helper to reduce boilerplate:**
+
+```typescript
+import { configureTestBed } from '@shared/utils/testing';
+
+describe('MyComponent', () => {
+  let component: MyComponent;
+  let fixture: ComponentFixture<MyComponent>;
+
+  beforeEach(async () => {
+    // Helper includes: TranslateModule, NoopAnimationsModule, IconSetService
+    await configureTestBed({
+      imports: [MyComponent],
+      providers: [
+        { provide: MyService, useValue: { getData: () => of([]) } }
+      ]
+    });
+
+    fixture = TestBed.createComponent(MyComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+```
+
+### Mocking Services
+
+```typescript
+// ✅ CORRECT - Mock only what you test
+{ provide: CustomerService, useValue: { getCustomer: () => of(mockCustomer) } }
+
+// ✅ CORRECT - Use jest.fn() for spying
+const mockService = { save: jest.fn().mockReturnValue(of({})) };
+
+// ❌ FORBIDDEN - Real HTTP calls in tests
+providers: [CustomerService]  // Will make real API calls!
+```
+
+### Testing Commands
+
+```bash
+npm test              # Run all tests
+npm test -- --watch   # Watch mode
+npm test -- --coverage # With coverage report
+```
+
+### AAA Pattern (Required)
+
+Every test must follow Arrange-Act-Assert with comments:
+
+```typescript
+it('should select item', () => {
+  // Arrange
+  const item = mockData[0];
+
+  // Act
+  component.selectItem(item);
+
+  // Assert
+  expect(component.selectedItem()).toEqual(item);
+});
+```
+
+### Async Testing (Zoneless)
+
+**DO NOT use `fakeAsync()` or `tick()`** — project is zoneless.
+
+```typescript
+// ✅ CORRECT - async/await with whenStable
+it('should load data', async () => {
+  component.ngOnInit();
+  await fixture.whenStable();
+  expect(component.data()).toBeDefined();
+});
+
+// ✅ CORRECT - firstValueFrom for observables
+const value = await firstValueFrom(component.data$);
+
+// ❌ FORBIDDEN - fakeAsync requires zone.js
+fakeAsync(() => { tick(); })
+```
+
+### Quality Rules
+
+- **ALL new components/services MUST have `*.spec.ts` file**
+- **Minimum test:** `it('should create')` — verifies component compiles
+- **Mock all HTTP services** — no real API calls in tests
+- **Use `jest.fn()` for spies** (not Jasmine's `spyOn` syntax)
+- **Use AAA pattern** with comments in each test
+- **Use `async/await`** with `fixture.whenStable()` for async operations
+- **List components:** Must have initialization order test with JSDoc explaining why order matters
+
+### Reference Examples
+
+| Example | Location |
+|---------|----------|
+| Component tests | `src/app/shared/components/generic-table/generic-table.component.spec.ts` |
+| Feature tests | `src/app/views/users/components/user-list/user-list.component.spec.ts` |
+
+---
+
 ## Governance
 
 - **Constitution supersedes** all other practices
@@ -1092,4 +1218,4 @@ specs/{feature-name}/
 
 ---
 
-**Version:** 1.11.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-16
+**Version:** 1.13.0 | **Ratified:** 2025-12-03 | **Last Amended:** 2026-01-30

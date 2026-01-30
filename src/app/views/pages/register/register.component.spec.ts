@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ButtonModule, CardModule, FormModule, GridModule } from '@coreui/angular';
-import { IconModule } from '@coreui/icons-angular';
 import { IconSetService } from '@coreui/icons-angular';
+import { TranslateModule } from '@ngx-translate/core';
 import { iconSubset } from '../../../icons/icon-subset';
 import { RegisterComponent } from './register.component';
 
@@ -13,14 +11,10 @@ describe('RegisterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RegisterComponent ],
-      imports: [CardModule, FormModule, GridModule, ButtonModule, IconModule],
+      imports: [RegisterComponent, TranslateModule.forRoot()],
       providers: [IconSetService]
-    })
-    .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     iconSetService = TestBed.inject(IconSetService);
     iconSetService.icons = { ...iconSubset };
 

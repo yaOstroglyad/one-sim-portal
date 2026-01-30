@@ -47,7 +47,7 @@
           <label for="type">{{ 'users.type' | translate }}</label>
           <app-searchable-select
             id="type"
-            [options]="userTypeOptions"
+            [options]="userTypeOptions()"
             [config]="{
               entityKey: 'common.entities.userType',
               clearable: true,
@@ -69,10 +69,13 @@
     </button>
   </ng-container>
 </app-header>
-<generic-table [config$]="tableConfig$"
+
+<generic-table
+  [config$]="tableConfig$"
   [menu]="menuTemplate"
   [data$]="dataList$"
-(pageChange)="onPageChange($event)"></generic-table>
+  (pageChange)="onPageChange($event)">
+</generic-table>
 
 <ng-template #menuTemplate let-item>
   <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
@@ -105,22 +108,20 @@
       <div class="roles-list">
         @for (role of data.roles; track role; let last = $last) {
           <span class="role-item">
-            {{ role.displayName || role.name }}@if (!last) {
-            <span>, </span>
-          }
-        </span>
-      }
-    </div>
-  }
-</div>
+            {{ role.displayName || role.name }}@if (!last) {<span>, </span>}
+          </span>
+        }
+      </div>
+    }
+  </div>
 </ng-template>
 
 <!-- Create Panel -->
-@if (showCreatePanel) {
+@if (showCreatePanel()) {
   <app-generic-right-panel
     title="{{ 'users.createTitle' | translate }}"
     subtitle="{{ 'users.createSubtitle' | translate }}"
-    [isOpen]="showCreatePanel"
+    [isOpen]="showCreatePanel()"
     [hasFooter]="true"
     (close)="onPanelClose()">
     <div panel-content>
@@ -143,8 +144,7 @@
         (click)="createForm.onSubmit()"
         [disabled]="createForm.loading || createForm.userForm?.invalid">
         @if (createForm.loading) {
-          <span class="spinner-border spinner-border-sm me-2" role="status"
-          aria-hidden="true"></span>
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
         }
         {{ 'users.create' | translate }}
       </button>
@@ -153,20 +153,20 @@
 }
 
 <!-- Assign Roles Panel -->
-@if (showAssignRolesPanel && selectedUser) {
+@if (showAssignRolesPanel() && selectedUser()) {
   <app-generic-right-panel
     title="{{ 'users.assignRolesToUser' | translate }}"
     subtitle="{{ 'users.selectRolesToAssign' | translate }}"
-    [isOpen]="showAssignRolesPanel"
+    [isOpen]="showAssignRolesPanel()"
     [hasFooter]="true"
     (close)="onPanelClose()">
     <div panel-content>
       <app-role-management-form
         #assignRoleForm
-        [availableRoles]="availableRoles"
+        [availableRoles]="availableRoles()"
         [selectedRoleIds]="[]"
         [mode]="'assign'"
-        [userAccountType]="selectedUser?.accountInfo?.type"
+        [userAccountType]="selectedUser()?.accountInfo?.type"
         [currentUsername]="currentUsername">
       </app-role-management-form>
     </div>
@@ -181,10 +181,9 @@
         type="button"
         class="btn btn-primary"
         (click)="onConfirmAssignRoles()"
-        [disabled]="!canConfirmAssignRoles">
+        [disabled]="!canConfirmAssignRoles()">
         @if (assignRoleForm?.loading) {
-          <span class="spinner-border spinner-border-sm me-2" role="status"
-          aria-hidden="true"></span>
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
         }
         {{ 'users.assignRoles' | translate }}
       </button>
@@ -193,20 +192,20 @@
 }
 
 <!-- Remove Roles Panel -->
-@if (showRemoveRolesPanel && selectedUser) {
+@if (showRemoveRolesPanel() && selectedUser()) {
   <app-generic-right-panel
     title="{{ 'users.removeRolesFromUser' | translate }}"
     subtitle="{{ 'users.selectRolesToRemove' | translate }}"
-    [isOpen]="showRemoveRolesPanel"
+    [isOpen]="showRemoveRolesPanel()"
     [hasFooter]="true"
     (close)="onPanelClose()">
     <div panel-content>
       <app-role-management-form
         #removeRoleForm
-        [availableRoles]="userRoles"
+        [availableRoles]="userRoles()"
         [selectedRoleIds]="[]"
         [mode]="'remove'"
-        [userAccountType]="selectedUser?.accountInfo?.type"
+        [userAccountType]="selectedUser()?.accountInfo?.type"
         [currentUsername]="currentUsername">
       </app-role-management-form>
     </div>
@@ -221,10 +220,9 @@
         type="button"
         class="btn btn-danger"
         (click)="onConfirmRemoveRoles()"
-        [disabled]="!canConfirmRemoveRoles">
+        [disabled]="!canConfirmRemoveRoles()">
         @if (removeRoleForm?.loading) {
-          <span class="spinner-border spinner-border-sm me-2" role="status"
-          aria-hidden="true"></span>
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
         }
         {{ 'users.removeRoles' | translate }}
       </button>
@@ -233,21 +231,22 @@
 }
 
 <!-- Delete Confirmation Panel -->
-@if (showDeletePanel && selectedUser) {
+@if (showDeletePanel() && selectedUser()) {
+  @let user = selectedUser();
   <app-generic-right-panel
     title="{{ 'users.deleteTitle' | translate }}"
     subtitle="{{ 'users.deleteSubtitle' | translate }}"
-    [isOpen]="showDeletePanel"
+    [isOpen]="showDeletePanel()"
     [hasFooter]="true"
     (close)="onPanelClose()">
     <div panel-content>
       <app-delete-confirmation
-            [config]="{
-              itemName: selectedUser.name,
-              itemType: 'User',
-              title: ('users.deleteTitle' | translate),
-              message: ('users.deleteMessage' | translate: { name: selectedUser.name })
-            }"
+        [config]="{
+          itemName: user!.name,
+          itemType: 'User',
+          title: ('users.deleteTitle' | translate),
+          message: ('users.deleteMessage' | translate: { name: user!.name })
+        }"
         (confirm)="onConfirmDelete()"
         (cancel)="onPanelClose()">
       </app-delete-confirmation>

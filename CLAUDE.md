@@ -83,6 +83,7 @@ Skills are triggered automatically when your request matches their description.
 | **review-code** | "review code", "check code" | Reviews code against constitution |
 | **fix-errors** | "fix errors", "fix build" | Diagnoses and fixes build/lint errors |
 | **refactor-legacy** | "refactor", "modernize" | Updates legacy code to current standards |
+| **create-tests** | "create tests", "add tests", "write spec" | Creates unit tests with Jest + Angular |
 
 **Location:** `.claude/skills/`
 

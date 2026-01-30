@@ -16,8 +16,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import { Observable, combineLatest } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { FormatTimePipe } from '../../pipes/format-time/format-time.pipe';
-import { DisplayValueByKeyPipe } from '../../pipes/display-value-by-key/display-value-by-key.pipe';
+import { FormatTimePipe, DisplayValueByKeyPipe } from '@shared/pipes';
 import { PaginationComponent } from '../pagination';
 import { TableColumnConfig, TableConfig } from '@shared/models';
 import { TableFooterAggregationHelper } from './helpers/table-footer-aggregation.helper';

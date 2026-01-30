@@ -1,18 +1,19 @@
 import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	inject,
-	OnDestroy,
-	OnInit,
-	TemplateRef,
-	ViewChild
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  TemplateRef,
+  viewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,20 +22,20 @@ import { IconDirective } from '@coreui/icons-angular';
 import { TranslateModule } from '@ngx-translate/core';
 
 import {
-	ADMIN_PERMISSION,
-	AuthService,
-	CompaniesDataService,
-	DeleteConfirmationComponent,
-	GenericRightPanelComponent,
-	GenericTableComponent,
-	HeaderComponent,
-	RoleOption,
-	SearchableSelectComponent,
-	SearchableSelectOption,
-	SmartFilterConfig,
-	SmartFilterHeaderComponent,
-	TableConfig,
-	UserRoleService
+  ADMIN_PERMISSION,
+  AuthService,
+  CompaniesDataService,
+  DeleteConfirmationComponent,
+  GenericRightPanelComponent,
+  GenericTableComponent,
+  HeaderComponent,
+  RoleOption,
+  SearchableSelectComponent,
+  SearchableSelectOption,
+  SmartFilterConfig,
+  SmartFilterHeaderComponent,
+  TableConfig,
+  UserRoleService
 } from '@shared';
 import { NotificationService } from '@shared/services/ui/notification.service';
 import { UserService, UsersTableService } from '../../services';
@@ -45,329 +46,343 @@ import { RoleService } from '../../../roles';
 import { USERS_CONFIG, UsersFilterParams, UsersUtils } from './user-list.utils';
 
 @Component({
-    standalone: true,
-    selector: 'app-user-list',
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        TranslateModule,
-        GenericRightPanelComponent,
-        UserFormComponent,
-        DeleteConfirmationComponent,
-        RoleManagementFormComponent,
-        GenericTableComponent,
-        HeaderComponent,
-        SmartFilterHeaderComponent,
-        SearchableSelectComponent,
-        MatMenuModule,
-        MatIconModule,
-        MatButtonModule,
-        ButtonDirective,
-        FormControlDirective,
-        IconDirective
-    ],
-    providers: [UsersTableService],
-    templateUrl: './user-list.component.html',
-    styleUrls: ['./user-list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: true,
+  selector: 'app-user-list',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    GenericRightPanelComponent,
+    UserFormComponent,
+    DeleteConfirmationComponent,
+    RoleManagementFormComponent,
+    GenericTableComponent,
+    HeaderComponent,
+    SmartFilterHeaderComponent,
+    SearchableSelectComponent,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    ButtonDirective,
+    FormControlDirective,
+    IconDirective
+  ],
+  providers: [UsersTableService],
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserListComponent implements OnInit, OnDestroy, AfterViewInit {
-	private cdr = inject(ChangeDetectorRef);
-	private notification = inject(NotificationService);
-	private userService = inject(UserService);
-	private roleService = inject(RoleService);
-	private authService = inject(AuthService);
-	private tableService = inject(UsersTableService);
-	private userRoleService = inject(UserRoleService);
-	private companiesDataService = inject(CompaniesDataService);
+export class UserListComponent implements OnInit, AfterViewInit {
+  // Dependency injection
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly notification = inject(NotificationService);
+  private readonly userService = inject(UserService);
+  private readonly roleService = inject(RoleService);
+  private readonly authService = inject(AuthService);
+  private readonly tableService = inject(UsersTableService);
+  private readonly userRoleService = inject(UserRoleService);
+  private readonly companiesDataService = inject(CompaniesDataService);
 
-	public tableConfig$: BehaviorSubject<TableConfig>;
-	public dataList$: Observable<User[]>;
-	public filterForm: FormGroup;
-	public companyOptions$: Observable<SearchableSelectOption[]>;
-	public userTypeOptions: SearchableSelectOption[] = [];
-	public smartFilterConfig: SmartFilterConfig;
-	public isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
-	public currentUsername = this.authService.currentUsername;
+  // View children (signal-based)
+  readonly assignRoleForm = viewChild<RoleManagementFormComponent>('assignRoleForm');
+  readonly removeRoleForm = viewChild<RoleManagementFormComponent>('removeRoleForm');
+  readonly userRolesTemplate = viewChild<TemplateRef<unknown>>('userRolesTemplate');
 
-	// Panel states
-	showCreatePanel = false;
-	showDeletePanel = false;
-	showAssignRolesPanel = false;
-	showRemoveRolesPanel = false;
-	selectedUser: User | null = null;
+  // Panel states (signals)
+  readonly showCreatePanel = signal(false);
+  readonly showDeletePanel = signal(false);
+  readonly showAssignRolesPanel = signal(false);
+  readonly showRemoveRolesPanel = signal(false);
+  readonly selectedUser = signal<User | null>(null);
 
-	// Role management data
-	availableRoles: RoleOption[] = [];
-	userRoles: RoleOption[] = [];
+  // Data signals
+  readonly dataList = signal<User[]>([]);
+  readonly availableRoles = signal<RoleOption[]>([]);
+  readonly userRoles = signal<RoleOption[]>([]);
+  readonly userTypeOptions = signal<SearchableSelectOption[]>([]);
 
-	// Getters for button disabled state
-	get canConfirmAssignRoles(): boolean {
-		if (this.assignRoleForm?.loading) return false;
-		return this.assignRoleForm?.hasSelectedRoles() || false;
-	}
+  // Observable for generic-table compatibility
+  readonly dataList$ = toObservable(this.dataList);
 
-	get canConfirmRemoveRoles(): boolean {
-		if (this.removeRoleForm?.loading) return false;
-		return this.removeRoleForm?.hasSelectedRoles() || false;
-	}
+  // Computed properties
+  readonly canConfirmAssignRoles = computed(() => {
+    const form = this.assignRoleForm();
+    if (form?.loading) return false;
+    return form?.hasSelectedRoles() ?? false;
+  });
 
-	@ViewChild('assignRoleForm') assignRoleForm: RoleManagementFormComponent;
-	@ViewChild('removeRoleForm') removeRoleForm: RoleManagementFormComponent;
-	@ViewChild('userRolesTemplate') userRolesTemplate: TemplateRef<any>;
+  readonly canConfirmRemoveRoles = computed(() => {
+    const form = this.removeRoleForm();
+    if (form?.loading) return false;
+    return form?.hasSelectedRoles() ?? false;
+  });
 
-	private unsubscribe$ = new Subject<void>();
+  // Auth state (computed from service)
+  readonly isAdmin = this.authService.hasPermission(ADMIN_PERMISSION);
+  readonly currentUsername = this.authService.currentUsername;
 
-	public ngOnInit(): void {
-		this.initFormControls();
-		this.initializeCompanyOptions();
-		this.loadUserTypes();
-		this.initSmartFilterConfig();
-		// Load data with initial filter values
-		const initialParams = UsersUtils.Form.createFilterParams(this.filterForm.getRawValue());
-		this.loadData(initialParams);
-	}
+  // Table configuration (from service)
+  tableConfig$: BehaviorSubject<TableConfig>;
 
-	public ngAfterViewInit(): void {
-		// Pass the template reference to the table service
-		this.tableService.setUserRolesTemplate(this.userRolesTemplate);
-	}
+  // Form and filter configuration
+  filterForm: FormGroup;
+  companyOptions$: Observable<SearchableSelectOption[]>;
+  smartFilterConfig: SmartFilterConfig;
 
-	public ngOnDestroy(): void {
-		this.unsubscribe$.next();
-		this.unsubscribe$.complete();
-	}
+  // Lifecycle
+  ngOnInit(): void {
+    this.initFormControls();
+    this.initializeCompanyOptions();
+    this.loadUserTypes();
+    this.initSmartFilterConfig();
+    this.initTableConfig();
 
-	public onPageChange({page, size}: { page: number; size: number }): void {
-		const params = UsersUtils.Form.createFilterParams(this.filterForm.getRawValue(), page, size);
-		this.loadData(params);
-	}
+    const initialParams = UsersUtils.Form.createFilterParams(this.filterForm.getRawValue());
+    this.loadData(initialParams);
+  }
 
-	public onColumnSelectionChanged(selectedColumns: Set<string>): void {
-		this.tableService.updateColumnVisibility(selectedColumns);
-	}
+  ngAfterViewInit(): void {
+    const template = this.userRolesTemplate();
+    if (template) {
+      this.tableService.setUserRolesTemplate(template);
+    }
+  }
 
-	private initFormControls(): void {
-		this.filterForm = UsersUtils.Form.createFilterForm();
-		// Mark form as dirty since we have a default value
-		this.filterForm.markAsDirty();
-	}
+  // Public methods - Pagination
+  onPageChange({ page, size }: { page: number; size: number }): void {
+    const params = UsersUtils.Form.createFilterParams(this.filterForm.getRawValue(), page, size);
+    this.loadData(params);
+  }
 
-	private initializeCompanyOptions(): void {
-		if (this.isAdmin) {
-			this.companyOptions$ = UsersUtils.Company.createCompanyOptions(this.companiesDataService);
-		}
-	}
+  onColumnSelectionChanged(selectedColumns: Set<string>): void {
+    this.tableService.updateColumnVisibility(selectedColumns);
+  }
 
-	private initSmartFilterConfig(): void {
-		this.smartFilterConfig = UsersUtils.SmartFilter.create(this.companiesDataService, this.isAdmin);
-	}
+  // Public methods - Filters
+  onFiltersChanged(formValues: unknown): void {
+    const params = UsersUtils.Form.createFilterParams(formValues);
+    this.loadData(params);
+  }
 
-	private loadUserTypes(): void {
-		this.userService.getUserTypes().pipe(
-			takeUntil(this.unsubscribe$)
-		).subscribe(types => {
-			this.userTypeOptions = UsersUtils.Type.createUserTypeOptions(types);
-			this.cdr.markForCheck();
-		});
-	}
+  resetForm(): void {
+    this.filterForm.reset();
+  }
 
-	// Helper method to close panels and reset state
-	private closeAllPanelsAndRefresh(): void {
-		this.onPanelClose();
-		// Preserve current filters when refreshing data
-		const currentParams = UsersUtils.Form.createFilterParams(this.filterForm.getRawValue());
-		this.loadData(currentParams);
-	}
+  // Public methods - User actions
+  createUser(): void {
+    this.selectedUser.set(null);
+    this.showCreatePanel.set(true);
+  }
 
-	private loadData(params: UsersFilterParams = UsersUtils.Form.createFilterParams({})): void {
-		this.userService.paginatedUsers(params, params.page, params.size)
-			.pipe(takeUntil(this.unsubscribe$))
-			.subscribe(data => {
-				const processedData = UsersUtils.Data.processUsersData(data);
+  onUserSaved(): void {
+    this.showSuccessNotification('notifications.userSaved');
+    this.closeAllPanelsAndRefresh();
+  }
 
-				this.tableService.updateConfigData(processedData.totalPages);
-				this.tableConfig$ = this.tableService.getTableConfig();
-				this.dataList$ = of(processedData.content);
-				this.cdr.detectChanges();
+  onConfirmDelete(): void {
+    const user = this.selectedUser();
+    if (!user?.id) return;
 
-				if (this.filterForm.dirty) {
-					this.showSearchResultsNotification(processedData.totalElements);
-				}
-			});
-	}
+    this.userService.deleteUser(user.id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: () => {
+        this.showSuccessNotification('notifications.userDeleted');
+        this.closeAllPanelsAndRefresh();
+      },
+      error: () => {
+        this.showErrorNotification('errors.userDeleteFailed');
+      }
+    });
+  }
 
-	public createUser(): void {
-		console.log('[UserList] createUser called');
-		this.selectedUser = null;
-		this.showCreatePanel = true;
-		this.cdr.detectChanges();
-	}
+  onPanelClose(): void {
+    this.showCreatePanel.set(false);
+    this.showDeletePanel.set(false);
+    this.showAssignRolesPanel.set(false);
+    this.showRemoveRolesPanel.set(false);
+    this.selectedUser.set(null);
+  }
 
-	public resetForm(): void {
-		this.filterForm.reset();
-		this.cdr.markForCheck();
-	}
+  // Public methods - Role management
+  canManageRoles(): boolean {
+    return this.userRoleService.isAdmin();
+  }
 
-	public onFiltersChanged(formValues: any): void {
-		// Smart filter now handles debouncing internally
-		const params = UsersUtils.Form.createFilterParams(formValues);
-		this.loadData(params);
-	}
+  shouldDisableRoleButton(user: User): boolean {
+    return !this.canManageRoles() || (this.isSelfUser(user) && !this.canManageSelfRoles());
+  }
 
-	onConfirmDelete(): void {
-		if (!this.selectedUser?.id) return;
+  assignRoles(user: User): void {
+    if (this.isSelfUser(user) && !this.canManageSelfRoles()) {
+      this.showWarningNotification('errors.cannotManageOwnRoles');
+      return;
+    }
+    this.selectedUser.set(user);
+    this.loadAvailableRoles();
+    this.showAssignRolesPanel.set(true);
+  }
 
-		this.userService.deleteUser(this.selectedUser.id).subscribe({
-			next: () => {
-				this.showSuccessNotification('notifications.userDeleted');
-				this.closeAllPanelsAndRefresh();
-			},
-			error: () => {
-				this.showErrorNotification('errors.userDeleteFailed');
-			}
-		});
-	}
+  removeRoles(user: User): void {
+    if (this.isSelfUser(user) && !this.canManageSelfRoles()) {
+      this.showWarningNotification('errors.cannotManageOwnRoles');
+      return;
+    }
+    this.selectedUser.set(user);
+    this.loadUserRoles(user);
+    this.showRemoveRolesPanel.set(true);
+  }
 
-	onPanelClose(): void {
-		this.showCreatePanel = false;
-		this.showDeletePanel = false;
-		this.showAssignRolesPanel = false;
-		this.showRemoveRolesPanel = false;
-		this.selectedUser = null;
-		this.cdr.detectChanges();
-	}
+  onConfirmAssignRoles(): void {
+    const user = this.selectedUser();
+    const form = this.assignRoleForm();
 
-	onUserSaved(): void {
-		this.showSuccessNotification('notifications.userSaved');
-		this.closeAllPanelsAndRefresh();
-	}
+    if (!user || !form) {
+      console.error('Selected user or assign role form not found');
+      return;
+    }
 
-	private showSuccessNotification(messageKey: string): void {
-		UsersUtils.Notification.showSuccessNotification(this.notification, messageKey);
-	}
+    const selectedRoleIds = form.getSelectedRoleIds();
+    if (selectedRoleIds.length === 0) {
+      this.showWarningNotification('errors.selectAtLeastOneRole');
+      return;
+    }
 
-	private showErrorNotification(messageKey: string): void {
-		UsersUtils.Notification.showErrorNotification(this.notification, messageKey);
-	}
+    this.userService.assignRoles(user.id, selectedRoleIds).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: () => {
+        this.showSuccessNotification('notifications.rolesAssigned');
+        this.closeAllPanelsAndRefresh();
+      },
+      error: () => {
+        this.showErrorNotification('errors.rolesAssignFailed');
+      }
+    });
+  }
 
-	private showWarningNotification(messageKey: string): void {
-		UsersUtils.Notification.showWarningNotification(this.notification, messageKey);
-	}
+  onConfirmRemoveRoles(): void {
+    const user = this.selectedUser();
+    const form = this.removeRoleForm();
 
-	private showSearchResultsNotification(count: number): void {
-		UsersUtils.Notification.showSearchResultsNotification(this.notification, count);
-	}
+    if (!user || !form) {
+      console.error('Selected user or remove role form not found');
+      return;
+    }
 
-	canManageRoles(): boolean {
-		return this.userRoleService.isAdmin();
-	}
+    const selectedRoleIds = form.getSelectedRoleIds();
+    if (selectedRoleIds.length === 0) {
+      this.showWarningNotification('errors.selectAtLeastOneRole');
+      return;
+    }
 
-	shouldDisableRoleButton(user: User): boolean {
-		return !this.canManageRoles() || (this.isSelfUser(user) && !this.canManageSelfRoles());
-	}
+    this.userService.removeRoles(user.id, selectedRoleIds).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: () => {
+        this.showSuccessNotification('notifications.rolesRemoved');
+        this.closeAllPanelsAndRefresh();
+      },
+      error: () => {
+        this.showErrorNotification('errors.rolesRemoveFailed');
+      }
+    });
+  }
 
-	private isSelfUser(user: User): boolean {
-		return user.loginName === this.currentUsername;
-	}
+  // Private methods - Initialization
+  private initFormControls(): void {
+    this.filterForm = UsersUtils.Form.createFilterForm();
+    this.filterForm.markAsDirty();
+  }
 
-	private canManageSelfRoles(): boolean {
-		return this.currentUsername === 'admin';
-	}
+  private initializeCompanyOptions(): void {
+    if (this.isAdmin) {
+      this.companyOptions$ = UsersUtils.Company.createCompanyOptions(this.companiesDataService);
+    }
+  }
 
-	assignRoles(user: User): void {
-		if (this.isSelfUser(user) && !this.canManageSelfRoles()) {
-			this.showWarningNotification('errors.cannotManageOwnRoles');
-			return;
-		}
-		this.selectedUser = user;
-		this.loadAvailableRoles();
-		this.showAssignRolesPanel = true;
-		this.cdr.detectChanges();
-	}
+  private initSmartFilterConfig(): void {
+    this.smartFilterConfig = UsersUtils.SmartFilter.create(this.companiesDataService, this.isAdmin);
+  }
 
-	removeRoles(user: User): void {
-		if (this.isSelfUser(user) && !this.canManageSelfRoles()) {
-			this.showWarningNotification('errors.cannotManageOwnRoles');
-			return;
-		}
-		this.selectedUser = user;
-		this.loadUserRoles(user);
-		this.showRemoveRolesPanel = true;
-		this.cdr.detectChanges();
-	}
+  private initTableConfig(): void {
+    this.tableConfig$ = this.tableService.getTableConfig();
+  }
 
-	private loadAvailableRoles(): void {
-		if (!this.selectedUser) return;
+  private loadUserTypes(): void {
+    this.userService.getUserTypes().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(types => {
+      this.userTypeOptions.set(UsersUtils.Type.createUserTypeOptions(types));
+    });
+  }
 
-		this.roleService.getRoles(undefined, 0, USERS_CONFIG.ROLES_PAGE_SIZE).pipe(
-			takeUntil(this.unsubscribe$)
-		).subscribe(response => {
-			// Get IDs of roles that user already has
-			const userRoleIds = this.selectedUser.roles.map(role => role.id);
+  // Private methods - Data loading
+  private loadData(params: UsersFilterParams = UsersUtils.Form.createFilterParams({})): void {
+    this.userService.paginatedUsers(params, params.page, params.size).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(data => {
+      const processedData = UsersUtils.Data.processUsersData(data);
 
-			const filteredRoles = response.content
-				.filter(role => role.name !== 'ADMIN') // Exclude ADMIN role
-				.filter(role => !userRoleIds.includes(role.id)); // Exclude roles user already has
+      this.tableService.updateConfigData(processedData.totalPages);
+      this.dataList.set(processedData.content);
 
-			this.availableRoles = UsersUtils.Role.convertToRoleOptions(filteredRoles);
-			this.cdr.detectChanges();
-		});
-	}
+      if (this.filterForm.dirty) {
+        this.showSearchResultsNotification(processedData.totalElements);
+      }
+    });
+  }
 
-	private loadUserRoles(user: User): void {
-		// Extract roles from the user object
-		this.userRoles = UsersUtils.Role.convertToRoleOptions(user.roles || []);
-		this.cdr.detectChanges();
-	}
+  private loadAvailableRoles(): void {
+    const user = this.selectedUser();
+    if (!user) return;
 
-	onConfirmAssignRoles(): void {
-		if (!this.selectedUser || !this.assignRoleForm) {
-			console.error('Selected user or assign role form not found');
-			return;
-		}
+    this.roleService.getRoles(undefined, 0, USERS_CONFIG.ROLES_PAGE_SIZE).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(response => {
+      const userRoleIds = user.roles?.map(role => role.id) ?? [];
 
-		const selectedRoleIds = this.assignRoleForm.getSelectedRoleIds();
-		if (selectedRoleIds.length === 0) {
-			this.showWarningNotification('errors.selectAtLeastOneRole');
-			return;
-		}
+      const filteredRoles = response.content
+        .filter(role => role.name !== 'ADMIN')
+        .filter(role => !userRoleIds.includes(role.id));
 
-		this.userService.assignRoles(this.selectedUser.id, selectedRoleIds).pipe(
-			takeUntil(this.unsubscribe$)
-		).subscribe({
-			next: () => {
-				this.showSuccessNotification('notifications.rolesAssigned');
-				this.closeAllPanelsAndRefresh();
-			},
-			error: () => {
-				this.showErrorNotification('errors.rolesAssignFailed');
-			}
-		});
-	}
+      this.availableRoles.set(UsersUtils.Role.convertToRoleOptions(filteredRoles));
+    });
+  }
 
-	onConfirmRemoveRoles(): void {
-		if (!this.selectedUser || !this.removeRoleForm) {
-			console.error('Selected user or remove role form not found');
-			return;
-		}
+  private loadUserRoles(user: User): void {
+    this.userRoles.set(UsersUtils.Role.convertToRoleOptions(user.roles ?? []));
+  }
 
-		const selectedRoleIds = this.removeRoleForm.getSelectedRoleIds();
-		if (selectedRoleIds.length === 0) {
-			this.showWarningNotification('errors.selectAtLeastOneRole');
-			return;
-		}
+  // Private methods - Helpers
+  private closeAllPanelsAndRefresh(): void {
+    this.onPanelClose();
+    const currentParams = UsersUtils.Form.createFilterParams(this.filterForm.getRawValue());
+    this.loadData(currentParams);
+  }
 
-		this.userService.removeRoles(this.selectedUser.id, selectedRoleIds).pipe(
-			takeUntil(this.unsubscribe$)
-		).subscribe({
-			next: () => {
-				this.showSuccessNotification('notifications.rolesRemoved');
-				this.closeAllPanelsAndRefresh();
-			},
-			error: () => {
-				this.showErrorNotification('errors.rolesRemoveFailed');
-			}
-		});
-	}
+  private isSelfUser(user: User): boolean {
+    return user.loginName === this.currentUsername;
+  }
+
+  private canManageSelfRoles(): boolean {
+    return this.currentUsername === 'admin';
+  }
+
+  // Private methods - Notifications
+  private showSuccessNotification(messageKey: string): void {
+    UsersUtils.Notification.showSuccessNotification(this.notification, messageKey);
+  }
+
+  private showErrorNotification(messageKey: string): void {
+    UsersUtils.Notification.showErrorNotification(this.notification, messageKey);
+  }
+
+  private showWarningNotification(messageKey: string): void {
+    UsersUtils.Notification.showWarningNotification(this.notification, messageKey);
+  }
+
+  private showSearchResultsNotification(count: number): void {
+    UsersUtils.Notification.showSearchResultsNotification(this.notification, count);
+  }
 }

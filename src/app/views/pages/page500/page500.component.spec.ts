@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ButtonModule, FormModule, GridModule } from '@coreui/angular';
-import { IconModule } from '@coreui/icons-angular';
 import { IconSetService } from '@coreui/icons-angular';
+import { TranslateModule } from '@ngx-translate/core';
 import { iconSubset } from '../../../icons/icon-subset';
 import { Page500Component } from './page500.component';
 
@@ -13,14 +11,10 @@ describe('Page500Component', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ Page500Component ],
-      imports: [GridModule, ButtonModule, FormModule, IconModule],
+      imports: [Page500Component, TranslateModule.forRoot()],
       providers: [IconSetService]
-    })
-    .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     iconSetService = TestBed.inject(IconSetService);
     iconSetService.icons = { ...iconSubset };
 
