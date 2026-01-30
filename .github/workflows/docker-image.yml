@@ -66,7 +66,8 @@ jobs:
 
       - name: Commit and push version
         run: |
-          git add package.json package-lock.json
+          git add package.json
+          git diff --staged --quiet && echo "No changes to commit" && exit 0
           git commit -m "chore(release): v${{ steps.bump.outputs.version }} [skip ci]"
           git tag "v${{ steps.bump.outputs.version }}"
           git push origin release --follow-tags
