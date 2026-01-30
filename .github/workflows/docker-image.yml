@@ -17,9 +17,17 @@ env:
   NODE_VERSION: '22'
 
 jobs:
-  # ==================== VERSION (only on release push) ====================
+  # ==================== VERSION (only on PR merge to release) ====================
   version:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/release'
+    # Only bump version when PR is merged (not on direct push)
+    # Detects: "Merge pull request #X" or "feat: something (#123)"
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/release' &&
+      (
+        startsWith(github.event.head_commit.message, 'Merge pull request') ||
+        contains(github.event.head_commit.message, '(#')
+      )
     uses: ./.github/workflows/_version.yml
     secrets:
       PAT_TOKEN: ${{ secrets.PAT_TOKEN }}

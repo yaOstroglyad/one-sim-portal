@@ -2,12 +2,15 @@
 
 ## Automatic Versioning
 
-Version is **automatically bumped** on every push to `release` branch.
+Version is **automatically bumped** only when a **PR is merged** to `release` branch.
+
+> **Direct push** to release does NOT bump version — only deploys with existing version.
 
 ### How It Works
 
 ```
-Push to release → CI determines version type → Bumps package.json → Creates git tag → Deploys
+PR merged to release → CI detects merge → Bumps package.json → Creates git tag → Deploys
+Direct push to release → NO version bump → Deploys with current version
 ```
 
 ### Version Types
@@ -22,38 +25,48 @@ Push to release → CI determines version type → Bumps package.json → Create
 
 ### Standard Release (PATCH)
 
-Just push or merge PR — version bumps automatically:
+Create PR to `release` and merge — version bumps automatically:
 
 ```bash
-git push origin release
-# 1.0.3 → 1.0.4
+# Create PR from feature branch
+git checkout -b feature/my-feature
+# ... make changes ...
+git push origin feature/my-feature
+# Create PR to release → Merge → 1.0.3 → 1.0.4
 ```
 
 ### Minor Release (new feature)
 
-Add `[MINOR]` to commit message or PR title:
+Add `[MINOR]` to PR title:
 
-```bash
-git commit -m "[MINOR] Add user export feature"
-git push origin release
-# 1.0.3 → 1.1.0
+```
+PR title: "[MINOR] Add user export feature"
+# After merge: 1.0.3 → 1.1.0
 ```
 
 ### Major Release (breaking change)
 
-Add `[MAJOR]` to commit message or PR title:
+Add `[MAJOR]` to PR title:
+
+```
+PR title: "[MAJOR] New authentication API"
+# After merge: 1.0.3 → 2.0.0
+```
+
+### Direct Push (hotfix, no version bump)
+
+Direct push deploys without changing version:
 
 ```bash
-git commit -m "[MAJOR] New authentication API"
 git push origin release
-# 1.0.3 → 2.0.0
+# Deploys current version, NO version bump
 ```
 
 ## CI Pipeline
 
 ```
 ┌──────────┐
-│ 🏷️ Version│  ← Only on push to release
+│ 🏷️ Version│  ← Only on PR merge to release
 └────┬─────┘
      │
 ┌────┴─────┐
@@ -158,7 +171,10 @@ A: Add `[skip ci]` to commit message to skip entire pipeline.
 A: In `package.json` — CI updates it automatically.
 
 **Q: What about PR to main?**
-A: No version bump. Version only changes on push to `release`.
+A: No version bump. Version only changes when PR is merged to `release`.
+
+**Q: What about direct push to release?**
+A: No version bump. Direct push deploys with the current version (useful for hotfixes).
 
 **Q: CI failed with "protected branch" error?**
 A: Check if `PAT_TOKEN` is valid and not expired.
