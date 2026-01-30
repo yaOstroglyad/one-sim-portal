@@ -1,0 +1,59 @@
+name: Install Dependencies
+
+on:
+  workflow_call:
+    inputs:
+      pull-latest:
+        description: "Pull latest changes after version bump"
+        type: boolean
+        default: false
+    outputs:
+      version:
+        description: "Current version from package.json"
+        value: ${{ jobs.install.outputs.version }}
+      cache-key:
+        description: "Cache key for node_modules"
+        value: ${{ jobs.install.outputs.cache-key }}
+
+jobs:
+  install:
+    name: 📦 Install
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+      cache-key: ${{ steps.cache-key.outputs.key }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Pull latest (after version bump)
+        if: inputs.pull-latest
+        run: git pull origin ${{ github.ref_name }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Generate cache key
+        id: cache-key
+        run: echo "key=node-modules-${{ hashFiles('package.json') }}" >> $GITHUB_OUTPUT
+
+      - name: Get version
+        id: get-version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Current version: $VERSION"
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Cache node_modules
+        uses: actions/cache/save@v4
+        with:
+          path: node_modules
+          key: ${{ steps.cache-key.outputs.key }}
