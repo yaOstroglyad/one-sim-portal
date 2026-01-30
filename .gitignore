@@ -2,7 +2,6 @@
 /.idea/
 /.angular/
 /dist/
-/package-lock.json
 /mock-server/node_modules/
 
 # macOS

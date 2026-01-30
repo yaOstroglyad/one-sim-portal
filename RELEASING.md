@@ -78,6 +78,28 @@ git push origin release
 └──────────┘
 ```
 
+### Workflow Files
+
+Pipeline is split into reusable workflows:
+
+| File | Purpose | Timeout |
+|------|---------|---------|
+| `docker-image.yml` | Main orchestrator | - |
+| `_version.yml` | Version bump (release only) | 10 min |
+| `_install.yml` | npm ci + cache | 15 min |
+| `_test.yml` | Jest tests | 10 min |
+| `_build.yml` | Production build | 15 min |
+| `_docker.yml` | Docker build & push | 15 min |
+| `_deploy.yml` | Kubernetes deploy | 10 min |
+
+### Pipeline Features
+
+- **Concurrency control** — cancels in-progress runs for the same branch
+- **Caching** — `node_modules` cached by `package-lock.json` hash
+- **Fallback install** — test/build jobs install deps if cache miss
+- **Docker tags** — version tag always, `latest` tag only on release
+- **Optimized checkout** — `fetch-depth: 50` for version history
+
 ## Git Tags
 
 Every release creates a git tag:
@@ -88,6 +110,14 @@ git show v1.0.4      # Show specific release
 ```
 
 ## CI/CD Configuration
+
+### Secrets
+
+| Secret | Purpose |
+|--------|---------|
+| `PAT_TOKEN` | Push version commits to protected release branch |
+| `AWS_ACCESS_KEY_ID` | EKS deployment |
+| `AWS_SECRET_ACCESS_KEY` | EKS deployment |
 
 ### PAT_TOKEN
 
@@ -108,6 +138,14 @@ CI uses a Personal Access Token to push version commits to protected `release` b
 2. Generate new token (classic) with `repo` scope
 3. Update secret in Repository Settings → Secrets → Actions → `PAT_TOKEN`
 
+## Deploy Environments
+
+| Branch | Environment | When |
+|--------|-------------|------|
+| `main` | test | push, PR |
+| `release` | release | push |
+| PR to main/release | test | PR |
+
 ## FAQ
 
 **Q: What if I forget to add [MINOR] or [MAJOR]?**
@@ -124,3 +162,19 @@ A: No version bump. Version only changes on push to `release`.
 
 **Q: CI failed with "protected branch" error?**
 A: Check if `PAT_TOKEN` is valid and not expired.
+
+**Q: Why did tests/build fail with "module not found"?**
+A: Cache miss occurred. Check if `package-lock.json` changed. Fallback install should handle this automatically.
+
+**Q: What happens if multiple developers push to release simultaneously?**
+A: CI handles this automatically:
+1. Concurrency control cancels older runs
+2. Version job does `git rebase` to sync with any concurrent version commits
+3. If rebase conflict occurs, CI fails with clear error — just pull and push again
+
+**Q: CI failed with "Rebase conflict with concurrent version bump"?**
+A: Another developer's version commit conflicted. Run:
+```bash
+git pull --rebase origin release
+git push origin release
+```

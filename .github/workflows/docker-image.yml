@@ -7,8 +7,14 @@ on:
   push:
     branches: ["main", "release"]
 
+# Cancel in-progress runs for the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   IMAGE_NAME: ghcr.io/quantum-soft-dev/esim-portal-ui
+  NODE_VERSION: '22'
 
 jobs:
   # ==================== VERSION (only on release push) ====================
@@ -47,6 +53,7 @@ jobs:
     with:
       version: ${{ needs.install.outputs.version }}
       image-name: ghcr.io/quantum-soft-dev/esim-portal-ui
+      push-latest: ${{ github.ref == 'refs/heads/release' }}
 
   # ==================== DEPLOY ====================
   deploy-test:

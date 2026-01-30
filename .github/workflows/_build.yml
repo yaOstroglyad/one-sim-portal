@@ -7,11 +7,16 @@ on:
         description: "Cache key for node_modules"
         type: string
         required: true
+      node-version:
+        description: "Node.js version"
+        type: string
+        default: '22'
 
 jobs:
   build:
     name: 🔨 Build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ inputs.node-version }}
 
       - name: Restore node_modules
         id: cache
@@ -28,9 +33,10 @@ jobs:
           path: node_modules
           key: ${{ inputs.cache-key }}
 
-      - name: Install dependencies (fallback)
+      # Fallback: install if cache miss (first run, cache expired, or package-lock.json changed)
+      - name: Install dependencies (cache miss)
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
 
       - name: Build production
         run: npm run build-prod
