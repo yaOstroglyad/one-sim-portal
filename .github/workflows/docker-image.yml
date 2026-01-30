@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: CI/CD Pipeline
 
 on:
   workflow_dispatch:
@@ -8,248 +8,67 @@ on:
     branches: ["main", "release"]
 
 env:
-  REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/quantum-soft-dev/esim-portal-ui
-  EKS_REGION: eu-central-1
-  EKS_CLUSTER: esim-dev
 
 jobs:
-  # ==================== VERSION ====================
+  # ==================== VERSION (only on release push) ====================
   version:
-    name: 🏷️ Version
-    runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/release'
-    permissions:
-      contents: write
-    outputs:
-      version: ${{ steps.bump.outputs.version }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.PAT_TOKEN }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Determine version bump type
-        id: bump-type
-        run: |
-          # Get the last commit message
-          COMMIT_MSG=$(git log -1 --pretty=%B)
-          echo "Commit message: $COMMIT_MSG"
-
-          if [[ "$COMMIT_MSG" == *"[MAJOR]"* ]]; then
-            echo "type=major" >> $GITHUB_OUTPUT
-          elif [[ "$COMMIT_MSG" == *"[MINOR]"* ]]; then
-            echo "type=minor" >> $GITHUB_OUTPUT
-          else
-            echo "type=patch" >> $GITHUB_OUTPUT
-          fi
-          echo "Version bump type: $(cat $GITHUB_OUTPUT)"
-
-      - name: Bump version
-        id: bump
-        run: |
-          npm version ${{ steps.bump-type.outputs.type }} --no-git-tag-version
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "New version: $VERSION"
-
-      - name: Commit and push version
-        run: |
-          git add package.json
-          git diff --staged --quiet && echo "No changes to commit" && exit 0
-          git commit -m "chore(release): v${{ steps.bump.outputs.version }} [skip ci]"
-          git tag "v${{ steps.bump.outputs.version }}"
-          git push origin release --follow-tags
+    uses: ./.github/workflows/_version.yml
+    secrets:
+      PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
 
   # ==================== INSTALL ====================
   install:
-    name: 📦 Install
-    runs-on: ubuntu-latest
     needs: [version]
     if: always() && (needs.version.result == 'success' || needs.version.result == 'skipped')
-    outputs:
-      version: ${{ steps.get-version.outputs.version }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
-          fetch-depth: 0
-
-      - name: Pull latest (after version bump)
-        if: needs.version.result == 'success'
-        run: git pull origin ${{ github.ref_name }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Get version
-        id: get-version
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Current version: $VERSION"
-
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
-
-      - name: Cache node_modules
-        uses: actions/cache/save@v4
-        with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('package.json') }}
+    uses: ./.github/workflows/_install.yml
+    with:
+      pull-latest: ${{ needs.version.result == 'success' }}
 
   # ==================== TEST ====================
   test:
-    name: 🧪 Test
-    runs-on: ubuntu-latest
-    needs: install
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Restore node_modules
-        uses: actions/cache/restore@v4
-        with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('package.json') }}
-
-      - name: Run tests
-        run: npm test
+    needs: [install]
+    uses: ./.github/workflows/_test.yml
+    with:
+      cache-key: ${{ needs.install.outputs.cache-key }}
 
   # ==================== BUILD ====================
   build:
-    name: 🔨 Build
-    runs-on: ubuntu-latest
-    needs: install
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Restore node_modules
-        uses: actions/cache/restore@v4
-        with:
-          path: node_modules
-          key: node-modules-${{ hashFiles('package.json') }}
-
-      - name: Build production
-        run: npm run build-prod
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist/
-          retention-days: 1
+    needs: [install]
+    uses: ./.github/workflows/_build.yml
+    with:
+      cache-key: ${{ needs.install.outputs.cache-key }}
 
   # ==================== DOCKER ====================
   docker:
-    name: 🐳 Docker
-    runs-on: ubuntu-latest
     needs: [install, test, build]
-    permissions:
-      contents: read
-      packages: write
-    env:
-      IMAGE_TAG: ${{ needs.install.outputs.version }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: |
-            ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-            ${{ env.IMAGE_NAME }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+    uses: ./.github/workflows/_docker.yml
+    with:
+      version: ${{ needs.install.outputs.version }}
+      image-name: ghcr.io/quantum-soft-dev/esim-portal-ui
 
   # ==================== DEPLOY ====================
-  deploy:
-    name: 🚀 Deploy
-    runs-on: ubuntu-latest
+  deploy-test:
     needs: [install, docker]
-    env:
-      IMAGE_TAG: ${{ needs.install.outputs.version }}
-    steps:
-      - name: Install kubectl
-        run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      version: ${{ needs.install.outputs.version }}
+      image-name: ghcr.io/quantum-soft-dev/esim-portal-ui
+      environment: test
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.EKS_REGION }}
-
-      - name: Update kubeconfig
-        run: |
-          aws eks --region "${{ env.EKS_REGION }}" update-kubeconfig --name "${{ env.EKS_CLUSTER }}"
-
-      - name: Deploy to TEST (PR to main)
-        if: github.event_name == 'pull_request' && github.base_ref == 'main'
-        run: |
-          echo "🚀 Deploying PR to TEST (v${{ env.IMAGE_TAG }})..."
-          kubectl set image deployment/test-esim-portal test-esim-portal=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          kubectl rollout status deployment/test-esim-portal --timeout=5m
-
-      - name: Deploy to TEST (push to main)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          echo "🚀 Deploying to TEST (v${{ env.IMAGE_TAG }})..."
-          kubectl set image deployment/test-esim-portal test-esim-portal=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          kubectl rollout status deployment/test-esim-portal --timeout=5m
-
-      - name: Deploy to RELEASE (push to release)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/release'
-        run: |
-          echo "🚀 Deploying to RELEASE (v${{ env.IMAGE_TAG }})..."
-          kubectl set image deployment/esim-portal esim-portal=${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          kubectl rollout status deployment/esim-portal --timeout=5m
+  deploy-release:
+    needs: [install, docker]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/release'
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      version: ${{ needs.install.outputs.version }}
+      image-name: ghcr.io/quantum-soft-dev/esim-portal-ui
+      environment: release
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -1,0 +1,43 @@
+name: Build Application
+
+on:
+  workflow_call:
+    inputs:
+      cache-key:
+        description: "Cache key for node_modules"
+        type: string
+        required: true
+
+jobs:
+  build:
+    name: 🔨 Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore node_modules
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: ${{ inputs.cache-key }}
+
+      - name: Install dependencies (fallback)
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install --legacy-peer-deps
+
+      - name: Build production
+        run: npm run build-prod
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
