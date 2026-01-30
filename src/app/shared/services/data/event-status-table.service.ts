@@ -6,6 +6,7 @@ import {
   TemplateType,
   SubscriberStatusEvent
 } from '@shared';
+
 // Сервис для конфигурации таблицы статусов событий.
 // Хранит TemplateRef для кастомных колонок (таймстамп и статус),
 // которые будут использованы GenericTable при рендере строк.
@@ -57,7 +58,7 @@ export class EventStatusTableService extends TableConfigAbstractService<Subscrib
     status: TemplateRef<{ $implicit: SubscriberStatusEvent }>;
   }): void {
     this.eventTimestampTemplate = tpls.eventTimestamp;
-    this.statusTemplate = tpls.status; 
+    this.statusTemplate = tpls.status;
     this.tableConfigSubject.next({ ...this.tableConfigSubject.value });
   }
 }
