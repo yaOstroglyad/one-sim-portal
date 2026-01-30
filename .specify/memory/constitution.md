@@ -1149,10 +1149,17 @@ providers: [CustomerService]  // Will make real API calls!
 ### Testing Commands
 
 ```bash
-npm test              # Run all tests
-npm test -- --watch   # Watch mode
-npm test -- --coverage # With coverage report
+npm test                # Run all tests
+npm run test:watch      # Watch mode - auto-run on file changes
+npm run test:changed    # Only uncommitted changes (git)
+npm run test:branch     # Changes since release branch
+npm run test:coverage   # With coverage report
+
+# Run tests for specific file
+npm test -- --findRelatedTests src/app/path/to/file.ts
 ```
+
+**Main branch:** `release` (not main)
 
 ### AAA Pattern (Required)
 
