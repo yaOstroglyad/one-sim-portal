@@ -87,6 +87,27 @@ git tag              # List all versions
 git show v1.0.4      # Show specific release
 ```
 
+## CI/CD Configuration
+
+### PAT_TOKEN
+
+CI uses a Personal Access Token to push version commits to protected `release` branch.
+
+| Setting | Value |
+|---------|-------|
+| Secret name | `PAT_TOKEN` |
+| Location | Repository Settings → Secrets → Actions |
+| Expiration | **30/01/2027** (1 year) |
+| Scopes | `repo` |
+
+⚠️ **Token expires in 1 year.** Renew before expiration to avoid CI failures.
+
+### Renewing PAT_TOKEN
+
+1. https://github.com/settings/tokens
+2. Generate new token (classic) with `repo` scope
+3. Update secret in Repository Settings → Secrets → Actions → `PAT_TOKEN`
+
 ## FAQ
 
 **Q: What if I forget to add [MINOR] or [MAJOR]?**
@@ -100,3 +121,6 @@ A: In `package.json` — CI updates it automatically.
 
 **Q: What about PR to main?**
 A: No version bump. Version only changes on push to `release`.
+
+**Q: CI failed with "protected branch" error?**
+A: Check if `PAT_TOKEN` is valid and not expired.
