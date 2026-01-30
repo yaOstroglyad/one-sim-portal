@@ -2,6 +2,11 @@ name: Version Bump
 
 on:
   workflow_call:
+    inputs:
+      node-version:
+        description: "Node.js version"
+        type: string
+        default: '22'
     secrets:
       PAT_TOKEN:
         required: true
@@ -17,6 +22,7 @@ jobs:
   version:
     name: 🏷️ Version
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: write
     outputs:
@@ -26,18 +32,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 50  # Enough for version history, faster than full clone
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ inputs.node-version }}
 
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Sync with remote (handle concurrent pushes)
+        run: |
+          git fetch origin release
+          git rebase origin/release || {
+            echo "::error::Rebase conflict with concurrent version bump. Please pull and push again."
+            exit 1
+          }
 
       - name: Determine version bump type
         id: bump-type
@@ -56,6 +70,7 @@ jobs:
       - name: Bump version
         id: bump
         run: |
+          # npm version updates both package.json and package-lock.json
           npm version ${{ steps.bump-type.outputs.type }} --no-git-tag-version
           VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
@@ -64,7 +79,7 @@ jobs:
 
       - name: Commit and push version
         run: |
-          git add package.json
+          git add package.json package-lock.json
           git diff --staged --quiet && echo "No changes to commit" && exit 0
           git commit -m "chore(release): v${{ steps.bump.outputs.version }} [skip ci]"
           git tag "v${{ steps.bump.outputs.version }}"

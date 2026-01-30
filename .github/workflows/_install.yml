@@ -3,6 +3,10 @@ name: Install Dependencies
 on:
   workflow_call:
     inputs:
+      node-version:
+        description: "Node.js version"
+        type: string
+        default: '22'
       pull-latest:
         description: "Pull latest changes after version bump"
         type: boolean
@@ -19,6 +23,7 @@ jobs:
   install:
     name: 📦 Install
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     outputs:
       version: ${{ steps.get-version.outputs.version }}
       cache-key: ${{ steps.cache-key.outputs.key }}
@@ -27,7 +32,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
-          fetch-depth: 0
 
       - name: Pull latest (after version bump)
         if: inputs.pull-latest
@@ -36,11 +40,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ inputs.node-version }}
 
       - name: Generate cache key
         id: cache-key
-        run: echo "key=node-modules-${{ hashFiles('package.json') }}" >> $GITHUB_OUTPUT
+        run: echo "key=node-modules-${{ hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
 
       - name: Get version
         id: get-version
@@ -50,7 +54,7 @@ jobs:
           echo "Current version: $VERSION"
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
 
       - name: Cache node_modules
         uses: actions/cache/save@v4
