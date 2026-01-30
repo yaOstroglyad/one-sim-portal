@@ -34,7 +34,7 @@ One Sim Portal is a comprehensive web application for managing eSIM products, cu
 | Charts | Chart.js 4.4 |
 | State | Angular Signals + RxJS 7.8 |
 | i18n | @ngx-translate |
-| Testing | Jest 30 + jest-preset-angular |
+| Testing | Vitest 4 + @angular/build:unit-test |
 | Styling | SCSS (Dart Sass) |
 
 ## Getting Started
@@ -111,28 +111,47 @@ src/app/
 |---------|-------------|
 | `npm start` | Start dev server (port 4200) |
 | `npm run build-prod` | Production build |
-| `npm test` | Run tests |
+| `npm test` | Run tests (jsdom) |
 | `npm run test:watch` | Run tests in watch mode |
 | `npm run test:coverage` | Run tests with coverage |
-| `npm run test:changed` | Run tests for changed files only |
+| `npm run test:ui` | Run tests with Vitest UI |
 
 ## Testing
 
 ```bash
-# Run all tests
+# Run all tests (jsdom environment)
 npm test
 
 # Watch mode (re-run on changes)
 npm run test:watch
 
-# Only changed files
-npm run test:changed
-
 # With coverage report
 npm run test:coverage
+
+# Vitest UI (interactive test explorer)
+npm run test:ui
+
+# Browser Mode (real Chromium browser)
+npm test -- --browsers=chromium
 ```
 
-Tests use Jest with `jest-preset-angular` for zoneless Angular testing.
+Tests use **Vitest 4** with `@angular/build:unit-test` builder for zoneless Angular testing.
+
+### Testing Environments
+
+| Environment | Command | Use Case |
+|-------------|---------|----------|
+| jsdom (default) | `npm test` | Fast, lightweight, CI/CD |
+| Browser Mode | `npm test -- --browsers=chromium` | Real browser APIs, DOM accuracy |
+| Vitest UI | `npm run test:ui` | Interactive debugging |
+
+### Browser Mode Setup
+
+Browser Mode requires Playwright browser:
+
+```bash
+npx playwright install chromium
+```
 
 ## Building for Production
 

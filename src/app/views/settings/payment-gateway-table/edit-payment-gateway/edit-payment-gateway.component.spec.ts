@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
@@ -10,27 +11,27 @@ import { PaymentGatewayUtilsService } from '../payment-gateway.utils.service';
 import { NotificationService } from '@shared/services/ui/notification.service';
 
 describe('EditPaymentGatewayComponent', () => {
-  let component: EditPaymentGatewayComponent;
-  let fixture: ComponentFixture<EditPaymentGatewayComponent>;
+    let component: EditPaymentGatewayComponent;
+    let fixture: ComponentFixture<EditPaymentGatewayComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [EditPaymentGatewayComponent, TranslateModule.forRoot(), NoopAnimationsModule],
-      providers: [
-        { provide: MatDialogRef, useValue: { close: jest.fn() } },
-        { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: PaymentGatewayService, useValue: { update: () => of({}) } },
-        { provide: PaymentGatewayUtilsService, useValue: { getFormConfig: () => ({ fields: [] }) } },
-        { provide: NotificationService, useValue: { success: jest.fn(), error: jest.fn() } }
-      ]
-    }).compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [EditPaymentGatewayComponent, TranslateModule.forRoot(), NoopAnimationsModule],
+            providers: [
+                { provide: MatDialogRef, useValue: { close: vi.fn() } },
+                { provide: MAT_DIALOG_DATA, useValue: {} },
+                { provide: PaymentGatewayService, useValue: { update: () => of({}) } },
+                { provide: PaymentGatewayUtilsService, useValue: { getFormConfig: () => ({ fields: [] }) } },
+                { provide: NotificationService, useValue: { success: vi.fn(), error: vi.fn() } }
+            ]
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(EditPaymentGatewayComponent);
-    component = fixture.componentInstance;
-    // Skip detectChanges as component requires complex service setup
-  });
+        fixture = TestBed.createComponent(EditPaymentGatewayComponent);
+        component = fixture.componentInstance;
+        // Skip detectChanges as component requires complex service setup
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

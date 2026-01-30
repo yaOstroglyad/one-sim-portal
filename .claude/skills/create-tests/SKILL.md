@@ -4,12 +4,33 @@ description: Creates unit tests for Angular components and services. Use when as
 allowed-tools: Write, Read, Glob, Grep, Edit
 ---
 
-# Create Angular Unit Tests
+# Create Angular Unit Tests (Vitest)
 
 Create unit tests for Angular components/services following One-Sim-Portal project standards.
 
+> **Test Framework:** Vitest 4 with `@angular/build:unit-test` builder
+> **NOT Jest** — use `vi.fn()`, `vi.spyOn()`, NOT `jest.fn()`
+>
 > **Rules Reference:** Testing rules are defined in `constitution.md` Section XV.
 > This skill provides the **procedure** and **templates** for writing tests.
+
+## Test Framework
+
+| Item | Value |
+|------|-------|
+| Framework | **Vitest 4** (not Jest) |
+| Builder | `@angular/build:unit-test` |
+| Environment | jsdom (default) or Browser Mode (Playwright) |
+| Mock functions | `vi.fn()`, `vi.spyOn()` |
+| Config | `vitest.config.ts`, `vitest.setup.ts` |
+
+```bash
+# Run tests
+npm test                           # jsdom (fast)
+npm test -- --browsers=chromium    # Browser Mode (real browser)
+npm run test:watch                 # Watch mode
+npm run test:ui                    # Vitest UI
+```
 
 ## Reference Examples
 
@@ -26,13 +47,14 @@ Create unit tests for Angular components/services following One-Sim-Portal proje
 4. **Use `configureTestBed` helper** from `@shared/utils/testing`
 5. **Follow AAA pattern** in each test (Arrange-Act-Assert)
 6. **Test all public methods and outputs**
-7. **Run tests** to verify: `npm test -- --testPathPatterns="component-name"`
+7. **Run tests** to verify: `npm test -- src/app/path/to/component.spec.ts`
 
 ## Component Test Template
 
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, firstValueFrom } from 'rxjs';
+import { vi } from 'vitest';
 
 import { MyComponent } from './my.component';
 import { configureTestBed } from '@shared/utils/testing';
@@ -43,7 +65,7 @@ describe('MyComponent', () => {
   let fixture: ComponentFixture<MyComponent>;
 
   // Mock services
-  let mockService: jest.Mocked<Partial<MyService>>;
+  let mockService: Partial<MyService>;
 
   // Mock data
   const mockData = [
@@ -54,8 +76,8 @@ describe('MyComponent', () => {
   beforeEach(async () => {
     // Arrange - Create mocks
     mockService = {
-      getData: jest.fn().mockReturnValue(of(mockData)),
-      saveData: jest.fn().mockReturnValue(of(undefined))
+      getData: vi.fn().mockReturnValue(of(mockData)),
+      saveData: vi.fn().mockReturnValue(of(undefined))
     };
 
     await configureTestBed({
@@ -114,6 +136,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { vi } from 'vitest';
 
 import { MyService } from './my.service';
 
@@ -207,26 +230,88 @@ it('should load data', fakeAsync(() => {
 }));
 ```
 
-### Mocking with jest.fn()
+### Mocking with vi.fn()
 
 ```typescript
-// ✅ CORRECT - jest.fn() for mocks
+import { vi } from 'vitest';
+
+// ✅ CORRECT - vi.fn() for mocks
 const mockService = {
-  save: jest.fn().mockReturnValue(of({})),
-  load: jest.fn().mockReturnValue(of([]))
+  save: vi.fn().mockReturnValue(of({})),
+  load: vi.fn().mockReturnValue(of([]))
 };
 
 // ✅ CORRECT - Typed mock
-let mockService: jest.Mocked<Partial<MyService>>;
+let mockService: Partial<MyService>;
 mockService = {
-  getData: jest.fn().mockReturnValue(of(mockData))
+  getData: vi.fn().mockReturnValue(of(mockData))
 };
 
 // ✅ CORRECT - Spy on output
-const saveSpy = jest.spyOn(component.saveEvent, 'emit');
+const saveSpy = vi.spyOn(component.saveEvent, 'emit');
 component.onSave();
 expect(saveSpy).toHaveBeenCalledWith(expectedData);
 ```
+
+## Mocking Architecture (CRITICAL)
+
+Vitest has **three levels of mocking** that work at different stages:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  1. MODULE ALIASES (Build Time - vitest.config.ts)          │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │  • Replaces entire npm packages BEFORE loading        │  │
+│  │  • For packages that CRASH on import (Node.js APIs)   │  │
+│  │  → src/testing/mocks/*.mock.ts                        │  │
+│  │  Example: qrcode → uses pngjs → util.inherits (crash) │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                            ↓                                 │
+│  2. GLOBAL MOCKS (Runtime - vitest.setup.ts)                │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │  • Patches globalThis/window AFTER modules load       │  │
+│  │  • For browser APIs missing in jsdom                  │  │
+│  │  Example: ResizeObserver, IntersectionObserver        │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                            ↓                                 │
+│  3. TEST MOCKS (Test Time - *.spec.ts)                      │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │  • vi.fn(), vi.spyOn(), TestBed providers             │  │
+│  │  • For services and dependencies in specific tests    │  │
+│  │  Example: CustomerService, HttpClient                 │  │
+│  └───────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### When to Use Each Level
+
+| Problem | Solution | Location |
+|---------|----------|----------|
+| npm package uses Node.js APIs (crashes on import) | Module alias | `vitest.config.ts` + `src/testing/mocks/` |
+| Browser API missing in jsdom (crashes at runtime) | Global mock | `vitest.setup.ts` |
+| Service/dependency mock for test | TestBed provider | `*.spec.ts` |
+| Spy on method calls | `vi.spyOn()` | `*.spec.ts` |
+
+### Adding a Module Alias Mock
+
+If a package crashes on import with errors like `util.inherits is not a function`:
+
+1. Create mock file: `src/testing/mocks/{package}.mock.ts`
+2. Add alias to `vitest.config.ts`:
+   ```typescript
+   alias: {
+     '{package}': path.resolve(__dirname, 'src/testing/mocks/{package}.mock.ts')
+   }
+   ```
+
+### Adding a Global Mock
+
+If code fails at runtime with `ReferenceError: X is not defined`:
+
+1. Add to `vitest.setup.ts`:
+   ```typescript
+   globalThis.X = class MockX { /* ... */ };
+   ```
 
 ### Helper Functions
 
@@ -312,10 +397,12 @@ it('should initialize tableConfig$ synchronously in ngOnInit (before async data 
 Before finishing, verify against `constitution.md`:
 - [ ] Uses `configureTestBed` helper
 - [ ] All dependencies are mocked (no real API calls)
-- [ ] Uses `jest.fn()` for spies (not Jasmine syntax)
+- [ ] Uses `vi.fn()` and `vi.spyOn()` for mocks/spies
 - [ ] AAA pattern with comments in each test
 - [ ] `async/await` + `whenStable()` for async (NOT fakeAsync)
 - [ ] `firstValueFrom()` for observable testing
 - [ ] Tests organized by describe blocks
 - [ ] All public methods have test coverage
 - [ ] **List components:** initialization order test with documentation
+- [ ] **Module crashes on import?** → Add alias in `vitest.config.ts`
+- [ ] **Browser API missing?** → Add global mock in `vitest.setup.ts`

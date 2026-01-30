@@ -1,47 +1,11 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./out-tsc/spec",
     "module": "ESNext",
-    "moduleResolution": "bundler",
-    "target": "ES2022",
-    "types": [
-      "jest",
-      "node",
-      "@angular/localize"
-    ],
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": false,
-    "strictNullChecks": false,
-    "declaration": false,
-    "skipLibCheck": true,
+    "types": ["node", "@angular/localize"],
     "isolatedModules": true,
-    "paths": {
-      "@shared": [
-        "src/app/shared"
-      ],
-      "@shared/*": [
-        "src/app/shared/*"
-      ],
-      "@models": [
-        "src/app/shared/models"
-      ],
-      "@models/*": [
-        "src/app/shared/models/*"
-      ],
-      "@env": [
-        "src/environments/environment"
-      ],
-      "@env/*": [
-        "src/environments/*"
-      ]
-    }
+    "skipLibCheck": true
   },
-  "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts",
-    "setup-jest.ts"
-  ]
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

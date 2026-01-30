@@ -35,8 +35,8 @@
 export { CacheHubService } from './cache-hub.service';
 
 // Types and Interfaces
-export {
-  DataType,
+export { DataType } from './types';
+export type {
   CacheOptions,
   CacheEntry,
   CacheStats,
@@ -68,15 +68,13 @@ export {
   InvalidateOn,
   CacheDecorators,
   hasCacheNamespace,
-  CacheableService,
   DEFAULT_CACHE_OPTIONS
 } from './namespace.decorator';
+export type { CacheableService } from './namespace.decorator';
 
 // Storage Services
-export {
-  PersistentStorage,
-  LocalStorageService
-} from './storage/local-storage.service';
+export { LocalStorageService } from './storage/local-storage.service';
+export type { PersistentStorage } from './storage/local-storage.service';
 export { IndexedDBService } from './storage/indexed-db.service';
 
 // Management Services

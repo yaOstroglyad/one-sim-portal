@@ -1083,23 +1083,24 @@ specs/{feature-name}/
 
 ---
 
-## XV. Unit Testing (Jest + Angular)
+## XV. Unit Testing (Vitest + Angular)
 
 ### Test Framework
-- **Jest** with `jest-preset-angular`
-- **Zoneless** test environment (`setupZonelessTestEnv`)
-- **No Karma** — removed from project
+- **Vitest 4** with `@angular/build:unit-test` builder
+- **Zoneless** test environment (Angular builder configures automatically)
+- **Two modes:** jsdom (default, fast) and Browser Mode (Playwright, real browser)
 
 ### Test File Location
 - **Component tests:** Same directory as component (`*.spec.ts`)
 - **Service tests:** Same directory as service (`*.spec.ts`)
 - **Testing utilities:** `/shared/utils/testing/`
+- **Test mocks:** `/src/testing/mocks/`
 
 ### Test Configuration Files
 ```
-jest.config.js       # Jest configuration
+vitest.config.ts     # Vitest configuration (module aliases, setup file)
+vitest.setup.ts      # Test environment setup (ResizeObserver mock)
 tsconfig.spec.json   # TypeScript config for tests
-setup-jest.ts        # Test environment setup
 ```
 
 ### Using Test Helpers
@@ -1108,6 +1109,7 @@ setup-jest.ts        # Test environment setup
 
 ```typescript
 import { configureTestBed } from '@shared/utils/testing';
+import { vi } from 'vitest';
 
 describe('MyComponent', () => {
   let component: MyComponent;
@@ -1139,8 +1141,8 @@ describe('MyComponent', () => {
 // ✅ CORRECT - Mock only what you test
 { provide: CustomerService, useValue: { getCustomer: () => of(mockCustomer) } }
 
-// ✅ CORRECT - Use jest.fn() for spying
-const mockService = { save: jest.fn().mockReturnValue(of({})) };
+// ✅ CORRECT - Use vi.fn() for spying
+const mockService = { save: vi.fn().mockReturnValue(of({})) };
 
 // ❌ FORBIDDEN - Real HTTP calls in tests
 providers: [CustomerService]  // Will make real API calls!
@@ -1149,17 +1151,32 @@ providers: [CustomerService]  // Will make real API calls!
 ### Testing Commands
 
 ```bash
-npm test                # Run all tests
+npm test                # Run all tests (jsdom)
 npm run test:watch      # Watch mode - auto-run on file changes
-npm run test:changed    # Only uncommitted changes (git)
-npm run test:branch     # Changes since release branch
 npm run test:coverage   # With coverage report
+npm run test:ui         # Vitest UI - interactive test explorer
+
+# Browser Mode (real Chromium browser)
+npm test -- --browsers=chromium
 
 # Run tests for specific file
-npm test -- --findRelatedTests src/app/path/to/file.ts
+npm test -- src/app/path/to/file.spec.ts
 ```
 
 **Main branch:** `release` (not main)
+
+### Testing Environments
+
+| Environment | Command | Use Case |
+|-------------|---------|----------|
+| jsdom (default) | `npm test` | Fast, lightweight, CI/CD |
+| Browser Mode | `npm test -- --browsers=chromium` | Real browser APIs, DOM accuracy |
+| Vitest UI | `npm run test:ui` | Interactive debugging |
+
+**Browser Mode setup:**
+```bash
+npx playwright install chromium
+```
 
 ### AAA Pattern (Required)
 
@@ -1202,7 +1219,7 @@ fakeAsync(() => { tick(); })
 - **ALL new components/services MUST have `*.spec.ts` file**
 - **Minimum test:** `it('should create')` — verifies component compiles
 - **Mock all HTTP services** — no real API calls in tests
-- **Use `jest.fn()` for spies** (not Jasmine's `spyOn` syntax)
+- **Use `vi.fn()` for spies** and `vi.spyOn()` for spying
 - **Use AAA pattern** with comments in each test
 - **Use `async/await`** with `fixture.whenStable()` for async operations
 - **List components:** Must have initialization order test with JSDoc explaining why order matters

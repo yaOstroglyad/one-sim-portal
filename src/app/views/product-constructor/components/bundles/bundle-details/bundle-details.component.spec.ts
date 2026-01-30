@@ -1,22 +1,23 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BundleDetailsComponent } from './bundle-details.component';
 
 describe('BundleDetailsComponent', () => {
-  let component: BundleDetailsComponent;
-  let fixture: ComponentFixture<BundleDetailsComponent>;
+    let component: BundleDetailsComponent;
+    let fixture: ComponentFixture<BundleDetailsComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [BundleDetailsComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(BundleDetailsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [BundleDetailsComponent]
+        })
+            .compileComponents();
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+        fixture = TestBed.createComponent(BundleDetailsComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

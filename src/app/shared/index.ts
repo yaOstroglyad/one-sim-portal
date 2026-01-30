@@ -74,7 +74,7 @@ export * from './services/search';      // Global search service
 export * from './services/account-context';  // Account context service
 
 // Named exports for specific services
-export { Language } from './services/ui/language.service';
+export type { Language } from './services/ui/language.service';
 
 // Directives
 export * from './directives';

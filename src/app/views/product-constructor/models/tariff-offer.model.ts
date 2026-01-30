@@ -1,7 +1,7 @@
 import { Currency, PageRequest, ServiceProvider } from './common.model';
 
 // Re-export Currency for use in components
-export { Currency } from './common.model';
+export type { Currency } from './common.model';
 import { Product } from './product.model';
 import { ProviderProduct } from './provider-product.model';
 

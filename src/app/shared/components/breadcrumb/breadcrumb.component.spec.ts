@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,39 +8,39 @@ import { of, Subject } from 'rxjs';
 import { BreadcrumbComponent } from './breadcrumb.component';
 
 describe('BreadcrumbComponent', () => {
-  let component: BreadcrumbComponent;
-  let fixture: ComponentFixture<BreadcrumbComponent>;
+    let component: BreadcrumbComponent;
+    let fixture: ComponentFixture<BreadcrumbComponent>;
 
-  const mockRouter = {
-    events: new Subject(),
-    url: '/'
-  };
+    const mockRouter = {
+        events: new Subject(),
+        url: '/'
+    };
 
-  const mockActivatedRoute = {
-    snapshot: { data: {} },
-    root: { children: [] }
-  };
+    const mockActivatedRoute = {
+        snapshot: { data: {} },
+        root: { children: [] }
+    };
 
-  const mockLanguageService = {
-    currentLang$: of('en')
-  };
+    const mockLanguageService = {
+        currentLang$: of('en')
+    };
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [BreadcrumbComponent, TranslateModule.forRoot()],
-      providers: [
-        { provide: Router, useValue: mockRouter },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute },
-        { provide: LanguageService, useValue: mockLanguageService }
-      ]
-    }).compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [BreadcrumbComponent, TranslateModule.forRoot()],
+            providers: [
+                { provide: Router, useValue: mockRouter },
+                { provide: ActivatedRoute, useValue: mockActivatedRoute },
+                { provide: LanguageService, useValue: mockLanguageService }
+            ]
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(BreadcrumbComponent);
-    component = fixture.componentInstance;
-    // Skip detectChanges to avoid router initialization issues
-  });
+        fixture = TestBed.createComponent(BreadcrumbComponent);
+        component = fixture.componentInstance;
+        // Skip detectChanges to avoid router initialization issues
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

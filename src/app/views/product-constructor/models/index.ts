@@ -6,7 +6,7 @@ export * from './provider-product.model';
 export * from './product.model';
 
 // Export specific types from company-product.model to avoid conflicts
-export {
+export type {
   CompanyProduct,
   CompanyProductTariffOffer,
   CompanyProductServiceProvider,

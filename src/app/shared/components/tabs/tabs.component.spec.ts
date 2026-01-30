@@ -1,12 +1,13 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TabsComponent } from './tabs.component';
 import { TabComponent } from './tab.component';
 import { Component } from '@angular/core';
 
 @Component({
-  standalone: true,
-  imports: [TabsComponent, TabComponent],
-  template: `
+    standalone: true,
+    imports: [TabsComponent, TabComponent],
+    template: `
     <os-tabs [(activeTabIndex)]="activeTab" (tabChange)="onTabChange($event)">
       <os-tab label="Tab 1">Content 1</os-tab>
       <os-tab label="Tab 2" [disabled]="true">Content 2</os-tab>
@@ -15,115 +16,115 @@ import { Component } from '@angular/core';
   `
 })
 class TestHostComponent {
-  activeTab = 0;
+    activeTab = 0;
 
-  onTabChange(event: any) {
-    this.activeTab = event.index;
-  }
+    onTabChange(event: any) {
+        this.activeTab = event.index;
+    }
 }
 
 describe('TabsComponent', () => {
-  let component: TabsComponent;
-  let fixture: ComponentFixture<TabsComponent>;
-  let hostComponent: TestHostComponent;
-  let hostFixture: ComponentFixture<TestHostComponent>;
+    let component: TabsComponent;
+    let fixture: ComponentFixture<TabsComponent>;
+    let hostComponent: TestHostComponent;
+    let hostFixture: ComponentFixture<TestHostComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TabsComponent, TabComponent, TestHostComponent]
-    }).compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [TabsComponent, TabComponent, TestHostComponent]
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(TabsComponent);
-    component = fixture.componentInstance;
+        fixture = TestBed.createComponent(TabsComponent);
+        component = fixture.componentInstance;
 
-    hostFixture = TestBed.createComponent(TestHostComponent);
-    hostComponent = hostFixture.componentInstance;
-  });
+        hostFixture = TestBed.createComponent(TestHostComponent);
+        hostComponent = hostFixture.componentInstance;
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 
-  it('should generate correct tab classes', () => {
-    component.variant = 'pills';
-    component.size = 'large';
-    component.position = 'left';
-    component.customClass = 'my-custom-class';
+    it('should generate correct tab classes', () => {
+        component.variant = 'pills';
+        component.size = 'large';
+        component.position = 'left';
+        component.customClass = 'my-custom-class';
 
-    const classes = component.tabsClasses;
-    
-    expect(classes).toContain('os-tabs');
-    expect(classes).toContain('os-tabs--pills');
-    expect(classes).toContain('os-tabs--large');
-    expect(classes).toContain('os-tabs--left');
-    expect(classes).toContain('my-custom-class');
-  });
+        const classes = component.tabsClasses;
 
-  it('should select tab correctly', () => {
-    jest.spyOn(component.tabChange, 'emit');
-    component.tabs = [
-      { id: 'tab1', label: 'Tab 1' },
-      { id: 'tab2', label: 'Tab 2' }
-    ];
-    component.selectTab(1);
+        expect(classes).toContain('os-tabs');
+        expect(classes).toContain('os-tabs--pills');
+        expect(classes).toContain('os-tabs--large');
+        expect(classes).toContain('os-tabs--left');
+        expect(classes).toContain('my-custom-class');
+    });
 
-    expect(component.activeTabIndex).toBe(1);
-    expect(component.tabChange.emit).toHaveBeenCalled();
-  });
+    it('should select tab correctly', () => {
+        vi.spyOn(component.tabChange, 'emit');
+        component.tabs = [
+            { id: 'tab1', label: 'Tab 1' },
+            { id: 'tab2', label: 'Tab 2' }
+        ];
+        component.selectTab(1);
 
-  it('should not select disabled tab', () => {
-    const initialTab = component.activeTabIndex;
-    component.tabs = [
-      { id: 'tab1', label: 'Tab 1' },
-      { id: 'tab2', label: 'Tab 2', disabled: true }
-    ];
-    
-    component.selectTab(1);
-    
-    expect(component.activeTabIndex).toBe(initialTab);
-  });
+        expect(component.activeTabIndex).toBe(1);
+        expect(component.tabChange.emit).toHaveBeenCalled();
+    });
 
-  it('should emit close event for closable tab', () => {
-    jest.spyOn(component.tabClose, 'emit');
-    const mockEvent = new Event('click');
-    jest.spyOn(mockEvent, 'stopPropagation');
-    
-    component.tabs = [
-      { id: 'tab1', label: 'Tab 1', closable: true }
-    ];
-    
-    component.closeTab(0, mockEvent);
-    
-    expect(mockEvent.stopPropagation).toHaveBeenCalled();
-    expect(component.tabClose.emit).toHaveBeenCalled();
-  });
+    it('should not select disabled tab', () => {
+        const initialTab = component.activeTabIndex;
+        component.tabs = [
+            { id: 'tab1', label: 'Tab 1' },
+            { id: 'tab2', label: 'Tab 2', disabled: true }
+        ];
 
-  it('should handle keyboard navigation', () => {
-    component.tabs = [
-      { id: 'tab1', label: 'Tab 1' },
-      { id: 'tab2', label: 'Tab 2' },
-      { id: 'tab3', label: 'Tab 3' }
-    ];
-    
-    const mockEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-    jest.spyOn(mockEvent, 'preventDefault');
-    jest.spyOn(component, 'selectTab');
-    
-    component.navigateTab(1, mockEvent);
-    
-    expect(mockEvent.preventDefault).toHaveBeenCalled();
-    expect(component.selectTab).toHaveBeenCalledWith(1);
-  });
+        component.selectTab(1);
 
-  it('should validate active tab index', () => {
-    component.tabs = [
-      { id: 'tab1', label: 'Tab 1' },
-      { id: 'tab2', label: 'Tab 2' }
-    ];
-    component.activeTabIndex = 5; // Invalid index
-    
-    component['validateActiveTab']();
-    
-    expect(component.activeTabIndex).toBe(1); // Should be set to last valid index
-  });
+        expect(component.activeTabIndex).toBe(initialTab);
+    });
+
+    it('should emit close event for closable tab', () => {
+        vi.spyOn(component.tabClose, 'emit');
+        const mockEvent = new Event('click');
+        vi.spyOn(mockEvent, 'stopPropagation');
+
+        component.tabs = [
+            { id: 'tab1', label: 'Tab 1', closable: true }
+        ];
+
+        component.closeTab(0, mockEvent);
+
+        expect(mockEvent.stopPropagation).toHaveBeenCalled();
+        expect(component.tabClose.emit).toHaveBeenCalled();
+    });
+
+    it('should handle keyboard navigation', () => {
+        component.tabs = [
+            { id: 'tab1', label: 'Tab 1' },
+            { id: 'tab2', label: 'Tab 2' },
+            { id: 'tab3', label: 'Tab 3' }
+        ];
+
+        const mockEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
+        vi.spyOn(mockEvent, 'preventDefault');
+        vi.spyOn(component, 'selectTab');
+
+        component.navigateTab(1, mockEvent);
+
+        expect(mockEvent.preventDefault).toHaveBeenCalled();
+        expect(component.selectTab).toHaveBeenCalledWith(1);
+    });
+
+    it('should validate active tab index', () => {
+        component.tabs = [
+            { id: 'tab1', label: 'Tab 1' },
+            { id: 'tab2', label: 'Tab 2' }
+        ];
+        component.activeTabIndex = 5; // Invalid index
+
+        component['validateActiveTab']();
+
+        expect(component.activeTabIndex).toBe(1); // Should be set to last valid index
+    });
 });

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
@@ -9,26 +10,26 @@ import { AddSubscriberProductService } from './add-subscriber-product.service';
 import { NotificationService } from '@shared/services/ui/notification.service';
 
 describe('AddSubscriberProductComponent', () => {
-  let component: AddSubscriberProductComponent;
-  let fixture: ComponentFixture<AddSubscriberProductComponent>;
+    let component: AddSubscriberProductComponent;
+    let fixture: ComponentFixture<AddSubscriberProductComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AddSubscriberProductComponent, TranslateModule.forRoot(), NoopAnimationsModule],
-      providers: [
-        { provide: MatDialogRef, useValue: { close: jest.fn() } },
-        { provide: MAT_DIALOG_DATA, useValue: { id: 'test-id' } },
-        { provide: AddSubscriberProductService, useValue: { list: () => of([]) } },
-        { provide: NotificationService, useValue: { success: jest.fn(), error: jest.fn() } }
-      ]
-    }).compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [AddSubscriberProductComponent, TranslateModule.forRoot(), NoopAnimationsModule],
+            providers: [
+                { provide: MatDialogRef, useValue: { close: vi.fn() } },
+                { provide: MAT_DIALOG_DATA, useValue: { id: 'test-id' } },
+                { provide: AddSubscriberProductService, useValue: { list: () => of([]) } },
+                { provide: NotificationService, useValue: { success: vi.fn(), error: vi.fn() } }
+            ]
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(AddSubscriberProductComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(AddSubscriberProductComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });
