@@ -17,11 +17,33 @@ env:
   NODE_VERSION: '22'
 
 jobs:
-  # ==================== VERSION (only on PR merge to release) ====================
+  # ==================== INSTALL ====================
+  install:
+    uses: ./.github/workflows/_install.yml
+
+  # ==================== TEST ====================
+  test:
+    needs: [install]
+    uses: ./.github/workflows/_test.yml
+    with:
+      cache-key: ${{ needs.install.outputs.cache-key }}
+
+  # ==================== BUILD ====================
+  build:
+    needs: [install]
+    uses: ./.github/workflows/_build.yml
+    with:
+      cache-key: ${{ needs.install.outputs.cache-key }}
+
+  # ==================== VERSION (only after successful test/build on PR merge) ====================
   version:
-    # Only bump version when PR is merged (not on direct push)
-    # Detects: "Merge pull request #X" or "feat: something (#123)"
+    needs: [install, test, build]
+    # Only bump version when:
+    # 1. test and build succeeded
+    # 2. PR is merged to release (not direct push)
     if: |
+      needs.test.result == 'success' &&
+      needs.build.result == 'success' &&
       github.event_name == 'push' &&
       github.ref == 'refs/heads/release' &&
       (
@@ -32,50 +54,32 @@ jobs:
     secrets:
       PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
 
-  # ==================== INSTALL ====================
-  install:
-    needs: [version]
-    if: always() && (needs.version.result == 'success' || needs.version.result == 'skipped')
-    uses: ./.github/workflows/_install.yml
-    with:
-      pull-latest: ${{ needs.version.result == 'success' }}
-
-  # ==================== TEST ====================
-  test:
-    needs: [install]
-    if: always() && needs.install.result == 'success'
-    uses: ./.github/workflows/_test.yml
-    with:
-      cache-key: ${{ needs.install.outputs.cache-key }}
-
-  # ==================== BUILD ====================
-  build:
-    needs: [install]
-    if: always() && needs.install.result == 'success'
-    uses: ./.github/workflows/_build.yml
-    with:
-      cache-key: ${{ needs.install.outputs.cache-key }}
-
-  # ==================== DOCKER (only on push, not PRs) ====================
+  # ==================== DOCKER (only on push, after test/build succeed) ====================
   docker:
-    needs: [install, test, build]
+    needs: [install, test, build, version]
     if: |
-      github.event_name == 'push' &&
+      always() &&
       needs.test.result == 'success' &&
-      needs.build.result == 'success'
+      needs.build.result == 'success' &&
+      github.event_name == 'push'
     uses: ./.github/workflows/_docker.yml
     with:
-      version: ${{ needs.install.outputs.version }}
+      # Use bumped version if available, otherwise current version
+      version: ${{ needs.version.outputs.version || needs.install.outputs.version }}
       image-name: ghcr.io/quantum-soft-dev/esim-portal-ui
       push-latest: ${{ github.ref == 'refs/heads/release' }}
 
-  # ==================== DEPLOY (only on push, not PRs) ====================
+  # ==================== DEPLOY ====================
   deploy-test:
-    needs: [install, docker]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [install, version, docker]
+    if: |
+      always() &&
+      needs.docker.result == 'success' &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main'
     uses: ./.github/workflows/_deploy.yml
     with:
-      version: ${{ needs.install.outputs.version }}
+      version: ${{ needs.version.outputs.version || needs.install.outputs.version }}
       image-name: ghcr.io/quantum-soft-dev/esim-portal-ui
       environment: test
     secrets:
@@ -83,11 +87,15 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
   deploy-release:
-    needs: [install, docker]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/release'
+    needs: [install, version, docker]
+    if: |
+      always() &&
+      needs.docker.result == 'success' &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/release'
     uses: ./.github/workflows/_deploy.yml
     with:
-      version: ${{ needs.install.outputs.version }}
+      version: ${{ needs.version.outputs.version || needs.install.outputs.version }}
       image-name: ghcr.io/quantum-soft-dev/esim-portal-ui
       environment: release
     secrets:
