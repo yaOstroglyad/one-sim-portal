@@ -2,15 +2,20 @@
 
 ## Automatic Versioning
 
-Version is **automatically bumped** only when a **PR is merged** to `release` branch.
+Version is **automatically bumped** only when a **PR is merged** to `release` branch AND tests/build pass.
 
 > **Direct push** to release does NOT bump version — only deploys with existing version.
 
 ### How It Works
 
 ```
-PR merged to release → CI detects merge → Bumps package.json → Creates git tag → Deploys
-Direct push to release → NO version bump → Deploys with current version
+PR merged to release → Install → Test + Build → Version bump → Docker → Deploy
+                                      ↑
+                            Only if test/build succeed
+```
+
+```
+Direct push to release → Install → Test + Build → Docker → Deploy (NO version bump)
 ```
 
 ### Version Types
@@ -64,12 +69,10 @@ git push origin release
 
 ## CI Pipeline
 
+### For Pull Requests (validation only)
+
 ```
 ┌──────────┐
-│ 🏷️ Version│  ← Only on PR merge to release
-└────┬─────┘
-     │
-┌────┴─────┐
 │ 📦 Install│
 └────┬─────┘
      │
@@ -78,11 +81,33 @@ git push origin release
 ▼         ▼        │
 🧪 Test   🔨 Build  │  ← Parallel
 │         │        │
-└────┬────┘        │
-     │             │
-     ▼             │
-┌──────────┐       │
-│ 🐳 Docker│ ◄─────┘
+└─────────┴────────┘
+     │
+     ✓ Done (no docker, no deploy)
+```
+
+### For Push to release (PR merge)
+
+```
+┌──────────┐
+│ 📦 Install│
+└────┬─────┘
+     │
+┌────┴────┬────────┐
+│         │        │
+▼         ▼        │
+🧪 Test   🔨 Build  │  ← Parallel
+│         │        │
+└────┬────┴────────┘
+     │
+     ▼ (only if both succeed)
+┌──────────┐
+│ 🏷️ Version│  ← Bump only after test/build pass
+└────┬─────┘
+     │
+     ▼
+┌──────────┐
+│ 🐳 Docker│
 └────┬─────┘
      │
      ▼
@@ -98,10 +123,10 @@ Pipeline is split into reusable workflows:
 | File | Purpose | Timeout |
 |------|---------|---------|
 | `docker-image.yml` | Main orchestrator | - |
-| `_version.yml` | Version bump (release only) | 10 min |
 | `_install.yml` | npm ci + cache | 15 min |
 | `_test.yml` | Jest tests | 10 min |
 | `_build.yml` | Production build | 15 min |
+| `_version.yml` | Version bump (after test/build) | 10 min |
 | `_docker.yml` | Docker build & push | 15 min |
 | `_deploy.yml` | Kubernetes deploy | 10 min |
 
@@ -110,6 +135,7 @@ Pipeline is split into reusable workflows:
 - **Concurrency control** — cancels in-progress runs for the same branch
 - **Caching** — `node_modules` cached by `package-lock.json` hash
 - **Fallback install** — test/build jobs install deps if cache miss
+- **Safe versioning** — version bumps only AFTER test/build succeed
 - **Docker tags** — version tag always, `latest` tag only on release
 - **Optimized checkout** — `fetch-depth: 50` for version history
 
@@ -153,11 +179,12 @@ CI uses a Personal Access Token to push version commits to protected `release` b
 
 ## Deploy Environments
 
-| Branch | Environment | When |
-|--------|-------------|------|
-| `main` | test | push, PR |
-| `release` | release | push |
-| PR to main/release | test | PR |
+| Event | Environment | Version bump |
+|-------|-------------|--------------|
+| PR to main/release | — (test/build only) | No |
+| Push to main | test | No |
+| Push to release (direct) | release | No |
+| Push to release (PR merge) | release | Yes |
 
 ## FAQ
 
@@ -171,10 +198,13 @@ A: Add `[skip ci]` to commit message to skip entire pipeline.
 A: In `package.json` — CI updates it automatically.
 
 **Q: What about PR to main?**
-A: No version bump. Version only changes when PR is merged to `release`.
+A: No version bump. Only runs test + build for validation.
 
 **Q: What about direct push to release?**
 A: No version bump. Direct push deploys with the current version (useful for hotfixes).
+
+**Q: What if test or build fails?**
+A: Version is NOT bumped. No "wasted" versions on failed builds.
 
 **Q: CI failed with "protected branch" error?**
 A: Check if `PAT_TOKEN` is valid and not expired.
