@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of, BehaviorSubject, firstValueFrom } from 'rxjs';
+import { of, BehaviorSubject, firstValueFrom, throwError } from 'rxjs';
 
 import { UserListComponent } from './user-list.component';
 import { configureTestBed } from '@shared/utils/testing';
@@ -22,6 +22,12 @@ describe('UserListComponent', () => {
     let mockUserRoleService: Partial<UserRoleService>;
     let mockCompaniesDataService: Partial<CompaniesDataService>;
     let mockNotificationService: Partial<NotificationService>;
+
+    // Test constants
+    const DEFAULT_PAGE = 0;
+    const DEFAULT_PAGE_SIZE = 15;
+    const CUSTOM_PAGE = 2;
+    const CUSTOM_PAGE_SIZE = 20;
 
     const mockTableConfig: TableConfig = {
         columns: [
@@ -284,7 +290,9 @@ describe('UserListComponent', () => {
 
         it('should show error notification on delete failure', async () => {
             // Arrange
-            mockUserService.deleteUser = vi.fn().mockReturnValue(new (await import('rxjs')).Observable(subscriber => subscriber.error(new Error('Delete failed'))));
+            mockUserService.deleteUser = vi.fn().mockReturnValue(
+                throwError(() => new Error('Delete failed'))
+            );
             component.selectedUser.set(mockUsers[0]);
 
             // Act
@@ -305,11 +313,15 @@ describe('UserListComponent', () => {
 
         it('should load data on page change', async () => {
             // Act
-            component.onPageChange({ page: 2, size: 20 });
+            component.onPageChange({ page: CUSTOM_PAGE, size: CUSTOM_PAGE_SIZE });
             await fixture.whenStable();
 
             // Assert
-            expect(mockUserService.paginatedUsers).toHaveBeenCalledWith(expect.objectContaining({ page: 2, size: 20 }), 2, 20);
+            expect(mockUserService.paginatedUsers).toHaveBeenCalledWith(
+                expect.objectContaining({ page: CUSTOM_PAGE, size: CUSTOM_PAGE_SIZE }),
+                CUSTOM_PAGE,
+                CUSTOM_PAGE_SIZE
+            );
         });
     });
 
@@ -321,12 +333,19 @@ describe('UserListComponent', () => {
         });
 
         it('should load data on filter change', async () => {
+            // Arrange
+            const filterParams = { searchQuery: 'test', type: 'CORPORATE' };
+
             // Act
-            component.onFiltersChanged({ searchQuery: 'test', type: 'CORPORATE' });
+            component.onFiltersChanged(filterParams);
             await fixture.whenStable();
 
             // Assert
-            expect(mockUserService.paginatedUsers).toHaveBeenCalledWith(expect.objectContaining({ searchQuery: 'test', type: 'CORPORATE' }), 0, 15);
+            expect(mockUserService.paginatedUsers).toHaveBeenCalledWith(
+                expect.objectContaining(filterParams),
+                DEFAULT_PAGE,
+                DEFAULT_PAGE_SIZE
+            );
         });
 
         it('should reset form', () => {
@@ -342,48 +361,47 @@ describe('UserListComponent', () => {
     });
 
     describe('role management permissions', () => {
-        it('should return true for canManageRoles when user is admin', () => {
-            // Arrange
-            mockUserRoleService.isAdmin = vi.fn().mockReturnValue(true);
+        describe('when user is admin', () => {
+            beforeEach(() => {
+                mockUserRoleService.isAdmin = vi.fn().mockReturnValue(true);
+            });
 
-            // Assert
-            expect(component.canManageRoles()).toBe(true);
+            it('should return true for canManageRoles', () => {
+                // Act & Assert
+                expect(component.canManageRoles()).toBe(true);
+            });
+
+            it('should disable role button for self user', () => {
+                // Arrange
+                const selfUser: User = {
+                    ...mockUsers[0],
+                    loginName: 'testuser' // matches currentUsername
+                };
+
+                // Act & Assert
+                expect(component.shouldDisableRoleButton(selfUser)).toBe(true);
+            });
+
+            it('should not disable role button for other users', () => {
+                // Act & Assert
+                expect(component.shouldDisableRoleButton(mockUsers[0])).toBe(false);
+            });
         });
 
-        it('should return false for canManageRoles when user is not admin', () => {
-            // Arrange
-            mockUserRoleService.isAdmin = vi.fn().mockReturnValue(false);
+        describe('when user is not admin', () => {
+            beforeEach(() => {
+                mockUserRoleService.isAdmin = vi.fn().mockReturnValue(false);
+            });
 
-            // Assert
-            expect(component.canManageRoles()).toBe(false);
-        });
+            it('should return false for canManageRoles', () => {
+                // Act & Assert
+                expect(component.canManageRoles()).toBe(false);
+            });
 
-        it('should disable role button for self user when not admin username', () => {
-            // Arrange
-            mockUserRoleService.isAdmin = vi.fn().mockReturnValue(true);
-            const selfUser: User = {
-                ...mockUsers[0],
-                loginName: 'testuser' // matches currentUsername
-            };
-
-            // Assert
-            expect(component.shouldDisableRoleButton(selfUser)).toBe(true);
-        });
-
-        it('should not disable role button for other users', () => {
-            // Arrange
-            mockUserRoleService.isAdmin = vi.fn().mockReturnValue(true);
-
-            // Assert
-            expect(component.shouldDisableRoleButton(mockUsers[0])).toBe(false);
-        });
-
-        it('should disable role button when user cannot manage roles', () => {
-            // Arrange
-            mockUserRoleService.isAdmin = vi.fn().mockReturnValue(false);
-
-            // Assert
-            expect(component.shouldDisableRoleButton(mockUsers[0])).toBe(true);
+            it('should disable role button for any user', () => {
+                // Act & Assert
+                expect(component.shouldDisableRoleButton(mockUsers[0])).toBe(true);
+            });
         });
     });
 
@@ -458,12 +476,12 @@ describe('UserListComponent', () => {
 
     describe('computed properties', () => {
         it('should compute canConfirmAssignRoles as false when no form', () => {
-            // Assert
+            // Act & Assert
             expect(component.canConfirmAssignRoles()).toBe(false);
         });
 
         it('should compute canConfirmRemoveRoles as false when no form', () => {
-            // Assert
+            // Act & Assert
             expect(component.canConfirmRemoveRoles()).toBe(false);
         });
     });
@@ -522,6 +540,58 @@ describe('UserListComponent', () => {
 
             // Assert
             expect(mockUserService.removeRoles).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('ngAfterViewInit', () => {
+        it('should call setUserRolesTemplate only if template exists', () => {
+            // Arrange
+            component.ngOnInit();
+
+            // Act
+            component.ngAfterViewInit();
+
+            // Assert - template doesn't exist in test environment, so not called
+            // This tests the guard condition in the component
+            expect(mockTableService.setUserRolesTemplate).not.toHaveBeenCalled();
+        });
+    });
+
+    /**
+     * Note on error handling coverage:
+     * - loadData() doesn't have explicit error handling - errors propagate to global handler
+     * - assign/remove roles require viewChild forms which can't be easily mocked in unit tests
+     * - Delete error handling is covered in 'user actions' describe block
+     */
+
+    describe('edge cases', () => {
+        beforeEach(async () => {
+            component.ngOnInit();
+            await fixture.whenStable();
+        });
+
+        it('should handle user with no roles when removing roles', () => {
+            // Arrange
+            const userWithNoRoles = mockUsers[1]; // Has empty roles array
+
+            // Act
+            component.removeRoles(userWithNoRoles);
+
+            // Assert
+            expect(component.userRoles()).toEqual([]);
+            expect(component.showRemoveRolesPanel()).toBe(true);
+        });
+
+        it('should handle empty roles response when assigning roles', async () => {
+            // Arrange
+            mockRoleService.getRoles = vi.fn().mockReturnValue(of({ content: [] }));
+
+            // Act
+            component.assignRoles(mockUsers[0]);
+            await fixture.whenStable();
+
+            // Assert
+            expect(component.availableRoles()).toEqual([]);
         });
     });
 });

@@ -20,6 +20,7 @@ Create unit tests for Angular components/services following One-Sim-Portal proje
 |------|-------|
 | Framework | **Vitest 4** (not Jest) |
 | Builder | `@angular/build:unit-test` |
+| Angular Mode | **Zoneless** (no zone.js) |
 | Environment | jsdom (default) or Browser Mode (Playwright) |
 | Mock functions | `vi.fn()`, `vi.spyOn()` |
 | Config | `vitest.config.ts`, `vitest.setup.ts` |
@@ -31,6 +32,32 @@ npm test -- --browsers=chromium    # Browser Mode (real browser)
 npm run test:watch                 # Watch mode
 npm run test:ui                    # Vitest UI
 ```
+
+## Zoneless Testing (CRITICAL)
+
+This project uses **Angular Zoneless** mode. Key differences:
+
+| Zone-based (old) | Zoneless (this project) |
+|------------------|-------------------------|
+| `fixture.detectChanges()` | ❌ **NOT NEEDED** - signals auto-update |
+| `fakeAsync()` / `tick()` | ❌ **FORBIDDEN** - requires zone.js |
+| Manual change detection | ✅ Automatic via signals |
+| `ComponentFixture.whenStable()` | ✅ Use for async operations |
+
+```typescript
+// ❌ FORBIDDEN - requires zone.js
+fixture.detectChanges();  // Not needed in zoneless
+fakeAsync(() => { tick(); });  // Requires zone.js
+
+// ✅ CORRECT - zoneless patterns
+await fixture.whenStable();  // Wait for async
+component.mySignal();        // Read signal value directly
+```
+
+**Why no `detectChanges()`?**
+- Zoneless Angular uses signals for reactivity
+- Signals automatically notify the framework of changes
+- No manual trigger needed - the framework handles it
 
 ## Reference Examples
 
@@ -205,29 +232,50 @@ it('should update selection', () => {
 
 ### Async Testing (Zoneless)
 
-**DO NOT use `fakeAsync()` or `tick()`** - project is zoneless.
+**DO NOT use `fakeAsync()`, `tick()`, or `fixture.detectChanges()`** - project is zoneless.
 
 ```typescript
 // ✅ CORRECT - async/await with whenStable
 it('should load data', async () => {
+  // Act
   component.ngOnInit();
   await fixture.whenStable();
 
+  // Assert - read signals directly, no detectChanges needed
   expect(component.data()).toBeDefined();
 });
 
 // ✅ CORRECT - firstValueFrom for observables
 it('should emit values', async () => {
+  // Act
   const value = await firstValueFrom(component.data$);
+
+  // Assert
   expect(value).toEqual(expected);
+});
+
+// ✅ CORRECT - signals update automatically
+it('should update signal', () => {
+  // Act
+  component.mySignal.set('new value');
+
+  // Assert - no detectChanges needed!
+  expect(component.mySignal()).toBe('new value');
 });
 
 // ❌ FORBIDDEN - fakeAsync (requires zone.js)
 it('should load data', fakeAsync(() => {
   component.ngOnInit();
-  tick();
+  tick();  // NOT AVAILABLE
   expect(component.data()).toBeDefined();
 }));
+
+// ❌ FORBIDDEN - detectChanges (not needed in zoneless)
+it('should update', () => {
+  component.mySignal.set('value');
+  fixture.detectChanges();  // UNNECESSARY
+  expect(component.mySignal()).toBe('value');
+});
 ```
 
 ### Mocking with vi.fn()
