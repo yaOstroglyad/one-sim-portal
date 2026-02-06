@@ -1,77 +1,19 @@
-@if (purchasedProductsView$ | async; as purchasedProducts) {
-  @if (!purchasedProducts || purchasedProducts.length === 0) {
-    <app-empty-state
-      [title]="'purchasedProducts.noPurchasedProductsFound' | translate"
-      [message]="'purchasedProducts.noPurchasesMessage' | translate"
-      [imageSrc]="'assets/img/empty-states/file-not-found.svg'">
-    </app-empty-state>
-  }
-  @if (purchasedProducts.length > 0) {
-    <table
-      [dataSource]="purchasedProducts"
-      mat-table
-      class="mat-elevation-z0">
-      <!-- Product Name Column -->
-      <ng-container matColumnDef="productName">
-        <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.productName' | translate }}</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.productName }}
-        </td>
-      </ng-container>
-      <!-- Status Column -->
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.status' | translate }}</th>
-        <td mat-cell *matCellDef="let element" [ngClass]="getStatusClass(element.status)">
-          {{ element.status }}
-        </td>
-      </ng-container>
-      <!-- Total Balance Column -->
-      <ng-container matColumnDef="totalBalance">
-        <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.totalBalance' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.usage.balance[0].total + this.getUnitType(element.usage) }}</td>
-      </ng-container>
-      <!-- Remaining Balance Column -->
-      <ng-container matColumnDef="remainingBalance">
-        <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.remainingBalance' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.usage.balance[0].remaining + this.getUnitType(element.usage) }}</td>
-      </ng-container>
-      <!-- Price Column -->
-      <ng-container matColumnDef="price">
-        <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.price' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.price.price + " " + element.price.currency }}</td>
-      </ng-container>
-      <!-- Purchased At Column -->
-      <ng-container matColumnDef="purchasedAt">
-        <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.purchasedAt' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.purchasedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
-      </ng-container>
-      <!-- Updated At Column -->
-      <ng-container matColumnDef="updatedAt">
-        <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.updatedAt' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
-      </ng-container>
-      <!-- Updated By Column -->
-      <ng-container matColumnDef="updatedBy">
-        <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.updatedBy' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.updatedBy }}</td>
-      </ng-container>
-      <!-- Usage Started At Column -->
-      <ng-container matColumnDef="usageStartedAt">
-        <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.usageStartedAt' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.usage.startedAt | date: 'dd/MM/yyyy' }}</td>
-      </ng-container>
-      <!-- Usage Expired At Column -->
-      <ng-container matColumnDef="usageExpiredAt">
-        <th mat-header-cell *matHeaderCellDef> {{ 'purchasedProducts.usageExpiredAt' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.usage.expiredAt | date: 'dd/MM/yyyy' }}</td>
-      </ng-container>
-      <!-- Header and Row Definitions -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  }
-} @else {
-  <p>{{ 'common.loading' | translate }}</p>
-}
+<ng-template #statusTpl let-item="context">
+  <span [ngClass]="getStatusClass(item?.status ?? '')">
+    {{ item?.status ?? '' }}
+  </span>
+</ng-template>
 
-<!-- Loading Template -->
+<ng-template #priceTpl let-item="context">
+  {{ (item?.price?.price ?? '') + ' ' + (item?.price?.currency ?? '') }}
+</ng-template>
+
+<ng-template #totalBalanceTpl let-item="context">
+  {{ (item?.usage?.balance?.[0]?.total ?? '') + getUnitType(item?.usage) }}
+</ng-template>
+
+<ng-template #remainingBalanceTpl let-item="context">
+  {{ (item?.usage?.balance?.[0]?.remaining ?? '') + getUnitType(item?.usage) }}
+</ng-template>
+
+<generic-table [config$]="config$" [data$]="data$"></generic-table>

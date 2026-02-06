@@ -120,7 +120,8 @@
       "Bash(do basename \"$dir\")",
       "Skill(review-code)",
       "Bash(gh pr view:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(gh workflow run:*)"
     ],
     "deny": [
       "// === Blocked for Security ===",

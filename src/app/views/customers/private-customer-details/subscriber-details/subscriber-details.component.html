@@ -1,87 +1,83 @@
 @if (simView$ | async; as simView) {
-  <div class="content">
-    <div class="left-panel">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>{{ 'subscriberDetails.location' | translate }}</mat-card-title>
-        </mat-card-header>
-        @if (simView.simDetails && simView.locations) {
-          <mat-card-content>
-            <p><strong>{{ 'subscriberDetails.state' | translate }}:</strong> {{ simView.simDetails.networkStatus }}</p>
-            <p><strong>{{ 'subscriberDetails.country' | translate }}:</strong> {{ simView.locations[0]?.country || 'N/A' }}</p>
-            <p><strong>{{ 'subscriberDetails.operator' | translate }}:</strong> {{ simView.locations[0]?.operator || 'N/A' }}</p>
-            <p><strong>{{ 'subscriberDetails.lastUpdatedAt' | translate }}:</strong> {{ (simView.simDetails.updatedAt | date: 'dd/MM/yyyy HH:mm') || 'N/A' }}</p>
-          </mat-card-content>
-        }
-      </mat-card>
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>{{ 'subscriberDetails.bundles' | translate }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <app-bundles [subscriber]="subscriber"></app-bundles>
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div class="right-panel">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>{{ 'subscriberDetails.simDetails' | translate }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p><strong>{{ 'subscriberDetails.status' | translate }}:</strong> {{ simView.simDetails.status || 'N/A' }}</p>
-          <p><strong>{{ 'subscriberDetails.networkStatus' | translate }}:</strong> {{ simView.simDetails.networkStatus || 'N/A' }}</p>
-          <p><strong>{{ 'subscriberDetails.imsi' | translate }}:</strong> {{ simView.simDetails.imsi || 'N/A' }}</p>
-          <p><strong>{{ 'subscriberDetails.msisdn' | translate }}:</strong> {{ simView.simDetails.msisdn || 'N/A' }}</p>
-          <p><strong>{{ 'subscriberDetails.imei' | translate }}:</strong> {{ simView.simDetails.imei || 'N/A' }}</p>
-          <p>
-            <strong>{{ 'subscriberDetails.iccid' | translate }}:</strong>
-            @if (simView.simDetails.iccid) {
-              <app-contextual-text
-                [text]="simView.simDetails.iccid"
-                [actions]="iccidContextActions"
-                [tooltip]="'Click for actions'">
-              </app-contextual-text>
-            } @else {
-              N/A
-            }
-          </p>
-          <p><strong>{{ 'subscriberDetails.createdAt' | translate }}:</strong> {{ (simView.simDetails.createdAt | date: 'dd/MM/yyyy HH:mm') || 'N/A' }}</p>
-          <p><strong>{{ 'subscriberDetails.createdBy' | translate }}:</strong> {{ simView.simDetails.createdBy || 'N/A' }}</p>
-          <p><strong>{{ 'subscriberDetails.updatedAt' | translate }}:</strong> {{ (simView.simDetails.updatedAt | date: 'dd/MM/yyyy HH:mm') || 'N/A' }}</p>
-          <p><strong>{{ 'subscriberDetails.updatedBy' | translate }}:</strong> {{ simView.simDetails.updatedBy || 'N/A' }}</p>
-          <p><strong>{{ 'subscriberDetails.externalReferenceId' | translate }}:</strong> {{ simView.simDetails.externalReferenceId || 'N/A' }}</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-  <div class="w-100">
+<div class="content">
+  <div class="left-panel">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>{{ 'subscriberDetails.purchasedProductsHistory' | translate }}</mat-card-title>
+        <mat-card-title>{{ 'subscriberDetails.location' | translate }}</mat-card-title>
       </mat-card-header>
+      @if (simView.simDetails && simView.locations) {
       <mat-card-content>
-        <app-purchased-products [subscriber]="subscriber"></app-purchased-products>
+        <p><strong>{{ 'subscriberDetails.state' | translate }}:</strong> {{ simView.simDetails.networkStatus }}</p>
+        <p><strong>{{ 'subscriberDetails.country' | translate }}:</strong> {{ simView.locations[0]?.country || 'N/A' }}
+        </p>
+        <p><strong>{{ 'subscriberDetails.operator' | translate }}:</strong> {{ simView.locations[0]?.operator || 'N/A'
+          }}</p>
+        <p><strong>{{ 'subscriberDetails.lastUpdatedAt' | translate }}:</strong> {{ (simView.simDetails.updatedAt |
+          date: 'dd/MM/yyyy HH:mm') || 'N/A' }}</p>
       </mat-card-content>
+      }
     </mat-card>
     <mat-card>
       <mat-card-header>
-        <mat-card-title>{{ 'subscriberDetails.transactionOrders' | translate }}</mat-card-title>
+        <mat-card-title>{{ 'subscriberDetails.bundles' | translate }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <app-transaction-orders-table
-          [customer]="simView.simDetails.customer"
-          [subscriber]="subscriber"
-        ></app-transaction-orders-table>
-      </mat-card-content>
-    </mat-card>
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>{{ 'subscriberDetails.statusEvent' | translate }}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <app-event-status [subscriber]="subscriber"></app-event-status>
+        <app-bundles [subscriber]="subscriber"></app-bundles>
       </mat-card-content>
     </mat-card>
   </div>
+  <div class="right-panel">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ 'subscriberDetails.simDetails' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>{{ 'subscriberDetails.status' | translate }}:</strong> {{ simView.simDetails.status || 'N/A' }}</p>
+        <p><strong>{{ 'subscriberDetails.networkStatus' | translate }}:</strong> {{ simView.simDetails.networkStatus ||
+          'N/A' }}</p>
+        <p><strong>{{ 'subscriberDetails.imsi' | translate }}:</strong> {{ simView.simDetails.imsi || 'N/A' }}</p>
+        <p><strong>{{ 'subscriberDetails.msisdn' | translate }}:</strong> {{ simView.simDetails.msisdn || 'N/A' }}</p>
+        <p><strong>{{ 'subscriberDetails.imei' | translate }}:</strong> {{ simView.simDetails.imei || 'N/A' }}</p>
+        <p>
+          <strong>{{ 'subscriberDetails.iccid' | translate }}:</strong>
+          @if (simView.simDetails.iccid) {
+          <app-contextual-text [text]="simView.simDetails.iccid" [actions]="iccidContextActions"
+            [tooltip]="'Click for actions'">
+          </app-contextual-text>
+          } @else {
+          N/A
+          }
+        </p>
+        <p><strong>{{ 'subscriberDetails.createdAt' | translate }}:</strong> {{ (simView.simDetails.createdAt | date:
+          'dd/MM/yyyy HH:mm') || 'N/A' }}</p>
+        <p><strong>{{ 'subscriberDetails.createdBy' | translate }}:</strong> {{ simView.simDetails.createdBy || 'N/A' }}
+        </p>
+        <p><strong>{{ 'subscriberDetails.updatedAt' | translate }}:</strong> {{ (simView.simDetails.updatedAt | date:
+          'dd/MM/yyyy HH:mm') || 'N/A' }}</p>
+        <p><strong>{{ 'subscriberDetails.updatedBy' | translate }}:</strong> {{ simView.simDetails.updatedBy || 'N/A' }}
+        </p>
+        <p><strong>{{ 'subscriberDetails.externalReferenceId' | translate }}:</strong> {{
+          simView.simDetails.externalReferenceId || 'N/A' }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<div class="w-100">
+  <div class="mt-4">
+    <h4>{{ 'subscriberDetails.purchasedProductsHistory' | translate }}</h4>
+    <app-purchased-products [subscriber]="subscriber"></app-purchased-products>
+  </div>
+
+  <div class="mt-4">
+    <h4>{{ 'subscriberDetails.transactionOrders' | translate }}</h4>
+    <app-transaction-orders-table [customer]="simView.simDetails.customer"
+      [subscriber]="subscriber"></app-transaction-orders-table>
+  </div>
+
+  <div class="mt-4">
+    <h4>{{ 'subscriberDetails.statusEvent' | translate }}</h4>
+    <app-event-status [subscriber]="subscriber"></app-event-status>
+  </div>
+</div>
+
 }
