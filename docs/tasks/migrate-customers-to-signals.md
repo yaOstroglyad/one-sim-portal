@@ -268,3 +268,5 @@ export class CustomersComponent implements OnInit {
 - `tableConfig$` stays as BehaviorSubject because it comes from service
 - `filterFieldsConfig` can stay as regular property (static config)
 - External panel pattern (`showFilterPanel` signal) is already correct
+
+DO IT!
